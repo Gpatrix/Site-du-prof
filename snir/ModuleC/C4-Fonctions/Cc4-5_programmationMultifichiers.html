@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="4"
+  data-pagenumber="V"
+  data-pageState="travaux"
+  data-pageheadtitle="Prog. multi‑fichiers"
+  data-pagefulltitle="La répartition des programmes sur plusieurs fichiers"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="exergue">
+<p class="square"> Au chapitre C4‑I <a class="previous" href="Cc4-1_fonctionsGeneralites.html#progMod" target="_BLANK"></a>, on a vu que la <strong class="title">décomposition en fonctions</strong> d'un programme  était la <strong class="defin">base de la programmation modulaire</strong>. Mais lorsque un programme dépasse quelques centaines de ligne (ce qui est très peu), sa conception devient déjà mal aisée s'il est codé sur <strong class="cons">un seul fichier</strong>. En effet, même avec les possibilités avancées de recherche des meilleurs éditeurs de code, faire des allers‑retours entre diverses parties éloignées du fichier devient <strong class="warning">fastidieux</strong>, <strong class="warning">chronophage</strong>… </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/codeSourceMultiFile.png" width="120px">
+<p> C'est pourquoi les langages <strong>C</strong> et <strong>C++</strong> sont conçus pour permettre de <strong class="title">répartir sur plusieurs fichiers</strong> le <strong class="specialG">code source</strong> d'un programme. De cette manière, même avec un simple <strong class="defin">éditeur de code</strong>, les <strong class="pros">accès rapides</strong> aux différentes fonctions d'un programme sont facilités : via le <strong>panneau de navigation</strong> et/ou les <strong>onglets</strong> affichés dans la fenêtre d'édition, il suffit d'ouvrir le fichier dans lequel une fonction est codée pour la trouver rapidement, dès lors que ce fichier reste de taille raisonnable. Cela suppose bien entendu de savoir dans quel fichier est codée la fonction – et c'est tout l'art de la répartition du code. </p>
+</div><!-- display -->
+
+<p> Plus généralement, la <strong class="title">programmation multi‑fichiers</strong> présente d'<strong class="defin">autres intérêts</strong> déterminants. </p>
+<ul>
+	<li> Lors de la <strong class="specialLB">mise au point</strong> du programme, on peut faire en sorte que <strong class="defin">seuls les fichiers modifiés</strong> soient <strong>recompilés</strong>, ce qui procure un <strong class="pros">gain de temps</strong> d'autant plus de important que le programme est grand. </li>
+
+	<li> À terme, dans une <strong class="specialLB">perspective de réutilisation</strong>, certains fichiers peuvent être compilés pour former des <strong class="defin">modules de bibliothèque</strong>. Stockés dans un répertoire connu du système, les fichiers objets de ces modules sont alors <strong class="pros">directement disponibles</strong> pour l'<strong>édition de liens</strong> (cf. chap. C4‑IV <a class="previous" href="Cc4-4_chaineCompilation.html#editionLiens" target="_BLANK"></a>) de tout programme qui ferait appel à ces modules. </li>
+</ul>
+
+<p class="square"> Mais la <strong class="title">répartition du code sur plusieurs fichiers</strong> n'est pas toujours simple à mettre en œuvre, elle requiert un <strong>savoir‑faire technique</strong>. Pour <strong class="defin">maîtriser l'interdépendance des modules</strong> et faire en sorte que la compilation se déroule sans erreurs, il faut : </p>
+
+<ul>
+	<li> comprendre <strong class="specialLB">où placer les déclarations</strong> des <strong>types</strong>, <strong>variables</strong>, prototypes des <strong>fonctions</strong> et leurs définitions ; </li>
+
+	<li> toujours coder une pseudo‑constante et une <strong class="specialLB">directive de compilation conditionnelle</strong> pour prévenir toute <strong class="cons">double inclusion</strong> d'un fichier (cf. chap. C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html#prevDoubleInclusion" target="_BLANK"></a>). </li>
+</ul>
+
+<p> L'<strong class="title">objectif</strong> de ce chapitre est donc d'apporter les <strong class="defin">connaissances de base</strong> indispensables pour pouvoir ensuite acquérir ce savoir‑faire dans la pratique. On abordera dans l'ordre : </p>
+
+<ul>
+	<li> le <strong class="specialLB">cas général</strong> d'un programme en <strong class="defin">langage C</strong> (les mêmes principes valent en <strong>C++</strong>) ; on en fera l'étude à travers l'<strong>exemple concret</strong> d'un programme académique de <strong class="specialY">calendrier</strong> compilé avec <strong>GCC</strong> sous <strong>Linux</strong> ; </li>
+
+	<li> le <strong class="specialLB">cas plus spécifique</strong> d'un programme <strong class="Arduino">Arduino</strong>, pour lequel on traitera l'<strong>exemple concret</strong> un programme académique de <strong class="specialY">clignotement d'une led à fréquences multiples</strong> . </li>
+</ul>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Cas d'un programme en langage <em class="mark">C</em>/<em class="mark">C++</em> </h2>
+
+
+
+<p> Sans entrer dans le cas beaucoup plus complexe des gros logiciels,  on se propose de décrire le <strong class="title">principe général</strong> de <strong class="defin">répartition sur plusieurs fichiers</strong> du code source d'un programme. </p>
+
+<p> Pour fixer les idées, on imagine d'abord un <strong class="specialLB">exemple générique</strong> nommé <code class="filename">simpleProgram</code>. Habituellement, on crée un <strong class="specialM">répertoire de projet</strong> <strong class="defin">homonyme</strong> – c'est‑à‑dire portant le <strong>même nom</strong> que le programme, même si ce n'est pas une contrainte impérative – dans lequel seront stockés tous les <strong>fichiers sources</strong> (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#squeletteC" target="_BLANK"></a>). </p>
+
+
+
+<h3 id="structureCodeSource"> Structure modulaire d'un code source en langage <em class="mark">C</em> </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, une <strong class="title">méthode générale</strong> de répartition du code source sur <strong>plusieurs fichiers</strong> est basée sur une structure en <strong class="specialLB">modules</strong>, avec typiquement : </p>
+<ul>
+	<li> un <strong class="specialN">module principal</strong> où est codé la fonction <code class="prettyprint lang-c">main</code> ; </li>
+
+	<li> des <strong class="specialLGr">modules auxiliaires</strong> pour répartir les autres fonctions. </li>
+</ul>
+
+
+<p> En règle générale, chaque <strong class="defin">module</strong> est constitué de <strong class="specialDG">2 fichiers source</strong>, de préférence <strong class="pros">homonymes</strong> pour expliciter l'appartenance au même module : </p>
+<ul>
+	<li> un <strong class="specialSG">fichier d'en‑tête</strong> d'extension <code class="filename">.h</code> (pour <em class="english">header</em> en anglais) ; </li>
+
+	<li> un <strong class="specialG">fichier d'implémentation</strong> d'extension <code class="filename">.c</code>. </li>
+</ul>
+	<img class="top-left" src="../img/structureModulaire.png" style="max-width: 800px">
+</div><!-- important -->
+
+<div class="complement">
+<p> Tous les <strong class="specialDG">fichiers sources</strong> d'un programme sont <strong>liés entre eux</strong> par diverses <strong class="title">directives d'inclusion</strong>, typiquement comme représenté sur la figure ci‑dessus et détaillées plus loin. En particulier, chaque fichier d'implémentation comporte une directive d'inclusion de son fichier d'en‑tête associé pour former une <strong class="defin">unité de compilation</strong>. </p>
+
+<p> Il peut également exister d'<strong class="title">autres liaisons</strong>, notamment celles relatives aux variables globales, via le <strong>mot‑clef</strong> <code class="prettyprint lang-c">extern</code> (cf. infra <a class="infra" href="Cc4-5_programmationMultifichiers.html#fichierImplementation"></a>). </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Toutefois, il importe de souligner que la <strong>méthode générale</strong> présentée ci‑dessus peut se décliner avec <strong class="title">diverses variantes</strong> : </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/structureModulaire1.png"  height="400px">
+	<li> Si le <strong class="specialSG">fichier d'en‑tête principal</strong> se limite à <strong>quelques directives d'inclusion</strong>, alors il peut être <strong class="specialO">fusionné</strong> avec le fichier d'implémentation principal, conformément à la figure ci‑contre. </li>
+
+	<div class="nobullet"> En effet, ce ne sont pas quelques lignes de code supplémentaires en préambule du <strong class="specialG">fichier principal d'implémentation</strong> qui vont diminuer significativement la commodité d'accès à la <strong>fonction</strong> <code class="prettyprint lang-c">main</code>. </div>
+
+  <div class="nobullet"> En revanche, si le codage du programme nécessite la <strong>déclaration de types</strong> qui sont utilisés dans d'autres modules, alors le recours à un <strong class="specialSG">fichier d'en‑tête principal</strong> est incontournable. </div>
+  </div><!-- display -->
+  
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/structureModulaire2.png" height="400px">
+	<li> Par ailleurs, lorsque les <strong class="specialSG">fichiers d'en‑tête</strong> sont <strong class="defin">peu volumineux</strong>, il est envisageable de les <strong class="specialO">fusionner en un seul</strong> : celui du module principal. Chaque module auxiliaire est alors constitué de son seul fichier d'implémentation, qui commence par une directive d'inclusion de l'<strong class="specialSG">unique fichier d'en‑tête</strong>, conformément à la figure ci‑dessous. </li>
+
+	<div class="nobullet"> 	Mais dans ce cas, il n'est <strong class="cons">pas possible</strong> de <strong>réutiliser individuellement</strong> chaque module dans un autre projet sans l'encombrer avec des éléments de code inutiles.  </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/structureModulaire3.png" height="400px">
+	<li> Enfin, lorsque le programme comporte un <strong class="defin">module volumineux</strong>, il est possible de répartir son code sur <strong class="specialN">plusieurs</strong> <strong class="specialG">fichiers d'implémentation</strong> tout en conservant <strong class="specialN">un seul</strong> <strong class="specialSG">fichier d'en‑tête</strong>, conformément à la figure ci‑contre. </li>
+  <div class="nobullet"> Encore une fois, le but est de travailler sur des <strong class="pros">fichiers de taille raisonnable</strong> pour ne pas perdre de temps à les parcourir. </div>
+  </div><!-- display -->
+</ul>
+
+<div class="remarques">
+<p class="remarque"> Comme expliqué au chap. C2‑I, le nommage <code class="filename">main.c</code> du fichier principal d'implémentation est une <strong class="defin">convention</strong>, pas une obligation.  </p>
+</div><!-- exemple -->
+
+
+
+<!-- expert -->
+<h4> Spécificités en langage <em class="mark">C++</em> </h4>
+
+
+<p> En langage <strong>C++</strong>, on adopte la <strong class="pros">même méthode générale</strong> de répartition du code source d'un programme sur plusieurs fichiers, avec seulement <strong class="title">quelques spécificités</strong> pour les <strong>extensions de fichiers</strong>. Typiquement, on adopte : </p>
+<ul>
+	<li> l'extension <code class="filename">.hh</code> pour les <strong class="specialSG">fichiers d'en‑tête</strong> ; </li>
+
+	<li> l'extension <code class="filename">.cpp</code> pour les <strong class="specialG">fichiers d'implémentation</strong>. </li>
+</ul>
+<p> Ces aspects ont déjà été présentés <strong>plus en détail</strong> au chap. C4‑IV <a class="external" href="Cc4-4_chaineCompilation.html#casCPP" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3> Principes de la répartition en fichiers </h3>	
+
+
+
+<div class="complement">
+<p> La <strong class="title">structuration d'un programme</strong> en <strong class="specialLB">plusieurs modules</strong> est une <strong class="warning">tâche complexe</strong>, qui en général débouche sur plusieurs solutions. Dès qu'un programme devient volumineux, on aboutit à des <strong class="cons">conflits de classification</strong> inévitables : dans quel module coder telle ou telle fonction ? </p>
+</div><!-- complement -->
+
+<p> En général, au moins <strong class="title">deux approches</strong> sont possibles. </p>
+<ul>
+	<li> Au regard des <strong>spécifications</strong> auquel le programme doit répondre, on structure le code en grandes <strong class="specialLB">problématiques fonctionnelles</strong> : typiquement, le dialogue homme‑machine, les calculs techniques, les commandes des actionneurs, les communications diverses, etc.  </li>
+
+	<li> Mais du point de vue des <strong>techniques d'implémentation</strong>, on est plutôt amené à structurer le code avec une <strong class="specialLB">logique d'objets</strong> : chaque module spécifique met en œuvre des variables d'un type spécifiques et définit toutes les fonctions pour manipuler ces objets.  </li>
+</ul>
+<p> Et bien entendu, ces deux approches peuvent être <strong class="defin">employées conjointement</strong> à <strong>différents niveaux</strong> de raffinement du code : ainsi, il est usuel d'adopter une logique d'objets dans chaque grande problématique fonctionnelle. </p>
+
+
+
+
+<h3> Les fichiers d'en‑tête </h3>
+
+
+
+<div class="important">
+<p> En principe, un <strong class="title">fichier d'en‑tête</strong> (usuellement d'extension <code class="filename">.h</code>) sert à coder, <strong class="pros">séparément</strong> du fichier d'implémentation, les <strong class="defin">déclarations publiques</strong> de <strong>types</strong>, de <strong>constantes</strong> et de <strong>fonctions</strong> (prototypes seuls) utilisées dans un module. </p>
+
+<p> Le fichier peut également contenir des <strong class="defin">directives</strong> d'inclusion de fichiers, de définitions (pseudo‑constantes, pseudo‑fonctions…), de compilation conditionnelle, etc. </p> 
+
+<div class="expert">
+<p> Ne contenant <strong class="pros">pas de code source algorithmique</strong>, ce fichier peut en principe être <strong>divulgué à d'éventuels partenaires</strong> de développement. C'est pourquoi on le qualifie aussi de <strong class="specialSG">fichier d'interface</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Interface_de_programmation" target="_BLANK">W</a>.  </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<div class="expert">
+<p> Les <strong class="title">déclarations</strong> codées dans un <strong class="specialSG">fichier d'en‑tête</strong> sont dites <strong class="defin">publiques</strong> dans la mesure où elles deviennent exploitables dans n'importe quel fichier source qui inclut ce fichier d'en‑tête par une directive <code class="prettyprint lang-c">#include</code>.  </p>
+
+<p> A contrario, toutes les <strong class="title">déclarations</strong> qui sont codées dans un <strong class="specialG">fichier d'implémentation</strong> sont a priori exploitables seulement dans ce dernier. On peut donc considérer qu'elles sont <strong class="defin">privées</strong> (on verra toutefois que cette limitation peut aisément être contournée dans le cas des variables). </p>
+
+</div><!-- expert -->
+<p> En règle générale, un <strong class="title">fichier d'en‑tête</strong> n'est <strong class="warning">pas</strong> employé pour coder des instructions programmant des <strong>actions</strong> (même si cette pratique existe), ni des <strong>déclarations de variables globales</strong> (au risque sinon d'erreur de compilation). </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Considérons notre <strong class="title">exemple générique</strong> d'un programme dont le <strong class="specialLB">fichier d'en‑tête principal</strong> est nommé <code class="filename">simpleProgram.h</code>. Comme expliqué au chapitre C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html#directiveProtection" target="_BLANK"></a>, il doit avoir son contenu déclaratif en totalité <strong class="defin">protégé contre les doubles inclusions</strong> par une <strong>directive de compilation conditionnelle</strong> de la forme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#ifndef SIMPLE_PROGRAM_H_INCLUDED
+#define SIMPLE_PROGRAM_H_INCLUDED
+
+// code protected against double inclusions
+
+#endif
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p>	Après cette directive de protection, le fichier d'en‑tête commence par des <strong class="defin">directives d'inclusion</strong> de tous les fichiers d'en‑tête des <strong>modules du programme</strong> (sauf lui‑même, bien entendu), ainsi que des fichiers d'en‑tête de <strong>bibliothèques</strong>. Par exemple, on peut avoir :   </p> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:3">
+#include "module1.h"
+#include "module2.h"
+#include "module3.h"
+
+#include &lt;stdio.h&gt;
+// ...
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Par ailleurs, il est usuel que certains <strong class="specialSG">fichiers d'en‑tête auxiliaire</strong> <code class="filename">.h</code> commencent par la directive d'inclusion : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">#include "simpleProgram.h"</code>
+</span> <br>
+afin de pouvoir exploiter les <strong class="defin">déclarations</strong> codées dans le fichier <code class="filename">simpleProgram.h</code> seront incluses – donc <strong >exploitables</strong> – dans les <strong>modules auxiliaires</strong> du programme. Et comme le fichier d'en‑tête principal inclut lui‑même les fichiers d'en‑tête des modules auxiliaires, la <strong class="pros">protection contre les doubles inclusions</strong> empêche que ses propres déclarations lui soient incluses en retour. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="fichiersImplementation"> Fichiers d'implémentation </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">fichier d'implémentation</strong>, usuellement d'extension <code class="filename">.c</code> ou <code class="filename">.cpp</code>, est un fichier dans lequel on code essentiellement la <strong class="defin">définition des fonctions</strong> déclarées dans le fichier d'en‑tête qui lui est associé. </p>
+
+<p> Souvent, on parle spécifiquement de « <strong class="specialG">fichier source</strong> » car c'est là que l'on trouve <strong>l'essentiel du code</strong> (les algorithmes). Néanmoins, il s'agit d'un abus de langage, car en termes de compilation, un fichier d'en‑tête est aussi un fichier source – par opposition à un fichier objet ou un fichier exécutable. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans le <strong class="title">fichier d'implémentation</strong> <strong class="specialLB">principal</strong>, typiquement nommé <code class="filename">main.c</code> (ou <code class="filename">.cpp</code>), on trouve en général :  </p>
+
+<ul>
+	<li> la <strong class="defin">directive d'inclusion</strong> du <strong class="specialSG">fichier d'en‑tête principal</strong> du programme ; </li>
+
+	<li> la <strong class="defin">déclaration</strong> des <strong>variables globales</strong> du programme ; </li>
+
+	<li> la <strong class="defin">définition</strong> de la <strong>fonction principale</strong> <code class="prettyprint lang-c">main</code> qui, idéalement, devrait <strong class="pros">ne pas dépasser une page de moniteur</strong> pour que son algorithme soit simple à visualiser dans son ensemble. Dans cet objectif, la fonction <em class="mark">main</em> fait appel à de <strong>nombreuses fonctions de haut niveau</strong> définies dans les fichiers d'implémentation des différents modules auxiliaires.  </li>
+</ul>
+
+<p> Par ailleurs, chaque <strong class="title">fichier d'implémentation</strong> <strong class="specialLB">auxiliaire</strong> comprend : </p> 
+
+<ul>
+	<li> la <strong class="defin">directive d'inclusion</strong> de son <strong class="specialSG">fichier d'en‑tête associé</strong> <code class="filename">.h</code>, en principe de <strong>même nom</strong> ; </li>
+
+	<li> éventuellement des <strong class="defin">déclarations</strong> de <strong>variables globales</strong></strong> utilisées spécifiquement dans le fichier d'implémentation, chacune étant :  </li>
+
+	<ul>
+		<li> précédée du <strong>mot‑clef</strong> <code class="prettyprint lang-c">extern</code>, si cette variable est <strong class="specialT">déjà déclarée dans un autre fichier</strong> d'implémentation ; </li>
+
+		<li> précédée du <strong>mot‑clef</strong> <code class="prettyprint lang-c">static</code>, si cette variable doit <strong class="specialO">rester locale au fichier</strong> d'implémentation (autrement dit que le codeur veut en interdire l'usage dans les autres fichiers par une déclaration avec le mot‑clef <code>extern</code>). </li>
+	</ul>
+
+	<li> la <strong class="defin">définition</strong> de <strong>toutes les fonctions</strong> dont les prototypes sont déclarés dans le fichier d'en‑tête associé au fichier d'implémentation. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3> Point d'entrée du programme </h3>
+
+
+<div class="important">
+<p> Sauf codage spécifique d'une option de compilation contraire, la <strong>fonction</strong> <code class="cmd">main</code> est par défaut le <strong class="title">point d'entrée</strong> du programme. </p>
+
+<p> Plus précisément, sachant que toutes les déclarations des données globales ont forcément été traitées par allocation mémoire dans les segments <code class="inv" style="background:mediumseagreen;">.data</code> et <code class="inv" style="background:springgreen;">.rodata</code>, la <strong class="defin">première instruction machine exécutée</strong> au lancement du programme correspond à la <strong>première instruction codée dans la fonction</strong> <code class="cmd">main</code>. </p>
+</div><!-- complement -->
+
+
+
+
+
+<h3> Organisation du répertoire de projet </h3>
+
+
+<h4> Avec un environnement intégré de développement </h4>
+
+
+<p class="square"> En règle générale, lorsqu'on utilise un environnement intégré de développement – <strong><em class="sigle">IDE</em></strong>,  cf. chap. C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#IDE" target="_BLANK"></a> – la création du <strong class="specialM">répertoire de projet</strong> est prise en charge par la procédure de <strong class="specialN">création d'un nouveau projet</strong>, laquelle comporte de nombreuses options.  </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/codeblocksNewProject.png" width="500px" style="padding-top: 1em">
+<p>	Par exemple, avec le logiciel <strong class="Codeblocks">Code::Blocks</strong>, il existe une quarantaine de possibilité rien que pour le choix du type de projet (choix du framework, du langage, de la machine cible, etc. – cf. fig. ci‑contre). Dans le cas d'une <strong>application pour console</strong>, c'est‑à‑dire un programme s'exécutant dans une fenêtre de commande en ligne de l'ordinateur sur lequel on travaille (c'est le cas le plus usuel de compilation native), l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::Blocks</strong> propose également de créer <strong>une ou deux</strong> <strong class="title">versions exécutables</strong> pour le programme : </p>
+
+<ul>
+	<li> une <strong>version de mise au point</strong> dite <strong class="defin">Debug</strong> car elle permet d'employer les outils de débogage ; </li>
+
+	<li> une <strong>version livrable</strong> dite <strong class="defin">Release</strong> qui doit pouvoir être fournie à un client. </li>
+</ul>
+
+<p>	Ainsi, pour les programmes codés dans le cadre des exercices et travaux pratiques de ce module de formation, il n'y a pas de « client » à livrer, donc il est <strong class="cons">inutile</strong> de <strong>cocher l'option</strong> <code>Release</code>. </p>
+</div><!-- display -->
+
+
+<p class="square"> Dans tous les cas, la procédure de création d'un nouveau projet s'achève avec la génération automatique de <strong class="title">deux fichiers</strong> : </p>
+
+<ul>
+	<li> un <strong class="specialLB">fichier source</strong> nommé <code class="filename">main.c</code> (<code class="filename">.cpp</code> en <strong>C++</strong>) qui contient en général un squelette minimal de code ; </li>
+
+	<li> un <strong class="defin">fichier de projet</strong> d'extension <code class="filename">.cbp</code> (pour <em><strong>C</strong>ode::<strong>B</strong>locks <strong>p</strong>roject</em>) ; c'est ce fichier sur lequel il faudra double‑cliquer pour ré‑ouvrir le projet ultérieurement (car si on double‑clique sur le fichier <code class="filename">main.c</code>, on n'ouvre que ce fichier et <strong class="cons">sans activer le projet</strong>). </li>
+</ul>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/CodeBlocksNewFile.png" width="40px">
+<p> Lors de la phase de développement, il est alors très facile d'<strong class="title">ajouter des fichiers sources</strong> au projet. Tout <strong><em class="sigle">IDE</em></strong> dispose d'une commande spécifique – typiquement <code>New file…</code> dans le <strong>menu</strong> <code>File</code>, avec un <strong>bouton de raccourci</strong> dans la barre de commandes. </p>
+</div><!-- display -->
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/repertoireProjet.png" width="250px">
+<p>	C'est également dans le <strong class="specialM">répertoire de projet</strong> que l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::Blocks</strong> enregistrera divers <strong class="title">fichiers accessoires</strong> de compilation et de sauvegarde (avec les extensions <code class="filename">.layout</code>, <code class="filename">.depend</code>, etc.). </p>
+</div><!-- expert -->
+
+<p class="square"> Quant au <strong class="title">code machine</strong> produit par la chaîne de la compilation, on trouvera : </p>
+
+<ul>
+	<li> les <strong>fichiers objets</strong> (d'extension <code class="filename">.o</code>) rangés dans le répertoire <code class="filename">obj</code> ; </li>
+
+	<li> le <strong>fichier exécutable</strong> (d'extension <code class="filename">.exe</code> sous <em class="mark">Windows</em>) dans le répertoire <code class="filename">bin</code>, et plus précisément : </li>
+	<ul>
+		<li> dans le sous‑répertoire <code class="filename">Debug</code> pour la <strong>version de mise au point</strong> ; </li>
+
+		<li> dans le sous‑répertoire <code class="filename">Release</code> pour la <strong>version livrable</strong>. </li>
+	</ul>
+</ul>
+
+
+<div class="remarques">
+<p class="remarque"> La génération des <strong class="title">fichiers accessoires</strong> (autres que sources, objets et exécutables) dans le répertoire de projet <strong class="defin">dépend de l'<em class="sigle">IDE</em></strong> avec lequel on travaille. </p>
+
+<p> Comparativement à d'autres – notamment <strong class="specialLB">VScode</strong> – l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::Blocks</strong> reste assez « rustique » (il crée peu de fichiers accessoires), ce qui est appréciable pour s'y retrouver quand on débute. </p>
+</div><!-- complement -->
+
+
+<!--
+<h4> Avec un simple éditeur de code </h4>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Cas général d'un programme <em class="mark">Arduino</em> </h2>
+
+
+
+
+<div class="complement">
+<p> L'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong> présente des <strong class="defin">points communs</strong> et mais aussi quelques <strong class="warning">spécificités</strong> par rapport aux <strong><em class="sigle">IDE</em> généralistes</strong> de programmation en <strong>C/C++</strong> (<em class="mark">Code::Blocks</em>, <em class="mark">VScode</em>, etc.). </p>
+
+<p> Il en résulte une mise en œuvre de la <strong class="title">programmation multi‑fichiers</strong> <strong>un peu différente</strong> – ce que l'on va examiner dans cette section. </p>
+</div><!-- complement -->
+
+<p> Et précisons tout de suite qu'il n'est <strong class="cons">pas possible</strong> de mettre en œuvre une <strong class="title">programmation multi‑fichiers</strong> dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong>. </p>
+
+
+
+<h3> Organisation des fichiers dans l'environnement <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="important">
+<p> Avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong>, on peut suivre le <strong class="pros">même principe</strong> de <strong class="title">répartition sur plusieurs fichiers</strong> du code source d'un programme que dans un <strong><em class="sigle">IDE</em> généraliste</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Néanmoins, certaines <strong class="warning">contraintes de nommage</strong> des fichiers s'imposent (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#casArduino" target="_BLANK"></a>). </p>
+<ul>
+	<li> Le <strong class="specialG">fichier source</strong> <strong class="specialN">principal</strong> du programme – celui contenant le code de définition des fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code> doit <strong class="warning">impérativement</strong> : </li>
+	<ul>
+		<li> porter l'<strong>extension</strong> <code class="filename">.ino</code> ; </li>
+	
+		<li> être placé dans un <strong class="specialM">répertoire de projet</strong> <strong class="defin">homonyme</strong>. </li>
+	</ul>
+	
+	<li> Le <strong class="specialM">répertoire de projet</strong> doit contenir tous les <strong class="defin">fichiers sources</strong> du programme, à l'exception des fichiers de <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong> qui peuvent être rangés dans des <strong>répertoires ciblés par l'<em class="sigle">IDE</em></strong>. </li>
+
+	<div class="nobullet"> Ces fichiers sources peuvent porter l'<strong>extension</strong> <code class="filename">.ino</code>, <code class="filename">.cpp</code>, <code class="filename">.c</code>, <code class="filename">.h</code> ou autre. Le choix de ces extensions n'est pas indifférent : l'<strong><em class="sigle">IDE</em></strong> se base dessus pour effectuer des traitements différentiés sur les fichiers sources (cf. infra). </div>
+</ul>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ArduinoMultiTab.png" width="300px">
+<p> De plus, lors de l'<strong class="title">ouverture</strong> d'un fichier <code class="filename">.ino</code>, l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong> <strong>ouvre</strong> simultanément <strong class="pros">tous les fichiers sources</strong> <code class="filename">.ino</code>, <code class="filename">.cpp</code> ou <code class="filename">.h</code> placés dans le répertoire de projet. Chaque fichier apparaît dans un <strong>onglet séparé</strong> (en anglais, <em class="english">tab</em>). </p>
+
+<p> Et on trouve dans la barre supérieure de la fenêtre principale un <strong class="specialY" style="color: #E0E000">bouton « nouvel onglet »</strong> <span class="Arduino">▾</span> qui permet d'<strong>ajouter un nouveau fichier</strong> au projet. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+
+<h3> Traitements spécifiques opérés par l'IDE <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="important">
+<p> Comme expliqué aux chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#casArduino" target="_BLANK"></a> et C4‑I <a class="previous" href="Cc4-1_fonctionsGeneralites.html#casArduino" target="_BLANK"></a>, pour rendre la programmation des cartes à microcontrôleur accessible à des non‑spécialistes, avant toute compilation, l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong> effectue des <strong class="title">traitements préliminaires</strong> sur le code source (un peu à la manière d'un préprocesseur). </p>
+
+<p> Ces traitements spécifiques sont opérés <strong class="pros">en arrière‑plan</strong>, ils sont transparents pour l'utilisateur de l'<strong><em class="sigle">IDE</em></strong>.</p>
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong><em class="sigle">IDE</em></strong> commence par créer un <strong class="specialY">répertoire temporaire de compilation</strong> dans l'espace réservé à cet effet par le système d'exploitation du poste de travail (sous <em class="mark">Linux</em>, typiquement <code class="filename">/tmp/arduino_build_<span class="nocode"><strong class="specialY">xxxxxx</strong></span>/</code> où <strong class="specialY">xxxxxx</strong> est un nouveau numéro généré automatiquement). </p>	
+
+<p> Dans un <strong>sous‑répertoire</strong> <code class="filename">sketch</code> du répertoire temporaire de compilation :   </p>
+<ul>
+  <li> Il <strong>génère</strong> un <strong class="specialG">fichier d'implémentation</strong> <strong>auxiliaire</strong> d'extension <code class="filename">.cpp</code> dans lequel il <strong>concatène</strong> le contenu de <strong class="Arduino">tous les fichiers sources</strong> d'extension <code class="filename">.ino</code> placés dans le <strong class="specialM">répertoire de projet</strong> : </li>
+  <ul>
+  	<li> en commençant par le <strong>fichier principal</strong> (identifié par homonymie avec le répertoire de projet) ; </li>
+
+  	<li> puis en procédant par <strong>ordre alphabétique</strong> pour les autres fichiers (mais pas les éventuels fichiers ayant une autre extension comme <code>.cpp</code> ou <code>.h</code>).</li>
+  </ul>
+
+  <li> Dans ce <strong class="specialG">fichier d'implémentation</strong> <strong>auxiliaire</strong>, il effectue <strong>divers traitements</strong>, notamment :   </li>
+  <ul>
+   	<li> par précaution, il ajoute en première ligne la <strong class="defin">directive</strong> <code class="prettyprint lang-c">#include &lt;Arduino.h&gt;</code> ; </li>
+
+    <li> il génère automatiquement les <strong class="defin">prototypes</strong> de <strong>toutes les fonctions</strong> définies dans ces fichiers. </li>
+    <!-- à moins que de tels prototypes aient déjà été déclarés dans le ou les fichiers <code class="filename">.ino</code> ; ???? -->
+  </ul>
+
+  <li> De plus, il <strong>copie</strong> <strong class="specialG">tous les autres fichiers sources</strong> (<code>.h</code>, <code>.cpp</code> etc.) présents dans le <strong class="specialM">répertoire de projet</strong>, mais sans y effectuer des modifications significatives (il ajoute simplement des directives de marquage de lignes <code class="prettyprint lang-c">#line</code>). </li>
+</ul>
+</div><!-- complement -->
+
+<p> Ensuite, la <strong class="title">compilation</strong> est opérée en <strong>C++</strong> avec comme <strong class="specialG">fichier source principal</strong> le fichier « <strong>standard</strong> » <code class="filename">main.cpp</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/main.cpp" target="_BLANK">A</a>. C'est dans ce fichier qu'est codée la fonction <code class="prettyprint lang-c">main</code> qui appelle les fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code>.  </p>
+  
+
+
+
+<h3 id="consignesArduino"> Consignes pour la programmation multi‑fichiers <em class="mark">Arduino</em> </h3>
+
+
+<div class="complement">
+<p> Compte tenu des traitements spécifiques qui l'on vient de décrire, en plus de la<strong> méthode générale de répartition du code source</strong> proposée supra <a class="supra" href="Cc4-5_programmationMultifichiers.html#structureCodeSource"></a>, on peut formuler les <strong class="title">remarques</strong> suivantes lorsque l'on code un programme <strong class="Arduino">Arduino</strong> : </p>
+
+<ul>
+	<li> La répartition sur <strong>plusieurs fichiers</strong> d'extension <code class="filename">.ino</code> peut <strong class="pros">faciliter le travail</strong> du codeur mais n'apporte <strong class="cons">aucun gain</strong> en termes de <strong>temps de compilation</strong> puisque tous ces fichiers sont finalement concaténés en un seul et ne forme donc qu'<strong class="cons">une seule</strong> <strong class="defin">unité de compilation</strong>. </li>
+
+	<li> Il est donc préférable de surtout privilégier la répartition du code source sur <strong>plusieurs fichiers</strong> d'extension <code class="filename">.cpp</code> pour former <strong class="pros">plusieurs</strong> <strong class="defin">unités de compilation</strong> et ainsi <strong class="pros">gagner du temps</strong> lors de la mise au point du programme (les unités non modifiées n'ayant pas besoin d'être recompilées). </li>
+
+	<div class="nobullet"> <em class="remark">Attention</em> : si ces fichiers <code class="filename">.cpp</code> emploient des <strong>fonctions</strong> <strong class="Arduino">Arduino</strong> (par exemple, <code class="prettyprint lang-c">pinMode</code> ou  autre), alors il est <strong class="warning">indispensable</strong> de coder une <strong>directive</strong> <code class="prettyprint lang-c">#include &lt;Arduino.h&gt;</code> au début du fichier ou dans son fichier d'en‑tête associé. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Il importe aussi de prendre conscience qu'avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong>, les <strong>fichiers objets</strong> et le <strong>fichier exécutable</strong> produits par la chaîne de compilation sont stockés dans un <strong class="warning">répertoire temporaire</strong>. A priori, ce répertoire est conservé tant que le projet est ouvert, mais il n'a pas vocation à être pérennisé dans la durée. </p>
+
+<p> Ainsi, à chaque <strong>ouverture d'un projet</strong> qui était auparavent fermé, la <strong class="title">première compilation</strong> est a priori <strong class="cons">plus longue </strong>que les suivantes puisqu'elle doit reprendre à zéro la production de tous les fichiers objets. C'est seulement ensuite que l'on bénéficie d'un <strong class="pros">gain de temps</strong> grâce à la structuration du code en plusieurs unités de compilation. </p>  
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- non relu en 2022 -->
+
+
+<h2 id="multiSpeedBlink"> Exemple de programme <em class="mark">Arduino</em> multi‑fichiers</h2>
+
+
+<p> Il s'agit d'un programme « académique » qui met en œuvre juste une led et un bouton-poussoir, comme avec le montage du TP n° 1 du chapitre C2 <a class="TP" href="../C2-ElementsLangage/Ctp2-1_ledBouton.html" target="_BLANK"></a>. Nommé <code>multiSpeedBlink</code>, ce programme commande le clignotement de la led avec une demi-période réglable : partant d'une valeur donnée (2 s), à chaque appui sur le bouton, la période est divisée par 2, et au bout de 8 appuis, la led s'éteint. Le programme est réparti sur 8 fichiers formant <strong>4 modules</strong> : </p>
+
+<ol>
+	<li> le module principal, </li>
+
+	<li> un module d'entrées-sorties booléennes, </li>
+
+	<li> un module de changement de la fréquence de clignotement, </li>
+
+	<li> un module de détection des fronts montants sur le bouton-poussoir. </li>
+</ol>
+
+
+<h3> Module principal </h3>
+
+
+<h4> Fichier d'en‑tête principal <code class="filename">multiSpeedBlink.h</code> </h4>
+
+<p> Dans une directive de compilation conditionnelle de protection contre les doubles expansions,
+	il contient : </p>
+
+<ul>
+	<li> les directives d'inclusion des trois fichiers d'en‑tête des autres modules du programme ; </li>
+
+	<li> les directives de définition des pseudo-constantes (numéros des broches utilisées) et les déclarations des constantes du programmes pour le réglage de la période de clignotement. </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#ifndef MULTI_SPEED_BLINK_H_INCLUDED
+#define MULTI_SPEED_BLINK_H_INCLUDED
+ 
+#include "logicalSignals.h"
+#include "pinManagement.h"
+#include "blinkSpeedManagement.h"
+ 
+#define LED_PIN    2
+#define BUTTON_PIN 4
+
+const uint32_t baseBlinkPeriod = 2000000; // microseconds (= 2 s)
+const uint16_t maxBlinkSpeed   = 256;    // divisor of the period
+ 
+#endif // MULTI_SPEED_BLINK_H_INCLUDED
+</pre>
+<!---------- ne pas indenter ---------->	
+
+
+<h4> Fichier d'implémentation principal <code class="filename">multiSpeedBlink.ino</code> </h4>
+
+<p> Il contient : </p>
+
+<ul>
+	<li> la directive d'inclusion du fichier d'en‑tête principal ; </li>
+
+	<li> la déclaration des variables globales, l'une étant du type structuré <code>LogicalSignal</code> défini dans le fichier <code>LogicalSignals.h</code> ; </li>
+
+	<li> la définition des fonctions <code>setup</code> et <code>loop</code> qui n'appellent que des fonction de haut niveau, définies dans d'autres fichiers. </li>
+</ul> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include "multiSpeedBlink.h"
+ 
+// global variables
+LogicalSignal button = {BUTTON_PIN, 0b00}; // from LogicalSignals.h
+uint16_t blinkSpeed = 1;
+ 
+void setup() {
+  configDigitalOutput(LED_PIN, LOW);
+  configDigitalInput(BUTTON_PIN, INPUT);
+}
+ 
+void loop() {
+  updateSignal(button);
+  if (risingEdge(button)) {
+    switchToNextBlinkSpeed(blinkSpeed);
+  }
+  blinkDigitalOutput(LED_PIN, blinkSpeed);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p>	<em class="remark">Remarque</em> : ce module principe ne met directement en œuvre aucune fonction de bas niveau ; il est donc a priori portable sur n'importe quel type de carte compatible avec l'environnement <em class="mark">Arduino</em>. </p>
+	
+
+
+<h3> Module d'entrées‑sorties booléennes </h3>	
+
+
+
+<h4> Fichier d'en‑tête <code class="filename">pinManagement.h</code> </h4>
+
+
+<p> Il contient : </p>
+
+<ul>
+	<li> la directive d'inclusion du fichier d'en‑tête <code>Arduino.h</code> car le fichier d'implémentation associé utilise des fonctions <em class="mark">Arduino</em> ; </li>
+
+	<li> la directive d'inclusion du fichier d'en‑tête principal du programme ; </li>
+
+	<li> le prototype des trois fonctions définies dans le fichier d'implémentation associé <code>pinManagement.cpp</code>. </li>
+</ul> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;Arduino.h&gt;
+#include "multiSpeedBlink.h"
+
+void configDigitalOutput(uint8_t pin, bool level);
+void configDigitalInput(uint8_t pin, byte mode);
+void blinkDigitalOutput(uint8_t pin, uint16_t speed);
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<h4> Fichier d'implémentation <code class="filename">pinManagement.cpp</code> </h4>
+
+
+<p> Il contient : </p>
+
+<ul>
+	<li> la directive d'inclusion du fichier d'en‑tête associé ; </li>
+
+	<li> la définition des trois fonctions déclarées dans le fichier d'en‑tête associé ; ce sont des procédures qui opèrent des actions de bas niveau sur les broches de la cartes (déclarer une broche en sortie, en entrée, mettre en œuvre le clignotement sur une broche à une vitesse donnée). </li>
+</ul>
+
+	<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include "pinManagement.h"
+
+void configDigitalOutput(uint8_t pin, bool level) {
+  pinMode(pin, OUTPUT);
+  digitalWrite(pin, level);
+}
+
+void configDigitalInput(uint8_t pin, byte mode) {
+  pinMode(pin, mode);
+}
+
+void blinkDigitalOutput(uint8_t pin, uint16_t speed) {
+  static unsigned long previousMicros = micros();
+  if (speed == 0) {
+    digitalWrite(pin, LOW);
+    previousMicros = micros();
+  }
+  else {
+    uint32_t blinkHalfPeriod = baseBlinkPeriod / speed;
+    if (micros() - previousMicros >= blinkHalfPeriod) {
+      previousMicros += blinkHalfPeriod;
+      digitalWrite(pin, !digitalRead(pin));
+    }
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> <em class="remark">Remarque</em>. La fonction <code>initDigitalInput</code> peut sembler inutile dans la mesure où elle ne fait qu'appeler la fonction <code>pinMode</code>. Elle n'a pour but que de déporter du module principal une fonction de bas niveau qui serait éventuellement implémentée autrement dans un autre environnement matériel. Elle pourrait également apparaître plus pertinente pour un programme mettant en œuvre plusieurs entrées booléennes (en factorisant le code). </p>
+
+
+
+<h3> Module de changement de la fréquence de clignotement </h3>
+
+
+
+<h4> Fichier d'en‑tête <code class="filename">blinkSpeedManagement.h</code> </h4>
+
+
+<p> Il contient : </p>
+
+<ul>
+	<li> la directive d'inclusion du fichier d'en‑tête principal du programme ; </li>
+
+	<li> le prototype de la fonction définie dans le fichier d'implémentation associé <code>blinkSpeedManagement.cpp</code>. </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include "multiSpeedBlink.h"
+
+void switchToNextBlinkSpeed(uint16_t & blinkSpeed);
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+
+<h4> Fichier d'implémentation <code class="filename">blinkSpeedManagement.cpp</code> </h4>
+
+<p> Il contient : </p>
+
+<ul>
+	<li> la directive d'inclusion du fichier d'en‑tête associé ; </li>
+
+	<li> la déclaration de la variable externe de vitesse (déclarée dans le fichier d'implémentation principal) ; </li>
+
+	<li> la définition de la fonction déclarée dans le fichier d'en‑tête associé ; c'est une procédure qui modifie la variable globale de vitesse conformément à la spécification ; </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include "blinkSpeedManagement.h"
+
+void switchToNextBlinkSpeed(uint16_t & blinkSpeed) {
+  if (blinkSpeed == 0) {
+    blinkSpeed = 1;
+  }
+  else {
+    blinkSpeed = (blinkSpeed * 2) % maxBlinkSpeed;
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Remarque</em>. Il peut sembler fastidieux de créer un module pour une seule fonction, mais cela découle du fait que le programme est simple. Du point de vue fonctionnel, il semblerait peu cohérent de placer cette fonction dans l'un des trois autres modules. </p>
+
+
+
+<h3 id="LogicalSignals"> Module de détection de fronts montants sur le signal du bouton </h3>
+
+
+<h4> Fichier d'en‑tête <code class="filename">LogicalSignals.h</code> </h4>
+
+<p> Il contient : </p>
+
+<ul>
+	<li> la directive d'inclusion du fichier d'en‑tête <code>Arduino.h</code> car le fichier d'implémentation associé utilise des fonctions <em class="mark">Arduino</em> ; </li>
+
+	<li> la déclaration du type <code>LogicalSignal</code> qui regroupe dans un type structuré un numéro de broche du port numérique et un octet pour stocker sur ses deux premiers bits la valeur courante et la valeur précédente du niveau logique sur la broche (les types structurés sont abordés au chap. C5‑V <a class="next" href="../C5-StructuresPointeurs/Cc5-5_structuresHeterogenes.html" target="_BLANK"></a>) ; </li>
+
+	<li> le prototype des deux fonctions définies dans le fichier d'implémentation associé <code>LogicalSignals.cpp</code>. </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;Arduino.h&gt;
+
+typedef struct {
+  uint8_t pin;  // pin number to be declared as INPUT our INPUT_PULLUP
+  byte levels;  // current level on bit 0, previous level on bit 1
+} LogicalSignal;
+
+void updateSignal(LogicalSignal & signal); // to be called once in loop function
+bool risingEdge (LogicalSignal signal);
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<h4 > Fichier d'implémentation <code class="filename">LogicalSignals.cpp</code> </h4>
+
+
+<p> Il contient : </p>
+
+<ul>
+	<li> la directive d'inclusion du fichier d'en‑tête associé ; </li>
+
+	<li> la définition des deux fonctions déclarées dans le fichier d'en‑tête associé.  </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include "LogicalSignals.h"
+
+void updateSignal(LogicalSignal & signal) {
+  signal.levels <<= 1;        // record previous level on bit rank 1
+  // copy current level on bit rank 0 and clear all bits ranging over rank 1
+  signal.levels = ((digitalRead(signal.pin) | signal.levels) & 0b11);
+}
+
+bool risingEdge (LogicalSignal signal) {
+  return (signal.levels == 0b01);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Remarque</em>. Contrairement aux autres modules, celui-ci ne requiert pas la directive <code>#include "multiSpeedBlink.h"</code> car aucune de ces fonctions ne fait appel à un élément spécifique du programme. Il peut être complété pour former une bibliothèque de fonctions lecture de niveaux et de fronts sur un signal d'entrée booléenne. </p>
+
+
+
+
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

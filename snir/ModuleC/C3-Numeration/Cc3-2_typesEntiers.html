@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="II"
+  data-pageState="OK"
+  data-pageheadtitle="Types entiers"
+  data-pagefulltitle="Les types entiers"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<div class="exergue">
+
+<img class="top-right" src="../img/cardinal.png" width="150px">
+<p class="square"> En programmation comme en mathématiques, on utilise avant tout un <strong class="specialV">nombre entier</strong> dans un programme pour exprimer :   </p>
+
+<ul>
+  <li> soit un aspect <strong class="specialMg">cardinal</strong>, c'est‑à‑dire relatif à une <strong>quantité d'éléments</strong> dans un ensemble <a class="external" href="https://fr.wikipedia.org/wiki/Cardinalité_(mathématiques)" target="_BLANK">W</a> ; </li>
+
+  <div style="display:inline-block;">
+    <img class="top-right" src="../img/ordinal.png" width="150px"> 
+  <li> soit un aspect <strong class="specialMg">ordinal</strong>, c'est‑à‑dire relatif à une <strong>position</strong> au sein d'une suite ordonnée d'éléments <a class="external" href="https://fr.wikipedia.org/wiki/Nombre_ordinal" target="_BLANK">W</a>. </li>
+  </div><!-- display -->
+</ul>
+
+<p> Mais il existe un <strong class="warning">différence majeure</strong> : en mathématiques, les nombres entiers sont sans limite, alors qu'en informatique, les <strong class="title">types entiers</strong> ont forcément une <strong class="cons">étendue limitée</strong>, puisque les mémoires des systèmes numériques ne peuvent offrir qu'un <strong>espace de stockage fini</strong>. </p>
+
+<p> En langages <strong>C</strong> et <strong>C++</strong>, les <strong class="title">types entiers</strong> sont <strong class="defin">fondamentaux</strong> car, en plus des nombres entiers à proprement parler, ils servent à <strong class="defin">définir d'autres types de donnée</strong>s : les <strong>caractères</strong>, les <strong>booléens</strong>, les <strong>énumérés</strong>. </p>
+
+
+<p class="square"> Conçus pour permettre une <strong class="defin">gestion fine de la mémoire</strong>, les langages <strong>C</strong> et <strong>C++</strong> mettent à disposition du codeur une <strong>grande variété</strong> de <strong class="title">types entiers</strong> : </p>
+
+<ul>
+  <li> avec <strong>différentes</strong> <strong class="defin">tailles</strong> (1, 2, 4 ou 8 octets), </li>
+
+  <li> et la possibilité ou non de coder un <strong class="defin">signe</strong> <strong>positif</strong> ou <strong>négatif</strong>, </li>
+</ul>
+
+<p> offrant ainsi toute une gamme de compromis en termes d'<strong class="defin">étendue de valeurs</strong> et d'<strong class="cons">encombrement en mémoire</strong> pour stocker des données. </p>
+
+<p> Il est certes difficile de percevoir l'importance de ces aspects lorsque l'on débute en programmation, mais il faut comprendre que dans les <strong class="title">contextes professionnels</strong> du développement informatique, lorsqu'une application doit manipuler des données en grands nombres, le <strong class="pros">bon dimensionnement</strong> de leur taille est une <strong>question stratégique</strong>. </p>
+
+
+<p class="square"> En tout état de cause, une solide connaissance des types entiers est indispensable à tout codeur. Aussi ce chapitre se donne donc pour <strong class="title">objectif</strong> : </p>
+
+<ul>
+  <li> de présenter les <strong class="specialLB">principales familles</strong> de <strong>types entiers</strong>, en détaillant leurs caractéristiques (taille, étendue, etc.) ; </li>
+
+  <li> de donner la <strong class="specialLB">syntaxe de codage</strong> des <strong>valeurs entières</strong> ; </li>
+
+  <li> d'expliquer les <strong>deux</strong> <strong class="specialLB">formats d'encodage</strong> des <strong>valeurs entières</strong> (la façon dont les données sont stockées dans les bits de la mémoire) selon que le type est <strong class="defin">signé</strong> ou <strong class="defin">non</strong> ; </li>
+
+  <li> d'exposer les particularités et précautions d'emploi de certains <strong class="specialLB">opérateurs</strong> sur les valeurs entières, et d'attirer dès à présent l'attention sur la notion de <strong class="warning">débordement</strong> et de <strong>rebouclage cyclique</strong>. </li>
+</ul>
+
+<div class="expert">
+<p> Dans cet exposé, les <strong class="title">aspects de bas niveau</strong> comme les <strong class="specialLB">formats d'encodage</strong> peuvent ne pas sembler essentiels dans un premier temps pour le codage des programmes. Pourtant, ils constituent des <strong>prérequis indispensables</strong> pour comprendre des notions étudiées dans les chapitres suivants (opérateurs de décalage de bits, conversions, codage des caractères, etc.).  </p>
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Variété des types entiers </h2>
+
+
+<div class="expert">
+<p> Les spécifications des <strong class="title">normes</strong> respectives des langages <strong>C</strong> et <strong>C++</strong> sur les <strong class="specialLB">types entiers</strong> sont <strong class="warning">difficiles à comprendre</strong> pour un codeur débutant. Au motif d'une forte compatibilité avec l'évolution historique des langages, elles imposent des contraintes minimales de taille tout en laissant une certaine <strong class="pros">liberté d'implémentation</strong> (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#implementation" target="_BLANK"></a>). </p>
+
+<p> Pour des questions pédagogiques, il est préférable de ne pas trop insister sur ces contraintes normalisées et d'aborder la <strong class="title">variété des types entiers</strong> de façon pragmatique, au regard des <strong class="defin">implémentations les plus courantes</strong>, en particulier celles basées sur les chaînes de compilation <strong>GCC</strong>. </p>
+</div><!-- expert -->
+
+
+<h3 id="entiersStandards"> Types entiers standards du langage <em class="mark">C</em> </h3>
+
+
+
+<div class="important">
+<p> Dans le <strong>noyau</strong> des langages <strong>C</strong> et <strong>C++</strong> (c'est‑à‑dire, sans recourir à un module de bibliothèque), avec la plupart des implémentations : </p>
+
+<ul>
+	<li> on compte <strong class="title">quatre types entiers</strong> qui diffèrent par leur <strong class="defin">taille minimale</strong> – <strong>1</strong>, <strong>2</strong>, <strong>4</strong> ou <strong>8 octets</strong> – et donc en proportion par le <strong>nombre de valeurs</strong> encodables ; ils sont respectivement désignés par les <strong class="specialG">descripteurs</strong> abrégés : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">char</code>, <code class="prettyprint lang-c">int</code> ou <code class="prettyprint lang-c">short</code>, <code class="prettyprint lang-c">int </code> ou <code class="prettyprint lang-c">long</code> et <code class="prettyprint lang-c">long long</code>
+  </span> </li>
+
+  <li> le <strong class="specialG">descripteur</strong> <code class="prettyprint lang-c">int</code> désignant le type entier <strong class="defin">à employer par défaut</strong> dans toutes les situations sans contraintes particulières ; il a une <strong class="pros">taille optimisée</strong> en fonction de l'implémentation ; </li>
+
+	<li> par ailleurs, chaque type entier se décline  en <strong class="title">deux sous‑types</strong> <strong class="specialLB">signé</strong> et <strong class="specialLB">non signés</strong>, qui différent l'un de l'autre par leur <strong>étendue</strong>, c'est‑à‑dire l'intervalle des valeurs encodables ; pour les désigner, il suffit d'adjoindre respectivement l'un des deux <strong>mot‑clefs</strong> <code class="prettyprint lang-c">signed</code> ou <code class="prettyprint lang-c">unsigned</code> au descripteur de type. </li> 
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> <strong>Selon  l'implémentation</strong> (machine et chaîne de compilation – cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#implementation" target="_BLANK"></a>), les <strong class="title">types entiers standards</strong> ne sont <strong class="cons">pas toujours</strong> désignés par les <strong>mêmes descripteurs</strong>. Dans le cadre des exercices et <em class="sigle">TP</em> de ce module de formation, on rencontrera essentiellement <strong class="specialLB">3 cas de figure</strong>, que détaille le tableau ci‑dessous. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+  <tr>  
+    <th> PC <em class="mark">Linux</em> (<em class="mark">GCC</em>)</strong> </th>
+    <th> PC <em class="mark">Windows</em> <br> ou Carte 32 bits </th>
+    <th> Carte 8 bits <br> (<em class="signalée">AVR</em>) </th>  
+    <th> Taille <br> (octets)  </th> 
+    <th> Nombre de <br> valeurs  </th>
+    <th> Sous‑type <br> 
+      <code class="prettyprint lang-c" style="background: #F0F0F0; padding-left: 0.3em; padding-right: 0.3em;">signed</code> </th>
+    <th> Sous‑type <br> 
+      <code class="prettyprint lang-c" style="background: #F0F0F0; padding-left: 0.3em; padding-right: 0.3em;">unsigned</code> </th> 
+  </tr>
+  <tr>
+    <td colspan="3"> <code class="prettyprint lang-c">char</code> </td>
+    <td style="text-align: center;">  <em class="bold">1</em> </td>
+    <td style="text-align: center;"> 2<sup>8</sup> = 256 </td>
+    <td style="text-align: center;"> −128 … 0 … 127 </td>
+    <td style="text-align: center;"> 0 … 255 </td>
+  </tr>
+  <tr>
+    <td colspan="2"> <code class="prettyprint lang-c">short</code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">short</code> ou <code class="prettyprint lang-c">int</code>  </td>
+    <td style="text-align: center;">  <em class="bold">2</em> </td>
+    <td style="text-align: center;"> 2<sup>16</sup> = 65&#8239;536 </td>
+    <td style="text-align: center;"> −32&#8239;768 … 0 … 32&#8239;767 </td>
+    <td style="text-align: center;"> 0 … 65&#8239;535 </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">int</code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">int</code> ou <code class="prettyprint lang-c">long</code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">long</code> </td>
+    <td style="text-align: center;">  <em class="bold">4 </em></td>
+    <td style="text-align: center;"> 2<sup>32</sup> = 4&#8239;294&#8239;967&#8239;296 </td>
+    <td style="text-align: center;"> −2&#8239;147&#8239;483&#8239;648 … 0 … 2&#8239;147&#8239;483&#8239;647 </td>
+    <td style="text-align: center;"> 0 … 4&#8239;294&#8239;967&#8239;295 </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">long</code> ou <code class="prettyprint lang-c">long long</code> </td>
+    <td colspan="2" style="text-align: center;"> <code class="prettyprint lang-c">long long</code> </td>
+    <td style="text-align: center;">  <em class="bold">8</em> </td>
+    <td style="text-align: center;"> 2<sup>64</sup> = <br>
+    18&#8239;446&#8239;744&#8239;073&#8239;709&#8239;551&#8239;616 </td>
+    <td style="text-align: center;"> −9&#8239;223&#8239;372&#8239;036&#8239;854&#8239;775&#8239;808 … <br>
+         0 … 9&#8239;223&#8239;372&#8239;036&#8239;854&#8239;775&#8239;807 </td>
+    <td style="text-align: center;"> 0 … 18&#8239;446&#8239;744&#8239;073&#8239;709&#8239;551&#8239;615 </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+<div class="expert">
+<p> Pour plus de détails sur les différentes <strong>implémentations de machines 64 bits</strong>, on pourra consulter ce lien <a class="external" href="https://en.wikipedia.org/wiki/64-bit_computing#64-bit_data_models" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<div class="remarques" id="remarqueTypes"><p class="remarques"></p>
+<ol class="littered">
+  <li> Avec les <strong>5 descripteurs</strong> <code class="prettyprint lang-c">signed char</code>, <code class="prettyprint lang-c">short</code>, <code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">long</code> et <code class="prettyprint lang-c">long long</code>, les <strong class="title">normes</strong> des langages <strong>C</strong> et <strong>C++</strong> définissent en principe <strong class="cons">5</strong> <strong>types entiers standards</strong> signés, mais concrètement, sur les implémentations courantes, il y a toujours <strong>deux types qui sont équivalents</strong> en termes de taille, comme détaillé dans le tableau ci‑dessus. </li>
+
+  <li> Le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">signed</code> est <strong class="defin">facultatif</strong> <strong class="warning">sauf</strong> pour le type <code class="prettyprint lang-c">char</code>. En effet, sur certaines implémentations, le type <code class="prettyprint lang-c">char</code> est <strong class="warning">non signé</strong>. </li>
+
+  <li style="margin-bottom : 0em;"> Le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">int</code> est <strong class="defin">facultatif</strong> : </li>
+  <ul>
+    <li> le descripteur <code class="prettyprint lang-c">short int</code> est <strong>équivalent</strong> au descripteur abrégé <code class="prettyprint lang-c">short</code> ; idem pour <code class="prettyprint lang-c">long</code> et <code class="prettyprint lang-c">long long</code> ;  </li>
+
+    <li> le descripteur <code class="prettyprint lang-c">unsigned int</code> est <strong>équivalent</strong> au descripteur abrégé <code class="prettyprint lang-c">unsigned</code> ; idem pour <code class="prettyprint lang-c">signed</code> ; </li>
+
+    <li> toute <strong class="title">donnée déclarée</strong> <strong class="cons">sans descripteur de type</strong> se voit attribuer <strong>par défaut</strong> le <strong>type</strong> <code class="prettyprint lang-c">int</code>  (mais pour des questions de lisibilité, il faut <strong class="warning">ne pas céder à cette facilité</strong>).</li>
+  </ul>
+</ol>
+</div>
+
+
+<h4 id="limits"> Valeurs des limites d'étendue sur une implémentation </h4>
+
+
+<div class="complement">
+<p> En règle générale, sachant les techniques d'encodage usuelles (cf. infra <a class="infra" href="Cc3-2_typesEntiers.html#formatEncodage"></a>), les <strong class="title">limites d'étendue</strong> d'un <strong class="specialLB">type entier</strong> sont données par les <strong>expressions exponentielles</strong> du tableau ci‑dessous : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>  
+    <th> largeur <br> (bits)  </th>
+    <th> Nombre de <br> valeurs  </th>
+    <th> Sous‑type <br> 
+      <code class="prettyprint lang-c" style="background: #F0F0F0; padding-left: 0.3em; padding-right: 0.3em;">signed</code> </th>
+    <th> Sous‑type <br> 
+      <code class="prettyprint lang-c" style="background: #F0F0F0; padding-left: 0.3em; padding-right: 0.3em;">unsigned</code> </th> 
+  </tr>
+  <tr>
+    <td style="text-align: center;">  <strong>n</strong> </td>
+    <td style="text-align: center;"> <em class="bold">2</em><sup><strong>n</strong></sup> </td>
+    <td style="text-align: center;"> <em class="bold">{−2<sup><strong>n</strong> − 1</sup>,  … 2<sup><strong>n</strong> − 1</sup> − 1}</em> </td>
+    <td style="text-align: center;"> <em class="bold">{0, … 2<sup><strong>n</strong></sup> − 1}</em> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<p> Toutefois, certaines limites d'étendue peuvent être <strong class="cons">différentes d'une implémentation à l'autre</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<div class="important">
+<p>  C'est pourquoi le langage <strong>C</strong> met à disposition du codeur le <strong>fichier d'en‑tête</strong> <code class="filename">limits.h</code> de la bibliothèque standard (<code class="filename">climits</code> en <strong>C++</strong>) qui fournit les <strong class="title">limites d'étendue</strong> des <strong class="specialLB">types entiers</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces <strong class="title">limites d'étendues</strong> sont données sous forme de <strong class="defin">pseudo‑constantes</strong> qui prennent chacune une <strong class="pros">valeur spécifique</strong> lors de la compilation pour la <strong>machine cible</strong>. Elles sont désignées toujours par des <strong class="specialG">identificateurs</strong> en <strong>majuscules</strong> de la forme <a class="external" href="https://en.cppreference.com/w/c/types/limits" target="_BLANK">C</a> : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">abréviation</strong></span>_MIN</code> pour la <strong class="defin">valeur minimale</strong>, </li>
+
+  <li> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">abréviation</strong></span>_MAX</code> pour la <strong class="defin">valeur maximale</strong>, </li>
+</ul>
+
+<p>  encodable dans le type spécifié par le <strong class="specialLB">préfixe d'abréviation</strong> indiqué dans le tableau ci‑dessous : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>  
+    <th width="30%"> Descripteur  </th>
+    <th width="35%"> Sous‑type <br> 
+      <code class="prettyprint lang-c" style="background: #F0F0F0; padding-left: 0.3em; padding-right: 0.3em;">signed</code> </th>
+    <th width="35%"> Sous‑type <br> 
+      <code class="prettyprint lang-c" style="background: #F0F0F0; padding-left: 0.3em; padding-right: 0.3em;">unsigned</code> </th> 
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">char</code> </td>
+    <td colspan="2" style="padding:0em;"><table style="margin:0em;">
+      <td style="text-align: center; border: none; border-right: solid 1px black;">  <code class="prettyprint lang-c">SCHAR</code> </td>
+      <td style="text-align: center; border: none; border-right: solid 1px black;">  <code class="prettyprint lang-c">CHAR</code> </td>
+      <td style="text-align: center;border: none;">  <code class="prettyprint lang-c">UCHAR</code> </td>
+    </table></td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">short </code> </td>
+    <td style="text-align: center;">  <code class="prettyprint lang-c">SHRT</code> </td>
+    <td style="text-align: center;">  <code class="prettyprint lang-c">USHRT</code> </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">int </code> </td>
+    <td style="text-align: center;">  <code class="prettyprint lang-c">INT</code> </td>
+    <td style="text-align: center;">  <code class="prettyprint lang-c">UINT</code> </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">long</code> </td> 
+    <td style="text-align: center;">  <code class="prettyprint lang-c">LONG</code> </td>
+    <td style="text-align: center;">  <code class="prettyprint lang-c">ULONG</code> </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">long long</code> </td> 
+    <td style="text-align: center;">  <code class="prettyprint lang-c">LLONG</code> </td>
+    <td style="text-align: center;">  <code class="prettyprint lang-c">ULLONG</code> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<p> avec le cas particulier du type <code class="prettyprint lang-c">char</code>, conformément à la remarque <em class="bold">A)</em> supra. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Ainsi, pour afficher la <strong class="title">valeur maximale</strong> encodable dans le type <code class="prettyprint lang-c">unsigned</code>, il suffit de coder : </p>
+<ul>
+  <li>  <code class="prettyprint lang-c">Serial.println(UINT_MAX);</code> dans un programme pour <strong>carte</strong> <strong class="Arduino">Arduino</strong>, 
+  sans oublier d'<strong>initialiser</strong> préalablement le <strong>moniteur série</strong> (cf. chap. C3‑X <a class="next" href="Cc3-10_moniteurSerie.html#initialisation" target="_BLANK"></a>) ; </li>
+
+  <li> <code class="prettyprint lang-c">printf("%u\n", UINT_MAX);</code> dans un programme pour <strong>ordinateur</strong>, sans oublier de coder préalablement la <strong>directive</strong> <code class="prettyprint lang-c">#include &lt;stdio.h&gt;</code>  (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#directives" target="_BLANK"></a>). </li>
+</ul>
+<p> Dans les deux cas, il faut <strong class="warning">ne pas oublier</strong> de coder en début de programme la <strong>directive</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;limits.h&gt;</code>
+</span> </p>
+</div><!-- exemples -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="stdint"> Types entiers à largeur spécifiée  </h3>
+
+
+
+<h4> Problématiques </h4>
+
+
+<p class="square"> On a vu que le <strong class="title">type entier</strong> <code class="prettyprint lang-c">char</code> se nomme ainsi (comme abréviation de <em class="english">character</em> en anglais) car il permet de représenter le <strong>jeu de caractères <em class="sigle">ASCII</em> restreint</strong> (cf. chap C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#typesLangC" target="_BLANK"></a>). </p>
+
+<p> Mais ce mot‑clef pose un <strong class="warning">problème de lisibilité</strong> dans les descripteurs de types pour <strong>déclarer des données</strong> représentant des <strong class="defin">nombres</strong>, et non <strong class="cons">pas des caractères</strong>. </p>
+
+
+<div class="exemples">
+<p class="exemple"> Un codage de <strong class="title">boucle répétitive</strong> <code class="prettyprint lang-c">for</code> comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  for (char i = 0; i <= 10; i++) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> n'est <strong class="cons">pas très clair</strong>, car la <strong class="defin">variable d'itération</strong> <code class="prettyprint lang-c">i</code>, déclarée de type <code class="prettyprint lang-c">char</code> ne représente pourtant <strong>pas un caractère</strong> (sinon, ses valeurs initiales et finales seraient codées par des valeurs de caractères comme <code>'A'</code>…). </p>
+
+<p> Il serait donc <strong class="pros">plus logique</strong> de coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  for (int i = 0; i <= 10; i++) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> mais alors la variable <code class="prettyprint lang-c">i</code> occupe alors un <strong class="cons">espace mémoire disproportionné</strong> (4 octets) par rapport à l'étendue des valeurs qu'elle prend. </p>
+</div><!-- exemples -->
+
+
+
+<p class="square"> De plus, le fait que certains types aient une <strong class="title">taille variable selon l'implémentation</strong> peut poser des <strong class="warning">problèmes de portage</strong> du code source d'un programme. </p>
+
+<p> Par exemple, un programme utilisant des données de <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code> qui aurait été développé pour une carte <strong class="Arduino">Arduino Due</strong> pourrait subir des <strong class="warning">dysfonctionnements</strong> s'il était porté sur une <strong class="Arduino">Arduino Uno</strong> ou ce type est <strong class="cons">deux fois moins large</strong>. </p>
+
+
+<h4> Types entiers à largeur spécifiée </h4>
+
+
+<div class="important">
+<p> Le <strong>fichier d'en‑tête</strong> <code class="filename">stdint.h</code> (<code class="filename">cstdint</code> en <strong class="title">C++</strong>) de la bibliothèque standard du langage déclare par <em>synonymie</em> – c'est‑à‑dire via le mot‑clef <code class="prettyprint lang-c">typedef</code> – une <strong>série de</strong> <strong class="title">types entiers à largeur spécifiée</strong> : </p>
+
+<ul>
+	<li> <strong class="specialLB">signés</strong> – <code class="prettyprint lang-c">int8_t</code>,
+		<code class="prettyprint lang-c">int16_t</code>,
+		<code class="prettyprint lang-c">int32_t</code> et
+		<code class="prettyprint lang-c">int64_t</code> ; </li>
+
+	<li> et <strong class="specialLB">non signés</strong> – <code class="prettyprint lang-c">uint8_t</code>,
+		<code class="prettyprint lang-c">uint16_t</code>,
+		<code class="prettyprint lang-c">uint32_t</code> et 
+		<code class="prettyprint lang-c">uint64_t</code> ; </li>
+</ul>
+
+<p> où le nombre dans l'identificateur – <code class="prettyprint lang-c">8</code>, <code class="prettyprint lang-c">16</code>, etc. – explicite la <strong class="defin">largeur</strong> <strong class="specialN">en bits</strong> du type, <em class="remark">quelle que soit l'implémentation</em>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En termes de <strong class="pros">bonnes pratiques</strong>, il est <strong>recommandé</strong> de ne pas recourir au type <code class="prettyprint lang-c">int</code> mais d'utiliser systématiquement des <strong class="title">types à largeur spécifiée</strong>, et ceci particulièrement : </p>
+<ul>
+  <li> si les données déclarées peuvent prendre des <strong>valeurs</strong> un tant soit peu <strong>élevées</strong> (au delà de ±100) ; en effet, des produits de ces valeurs peuvent facilement déborder de l'intervalle des valeurs encodables du type <code class="prettyprint lang-c">int</code> si ce dernier a une taille de seulement 2 octets ;  </li>
+
+  <li> ou si la machine cible possède une architecture à <strong class="cons">mémoire très limitée</strong>, typiquement comme les <strong>cartes</strong> <strong class="Arduino">Arduino Uno</strong>, <strong class="Arduino">Nano</strong> et les <strong>microcontrôleurs</strong> <strong class="specialT">ATtiny</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemple">
+ <code class="prettyprint lang-c">int8_t</code> est l'identificateur d'un <strong class="title">type à largeur spéciée</strong> de <strong>valeurs entières signées</strong> encodées sur exactement <strong>8 bits</strong>, soit un octet. Il est <strong class="defin">équivalent</strong> au type <code class="prettyprint lang-c">signed char</code>. </p>
+
+<p> Ce type est un <strong class="pros">bon choix</strong> pour déclarer une <strong>variable d'itération</strong> de boucle <code class="prettyprint lang-c">for</code> dans les environnement à <strong class="cons">mémoire limitée</strong>, du moins tant que cette variable reste dans l'intervalle {−128 ; +127}. </p>
+</div><!-- exemples -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li style="margin-bottom: 0.2em"> Le <strong>fichier d'en‑tête</strong> <code class="filename">stdint.h</code> (<code class="filename">cstdint</code> en <strong class="title">C++</strong>) <a class="external" href="https://en.cppreference.com/w/c/types/integer" target="_BLANK">C</a> : </li>
+
+  <ul>
+    <li> définit <strong class="title">deux autres séries</strong> de <strong class="specialG">types à largeur spécifiée</strong> (<code>_fast</code> et <code>_least</code>) ; </li>
+
+    <li> mais peut éventuellement <strong class="warning">ne pas définir</strong> la série <code class="prettyprint lang-c">int8_t</code>, <code class="prettyprint lang-c">int16_t</code>… exposée supra ; tout dépend de l'<strong>implémentation</strong> ; </li>
+
+    <li> définit également les <strong>pseudo‑constantes</strong> donnant les <strong class="defin">valeurs limites</strong> de tous les types qui y sont définis (<code class="prettyprint lang-c">INT8_MIN</code>, <code class="prettyprint lang-c">INT8_MAX</code>, etc.). </li>
+  </ul>
+
+  <li style="margin-top: 0.5em; margin-bottom: 0.2em"> La <strong class="title">bibliothèque standard</strong> comporte également le <strong>fichier d'en‑tête</strong> <code class="filename">inttypes.h</code> (<code class="filename">cinttypes</code> en <strong class="title">C++</strong> et même page de référence que supra) : </li>
+
+  <ul>
+    <li> où figure la <strong>directive</strong> <code class="prettyprint lang-c">#include &lt;stdint.h&gt;</code> (<code class="prettyprint lang-c">&lt;cstdint&gt;</code> en <strong class="title">C++</strong>) ; </li>
+
+    <li> et qui définit en plus des <strong class="specialDR">spécifications de conversion</strong> <strong class="defin">appropriées</strong> à employer pour les entrées‑sorties (avec les fonctions <code class="prettyprint lang-c">printf</code>, <code class="prettyprint lang-c">scanf</code> – cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#specificationsConversion" target="_BLANK"></a>) dans le cas de données de types entiers à largeur spécifiée. </li>
+  </ul>
+
+  <li style="margin-top: 0.5em;"> Dans un <strong>programme</strong> <strong class="Arduino">Arduino</strong>, il n'est <strong class="pros">pas nécessaire</strong> de coder une <strong>directive d'inclusion</strong> pour employer les <strong class="title">types entiers à largeur spécifiée</strong>. En effet, la directive : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:27">
+#include &lt;inttypes.h&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+  est <strong>déjà codée</strong> dans le fichier <code class="filename">HardwareSerial.h</code>, lui‑même inclus par une directive dans le fichier <code class="filename">Arduino.h</code> (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#fonctionnementArduino" target="_BLANK"></a>). Et comme expliqué supra, on y trouve la directive d'inclusion du fichier d'en‑tête <code class="filename">stdint.h</code>. </li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Codage et types des constantes littérales entières </h2>
+
+
+
+<h3> Rappels de numération </h3>
+
+
+
+<p> Les passages ci‑dessous sont extraits d'un <strong class="title">cours de numération</strong> pour les <strong>Sciences de l'ingénieur</strong>, que l'on pourra consulter en intégralité si besoin <a class="external" href="../doc/SI_43C&#32;-&#32;numeration.pdf" target="_BLANK"></a>.  </p>
+
+<img class="top-left" src="../img/rappelNumeration.jpg" style="min-width: 800px">
+
+
+
+
+<h3> Notion de constante littérale entière </h3>
+
+
+
+<div class="important">
+<p> Comme en mathématiques, dans une <strong>expression</strong> codée en langage <strong>C</strong> ou <strong>C++</strong> (et hors d'une chaîne de caractère), toute <strong class="defin">suite de chiffres</strong>, éventuellement précédée d'un signe <code class="prettyprint lang-c">+</code> ou <code class="prettyprint lang-c">-</code>, est interprétée par le compilateur comme une <strong class="title">constante littérale entière</strong>. </p>
+
+<p> De plus, la <strong class="specialLB">valeur numérique</strong> de cette constante est interprétée <strong class="defin">par défaut</strong> – c'est‑à‑dire, sauf spécification particulière – en <strong class="specialR">base 10</strong> selon le principe usuel de la <strong>numération par position</strong> avec, de droite à gauche, le chiffre des unités, des dizaines, etc. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette syntaxe de codage par défaut, du fait qu'une <strong class="title">constante littérale</strong> se lit directement comme sa <strong class="specialLB">valeur numérique</strong> usuelle (en base 10), on peut avoir tendance à <strong class="cons">confondre ces deux notions</strong>. </p>
+</div><!-- complement -->
+<div class="exemples">
+<p class="exemple"> Dans n'importe quelle expression, la <strong class="title">constante littérale</strong> codée <code class="prettyprint lang-c">12345</code> est interprétée par le compilateur comme la <strong class="defin">valeur numérique</strong> <em class="bold">12&#8239;345</em> (douze‑mille-trois‑cent-quarante‑cinq). </p>
+</div><!-- exemples -->
+
+<p> Mais on va voir ci‑après que la syntaxe des langages <strong>C</strong> et <strong>C++</strong> permet de coder des <strong class="title">constantes littérales entières</strong> de bien d'<strong class="defin">autres façons</strong>. </p>
+
+
+
+
+<h3 id="constantesLitterales"> Codage d'une constante littérale entière en base 2, 8, 16 </h3>
+
+
+
+<div class="complement">
+<p> Remarquons tout d'abord que les <strong>langages de programmation</strong> <strong class="warning">ne reconnaissent pas</strong> les <strong class="title">notations mathématiques indicielles</strong> (<strong>x</strong>)<sub><strong class="title">b</strong></sub> ou <strong>x</strong><sub>(<strong class="title">b</strong>)</sub> qui sont d'usage pour signifier qu'une constante littérale s'exprime en base <strong class="title">b</strong></sub>. </p>
+
+<p> Et plus généralement, un <strong>éditeur de code</strong> ne permet pas la saisie de texte en indice. C'est pourquoi d'<strong class="specialLB">autres notations</strong> sont employées – avec des <strong class="defin">préfixes</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on peut coder une <strong>constante littérale entière</strong> dans une <strong class="title">base de numération</strong> <strong class="specialLB">autre que la base 10</strong> par défaut en adjoignant à cette valeur un <strong class="defin">préfixe</strong> : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">0b</code> ou <code class="prettyprint lang-c">0B</code> pour la <strong>base</strong> <strong class="title">2</strong> – et on parle alors de <strong class="defin">code binaire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_binaire" target="_BLANK">W</a> ; </li>
+
+  <li> <code class="prettyprint lang-c">0x</code> ou <code class="prettyprint lang-c">0X</code> pour la <strong>base</strong> <strong class="title">16</strong> – et on parle alors de <strong class="defin">code hexadécimal</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_hexadécimal" target="_BLANK">W</a> ;</li>
+
+  <li> <code class="prettyprint lang-c">0</code> pour la <strong>base</strong> <strong class="title">8</strong>, aujourd'hui <strong class="cons">désuète</strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> La <strong class="title">constante littérale</strong> <code class="prettyprint lang-c">0b11</code> code la <strong>même valeur</strong> que <code class="prettyprint lang-c">3</code> (sans préfixe) ;</li></li>
+
+	<li> La <strong class="title">constante littérale</strong> <code class="prettyprint lang-c">0xFF</code> code la <strong>même valeur</strong> que <code class="prettyprint lang-c">255</code> (idem) ; </li>
+
+	<li> La <strong class="title">constante littérale</strong> <code class="prettyprint lang-c">077</code> code la <strong>même valeur</strong> que <code class="prettyprint lang-c">63</code> (idem). </li>
+</ul>
+</div>
+
+<div class="remarques">
+<p class="remarque"> La <strong class="title">base 8</strong> a beau être <strong class="cons">désuète</strong> depuis longtemps, son <strong>préfixe</strong> <code class="prettyprint lang-c">0</code> est <strong class="warning">maintenu</strong> par la norme du langage pour des questions de compatibilité des anciens programmes avec les compilateurs actuels. </p>
+
+<p> En méconnaître l'existence est une <strong class="cons">source d'erreur</strong> pour un codeur débutant. On veillera donc à <strong class="warning">ne jamais coder</strong> une <strong>constante littérale entière</strong> en <strong class="defin">base 10</strong> avec un <strong class="warning">zéro initial</strong> – à gauche, autrement dit un zéro <strong>non significatif</strong> – sous peine sinon de mauvaise surprise à l'exécution ! </p>
+
+<p> Rappelons en revanche qu'il est parfaitement possible, via des <strong class="specialDR">spécifications de conversion</strong>, de coder des instructions d'<strong>affichage de valeur numérique</strong> entière avec un <strong>zéro initial</strong> (comme le jour et le mois dans une date, par exemple 01/01/1970).  </p>
+</div><!-- remarque -->
+
+
+<h4 id="interetBase16"> Intérêt de la base 16 </h4>
+
+
+<div class="complement">
+<p> Chaque <strong>base de numération</strong> a des <strong class="title">usages spécifiques</strong> : </p>
+<ul>
+  <li> la <strong class="specialLB">base 10</strong> sert pour les <strong class="defin">valeurs et calculs usuels</strong> ; </li>
+
+  <li> la <strong class="specialLB">base 16</strong> sert pour exprimer les <strong class="defin">adresses</strong> (mémoire, réseaux, etc.) et plus généralement tous les <strong>mots binaires de grande taille</strong> (codes couleurs, etc.) ; </li>
+
+  <li> la <strong class="specialLB">base 2</strong> sert pour le <strong class="defin">détail des bits</strong> dans tout ou partie d'un <strong>mot binaire</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> En particulier, la <strong class="title">base 16</strong> présente l'<strong class="pros">intérêt</strong> essentiel d'exprimer avec <strong class="defin">quatre fois moins de digits</strong> les <strong>codes binaires</strong> (lesquels présentent justement l'inconvénient d'être souvent très longs). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En effet, partant de l'égalité <em class="bold">2<sup>4</sup> = 16</em>, toute <strong class="defin">nombre entier</strong> écrit en <strong class="specialLB">base 2</strong> se <strong class="title">transcode</strong> en <strong class="specialLB">base 16</strong> – et réciproquement – en procédant <strong>quartet par quartet</strong>. </p>
+
+<p> <em class="remark">Rappel</em> : un <strong class="title">quartet</strong> est un <strong class="defin">mot binaire de 4 bits</strong>, autrement dit un demi‑octet. </p>
+
+<p> Le transcodage en <strong class="title">base 16</strong> d'un code binaire présente l'avantage d'être <strong class="pros">plus facile à saisir et à lire</strong>, à condition de connaître les <strong>valeurs des digits hexadécimaux</strong> figurant dans les tableaux ci‑dessous. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th style="min-width: 4em; width: 4em;"> base 16  </th>
+    <th> <code>0</code> </th>  <th> <code>1</code> </th> 
+    <th> <code>2</code> </th>  <th> <code>3</code> </th> 
+    <th> <code>4</code> </th>  <th> <code>5</code> </th> 
+    <th> <code>6</code> </th>  <th> <code>7</code> </th> 
+    <th> <code>8</code> </th>  <th> <code>9</code> </th> 
+  </tr>
+  <tr>
+    <th style="color: green"> base 2  </th>
+    <td style="text-align: center"> <code style="color:green">0000</code> </td>
+    <td style="text-align: center"> <code style="color:green">0001</code> </td>
+    <td style="text-align: center"> <code style="color:green">0010</code> </td>
+    <td style="text-align: center"> <code style="color:green">0011</code> </td>
+    <td style="text-align: center"> <code style="color:green">0100</code> </td>
+    <td style="text-align: center"> <code style="color:green">0101</code> </td>
+    <td style="text-align: center"> <code style="color:green">0110</code> </td>
+    <td style="text-align: center"> <code style="color:green">0111</code> </td>
+    <td style="text-align: center"> <code style="color:green">1000</code> </td>
+    <td style="text-align: center"> <code style="color:green">1001</code> </td>            
+  </tr>
+</table>
+
+<table style="margin: 0em; margin-top: 0.5em">
+  <tr>
+    <th style="min-width: 4em; width: 4em;"> base 16</sub> </th>
+    <th> <code>A</code> </th>  <th> <code>B</code> </th> 
+    <th> <code>C</code> </th>  <th> <code>D</code> </th> 
+    <th> <code>E</code> </th>  <th> <code>F</code> </th> 
+  </tr>
+  <tr>
+    <th style="color: gray"> base 10</sub> </th>
+    <td style="text-align: center"> <code style="color:gray">10</code> </td>
+    <td style="text-align: center"> <code style="color:gray">11</code> </td>
+    <td style="text-align: center"> <code style="color:gray">12</code> </td>
+    <td style="text-align: center"> <code style="color:gray">13</code> </td>
+    <td style="text-align: center"> <code style="color:gray">14</code> </td>
+    <td style="text-align: center"> <code style="color:gray">15</code> </td>         
+  </tr>
+  <tr>
+    <th style="color: green"> base 2</sub> </th>
+    <td style="text-align: center"> <code style="color:green">1010</code> </td>
+    <td style="text-align: center"> <code style="color:green">1011</code> </td>
+    <td style="text-align: center"> <code style="color:green">1100</code> </td>
+    <td style="text-align: center"> <code style="color:green">1101</code> </td>
+    <td style="text-align: center"> <code style="color:green">1110</code> </td>
+    <td style="text-align: center"> <code style="color:green">1111</code> </td> 
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Le nombre entier <em class="bold">200</em> (en base 10), codé <code class="prettyprint lang-c">0b11001000</code> en <strong>base 2</strong> sur <strong>8 bits</strong>, se code avec seulement 8 ÷ 4 = <strong class="pros">2 digits</strong> – à savoir <code style="background: white">0xC8</code> – en <strong class="title">base 16</strong>  : </p>
+
+<ul>
+  <li> le digit hexadécimal <code style="background: white;">C</code> code le <strong>quartet</strong> <code style="background: white; color: green">1100</code> dit « <em>de poids fort</em> » ;</li>
+
+  <li> le digit hexadécimal <code style="background: white;">8</code> code le <strong>quartet</strong> <code style="background: white; color: green">1000</code> dit « <em>de poids faible</em> ». </li>
+</ul>
+
+<p> On peut vérifier qu'on a bien <em class="bold">200</em>  =  192 + 8  =  12×16<sup>1</sup>  +  8×16<sup>0</sup>. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="suffixes"> Typage d'une constante littérale entière </h3>
+
+
+<h4 id="typeParDefaut"> Type par défaut d'une constante littérale entière </h4>
+
+
+<div class="important">
+<p> Dans une expression en langage <strong>C</strong> ou <strong>C++</strong>, toute <strong class="title">constante littérale entière</strong> est <strong>compilée</strong> <strong class="defin">par défaut</strong> – c'est‑à‑dire sauf codage d'un suffixe, cf. infra <a class="infra" href="Cc3-2_typesEntiers.html#specifTypage"></a> – comme étant de <strong class="specialG">type</strong> :  </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">long</code> ou <code class="prettyprint lang-c">long long</code> si elle est codée <strong>sans préfixe de base</strong> – autrement dit en <strong>base 10</strong> ; </li>
+
+  <li> <code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">unsigned int</code>, <code class="prettyprint lang-c">long</code>, <code class="prettyprint lang-c">unsigned long</code>, <code class="prettyprint lang-c">long long</code> ou <code class="prettyprint lang-c">unsigned long long</code> si elle est codée avec un préfixe de <strong>base 2</strong>, <strong>8</strong> ou <strong>16</strong> ;</li>
+</ul>
+<p> et ce <strong class="defin">par ordre de préférence</strong>, dès que cette valeur entre dans l'<strong>étendue</strong> d'un de ces types. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ainsi, dans une expression, une <strong class="title">constante littérale entière</strong>  n'est donc <strong class="warning">jamais</strong> compilée comme étant de <strong class="specialG">type</strong> <code class="prettyprint lang-c">char</code> ou <code class="prettyprint lang-c">short</code>, même si sa valeur est incluse dans l'étendue de ces types. Elle est <strong class="defin">toujours</strong> « au moins » de <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code>.</p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Sur une <strong class="Arduino">carte Arduino</strong> à cœur <strong><em class="sigle">AVR</em></strong> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…) – donc avec une architecture <strong>8 bits</strong> : </p>
+<ul>
+  <li> la <strong>constante littérale</strong> codée <code class="prettyprint lang-c">100</code> est compilée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code>, même si elle aurait pu être encodée à moindre coût mémoire dans le type <code>char</code> ; </li>
+
+  <li> la <strong>constante littérale</strong> codée <code class="prettyprint lang-c">32768</code> est compilée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">long</code> car elle n'entre pas dans l'étendue du type <code>int</code> ; </li>
+
+  <li> la <strong>constante littérale</strong> codée <code class="prettyprint lang-c">0x8000</code> (qui vaut <code>32768</code>) est compilée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">unsigned int</code> parce qu'elle est codée en <strong>base 16</strong> et qu'elle entre dans l'étendue de ce type (mais pas dans celle du type <code>int</code>). </li>
+</ul>
+</div><!-- exemples -->
+
+<div class="expert">
+<p> L'<strong class="title">attribution d'un type</strong> à une constante littérale détermine le <strong>nombre de registres</strong> requis dans le <strong><em class="sigle">CPU</em></strong> pour effectuer un calcul avec cette donnée. La stratégie de compilation consistant à attribuer à toute valeur entière un type de <strong>taille</strong> <strong class="defin">au moins aussi grande</strong> que celle du type <code class="prettyprint lang-c">int</code> permet de <strong class="pros">diminuer les risques de débordement</strong> des limites minimales et maximales lors de l'évaluation des expressions calculatoires. </p>
+
+<div class="exemples">
+<p class="exemple"> Dans l'<strong class="title">expression calculatoire</strong> ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">21 * 10 / 7</code>
+</span> <br>
+toutes les constantes littérales qui y sont codées, ainsi que le résultat (a priori, la valeur <code>30</code>) sont encodables dans le <strong>type</strong> <code class="prettyprint lang-c">signed char</code>. Heureusement, le compilateur encode toutes ces valeurs dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code>, sinon le résultat serait <strong class="warning">erroné</strong>. En effet : </p>
+<ul>
+  <li> la valeur de la <strong>sous‑expression</strong> <code class="prettyprint lang-c">25 * 10</code> vaut <code>300</code>, ce qui est <strong class="warning">supérieur à la limite</strong> <code class="prettyprint lang-c">CHAR_MAX</code> (<code>127</code>) ;</li>
+
+  <li> par <strong>rebouclage</strong> (cf. infra <a class="infra" href="Cc3-2_typesEntiers.html#debordements"></a>), cette sous‑expression prendrait la valeur <code>-46</code>, donc l'expression <code class="prettyprint lang-c">21 * 10 / 7</code> prendrait la valeur <code>-46/7</code>, c'est‑à‑dire <code>-6</code>, et non <strong class="warning">pas la valeur attendue</strong> <code>30</code> !</li>
+</ul>
+<p> On comprend à la lumière de cet exemple académique pourquoi il ne serait <strong class="cons">pas judicieux</strong> de compiler les constantes littérales entières dans un type de <strong class="cons">petite taille</strong> même si elles sont petites. </p>  
+</div><!-- exemples -->
+
+<p> Les <strong class="title">débordements d'entiers</strong> et leurs conséquences sont expliqués infra <a class="infra" href="Cc3-2_typesEntiers.html#debordements"></a>. Des éléments pour leur prévention sont apportés au chapitre C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<h4 id="specifTypage"> Codage de contraintes de typage </h4>
+
+
+<div class="complement">
+<p> Même avec les <strong class="title">types attribués par défaut</strong> aux constantes littérales, un <strong class="cons">problème de débordement</strong> peut se présenter, notamment sur les architectures <strong>8 bits</strong> où le type <code class="prettyprint lang-c">int</code> n'est souvent implémenté que sur <strong>2 octets</strong>.  </p>
+</div><!-- complement -->
+
+<div class="important">
+<p>  C'est pourquoi en langages <strong>C</strong> et <strong>C++</strong>, le codeur peut imposer une <strong class="title">contrainte de typage</strong> à toute <strong>constante littérale</strong> à <strong>valeur entière</strong>, en lui adjoignant un ou deux <strong class="defin">suffixes</strong> concaténés parmi les suivants : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">u</code> ou <code class="prettyprint lang-c">U</code> pour imposer un type <strong class="defin">non signé</strong> ; </li>
+
+  <li> <code class="prettyprint lang-c">l</code> ou <code class="prettyprint lang-c">L</code> pour imposer un type de <strong class="defin">taille au moins égale</strong> à celle de <code class="prettyprint lang-c">long</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">ll</code> ou <code class="prettyprint lang-c">LL</code> pour imposer le <strong>type</strong> <code class="prettyprint lang-c">long long</code>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Sur une <strong class="Arduino">carte Arduino</strong> à cœur <strong><em class="sigle">AVR</em></strong> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…) – donc avec une architecture <strong>8 bits</strong> : </p>
+<ul>
+  <li> la <strong>constante littérale</strong> codée <code class="prettyprint lang-c">100L</code> sera compilée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">long</code>, imposé par le suffixe <code class="prettyprint lang-c">L</code> ; </li>
+
+  <li> la <strong>constante littérale</strong> codée <code class="prettyprint lang-c">100U</code> sera compilée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">unsigned</code>, imposé par le suffixe <code class="prettyprint lang-c">U</code> ; </li>
+
+  <li> la <strong>constante littérale</strong> codée <code class="prettyprint lang-c">100UL</code> sera compilée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">unsigned long</code>, imposé par les suffixes <code class="prettyprint lang-c">U</code> et <code class="prettyprint lang-c">L</code>. </li>
+</ul>
+</div>
+
+
+<div class="remarques"><p class="remarques"></p>
+
+<ol class="littered" style="margin-bottom: 0em">
+  <li> Il n'existe <strong class="title">pas de suffixe</strong> pour imposer un <strong class="specialG">type</strong> <code class="prettyprint lang-c">short</code> ou <code class="prettyprint lang-c">char</code> à une <strong>constante littérale entière</strong>. Cela n'aurait  <strong class="defin">aucun intérêt</strong> puisqu'elle serait immédiatement convertie dans le type <code class="prettyprint lang-c">int</code> lors de la compilation.</li>
+
+  <li style="margin-bottom: 0.5em"> L'<strong class="title">attribution d'un type</strong> – par <strong>défaut</strong> ou <strong>par suffixe</strong> – à une constante littérale entière <strong class="warning">ne change pas le type d'une donnée déclarée</strong> auquel cette constante serait affectée. </li>
+
+  <div class="nobullet"> <em class="remark">Exemple</em>. Dans la <strong class="title">déclaration</strong> codée ci‑dessous : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">int8_t a = 100;</code>
+  </span> <br>
+  la <strong class="specialLB">constante littérale</strong> codée <code class="prettyprint lang-c">100</code> est compilée (donc évaluée) par défaut de <strong>type</strong> <code class="prettyprint lang-c">int</code>. </div> 
+  
+  <div class="nobullet"> Néanmoins, lors de l'initialisation de la <strong class="defin">variable</strong> <code class="prettyprint lang-c">a</code>, cette valeur est <strong class="warning">implicitement convertie</strong> dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">int8_t</code>. Cela ne pose pas de problème parce que <code class="prettyprint lang-c">100</code> est bien dans l'étendue du type <code class="prettyprint lang-c">int8_t</code>. La conversion s'effectue sans perte d'information, les bits tronqués étant tous nuls. </div>
+</ol>
+</div><!-- remarques -->
+
+
+
+<div class="expert">
+<h3 id="separateurDigital"> Séparateur digital </h3>
+
+
+
+<div class="complement">
+<p> Depuis la <strong>norme C++14</strong>, le langage <strong class="title">C++</strong> dispose du <strong class="title">séparateur digital</strong> <code style="background: white">'</code>. Ce symbole est <strong class="defin">insérable</strong> partout <strong>entre les digits</strong> d'une <strong class="specialLB">constante littérale entière</strong>, quelle que soit la base de numération, pour <strong class="pros">faciliter la saisie et la lecture</strong>, en particulier quand la valeur comporte un <strong>grand nombre de digits</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Pour une <strong class="pros">bonne lisibilité</strong>, on peut utiliser le <strong class="title">séparateur digital</strong> pour coder les <strong>grandes constantes littérales</strong> dans les déclarations ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+int a = <span class="nocode"><code>5'000'000</code></span>;        // 5 millions
+short b = <span class="nocode"><code>0b10'0111'1111</code></span>; // 639
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Le <strong class="title">séparateur digital</strong> <code style="background: white">'</code> : </p>
+<ul>
+  <li> <strong class="cons">n'existe pas</strong> en langage <strong>C</strong> ; </li>
+
+  <li> n'est pour le moment <strong class="cons">pas utilisable</strong> dans les <strong>programmes</strong> pour cartes à microcontrôleur compilés avec les <strong>versions 1.8.x</strong> du logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> (il utilise des compilateurs <em class="mark">GCC</em> conformes à la norme <em class=mark>C++11</em>) ;  </li>
+  
+  <li> mais est <strong class="pros">accepté</strong> depuis peu dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong> (car il utilise un compilateur conforme à la norme <em class=mark>C++14</em> – cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#TinkercadSimulation" target="_BLANK"></a>). </li>
+  </ul>   
+</ul>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="formatEncodage"> Encodage des données entières </h2>
+
+
+
+<p> Rappelons que l'<strong class="title">encodage d'une donnée</strong> est la <strong class="defin">manière dont sa valeur est stockée</strong> dans les <strong>bits</strong> de la mémoire de la machine cible durant l'exécution du programme (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#notionDonnee" target="_BLANK"></a>). On parle aussi de <strong class="specialLB">format d'encodage</strong> ou de <strong class="specialLB">représentation en mémoire</strong>. </p>
+
+<p>  Il faut <strong class="warning">ne pas confondre</strong> la <strong class="title">notion d'encodage</strong> d'une donnée avec celle de <strong class="cons">codage</strong> des constantes littérales dans le programme source, exposée supra. </p>
+
+<p> Dans le cas des <strong class="title">types entiers</strong>, c'est le fait d'être <strong class="defin">signé</strong> ou <strong class="defin">non signé</strong> qui détermine un <strong>encodage spécifique</strong>. </p>
+
+
+
+<h3> Encodage des entiers non signés </h3>
+
+
+
+<h4> Principe d'encodage </h4>
+
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/binaireNaturel_a.png" width="500px"> 
+<p> En <strong class="specialLB">mathématiques</strong>, on appelle <strong class="defin">entier « naturel »</strong> tout nombre entier <strong>positif ou nul</strong>, c'est‑à‑dire <strong>non signé</strong>. </p>
+
+<p> En <strong class="specialLB">informatique</strong>, on parle de <strong class="title">code binaire naturel</strong> pour nommer l'<strong class="defin">encodage entier non signé</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_binaire" target="_BLANK">W</a>. Cet encodage procède selon le même algorithme de <strong>numération par position</strong> que celui employé usuellement en base 10. </p>
+
+<p> Mais en <strong class="specialG">base 2</strong>, un <strong class="title">digit</strong> – c'est‑à‑dire un <strong class="title">bit</strong> – est beaucoup plus vite « épuisé » qu'en base 10 pour exprimer des nombres, puisqu'on ne dispose que des <strong>deux symboles</strong> <code>0</code> et <code>1</code>. Donc, avec <strong class="defin">n bits</strong>, on peut encoder seulement <em class="bold">2<sup><strong>n</strong></sup></em> <strong>valeurs</strong>. Par exemple, sur 8 bits, on peut encoder 2<sup>8</sup> = 256 valeurs. </p>
+</div><!-- display -->
+
+<p> À titre de comparaison, en base 10, on peut encoder 10<sup><var>n</var></sup> valeurs sur <var>n</var> chiffres (par exemple, sur 8 chiffres, 10<sup>8</sup> soit 100 millions de valeurs). </p>
+
+
+
+<div class="expert">
+<h4 id="algorithmeConversion"> Algorithme de conversion de la base 10 vers la base 2 </h4>  
+
+
+<div class="complement">
+<p> Algorithmiquement, le <strong class="title">code  binaire naturel</strong> (donc, en <strong class="specialG">base 2</strong>) d'un nombre entier <strong>x</strong> (exprimé en base 10) s'obtient par <strong>n</strong> <strong class="defin">divisions euclidiennes</strong> <strong>successives</strong> par <strong class="specialG">2</strong> de <strong>x</strong> jusqu'à obtenir un <strong class="pros">quotient nul</strong>. </p>
+</div><!-- complement -->
+
+<p style="display: inline-block;"> En notant comme ci‑dessous, pour <strong>k</strong> allant de <em class="bold">0</em> à <strong>n</strong> <em class="bold">− 1</em>, l'<strong class="title">équation fondamentale</strong> de la <strong>k‑ième division euclidienne</strong> par <em class="bold">2</em> : <br>
+<span class="inline">
+  <em class="bold"><var>D<sub>k</sub></var>  =  2.<var>q<sub>k</sub></var> + <var>r<sub>k</sub></var></em>
+</span> <br>
+et sachant que les dividendes <strong>D<sub>k</sub></strong> et les quotients <strong>q<sub>k</sub></strong> sont liés par la <strong class="title">relation</strong> : <br>
+<span class="inline">
+  <em class="bold"><var>D</var><sub><var>k</var> + 1</sub> = <var>q<sub>k</sub></var></em>   (avec   <em class="bold"><var>D</var><sub>0</sub> = <var>x</var></em>)
+</span> <br>
+  <img class="top-right" src="../img/mouleDivision.png" width="150px">
+alors les <strong>n bits</strong> <strong class="specialLG">d<sub>k</sub></strong> du code binaires de <strong>x</strong> sont, dans l'ordre de leur rang <strong>k</strong> croissant, les <strong class="specialLG">restes successifs</strong> <strong>r<sub>k</sub></strong> de chaque division, comme illustré sur la figure ci‑contre. </p>
+
+
+
+<div class="exemples" style="display: inline-block;">
+<p class="exemple"> La <strong class="title">conversion en base 2</strong> du nombre entier <em class="bold">14</em> est illustrée par la figure ci‑dessous, avec : </p>
+<ul>
+  <li> à droite la <strong>succession algorithmique</strong> des <strong class="specialLB">divisions euclidiennes</strong> posées en cascade ; </li>
+
+  <li> et à gauche la <strong class="specialLB">mise en équation</strong> de ces <strong>divisions</strong>, qui permet de reconstituer la valeur <em class="bold">14</em> comme une <strong class="specialLG">somme discrète de puissances croissantes de</strong> <strong class="specialG">2</strong>. </li>
+</ul>
+  <img class="top-left" src="../img/exConvBinaireEntier.png" style="min-width:800px; max-width: 1000px;">  
+</div><!-- exemples -->
+
+</div><!-- expert -->
+
+
+<h4> Expression d'un entier positif en somme discrète de puissances de 2 </h4>
+
+
+<div class="complement" style="display: block">
+<p> Mathématiquement, les  <strong>n bits</strong> <strong class="specialLG">d<sub>k</sub></strong> formant le <strong class="title">code binaire naturel</strong> d'un nombre entier <strong>x</strong> sont les <strong class="specialLG">coefficients multiplicateurs</strong> binaires d'une <strong>somme discrète< de puissances de croissantes de </strong> <strong class="specialG">2</strong> – cette somme valant <strong>x</strong>. On appelle <strong class="title">poids</strong> ces puissances de 2 (cf. la figure ci‑dessous). </p>
+  <img class="top-left" src="../img/binaireNaturel_b.jpg" style="min-width:800px; max-width: 1000px;">
+</div><!-- complement -->
+
+<div class="important">
+<p> En encodage binaire naturel, le <strong class="title">poids</strong> du <strong class="specialLG">bit</strong> de rang <strong>k</strong> vaut <strong class="defin">2<sup><var>k</var></sup></strong>. Cette valeur <strong class="defin">double</strong> à <strong>chaque incrémentation du rang</strong> du bit et détermine donc l'importance de du bit dans la valeur encodée : </p>
+<ul>
+  <li> le bit de <strong>rang</strong> <strong class="cons">0</strong> est dit de <strong class="specialLB">poids faible</strong> (en anglais, <strong>least significant bit</strong> ou <em class="bold"><em class="sigle">LSB</em></em>) ; ce poids vaut <strong class="defin">toujours 1</strong> ;</li>
+
+  <li> le bit de <strong>rang</strong> <strong class="cons">n − 1</strong> est dit de <strong class="specialLB">poids fort</strong> (en anglais, <strong>most significant bit</strong> ou <em class="bold"><em class="sigle">MSB</em></em>) ; ce poids vaut <strong class="defin">la moitié de la valeur maximale</strong> encodable dans le type, arrondie à l'entier supérieur. </li>
+</ul>
+</div><!-- important -->
+
+<div class="exemples" style="display: block">
+<p class="exemple"> L'<strong class="title">encodage en binaire naturel</strong> du nombre entier <em class="bold">200</em> dans le <strong>type</strong> <code class="prettyprint lang-c">uint8_t</code> est analysé dans la figure ci‑dessous. </p>
+  <img class="top-left" src="../img/binaireNaturelExemple.png" style="min-width:800px; max-width: 1000px;">
+</div><!-- exemples -->
+
+<div class="remarques" id="remarqueBinaireNaturel">
+<p class="remarque"> L'<strong class="title">encodage en binaire naturel</strong> des <strong>entiers non signés</strong> est dit : </p>
+<ul>
+  <li> <strong class="defin">bijectif</strong> car, quelle que soit la taille du type considéré, <strong>tout code</strong> binaire correspond à une <strong>valeur</strong> en base 10, et <strong>réciproquement</strong> ; </li>
+
+  <li> <strong class="defin">monotone</strong> car il procède toujours de façon croissante depuis la valeur minimale à la valeur maximale <strong>dans les deux bases</strong> ; </li>
+
+  <li> <strong class="defin">pondéré</strong> car il attribue des <strong>poids</strong> aux bits. </li>
+</ul>
+</div><!-- remarque -->
+
+
+
+<h3 id="entiersSignes"> Encodage des entiers signés </h3>
+
+
+
+<div class="expert">
+<p> Il existe <strong >différents formats binaires d'encodage</strong> des <strong class="defin">entiers signés</strong>, mais celui dit du « <strong class="title">complément à 2</strong> » est presque universellement employé <a class="external" href="https://fr.wikipedia.org/wiki/Compément_à_deux" target="_BLANK">W</a>. Les <strong>autres</strong> (<em>complément à 1</em>, <em>signe‑magnitude</em>) sont <strong class="cons">désuets</strong> ; néanmoins, ils restent autorisés par les normes des langages <em class="mark">C</em> et <em class="mark">C++</em>, au motif de garantir leur compatibilité avec d'anciennes implémentations. </p>
+</div><!-- expert -->
+
+
+<h4 id="complementA2"> Principe d'encodage par complément à 2 </h4>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/binaireComplementAdeux.png" width="530px"> 
+<p> L'encodage dit par « <strong class="title">complément à 2</strong> » consiste à : </p>
+
+<ul>
+  <li> réserver le <strong>bit de plus haut rang</strong> pour coder : <br>
+  <ul>
+    <li> par <code style="color: magenta; background: white">0</code> l'<strong>absence</strong> du <strong class="specialMg">signe</strong> « <strong class="specialMg">−</strong> », c'est‑à‑dire pour les <strong class="defin">valeurs positives</strong> ; </li>
+
+    <li> par <code style="color: magenta; background: white">1</code> la <strong>présence</strong> du <strong class="specialMg">signe</strong> « <strong class="specialMg">−</strong> », c'est‑à‑dire pour les <strong class="defin">valeurs négatives</strong> ; </li>
+  </ul>
+  ce bit étant dit <strong class="specialMg">bit de signe</strong> ;</li>
+
+  <li> coder sur les <strong>bits restants</strong> <strong class="pros">comme en binaire naturel</strong> :  </li>
+  <ul>
+    <li> les <strong class="defin">valeurs positives</strong> en partant de <em class="bold">0</em> ; </li>
+
+    <li> les <strong class="defin">valeurs négatives</strong> en partant de <strong>la plus basse</strong> (<em class="bold">−2<sup><var>n</var>−1</sup></em> pour un type de largeur <strong>n</strong> bits). </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<div class="complement">
+<p> En mathématique, le format d'encodage en <strong class="title">complément à 2</strong> est noté « <em class="bold">2±</em> ». Le code <strong>x</strong><sub>(2±)</sub> d'une valeur entière négative <strong>x</strong> sur <strong>n bits</strong> est donné par la formule : <br>
+<span class="inline">
+<span class="framed" style="border-color : black; padding-bottom:0.4em">
+   <strong>x</strong><sub>(2±)</sub> = <em class="bold">2</em><sup><strong>n</strong></sup><sub>(2)</sub> − |<strong>x</strong>|<sub>(2)</sub> 
+</span></span> <br>
+autrement dit, par <strong class="defin">complémentarité</strong> de la valeur positive correspondante (|<strong>x</strong>|) à la valeur <em class="bold">2</em><sup><strong>n</strong></sup>, ce qu'on abrège (par <em>abus de langage</em>) en « <strong>complément à 2</strong> ». </p>
+</div><!-- complement -->
+
+<div class="exemples" style="display: inline-block;">
+  
+<p class="exemple"> Prenons l'entier <strong>x</strong> = <em class="bold">−5</em> à encoder sur <strong>n</strong> = 8 bits – par exemple dans le type <code class="prettyprint lang-c">int8_t</code>. On obtient <strong class="title">son code binaire en complément à 2</strong> en effectuant la <strong class="defin">soustraction</strong> : </p>
+  <img class="top-right" src="../img/binaireComplement2exemple_a.png" width="450px">
+<ul>
+  <li> du <strong>code binaire naturel</strong> de <em class="bold">2</em><sup><strong>n</strong></sup> (encodable sur 9 bits),</li>
+
+  <li> moins le <strong>code binaire naturel</strong> de <em class="bold">5</em>,</li>
+</ul>
+<p> en appliquant la même technique qu'en base 10 pour les calculs et les retenues. </p>
+</div><!-- exemples -->
+
+</div><!-- expert -->
+
+
+<h4> Décomposition d'un entier relatif en somme discrète de puissances de 2 </h4>
+
+
+<div class="complement" style="display: block">
+<p> Mathématiquement, le code binaire en <strong class="title">complément à 2</strong> d'un nombre entier découle de la décomposition de la valeur en base 10 de l'entier en une <strong>somme de puissances croissantes de</strong> <strong class="specialG">2</strong> comme en binaire naturel, mais en attribuant au <strong class="specialMg">bit de signe</strong> le <strong class="specialR">poids négatif</strong> <em class="bold">−2<sup><strong>n</strong>−1</sup></em>. </p>
+  <img class="top-left" src="../img/binaireComplement2b.jpg" style="min-width:800px; max-width: 1000px;">
+</div><!-- complement -->
+
+<div class="exemples" style="display: block">
+<p class="exemple"> Le code binaire en <strong class="title">complément à 2</strong> du nombre entier <em class="bold">−100</em> dans le type <code class="prettyprint lang-c">int8_t</code> est analysé dans la figure ci‑dessous. On part du <strong class="specialR">poids négatif</strong> −2<sup>7</sup> = <em class="bold">−128</em> auxquel on ajoute des <strong>puissances de 2</strong> pour retrouver le nombre initial.</p>
+  <img class="top-left" src="../img/binaireComplement2exemple_b.png" style="min-width:800px; max-width: 1000px;">
+</div><!-- exemples -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> L'encodage binaire <strong class="title">en complément à 2</strong> des entiers signés est, comme celui des entiers non signés, <strong class="defin">bijectif</strong> et <strong class="defin">pondéré</strong> (cf. supra <a class="supra" href="Cc3-2_typesEntiers.html#remarqueBinaireNaturel"></a>), même si le <strong>poids du bit de signe</strong> est <strong class="specialR">spécial</strong>. </li>
+
+  <div class="nobullet"> Mais a contrario, cet encodage est <strong class="cons">non monotone</strong> autour de la valeur <em class="bold">0</em> (en effet, <em class="bold">−1</em><sub>(2±)</sub> > <em class="bold">0</em><sub>(2±)</sub> alors qu'en base 10, on a <em class="bold">−1</em> < <em class="bold">0</em>). Toutefois, cette non‑monotonie ne rompt pas la propriété fondamentale de <strong class="pros">cyclicité</strong> : le code de la valeur <em class="bold">−1</em> a bien pour successeur, par rebouclage au code <code>0</code>, celui de la valeur <em class="bold">0</em>. </div>
+
+  <div class="nobullet"> De même, on peut constater la <strong class="pros">cyclicité</strong> du code <strong>aux extrémités de l'étendue</strong> des valeurs encodées : le code de la plus grande valeur <em class="bold"><em class="bold">2</em><sup><strong>n</strong>−1</sup>−1</em> a bien pour successeur celui de la plus petite <em class="bold"><em class="bold">−2</em><sup><strong>n</strong>−1</sup></em>. </div>
+
+  <div class="nobullet"> La <strong class="title">cyclicité de l'encodage</strong> des entiers garantit de pouvoir <strong class="pros">traiter à bas niveau</strong> (directement sur les bits) les opérations <strong>prédécesseur</strong> et <strong>successeur</strong>, à partir desquelles peuvent être définis tous les  opérateurs arithmétiques sur les entiers (une addition étant une succession d'incrémentation, une multiplication étant une succession d'additions, etc.).  </div>
+
+
+  <li> L'encodage binaire <strong class="title">en complément à 2</strong> présente également l'intérêt d'être <strong class="pros">totalement compatible</strong> avec l'encodage en <strong class="defin">binaire naturel</strong> pour la <strong>plage des valeurs positives et nulle</strong> : leur code ne change pas d'un format à l'autre, autrement dit : <br>
+<span class="inline">
+si <strong>n</strong> ≥ 0   alors   <strong>n</strong><sub>(2±)</sub> = <strong>n</strong><sub>(2)</sub>
+</span> </li>
+</ol>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Opérations sur les entiers </h2>
+
+
+
+<p> Tous les <strong class="title">opérateurs élémentaires</strong> du langage <strong>C</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a>) sont <strong class="defin">applicables</strong> aux données de <strong class="defin">types entiers</strong>. Toutefois, la vigilance du codeur est requise au regard des points suivants. </p>
+
+<ul>
+  <li> Les opérateurs <strong class="specialLB">booléens</strong> (<code class="prettyprint lang-c">!</code>, <code class="prettyprint lang-c">&&</code>, <code class="prettyprint lang-c">||</code>), <strong class="specialLB">bits à bits</strong> (<code class="prettyprint lang-c">~</code>, <code class="prettyprint lang-c">&</code>, <code class="prettyprint lang-c">|</code>, <code class="prettyprint lang-c">^</code>) et de <strong class="specialLB">décalage des bits</strong> (<code class="prettyprint lang-c">>></code>, <code class="prettyprint lang-c"><<</code>) sont <strong class="warning">complexes</strong>. Ils seront détaillés dans le chapitre consacré aux <strong class="title">types booléens</strong> (cf. chap. C3‑III <a class="previous" href="Cc3-3_typesBooleens.html" target="_BLANK"></a>). </li>
+
+  <li> Les opérateurs de <strong class="specialLB">comparaison</strong> (<code class="prettyprint lang-c">==</code>, <code class="prettyprint lang-c">!=</code>, <code class="prettyprint lang-c">></code>, <code class="prettyprint lang-c">>=</code>, <code class="prettyprint lang-c"><</code>, <code class="prettyprint lang-c"><=</code>) sont conformes à leurs équivalents mathématiques respectifs (=, ≠, >, ≥, <, ≤). Toutefois, ils doivent être employés <strong class="warning">avec précaution</strong> lorsque les deux opérandes sont de types entiers respectivement <strong>signés</strong> et <strong>non signés</strong>.  </li> 
+
+  <li> Parmi les opérateurs <strong class="specialLB">arithmétiques</strong> (<code class="prettyprint lang-c">+</code>, <code class="prettyprint lang-c">-</code>, <code class="prettyprint lang-c">*</code>, etc.), ceux relatifs à la <strong class="defin">division euclidienne</strong> (<code class="prettyprint lang-c">/</code>, <code class="prettyprint lang-c">%</code>) sont <strong class="cons">souvent méconnus</strong> des débutants et doivent être détaillés. </li>
+</ul>
+
+<p> Par ailleurs, il est <strong class="warning">indispensable</strong> d'aborder la problématique des <strong class="title">débordements</strong>, qui n'est pas spécifique à tel ou tel opérateur ni à tel ou tel type entier, mais au regard de laquelle les <strong class="defin">opérations élémentaires sur les entiers</strong> constituent un « <strong>cas d'école</strong> ». </p>
+
+
+
+<h3 id="infSup"> Opérateurs d'infériorité et de supériorité </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C/C++</strong>, avec des opérandes de <strong class="specialG">types entiers</strong>, les <strong class="title">opérateurs de supériorité et d'infériorité</strong> <code class="prettyprint lang-c">></code>, <code class="prettyprint lang-c">>=</code>, <code class="prettyprint lang-c"><</code> et <code class="prettyprint lang-c"><=</code> sont évalués <strong class="defin">conformément</strong> à leurs <strong>équivalents mathématiques</strong> respectifs (>, ≥, < et ≤)  <strong class="warning">sauf</strong> : </p>
+<ul>
+  <li> lorsque l'un des opérandes est de type <strong class="specialG">non signé</strong> et l'autre <strong class="specialG">signé</strong> ;  </li>
+
+  <li> <em class="remark">et</em> que l'opérande de type <strong>signé</strong> prend une <strong class="warning">valeur négative</strong> ;  </li>
+</ul>
+<p> c'est‑à‑dire par exemple dans une expression comme <code class="prettyprint lang-c">1u > -1</code> qui, contre‑intuitivement, sera évaluée <strong class="warning">fausse</strong> ! </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Pour se convaincre du <strong class="cons">problème</strong>, il suffit de tester les <strong class="title">exemples académiques</strong> ci‑dessous avec <strong class="OnlineGDB">OnlineGDB</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  unsigned a =  1;
+  int      b = -1;
+  // a > b BUT:
+  printf("a <  b : %d\n", a <  b); // wrong!
+  printf("a <= b : %d\n", a <= b); // wrong!
+  printf("a >  b : %d\n", a >  b); // wrong!
+  printf("a >= b : %d\n", a >= b); // wrong!
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, à l'exécution, on obtient en sortie standard l'affichage suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+a <  b : 1
+a <= b : 1
+a >  b : 0
+a >= b : 0
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où toutes les expressions de comparaison prennent des <strong class="warning">valeurs erronées</strong>. </p>
+
+<p> A contrario, <strong class="pros">le problème disparaît</strong> si l'on déclare la variable <code class="prettyprint lang-c">a</code> de type <code class="prettyprint lang-c">int</code> (ou de n'importe quel autre type entier signé). </p>
+
+<div class="expert">
+<p> <em class="remark">Remarque</em>. Si l'on compile le programme avec les <strong class="defin">options d'affichage des avertissements</strong> ci‑dessous (choix recommandé dès le chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#gccEmploi" target="_BLANK"></a>) : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-Wall</span> <span class="displayDarkRed">-Wextra</span></code>
+</span> <br>
+le compilateur émet un <strong class="warning">avertissement</strong> pour chacune des expressions de comparaison, par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+unsignedSignedTest.c: In function ‘main’:
+unsignedSignedTest.c:7:29: <span class="displayDarkRed">warning:</span> comparison of integer expressions of different signedness: ‘unsigned int’ and ‘int’ <span class="displayDarkRed">[-Wsign-compare]</span>
+    7 |   printf("a <  b : %d\n", a <  b); // wrong!
+      |                             <span class="displayDarkRed">^</span>
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+<div class="complement">
+<p> Ce constat étant fait, pour ne pas coder de telles <strong class="title">expressions de comparaison</strong> qui seraient <strong class="warning">mal évaluées</strong>, il importe donc de <strong class="pros">bien choisir les types</strong> des données manipulées par le programme ou d'effectuer ponctuellement les <strong class="defin">conversions explicites</strong> nécessaires (cf. chap. C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html" target="_BLANK"></a>).  </p>
+
+<p> En règle générale, il est <strong class="pros">vivement conseillé</strong> : </p>
+<ul>
+  <li> d'employer <strong class="defin">par défaut</strong> des <strong class="specialG">types signés</strong> ;  </li>
+
+  <li> de recourir aux <strong class="specialG">types non signés</strong> <strong class="warning">seulement si c'est indispensable</strong>, c'est‑à‑dire lorsqu'une variable est amenée à prendre les valeurs positives qui débordent de l'étendue du type signé de même taille que celui qu'on choisirait sinon. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="division"> Quotient et reste d'une division euclidienne </h3>
+
+
+
+<div class="complement">
+<p> On rappelle qu'<strong>en mathématiques</strong>, on peut définir la <strong class="title">division euclidienne</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Division_euclidienne" target="_BLANK">W</a> comme une opération sur deux <strong class="defin">nombres entiers relatifs</strong> <strong>a</strong> (le <em>dividende</em>) – et <em class="bold"><var>b</var> ≠ 0</em> (le <em>diviseur</em>). Elle est notée <span class="framed"><em class="bold"><var>a</var> ÷ <var>b</var></em></span> et son résultat est le nombre <strong>q</strong> appelé <strong class="specialLB">quotient</strong> tel que : </p>
+<div class="inline">
+  <span class="framed"><em class="bold"><var>a</var> = <var>b</var>.<var>q</var> + <var>r</var></em></span>     avec     <em class="bold">0 ≤ <var>r</var> < |<var>b</var>|</em> 
+</div>
+<p> le nombre <strong>r</strong> étant appelé le <strong class="specialLB">reste</strong> de la division. </p>
+
+<p> <em class="remark">Remarque</em>. <strong>En mathématiques</strong>, il n'y a <strong class="cons">pas de symbole d'opérateur</strong> pour définir le <strong class="specialLB">reste</strong> de la division euclidienne. Le plus souvent, on emploie l'abréviation <em class="bold">mod</em> (pour <em>modulo</em>). </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Il est <strong class="pros">facile</strong> de concevoir la <strong class="title">division euclidienne</strong> en termes de <strong class="defin">répartition équitable</strong> avec des <strong>entiers naturels</strong>. Par exemple, répartir <em class="bold">17</em> pommes entre <em class="bold">5</em> personnes donne <em class="bold">3</em> pommes par personnes et un reste indivisible de <em class="bold">2</em> pommes – ce qui s'écrit : <br>
+<span class="inline">
+  17 ÷ 5 = 3    car   17 = 5 × 3 + 2
+</span> </p>
+
+<div class="expert">
+<p class="square"> En revanche, la <strong class="title">division euclidienne</strong> est <strong class="warning">plus subtile</strong> à interpréter avec des <strong class="defin">entiers relatifs</strong>. </p>
+<ul>
+  <li> Un <strong>dividende négatif</strong> peut être vu comme une <strong class="defin">dette</strong>. Ainsi donc, pour rembourser équitablement une dette de <em class="bold">17</em> euros, <em class="bold">5</em> personnes doivent en rembourser <em class="bold">4</em> euros, avec un excédent indivisible de <em class="bold">3</em> euros – ce qui s'écrit : <br>
+  <span class="inline">
+   −17 ÷  5  = −4    car   −17 =   5 × −4 + 3 
+  </span>  </li>
+
+  <li> Mais une division euclidienne avec un <strong>quotient négatif</strong> est <strong class="cons">difficile à interpréter</strong>. On doit s'en tenir aux équations :  </li>
+  <ul>
+    <li> −17 ÷ −5 =   4    car   −17 = −5 ×   4 + 3 </li>
+
+    <li>   17 ÷ −5 = −3    car     17 = −5 × −3 + 2 </li>
+  </ul>
+</ul>
+</div><!-- exemple --> 
+</div><!-- expert -->
+
+
+<h4 id="div"> L'opérateur <code class="prettyprint lang-c">/</code> </h4>
+
+
+<div class="important">
+<p> En langages <strong>C/C++</strong>, dans une expression de la forme <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> / <span class="nocode"><strong>b</strong></span></code> ou <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong>b</strong></span></code> sont deux opérandes de <strong>types entiers</strong> avec <em class="bold"><var>a</var> ≥ 0</em> et <em class="bold"><var>b</var> ≠ 0</em>, l'<strong class="title">opérateur</strong> <code class="prettyprint lang-c">/</code> retourne comme valeur le <strong class="defin">quotient</strong> <strong>q</strong> de la <strong class="defin">division euclidienne</strong> <strong>a</strong> ÷ <strong>b</strong> (il n'y a pas d'opérateur de division algébrique sur les entiers). </p>
+
+<div class="expert"> 
+<p> <em class="remark">Mais attention</em>, avec la plupart des implémentations, si le dividende <strong>a</strong> est <strong class="warning">négatif</strong>, alors la valeur <strong class="specialLB">q</strong> de l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> / <span class="nocode"><strong>b</strong></span></code> n'est <strong class="cons">pas conforme</strong> à celle d'une division euclidienne au sens mathématique. Elle vérifie bien la relation <em class="bold"><var>a</var> = <var>b</var>.<var>q</var> + <var>r</var></em></span> mais avec un <strong class="warning">reste négatif</strong> tel que <em class="bold">−|<var>b</var>| < <var>r</var> ≤ 0</em> (cf. les exemples ci‑après). </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">quotient</strong> retourné par l'opérateur <code class="prettyprint lang-c">/</code> prend une valeur de <strong class="specialG">type entier</strong>. Comme pour toutes les opérations arithmétiques binaires, ce type est :  </p>
+<ul>
+  <li> <strong class="defin">le plus grand</strong> des deux types des <strong>opérandes</strong>, </li>
+
+  <li> et conforme à la règle d'attribution implicite exposée supra <a class="supra" href="Cc3-2_typesEntiers.html#typeParDefaut"></a>, donc « <strong class="defin">au moins</strong> » de type <code class="prettyprint lang-c">int</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples" id="divNeg">
+<p class="exemple"> Sur une <strong>architecture 8 bits</strong> (carte <em class="mark">Arduino Uno, Nano, Mega</em>…), l'expression : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">17 / 5</code> est évaluée <code>3</code> et encodée dans le <strong>type</strong> <code class="prettyprint lang-c">int</code> ;   </li>
+
+  <li> <code class="prettyprint lang-c">170000 / 50000</code> est évaluée <code>3</code> et encodée dans le <strong>type</strong> <code class="prettyprint lang-c">long</code>.   </li>
+</ul>
+
+
+<div class="expert">
+<p> <strong class="warning">Attention !</strong>  Avec la plupart des implémentations – <em class="mark">OnlineGDB</em>, <em class="mark">GCC</em>, <em class="mark">Arduino</em>, etc. – l'expression : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">-17 / 5</code> est évaluée <code>-3</code> (alors que −17 ÷ 5 = −4) ;  </li>
+
+  <li> <code class="prettyprint lang-c">-17 / -5</code> est évaluée <code>3</code> (alors que −17 ÷ −5 = 4).  </li>
+</ul>
+<p> avec dans les deux cas, un <strong class="warning">reste négatif</strong> (cf. infra). </p>
+
+<p> <em class="remark">En revanche</em>, <code class="prettyprint lang-c">17 / -5</code> est évaluée <code>-3</code> conformément au fait que 17 ÷ −5 = −3.  </p>
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Si <strong>un seul des deux opérandes</strong> d'une division est de <strong class="specialG">type décimal</strong>, l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> / <span class="nocode"><strong>b</strong></span></code> est compilable mais effectue une <strong class="title">division algébrique</strong>, c'est‑à‑dire <strong class="warning">sans reste</strong> et retournant un quotient à <strong class="warning">valeur décimale</strong>.  </p>
+
+<p> Si l'on souhaite justement effectuer une <strong class="title">division algébrique</strong> entre deux données de <strong class="defin">type entiers</strong>, il est nécessaire de coder une <strong class="warning">conversion explicite</strong> (cf. chap. C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#cast" target="_BLANK"></a>) de l'une d'elle dans un <strong class="specialG">type décimal</strong>. </p>
+
+<p> <em class="remark">Exemple</em>. Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong> l'expression : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">(double) 17 / 5</code>
+</span> <br>
+sera évaluée <code>3.4</code> et encodée dans le <strong>type</strong> <code class="prettyprint lang-c">double</code>. </p>
+</div><!-- remarque -->
+
+
+<h4 id="modulo"> L'opérateur <code class="prettyprint lang-c">%</code> </h4>
+
+
+<div class="important">
+<p> En langages <strong>C/C++</strong>, dans une expression de la forme <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> % <span class="nocode"><strong>b</strong></span></code> ou <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong>b</strong></span></code> sont deux opérandes de <strong>types entiers</strong> avec <em class="bold"><var>a</var> ≥ 0</em> et <em class="bold"><var>b</var> ≠ 0</em>, l'<strong>opérateur</strong> <code class="prettyprint lang-c">%</code> – dit <strong class="title">modulo</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modulo_(opération)" target="_BLANK">W</a> (en anglais <em class="english">remainer</em>) – retourne le <strong class="specialLB">reste</strong> de la <strong class="defin">division euclidienne</strong> <strong>a</strong> ÷ <strong>b</strong>. </p>
+
+<p> Ce <strong class="specialLB">reste</strong> est évidemment de <strong class="specialG">type entier</strong> (même principe qu'énoncé supra <a class="supra" href="Cc3-2_typesEntiers.html#div"></a>). Sa <strong class="defin">valeur</strong> est forcément comprise dans l'intervalle {<em class="bold">0</em>, … <em class="bold"><var>b</var> − 1</em>}. </p>
+
+<div class="expert">
+<p> <strong class="warning">Attention !</strong> Si <em class="bold"><var>a</var> < 0</em>, alors l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> % <span class="nocode"><strong>b</strong></span></code> prend une <strong class="warning">valeur négative</strong> comprise dans l'intervalle {<em class="bold">−|<var>b</var>| + 1</em>, … <em class="bold">0</em>}. </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong class="title">opérateur modulo</strong> est <strong class="pros">très utile</strong> en programmation, en particulier : </p>
+<ul>
+  <li> pour générer une <strong class="defin">variable cyclique</strong> par <strong>incrémentation</strong> (cf. l'exemple ci‑après) ; </li>
+
+  <li> pour tester la <strong class="defin">divisibilité</strong> d'une valeur entière par une autre. </li>
+
+  <div class="nobullet"> En effet, la valeur de <strong>a</strong> est divisible par celle de <strong>b</strong> si et seulement si l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> % <span class="nocode"><strong>b</strong></span></code> est évaluée <strong class="specialO">nulle</strong>. </div>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarques"> En langage <strong>C/C++</strong>, si <strong>un seul</strong> des deux opérandes <strong>a</strong> et <strong>b</strong> est de <strong class="specialG">type décimal</strong>, alors l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> % <span class="nocode"><strong>b</strong></span></code> n'est <strong class="warning">pas compilable</strong>. </p>
+</div><!-- remarque -->
+
+<div class="exemples">
+<p class="exemple"> Dans le tableau ci‑dessous, on donne en première ligne les valeurs croissantes par <strong>incrémentation unitaire</strong> d'une variable entière <code class="prettyprint lang-c">a</code>. </p>
+
+<p> En deuxième ligne, on observe la <strong class="title">valeur cyclique</strong> de l'<strong>expression</strong> <code class="prettyprint lang-c">a % 4</code>, comprise dans l'<strong>intervalle</strong> {<em class="bold">0</em>, … <em class="bold">3</em>} (3 = 4 − 1) :  </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> <code class="prettyprint lang-c">a</code>  </th>
+    <th> <code>0</code> </th>  <th> <code>1</code> </th> 
+    <th> <code>2</code> </th>  <th> <code>3</code> </th> 
+    <th> <code>4</code> </th>  <th> <code>5</code> </th> 
+    <th> <code>6</code> </th>  <th> <code>7</code> </th> 
+    <th> <code>8</code> </th>  <th> <code>9</code> </th> 
+    <th> <code>10</code> </th>  <th> <code>…</code> </th>
+  </tr>
+  <tr>
+    <th> <code class="prettyprint lang-c">a % 4</code> </th>
+    <td style="text-align: center"> <code style="color:orange">0</code> </td>
+    <td style="text-align: center"> <code style="color:green">1</code> </td>
+    <td style="text-align: center"> <code style="color:green">2</code> </td>
+    <td style="text-align: center"> <code style="color:green">3</code> </td>
+    <td style="text-align: center"> <code style="color:orange">0</code> </td>
+    <td style="text-align: center"> <code style="color:green">1</code> </td>
+    <td style="text-align: center"> <code style="color:green">2</code> </td>
+    <td style="text-align: center"> <code style="color:green">3</code> </td>
+    <td style="text-align: center"> <code style="color:orange">0</code> </td>
+    <td style="text-align: center"> <code style="color:green">1</code> </td> 
+    <td style="text-align: center"> <code style="color:green">2</code> </td>
+    <td style="text-align: center"> <code style="color:green">…</code> </td>
+  </tr>
+</table> 
+</div><!-- overflow -->
+
+<p> On obtient la <strong class="specialO">valeur</strong> <code class="cmd" style="color:orange">0</code> pour chaque valeur de <code class="prettyprint lang-c">a</code> qui est <strong class="title">divisible</strong> par <code class="prettyprint lang-c">4</code>. </p>
+</div><!-- exemples -->
+
+
+
+
+<h4 id="divisionPar0"> Division par 0 </h4>
+
+
+<div class="important">
+<p> On rappelle que dans le cas d'une <strong class="title">division euclidienne</strong> dont le <strong>diviseur</strong> est <em class="bold">0</em>, le <strong class="specialLB">quotient</strong> comme le <strong class="specialLB">reste</strong> ne sont <strong>mathématiquement</strong> <strong class="warning">pas définis</strong> comme des <strong>entiers</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> En conséquence : </p>
+<ul>
+  <li> si le code source d'un programme comporte une <strong>expression</strong> de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> / 0</code>  ou  <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> % 0</code>
+  </span> <br>
+  alors <strong class="warning">la compilation échoue</strong>, le compilateur émettant un <strong>message d'erreur</strong> ; </li>
+
+  <li> sinon, lors de l'<strong>exécution</strong> d'un programme, au moment de l'évaluation d'une expression codée de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> / <span class="nocode"><strong>b</strong></span></code>  ou  <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> % <span class="nocode"><strong>b</strong></span></code>
+  </span> <br>
+  si l'opérande <strong>b</strong> prend la valeur <code>0</code>, alors cette évaluation n'aboutit pas et au bout de quelques secondes, <strong class="warning">l'exécution est interrompue</strong> avec un <strong>code de retour</strong> de la fonction <code class="prettyprint lang-c">main</code> <strong>différent de</strong> <code>0</code>, c'est‑à‑dire synonyme d'erreur (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#fonctionMain" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="debordements"> Débordements d'entiers et conséquences </h3>
+
+
+
+<h4> Notion de débordement d'entier </h4>
+
+
+<div class="important"> 
+<p> On parle de <strong class="title">débordement d'entier</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dépassement_d'entier" target="_BLANK">W</a> (en anglais <em class="english">integer overflow</em> <a class="external" href="https://en.wikipedia.org/wiki/Integer_overflow" target="_BLANK">W</a>) lorsque, durant l'exécution d'un programme, la <strong>valeur</strong> d'une <strong>expression</strong> de <strong class="specialG">type entier</strong> <strong class="warning">n'appartient pas</strong> à l'<strong class="defin">étendue</strong> de ce type. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Autrement dit, un débordement intervient lorsque l'évaluation de l'expression aboutit à une <strong>valeur</strong> qui <strong class="warning">dépasse</strong> la <strong class="defin">capacité de stockage</strong> en <strong>mémoire</strong> ou dans le <strong>registre</strong> de calcul utilisé. Matériellement, cela se traduit par la <strong class="cons">perte des octets</strong> nécessaires à l'encodage de la valeur mais qui sont <strong>de rangs plus élevés</strong> que ceux prévus par la <strong class="">taille</strong> du type. </p>
+</div><!-- complement -->
+
+
+<h4 id="debordements"> Règle générale de traitement des débordements d'entiers </h4>
+
+
+<div style="display: inline-block;">
+<img class="top-right" src="../img/overflowNonSigne.png" width="500px" style="margin-top: 1em;">
+<p class="square" style="margin-top: 0.5em"> Dans le cas d'un <strong class="specialLB">type entier non signés</strong> encodé sur <strong>n bits</strong>, la <strong class="cons">perte des octets</strong> de trop hauts rangs se traduit par un rebouclage en <strong class="title">arithmétique cyclique</strong> <strong class="defin">modulo N</strong>, où <strong class="defin">N</strong><em class="bold"> = 2<sup><var>n</var></sup></em> est le nombre de valeurs encodables dans le type (par exemple, 2<sup>8</sup> = 256 pour 8 bits). </p>
+
+<p> Ainsi, une <strong class="defin">incrémentation unitaire</strong> (+1) d'une <strong>donnée</strong> ayant déjà la valeur <em class="bold">2<sup><var>n</var></sup> − 1</em> (la limite haute de l'étendue pour un encodage sur <strong>n bits</strong>) met à <code>0</code> tous les bits du format qui étaient à <code>1</code> (par propagation de la retenue), et nécessite un bit valant <code>1</code> de rang plus élevé, donc, dans un <strong class="cons">octet supplémentaire</strong>. </p>
+
+<p> Cet <strong class="title">octet supplémentaire</strong> peut très bien exister dans un <strong>registre</strong> de calcul de l'unité artithmétique et logique du processeur, mais il sera <strong class="cons">perdu</strong> <em>in fine</em> puisqu'il n'est <strong class="cons">pas dans le format de stockage</strong> en mémoire de la donnée. Cette dernière <strong class="warning">reboucle</strong> donc à <em class="bold">0</em> (la limite basse de l'étendue des valeurs encodables), comme illustré sur la figure ci‑contre. </p>
+</div><!-- display -->
+
+<div class="complement">
+<p> <strong class="title">Plus généralement</strong>, quelle que soit la <strong class="specialLB">valeur entière positive</strong> <strong>a</strong> qu'il faille encoder en mémoire sur <strong>n bits</strong>, c'est seulement la <strong class="defin">valeur</strong> <strong>a</strong> <em class="bold">mod 2<sup><var>n</var></sup></em> qui est <strong class="defin">effectivement stockée</strong> par la machine, que ce soit lors de la compilation ou de l'exécution. </p>
+
+<p> Ce comportement est précisément celui attendu par les <strong>normes</strong> des langages <strong>C</strong> et <strong>C++</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Dans le <strong class="specialLB">type entier non signé</strong> <code class="prettyprint lang-c">uint8_t</code>, formaté sur <strong>n</strong> = <strong>8 bits</strong> (1 octet) avec donc <strong>N = 256</strong> valeurs encodables :  </p>
+<ul>
+  <li> la valeur <code class="prettyprint lang-c">200</code> sera encodée <em class="bold">200 mod 256</em>, c'est‑à‑dire <code class="cmd">200</code> ; </li>
+
+  <div class="nobullet"> ici, il n'y a <strong class="pros">pas de débordement</strong> puisque la valeur <code class="prettyprint lang-c">200</code> est bien <strong class="defin">dans</strong> l'intervalle {<em class="bold">0</em>, … <em class="bold">255</em>} des valeurs encodables dans le type <code class="prettyprint lang-c">uint8_t</code> ; </div>
+
+  <li> la valeur <code class="prettyprint lang-c">1000</code> sera encodée <em class="bold">1000 mod 256</em>, c'est‑à‑dire <code class="cmd">232</code> (car 1000 = 3 × 256 + 232) ;  </li>
+
+  <div class="nobullet"> ici, il y a un <strong class="warning">débordement</strong> puisque la valeur <code class="prettyprint lang-c">1000</code> n'est <strong class="warning">pas</strong> dans l'intervalle {<em class="bold">0</em>, … <em class="bold">255</em>} des valeurs encodables dans le type <code class="prettyprint lang-c">uint8_t</code>. </div>
+</ul>
+</div><!-- exemple -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/overflowSigne.png" width="500px" style="margin-top: 1em;">
+<p class="square"> Dans le cas des <strong class="specialLB">types entiers signés</strong>, comme les <strong>normes</strong> des langages <strong>C</strong> et <strong>C++</strong> n'impose pas de format à l'implémentation. Elles considèrent comme <strong class="cons">indéterminé</strong> le résultat d'un <strong class="warning">débordement</strong>. </p>
+
+<p> Mais <strong>dans la pratique</strong>, avec un compilateur qui emploie le format du <strong class="title">complément à 2</strong> (cf. supra <a class="supra" href="Cc3-2_typesEntiers.html#complementA2"></a>), une <strong class="defin">incrémentation unitaire</strong> (+1) d'une donnée encodée sur <strong>n bits</strong>, ayant déjà la valeur <em class="bold">2<sup><var>n</var>−1</sup> − 1</em> (la limite haute de l'étendue sur <strong>n</strong> bits) met à <code>0</code> tous les bits du format qui étaient à <code>1</code> (par propagation de la retenue), sauf le <strong class="specialMg">bit de signe</strong> qui était à <code>0</code> et qui passe donc à <code>1</code>. La donnée <strong class="warning">reboucle</strong> donc à la valeur <em class="bold">−2<sup><var>n</var>−1</sup></em> (la limite basse de l'étendue), comme illustré sur la figure ci‑contre. </p>  
+</div><!-- display -->
+
+<div class="important" style="margin-top: 1em">
+<p> <strong>En règle générale</strong>, lors de l'exécution d'un programme, un <strong class="title">débordement d'entier</strong> est donc traité en <strong class="defin">arithmétique cyclique</strong>, <strong class="warning">sans interruption du processus</strong> d'exécution. </p>
+</div><!-- important -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Le <strong>terme</strong> « <strong class="title">overflow</strong> » est usuellement employé par les compilateurs pour signaler les <strong class="defin">débordements</strong> <strong>aussi bien par le haut que par le bas</strong>. Cela n'exclut pas que le terme « <strong class="specialLB">underflow</strong> » puisse également être utilisé par la norme ou par certains compilateurs pour qualifier spécifiquement un <strong>dépassement de limite basse</strong> d'un type entier, mais en général, ce terme est réservé pour les <strong>nombres flottants</strong> (cf. chap. C3‑V <a class="next" href="Cc3-5_typesFlottants.html#debordements" target="_BLANK"></a>).  </li>
+
+  <li> Même si un <strong class="title">débordement d'entier</strong> ne provoque <strong>pas d'interruption</strong> de l'exécution du programme, lorqu'il est <strong class="cons">non intentionnel</strong> ni anticipé par le codeur lors de l'évaluation d'une expression, il  constitue une <strong class="warning">source d'erreur</strong> dont la <strong>gravité potentielle</strong> ne doit pas être minimisée. Un accident industriel majeur est réputé avoir eu une telle cause <a class="external" href="https://fr.wikipedia.org/wiki/Vol_501_d'Ariane_5" target="_BLANK">W</a>.  </li>
+</ol>
+</div><!-- remarques -->
+
+
+<div class="expert">
+<h4> Exemples pratiques de débordements d'entiers </h4>
+
+
+<p class="square"> Un <strong class="title">débordement inopiné</strong> peut résulter de diverses <strong class="warning">erreurs de codage</strong> et avoir des <strong class="cons">conséquences négatives</strong>. Les exemples proposés ci‑après n'ont rien d'exhaustifs, mais sont assez « classiques » chez les programmeurs débutants. </p>
+
+<ul>
+  <li> Le <strong class="specialLB">cas le plus trivial</strong> est celui de l'<strong>affectation directe</strong> dans un type <strong class="warning">sous‑dimensionné</strong> (ou avec une valeur sur‑dimensionnée, selon un point de vue complémentaire) ; </li>
+
+  <div class="exemples">
+  <p class="exemple"> Dans un programme pour <strong>carte</strong> <strong class="Arduino">Arduino</strong>, la déclaration ci‑dessous emploie un <strong class="title">grossière erreur de typage</strong> (sous‑dimensionnement) mais heureusement <strong class="pros">détectable par compilateur</strong> (donc signalée par un avertissement) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+const uint8_t highBlinkDuration = 300; // error: UINT8_MAX == 255! 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div style="display: block">
+  <p> En effet, lors de son évaluation, l'<strong class="defin">expression constante</strong> <code class="prettyprint lang-c">300</code> se voit attribuer automatiquement le <strong>type</strong> <code class="prettyprint lang-c">int</code> (taille 2 octets sur une architecture 8 bits), avec l'encodage binaire : </p>
+
+    <img class="top-left" src="../img/debordementExemple300.png" style="max-width: 700px;">
+
+  <p> Mais lors de l'<strong class="defin">affectation à la variable</strong> <code class="prettyprint lang-c">highDuration</code> de type <code class="prettyprint lang-c">uint8_t</code> (taille 1 octet) : </p>
+  <ul>
+    <li> seul l'<strong>octet de poids faible</strong> (<em class="english">least significant byte</em> ou <em class="sigle">LSB</em>) est stocké et il encode seulement la valeur <code class="cmd">44</code> (32 + 8 + 4) ; </li>
+
+    <li> quant à l'<strong>octet de poids</strong> fort (<em class="english">most significant byte</em> ou <em class="sigle">LSB</em>), il est <strong class="cons">perdu</strong>.</li>
+  </ul>
+
+  <p> La <strong class="title">solution</strong> à ce problème est évidemment <strong class="pros">très simple</strong> : il suffit par exemple de déclarer la constante <code class="prettyprint lang-c">highBlinkDuration</code> dans le type <code class="prettyprint lang-c">uint16_t</code>. </p>
+  </div><!-- display -->
+  </div><!-- exemples -->
+
+  <li> Un <strong class="specialLB">cas moins flagrant</strong> – mais néanmoins courant – est celui du codage d'une <strong>expression</strong> dont l'évaluation produit une <strong class="warning">valeur beaucoup plus grande</strong> que celle de ses <strong>atomes</strong>, au point de déborder du type automatiquement choisi par le compilateur pour cette évaluation. </li>
+    
+  <div class="exemples">
+  <p class="exemple"> Toujours pour une architecture 8 bits, la ligne nº 12 ci‑dessous emploie un <strong class="title">type sous‑dimensionné</strong>, mais cette fois l'erreur n'est <strong class="cons">pas détectée par le compilateur</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+const unsigned blinkPeriod = 1000;    
+const unsigned dutyCyclePercent = 75; 
+const unsigned blinkHighDuration = (blinkPeriod * dutyCyclePercent) / 100; // error: UINT_MAX == 65535
+const unsigned blinkLowDuration =  blinkPeriod - blinkHighDuration;        // cascading error
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> En effet, avec les valeurs des constantes déclarées ci‑dessus, la sous‑expression codée : </br>
+    <span class="inline">
+      <code class="prettyprint lang-c">blinkPeriod * dutyCyclePercent</code> 
+    </span> <br>
+     prend la valeur <code>75000</code> qui dépasse la <strong>limite supérieure</strong> du <strong class="specialG">type</strong> <code class="prettyprint lang-c">unsigned</code> (<code>65&#8239;535</code>) dans lequel elle est évaluée. Et y remédier n'est <strong class="cons">pas simple</strong> si l'on se tient aux éléments de langage étudiés jusqu'à présent : </p>
+
+  <ul>
+    <li> il est <strong class="cons">inutile</strong> de <strong>changer le type de la constante</strong> <code class="prettyprint lang-c">blinkHighDuration</code> puisque l'erreur se produit <em class="remark">avant toute affectation</em> ; </li>
+
+    <li> il est <strong class="cons">inutile</strong> également de coder les <strong>suffixes</strong> <code class="prettyprint lang-c">LU</code> à la constante <code class="prettyprint lang-c">100</code> puisque celle‑ci est traitée <em class="remark">après</em> évaluation de la sous‑expression problématique ; </li>
+
+    <li> il est <strong class="cons">impossible</strong> de <strong>changer le parenthésage</strong> en codant l'expression : <br>
+    <span class="inline">
+      <code class="prettyprint lang-c">blinkPeriod * (dutyCyclePercent / 100)</code>
+    </span> <br>
+    car la division euclidienne <code>75/100</code> donnerait la valeur <code>0</code> ! </li>
+  </ul>
+  
+  <p> Il serait bien entendu <strong class="pros">préférable</strong> d'utiliser un <strong>type décimal</strong> pour exprimer le rapport cyclique. cependant, il existe aussi une <strong class="title">solution</strong> <strong class="pros">simple</strong> par <strong>conversion explicite</strong>. Elle sera présentée au chapitre C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#cast" target="_BLANK"></a>. </p>
+    </div><!-- exemple -->
+
+  <li id="overflowFor"> Enfin, un <strong class="specialLB">cas bien plus « vicieux »</strong> de débordement est celui de l'<strong>incrémentation</strong> (ou la décrémentation) d'une <strong>variable d'itération</strong> jusqu'à une <strong class="warning">limite d'étendue</strong> de son type. </li>
+
+  <div class="exemples"><p class="exemples"></p>
+  <ol class="numbered">
+    <li> Dans la <strong class="title">boucle</strong> <code class="prettyprint lang-c">for</code> ci‑dessous, le typage de la variable d'incrémentation <code class="prettyprint lang-c">ledLight</code> est <strong class="warning">trop juste</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  for (uint8_t ledLight = 0; ledLight <= 255; ledLight++) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> En effet, à la fin de la supposée dernière itération de la boucle, la variable <code class="prettyprint lang-c">ledLight</code> est incrémentée une dernière fois pour <strong class="warning">dépasser</strong> <code class="prettyprint lang-c">255</code> et invalider la condition de répétition. Toutefois : </div>
+    <ul>
+      <li> son type ne lui permet pas d'atteindre la valeur <code class="cmd" style="color:red">256</code> ; </li>
+
+      <li> elle déborde et repart donc à <code class="prettyprint lang-c">0</code>. </li>
+    </ul>
+    
+    <div class="nobullet"> Et ainsi, la boucle <code class="prettyprint lang-c">for</code> est réinitialisée ! Elle se répète donc sans fin… </div>
+
+    <div class="nobullet"> Ici, la <strong class="title">solution</strong> est <strong class="pros">simple</strong> : il suffit de déclarer <code class="prettyprint lang-c">ledLight</code> dans un <strong class="specialG">type de plus grande taille</strong> (<code class="prettyprint lang-c">uin16_t</code> par exemple). </div>
+
+    <li> Un <strong>problème analogue</strong> se pose avec la variable de décrémentation <code class="prettyprint lang-c">attempt</code> de la <strong class="title">boucle</strong> <code class="prettyprint lang-c">for</code> ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  for (uint8_t attempt = 10; attempt >= 0; attempt--) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> Parce qu'elle déclarée de <strong class="warning">type non signé</strong>, la variable <code class="prettyprint lang-c">attempt</code> ne peut <strong class="warning">pas</strong> être décrémentée jusqu'à la valeur <code class="cmd" style="color:red">-1</code> pour invalider la condition de répétition de la boucle. Après avoir atteint la valeur <code class="prettyprint lang-c">0</code>, elle repart à <code class="prettyprint lang-c">255</code> et la boucle <code class="prettyprint lang-c">for</code> s'exécute sans fin… </div>
+
+    <div class="nobullet"> Là encore, il existe une <strong class="title">solution</strong> <strong class="pros">simple</strong> :  il suffit donc de déclarer <code class="prettyprint lang-c">attempt</code> de <strong class="specialG">type signé</strong> <code class="prettyprint lang-c">int8_t</code>. </div>
+  </ol>
+  </div><!-- exemples -->
+</ul>  
+
+<p class="square" id="applicationMillis" style="margin-top:0em"> Les <strong class="title">débordements d'entier</strong> n'empêchent pas forcément d'<strong class="pros">évaluer de façon cohérente</strong> une <strong>soustraction</strong> de la forme <code class="prettyprint lang-c">a - b</code> où les opérandes <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> sont de <strong class="defin">types non signés</strong> de <strong class="defin">même taille</strong>. En effet, même lorsque la valeur de l'opérande <code class="prettyprint lang-c">a</code> <strong class="warning">déborde</strong> de la valeur maximale encodable et reboucle, la différence reste cohérente. </p>
+
+<div class="exemples">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/blinkMillis2.png" width="400px" style="margin-top: 0.0em">
+<p class="exemple"> C'est en particulier le cas avec les <strong class="title">fonctions</strong> <code class="prettyprint lang-c">millis</code> et <code class="prettyprint lang-c">micros</code> de la bibliothèque <strong class="Arduino">Arduino</strong> lorsqu'elles sont appelées dans un <strong>algorithme réactif</strong> de temporisation comme celui proposé au chap. C2‑VIII <a class="previous" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html#millis" target="_BLANK"></a> pour faire <strong class="defin">clignoter une led</strong> sans recourir à la fonction <code class="prettyprint lang-c">delay</code>, comme dans le programme ci‑dessous : </p>
+</div><!-- display -->
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+unsigned long previousMillis = millis();
+const unsigned blinkHalfPeriod = 1000; // = 1 s
+
+void loop() {
+  if (millis() - previousMillis >= blinkHalfPeriod) {     // end of the half period
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); // LED blinks
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Analysons ce qui se produit lors d'un <strong class="title">débordement de la fonction</strong> <code class="prettyprint lang-c">millis</code>, sachant qu'ici la led doit changer d'état toutes les secondes (donc toutes les 1000 ms). </p>
+
+<ul>
+  <li> On rappelle que la valeur retournée par <code class="prettyprint lang-c">millis</code> est encodée dans le <strong>type</strong> <code class="prettyprint lang-c">unsigned long</code> dont la <strong>valeur maximale</strong> <code>ULONG_MAX</code> vaut 4&#8239;294&#8239;967&#8239;295. </li>
+
+  <li> Donc par exemple, au bout de 4&#8239;294&#8239;968&#8239;secondes (soit 49 jours, 17 heures, 2 minutes et 42 secondes) : </li>
+  <ul>
+    <li> lors de l'exécution de la ligne nº 9, la valeur retournée par l'appel <code class="prettyprint lang-c">millis()</code> devrait valoir 4&#8239;294&#8239;968&#8239;000 mais par limite d'encodage, elle <strong class="warning">reboucle</strong> à la <strong>valeur</strong> <em class="bold">704</em> (par arithmétique cyclique, c'est le résultat de la soustraction 4&#8239;294&#8239;968&#8239;000 − 4&#8239;294&#8239;967&#8239;296) ; </li>
+
+    <li> quant à la valeur de <code class="prettyprint lang-c">previousMillis</code>, elle vaut encore 4&#8239;294&#8239;967&#8239;000 car elle n'a pas changé depuis son incrémentation à la seconde précédente. </li>
+  </ul>
+
+  <li> La différence <code class="prettyprint lang-c">millis() - previousMillis</code> vaut donc en théorie : <br>
+  <span class="inline">
+    704 − 4&#8239;294&#8239;967&#8239;000  =  <em class="bold">−4&#8239;294&#8239;966&#8239;296</em>
+  </span> <br>
+  Une telle valeur négative n'est pas encodable en mémoire dans le type <code class="prettyprint lang-c">unsigned long</code>. Imaginons qu'elle soit encodée dans le type <code>long long</code>, donc en <em>complément à 2</em> sur <strong>64 bits</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre style="border: solid 1px black; padding-top: 0.2em; font-size:80%">
+  11111111 11111111 11111111 11111111 00000000 00000000 00000011 11101000
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Dans le registre de sortie du microcontrôleur, cette valeur est <strong>tronquée</strong> dans le type <code class="prettyprint lang-c">unsigned long</code> en ne gardant que les 4 octets (32 bits) de poids faible. Le <strong class="defin">résultat de la soustraction</strong> se réduit donc à la valeur binaire : </div>
+
+<!---------- ne pas indenter ---------->
+<pre style="border: solid 1px black; padding-top: 0.2em; font-size:80%">
+                                      00000000 00000000 00000011 11101000
+</pre>
+<!---------- ne pas indenter ---------->    
+
+  <div class="nobullet"> qui correspond en base 10 à la <strong>valeur</strong> <em class="bold">1000</em>, soit précisément la <strong class="pros">valeur attendue</strong> ! </div>
+</ul>
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> Sans attendre presque 50 jours d'exécution, le <strong class="pros">bon fonctionnement</strong> du <strong class="title">programme précédent</strong> peut être <strong class="defin">vérifié de deux façons</strong>. </p>
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/logoTinkercad.png" width="80px" style="margin-top: 0.8em">
+  <li> Sur une <strong>vrai carte</strong> <strong class="Arduino">Arduino</strong> ou dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong>, il suffit de remplacer l'appel <code class="prettyprint lang-c">millis()</code> par <code class="prettyprint lang-c">micros()</code> et de multiplier par 1000 la valeur de <code class="prettyprint lang-c">blinkHalfPeriod</code> (pour la convertir en microsecondes), comme dans le code ci‑dessous. Bien entendu, il est cohérent de renommer la variable de mémorisation par <code class="prettyprint lang-c">previousMicros</code>. </li>
+  </div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+unsigned long previousMicros = micros();
+const unsigned long blinkHalfPeriod = 1000000; // = 1 s
+
+void loop() {
+  if (micros() - previousMicros >= blinkHalfPeriod) {      // end of the half period
+    previousMicros += blinkHalfPeriod;
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));  // LED blinks
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Au bout de <strong class="defin">seulement 1&#8239;h&#8239;11</strong>, la valeur retournée par la fonction <code class="prettyprint lang-c">micros</code> <strong class="warning">reboucle</strong> et néanmoins, on peut constater que la led intégrée <strong class="pros">continue de clignoter</strong> imperturbablement, comme attendu !  </div>
+  
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/symboleOrdi.png" width="100px" style="margin-top: 0.5em">
+  <li> On peut aussi <strong class="specialLB">simuler sur un ordinateur</strong> le calcul de la <strong class="defin">différence entre deux variables</strong> <code class="prettyprint lang-c">mil</code> et <code class="prettyprint lang-c">prevMil</code> : </li>
+  <ul>
+    <li> l'une et l'autre déclarées de type <code class="prettyprint lang-c">uint32_t</code> (équivalent à l'implémentation du type <code class="prettyprint lang-c">unsigned long</code> sur une carte <em class="mark">Arduino</em>) ; </li>
+
+    <li> dont on maintient artificiellement la différence à <strong>1000</strong> en codant tout simplement l'initialisation <code class="prettyprint lang-c">mil = prevMil + 1000</code> ;  </li>
+
+    <li> en incrémentant unitairement <code class="prettyprint lang-c">prevMil</code> à partir d'une <strong class="defin">valeur très proche de la limite maximale d'encodage</strong> du type <code class="prettyprint lang-c">uint32_t</code>, par exemple 4&#8239;294&#8239;966&#8239;000 ; </li>
+
+    <li> et pour ne pas surcharger l'affichage, en ne montrant qu'<strong>une valeur sur 100</strong> ; </li>
+  </ul>
+  </div><!-- display -->
+
+  <div class="nobullet"> comme dans le programme ci‑dessous codé en <strong>C++</strong> :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+#include &lt;cstdio&gt;
+#include &lt;cstdint&gt;
+
+int main() {
+  printf("   mil     |   prevMil  |  difference  \n");
+  for (uint32_t prevMil = 4294966000; prevMil <= 4294966600; prevMil += 1) {
+    uint32_t mil = prevMil + 1000;
+    uint32_t difference = mil - prevMil;
+    if (prevMil % 100 == 0) {
+        printf("%10u | %10u | %7u\n", mil, prevMil, difference);
+    }
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> <strong class="pros">Sans aucune attente</strong>, on obtient en sortie standard le <strong>tableau d'affichage</strong> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+   mill    |   prevMil  |  difference  
+4294967000 | 4294966000 |    1000
+4294967100 | 4294966100 |    1000
+4294967200 | 4294966200 |    1000
+         4 | 4294966300 |    1000
+       104 | 4294966400 |    1000
+       204 | 4294966500 |    1000
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="nobullet"> où l'on observe que la différence <code class="prettyprint lang-c">mil - prevMil</code> <strong>reste constante</strong> et vaut <code>1000</code>, exactement <strong class="pros">comme souhaité</strong>. </div> 
+</ul>
+</div><!-- remarques -->
+
+
+
+<!-- expert -->
+<h3 id="fonctionRand"> Fonctions de génération de nombres pseudo‑aléatoires </h3>
+
+
+
+<p> Une <strong>machine informatique</strong> étant fondamentalement <strong class="defin">déterministe</strong>, elle ne peut <strong class="warning">pas</strong> engendrer des <strong class="title">nombres aléatoires</strong> au sens strict du terme, du moins en principe. C'est pourquoi on parle de nombres <strong class="specialLB">pseudo‑aléatoires</strong> <a class="external" href="https://fr.wikipedia.org/wiki/pseudo‑aléatoire" target="_BLANK">W</a>. </p>
+
+
+<h4> La fonction <code class="prettyprint lang-c">rand</code> </h4>
+
+
+<div class="important">
+<p> La bibliothèque standard du langage <strong>C</strong> fournit dans fichier d'en‑tête <code class="filename">stdlib.h</code> (en <strong>C++</strong>, <code class="filename">cstdlib</code>) la <strong class="title">fonction</strong> <code class="prettyprint lang-c">rand</code> qui, lors de l'exécution d'un programme, génère à chaque <strong>appel</strong> un nouveau nombre <strong>entier positif ou nul</strong> dont la valeur est <strong class="defin">pseudo‑aléatoire</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément, la <strong class="title">fonction</strong> <code class="prettyprint lang-c">rand</code> : </p>
+<ul>
+  <li> est <strong>sans argument</strong> – on code un appel simplement par l'expression <code class="prettyprint lang-c">rand()</code> ; </li>
+
+  <li> <strong>retourne</strong> une <strong class="defin">valeur pseudo‑aléatoire</strong> de type <code class="prettyprint lang-c">int</code> comprise entre <code class="cmd">0</code> et <code class="cmd">RAND_MAX</code> (bornes incluses) ; </li>
+
+  <div class="nobullet"> sachant que <code class="prettyprint lang-c">RAND_MAX</code> est une <strong>pseudo‑constante</strong> dont la valeur est <strong>très grande</strong> (elle a le plus souvent la même valeur que <code class="prettyprint lang-c">INT_MAX</code>, soit environ 2 milliards sur un PC) ; cette pseudo‑constante est définie dans le même fichier d'en‑tête que <code class="prettyprint lang-c">rand</code>. </div>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Génération d'un nombre pseudo‑aléatoire borné </h4>
+
+
+<div class="complement">
+<ul>
+  <li> Pour générer un <strong class="defin">nombre pseudo‑aléatoire</strong> compris <strong class="title">entre</strong> <code class="cmd">0</code> et un <strong class="specialLB">entier positif</strong> <code class="prettyprint lang-c"><span class="nocode"><em class="bold"><var>n</var><sub>max</sub></em></span></code> (bornes incluses), il suffit alors de <strong>coder l'expression</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">rand() % (<span class="nocode"><em class="bold"><var>n</var><sub>max</sub></em></span> + 1)</code>
+</span> </li>
+
+  <li> Et pour générer un nombre pseudo‑aléatoire compris <strong class="title">entre</strong> <strong class="specialLB">deux entiers positifs</strong> <code class="prettyprint lang-c"><span class="nocode"><em class="bold"><var>n</var><sub>min</sub></em></span></code> et <code class="prettyprint lang-c"><span class="nocode"><em class="bold"><var>n</var><sub>max</sub></em></span></code> (tels que <var>n</var><sub>min</sub> < <var>n</var><sub>max</sub>), il suffit de <strong>coder l'expression</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><em class="bold"><var>n</var><sub>min</sub></em></span> + rand() % (<span class="nocode"><em class="bold"><var>n</var><sub>max</sub></em> - <em class="bold"><var>n</var><sub>min</sub></em></span> + 1)</code>
+</span></li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Sur un ordinateur, pour <strong>simuler</strong> le résultat produit par <strong class="title">20 lancés</strong> consécutifs d'un <strong class="title">dé à 6 faces</strong>, on peut coder le programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt; 
+#include &lt;stdlib.h&gt; 
+
+int main(void) { 
+  for (int roll = 1; roll <= 20; roll++) {
+    printf("%d ", 1 + rand() % 6);
+  }
+}  
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Le programme ci‑dessus produit l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+6 6 5 5 6 5 1 1 5 3 6 6 2 4 2 6 2 3 4 1
+</pre>
+<!---------- ne pas indenter ---------->
+<p> où les <strong>20 nombres générés</strong> semblent tirés <strong>au hasard</strong>. Néanmoins, lorsqu'on réitère l'exécution, on obtient <strong class="warning">toujours la même séquence</strong> de nombres, ce qui ne doit donc plus <strong class="cons">rien au hasard</strong> !  </p>
+</div><!-- remarque -->
+
+
+<h4> Maîtrise du caractère aléatoire de la fonction <code class="prettyprint lang-c">rand</code> </h4>
+
+
+<p> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">rand</code> est usuellement implémentée par un <strong class="defin">générateur congruentiel linéaire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Générateur_congruentiel_linéaire" target="_BLANK">W</a>, c'est‑à‑dire une <strong>suite entière récurrente</strong> : </p>
+
+<ul>
+  <li> dont le terme courant <em class="bold"><var>X<sub>n</sub></var></em> dépend de <em class="bold"><var>X</var><sub><var>n</var> − 1</sub></em></em> mais en diffère fortement, au point de former une séquence pseudo‑aléatoire de nombres entiers ; </li>
+
+  <li> et qui est paramétrée par son premier terme <em class="bold"><var>X</var><sub>0</sub></em> qu'on appelle la <strong class="specialM">graine</strong> (en anglais, <em class="english">seed</em>) du générateur.  </li>
+</ul>
+
+<div class="important">   
+<p> Pour <strong class="pros">ne pas répéter la même séquence</strong>, il est indispensable <strong>à chaque exécution</strong> de <strong class="title">changer la valeur de la graine</strong> du générateur de nombres pseudo‑aléatoires. </p>
+
+<p>  Cette action s'accomplit à l'aide de la <strong class="title">fonction</strong> <code class="prettyprint lang-c">srand</code>, (avec le préfixe « <code>s</code> » comme <em class="english">seed</em>), également fournie dans fichier d'en‑tête <code class="filename">stdlib.h</code> de la bibliothèque standard du langage <strong>C</strong> (<code class="filename">cstdlib</code> en <strong>C++</strong>).  </p>    
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">srand</code> :  </p> 
+<ul>
+  <li> ne retourne <strong>aucune valeur</strong> ; </li>
+
+  <li> prend comme <strong>argument</strong> la valeur entière positive à affecter à la <strong class="specialM">graine</strong> de la fonction <code class="prettyprint lang-c">rand</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<p> Afin que la <strong class="specialM">graine</strong> soit <strong class="pros">différente à chaque exécution</strong>, il est d'usage, si la machine cible est un ordinateur, de recourir à la <strong class="title">fonction</strong> <code class="prettyprint lang-c">time</code> issue du fichier d'en‑tête <code class="filename">time.h</code> de la bibliothèque standard du langage <em class="mark">C</em> (<code class="filename">ctime</code> en <em class="mark">C++</em>) – cf. chap. C2‑VIII <a class="previous" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html" target="_BLANK"></a>. </p>
+
+<p> Dans la plupart des implémentations, lorsque la <strong class="title">fonction</strong> <code class="prettyprint lang-c">time</code> est appelée avec pour argument la valeur <code class="prettyprint lang-c">NULL</code>, elle retourne la <strong>valeur en secondes</strong> du <strong class="defin">temps calendaire</strong> écoulé depuis le 1<sup>er</sup> janvier 1970 (date dite <em class="mark">Unix Epoch</em> <a class="external" href="https://fr.wikipedia.org/wiki/Epoch" target="_BLANK">W</a>). Cette valeur est donc <strong class="pros">forcément différente</strong> <strong>à chaque nouvelle exécution du programme</strong>, en partant du principe qu'il s'écoule toujours au moins une seconde entre deux exécutions. </p>
+
+
+
+<div class="exemples">
+<p class="exemple"> Pour <strong class="title">remédier au problème</strong> de <strong>répétitivité d'exécution</strong> du programme précédent, on peut ainsi coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt; 
+#include &lt;stdlib.h&gt; 
+#include &lt;time.h&gt; 
+
+int main(void) {
+  srand(time(NULL)); 
+  for (int roll = 1; roll <= 20; roll++) {
+    printf("%d ", 1 + rand() % 6);
+  }
+}  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On obtient ainsi l'affichage d'une <strong>séquence de 2O nombres pseudo‑aléatoire</strong> <strong class="pros">toujours différente</strong> à chaque nouvelle exécution du programme. </p>
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> La <strong class="title">technique d'initialisation</strong> de la série de nombres aléatoires proposée ci‑dessus présente l'inconvénient d'être <strong class="cons">prévisible</strong> si l'instant d'exécution de la fonction <code class="prettyprint lang-c">srand</code> est connu. Cette prévisibilité peut constituer une <strong class="warning">faille de sécurité</strong> si, par exemple, le programme sert à générer un mot de passe aléatoire. </p>
+
+<p> Une <strong class="title">technique alternative</strong> simple consiste à appeler la fonction <code class="prettyprint lang-c">srand</code> avec pour argument une <strong class="defin">variable locale</strong> de type <code class="prettyprint lang-c">unsigned</code> <strong class="warning">non initialisée</strong>. Cette variable prend alors comme valeur initiale celle conférée par l'état des bits de l'espace mémoire qui lui est alloué (cf. chap. C2‑III <a class="external" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#varNonInit" target="_BLANK"></a>), et cette valeur est <strong class="pros">extrêmement difficile à prévoir</strong>. </p>
+
+<p> On peut donc remplacer la ligne nº 6 dans l'exemple de code supra par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  unsigned r;
+  srand(r); 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> sachant que la directive <code class="prettyprint lang-c">#include &lt;time.h&gt;</code>  (ligne nº 3) peut être <strong>supprimée</strong> (elle devient inutile). </p>
+</div><!-- remarques -->
+
+
+<h4 id="randomArduino"> Fonctions <em class="mark">Arduino</em> </h4>
+
+
+<div class="important">
+<p> Afin de <strong class="pros">faciliter le codage</strong>, l'<strong>environnement</strong> <strong class="Arduino">Arduino</strong> définit les fonctions : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">random</code> qui améliore la lisibilité de <code class="prettyprint lang-c">rand</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">randomSeed</code> qui améliore la lisibilité de <code class="prettyprint lang-c">srand</code>.</li>
+</ul>
+</div><!-- important -->
+
+<p class="square"> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">random</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/random-numbers/random/" target="_BLANK">A</a> prend <strong>2 arguments</strong> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">min</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong  class="specialO">max</strong></span></code> de type <code class="prettyprint lang-c">long</code>, le premier étant optionnel, tels que :  </p>
+<ul>
+  <li> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">min</strong></span></code> est une <strong>expression</strong> dont la valeur fixe la <strong>borne minimale</strong> <strong class="defin">incluse</strong> des valeurs possible du nombre aléatoire retourné par la fonction ; si cet argument n'est pas codé, la valeur <strong>par défaut</strong> est <code class="cmd">0</code> ; </li>
+
+  <li> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialO">max</strong></span></code> est une <strong>expression</strong> dont la valeur fixe la <strong>borne maximale</strong> <strong class="warning">exclue</strong> des valeurs possibles du nombre aléatoire retourné par la fonction. </li>
+</ul>
+
+<div class="complement">
+<p> Autrement dit, l'<strong>expression</strong> : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">random(<span class="nocode"><strong class="specialO">max</strong></span>)</code> en code <strong class="Arduino">Arduino</strong> correspond en fait à <code class="prettyprint lang-c">rand() % <span class="nocode"><strong class="specialO">max</strong></span></code> en langages <strong>C/C++</strong> ; </li>
+
+  <li> <code class="prettyprint lang-c">random(<span class="nocode"><strong class="specialT">min</strong></span>, <span class="nocode"><strong  class="specialO">max</strong></span>)</code> en code <strong class="Arduino">Arduino</strong> correspond en fait à <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">min</strong></span> + rand() % (<span class="nocode"><strong  class="specialO">max</strong></span> - <span class="nocode"><strong class="specialT">min</strong></span>)</code> en langages <strong>C/C++</strong>. </li>
+</ul>
+<p> ce qui manifestement <strong class="pros">simplifie le codage</strong>. </p>
+</div><!-- complement -->
+
+<p class="square"> Quant à la <strong class="title">fonction</strong> <code class="prettyprint lang-c">randomSeed</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/random-numbers/randomseed/" target="_BLANK">A</a>, elle redéfinit simplement la <strong>fonction</strong> <code class="prettyprint lang-c">srand</code> sous condition que la valeur passée en argument, de type <code class="prettyprint lang-c">unsigned long</code>, soit <strong>non nulle</strong>. </p>
+
+<div class="complement">
+<p> Autrement dit, l'expression : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">randomSeed(<span class="nocode"><strong class="specialM">seed</strong></span>)</code> en code <strong class="Arduino">Arduino</strong> correspond simplement à <code class="prettyprint lang-c">srand(<span class="nocode"><strong class="specialM">seed</strong></span>)</code> en langages <strong>C/C++</strong>.
+  </li>
+</ul>  
+</div><!-- complement -->
+
+<p> Toutefois, comme la très grande majorité des <strong>cartes</strong> <strong class="Arduino">Arduino</strong> ne disposent <strong class="cons">pas</strong> d'un <strong>module <em class="sigle">RTC</em></strong> (<em class="english">real‑time clock</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Horloge_temps_réel" target="_BLANK">W</a>, elles ne sont <strong class="cons">pas</strong> en mesure de délivrer une valeur de <strong>temps calendaire</strong> via la fonction <code class="prettyprint lang-c">time</code>. </p>
+
+<p> Aussi, pour <strong class="title">générer une graine différente</strong> à chaque exécution d'un programme, il est d'usage d'effectuer une <strong>lecture d'une broche</strong> du <strong class="specialO">port d'entrée analogique</strong> (cf. chap. C3‑VII <a class="next" href="Cc3-7_entreesSortiesAnalogiques.html" target="_BLANK"></a>) de la carte dont le potentiel n'est pas référencé – c'est‑à‑dire une <strong>broche non connectée</strong>. Soumise au champ électromagnétique ambiant, une telle broche présente alors un potentiel assez faible, mais suffisant pour être <strong>non nul</strong>, et tout à fait <strong class="pros">aléatoire</strong>. Pour l'argument <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">seed</strong></span></code>, à la place de <code class="prettyprint lang-c">time(NULL)</code>, on peut donc coder :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c">analogRead(<span class="nocode"><strong>pin</strong></span>)</code>
+</span> <br>
+où <strong>pin</strong> est un numéro de <strong>broche non connectée</strong> du port analogique. </p>
+
+<div class="exemples">
+<p class="exemple"> Sur une <strong class="Arduino">carte Arduino</strong>, on peut donc afficher <strong>toutes les secondes</strong> sur le moniteur série (cf. chap. C3‑X <a class="next" href="Cc3-10_moniteurSerie.html" target="_BLANK"></a>) un <strong class="title">nouveau nombre aléatoire</strong> compris entre <em class="bold">1</em> et <em class="bold">6</em> grâce au programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int nonConnectedPin = 0;
+
+void setup() {
+  randomSeed(analogRead(nonConnectedPin)); 
+  Serial.begin(9600);
+}  
+
+void loop() {
+  Serial.println(random(1, 7));
+  delay(1000);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">fonctions</strong> <code class="prettyprint lang-c">random</code> et <code class="prettyprint lang-c">randomseed</code> sont déclarées dans le fichier <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> et définies dans le fichier <code class="filename">WMath.cpp</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/WMath.cpp" target="_BLANK">G</a> de la <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong>. </p>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<h3> Fonctions mathématiques à valeur décimale </h3>
+
+
+<p> Lorsqu'on appelle une <strong class="defin">fonction mathématiques à valeurs décimales</strong> avec des paramètres entiers et dont le résultat attendu est une <strong>valeur entière</strong>, il est vivement conseillé d'encapsuler l'appel par une <strong>fonction d'arrondi</strong>. Sinon, si le résultat décimal est directement affecté à une variable entière, la conversion implicite opérée par le compilateur se fera par troncature (cf. chap. C3-VI  <a class="next" href=../C3-Numeration/Cc3-6_conversionsTypes.html#entierDecimal" target="_BLANK"></a>). </p>
+
+problème uniquement avec Tinkercad
+-->
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

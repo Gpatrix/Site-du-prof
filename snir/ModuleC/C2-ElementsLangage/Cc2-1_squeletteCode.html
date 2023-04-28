@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="I"
+  data-pageState="OK"
+  data-pageheadtitle="Squelette code"
+  data-pagefulltitle="Le squelette d'un code source"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<!-- noreturn -->
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/codeSourceC.jpg" width="300px" style="margin-top: 1.5em">
+<p class="square"> Le <strong class="title">code source</strong> d'un programme possède certains <strong class="defin">éléments distinctifs</strong> propres au <strong>langage de programmation</strong> employé : </p>
+
+<ul>
+  <li> la <strong class="specialLB">syntaxe</strong>, c'est‑à‑dire l'ensemble des <strong>règles formelles d'écriture</strong> du code ; si des éléments peuvent être communs à plusieurs langages, il a toujours des <strong>aspects spécifiques</strong> propres à chacun ; </li>
+
+  <li> les <strong class="specialLB">extensions</strong> des <strong>noms des fichiers</strong> dans lesquels le code source est écrit <a class="external" href="https://fr.wikipedia.org/wiki/Extension_de_nom_de_fichier" target="_BLANK">W</a>. </li>
+</ul>
+
+<p> Parmi les aspects du langage qui doivent attirer l'attention en premier lieu figure le <strong class="specialO">point d'entrée</strong> d'un programme, c'est‑à‑dire l'élément de code qui détermine par quoi <strong>débute l'exécution</strong>. </p>
+
+<p class="square"> Le but de cette courte présentation est de pouvoir <strong class="pros">identifier ces éléments</strong> qui forment le <strong class="defin">squelette minimal</strong>, commun à tous programmes écrits dans un même langage, <strong class="title">C</strong> ou <strong class="title">C++</strong>, et dans l'<strong>environnement</strong> <strong class="Arduino">Arduino</strong>. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="squeletteC"> Squelette d'un programme en langages <em>C</em> et <em>C++</em> </h2>
+
+
+
+<h3 id="C"> En langage <strong>C</strong> </h3>
+
+
+
+<h4> La fonction principale <code class="prettyprint lang-c">main</code> et son fichier source </h4>
+
+
+<div class="important">
+<p> Dans un environnement hébergé par un système d'exploitation (<em class="mark">hosted environment</em>), l'<strong>exécution</strong> d'un programme en langage <strong class="title">C</strong> commence nécessairement par l'appel du <strong>code exécutable</strong> d'une <strong class="title">fonction principale</strong> <code class="prettyprint lang-c">main</code>, laquelle constitue son <strong class="specialO">point d'entrée</strong>. </p>
+
+<div class="expert">
+<p> C'est la seule fonction qui n'a <strong class="pros">pas besoin</strong> d'être <strong>appelée dans le programme</strong> pour être exécutée. Elle est automatiquement appelée par le chargeur de programme du système, au début du processus d'exécution (cf. chap. C4‑IV <a class="next" href="../C4-Fonctions/Cc4-4_chaineCompilation.html" target="_BLANK"></a>). </p>
+<!-- PRECISER LE LIEN avec un # quand le chap. est enrichi -->
+</div><!-- expert -->
+
+<p> <em class="remark">Remarque</em> : « <code>main</code> » est ici l'adjectif anglais qui signifie justement « <strong>principal</strong> ». </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans le cadre d'un <strong class="specialLB">programme multi‑fichiers</strong>, le <strong>fichier source</strong> dans lequel cette fonction est enregistrée constitue le <strong class="title">fichier principal d'implémentation</strong> du programme. Il est souvent d'usage de le nommer <code class="filename">main.c</code> et a priori, on constitue un <strong class="specialM">répertoire de projet</strong> pour y regrouper tous les fichiers source du programme. Dans ce répertoire, il est alors très facile de repérer où est codée la fonction principale <code class="prettyprint lang-c">main</code>. C'est la procédure par défaut par certains <em class="sigle">IDE</em></strong> – notamment <strong class="Codeblocks">Code::Blocks</strong>. </p>
+
+<p> Mais lorsqu'un programme n'est constitué que d'<strong class="specialLB">un seul fichier source</strong> et qu'on le compile « à la volée » dans un terminal de commande, il est plus pertinent de donner à ce fichier un <strong class="pros">nom plus explicite</strong> faisant référence à ce que fait le programme – en gardant néanmoins l'<strong>extension</strong> <code class="prettyprint lang-c">.c</code>. Ainsi, on peut copier ce fichier dans un autre répertoire de projet sans crainte qu'il écrase son fichier principal. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> En fait, un <strong class="title">fichier source</strong> peut même être nommé avec <strong class="specialLB">n'importe quelle extension</strong>. Mais, l'<strong>extension</strong> <code class="filename">.c</code> reste <strong class="pros">vivement recommandée</strong> car elle permet au compilateur de détecter automatiquement qu'il s'agit d'un fichier source. Elle évite également au codeur les confusions, en particulier avec les fichiers codés en langage <strong>C++</strong> – et ainsi ne pas se tromper de compilateur pour élaborer le programme exécutable. </p>  
+<p> De plus, il est nécessaire de <strong class="warning">ne pas utiliser</strong> l'<strong class="cons">espace</strong> ni la plupart des <strong class="cons">symboles</strong> (<code>& # ?</code> etc.) de même que les <strong class="cons">caractères spéciaux</strong> (saut de tabulation, etc.) dans le <strong class="title">nom d'un fichier source</strong>, au risque sinon de nuire à la bonne exécution de la commande de compilation. </p>
+</div><!-- expert -->
+
+
+<!-- 
+<div class="remarques">
+<p class="remarque"> Le fait de nommer <code class="filename">main.c</code> le fichier source contenant le code de la fonction <code class="prettyprint lang-c">main</code> est utilisé par certains <strong><em class="sigle">IDE</em></strong> – notamment <strong class="Codeblocks">Code::Blocks</strong> – d'identifier le fichier qui contient le <strong class="specialO">point d'entrée</strong> du programme parmi tous les <strong>fichiers sources</strong> contenus dans le <strong class="specialM">répertoire de projet</strong>. C'est pourquoi ils adoptent par défaut cette convention de nommage, même si le programme ne comporte qu'un seul fichier. </p>
+
+<p> Il est néanmoins possible de nommer <strong class="cons">autrement</strong> que <code class="filename">main.c</code> le fichier principal, mais il faut alors spécifier son nom dans le <strong>script de commande</strong> de la <strong>chaîne de compilation</strong> utilisée pour produire le code exécutable du programme. </p>
+</div>
+-->
+
+
+<h4 id="fonctionMain"> Squelette de la fonction <code class="prettyprint lang-c">main</code> </h4>
+
+
+<div class="complement">
+<p> Le code source de la <strong class="title">fonction</strong> <code class="prettyprint lang-c">main</code> présente le <strong>« squelette » général</strong> de <strong class="defin">définition</strong> d'une fonction codé ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+
+int main(void) {
+
+  /* some code here */
+
+  return 0;
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> sachant que, <em class="remark">par défaut</em> : </p>
+<ul>
+  <li> on code la fonction <code class="prettyprint lang-c">main</code> <strong>sans argument</strong>, d'où la liste vide explicite <code class="prettyprint lang-c">(void)</code>, qui peut aussi se coder implicitement <code class="prettyprint lang-c">()</code> –  mais la forme explicite est à privilégier en <strong>C</strong> ; </li>
+
+  <li> la fonction <code class="prettyprint lang-c">main</code> <strong class="specialMg">retourne</strong> (c'est‑à‑dire, donne comme valeur) un <strong>nombre entier</strong>, d'où : <br>
+  <ul>
+    <li> le descripteur de type <code class="prettyprint lang-c">int</code> (début du mot anglais <em class="english">integer</em> qui signifie « entier »),</li>
+
+    <li> et l'instruction simple <code class="prettyprint lang-c">return 0;</code> qui spécifie la <strong>valeur retournée</strong>, ici <code class="prettyprint lang-c">0</code> ;</li>
+  </ul> </li>
+
+  <li> la <strong class="specialMg">valeur retournée</strong> par la fonction <code class="prettyprint lang-c">main</code> est interprétée comme un <strong class="defin">code d'erreur</strong>, la valeur <code class="prettyprint lang-c">0</code> signifiant par convention l'<strong style="color: green">absence d'erreur</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Lorsqu'on compile et exécute un programme <strong>en ligne de commande</strong> sur un poste de travail, le terminal d'exécution <strong class="cons">n'affiche pas</strong> la <strong class="specialMg">valeur retournée</strong> par la fonction <code class="prettyprint lang-c">main</code>. Néanmoins, il est <strong class="pros">possible</strong> de obtenir cette valeur dans le terminal d'exécution en saisissant la commande : </p>
+<ul>
+  <li>  <code class="displayDark"><span class="displayDarkGreen">echo</span> <span class="displayDarkBlue">$?</span></code> sous <strong class="specialLB">Linux</strong> ; </li>
+
+  <li> <code class="displayDark"><span class="displayDarkGreen">echo</span><span class="displayDarkBlue">$LastExitCode</span></code> sous <strong class="specialLB">Windows</strong> <strong>PowewShell</strong>. </li>
+</ul>
+<p> <em class="remark">Attention</em>. Dans les deux cas, il s'agit de valeur retournée par la <strong>dernière commande exécutée</strong>, donc, si on saisit à nouveau cette commande, on n'obtient pas la même valeur, mais celle retournée par la commande <code class="cmd">echo</code>. </p>
+
+<!-- PARAGRAPHE OBSOLÈTE (bug de OnlineGDB corrigé)
+<p class="square"> En revanche, dans l'environnement de programmation en ligne <strong class="OnlineGDB">OnlineGDB</strong>, la valeur affichée dans le message de sortie n'est <strong class="warning">pas</strong> celle retournée par la fonction <code class="prettyprint lang-c">main</code> mais un <strong>code de sortie</strong> conventionnel de bon fonctionnement (la valeur <code class="prettyprint lang-c">0</code> signifiant que le programme s'est exécuté normalement jusqu'à l'instruction <code class="prettyprint lang-c">return</code>). </p>
+-->
+</div><!-- expert -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> En langage <strong>C</strong>, le type <code class="prettyprint lang-c">int</code> des <strong class="title">valeurs de retour</strong> de la fonction <code class="prettyprint lang-c">main</code> est <strong class="defin">signé</strong> (cf. chap. C2‑III <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/ModuleC/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>) et de grande étendue. Mais sous <strong class="specialLB">Linux</strong>, la <strong>variable système</strong> <code class="cmd"><span class="blue">$?</span></code> l'enregistre dans le type <code class="prettyprint lang-c">unsigned char</code>. Autrement dit, la commande : <br>
+  <span class="inline">
+    <code class="displayDark"><span class="displayDarkGreen">echo</span> <span class="displayDarkBlue">$?</span></code>
+  </span> <br>
+  ne peut afficher que les valeurs comprises entre <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">255</code>. Dans ce contexte, si un programme retourne un <strong class="defin">code d'erreur négatif</strong> comme par exemple <code>-1</code>, on obtient comme pour un débordement traité en rebouclage sa <strong>valeur complémentaire</strong> à <code>256</code> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#debordements" target="_BLANK"></a>), dans notre exemple <code>255</code> dans le terminal. </li>
+
+  <li> Le <strong>type</strong> <code class="prettyprint lang-c">int</code> de la valeur de retour de la fonction <code class="prettyprint lang-c">main</code> et l'<strong>instruction</strong> <code class="prettyprint lang-c">return 0;</code> sont l'un comme l'autre <strong class="defin">facultatifs</strong> pour que le programme soit compilable. Toutefois, si l'on souhaitait que la fonction <code class="prettyprint lang-c">main</code> ne retourne <strong class="title">aucune valeur</strong>, il serait en théorie préférable d'expliciter ce choix en codant <code class="prettyprint lang-c">void</code> son type de valeurs retournées (cf. chap. C4‑I <a class="next" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#typeVoid" target="_BLANK"></a>), comme ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+
+void main(void) {
+
+}
+
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="nobullet"> sachant que, même dans ce cas, des instructions <code class="prettyprint lang-c">return;</code> pourraient  <em>éventuellement</em> être codées dans le programme (cf. chap. C4‑I <a class="next" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#corpsFonction" target="_BLANK"></a>). </div>
+
+  <div class="nobullet"> Cependant, bien que le programme minimal ci‑dessus soit compilable, la déclaration en langage <strong>C</strong> de la fonction <code class="prettyprint lang-c">main</code> de <strong class="specialG">type</strong> <code class="prettyprint lang-c">void</code> est <strong class="cons">déconseillée</strong>. D'ailleurs, en <strong>C++</strong>, cette pratique est <strong class="warning">refusée</strong> par le compilateur. </div>
+</ol>
+</div><!-- remarque -->
+
+
+<h4 id="blocMain"> Bloc de définition de la fonction <code class="prettyprint lang-c">main</code> </h4>
+
+
+<div class="important">
+<p> Les <strong class="defin">accolades</strong> ouvrante <code class="prettyprint lang-c">{</code> et fermante <code class="prettyprint lang-c">}</code> délimitent le <strong class="title">bloc de définition</strong> du corps de la <strong class="defin">fonction</strong> <code class="prettyprint lang-c">main</code>. Ce bloc peut être composé d'autant d'<strong>instructions</strong> que nécessaire. </p>
+</div><!-- important -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+
+/* only directives, declarations and definitions here */
+
+
+int main(void) { // <- BEGINING of the "main" function def. bloc
+
+  /* any kind of code possible here */
+
+  return 0;
+} // <- END of the "main" function def. bloc
+
+
+/* only directives, declarations and definitions here */
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="complement">
+<p> <strong class="warning">Hors de cette définition</strong> – <strong>avant</strong> et <strong>après</strong> – les éléments de code du fichier source ne peuvent être que : </p>
+
+<ul>
+  <li> des <strong class="defin">directives</strong> destinées au <strong>préprocesseur</strong> – c'est le composant de la chaîne de compilation qui agit en premier sur le fichier source ;  </li>
+
+  <div class="nobullet"> (Les directives sont <strong class="pros">faciles à repérer</strong> : elles sont codées par des <strong>lignes de contrôle</strong> toujours précédées par le symbole <code class="prettyprint lang-c">#</code> dit <strong>croisillon</strong>.) </div>
+
+  <li> des <strong class="defin">déclarations</strong> de types, de variable, de fonctions ; </li>
+
+  <div class="nobullet"> (Les déclarations commencent toujours par un <strong class="specialG">descripteur de type,</strong> comme <code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">float</code>, etc.) </div>
+
+  <li> d'autres <strong class="defin">définitions</strong> de fonctions ; </li>
+</ul>
+
+<p> mais il ne peut <strong class="warning">pas</strong> y avoir <strong class="warning">d'instructions</strong> au sens strict du terme (cf. chap. C2‑II <a class="next" href="Cc2-2_syntaxeFondamentale.html#remInstructions" target="_BLANK"></a>), ni simples, ni structurées. </p>
+</div><!-- complement -->
+
+<p> Toutes ces notions (<em>directive</em>, <em>déclaration</em>, <em>définition</em>) seront détaillées au fur et à mesure des chapitres suivants. </p>
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="remarques">
+  <li> D'<strong class="title">autres fonctions</strong> peuvent être définies <strong>avant</strong> <code class="prettyprint lang-c">main</code> dans le fichier source principal, mais elles ne constituent pas pour autant le point d'entrée du programme. Plus généralement, l'ordre de définition des fonctions dans un fichier source ne code pas du tout leur ordre d'exécution.  </li>
+
+  <li> Les <strong class="title">accolades</strong> ne servent pas seulement à délimiter le bloc de définition de la fonction <code class="prettyprint lang-c">main</code>, mais plus généralement de <strong>toute autre fonction</strong> ou <strong>groupement d'instructions</strong> codées en langage <strong>C</strong>. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<h4 id="directives"> Directives d'inclusion de modules de bibliothèque </h4>
+
+
+<div class="important">
+<p> Presque toujours, un fichier source en langage <strong>C</strong> commence, avant tout bloc de fonction, par des <strong class="title">directives d'inclusion</strong> de fichiers d'en‑tête de <strong class="defin">modules de bibliothèque</strong>, de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;<span class="nocode"><strong class="specialN">nom de fichier d'en‑tête</strong></span>&gt;</code>
+</span> </br>
+où le <strong class="specialN">nom de fichier d'en‑tête</strong> codé comporte l'extension <code class="prettyprint lang-c">.h</code> (pour <em class="english">header</em> en anglais).
+</p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces directives permettent d'<strong class="defin">employer</strong> <strong>dans le fichier source</strong> où elles sont inscrites les <strong>éléments de code</strong> (types, variables, fonctions) définis dans les modules de bibliothèque spécifiés. </p>
+
+<p> C'est un aspect essentiel de la <strong class="pros">modularité</strong> du langage <strong>C</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Le codage des directives est approfondi au chapitre C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html" target="_BLANK"></a>.
+</p>
+</div><!-- Expert -->
+
+
+<div class="exemples">
+<p class="exemple"> La directive <code class="prettyprint lang-c">#include &lt;stdio.h&gt;</code> autorise l'emploi des fonctions d'<strong>entrées‑sorties standard</strong> sur terminal d'exécution (fenêtre de console, clavier de l'ordinateur), comme par exemple la fonction <code class="prettyprint lang-c">printf</code> qu'on retrouve dans le programme « Hello World » (cf. TP. C1‑1 <a class="previous" href="../C1-Generalites/Ctp1-1_environnements.html#exo4" target="_BLANK"></a>). </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="cPlusPlus"> En langage <strong>C++</strong> </h3>
+
+
+
+<div class="important">
+<p> Le <strong>squelette</strong> du code source d'un programme <strong class="title">C++</strong> est articulé <strong>comme en <strong>C</strong></strong> autour d'une <strong class="title">fonction principale</strong> <code class="prettyprint lang-c">main</code> qui constitue son <strong class="specialO">point d'entrée</strong>. La définition de cette fonction possède le <strong>même squelette général</strong> que celui présenté supra <a class="supra" href="Cc2-1_squeletteCode.html#blocMain"></a>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Dans le cadre d'un <strong class="specialLB">programme multi‑fichier</strong>, il est d'usage de nommer <code class="filename">main.cpp</code> le <strong class="title">fichier source principal</strong> qui contient la fonction <code class="prettyprint lang-c">main</code>. L'extension <code class="filename">.cpp</code> (pour « <em>C plus plus</em> ») permet d'identifier le langage <strong class="title">C++</strong> sans confusion possible avec le <strong>C</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Il existe également d'<strong>autres différences notables</strong> entre un programme en <strong>C</strong> et en <strong class="title">C++</strong>. En particulier, les fichiers de la bibliothèque standard du <strong class="title">C++</strong> n'ont pas d'<strong>extension</strong>, donc le <code class="prettyprint lang-c">.h</code> n'apparaît pas dans les <strong>directives d'inclusion</strong> de ces fichiers. </p>
+
+<div class="exemples">
+<p class="exemple"> Pour disposer des fonctions d'<strong class="defin">entrées‑sorties</strong> standards du <strong class="title">C++</strong> (dont la syntaxe de codage est très différente de celle du <strong>C</strong>), on code spécifiquement la <strong>directive</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;iostream&gt;</code>
+</span> </p>
+</div><!-- exemple -->
+
+<p> De plus, on trouve spécifiquement dans du code source en <strong class="title">C++</strong> tous les éléments relatifs à la <strong>programmation orientée objet</strong> (classes, espaces de nom, etc.). Évoqués pour raisons pédagogiques, ces aspects ne sont pas approfondis dans ce module de formation. </p>
+</div><!-- Expert -->
+
+<div class="remarques">
+<p class="remarque"> Alors que l'inverse n'est pas vrai, il est tout à fait <strong class="defin">possible</strong> dans un programme codé en <strong class="title">langage C++</strong> d'utiliser des modules de la <strong>bibliothèque standard</strong> du <strong>C</strong> via des directives comme, par exemple <code class="prettyprint lang-c">#include &lt;math.h&gt;</code>. Les fichiers du framework <strong class="Arduino">Arduino</strong> recourent beaucoup à cette pratique. </p>
+
+<p> Néanmoins, il est recommandé d'<strong class="pros">employer préférentiellement</strong> les <strong class="title">variantes spécialement développées</strong> dans la bibliothèque standard du <strong class="title">C++</strong>. Ainsi, pour recourir aux fonctions mathématiques de la bibliothèque standard du <strong>C</strong>, on codera de préférence la directive : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;cmath&gt;</code>
+</span> <br>
+car cette variante procure des fonctions codées pour être <strong class="pros">plus robustes aux erreurs</strong> par rapport à celles déclarées dans le fichier d'en‑tête <code class="filename">math.h</code>. </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+<h2> Cas d'un programme <em class="mark">Arduino</em></h2>
+
+
+
+<h3 id="casArduino"> Squelette d'un programme <em class="mark">Arduino</em> </h3>
+
+
+
+<h4> Les fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code> </h4>
+
+
+<div class="important">
+<p> Dans un <strong>programme</strong> <strong class="Arduino">Arduino</strong>, on ne code <strong class="warning">pas de fonction</strong> <code class="prettyprint lang-c">main</code> mais <strong class="title">deux autres fonctions</strong> : </p>
+
+<ul>
+  <li> la <strong class="Arduino">fonction</strong> <code class="prettyprint lang-c">setup</code> qui constitue en apparence (pour le codeur) le <strong class="specialO">point d'entrée</strong> du programme ; elle est destinée à être <strong>exécutée</strong> <strong class="defin">une seule fois</strong> ;  </li>
+
+  <li> puis la <strong class="Arduino">fonction</strong> <code class="prettyprint lang-c">loop</code> qui destinée à être <strong>exécutée</strong> <strong class="defin">en boucle</strong>, <strong>indéfiniment</strong>, dès que l'exécution de la fonction <code class="prettyprint lang-c">setup</code> est achevée. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Le <strong>squelette minimal</strong> d'un <strong>programme</strong> <strong class="Arduino">Arduino</strong> est donc constitué de la <strong class="defin">définition</strong> respective de ces deux fonctions : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-cpp linenums:1">
+
+/* only directives, declarations and definitions here */
+
+
+void setup() { // <- BEGINING of the "setup" function def. bloc
+
+  /* any kind of code possible here */
+
+} // <- END of the "setup" function def. bloc
+
+/* only directives, declarations and definitions here */
+
+
+void loop() { // <- BEGINING of the "loop" function def. bloc
+
+   /* any kind of code possible here */
+
+} // <- END of the "loop" function def. bloc
+
+
+/* only directives, declarations and definitions here */
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ces deux fonctions sont de <strong>type</strong> <code class="prettyprint lang-c">void</code> (cf. chap. C3‑I <a class="next" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typeVoid" target="_BLANK"></a>). Sauf cas très particuliers, il ne faut <strong class="warning">surtout pas</strong> coder d'<strong>instruction</strong> <code class="prettyprint lang-c">return</code> dans leur bloc de définition. </p>
+</div><!-- complement -->
+
+
+<h4> Le fichier principal d'extension <code class="filename">.ino</code> </h4>
+
+
+<div class="important">
+<p> En <strong class="Arduino">Arduino</strong>, un programme est <strong>compilé en</strong> <strong class="defin">C++</strong>, mais le code source des fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code> doit être stocké dans un <strong class="title">fichier principal</strong> d'extension <code class="filename">.ino</code>. </p>
+
+<p> De plus, ce fichier source doit <em class="remark">obligatoirement</em> être placé dans un <strong class="specialM">répertoire de projet</strong> ayant un <strong class="warning">nom identique</strong> (sans extension). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> C'est par cette <strong class="defin">concordance de noms</strong> que procède l'<strong>identification</strong> du <strong class="title">fichier principal</strong>, car le répertoire de projet peut éventuellement contenir d'<strong>autres fichiers sources</strong> d'extension <code class="filename">.ino</code> (ainsi que des fichiers <code class="filename">.cpp</code> <code class="filename">.h</code> …), dans le cadre d'une programmation multi‑fichiers. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Comme dans le fichier source principal d'un programme en <strong>C</strong> ou <strong>C++</strong> (cf. supra <a class="supra" href="Cc2-1_squeletteCode.html#blocMain"></a>), <strong class="warning">hors des définitions</strong> des fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code>, il ne peut y avoir que des  <strong class="defin">directives</strong>, des <strong class="defin">déclarations</strong> et des <strong class="defin">définitions</strong>,  mais il ne peut <strong class="warning">pas</strong> y avoir d'<strong class="warning">instructions</strong> au sens strict du terme, ni simples, ni structurées. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="fonctionnementArduino"> Fonctionnement du logiciel <em class="mark">Arduino <em class="sigle">IDE</em></em> </h3>
+
+
+
+<div class="important">
+<p> Lorsqu'on clique sur le bouton <code>Téléverser</code> (<em class="english">upload)</em> du programme vers la carte, le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> met en œuvre une <strong class="title">chaîne de compilation</strong> <strong class="defin">C++</strong>. Pour cela, il accomplit des <strong>tâches en arrière plan</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Essentiellement, il crée puis compile un <strong class="title">fichier préformaté</strong> nommé <code class="filename">main.cpp</code>. Dans ce fichier, il génère le code source de définition de la <strong>fonction</strong> <code class="prettyprint lang-c">main</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/main.cpp" target="_BLANK">G</a> où : </p>
+
+<ul>
+  <li> la <strong>fonction</strong> <code class="prettyprint lang-c">setup</code> n'est appelée qu'<strong class="defin">une seule fois</strong> <a class="external" href="https://www.arduino.cc/reference/en/language/structure/sketch/setup/" target="_BLANK">A</a> ; </li>
+
+  <li> la <strong>fonction</strong> <code class="prettyprint lang-c">loop</code> est appelée dans une structure de <strong class="defin">boucle sans fin</strong> (<em class="english">forever</em>) qui fait qu'après exécution de sa dernière instruction, elle reprend à sa première instruction, etc. <a class="external" href="https://www.arduino.cc/reference/en/language/structure/sketch/loop/" target="_BLANK">A</a> </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> De plus, le <strong>fichier</strong> <code class="filename">main.cpp</code> généré par logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> contient la <strong>directive</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+#include &lt;Arduino.h&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Cette directive inclut le <strong class="title">module principal</strong> de la bibliothèque <strong class="Arduino">Arduino</strong> qui déclare et définit les éléments de code spécifiques pour les cartes à microcontrôleur de la marque ou compatibles <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a>. </p>
+
+<p> Le fichier d'en‑tête <code class="filename">Arduino.h</code> lui-même contient d'<strong class="defin">autres directives d'inclusion</strong> : </p>
+<ul>
+  <li> de nombreux <strong>autres modules</strong> de la bibliothèque <strong class="Arduino">Arduino</strong> ;  </li>
+
+  <li> quelques <strong>modules très usuels</strong> de la bibliothèque standard du langage <strong>C</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:23">
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;string.h&gt;
+#include &lt;math.h&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ul>
+</div><!-- expert -->
+
+<div class="remarques" id="ArduinoES">
+
+<p class="remarque"> Le <strong>fichier d'en‑tête</strong> <code class="filename">stdio.h</code> n'est <strong class="defin">pas inclus</strong> par une directive dans les <strong>fichiers</strong> <strong class="Arduino">Arduino</strong>. En effet, une carte à microcontrôleur n'est <strong class="warning">pas</strong> une machine dotée d'un <strong class="defin">terminal</strong> – elle n'a <strong class="warning">ni</strong> <strong>écran</strong>, <strong class="warning">ni</strong> <strong>clavier</strong>, ni même une unité de mémoire de masse (disque dur). Elle n'est donc <strong class="warning">pas conçue</strong> pour mettre en œuvre des <strong>entrées‑sorties</strong> <strong class="title">standards</strong>. </p>
+
+<p> En revanche, une <strong class="Arduino">carte Arduino</strong> dispose d'<strong class="title">autres moyens</strong> d'<strong>entrées‑sorties</strong> via son port numérique, son port analogique et surtout son <strong>port série</strong>, qui permet d'échanger des données textuelles avec le terminal de programmation.  Mis œuvre par le biais de fonctions spécifiques, ces aspects seront étudiés dans de prochains chapitres. </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

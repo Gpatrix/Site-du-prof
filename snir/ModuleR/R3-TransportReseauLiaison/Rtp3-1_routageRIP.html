@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="3"
+  data-pagenumber="1"
+  data-pageState="OK"
+  data-pageheadtitle="RIP"
+  data-pagefulltitle="Le protocole de routage dynamique RIP"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> L'<strong class="title">objectif principal</strong> de ce sujet de travaux pratiques est de comprendre les principes d'emploi du <strong class="specialLB">protocole <em class="sigle">RIP</em></strong> de <strong>gestion dynamique  des routes</strong> dans un réseau local. </p>
+
+<p> On se place dans l'exemple d'une <strong>dorsale</strong> reliant <strong>3 routeurs-passerelles</strong> : </p>
+  <ul>
+    <li> en configurant d'abord des <strong class="defin">routes statiques</strong>, avec un choix judicieux des adresses pour pouvoir procéder par <strong>agrégation de routes</strong> ;</li>
+
+    <li> puis en reconfigurant les routeurs pour qu'ils fassent appel au <strong class="specialDO">protocole <em class="sigle">RIP</em></strong>, d'abord <strong class="specialDO">version 1</strong> limité à l'adressage <strong>classfull</strong> ; </li>
+
+    <li> puis, en recourant à la <strong class="specialDO">version 2</strong>  qui permet d'attribuer des <strong>adresses <em class="sigle">CIDR</em></strong> (<em class="english">classless</em>) pour les routeurs. </li>
+  </ul>
+</ul> 
+
+<p> Un <strong class="title">objectif secondaire</strong> est de découvrir la simulation des <strong class="specialLB">routeurs Wi‑Fi</strong> et des connexions au réseau par <strong>liaisons sans‑fil</strong>. </p>
+
+<p> Ce sujet de travaux pratiques est aussi l'occasion de <strong class="pros">réviser</strong> la mise en place d'un <strong>serveur <em class="sigle">DHCP</em></strong> et d'un <strong>serveur web</strong>, abordée dans le sujet de TP R2‑1 <a class="previous" href="../R2-Applications/Rtp2-1_dhcp_dns.html" target="_BLANK"></a>. </p>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié les <strong class="warning">chapitres R3‑I</strong> et <strong class="warning">R3‑II</strong>  du cours. Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Environnement </h3>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ciscoPacketTracerLogo.png" width="80px">
+<p> Tous les exercices sont à traiter dans l'<strong class="title">environnement de simulation</strong> <strong class="Cisco">Cisco Packet Tracer</strong>. Ce logiciel gratuit doit être préalablement <strong>téléchargé</strong> et <strong>installé</strong> sur le poste travail (cf. chap. R1‑II <a class="cours" href="../R1-Generalites/Rc1-2_architecture.html#CPT" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer les manipulations sur ordinateur en veillant à <strong class="pros">enregistrer au fur et à mesure le travail</strong> dans <strong class="defin">un fichier distinct</strong> pour <strong>chaque exercice</strong> et parfois <strong>chaque question</strong>. Il est recommandé de nommer ces fichiers de la forme <code class="filename">R3tp1exo<span class="nocode"><strong class="defin">n</strong></span>.pkt</code> où <strong class="defin">n</strong> est le numéro d'exercice. </p>
+
+<p> Les <strong>exercices</strong> étant conçus <strong class="defin">en continuité l'un après l'autre</strong>, il est vivement recommandé de partir d'une <strong class="title">sauvegarde du fichier</strong> <code class="filename">.pkt</code> de  l'exercice <strong>n</strong> pour traiter l'exercice <strong>n</strong><em class="bold"> + 1</em>. </p>
+
+<p> Quant aux questions qui attendent une réponse littérale, il est conseillé d'y répondre sur cahier ou fichier de texte. </p>
+</div><!-- important -->
+
+
+
+
+
+<ol class="exercice">
+
+  <li id="exo1" style="margin-top: 2em;"> <em class="bold">Mise en place de la dorsale en routage statique</em> </li>
+
+  <img class="top-left" src="../img/R3tp1exo1.png">
+
+  <ol class="questions">
+		<li> Dans la <strong>vue « logique »</strong> de l'espace de travail, constituer la <strong class="title">topologie matérielle</strong> de réseau constituée de <strong>6 segments</strong>, représentée en figure ci‑dessus, sachant que la <strong>dorsale</strong> reliant les routeurs doit être câblée en <strong class="specialR">Gigabit Ethernet</strong>. Pour cela, il est préalablement nécessaire de <strong>rajouter des interfaces</strong> à leur configuration physique. </li>
+
+    <li> Configurer les <strong class="title">routeurs passerelles</strong> comme indiqué ci‑dessous. <br>
+    
+    <ul>
+      <li> Procéder à l'<strong>adressage statique IPv4</strong> des interfaces réseaux : </li>
+      <ul style="list-style: circle">
+      	<li> en respectant les adresses des segments spécifiées sur la figure pour les interfaces <em class="mark">Fast Ethernet</em> ; </li>
+      	<li> en choisissant judicieusement des adresses privées (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>) pour les interfaces <em class="mark">Gigabit Ethernet</em>. </li>
+        
+        <div class="nobullet"> <em class="remark">Attention</em> ! 
+        Pour ne pas avoir à changer tout le plan d'adressage de la dorsale à l'exercice 2, on choisira des réseaux dont les adresses sont <strong class="pros">classfull</strong>, par exemple en <code class="cmd">192.168.10x.0/24</code> où le digit <code class="cmd">x</code> change pour chaque liaison. </div>
+      </ul>
+
+      <li> Ajouter toutes les <strong class="defin">routes statiques</strong> nécessaires en utilisant autant que possible la technique d'agrégation des routes <a class="external" href="https://le-guide-du-sysops.fr/index.php/2021/10/18/lagregation-ou-summarization-de-routes-theorie-et-pratique/" target="_BLANK"></a>. </li>
+
+      <div class="nobullet"> <em class="remark">Attention</em> ! <strong class="warning">Ne pas oublier</strong> les routes vers les réseaux formant les liaisons de la <strong>dorsale</strong>. </div>
+
+      <div class="nobullet"> À titre indicatif, combien de routes faut‑il renseigner en tout ? Sachant le nombre de mots de 32 bits pour définir une adresse, combien de mots faut‑il renseigner en tout ? </div>
+
+      <li> <strong>Vérifier</strong> alors en simulation temps‑réel que toutes les interfaces des routeurs vers les segments peuvent communiquer entre entre elles, en utilisant la commande <code>ping</code> en <strong><em class="sigle">CLI</em></strong> (<em class="english">command line interface</em>). </li>
+
+      <li> <strong>Sauvegarder</strong> la configuration de chaque routeur dans sa mémoire <strong><em class="sigle">NVRAM</em></strong> (<em class="english">non volatile</em> <em class="sigle">RAM</em>). </li>
+    </ul></li>
+      
+    <li> Configurer tous les <strong class="title">PC</strong> en choisissant l'option <strong><em class="sigle">DHCP</em></strong> en <strong>IPv4</strong>. </li>
+
+    <li> Configurer le <strong class="title">serveur <em class="sigle">DHCP</em></strong> comme indiqué ci‑dessous. <br>
+    <ul>
+      <li> Procéder à l'<strong>adressage statique IPv4</strong> de son interface réseau conformément à l'adresse spécifiée sur la figure supra. </li>
+
+      <li> Activer le <strong>service <em class="sigle">DHCP</em></strong> et désactiver tous les autres services. </li>
+
+      <li> Réserver pour <strong class="specialLB">chaque segment des PC</strong> une plage de <strong>20 adresses</strong> à partir de l'adresse <strong>nº 50</strong>. </li>
+
+      <li> Configurer les interfaces des <strong>routeurs A et B</strong> vers les segments des PC en <strong>relais <em class="sigle">DHCP</em></strong> (cf. cours, chap. R2‑II <a class="cours" href="../R2-Applications/Rc2-2_dhcp.html#relaisDHCP" target="_BLANK"></a> et sujet de TP R2‑1 <a class="previous" href="../R2-Applications/Rtp2-1_dhcp_dns.html#relaisDHCP" target="_BLANK"></a>). </li>
+
+      <div class="nobullet"> (<em>Penser à sauvegarder la configuration des routeurs après chaque nouvelle modification.</em>) </div>
+
+      <li> <strong>Vérifier</strong> alors en simulation temps‑réel que tous les PC disposent d'une <strong>adresse <em class="sigle">IP</em></strong> conforme aux plages dynamiques configurées dans le serveur <strong><em class="sigle">DHCP</em></strong> et qu'ils peuvent communiquer entre eux par appels de la commande <code>ping</code> en <em class="english">command prompt</em>. </li>
+    </ul> </li>
+
+    <li> Configurer le <strong class="title">serveur web</strong> avec l'<strong>adresse statique IPv4</strong> spécifiée sur la figure supra. Supprimer tous les services sauf le <strong>service <em class="sigle">HTTP</em></strong>. </li>
+
+    <div class="nobullet"> <strong>Vérifier</strong> alors en simulation temps‑réel  que la page web <code class="filename">index.html</code> est accessible à l'adresse <strong><em class="sigle">IP</em></strong> du <strong>serveur <em class="sigle">HTTP</em></strong> depuis n'importe quel PC avec un <em class="english">web browser</em>. </div>
+	</ol><!-- questions (exo 1) -->
+
+
+
+
+  
+
+  <li id="exo2"> <em class="bold">Emploi du protocole de routage dynamique <em class="sigle">RIP</em></em> </li>
+
+  <div class="nobullet"> On commence par une <strong class="specialLB">mise en œuvre simple du protocole <em class="sigle">RIP</em></strong> en <strong class="specialO">version 1</strong>. Pour plus de détail sur la procédure à suivre, on pourra se reporter à ce tutoriel <a class="external" href="https://www.youtube.com/watch?v=8kaAfUOxZRI" target="_BLANK">Y</a>. </div>
+   
+  <div class="nobullet"> Enregistrer l'architecture de l'exercice précédent dans un <strong class="defin">nouveau fichier</strong>. </div>
+
+  <ol class="questions">
+    <li>  Reconfigurer les <strong class="title">routeurs‑passerelles</strong> : <br>
+
+    <ul>
+      <li> <strong class="warning">Supprimer</strong> toutes les <strong>routes statiques</strong>. </li>
+
+      <li> Sur chacun des trois routeurs, dans la fenêtre de configuration du <strong>protocole <em class="sigle">RIP</em></strong> (cf. chap. R3‑II <a class="cours" href="Rc3-2_coucheReseau.html#RIP" target="_BLANK"></a>), ajouter l'adresse des réseaux auquel il est raccordé. Sauvegarder cette nouvelle configuration en <strong><em class="sigle">NVRAM</em></strong>. </li>
+
+      <div class="nobullet"> En comparaison avec la question <em class="bold">1.b)</em>, combien d'adresses (et donc, de mots de 32 bits) faut‑il renseigner en tout ? </div>
+
+      <li> <strong>Vérifier</strong> maintenant que tous les PC peuvent communiquer entre eux par appels de la commande <code>ping</code> en <em class="english">command prompt</em>. </li>
+
+      <li> Sur chacun des trois routeurs (en mode <em class="english">enable</em>, hors configuration), appeler la commande <code class="cmd">show ip route</code> en <strong><em class="sigle">CLI</em></strong>. Repérer les routes déterminée par le protocole <strong><em class="sigle">RIP</em></strong>. </li>
+    </ul> </li>
+
+      <img class="top-right" src="../img/R3tp1exo2.png" width="400px">
+
+    <li> On souhaite procéder à l'<strong class="title">extension du réseau</strong> en installant un <strong>routeur‑passerelle supplémentaire</strong> (noté <code>routerD</code>) équipé d'un module d'interface <strong><em class="sigle">WLAN</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Wireless_LAN" target="_BLANK">W</a> (<em class="english">wireless local area network</em>), conformément à la figure ci‑contre. Le nouveau segment ainsi constitué apportera une possibilité de  connexion pour des <strong>ordinateurs portables</strong> équipés d'une interface <strong>Wi‑Fi</strong>. </li>
+
+    <div class="nobullet"> Enregistrer l'architecture de la question précédente dans un <strong class="defin">nouveau fichier</strong>. <br>
+
+    <ul>
+      <li> Mettre à jour l'équipement et la configuration de <code>routerC</code> pour prolonger la dorsale jusqu'à <code>routerD</code> : attribuer à la nouvelle interface <strong>Gigabit Ethernet</strong> une <strong>adresse IPv4</strong> et compléter la <strong class="specialO">table de routage <em class="sigle">RIP</em></strong>.  </li>
+
+      <li> En plus d'une interface <strong>Gigabit Ethernet</strong>, équiper <code>routerD</code> d'une <strong>interface Wireless</strong> compatible avec la <strong>norme <em class="sigle">IEEE 802.11a</em></strong>. </li>
+
+      <li> Pour achever le prolongement de la dorsale avec <code>routerC</code>,  configurer l'interface <strong>Gigabit Ethernet</strong> de <code>routerD</code>.  Définir sa <strong class="specialO">table de routage <em class="sigle">RIP</em></strong> comme pour les autres routeur à la question <em class="bold">2.a)</em>. </li>
+
+      <div class="nobullet"> <strong>Vérifier</strong> que les liaisons sont opérationnelles sur toute la dorsale par appels de la commande <code>ping</code> en <strong><em class="sigle">CLI</em></strong> vers les interfaces de passerelles avec les différents segments du réseau. </div>
+
+      <li> Configurer l'<strong>interface Wireless</strong> de <code>routerD</code> en suivant la procédure proposée par cette page web <a class="external" href="https://ciscotracer.wordpress.com/2015/03/23/configuration-dune-interface-wifi-sur-un-router-2811/" target="_BLANK"></a>. </li>
+
+      <div class="nobullet"> <em class="remark">Attention</em> !  Les commandes proposées dans cette page présentent une erreur. En effet, l'identificateur <strong><em class="sigle">SSID</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Service_set_identifier" target="_BLANK">W</a> est <strong>sensible à la casse</strong> et il doit être <strong>unique</strong> au cours de la procédure. (On pourra opter pour le <strong><em class="sigle">SSID</em></strong> <code>Cisco</code> et pour la <strong>clef</strong> <code>ciscoforever</code>.)  </div> 
+
+      <li> Après avoir configuré et connecté les deux ordinateurs portables au réseau, <strong>vérifier</strong> qu'ils peuvent communiquer avec les autres PC et serveurs par appels de la commande <code>ping</code> en <em class="english">command prompt</em>. </li>
+    </ul></div><!-- nobullet -->
+       
+  	<li> On souhaite maintenant revoir le <strong class="title">plan d'adressage</strong> de la <strong>dorsale</strong> en attribuant à chaque liaison inter‑routeurs une adresse de réseau de la forme <code class="cmd">10.0.<span class="nocode"><strong>x</strong></span>.0/24</code>. La « difficulté » réside dans le fait que les <strong>adresses <em class="sigle">CIDR</em></strong> ne sont <strong class="warning">pas prises en charge</strong> par le protocole <strong class="specialO"><em class="sigle">RIP</em></strong> dans sa <strong class="specialO">version 1</strong>. Pour plus de détail sur la procédure à suivre, on pourra se reporter à ce tutoriel <a class="external" href="https://www.youtube.com/watch?v=e4NzGAXfYBU" target="_BLANK">Y</a>. </li>
+
+  	<div class="nobullet"> Enregistrer l'architecture de la question précédente dans un <strong class="defin">nouveau fichier</strong>. </div>
+
+
+  	<div class="nobullet"> Pour commencer, <strong class="specialLB">reconfigurer chaque routeur</strong> : <br>
+	  <ul>
+	    <li> en modifiant ses <strong>adresses statiques IPv4</strong> d'interfaces <em class="mark">Gigabit Ethernet</em> pour attribuer aux 3 liaisons les réseaux respectivement les adresses <code class="cmd">10.0.0.0/24</code>, <code class="cmd">10.0.1.0/24</code> et <code class="cmd">10.0.2.0/24</code> ;  </li>
+
+	    <li> en supprimant de sa <strong>table de routage <em class="sigle">RIP</em></strong> les adresses obsolètes et en ajoutant les nouvelles, compte tenu des modifications précédentes. </li>
+	  </ul></div><!-- nobullet -->
+    
+	  <div class="nobullet"> Par appels de la commande <code>ping</code>, <strong>constater</strong> alors que la dorsale n'est <strong class="cons">pas opérationnelle</strong>. Afin de remédier à ce problème, il faut utiliser la <strong class="specialO">version 2</strong> du protocole <strong class="specialO"><em class="sigle">RIP</em></strong>. Pour chaque routeur, en configuration <code>rip</code> (commande <code>router rip</code>), saisir successivement les deux commandes : <br>
+
+	  <ul>
+	    <li> <code>version 2</code> </li>
+
+	    <li> <code>no auto-summary</code> </li>
+	  </ul> </div><!-- nobullet -->
+
+	  <div class="nobullet"> Recommencer les tests par la commande <code>ping</code> pour <strong>vérifier</strong> que la dorsale est maintenant opérationnelle et que tous les PC du réseaux peuvent communiquer entre eux. <strong>Afficher les tables de routage <em class="sigle">RIP</em></strong> pour observer la <strong>segmentation</strong> du réseau <code class="cmd">10.0.0.0</code>. </div>
+
+      <img class="top-right" src="../img/R3tp1exo2d.png" width="300px">
+
+  	<li> On souhaite maintenant ajouter un <strong>serveur <em class="sigle">FTP</em></strong> via un nouveau routeur (noté <code>routerE</code>) relié à <code>routerA</code> via une <strong class="title">route statique</strong>, conformément à la figure ci‑contre. La « difficulté » est d'intégrer ce routeur <strong class="warning">sans remettre en cause</strong> le <strong class="specialO">protocole <em class="sigle">RIP</em></strong> qui gère le reste de la dorsale. Pour plus de détail sur la procédure à suivre, on pourra se reporter à ce tutoriel <a class="external" href="https://www.youtube.com/watch?v=EjsL8CP9xws" target="_BLANK">Y</a>. </li>
+  
+  	<div class="nobullet"> Enregistrer l'architecture de la question précédente dans un <strong class="defin">nouveau fichier</strong>. <br>
+
+	  <ul>
+	    <li> Pour simplifier l'expression des routes statiques, commencer par <strong>rationaliser le plan d'adressage</strong> général, en rendant <strong class="pros">contigus</strong> les segments accessibles via <code>routerA</code> et <code>routerB</code>.  </li>
+
+	    <li> Ajouter les <strong>équipements matériels</strong> (routeur, serveur, liaisons) du nouveau segment. Configurer les interfaces avec des <strong>adresses IPv4 statiques</strong>. </li>
+
+	    <li> Configurer la table de routage de <code>routerE</code> avec toutes les <strong>routes statiques</strong> nécessaires parcourir le reste du réseau. Constater néanmoins que son rayon de communication ne dépasse pas <code>routerA</code>. Expliquer pourquoi ? </li>
+
+	    <li> Ajouter à la configuration de <code>routerA</code> la ou les <strong>route(s) statique(s)</strong> permettant d'atteindre <code>routerE</code> et le <strong>serveur <em class="sigle">FTP</em></strong>. Constater néanmoins que <code>routerE</code> ne peut pas encore communiquer avec <code>routerB</code>. </li>
+
+	    <li> En <strong><em class="sigle">CLI</em></strong> sur <code>routerA</code>, entrer en configuration <code>rip</code> (commande <code>router rip</code>) puis appeler la commande <code>redistribute static</code> pour imposer le <strong>partage des routes statiques</strong> avec le reste des routeurs qui utilisent le protocole <strong><em class="sigle">RIP</em></strong>. </li>
+
+	    <li> <strong>Vérifier</strong> alors que toutes les communications sont opérationnelles. </li>
+	  </ul></div><!-- nobullet -->
+
+  	<li> Conclure quant à l'<strong class="pros">intérêt</strong> du <strong class="specialO">protocole <em class="sigle">RIP</em></strong>. Quelle <strong class="defin">règle d'adressage</strong> faut‑il retenir pour définir des routes statiques aussi concises que possible ? </li>
+  </ol><!-- questions (exo 2) -->
+
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

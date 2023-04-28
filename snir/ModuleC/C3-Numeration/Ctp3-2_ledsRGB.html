@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="TP"
+	data-modulepartnumber="3"
+	data-pagenumber="2"
+	data-pageState="OK"
+	data-pageheadtitle="Led RGB"
+	data-pagefulltitle="Led RGB"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont : </p>
+
+<ul>
+	<li> de découvrir l'emploi des <strong class="defin">sorties numériques modulées</strong> ; </li>
+
+	<li> d'utiliser des <strong class="defin">types énumérés</strong> et d'employer les structures de contrôle appropriées pour en tester les valeurs (bifurcations multiples <code class="prettyprint lang-c">switch</code>) ; </li>
+
+	<li> d'expérimenter l'usage du <strong class="defin">moniteur série</strong> pour effecter des entrées-sorties numériques.</li>
+</ul>
+
+<p> Les exercices sont aussi l'occasion de <strong class="pros">consolider</strong> la manipulation des données de <strong>types entiers</strong> et la pratique des <strong>entrées analogiques</strong>. </p>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ce sujet de TP, il est recommandé d'avoir étudié <strong class="warning">tous les chapitres</strong> de la partie <span class="partie">C3</span> de ce module de formation (à l'exception du chap. C3‑V). Des renvois aux principaux éléments de cours requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Spécifications matérielles générales </h3>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/Ctp3-2_ledRGB.png" width="400px">
+
+<p>	Tous les exercices sont à traiter dans l'environnement de <strong>simulation en ligne</strong> <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK"></a>, en implémentant préalablement le <strong class="title">montage électronique</strong> en figure ci‑contre, qui comprend : </p>
+
+<ul>
+	<li> une <strong>carte</strong>  <strong class="Arduino">Arduino Uno</strong> ; </li>
+
+	<li> une <strong>platine d'essai</strong> (<em class="english">breadboard</em>) de taille moyenne, dont les rails « <em class="bold">+</em> » et « <em class="bold">−</em> » sont respectivement reliés aux broches <em class="bold" style="color:red">5V</em> et <em class="bold">GND</em> de la carte ; </li>
+
+	<li> deux <strong class="specialLGr">led RGB</strong> <a class="external" href="https://en.wikipedia.org/wiki/Light-emitting_diode#RGB_systems" target="_BLANK">W</a> montées de telle sorte que pour chacune : </li>
+
+	<ul>
+		<li> la <strong>cathode commune</strong> est reliée au rail « <em class="bold">−</em> » de la platine ; </li>
+
+		<li> les <strong>anodes</strong> contrôlant respectivement les composantes de couleur
+			<span class="color" style="color : #00FF00;">vert</span>,
+			<span class="color"style="color : #0000FF;">bleu</span> et 
+			<span class="color" style="color : #FF0000;">rouge</span>
+			sont reliées au port numérique de la carte, chacune via une résistance de limitation de courant de <em class="bold">220 Ω</em>, respectivement : </li>
+		<ul>
+			<li> pour la led de gauche, dite <strong class="specialLGr">variable</strong>, aux <strong>broches nº 9, 10, 11</strong> du port numérique de la carte, à commander en <em class="bold"><em class="sigle">PWM</em></em> (<em class="english">pulse width modulation</em>, cf. chap. C3‑VII <a class="cours" href="Cc3-7_entreesSortiesAnalogiques.html#modulationSorties" target="_BLANK"></a>) ; </li>
+
+			<li> pour la led de droite, dite <strong class="specialLGr">fixe</strong>, aux <strong>broches nº 3, 4, 5</strong> du port numérique de la carte, à commander en <em class="bold"><em class="sigle">TOR</em></em> (<em>tout-ou-rien</em>). </li>
+		</ul>
+	</ul>
+
+	<li> un <strong class="specialLB">potentiomètre</strong> (résistance variable) <a class="external" href="https://fr.wikipedia.org/wiki/Potentiomètre" target="_BLANK">W</a> à bouton tournant, de résistance totale <em class="bold">10 kΩ</em>, alimenté en tension par les rails « <em class="bold">+</em> » et « <em class="bold">−</em> » de la platine, et dont le <strong class="specialO">curseur</strong> (contact mobile) est relié directement à l'<strong>entrée analogique nº A0</strong> de la carte. </li>
+
+	<li> un <strong class="specialDGr">interrupteur à glissière</strong> <strong><em class="sigle">SPDT</em></strong> (<em class="english">single pole double throw</em>) <a class="external" href="https://en.wikipedia.org/wiki/Switch#Contact_terminology" target="_BLANK">W</a> tel que : </li>
+
+	<ul>
+		<li> son pôle commun est relié au rail « <em class="bold">−</em> » de la platine ;</li>
+
+		<li> sa voie de droite est reliée à la <strong>broche nº 8</strong> du port numérique de la carte et n'est pas associée à une résistance externe ; elle est donc à configurer dans les programmes comme une <strong class="defin">entrée en logique négative</strong> qui active une résistance de <strong class="warning">pull‑up</strong> <strong class="specialV">interne</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#INPUT_PULLUP" target="_BLANK"></a>) ;  </li>
+
+		<li> sa voie de gauche n'est pas utilisée ; elle est reliée par défaut au rail « <em class="bold">−</em> » de la platine ; </li>
+	</ul>
+
+	<li> un <strong class="specialGr">bouton‑poussoir</strong> câblé de la même manière que l'interrupteur à glissière, donc fonctionnant aussi en <strong class="defin">logique négative</strong> mais sur la <strong>broche nº 2</strong> de la carte ; ses pôles sont reliés par un <strong>condensateur</strong> <em>anti-rebond</em> de 10 nF (recommandé en pratique, mais facultatif en simulation, voire néfaste – à mettre hors circuit si les appuis sont mal détectés sur <strong class="Tinkercad">Tinkercad</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#remConfigES" target="_BLANK"></a>).   </li>
+</ul>
+
+</div><!-- display -->
+
+
+<h3 class="nocount"> Spécifications logicielles générales </h3>
+
+
+<p class="square"> Les exercices consistent à commander la <strong class="title">couleur d'allumage</strong> de la <strong class="specialLGr">led RGB</strong> <strong>variable</strong> (à gauche) qui joue le rôle de <strong>partie opérative</strong> du système. On souhaite lui faire balayer
+le spectre des couleurs par <strong class="defin">synthèse additive</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Synthèse_additive" target="_BLANK">W</a> des composantes primaires <a class="external" href="https://fr.wikipedia.org/wiki/Couleur_primaire" target="_BLANK">W</a> <span class="color" style="color : #FF0000;">rouge</span>, <span class="color"style="color : #00FF00;">vert</span> et <span class="color" style="color : #0000FF;">bleu</span>. </p>
+
+<p> La <strong class="specialLGr">led fixe</strong>, quant à elle, fait partie de l'interface homme-machine du système. Elle indique quelle couleur primaire est en cours de réglage. </p>
+
+<p class="square"> On demande d'implémenter <strong class="title">deux modes</strong> <strong>de fonctionnement</strong>. </p>
+<ol class="numbered">
+	<li> Le <strong>mode</strong> <strong class="title">manuel</strong> est tel que : </li>
+
+	<ul>
+		<li> on sélectionne par appuis successifs sur le <strong class="specialGr">bouton‑poussoir</strong> une des trois composantes primaires de couleur
+			<span class="color" style="color : #FF0000;">rouge</span>,
+			<span class="color"style="color : #00FF00;">vert</span> et 
+			<span class="color" style="color : #0000FF;">bleu</span>,
+		dans cet ordre et en boucle ; cette couleur doit s'afficher instantanément sur la <strong class="specialLGr">led fixe</strong> ; </li>
+
+		<li> on règle le niveau d'intensité de cette composante de <em class="bold">0</em> à <em class="bold">100 %</em> avec le <strong class="specialLB">potentiomètre</strong> ; la couleur de la <strong class="specialLGr">led variable</strong> change en temps‑réel par superposition des valeurs d'intensité déjà réglées pour les trois couleurs primaires (valeur 0 % par défaut) ; </li>
+	</ul>
+
+	<div class="nobullet"> sachant qu'à l'<strong>état initial</strong>, si le potentiomètre est à <em class="bold">0</em>, la <strong class="specialLGr">led variable</strong> doit être <strong>éteinte</strong> (elle apparaît transparente dans <strong class="Tinkercad">Tinkercad</strong>). </div>
+
+	<li id="modeAuto"> Le <strong>mode</strong> <strong class="title">automatique</strong> module la couleur et l'intensité lumineuse de la <strong class="specialLGr">led variable</strong> en suivant le <strong>cycle</strong> des couleurs alternées primaires et secondaires : </li>
+	  <span style="margin-left: 0.5em; border: solid 2px black; padding: 0.2em; line-height: 150%">
+			<span class="color" style="color : #FF0000;">rouge</span>
+			– <span class="color" style="color : #FFFF00;">jaune</span>
+			– <span class="color" style="color : #00FF00;">vert</span>
+			– <span class="color" style="color : #00FFFF;">cyan</span> 
+			– <span class="color" style="color : #0000FF;">bleu</span>
+			– <span class="color" style="color : #FF00FF;">magenta</span>
+		</span>	
+
+	<ul>
+		<li> la transition <span class="color" style="color : #FF0000;">rouge</span> → <span class="color" style="color : #FFFF00;">jaune</span> opérant par <strong>incrémentation unitaire</strong> de la composante de couleur <span class="color" style="color : #00FF00;">vert</span> ; </li> 
+
+		<li> la transition <span class="color" style="color : #FFFF00;">jaune</span> → <span class="color" style="color : #00FF00;">vert</span> opérant par <strong>décrémentation unitaire</strong> de la composante de couleur <span class="color" style="color : #FF0000;">rouge</span>, etc. </li>   
+
+		<li> avec une <strong>durée</strong> de <em class="bold">0,01 s</em> par incrémentation ou décrémentation et une <strong>pause</strong> de <em class="bold">1 s</em> à chaque moment d'<strong>intensité maximale</strong> d'une couleur primaire ou secondaire du cycle. </li>
+	</ul>
+
+	<div class="nobullet"> Quant à la <strong class="specialLGr">led fixe</strong>, elle reste éteinte. </div>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+
+<div class="important"; style="margin-left: 0em;">
+<p> Il est recommandé de traiter les exercices <strong class="pros">dans l'ordre</strong>. </p>
+
+<p> Dans un <strong class="title">nouveau circuit</strong> sous <strong class="Tinkercad">Tinkercad</strong> : </p>
+<ul>
+	<li> <strong class="specialLB">effectuer le câblage</strong> de la partie matérielle ;</li>
+
+	<li> <strong class="specialLB">vérifier le câblage</strong> par branchements directs temporaires, typiquement en reliant les anodes des led au potentiel de référence <em class="bold" style="color:red">5V</em> de la carte.  </li>
+</ul>
+
+<p> Sur le poste de travail, créer un <strong class="title">répertoire de TP</strong> nommé avec la référence du sujet, typiquement <code class="filename">C3_TP2</code>. </p>
+
+<p> Puis,	avec un <strong class="title">éditeur de code</strong> (<em class="mark">Sublime Text</em>, <em class="mark">Atom</em>…) : </p>
+
+<ul>
+	<li> <strong class="specialLB">Coder</strong> les programmes demandés en respectant les <strong class="pros">règles de bonnes pratiques</strong> (cf. chap. C2‑IX <a class="cours" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#nomsExplicites" target="_BLANK"></a>).  </li>
+
+	<li> <strong class="specialLB">Enregistrer</strong> le programme de <strong>chaque exercice</strong> dans un <strong class="pros">fichier distinct</strong> nommé <code class="filename">Ctp32_ex<strong class="defin" style="padding-left: 0.1em; padding-right: 0.1em">n</strong>.ino</code>, où <strong class="defin">n</strong> est le nº de l'exercice. </li>
+</ul>
+
+<p> Pour <strong class="title">tester le bon fonctionnement</strong> de chaque programme, procéder par <strong>copier‑coller </strong>dans la fenêtre d'édition de <strong class="Tinkercad">Tinkercad</strong>. En cas de <strong class="defin">modifications ponctuelles</strong> de mise au point, ne pas oublier d'effectuer un <strong>copier‑coller inverse</strong> dans l'éditeur de code et d'enregistrer les modifications. </p>
+
+<p>	Répondre aux <strong class="title">questions supplémentaires</strong> sur feuille ou cahier. </p>
+</div><!-- important -->
+
+
+<h4> Consignes de codage </h4>
+
+
+<div class="consignes" style="margin-left: 0em;"><p class="consignes"></p>
+<p> <strong class="title">Déclarer les constantes globales</strong> : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">steadyLEDgreenPin</code>, <code class="prettyprint lang-c">steadyLEDbluePin</code> et <code class="prettyprint lang-c">steadyLEDredPin</code> pour désigner les <strong>numéros de broches</strong> auxquelles sont respectivement reliées les anodes de la <strong class="specialLGr">led fixe</strong> ; </li>
+
+	<li> <code class="prettyprint lang-c">varLEDgreenPin</code>, <code class="prettyprint lang-c">varLEDbluePin</code> et <code class="prettyprint lang-c">varLEDredPin</code> pour désigner les <strong>numéros de broches</strong> auxquelles sont respectivement reliées les anodes de la <strong class="specialLGr">led variable</strong> ; </li>
+
+	<li> <code class="prettyprint lang-c">buttonPin</code>, <code class="prettyprint lang-c">switchPin</code> et <code class="prettyprint lang-c">potentiometerPin</code> pour désigner les <strong>numéros des broches</strong> auxquelles sont reliés respectivement le <strong class="specialGr">bouton‑poussoir</strong>, l'<strong class="specialDGr">interrupteur à glissière</strong> et le <strong class="specialLB">potentiomètre</strong>. </li>
+</ul>
+
+<p style="margin-top: 1em"> <strong class="title">Coder la fonction</strong> <code class="prettyprint lang-c">setup</code> pour configurer et initialiser toutes les sorties utilisées du port numérique de la carte (selon les exercices). </p>
+</div><!-- consignes -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="exercice">
+	<li id="exo1"> Sans employer l'interrupteur à glissière, implémenter le programme d'animation du <strong class="title">mode manuel</strong> en <strong class="defin">synthèse additive</strong> des couleurs, en suivant les étapes ci‑dessous. </li> 
+  
+ 
+  <ol class="questions"> 
+  	<li> Avant la fonction <code class="prettyprint lang-c">loop</code> : </li>
+    
+		<ul>
+			<li> Déclarer un <strong>type énuméré</strong> <code class="prettyprint lang-c">Color</code> constitué des constantes nommées <code class="prettyprint lang-c">RED</code>, <code class="prettyprint lang-c">GREEN</code> et <code class="prettyprint lang-c">BLUE</code> (cf. chap. C3‑IV <a class="cours" href="Cc3-4_typesEnumeres.html#typeNomme" target="_BLANK"></a>). Déclarer une variable <code class="prettyprint lang-c">steadyLEDcolor</code> de ce type pour mémoriser la couleur de la <strong class="specialLGr">led fixe</strong>. </li>
+
+			<li> Déclarer respectivement, dans le type <code class="prettyprint lang-c">uint8_t</code>, les variables entières de sortie <code class="prettyprint lang-c">redValue</code>, <code class="prettyprint lang-c">greenValue</code> et <code class="prettyprint lang-c">blueValue</code> pour mémoriser l'<strong>intensité lumineuse</strong> à écrire respectivement sur les trois broches reliées aux anodes de la <strong class="specialLGr">led variable</strong>. </li>
+	  </ul>
+
+	  <li> Dans la fonction <code class="prettyprint lang-c">loop</code> : </li>
+
+	  <ul>
+			<li> Au début, coder la <strong>détection les appuis</strong> sur le bouton‑poussoir (cf. chap. C2‑VII <a class="previous" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#detectionFronts" target="_BLANK"></a>) et consécutivement, l'incrémentation unitaire cyclique de <code class="prettyprint lang-c">steadyLEDcolor</code>  (cf. chap. C3‑IV <a class="cours" href="Cc3-4_typesEnumeres.html#manipEnumere" target="_BLANK"></a>) pour déterminer la couleur en cours de réglage. </li>
+
+			<div class="nobullet"> À la fin, coder les instructions d'<strong>écriture des sorties <em class="sigle">TOR</em></strong> (cf. chap. C2‑VII <a class="previous" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#digitalWrite" target="_BLANK"></a>) pour afficher la couleur de la <strong class="specialLGr">led fixe</strong>. On pourra opportunément employer une bifurcation multiple <code class="prettyprint lang-c">switch</code> (cf. chap. C2‑V <a class="previous" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#switchCases" target="_BLANK"></a>) sur la valeur de <code class="prettyprint lang-c">steadyLEDcolor</code>. </div>
+
+			<li> Au début, lire la valeur analogique de la position du curseur du potentiomètre (cf. chap. C3‑VII <a class="cours" href="Cc3-7_entreesSortiesAnalogiques.html#analogRead" target="_BLANK"></a>) ; au regard de cette valeur, <strong>mettre à l'échelle</strong> la variable d'intensité de la composante de couleur primaire en cours de réglage de la <strong class="specialLGr">led variable</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMathArduino" target="_BLANK"></a>). </li>
+
+			<div class="nobullet"> À la fin, coder les instructions d'<strong>écriture des sorties <em class="sigle">PWM</em></strong> (cf. chap. C3‑VII <a class="cours" href="Cc3-7_entreesSortiesAnalogiques.html#analogWrite" target="_BLANK"></a>) pour afficher la couleur de la <strong class="specialLGr">led variable</strong>. </div>
+		</ul>
+	</ol><!-- questions -->	
+
+
+	<li id="exo2"> Recoder le <strong class="title">mode manuel</strong> de l'exercice précédent en affichant sur la <strong class="specialLGr">led fixe</strong> non pas les composantes primaires mais les <strong>composantes secondaires</strong> pour opérer sur la <strong class="specialLGr">led variable</strong> une <strong class="defin">synthèse soustractive</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Synthèse_soustractive" target="_BLANK">W</a>. Ainsi, à l'instant initial : </li>
+	<div style="margin-left: 1.5em">
+	<ul>
+		<li> la <strong class="specialLGr">led fixe</strong> prend la couleur <span class="color" style="color : #00FFFF;">cyan</span> ; </li>
+
+		<li> la <strong class="specialLGr">led variable</strong> prend la couleur <span class="color" style="color : #FFFFFF;">blanche</span> puis toutes les nuances de <span class="color" style="color : #00FFFF;">cyan</span> lorsqu'on tourne le potentiomètre.</li>
+	</ul>	
+  </div>
+
+  <div class="nobullet" style="margin-left: 1.5em; margin-top: 0.5em"> Pour coder ce mode manuel soustractif, on peut : <br>
+
+  <ol class="questions">
+		<li> remplacer les noms des constantes nommées du <strong>type énuméré</strong> <code class="prettyprint lang-c">Color</code> par les identificateurs des couleurs secondaires <code class="prettyprint lang-c">CYAN</code>, <code class="prettyprint lang-c">MAGENTA</code> et <code class="prettyprint lang-c">YELLOW</code> ; </li>
+
+		<li> créer trois nouvelles <strong>variables d'intensité</strong> de composantes secondaires (<code class="prettyprint lang-c">cyanValue</code>, etc.), qui joueront le rôle de variables d'état, sans supprimer les variables de sortie (<code class="prettyprint lang-c">redValue</code>, etc.) des composantes primaires, puisque les led <strong><em class="sigle">RGB </em></strong> sont toujours commandées par composantes primaires ; </li>
+
+		<li> mettre à l'échelle la valeur de ces variables d'intensité des <strong>composantes secondaires</strong> en fonction de la valeur lue sur le <strong class="specialLB">potentiomètre</strong>, comme cela est fait pour les composantes primaires dans l’exercice précédent ; </li>
+
+		<li> calculer les valeurs des variables d'intensité des <strong>composantes primaires</strong> en fonction de celle des composantes secondaires, sachant les relations de <strong>complémentarité</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couleur_complémentaire#Détermination_simplifiée_d'une_couleur_secondaire" target="_BLANK">W</a> qui existent respectivement entre elles : <br>
+		<ul>
+			<li> le <span class="color" style="color : #FF0000;">rouge</span> avec le <span class="color" style="color : #00FFFF;">cyan</span>,  </li>
+
+			<li> le <span class="color" style="color : #00FF00;">vert</span> avec le <span class="color" style="color : #FF00FF;">magenta</span> ; </li>
+
+			<li> le <span class="color" style="color : #0000FF;">bleu</span> avec le <span class="color" style="color : #FFFF00;">jaune</span>. </li>
+		</ul>	</li>
+	</ol><!-- questions -->
+  </div><!-- nobullet -->
+
+	<li id="exo3"> Toujours sans employer l'interrupteur à glissière, implémenter le programme d'animation du <strong class="title">mode automatique</strong> (cf. supra <a class="supra" href="Ctp3-2_ledsRGB.html#modeAuto"></a>) :  </li>
+	<div class="inline">
+  <span style="margin-left: 0.5em; margin-top: 0.5em; margin-bottom: 0.5em; border: solid 2px black; padding: 0.2em; line-height: 150%">
+			<span class="color" style="color : #FF0000;">rouge</span>
+			– <span class="color" style="color : #FFFF00;">jaune</span>
+			– <span class="color" style="color : #00FF00;">vert</span>
+			– <span class="color" style="color : #00FFFF;">cyan</span> 
+			– <span class="color" style="color : #0000FF;">bleu</span>
+			– <span class="color" style="color : #FF00FF;">magenta</span>
+	</span>
+  </div>
+  <div class="nobullet" style="margin-left: 1.5em;"> en gardant les variables de sortie des exercices précédents et en suivant les étapes ci‑dessous. </div>
+
+  <div class="nobullet" style="margin-left: 1.5em;">
+	<ol class="questions"> 
+		<li> Sur cahier, dresser le <strong>tableau complet</strong> des <strong>transitions</strong> du mode automatique en déterminant pour chacune : <br>
+    <ul>
+    	<li> la <strong>composante variable</strong> et son <strong>sens de variation</strong> (<code>++</code> ou <code>--</code>), </li>
+
+    	<li> les valeurs respectives de deux <strong>autres composantes</strong> qui sont <strong>constantes</strong>. </li>
+    </ul> </li>
+
+    <li> Dans le programme, déclarer un <strong>type énuméré</strong> nommé par exemple <code class="prettyprint lang-c">ColorTransition</code> listant les différentes transitions <code class="prettyprint lang-c">TO_YELLOW</code>, <code class="prettyprint lang-c">TO_GREEN</code>, etc. ainsi qu'une variable de ce type nommée <code class="prettyprint lang-c">colorTransition</code> pour mémoriser la transistion en cours. </li>
+    
+    <li> Dans la fonction <code class="prettyprint lang-c">loop</code>, traiter les transitions par <strong>bifurcation multiple</strong> (cf. chap. C2‑V <a class="previous" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#switchCases" target="_BLANK"></a>) sur la variable <code class="prettyprint lang-c">colorTransition</code>, avec pour chaque transition : <br>
+  	<ul>
+  		<li> l'incrémentation ou de décrémentation de la <strong>composante variable</strong> jusqu'à la valeur cible (<code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">255</code>) ; </li>
+
+  		<li> une fois que la valeur cible est atteinte, le passage à la <strong>transition suivante</strong> par incrémentation cyclique de la variable <code class="prettyprint lang-c">colorTransition</code> après la pause requise.   </li>
+  	</ul> </li>
+  </ol><!-- questions -->
+  </div><!-- nobullet -->
+
+
+
+	<li id="exo4"> Réemployer le code source des deux exercices précédents pour implémenter le <strong>programme d'animation complet</strong> avec les <strong class="title">deux modes</strong> de fonctionnement – <strong class="specialLB">manuel</strong> en <strong>synthèse additive</strong> et <strong class="specialLB">automatique</strong> – sélectionnés par l'<strong class="specialDGr">interrupteur à glissière</strong>. </li>
+	<ul style="margin-left:1.5em">
+		<li> Il est recommandé de déclarer un <strong>type énuméré</strong> classiquement nommé <code class="prettyprint lang-c">Mode</code> avec les deux constantes <code class="prettyprint lang-c">AUTO</code> et <code class="prettyprint lang-c">MANU</code>, ainsi qu'une variable de ce type nommée <code class="prettyprint lang-c">mode</code> pour mémoriser le mode de fonctionnement courant du système. </li>
+
+		<div class="nobullet"> La variable <code class="prettyprint lang-c">mode</code> permet ainsi de gérer les <strong class="defin">changements de mode</strong> sans avoir à créer deux variables de niveau logique pour l'interrupteur à glissière. Par exemple, pour le passage au mode manuel, il suffit de coder :  <br>
+		<span class="inline"> 
+      <code class="prettyprint lang-c">if (mode == AUTO && digitalRead(switchPin) == LOW) { //...</code>
+		</span> </div>
+
+		<li> On veillera à bien <strong class="defin">ré‑initialiser les variables d'état</strong> appropriées à chaque <strong>changement de mode</strong>, notamment <code class="prettyprint lang-c">steadyLEDcolor</code> pour l'entrée dans le mode manuel et <code class="prettyprint lang-c">colorTransition</code> pour l'entrée dans le mode automatique. </li>
+	</ul>
+
+
+  
+	<li id="exo5"> Reprendre le programme du <strong class="specialLB">mode manuel</strong> en <strong>synthèse additive</strong> (exercice 1) en obtenant la valeur des variables des composantes primaires par le <strong class="title">moniteur série</strong> (dans ce programme, ni le bouton‑poussoir, ni l'interrupteur, ni la led fixe ne seront utilisés). </li>
+
+  <div class="nobullet" style="margin-left: 1.5em;"> En procédant dans l'ordre des composantes primaires <span class="color" style="color : #FF0000;">rouge</span> ‑ <span class="color"style="color : #00FF00;">vert</span> ‑ <span class="color" style="color : #0000FF;">bleu</span> : <br>
+	<ul>
+		<li> un <strong>message</strong> invite l'utilisateur à saisir la valeur d'une composante (cf. chap. C3‑X <a class="cours" href="Cc3-10_moniteurSerie.html#printPrintln" target="_BLANK"></a>) ; </li>
+
+
+		<li> on procède à la <strong>lecture</strong> de la valeur saisie (cf. chap. C3‑X <a class="cours" href="Cc3-10_moniteurSerie.html#parse" target="_BLANK"></a>) : <br> 
+
+		<ul>
+			<li> si elle est comprise entre <code>0</code> et <code>255</code>, elle est mémorisée, sinon l'invite passe à la composante suivante ;  </li>
+			
+			<li> la couleur de la <strong class="specialL">led variable</strong> est actualisée après chaque saisie. </li>
+		</ul> </li>
+	</ul> 
+  </div><!-- nobullet -->
+
+</ol><!-- exercices -->
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

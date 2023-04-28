@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="1"
+	data-pagenumber="III"
+	data-pageState="OK"
+	data-pageheadtitle="Arduino - Tinkercad"
+	data-pagefulltitle="Le framework Arduino – l'environnement Tinkercad"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block">
+	<img class="top-right" src="../img/logoArduino.png" width="200px" style="margin-top: 1.2em">
+<p class="square"> Les <strong class="title">cartes</strong> <strong class="Arduino">Arduino</strong> sont aujourd'hui les modèles les plus répandus de <strong>cartes à microcontrôleur</strong> pour le <strong class="defin">prototypage</strong> de petits systèmes programmables. Elles constituent aussi un excellent support pour <strong class="pros">s'initier</strong> aux bases de la programmation impérative structurée. Avec des variables booléennes, on gère des composants simples (boutons, leds, moteurs à courant continu) et on peut déjà exploiter toutes les structures de contrôles du langage (<code class="">if</code>, <code>for</code>, etc.). </p>
+
+<p> Aucune limitation n'empêche d'aller beaucoup plus loin pour exploiter des composants assez élaborés (écrans <em class="sigle">LCD</em>, claviers codés, moteurs pas‑à‑pas…) et mettre en œuvre des <strong>programmes modulaires</strong> de contrôle commande de systèmes temps‑réel.  </p>
+</div><!-- display -->
+
+<div style="display: inline-block">
+	<img class="top-right" src="../img/TinkercadLogo2.png" width="300px" style="margin-top: 1.2em">
+<p class="square"> Le <strong class="title">logiciel de simulation</strong> <strong>en ligne</strong> de circuits électronique <strong class="Tinkercad">Tinkercad</strong> est une application web qui inclut dans sa panoplie divers composants programmables, notamment la <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong> et le <strong>microcontrôleur</strong> <strong class="title">Atmel ATtiny85C</strong>. Cet environnement permet de se passer complètement de matériel pour <strong class="pros">expérimenter</strong> des circuits programmables élémentaires, avec tous les avantages que cela comporte en termes de coût et de sécurité, mais aux approximations de simulation près.  </p>
+
+<p> De plus, <strong class="Tinkercad">Tinkercad</strong> fournit un <strong>environnement de programmation</strong> réduit au strict minimum, <strong class="pros">idéal pour débuter</strong> : un simple clic sur un bouton simule la chaîne de compilation, le téléchargement du programme sur la carte, et son exécution. </p>
+</div><!-- display -->
+
+<p class="square"> Ce chapitre a pour objectif de donner toutes les connaissances de base du <strong class="title">contexte technologique</strong> dans lequel sont puisés les éléments de programmation des cartes à microcontrôleur exposés dans ce module de formation. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> L'univers <em class="mark">Arduino</em>  </h2>
+
+
+
+<h3> Bref historique  </h3>
+
+
+
+<div class="important">
+<p> Les <strong class="title">cartes</strong> <strong class="Arduino">Arduino</strong> sont des <strong class="defin">cartes électroniques de développement</strong>  destinées au <strong>prototypage</strong> de systèmes de contrôle/commande <a class="external" href="https://www.arduino.cc" target="_BLANK">A</a>. </p>
+
+<p> Inventées en Italie dans les années 2000 <a class="external" href="https://fr.wikipedia.org/wiki/Arduino" target="_BLANK">W</a>, elles ont « démocratisé » aux amateurs et au monde éducatif la pratique des  <strong class="specialLB">microcontrôleurs</strong> programmés en <strong>langage de haut niveau</strong> (et non pas en langage d'assemblage, qui était usuellement employé auparavant). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/ArduinoTeam.jpg" width="400px" style="margin-top: 0.2em">
+<p> Le <strong class="title">succès</strong> des <strong class="Arduino">cartes Arduino</strong> tient à une <strong class="pros">stratégie commerciale audacieuse</strong> adoptée dès le départ par leurs concepteurs <a class="external" href="https://www.arduino.cc/en/about" target="_BLANK">A</a> : </p>
+
+<ul>
+	<li> <strong>open‑source</strong> ‒ toutes les données techniques des cartes et les codes sources sont publiques et libres de droit, donc n'importe qui peut commercialiser des cartes, mais sans mentionner la marque <em class="mark">Arduino</em> ; </li>
+
+	<li> <strong>low‑cost</strong> ‒ un carte <strong class="Arduino">Arduino Uno</strong> authentique coûte environ 20 € TTC, son équivalent chinois 3 € ; </li>
+
+	<li> <strong>all‑inclusive</strong> ‒ l'environnement de développement intégré <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong>, inspiré des plateformes de développement <strong>Wiring</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wiring" target="_BLANK">W</a> et <strong>Processing</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Processing" target="_BLANK">W</a>, permet de programmer les cartes ; rudimentaire mais très facile à prendre en main, cette application intègre tous les outils essentiels de développement (fichiers sources, chaîne de compilation <em class="mark">C++</em>, protocoles de téléchargement, bibliothèques les plus courantes, exemples types, moniteur série, etc.) ; </li>
+
+	<li> <strong>one‑line</strong> ‒ un <strong class="title">site internet</strong> (cf. le lien <span style="color: #0066FF;">[A↗]</span> supra) regroupe tous les services gratuits indispensables pour les développeurs : </li>
+  <ul>
+  	<li> les <strong>liens de téléchargement</strong> des composants <strong class="Arduino">logiciels</strong>  ;</li>
+
+  	<li> la <strong>documentation technique</strong> des <strong class="Arduino">cartes</strong> et des <strong class="Arduino">bibliothèques de fonctions</strong> ; </li>
+
+  	<li> un <strong>éditeur de code en ligne</strong>, <strong class="Arduino">Arduino Web Editor</strong>, associé à un espace de stockage <em class="english">cloud</em> qui est mis à la disposition de tout internaute ayant créé un compte. </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="cartesTierces"> Développement et concurrence </h3>
+
+
+
+<div class="important">
+<p> Rapidement s'est développé tout un <strong class="title">écosystème</strong> de <strong>modules électroniques</strong> d'extension (<em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>, capteurs, cartes de puissance…) avec leur <strong>bibliothèques de fonctions</strong> appropriées, constituant un véritable <strong class="pros">framework</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Framework" target="_BLANK">W</a>. </p>
+
+<p> C'est la richesse de cet écosystème qui rend les <strong>cartes</strong> <strong class="Arduino">Arduino</strong> si attractives. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En même temps que la marque <strong class="Arduino">Arduino</strong> étoffait sa gamme de cartes <a class="external" href="https://www.arduino.cc/en/Main/Products" target="_BLANK">A</a>, des <strong class="title">concurrents</strong> ont développé des architectures matérielles plus performantes. Certaines – <strong class="defin">Teensy</strong> <a class="external" href="https://www.pjrc.com/teensy/" target="_BLANK"></a>, <strong class="defin">Wemos</strong> <a class="external" href="https://www.wemos.cc/" target="_BLANK"></a>… – sont compatibles avec l'<strong>environnement de programmation</strong> <strong class="Arduino">Arduino</strong>, moyennant quelques adaptations (on parle de <strong>carte tierce</strong>, en anglais <em class="english">third‑party board</em>). </p>
+</div><!-- complement -->
+
+
+
+
+
+<h3> Architecture de la carte <em class="mark">Arduino Uno</em> </h3>
+
+
+
+<h4> Généralités </h4>
+
+
+
+<div class="important">
+<p> Toutes les <strong>cartes</strong> <strong class="Arduino">Arduino</strong> ou compatibles emploient un <strong class="title">microcontrôleur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Microcontrôleur" target="_BLANK">W</a>. Ce dernier peut différer d'un modèle de carte à l'autre. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Un <strong class="title">microcontrôleur</strong> est un <strong class="defin">composant programmable</strong> qui intègre notamment : </p>
+
+<ul>
+	<li> un ou plusieurs <strong>microprocesseur(s)</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Processeur" target="_BLANK">W</a> (en anglais, <em class="english">central processing unit</em> ou <em class="sigle">CPU</em>) qui chacun constituent un <strong class="defin">cœur</strong> du microcontrôleur ; </li>
+
+	<li> des <strong>unités de mémoire</strong> de différents types (<em>flash</em>, <em class="sigle">SRAM</em>, <em class="sigle">EEPROM</em>…)  pour stocker <em>le</em> programme embarqué, et les données exploitées en cours d'exécution ; </li>
+
+	<li> des <strong>circuits spécialisés</strong> pour assurer diverses tâches (bus de communication, convertisseur analogique numérique, etc.). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="complementExpert">
+<p> Pour chaque microcontrôleur, un <strong class="defin">compilateur</strong> <strong class="title">C++</strong> spécifique, au moins conforme à la norme <em>C++11</em> a été développé. Ce sont ces compilateurs qui sont mis en œuvre par le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> pour produire un code exécutable à partir du code source fourni par le programmeur. </p>
+</div><!-- complementExpert -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Les microcontrôleurs employés sur les <strong>cartes</strong> <strong class="Arduino">Arduino</strong> n'ont qu'<strong>un seul cœur</strong>. Sur les modèles de cartes les plus courants, il s'agit d'un cœur <em class="bold"><em class="sigle">AVR</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Atmel_AVR" target="_BLANK">W</a> dont les <strong>performances</strong> peuvent sembler modestes en comparaison d'autres architectures mais qui sont <strong class="pros">excellentes</strong> au regard du coût financier. </li>
+
+	<li> Contrairement à une carte de développement de type <em class="mark">Raspberry Pi</em>, une <strong class="Arduino">carte Arduino</strong> ne peut gérer qu'<strong>un seul programme embarqué</strong> à la fois. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<h4 id="carteUno"> La carte <em class="mark">Uno</em> et son microcontrôleur </h4>
+
+
+<div class="important">
+<p> La carte <strong class="Arduino">Arduino Uno</strong> est basée sur un <strong>microcontrôleur</strong> <strong class="defin">Atmel ATmega328P</strong> <a class="external" href="https://en.wikipedia.org/wiki/ATmega328" target="_BLANK">W</a> qui se présente en <strong>boîtier <em class="sigle">DIP</em></strong> (<em class="english">dual inline package</em> <a class="external" href="https://fr.wikipedia.org/wiki/Dual_Inline_Package" target="_BLANK">W</a>) ou <strong><em class="sigle">SMD</em></strong> (<em class="mark">surface mounted device</em> <a class="external" href="https://fr.wikipedia.org/wiki/Composant_monté_en_surface" target="_BLANK">W</a>) – cf. sa documentation technique <a class="external" href="http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf" target="_BLANK"></a>. </p>
+
+<p> Dans la gamme des cartes <strong class="Arduino">Arduino</strong>, c'est le modèle le plus vendu car il apporte un <strong class="pros">excellent compromis</strong> en termes de <strong>performances</strong>, de <strong>robustesse</strong> et de <strong>coût</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block">
+<p> Actuellement commercialisée dans la version <em class="sigle">Rev3</em>, la carte <strong class="Arduino">Arduino Uno</strong> a les <strong class="title">caractéristiques</strong> suivantes <a class="external" href="https://store.arduino.cc/arduino-uno-rev3" target="_BLANK">A</a> : </p>
+	<img class="top-right" src="../img/carteArduinoUno.jpg" width="500px">
+<ul>
+	<li> <strong class="specialLB">processeur</strong> <strong>ATmega328P</strong> à cœur <strong><em class="sigle">AVR</em></strong> – architecture <em class="mark">Harvard</em> <strong><em class="sigle">RISC</em> 8 bits</strong>  (il faut donc 4 temps d'horloge pour charger dans un registre de calcul un entier long codé sur 32 bits) ; </li>
+
+	<li> <strong class="specialLB">fréquence d'horloge</strong> <strong>16 MHz</strong> (soit une période de 62,5 ns par opération) ; </li>
+
+	<li> <strong class="specialLB">mémoire flash</strong> (non volatile) pour le <strong>programme embarqué</strong> (code exécutable) de <strong>32 ko</strong> ; </li>
+
+	<li> <strong class="specialLB">mémoire <em class="sigle">SRAM</em></strong> (volatile, statique) pour les <strong>données</strong> de <strong>2 ko</strong> ; </li>
+
+	<li> <strong class="specialLB">mémoire <em class="sigle">EEPROM</em></strong> (non volatile) complémentaire pour les <strong>données</strong> <strong>1 ko</strong> ; </li>
+
+	<li> <strong class="specialLB">port numérique</strong> d'entrées‑sorties <strong>0&#8239;‑&#8239;5&#8239;V</strong> à <strong>14 broches</strong> avec 1 led intégrée ;
+		(<em class="english">pins</em> 0‑13) dont <strong>6 modulables</strong> (<strong><em class="sigle">PWM</em></strong>) sur <strong>8 bits</strong> (0-255) ; </li>
+
+	<li> <strong class="specialLB">convertisseur analogique numérique</strong> (<strong><em class="sigle">CAN</em></strong>) unipolaire ajustable <strong>5&#8239;V</strong> sur <strong>10 bits</strong> (0‑1023), multiplexé sur un port à <strong>6 broches</strong> (<em class="english">pins</em> A0‑A5) ; </li>
+
+	<li> <strong class="specialLB">protocoles de communication</strong> embarqués
+		<em class="bold"><em class="sigle">UART</em>, <em class="sigle">SPI</em>, <em class="sigle">I2C</em></em> ; </li>
+
+	<li> <strong class="specialLB">port <em class="sigle">USB</em></strong> <strong>type B</strong> qui combine <strong>alimentation</strong> et convertisseur pour <strong>liaison série</strong> via un microcontrôleur <em class="mark">Atmel ATmega16U2</em> dédié et un circuit oscillant à quartz 16 MHz ; </li>
+
+	<li> <strong class="specialLB">prise d'alimentation</strong> externe <strong>7 ‑ 12 V</strong> <em class="english">barrel jack</em> ⌀5,5 × 2,1 mm. </li>	
+</ul>
+<p> Une carte <strong class="Arduino">Arduino Uno</strong> coûte environ <strong>20 €</strong>, pèse <strong>25 g</strong> et mesure hors‑tout <strong>69 × 54 mm</strong>. </p>
+</div><!-- complement -->
+
+<p> Le <strong class="title">plan de brochage</strong> (<em class="english">pinout</em>) de la carte est disponible au lien suivant <a class="external" href="https://www.electronicshub.org/wp-content/uploads/2021/01/High-Res-Arduino-UNO-Pinout.jpg" target="_BLANK"></a>. </p>
+
+<div class="remarques">
+<p class="remarque"> En réalité, le <strong class="defin">port analogique</strong> de la carte est <strong class="pros">polyvalent</strong>. Ses six broches <strong>A0</strong> à <strong>A5</strong> peuvent également faire office d'<strong>entrées‑sorties logiques</strong> (ou <strong>booléennes</strong>) – cf. plan de brochage et chap. C2‑VII <a class="next" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#polyvalencePortC" target="_BLANK"></a>. </p>
+</div><!-- remarque -->
+
+
+<h4 id="interfaceMaterielle"> Interface matérielle pour l'utilisateur </h4>
+
+
+<div class="complement">
+<p> L'<strong class="title">interface matérielle</strong> utilisateur de la carte est <strong class="cons">minimale</strong>. Elle comporte (cf. photo supra) : </p>
+
+<ul>
+	<li> un <strong class="specialLB">bouton‑poussoir</strong> <strong class="defin">reset</strong> et une <strong>broche</strong> associée qui permettent, respectivement par appui ou par signal logique, de <strong class="warning">réinitialiser</strong> (c'est‑à‑dire reprendre au début) l'<strong>exécution du programme utilisateur</strong> ; </li>
+
+	<li> une <strong class="specialLB">led intégrée</strong> (<em class="english">built‑in LED</em>) qui donne l'image du niveau logique de tension sur la <strong>broche nº 13</strong> du port d'entrées‑sorties numérique ; cette led permet en particulier de tester un programme élémentaire de clignotement (<em class="english">blink</em>) sans recourir à du matériel supplémentaire ; </li>
+
+	<li> d'<strong class="specialLB">autres leds</strong> – <strong><em class="sigle">ON</em></strong>, <strong><em class="sigle">TX</em></strong>, <strong><em class="sigle">RX</em></strong> – qui permettent de vérifier la <strong>mise sous tension</strong> de la carte et l'activité sur les broches de c<strong>ommunication série</strong> avec le terminal de programmation. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3> Autres cartes <em class="mark">Arduino</em> et dispositifs programmables </h3>
+
+
+
+<p> Il existe une <strong>trentaine de modèles</strong> de cartes <em class="mark">Arduino</em> authentiques, et plus d'une centaines de cartes compatibles <a class="external" href="https://en.wikipedia.org/wiki/List_of_Arduino_boards_and_compatible_systems" target="_BLANK">W</a>. Il n'est pas question de les détailler toutes ici, mais seulement quelques unes qui présentent un <strong>intérêt technologique</strong> au regard de leurs caractéristiques et performances. </p>
+
+
+<h4 id="carteNano"> La carte <em class="mark">Arduino Nano</em> </h4>
+
+
+<div class="important">
+<p> La carte <strong class="Arduino">Arduino Nano</strong> présente par rapport à une carte <strong>Uno</strong> : </p>
+<ul>
+	<li> des <strong>caractéristiques techniques</strong> et un <strong>coût</strong> <strong class="defin">comparables</strong>,</li>
+
+	<li> mais un <strong>encombrement</strong> <strong class="pros">beaucoup plus réduit</strong>.</li>
+</ul>
+<p> Elle est donc privilégiée pour les <strong>systèmes embarqués</strong>. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block">
+<p> En contre‑partie, sa petite taille la rend <strong class="cons">moins facile à manipuler</strong> et <strong class="cons">moins robuste</strong> à l'usage. Elle ne représente pas un choix pertinent pour les expérimentations usuelles en laboratoire. </p>
+
+<img class="top-right" src="../img/ArduinoNano3.png" width="150px">
+
+<p> Ses principales <strong class="title">caractéristiques</strong> sont les suivantes <a class="external" href="https://store.arduino.cc/arduino-nano" target="_BLANK">A</a> : </p>
+
+<ul style="text-align: left">
+	<li> processeur <em class="mark">Atmel ATmega328P</em> <em class="sigle">SMD</em> à cœur <em class="sigle">AVR</em>	(<strong>8 bits</strong>) ; </li>
+
+	<li> fréquence d'horloge <strong>16 MHz</strong> ; </li>
+
+	<li> mémoire flash <strong>32 ko</strong> (programme) ; </li>
+
+	<li> mémoire <strong><em class="sigle">SRAM</em></strong> <strong>2 ko</strong> (données) ; </li>
+
+	<li> mémoire <strong><em class="sigle">EEPROM</em></strong> <strong>1 ko</strong> ; </li>
+
+	<li> port numérique  5 V <strong>14 broches</strong> (6 en <em class="sigle">PWM</em> sur 8 bits) avec 1 led intégrée ; </li>
+
+	<li> <strong><em class="sigle">CAN</em></strong> unipolaire ajustable 5&#8239;V <strong>10 bits</strong>, <strong>8 broches</strong> ; </li>
+
+	<li> protocoles	<em class="bold"><em class="sigle">UART</em>, <em class="sigle">SPI</em>, <em class="sigle">I2C</em></em> ; </li>
+
+	<li> port <strong><em class="sigle">USB</em> mini A</strong> qui combine alimentation et convertisseur pour liaison série via un circuit intégré <em class="sigle">FTDI FT232RL</em> <a class="external" href="https://en.wikipedia.org/wiki/FTDI" target="_BLANK">W</a> (avec oscillateur interne) ; </li>
+  
+	<li> coût <strong>20 €</strong>, poids <strong>7 g</strong>, dimensions <strong>45 × 18 mm</strong>. </li>
+</ul>	
+
+</div><!-- complement -->
+
+<p> Le <strong class="title">plan de brochage</strong> (<em class="english">pinout</em>) de la carte est disponible au lien suivant <a class="external" href="https://www.electronicshub.org/wp-content/uploads/2021/01/Arduino-Nano-Pinout-Large.png" target="_BLANK"></a>. </p>
+
+
+<h4 id="carteMega"> La carte <em class="mark">Arduino Mega 2560</em> </h4>
+
+<div class="important">
+<p> La carte <strong class="Arduino">Arduino Mega</strong> présente par rapport à une carte <strong>Uno</strong> : </p>
+<ul>
+	<li> des <strong>volumes mémoires</strong> <strong class="pros">plus importants</strong>, tant pour le programme que les données, </li>
+
+	<li> des <strong>entrées‑sorties</strong> <strong class="pros">plus nombreuses</strong> dans toutes les catégories (numériques, analogiques, séries).</li>
+</ul>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block;">
+
+<p> Un peu <strong class="cons">plus encombrante</strong> et <strong class="cons">plus chère</strong>, elle n'apporte en revanche <strong>aucun gain en vitesse</strong> d'exécution. </p> 
+</p>
+
+<img class="top-right" src="../img/ArduinoMega.png" width="250px">
+
+<p> Dans sa version <em class="sigle">Rev3</em>, ses principales <strong class="title">caractéristiques</strong> sont les suivantes <a class="external" href="https://store.arduino.cc/arduino-mega-2560-rev3" target="_BLANK">A</a> : </p>
+
+<ul style="text-align: left">
+	<li> processeur <em class="mark">Atmel ATmega2560</em> <em class="sigle">SMD</em>	à cœur <em class="sigle">AVR</em> (<strong>8 bits</strong>) ; </li>
+
+	<li> fréquence d'horloge <strong>16 MHz</strong> ; </li>
+
+	<li> mémoire flash <strong>256 ko</strong> (programme) ; </li>
+
+	<li> mémoire <strong><em class="sigle">SRAM</em></strong> <strong>8 ko</strong> (données) ; </li>
+
+	<li> mémoire <strong><em class="sigle">EEPROM</em></strong> <strong>4 ko</strong> ; </li>
+
+	<li> port numérique 5 V <strong>54 broches</strong> (15 en <em class="sigle">PWM</em> sur 8 bits) avec 1 led intégrée ; </li>
+
+	<li> <strong><em class="sigle">CAN</em></strong> unipolaire ajustable 5 V <strong>10 bits</strong>, <strong>8 broches</strong> ; </li>
+
+	<li> protocoles <em class="bold"><em class="sigle">UART</em></em> (4 ports), <em class="bold"><em class="sigle">SPI</em></em>, <em class="bold"><em class="sigle">I²C</em></em> ;</li>
+  
+	<li> port <strong><em class="sigle">USB</em> type B</strong> qui combine alimentation et convertisseur pour liaison série via un microcontrôleur <em class="mark">Atmel ATmega 16U2</em> dédié et un circuit oscillant à quartz 16 MHz ; </li>
+
+	<li> alimentation externe <strong>7 ‑ 12 V</strong> <em class="english">barrel jack</em> ⌀5,5 × 2,1 mm ; </li>	
+
+
+	<li> coût <strong>35 €</strong>, poids <strong>37 g</strong>, dimensions <strong>102 × 54 mm</strong>. </li>
+</ul>	
+</div><!-- complement -->
+
+<p> Le <strong class="title">plan de brochage</strong> (<em class="english">pinout</em>) de la carte est disponible au lien suivant <a class="external" href="https://www.electronicshub.org/wp-content/uploads/2021/01/Arduino-Mega-Pinout-High-Res.jpg" target="_BLANK"></a>. </p>
+
+
+<h4 id="carteDue"> La carte <em class="mark">Arduino Due</em> </h4>
+
+
+<div class="important">
+<p> La carte <strong class="Arduino">Arduino Due</strong> présente par rapport à une carte <strong>Mega</strong> : </p>
+
+<ul>
+	<li> un <strong>encombrement</strong> et un <strong>coût</strong> <strong class="defin">identiques</strong>,</li>
+
+	<li> mais une <strong>capacité mémoire</strong>, une <strong>précision</strong> et  une <strong>vitesse d'exécution</strong> <strong class="pros">significativement supérieures</strong> grâce un microcontrôleur plus performant. </li>
+</ul>
+</div><!-- important -->
+
+
+
+<div class="complement" style="display:inline-block;">
+<p> En contre‑partie, son port numérique opère seulement à la <strong class="cons">tension de 3,3 V</strong> et ses <strong>ports <em class="sigle">USB</em> micro</strong> sont <strong class="cons">moins robustes</strong> aux manipulations répétées.  </p> 
+</p>
+
+	<img class="top-right" src="../img/ArduinoDue.png" width="250px">
+
+<p> Ses principales <strong class="title">caractéristiques</strong> sont les suivantes <a class="external" href="https://store.arduino.cc/arduino-due" target="_BLANK">A</a> : </p>
+
+<ul style="text-align: left">
+	<li> processeur <em class="mark">Atmel SAM3X8E ARM Cortex‑M3</em>  <a class="external" href="https://fr.wikipedia.org/wiki/Architecture_ARM" target="_BLANK">W</a> <em class="sigle">SMD</em> <strong>32 bits</strong> ; </li>
+
+	<li> fréquence d'horloge <strong>84 MHz</strong> ; </li>
+
+	<li> mémoire flash <strong>512 ko</strong> (programme et données) ; </li>
+
+	<li> mémoire <strong><em class="sigle">SRAM</em></strong> <strong>96 ko</strong> (données) ; </li>
+
+
+	<li> port numérique 3,3 V <strong>54 broches</strong> (12 en <em class="sigle">PWM</em> sur 12 bits) avec 1 led intégrée ; </li>
+
+	<li> <strong><em class="sigle">CAN</em></strong> unipolaire ajustable 3,3 V <strong>12 bits</strong>, <strong>12 broches</strong> ; </li>
+
+	<li> <strong><em class="sigle">CNA</em></strong> 0,6 - 2,7 V <strong>12 bits</strong>, <strong>2 broches</strong> ; </li>
+
+	<li> protocoles	<strong><em class="sigle">UART</em></strong> (5 ports), <em class="bold"><em class="sigle">SPI</em></em>, <em class="bold"><em class="sigle">I²C</em></em>, <em class="bold"><em class="sigle">CAN</em></em> ; </li>
+
+	<li> 2 ports <strong><em class="sigle">USB</em> micro B</strong> : </li>
+  <ul>
+  	<li> un <strong>port de programmation</strong> (le plus proche du connecteur d'alimentation externe), qui combine alimentation et convertisseur pour liaison série via un microcontrôleur <em class="mark">Atmel ATmega16U2</em> dédié et un circuit oscillant à quartz 16 MHz ;  </li>
+
+  	<li> un <strong>port natif <em class="sigle">CDC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/USB_communications_device_class" target="_BLANK">W</a> (<em class="english">communication device class</em>) directement relié au microcontrôleur ; ce port permet notamment d'émuler et de communiquer avec des dispositifs de type clavier, souris, etc. <a class="external" href="https://www.arduino.cc/en/Reference/USBHost" target="_BLANK">A</a> ; </li>
+  </ul>
+	
+
+	<li> alimentation externe <strong>7 ‑ 12 V</strong> <em class="english">barrel jack</em> ⌀5,5 × 2,1 mm ; </li>
+  
+	<li> coût <strong>35 €</strong>, poids <strong>36 g</strong>, dimensions <strong>102 × 54 mm</strong>. </li>
+</ul>	
+</div><!-- complement -->
+
+<p> Le <strong class="title">plan de brochage</strong> (<em class="english">pinout</em>) de la carte est disponible au lien suivant <a class="external" href="https://www.electronicshub.org/wp-content/uploads/2021/01/Arduino-Mega-Pinout-High-Res.jpg" target="_BLANK"></a>. </p>
+
+
+<div class="expert">
+<h4 id="ATtiny"> Le microcontrôleur <em class="mark">Atmel ATtiny85</em> </h4>
+
+
+<div class="important">
+<p> Dans son boîtier <strong><em class="sigle">DIP</em></strong> 8 broches, le <strong>microcontrôleur</strong> <strong class="title">Atmel ATtiny85</strong> constitue une <strong class="defin">solution matérielle minimale</strong> en prototypage pour exécuter un <strong>programme</strong> <strong class="Arduino">Arduino</strong>. </p>
+
+<p> <strong class="pros">Très peu encombrant</strong>, sobre en énergie, très <strong class="pros">économique</strong>, il remplace avantageusement une carte <em class="mark">Nano</em> lorsque <strong class="cons">peu d'entrées‑sorties</strong> sont requises. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block">
+	<img class="top-right" src="../img/ATtiny85.jpg" width="280px">
+<p> Par <strong class="cons">absence de port <em class="sigle">USB</em></strong>, un montage ad hoc ou une carte spécifique de programmation avec un <strong>convertisseur <em class="sigle">USB</em>‑série</strong> (cf. la photo ci‑dessous) est nécessaire pour <strong class="defin">téléverser le programme</strong> via le logiciel <em class="mark">Arduino</em> <strong><em class="sigle">IDE</em></strong>. </p>
+
+<p> Les <strong class="title">caractéristiques</strong>  de ce microcontrôleur sont les suivantes (plusieurs valeurs selon le modèle) <a class="external" href="https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-2586-AVR-8-bit-Microcontroller-ATtiny25-ATtiny45-ATtiny85_Datasheet.pdf" target="_BLANK"></a> : </p>
+
+<ul style="text-align: left">
+	<li> architecture <em class="mark">Harvard</em> <strong>8 bits</strong> ; </li>
+
+	<li> fréquence d'horloge <strong>10</strong> ou <strong>20 MHz</strong> ; </li>
+
+	<li> mémoire flash <strong>2</strong> à <strong>8 ko</strong> (programme) ; </li>
+
+	<li> mémoire <strong><em class="sigle">SRAM</em></strong> <strong>128</strong> à <strong>512 o</strong> (données) ; </li>
+
+	<li> mémoire <strong><em class="sigle">EEPROM</em></strong></strong> <strong>128</strong> à <strong>512 o</strong> ; </li>
+
+	<li> port d'entrées‑sorties polyvalent (<em class="sigle">GPIO</em>) <strong>6 broches</strong> : </li>
+
+	<ul>
+		<li> <strong><em class="sigle">CAN</em></strong> ajustable 5 V sur 8 ou 10 bits, <strong>4 broches</strong> ; </li>
+
+		<li> port numérique 5 V, <strong>6 broches</strong>
+		 (3 en <em class="sigle">pwm</em> sur 8 bits) ; </li>
+
+	  <li> protocoles <em class="bold"><em class="sigle">UART</em>, <em class="sigle">SPI</em>, <em class="sigle">I²C</em></em>. </li>
+  </ul>
+	<li> coût <strong>2 €</strong>, poids <strong>1 g</strong>, dimensions <strong>10 × 7 mm</strong>. </li>
+</ul>	
+</div><!-- complement -->
+
+<p> Le <strong class="title">plan de brochage</strong> (<em class="english">pinout</em>) du microcontrôleur est disponible au lien suivant <a class="external" href="https://www.electronicshub.org/wp-content/uploads/2018/09/Getting-Started-with-ATtiny85-Attiny85-Pin-Diagram.jpg" target="_BLANK"></a>. </p>
+
+
+<!-- expert -->
+<h4 id="cartesWifi"> Cartes tierces à <em>SoC</em> <em class="mark">Wi‑Fi</em> </h4>
+
+
+<div class="complement">
+<p> Avec l'essor de l'Internet des objets <a class="external" href="https://fr.wikipedia.org/wiki/Internet_des_objets" target="_BLANK">W</a> (<em class="english">Internet of things</em>, abrégé <em class="mark">IoT</em>), certains fabricants de puce ont développés des circuits intégrés dits <strong class="title">SoC</strong> – sigle anglais signifiant <strong>system‑on‑chip</strong> – qui associent un <strong class="defin">microcontrôleur</strong> à une <strong class="defin">antenne Wi‑Fi</strong>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ESP32.png" width="250px">
+<p> C'est notamment le cas du fabricant chinois <strong class="specialR">Espressif</strong> qui a développé les gammes de <strong class="title">modules</strong> à microcontrôleur <strong>ESP8266</strong> <a class="external" href="https://www.espressif.com/en/products/socs/esp8266" target="_BLANK"></a> <a class="external" href="https://fr.wikipedia.org/wiki/ESP8266" target="_BLANK">W</a> et <strong>ESP32</strong> <a class="external" href="https://fr.wikipedia.org/wiki/ESP32" target="_BLANK">W</a> – cf. le module <em class="mark">ESP‑32S</em> en photo ci‑contre, dont l'antenne est apparente et dont le microcontrôleur est protégé par un blindage. 
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ESP32chip.png" width="100px">
+<p>	Les <strong class="title">microcontrôleurs</strong> <strong>ESP8266</strong>  et  <strong>ESP32</strong> sont basés sur des processeurs intégrés <em class="mark">Xtensa</em> à architecture <strong><em class="sigle">RISC</em> 32 bits</strong> conçus par l'entreprise californienne <em class="mark">Tensilica</em> <a class="external" href="https://en.wikipedia.org/wiki/Tensilica" target="_BLANK">W</a> (cf. le microcontrôleur <em class="mark">ESP32</em> en photo ci‑contre). La plupart sont fabriqués par des sous‑traitants comme le Taïwanais <em class="sigle">TSMC</em> <a class="external" href="https://fr.wikipedia.org/wiki/Taiwan_Semiconductor_Manufacturing_Company" target="_BLANK">W</a>. </p>
+</div><!-- display -->
+
+
+<p> Ces microcontrôleurs sont programmables dans divers langages comme <em class="mark">Lua</em> (avec le firmware <em class="mark">NodeMCU</em> – pour <em class="english">microcontroller unit</em>), <em class="mark">Python</em> (avec le firmware <em class="mark">MicroPython</em>)… et en <strong>C++</strong> via l'environnement <strong class="Arduino">Arduino</strong>. </p>
+
+</div><!-- complement -->
+
+<p style="margin-top: 1em"> Dans le commerce, on trouve aussi toutes sortes de <strong class="title">cartes de développements</strong> (<em class="english">development kit</em>) qui embarquent un module à microcontrôleur <strong>ESP8266</strong> <a class="external" href="https://en.wikipedia.org/wiki/NodeMCU" target="_BLANK">W</a> ou <strong>ESP32</strong>. Les deux exemples décrits ci‑dessous sont typiques de ceux que l'on peut utiliser en prototypage d'objets connectés. </p>
+
+<div style="display: inline-block; ">
+	<img class="top-right" src="../img/ESP8266-SBC-Joy-It.png" width="200px" style="margin-top: 1em">
+<p class="square"> À peine plus grande qu'une <em class="mark">Arduino Nano</em>, la carte <strong class="title">SBC‑NodeMCU</strong> <a class="external" href="https://joy-it.net/en/products/SBC-NodeMCU" target="_BLANK"></a> de l'assembleur allemand <strong>Joy‑It</strong> présente des <strong>caractéristiques</strong> <strong class="pros">nettement supérieures</strong>, et pour un <strong>prix</strong> <strong class="pros">deux fois moindre</strong>. </p>
+
+
+<ul style="text-align: left">
+	<li> microcontrôleur <strong>ESP8266</strong> à processeur <em class="mark">Tensilica Xtensa LX106</em> <strong>32 bits</strong> embarqué dans un <em class="mark">module sESP‑12E</em> <a class="external" href="https://www.electronicshub.org/nodemcu-pinout-esp-12e-pinout/" target="_BLANK"></a> ; </li>
+  <ul>
+		<li> fréquence d'horloge jusqu'à <strong>160 MHz</strong> ; </li>
+
+		<li> mémoire flash interne <strong>96 ko</strong> (programme) ; </li>
+
+		<li> mémoire <strong><em class="sigle">SRAM</em></strong> <strong>64 ko</strong> (données) ; </li>
+
+		<li> mémoire flash externe <strong>4 Mo</strong> ;</li>
+
+		<li> module <strong>Wi‑Fi</strong> 2,4 GHz normes 802.11 b/g/n</li>
+
+		<li> port d'entrées‑sorties polyvalent (<em class="sigle">GPIO</em>) <strong>16 broches</strong> en 3,3 V <a class="external" href="https://joy-it.net/files/files/Produkte/SBC-NodeMCU/SBC-NodeMCU_pinout.png" target="_BLANK"></a> : </li>
+
+		<ul>
+			<li> <strong><em class="sigle">CAN</em></strong> ajustable sur 10 bits, <strong>1 broche</strong> ; </li>
+
+			<li> 16 broches <strong><em class="sigle">PWM</em></strong> sur 10 bits ; </li>
+
+			<li> 1 <strong>bouton‑poussoir</strong> (« flash ») et 2 led intégrés (tous câblés en logique négative) ;</li>
+
+		  <li> protocoles	<em class="bold"><em class="sigle">UART</em></em>, <em class="bold"><em class="sigle">SPI</em></em>, <em class="bold"><em class="sigle">HSPI</em></em>, <em class="bold"><em class="sigle">I²C</em></em>, <em class="bold"><em class="sigle">SDIO</em></em> ; </li>
+	  </ul>
+  </ul>
+
+  <li> port <strong><em class="sigle">USB</em> micro B</strong> qui combine alimentation et convertisseur pour liaison série via un <em class="sigle">ASIC</em> <em class="mark">Silicon Labs</em> <em class="sigle">CP2102</em> <a class="external" href="https://www.silabs.com/documents/public/data-sheets/CP2102-9.pdf" target="_BLANK"></a> (à oscillateur interne 48 MHz) ; </li>
+
+	<li> coût <strong>10 €</strong>, poids <strong>8 g</strong>, dimensions <strong>49 × 26 mm</strong>. </li>
+</ul>	
+</div><!-- display -->
+
+<p> Le <strong class="title">plan de brochage</strong> de la carte (<em class="english">pinout</em>) est disponible au lien suivant <a class="external" href="https://i2.wp.com/randomnerdtutorials.com/wp-content/uploads/2019/05/ESP8266-NodeMCU-kit-12-E-pinout-gpio-pin.png?quality=100&strip=all&ssl=1" target="_BLANK"></a>. </p>
+
+
+<div style="display: inline-block; ">
+	<img class="top-right" src="../img/NodeMCU-ESP32-Joy-It.png" width="200px" style="margin-top: 1em">
+<p class="square"> De dimensions similaires à la précédente, la carte <strong class="title">NodeMCU ESP32</strong> <a class="external" href="https://joy-it.net/en/products/SBC-NodeMCU-ESP32" target="_BLANK"></a> de la même marque <strong>Joy‑It</strong> a des <strong>caractéristiques</strong> <strong class="pros">encore supérieures</strong>, pour un prix <strong class="pros">à peine plus cher</strong>. </p>
+
+
+<ul style="text-align: left">
+	<li> microcontrôleur <strong>ESP32</strong> à processeur <em class="mark">Tensilica Xtensa LX6</em> <strong>32 bits</strong> double cœur embarqué dans un <em class="mark">module ESP‑WROOM‑32</em> ; </li>
+  <ul>
+		<li> fréquence d'horloge jusqu'à <strong>240 MHz</strong> ; </li>
+
+		<li> mémoire flash <strong>4 Mo</strong> (programme) ; </li>
+
+		<li> mémoire <strong><em class="sigle">SRAM</em></strong> <strong>512 ko</strong> (données) ; </li>
+
+		<li> module <strong>Wi‑Fi</strong> 2,4 GHz normes 802.11 b/g/n ; </li>
+
+		<li> module <strong>Bluetooth</strong> <em class="english">classic</em> et <em class="sigle">LE</em> (<em class="english">low energy</em>) ;  </li>
+
+		<li> port d'entrées‑sorties polyvalent (<em class="sigle">GPIO</em>) <strong>16 broches</strong> en 3,3 V <a class="external" href="https://joy-it.net/files/files/Produkte/SBC-NodeMCU-ESP32/SBC-NodeMCU-ESP32-Manual-20200320.pdf" target="_BLANK"></a> : </li>
+
+		<ul>
+			<li> <strong><em class="sigle">CAN</em></strong> ajustable sur 12 bits, <strong>15 broche</strong> ; </li>
+
+			<li> <strong><em class="sigle">CNA</em></strong> sur 8 bits, <strong>2 broche</strong> ; </li>
+
+			<li> 16 broches <strong><em class="sigle">PWM</em></strong> sur 16 bits ; </li>
+
+			<li> 1 <strong>bouton‑poussoir</strong> (« boot ») et 2 led intégrés (tous câblés en logique négative) ;</li>
+
+		  <li> protocoles	<em class="bold"><em class="sigle">UART</em></em> (2), <em class="bold"><em class="sigle">SPI</em></em>, <em class="bold"><em class="sigle">VSPI</em></em>, <em class="bold"><em class="sigle">I²C</em></em>, <em class="bold"><em class="sigle">SDIO</em></em> ; </li>
+	  </ul>
+  </ul>
+  <li> port <strong><em class="sigle">USB</em> micro B</strong>  qui combine alimentation et convertisseur pour liaison série via un <em class="sigle">ASIC</em> <em class="mark">Silicon Labs</em> <em class="sigle">CP2102</em> (à oscillateur interne 48 MHz) ; </li>
+
+	<li> coût <strong>12,5 €</strong>, poids <strong>8 g</strong>, dimensions <strong>48 × 38 mm</strong>. </li>
+</ul>	
+</div><!-- display -->
+
+<p> Le <strong class="title">plan de brochage</strong> de la carte (<em class="english">pinout</em>) est disponible au lien suivant <a class="external" href="https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout.jpg" target="_BLANK"></a>. </p>
+
+
+<div class="remarques">
+<p class="remarque"> L'implémentation du <strong class="title">convertisseur <em class="sigle">USB</em>‑Serial</strong> par un <strong><em class="sigle">ASIC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Application-specific_integrated_circuit" target="_BLANK">W</a> (<em class="english">application‑specific integrated circuit</em>) nécessite parfois l'<strong class="defin">installation d'un pilote</strong> sur le système d'exploitation du terminal de programmation. C'est en particulier le cas avec <strong>Microsoft Windows</strong> ou <strong>Mac OS</strong> pour des <em class="sigle">ASIC</em> comme :  </p>
+<ul>
+	<li> les <strong><em class="sigle">CH340</em></strong> <a class="external" href="http://www.wch-ic.com/products/CH340.html" target="_BLANK"></a> du fabricant chinois <em class="mark">WCH</em> ; le pilote pour <em class="mark">Windows</em> peut être téléchargé au lien suivant <a class="external" href="https://www.arduined.eu/ch340-windows-10-driver-download/" target="_BLANK"></a> et celui pour <em class="mark">Mac OS</em> ici <a class="external" href="https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver" target="_BLANK"></a> ; </li>
+
+	<li> les <strong><em class="sigle">CP210x</em></strong> <a class="external" href="http://www.wch-ic.com/products/CH340.html" target="_BLANK"></a> du fabricant californien <em class="mark">Silicon Labs</em> ; les pilotes peuvent être téléchargés au lien suivant <a class="external" href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_BLANK"></a>.</li>
+</ul>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+<h3 id="ArduinoIDE"> L'environnement intégré de développement <em class="mark">Arduino</em> <em class="sigle">IDE</em> </h3>
+
+
+<div class="important">
+<p> <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> (<em class="english">integrated development environment)</em> est un <strong>logiciel</strong> <strong class="pros">libre</strong> (licence <em class="sigle">GNU GPL</em> version 2 <a class="external" href="https://fr.wikipedia.org/wiki/Licence_publique_générale_GNU" target="_BLANK">W</a>) et <strong class="pros">multiplateforme</strong> (<em class="mark">Windows</em>, <em class="mark">Linux</em>, <em class="mark">MacOS</em>) pour programmer les <strong>cartes Arduino</strong> et <strong>compatibles</strong>. </p>
+
+<p> Les dernières <strong class="defin">versions stables</strong> <em class="bold">1.8</em> présentent peu d'évolutions depuis plusieurs années mais une version <em class="bold">2.0</em> est en préparation (et déjà disponible en <em class="english">bêta</em> <a class="external" href="https://fr.wikipedia.org/wiki/Version_d'un_logiciel#Version_bêta" target="_BLANK">W</a>). </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p>Développé principalement en langage <strong>Java</strong>, le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> s'exécute sur la <strong>machine virtuelle</strong> <strong class="defin">JRE</strong> (<em class="mark">Java Runtime Environment</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Environnement_d'exécution_Java" target="_BLANK">W</a>.  </p>
+
+<p> Cette solution logicielle assure une <strong class="pros">excellente portabilité</strong>. Ainsi, le logiciel <em class="mark">Arduino</em> <em class="sigle">IDE</em> fonctionne sur n'importe quel poste de travail dès lors que la machine virtuelle <em class="mark">JRE</em> est installée et opérationnelle. </p>
+</div><!-- complementExpert -->
+
+
+<h4 id="installationArduino"> Installation </h4>
+
+
+<p> Comme pour la plupart des logiciels multiplateforme, il est conseillé d'effectuer le <strong class="title">téléchargement</strong> depuis la <strong>page web dédiée</strong> de l'éditeur, ici <a class="external" href="https://www.arduino.cc/en/software" target="_BLANK">A</a> pour l'<em class="sigle">IDE</em> <em class="mark">Arduino</em>. </p>
+
+<p> Quant à l'<strong class="title">installation</strong>, la procédure est très différente selon le <strong>système d'exploitation</strong> : </p>
+
+<ul>
+	<li> Sur un poste de travail fonctionnant sous <strong class="specialLB">Windows</strong>, elle ne pose <strong class="pros">aucune difficulté</strong>. Il suffit de se laisser guider par la procédure d'exécution du <strong>setup</strong>. </li>
+
+	<li> Sur un poste de travail fonctionnant sous <strong class="specialLB">Linux</strong> en revanche, avec les <strong>versions 1.8.x</strong>, il est <strong class="warning">déconseillé</strong> de passer par l'utilitaire usuel de <strong>bibliothèque logicielle</strong> ou un <strong>installateur de paquets</strong>, car le plus souvent, ils téléchargent une <strong class="cons">version ancienne</strong>. </li>
+
+  <div class="complement"> 
+  <p> La <strong class="defin">procédure recommandée</strong> consiste à : </p>
+  
+  <ol class="numbered">
+		<li> télécharger le <strong>fichier d'archive</strong> depuis la page de téléchargement supra, en sélectionnant bien celui compatible avec l'architecture du poste de travail (32 ou 64 bits, à processeur <em class="sigle">ARM</em> ou non) ; </li>
+
+		<li> <strong>extraire</strong> le contenu de ce fichier d'archive dans le répertoire <code class="filename">/opt</code> dédié aux applications optionnelles ; pour cela, il suffit d'ouvrir un terminal de commande <strong>dans le répertoire de téléchargement</strong> puis de saisir et exécuter une à une les commandes ci‑dessous – <strong>à adapter</strong> selon la version téléchargée : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+sudo mv arduino-1.8.19-linux64.tar.xz /opt
+cd /opt
+sudo tar -xvf arduino-1.8.19-linux64.tar.xz
+sudo rm arduino-1.8.19-linux64.tar.xz
+cd arduino-1.8.19
+ls -l
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="expert"> 
+    <div class="nobullet" style="margin-bottom: 0em"> sachant que : </div>
+    <ul>
+    	<li> la 4<sup>e</sup> commande – suppression du fichier d'archive téléchargé – est facultative (on pourrait en avoir besoin pour une installation sur une autre machine <em class="mark">Linux</em>) ;  </li>
+
+    	<li> mais qu'il ne faut <strong class="warning">pas supprimer</strong> le répertoire extrait <code>arduino-1.8.19</code> après l'exécution du script d'installation (en effet, ce répertoire constitue l'essentiel du logiciel) ; </li>
+    </ul>
+    </div><!-- expert -->
+
+		<li> depuis le même terminal, exécuter le <strong>script d'installation</strong> : <br>
+		<span class="inline">
+	  		<code class="displayDark">sudo ./install.sh</code>
+	  </span>	</li>
+
+	  <li> pour permettre à l'utilisateur du poste de travail d'utiliser les <strong>ports <em class="sigle">USB</em></strong> pour le téléversement des programmes sur les cartes, il faut également exécuter le <strong>script d'autorisation</strong> (<em class="remark">attention</em>, sans la commande <code>sudo</code>) : <br>
+		<span class="inline">
+	  		<code class="displayDark">./arduino-linux-setup.sh $USER</code>
+	  </span>	<br>
+	  après quoi il est nécessaire de redémarrer le poste de travail : <br>
+	  <span class="inline">
+	  		<code class="displayDark">sudo reboot</code>
+	  </span>	</li>
+
+	</ol><!-- numbered -->
+	</div><!-- complement -->
+
+	<div class="remarques">
+	<p class="remarque"> Sur le site <code>www.arduino.cc</code>, la page web <a class="external" href="https://www.arduino.cc/en/guide/linux" target="_BLANK">A</a> consacrée à cette procédure est un peu <strong class="warning">datée</strong> : </p>
+	<ul>
+		<li> elle effectue l'installation directement dans le <strong class="cons">répertoire de téléchargement</strong>, ce qui n'est guère satisfaisant ; </li>
+
+		<li> elle emploie une <strong class="cons">commande ad‑hoc</strong> pour autoriser l'utilisateur à exploiter les ports <em class="sigle">USB</em> lors du téléversement des programmes sur les cartes. </li>
+	</ul>
+  </div><!-- remarque -->
+</ul>
+
+
+<h4 id="fichiersSources"> Fichiers sources et documentation </h4>
+
+
+<div class="important">
+<p> Dans une installation par défaut, le <strong>logiciel</strong> <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> comprend en libre accès : </p>
+<ul>
+	<li> tous les <strong class="title">fichiers sources</strong> fondamentaux qui constituent ce qu'on appelle le <strong class="defin">noyau</strong> du <em class="english">framework</em> ; </li>
+
+	<li> quelques <strong>modules</strong> de <strong class="defin">bibliothèque</strong> usuels, qui sont très utiles pour employer des composants matériels <strong>périphériques</strong> (<em class="mark">shield Ethernet</em>, écran <em class="sigle">LCD</em>, capteurs, etc.) . </li>
+</ul>
+<p> Ces fichiers sources sont codés en langage <strong class="title">C++</strong> pour programmer avec des <strong>instructions de haut niveau</strong> n'importe quelle <strong class="Arduino">carte Arduino</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Les modules de <strong class="Arduino">bibliothèque Arduino</strong> fournissent au codeur des <strong>types</strong>, des <strong>classes</strong>, des <strong>constantes</strong> (ou pseudo‑constantes) et des <strong>fonctions</strong> spécifiques, faciles à employer : </p>
+<ul>
+	<li> tous ces éléments de langage sont <strong class="pros">documentés</strong> sur le <strong>site internet</strong> <strong class="Arduino">Arduino</strong> <a class="external" href="https://www.arduino.cc/reference/en#en" target="_BLANK">A</a> ; </li>
+
+	<li> leurs <strong>fichiers sources</strong> sont partagés et consultables en <strong class="pros">libre accès</strong> sur la plateforme <strong>Github</strong> <a class="external" href="https://github.com/arduino" target="_BLANK">A</a>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> (En particulier, on trouve au lien suivant <a class="external" href="https://github.com/arduino/ArduinoCore-avr/tree/master/cores/arduino" target="_BLANK">G</a> – également référencé dans l'onglet « LIENS » du panneau lattéral de ce site de cours – tous les fichiers du <strong class="defin">noyau</strong> pour les cartes à cœur <strong><em class="sigle">AVR</em></strong>.) </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Pour accéder à la <strong>documentation technique</strong> des <strong class="title">cartes tierces</strong> (cf. supra <a class="supra" href="Cc1-3_ArduinoTinkercad.html#cartesTierces"></a>), il faut consulter d'autres sites. En particulier, pour les pages de <strong>références logicielles</strong> des cartes à SoC <strong>ESP8266</strong>, on pourra consulter ce lien <a class="external" href="http://arduino.esp8266.com/Arduino/versions/2.3.0/doc/reference.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<h4 id="chaineCompil"> Chaînes de compilation </h4>
+
+
+<div class="important">
+<p> Le <strong>logiciel</strong> <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> incorpore par défaut toutes les <strong class="title">chaînes de compilation</strong> <strong class="defin">GCC</strong> (cf. chap. CI‑2<a class="previous" href="Cc1-2_langagesCetCpp.html#GCC" target="_BLANK"></a>) développées pour les microcontrôleurs des <strong class="Arduino">cartes Arduino</strong>, afin de générer du code exécutable. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En particulier, il fait appel aux chaînes de compilation : </p>
+<ul>
+	<li> <strong class="defin">AVR‑GCC</strong> pour les microcontrôleurs à <strong>cœur <em class="sigle">AVR</em></strong> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…) ;  </li>
+
+	<li> <strong class="defin">GCC‑ARM</strong> pour les microcontrôleurs à <strong>cœur <em class="sigle">ARM</em></strong> (<em class="mark">Due</em>, <em class="mark">Zero</em>…).  </li>
+</ul>
+</div><!-- complement -->
+
+<div id="versionC++" class="expert">
+<p> Avec l'<strong class="Arduino"><em class="sigle">IDE</em> Arduino</strong>, il n'est <strong class="cons">pas possible</strong> de choisir la <strong>version de la norme</strong> (cf. chap. C1‑II <a class="previous" href="Cc1-2_langagesCetCpp.html#versionCompilateur" target="_BLANK"></a>) du langage <strong>C++</strong> qui est appliquée lors de la compilation. Néanmoins, on peut <strong class="pros">savoir</strong> quelle est cette version en codant dans la fonction <code class="prettyprint lang-c">setup</code> les deux instructions :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  Serial.begin(9600);
+  Serial.println(__cplusplus);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En compilant et téléversant le code dans une carte <em class="mark">Arduino Uno</em>, on obtient usuellement l'affichage <code class="displayDark">201103</code>. C'est ici la norme <strong>C++11</strong> qui est appliquée.</p>
+
+</div><!-- expert --> 
+
+
+<h4> Interface utilisateur </h4>
+
+
+<div class="complement" style="display: inline-block"> 
+	<img class="top-right" src="../img/ArduinoIDE.jpg" width="450px">
+<p> En <strong>version 1.8.x</strong>, l'<strong class="title">interface utilisateur</strong> du <strong>logiciel</strong> <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> est assez simple. Elle présente (cf. figure ci‑contre) : </p>
+<ul>
+	<li> une barre de <strong>5 menus déroulants</strong> très classiques (<code>Fichiers</code>, <code>Éditions</code>, etc.) ; </li>
+
+	<li> une barre avec <strong>6 boutons de raccourcis</strong> vers les commandes les plus usuelles ; </li>
+
+	<li> un cadre principal d'<strong>édition de code</strong> multi‑onglets, avec par défaut un fond blanc et une coloration syntaxique du code source peu contrastée ; </li>
+
+	<li> sous le cadre principale, un cadre complémentaire à fond noir de <strong>compte-rendu</strong> (<code>log</code>) de compilation et transfert. </li>
+</ul>
+
+<p> L'appui sur le <strong>bouton à droite</strong> de la barre de raccourcis déclenche l'ouverture d'une fenêtre supplémentaire qui émule un <strong class="defin">moniteur série</strong> pour mettre en œuvre des entrées/sorties textuelles entre l'ordinateur et la carte à microcontrôleur. </p>
+
+<div class="expert">
+<p> Via le menu <code>Outils</code>, on peut également obtenir avec le <strong class="defin">traceur série</strong> un affichage sur un graphique à deux axes, avec en abscisses le temps et en ordonnée les valeurs issues de la carte. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<h4> Avertissements de compilation </h4>
+
+
+<div class="complement">
+<p>  En <strong>version 1.8.x</strong>, dans la fenêtre ouverte via le menu <code>Fichier/Préférences</code>, on trouve :  </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ArduinoIDE-avertissements.png" width="500px" style="margin-top: 0.5em">
+<ul>
+	<li> une rubrique relative à l'affichage ou non les <strong>résultats détaillés</strong> de la <strong class="title">compilation</strong> et du <strong class="title">téléversement</strong> du programme dans la carte ; il est recommandé de <strong class="pros">cocher ces cases</strong> pour pouvoir diagnostiquer les problèmes en cas d'échec ; </li>
+
+	<li> juste en dessous, un menu déroulant pour choisir les <strong class="title">avertissements du compilateur</strong> (il correspond à l'option <code>-W</code> de la commande <code>gcc</code> – cf chap. C1‑II <a class="previous" href="Cc1-2_langagesCetCpp.html#gccEmploi" target="_BLANK"></a>) ; là encore, il est recommandé de <strong class="pros">choisir l'exhaustivité</strong>, c'est‑à‑dire l'option <code>Tout</code>. </li>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Emploi d'un éditeur de code externe </h4>
+
+
+<div class="complement">
+<p> En <strong>version 1.8.x</strong>, l'apparence par défaut de l'interface utilisateur du logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> n'est pas idéale pour la programmation. Il est possible de l'améliorer, en particulier installer un <strong>mode sombre</strong> qui fait mieux ressortir la coloration syntaxique. Toutefois, la procédure n'est pas élémentaire <a class="external" href="https://forum.arduino.cc/index.php?topic=413404.0" target="_BLANK">A</a>. </p>
+</div><!-- complement -->
+
+<p> Par ailleurs, la fenêtre d'édition de code  permet de gérer <strong class="pros">plusieurs onglets</strong> (chacun donnant accès à un fichier distinct). Mais contrairement à la plupart des applications de développement et des éditeurs de code, il n'y a <strong class="cons">pas de panneau latéral</strong> pour naviguer dans les fichiers d'un projet. </p>
+
+<div style="display: inline-block"> 
+	<img class="top-right" src="../img/ArduinoPreferences.png" width="400px">
+<p> C'est pourquoi dans le cadre d'une <strong class="defin">programmation multi‑fichiers</strong>, il est en général préférable d'<strong>utiliser un éditeur externe</strong> comme <strong>Sublime Text</strong>, <strong>Atom</strong>,  ou autre… Pour cela, il suffit de cocher l'option idoine dans la fenêtre <code>Préférences</code> accessible via le menu <code>Fichier</code> (cf. figure ci‑contre). </p>
+
+<ul>
+	<li> La fenêtre d'édition d'<strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> apparaît alors <strong class="cons">grisée</strong> et n'accepte plus les modifications directes. </li>
+
+	<li> En revanche, lorsqu'on modifie et enregistre des modifications avec l'éditeur externe, elles apparaissent aussitôt dans la fenêtre d'édition d'<strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> et on peut vérifier si elles sont compilables en cliquant directement sur le bouton <code>Vérifier</code>.</li>
+</ul>
+</div><!-- display -->
+
+
+<h4 id="gestionnaireCartes"> Gestionnaire de cartes </h4>
+
+
+<div class="complement">
+<p> En plus des cartes <em class="mark">Arduino</em> ou leurs clones, il est possible avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong> de programmer des <strong class="title">cartes tierces</strong> (cf. supra <a class="supra" href="Cc1-3_ArduinoTinkercad.html#cartesTierces"></a>). Mais pour cela, il faut préalablement intégrer à l'<strong><em class="sigle">IDE</em></strong> la <strong class="defin">chaîne de compilation</strong> spécifique à chaque microcontrôleur embarqué sur les cartes. On procède en <strong>deux étapes</strong>.  </p>
+
+<ol class="numbered">
+	<li> Dans la fenêtre de l'<strong><em class="sigle">IDE</em></strong>, via le menu <code>Fichier/Préférences</code>, on trouve une barre d'adresse dans laquelle on copie l'<strong><em class="sigle">URL</em></strong> du site de téléchargement des chaînes de compilation (cf. la capture d'écran ci‑dessous). </li>
+	  <img class="top-left" src="../img/ArduinoURLboards.png">
+
+	<div class="exemples">
+	<p class="exemple"> Pour les cartes à SoC <strong class="title">ESP8266</strong>, il s'agit de l'<strong><em class="sigle">URL</em></strong>  ci‑dessous : <br>
+  <span class="inline">
+    <code class="displayWhite" style="font-size: 70%">https://arduino.esp8266.com/stable/package_esp8266com_index.json</code>
+  </span></p>
+      
+  </div><!-- exemple -->
+
+	<li> Via le menu : <br>
+  <span class="inline">
+    <code>Outils/Type de carte/Gestionnaire de cartes</code>
+  </span> <br>
+  on peut alors ouvrir la <strong>liste des cartes</strong> prises en charge, puis sélectionner une nouvelle famille de cartes à intégrer, et cliquer sur le bouton <code>Installer</code>. </li>
+
+	<div class="exemples">
+	<p class="exemple"> Pour les cartes à SoC <strong class="title">ESP8266</strong>, il s'agit de la rubrique figurant sur la capture d'écran ci‑dessous (ici, les cartes sont déjà installées, c'est indiqué à droite du numéro de version, et le bouton <code>Installer</code> est grisé). </p>
+		<img class="top-left" src="../img/ArduinoESP8266boards.png">
+  </div><!-- exemple -->
+
+  <div class="nobullet"> Une telle opération prend une <strong class="cons">durée non négligeable</strong> (plusieurs minutes), puisqu'il faut télécharger et installer sur la machine toute la <strong class="defin">chaîne de compilation</strong>  – typiquement, <strong>GCC</strong> – des microcontrôleurs. </div>
+</ol>
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="Tinkercad"> L’environnement de simulation <em class="mark">Tinkercad</em>  </h2>
+
+
+
+<h3> Bref descriptif </h3>
+
+
+
+<div class="important">
+<p> <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK"></a> est une <strong class="title">application web</strong> <strong class="pros">gratuite</strong> conçue pour le monde éducatif par l’entreprise américaine <strong>Autodesk</strong>, pionnère et leader dans le domaine des logiciels de <em class="sigle">CAO</em> (conception assistée par ordinateur, en anglais <em class="sigle">CAD</em> pour <em class="english">computer-aided design</em>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cette application permet notamment de <strong class="title">concevoir</strong> et <strong class="title">simuler</strong> des <strong class="defin">prototypes</strong>  de <strong>circuits électroniques</strong>  composés, comme dans la réalité, de : </p>
+<ul>
+	<li> platines d’expérimentation (<em class="english">breadboards</em>), </li>
+
+	<li> fils de connexion (<em class="english">jumpers</em>),</li>
+
+	<li> composants usuels en électronique (résistances, condensateurs, etc.), </li>
+
+	<li> quelques circuits intégrés, dont des <strong>composants programmables</strong>. </li>
+</ul>
+
+<p> Comme la plupart des applications web, elle requiert la création d'un <strong class="title">compte utilisateur</strong> avec une adresse électronique. Elle offre alors à chaque souscripteur un <strong>espace de stockage</strong> (sur le <em class="english">cloud</em>) pour mémoriser ses conceptions. </p>
+</div><!-- complement -->
+
+
+
+<h3> Premiers pas </h3>
+
+
+
+<p> La prise en main de l'application est très simple et intuitive. Elle fait l'objet d'un exercice de travaux pratiques <a class="TP" href="Ctp1-1_environnements.html#Tinkercad" target="_BLANK"></a>. Pour plus de détails, on trouve toutes sortes de tutoriels sur internet <a class="external" href="https://www.youtube.com/results?search_query=tinkercad" target="_BLANK">Y</a>. </p>
+
+
+<h4> Création d'un circuit </h4>
+
+
+<div class="important">
+<p> L'<strong class="title">espace de travail</strong> simule la technologie du <strong class="defin">prototypage</strong> sur <strong>platine d'expérimentation</strong> (<em class="english">breadboard</em>). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: flex; flex-direction: column;">
+
+<img class="top-left" src="../img/TinkercadFenetrePrincipale.png">
+
+<div>
+<ul>
+	<li> On implante des <strong class="defin">composants</strong> par  <strong>glisser-déposer</strong> depuis un <strong>panneau latéral</strong> sur la droite. </li>
+
+	<li> Le <strong class="defin">paramétrage</strong> des composants procède via un <strong>pop-up</strong> contextuel. </li>
+
+	<li> Les <strong class="defin">liaisons électriques</strong> entre composants s'établissent en cliquant sur leurs bornes pour <strong>« tirer » des fils</strong> dont on peut changer la couleur. </li>
+</ul>
+</div>
+</div><!-- complement -->
+
+
+<h4> Programmation </h4>
+
+
+<div class="important">
+<p> Le panneau latéral comporte <strong class="title">deux composants programmables</strong> : </p>
+<ul>
+	<li> la carte <strong class="Arduino">Arduino Uno</strong>, </li>
+
+	<li> le microcontrôleur miniature <strong>Atmel</strong> <strong class="specialLB">ATtiny85</strong> (8 broches). </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces deux composants se programment dans un volet <strong class="title">éditeur de texte</strong> rudimentaire, expansible par le <strong>bouton « Code »</strong>  situé en haut à droite de la fenêtre principale. En choisissant le <strong>mode « Texte »</strong>, on peut composer le programme directement en langage <em class="mark">C++</em> (norme de <strong>1998</strong>). </p>
+</div><!-- complement -->
+
+<div class="complementExpert">
+<p> En bas du volet d'édition se trouve un bouton pour activer la simulation du <strong class="defin">moniteur série</strong> et sa zone de saisie. On peut ensuite activer la <strong>fenêtre graphique</strong> pour simuler le <strong class="defin">traceur série</strong>. </p>
+</div><!-- complementExpert -->
+
+
+<h4 id="TinkercadSimulation"> Simulation </h4>
+
+
+<div class="important">
+<p> Un clic sur le <strong>bouton</strong> <span class="framed" style="background: #F8F8F8; font-family: calibri; border-color : #E5E5E5; font-size: 80%">  ▶  Démarrer la simulation  </span> déclenche d'abord la <strong class="title">chaîne de compilation</strong> du code source.  </p>
+</div><!-- important -->
+
+<div style="display:flex; flex-direction: column;">
+<p class="square" > En l’absence d’erreur, la simulation de l’<strong class="defin">exécution du programme</strong> commence, un <strong>chronomètre</strong> intitulé « durée du simulateur » indiquant dans la barre supérieure le <strong>temps écoulé</strong> depuis le début de l'exécution. Le bouton mute en <span class="framedFull" style="background: #22B55C; font-family: calibri; color : white; font-size: 80%">  ■  Arrêter la simulation  </span> pour pouvoir <strong>terminer</strong> l'exécution. </p>
+
+<p> <em class="remark">Attention</em> : un <strong class="title">arrêt</strong> n'est <strong class="warning">pas</strong> une mise en <strong>pause</strong> ! Un nouvel appui sur le bouton « Démarrer » recommence entièrement le processus compilation-exécution. </p>
+
+	<img class="top-left" src="../img/TinkercadExe.jpg">  
+
+<p class="square"> En cas d’<strong class="warning">erreur(s)</strong>, la ou les lignes de code « incriminées » sont mises en <span style="background:#FE6047;"> surbrillance rouge </span> et des <strong>messages de diagnostic</strong> sont affichés dans un volet à fond sombre qui simule une <strong>console d'exécution</strong> à la place du moniteur série. </p>
+
+	<img class="top-left" src="../img/TinkercadCode.png">
+</div><!-- display -->
+
+<div class="remarques">
+<p class="remarque"> En affichant la valeur de la variable d'environnement <code class="prettyprint lang-c">__cplusplus</code> comme supra <a class="supra" href="Cc1-3_ArduinoTinkercad.html#versionC++"></a>, on obtient maintenant la valeur <code class="displayDark">201402</code> (norme <strong>C++14</strong>) mais il n'y a pas si longtemps, on obtenait <code class="displayDark">199711</code> (norme <strong>C++98</strong>). </p>
+</div><!-- remarque -->
+
+
+
+<h3> Évaluation </h3>
+
+
+<h4> Avantages </h4>
+
+
+<p> Aux programmeurs débutants, <strong class="Tinkercad">Tinkercad</strong> procure deux <strong>avantages</strong> notables : </p>
+
+<ul>
+	<li> pouvoir <strong class="pros">se concentrer sur les algorithmes</strong> sans être parasité par des difficultés annexes (chaîne de compilation, flux d’entrées/sorties, pannes de matériel, etc.) ; </li>
+
+	<li> mettre en œuvre des <strong class="pros">composants animés</strong> dont le comportement est visuel et facile à interpréter (leds, boutons, etc.). </li>
+</ul>
+
+
+<h4> Inconvénients </h4>
+
+
+<p> Toutefois, <strong class="Tinkercad">Tinkercad</strong> reste un environnement d'initiation et ses <strong>inconvénients</strong> doivent être soulignées. En particulier : </p>
+
+<ul>
+	<li> la <strong>réaction de la partie matérielle</strong> (mouvement, force, chaleur…) n’est <strong class="cons">pas simulée</strong> alors qu’elle est souvent indispensable à la vérification du bon fonctionnement du programme ; par exemple, dans un système motorisé, il n'est pas possible de simuler des butées de fin de courses qui arrêteraient le mouvement ;</li>
+
+	<li> la <strong>gamme de composants</strong> est <strong class="cons">restreinte</strong> et non extensible ; par exemple, ni les cartes <em class="mark">Arduino Nano</em> et <em class="mark">Mega</em>, très usitées dans la pratique, ne sont pas simulées ; </li>
+
+	<li> de même, il est <strong class="cons">impossible de créer de</strong> <strong>nouvelles bibliothèques</strong>, donc de développer une programmation vraiment modulaire ; </li>
+
+	<li> l’<strong>éditeur de code</strong> est <strong class="cons">rudimentaire</strong> (fond clair, coloration syntaxique peu contrastée, pas d’auto-complétion lors de la saisie, pas de formulaire de remplacement) ; ces défauts et lacunes se font sentir dès que le code source s'étend sur plus d'une page.	</li>
+</ul>
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>
+
+</div><!-- exemple -->

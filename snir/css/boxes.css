@@ -1,0 +1,462 @@
+html{
+	height: 100%;
+	width: 100%;
+}
+
+body{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-content: stretch;
+	justify-content: stretch;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	margin : 0em;
+	padding : 0em;
+	background: none;
+
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+}
+
+
+nav {
+	float : left;
+	min-width: 14em;
+	max-width: 20em;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	margin: 0em;
+	padding: 0em;
+	padding-right: 0.8em;
+	background: none;
+	border: none;
+}
+
+.side{
+	display : flex;
+	flex-direction : column;
+	flex-wrap: nowrap;
+  justify-content: stretch;
+	align-content: stretch;
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+  margin : 0em;
+	padding-top : 0.4em;
+	padding-left : 0.5em;
+	padding-left : 0.4em;
+}
+
+
+button.little {
+	height: 100%;
+	margin: 0em;
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	border: none;
+  background: none;
+}
+
+img.bouton{ 
+	height: 1.5em;
+	margin-top: 0.3em;
+	margin-right: 0.2em;  
+	padding-bottom: 0em;
+}
+
+
+
+
+#mainFrame { 
+	display : flex;
+	flex-direction: column;
+	justify-content: stretch;
+	align-content: stretch;
+	
+	height: 100%;
+  width: 100%;
+	min-width: 45em;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	margin: 0em;
+	padding: 0em;
+	background: none;
+}
+
+header {
+	border-bottom: solid 0.5em white;
+}
+
+footer {
+	border-top: solid 0.5em white;
+	order: 2;
+}
+
+button#hidePannel {
+	padding-left: 0.8em;
+	padding-right: 0.5em;
+	margin-right: 0.5em;
+}
+
+button#showPannel {
+	padding-left: 0.8em;
+	padding-right: 0.5em;
+	margin-right: 0.5em;
+}
+
+button#hidePannel:hover {
+	background: white;
+}
+
+button#showPannel:hover {
+	background: white;
+}
+
+
+button.full {
+	float : right;
+	height: 100%;
+
+	margin: 0em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	border: none;
+	background: none;
+
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+  text-shadow: 0.06em 0.06em black; 
+	font-weight: 700;
+	font-size: 1.2em;
+	letter-spacing: 0.1rem;
+}
+
+button#expert:hover {
+	background: white; /* #E0EFBC */
+}
+
+button#beginner:hover {
+	background: white; /*#F0B4B7 */
+}
+
+
+
+
+.band { /* header&footer common properties */
+	display: inline-flex;
+	flex-wrap: wrap;
+	flex-basis: auto;
+	align-items: stretch;
+	align-self: center;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	min-height: 3em;
+	max-height: 3em;
+	background: #B3D1FF;
+}
+
+.bandContent{
+	display: inline-flex;
+	flex-wrap: nowrap;
+	flex-basis: auto;
+	align-items: center;
+	justify-content: start;
+	flex-grow: 2;
+	height: 100%;
+	width: auto;
+
+	margin: 0em;
+	padding-left:0.1em;
+	padding-top: 0.1em;
+	background: none;
+  
+  line-height: 150%;
+	font-size: 1.5em;
+	font-weight: bold;
+	text-shadow: 0.05em 0.05em white;
+	word-spacing: 0.5rem;
+	letter-spacing: 0.08rem;
+}
+
+.bandContent2{
+	display: inline-flex;
+	flex-wrap: nowrap;
+	flex-basis: auto;
+	align-items: center;
+	justify-content: start;
+	flex-grow: 2;
+	height: 100%;
+	width: auto;
+
+	margin: 0em;
+	padding-left:0.1em;
+	background: none;
+  
+  line-height: inherit;
+	font-family: caladea, cambria, bookman, georgia;
+	color: #0066FF;
+	font-size: 1.5em;
+	font-weight: normal;
+	text-shadow: 0.04em 0.04em black;
+	word-spacing: 0.5rem;
+	letter-spacing: 0.04rem;
+}
+
+object.inline{
+	display: flex;
+	flex-wrap: nowrap;
+	flex-basis: auto;
+	align-items: center;
+	justify-content: start;
+	flex-grow: 2;
+	height: 100%;
+	width: auto;
+
+	margin: 0em;
+	padding: 0em;
+	background: none;
+}
+
+object.intext{
+	width: 100%;
+	height: inherit;
+	margin: 0em;
+	padding: 0em;
+}
+
+
+#scrollingFrame { /*contains section & footer */
+	display : flex;
+	flex-direction: column;
+	justify-content: stretch;
+	align-content: stretch;
+	height: 100%;
+	width: 100%;
+  overflow-x: hidden;
+	overflow-y: auto;
+
+	background: none;
+}
+
+
+section {
+	order: 1;
+	text-align: justify;
+	height: auto;
+	width: auto;
+
+
+	margin: 0em;
+	padding-top: 0.5em;
+	padding-bottom : 0.5em;
+	padding-left: 0.5em;
+	padding-right : 0.5em;
+	background: #F8F0F0;
+
+	font-size: 1.5em;
+	font-family: caladea, cambria, bookman, georgia;
+	counter-reset: h2counter;
+}
+
+#version{
+	text-align: right;
+
+	margin-top: 0em;
+	margin-bottom: 1em;
+	
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+	color: #0066FF;
+	font-style: italic;
+	text-shadow: 0.05em 0.05em white;
+}
+
+/* Side Navigation Pannel */
+
+button.broad {
+	float:right;
+	text-align: right;
+	
+	margin: 0em;
+	padding-top: 0.1em;
+	padding-bottom: 0.1em;
+	padding-right:0.2em;
+	border: none;
+	border-bottom: solid 2px lightgray;
+  background: none;
+
+  font-family: Source code pro, Consolas, Monaco, Courier New, monospace;
+	font-size: 1.1em;
+	font-weight: 700;
+}
+
+#boutonSNIR:hover{
+	background: #E0EFBC;
+}
+
+#boutonModule:hover{
+	background: #F0B4B7;
+}
+
+img.icon{
+	height: 1em;
+	vertical-align: middle; 
+	padding-bottom: 0.2em;
+}
+
+img.icon2{ 
+	height: 1.5em;
+	margin: 0em; 
+	padding-bottom: 00em;
+}
+
+
+div#boiteBoutons {
+	display : flex;
+	flex-direction : row;
+	float: right;
+	justify-content: right;
+  vertical-align: middle;
+
+	margin: 0em;
+	padding-top: 0.0em;
+	padding-bottom: 0.0em;
+	padding-right:0em;
+	border: none;
+  background: none;
+}
+
+
+img.bouton{ 
+	height: 1.5em;
+	margin-top: 0.3em;
+	margin-right: 0.2em;  
+	padding-bottom: 0em;
+}
+
+button#boutonSommaire:hover{
+	background: #B3D1FF;
+}
+button#boutonChapitre:hover{
+	background: #F8F0F0;
+}
+button#boutonLiens:hover{
+	background: #B3D1FF;
+}
+button#boutonGlossaire:hover{
+	background: #E0EFBC;
+}
+
+
+
+
+#topZone{
+	display : flex;
+	flex-direction : column;
+	flex-wrap: nowrap;
+  justify-content: stretch;
+  align-content: stretch;
+  overflow-y: hidden;
+	overflow-x: hidden;
+
+	width: 100%;
+  max-height: 15em;
+	min-height: 10em;
+	padding-top: 0.15em;
+  padding-bottom: 0em;
+
+	background: none;
+}
+
+
+#buttonZone{
+	display : flex;
+	flex-direction : row;
+	justify-content: space-between;
+  align-content: stretch;
+	align-items: center;
+	width: 100%;
+	overflow-y: hidden;
+	overflow-x: hidden;
+
+	background: none;
+
+}
+
+#buttonList{
+	display : flex;
+	align-self: start;
+	flex-direction : column;
+	justify-content: stretch;
+
+	width: auto;
+	overflow-y: hidden;
+	overflow-x: hidden;
+
+	background: none;
+}
+
+#varZone{
+	display : block;
+	width: 100%;
+	height: 100%;
+	overflow-y: hidden;
+	overflow-x: hidden;
+
+	margin-bottom: 0.5em;
+
+	background: none;
+	font-size: 1.2em;
+}
+
+
+
+
+nav h1{
+	width: 100%;
+	text-align: center;
+
+	margin: 00em;
+	margin-top: 0.5em;
+	margin-bottom: 0em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	border-top: solid 4px lightgray;
+	border-bottom: solid 4px lightgray;
+	background: none;
+
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+	font-size: 150%;
+	font-weight: 800;
+	text-transform: uppercase;
+	color: black;
+	text-shadow: 0.05em 0.05em grey;
+}
+
+
+object.include{
+	width: 100%; 
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+
+  margin:0em;
+	margin-bottom: 0.2em;
+	padding-bottom: 0.1em;
+  background: none;
+
+  font-size: 1.5em;
+  counter-reset: h2counter;
+}
+
+

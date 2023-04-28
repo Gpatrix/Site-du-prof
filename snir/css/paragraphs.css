@@ -1,0 +1,167 @@
+.exergue{
+	font-size: 110%;
+	margin-top: 1em;
+}
+
+
+p{
+	margin-top: 0.0%;
+	margin-bottom: 0.8%;
+	margin-left: 1.0%;
+}
+
+
+p.numbered{
+	margin-top: 0.1em;
+	text-indent: -1.4em; 
+	padding-left: 1.4em;
+}
+
+div.inline{
+	margin-top: 0.2em;
+	margin-left: 1.2em;
+	margin-bottom: 0.2em;
+}
+
+div.ex, div.exemples, div.exemple, div.remarques, div.important, div.complement,
+div.complementExpert, div.consignes, div.prerequis {
+	margin-top: 0.5em;
+	margin-right: 0em;
+	margin-left: 0.5em;
+	margin-bottom: 0.5em;
+	padding-top: 0.2em;
+	padding-right: 0.5em;
+	padding-left: 0.5em;
+	padding-bottom: 0.3em;
+	border-color: #D0DFAC;
+	border-style: solid;
+	border-width: 8px 2px 2px 8px;
+	border-radius: 0.3em;
+}
+
+
+div.important {
+	background: #E0E0FF;
+	border: none;
+	padding-top: 0.3em;
+	padding-right: 0.7em;
+	padding-left: 0.6em;
+	padding-bottom: 0.3em;
+}
+
+div.complement, div.complementExpert {
+	border-radius: 0em;
+	border-top-left-radius: 0.3em;
+	border-bottom-left-radius: 0.3em;
+	border-color: #E0E0FF;
+	border-style: solid;
+	padding-left: 0.3em;
+	padding-right: 0em;
+	border-width: 0px 0px 0px 12px;
+}
+
+div.ex {
+	border-radius: 0em;
+	border-top-left-radius: 0.3em;
+	border-bottom-left-radius: 0.3em;
+	border-style: solid;
+	padding-left: 0.3em;
+	padding-right: 0em;
+	border-color: #D0DFAC;
+	border-width: 0px 0px 0px 12px;
+}
+
+div.remarques {
+	border-color: #E0C0C0;
+}
+
+div.consignes {
+	border-color: #D0D0FF;
+}
+
+div.prerequis {
+	border-color: #F0A0A0;
+}
+
+
+
+p.remarques{
+	margin-bottom: 0em;
+	padding-bottom: 0em;
+}
+
+
+p.exemple::before, p.exemples::before, 
+p.remarque::before, p.remarques::before,
+p.consigne::before, p.consignes::before,  
+p.prerequis::before {
+	font-family: carlito, calibri, verdana, trebuchet, arial; 
+	color: black; 
+	font-weight : 600; 
+	font-size: 110%; 
+}
+
+
+p.square{
+	position: relative;
+	text-indent: 1.3em;
+	margin-top: 1em;
+}
+
+p.ex::before { 
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+	text-shadow: 2px 2px #D0DFAC;
+	content: "Exemple.Â Â ";
+}
+
+
+p.exemple::before{
+	content: "Exemple.Â Â ";
+}
+
+p.exemples::before{
+	content: "Exemples.Â Â ";
+	line-height: 150%;
+}
+
+p.remarque::before{
+	content: "Remarque.Â Â ";
+}
+
+p.remarques::before{
+	content: "Remarques.Â Â ";
+	line-height: 150%;
+}
+
+p.prerequis::before{
+	content: "PrÃ©requis.Â Â ";
+}
+
+p.consigne::before{
+	content: "Consigne.Â Â ";
+}
+
+p.consignes::before{
+	content: "Consignes.Â Â ";
+	line-height: 150%;
+}
+
+p.square::before{
+	position: absolute;
+  left: -1.4em;
+	content: "âˆŽ";
+}
+
+div.nobullet{
+	margin-bottom: 0.5em;
+}
+
+div.enonce{
+	margin-bottom: 0.5em;
+	margin-left: 0.5em;
+	padding: 0.2em;
+	padding-right: 0.4em;
+	border: solid 2px black;"
+}
+
+

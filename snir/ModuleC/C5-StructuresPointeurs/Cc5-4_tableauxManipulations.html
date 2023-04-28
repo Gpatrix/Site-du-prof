@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="5"
+  data-pagenumber="IV"
+  data-pageState="OK"
+  data-pageheadtitle="Tableaux manipulations"
+  data-pagefulltitle="Les tableaux  –  manipulations & applications"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="exergue">
+<p class="square"> Les <strong class="title">aspects fondamentaux</strong> de la notion de <strong class="specialLB">tableau</strong> – déclaration et identification des éléments d'un tableau, ainsi que du tableau lui‑même – ont été présentés au chapitre C5‑III</strong> <a class="previous" href="Cc5-3_tableauxDeclarations.html" target="_BLANK"></a>. Il en ressort notamment : </p>
+
+<ul>
+  <li> qu'un tableau est une <strong class="defin">donnée structurée</strong> constituant une <strong>série</strong> de <strong class="defin">n</strong> <strong>éléments de même type</strong> ordonnés <strong>les uns à la suite des autres</strong> dans le segment mémoire alloué au programme ; </li>
+
+  <li> que sauf exceptions, l'<strong class="defin">identificateur</strong> d'un tableau est <strong class="warning">implicitement dégradé</strong> en un <strong class="specialLB">pointeur « constant »</strong>  dont le <strong>type</strong> et la <strong>valeur d'adresse</strong> sont ceux du <strong>1<sup>er</sup> élément du tableau</strong> ; </li>
+
+  <li> qu'à partir de ce pointeur, et par l'<strong class="defin">arithmétique spécifique</strong> à laquelle il obéit, on peut identifier tous les éléments du tableau, mais on doit prendre garde à <strong>rester dans les bornes</strong> du tableau pour <strong class="warning">éviter toute erreur de segmentation</strong> ; </li>
+
+  <li> qu'un <strong class="defin">tableau multidimensionnel</strong> est structuré en <strong>sous-tableaux</strong>, eux‑même pouvant éventuellement présenter cette structure – chaque niveau de structuration conférant au tableau une <strong>dimension</strong> supplémentaire.  </li>
+</ul>
+
+<p class="square"> Fort de ces connaissances, il est maintenant possible d'aborder le codage des « <strong>opérations</strong> » de <strong class="title">manipulation d'un tableau</strong>. Il s'agit d'un <strong class="warning">sujet complexe</strong> car une donnée de type structurée ne se manipule pas comme une donnée élémentaire, par simple application d'un opérateur. </p>
+
+<ul>
+	<li> Dans la première partie de ce chapitre, on étudie les <strong class="title">manipulations  « simples »</strong>, comme : </li>
+	<ul>
+		<li> l'<strong class="specialLB">affectation de valeurs</strong> aux éléments d'un tableau, qui ne peut <strong class="warning">pas</strong> s'opérer de façon <strong>globale</strong> ; </li>
+
+		<li> le <strong class="specialLB">comptage</strong> du <strong>nombre d'éléments</strong> d'un tableau ;</li>
+
+		<li> la <strong class="specialLB">conversion de type</strong> d'un tableau pour <strong>interpréter différemment sa structure</strong> – par exemple, considérer un tableau de 2 lignes et 3 colonnes comme un tableau de 6 éléments. </li>
+	</ul>
+
+	<li> Dans la deuxième partie du chapitre, on étudie la <strong class="title">transmission d'un tableau</strong> comme argument et/ou valeur d'une <strong>fonction</strong>. Il s'agit de manipulations <strong class="warning">assez techniques</strong> mais essentielles en programmation. </li>
+
+	<li> Enfin, dans la troisième et dernière partie du chapitre, on présente <strong class="title">applications concrètes</strong> des tableaux avec emploi conjoint de <strong class="specialG">types énumérés</strong>. On mentionne également certaines <strong>bibliothèques</strong> de fonctions spécifiquement dédiées à la mise en œuvre de tableaux.</li>
+</ul>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="manipulation"> Manipulations élémentaires de tableaux </h2>
+
+
+
+<h3> Règle générale et conséquence </h3>
+
+
+<p> Énonçons tout d'abord une <strong class="title">règle générale</strong> dont la connaissance est essentielle pour bien comprendre toute la suite du chapitre. </p>
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on ne peut coder <strong class="warning">aucune opération globale</strong> <strong>sur une donnée de type</strong> <strong class="specialLB">tableau</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Après les déclarations : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+short duration[3];
+short durationInit[3] = {60, 5, 90};
+</pre>
+<!---------- ne pas indenter ---------->
+
+des instructions comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c" style="background: lightgrey">duration = durationInit; // not valid statement!</code>
+</span> <br>
+ou même :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c" style="background: lightgrey">duration = {0, 0, 0};    // not valid statement!</code> 
+</span> <br>
+ne sont <strong class="warning">pas compilables</strong>. En effet, dans l'une comme l'autre, l'identificateur du tableau <code class="prettyprint lang-c">duration</code> est <strong>implicitement dégradé</strong> en pointeur sur son premier élément (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#decayArray" target="_BLANK"></a>) qui ne forme pas une <strong>pas une l-value</strong>. Il ne peut donc pas faire l'objet d'une affectation. </p>
+</div><!-- exemple -->
+
+
+
+<div class="important">
+<p> En conséquence de la règle générale énoncée supra, toute  <strong class="title">opération</strong> <strong>sur une donnée de type</strong> <strong class="specialLB">tableau</strong> ne peut se faire que : </p>
+<ul>
+	<li> <strong class="defin">élément par élément</strong> – de préférence, quand cela est possible, par une ou plusieurs <strong>boucles répétitives</strong> imbriquées conformément à la structure dimensionnelle du tableau ; </li>
+
+	<li> par le biais de <strong class="defin">pointeurs</strong>, notamment pour le <strong>passage d'argument</strong> ou la <strong>valeur de retour</strong> d'une fonction. </li>
+</ul>
+</div><!-- important -->
+
+
+
+<h3 id="affectation"> Affectations de valeurs </h3>
+
+
+<div class="complement"> Typiquement, on code l'<strong class="title">affectation de valeurs</strong> à des éléments d'un tableau unidimensionnel <code class="prettyprint lang-c">tab</code> de <strong class="specialLB">N</strong> <strong>éléments</strong> par une boucle répétitive de la forme : </p>
+
+<div class="inline" style="background: white; padding-left: 0.5em; max-width: 18em">
+<code class="prettyprint lang-c">for (size_t k = 0; k < <span class="nocode"><strong class="specialLB">N</strong></span>; k++) { <br>
+  tab[k] = <span class="nocode"><strong>fonction de</strong></span> k; <br>
+}; </code>
+</div><!-- inline -->
+
+<p> sachant que la <strong>fonction</strong> peut, entre autres : </p>
+<ul>
+	<li> ne pas dépendre de <code class="prettyprint lang-c">k</code>, </li>
+
+	<li> faire appel à une saisie d'utilisateur, notamment via la fonction <code class="prettyprint lang-c">scanf</code>,	</li>
+
+	<li> ou encore inclure l'identificateur d'un autre tableau, </li>
+
+	<li> etc. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Pour faire suite à l'exemple supra, afin de <strong class="title">copier les valeurs</strong> des éléments du tableau <code class="prettyprint lang-c">durationInit</code> dans ceux du tableau <code class="prettyprint lang-c">duration</code>, on codera : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  for (size_t k = 0; k < 3; k++) {
+    duration[k] = durationInit[k];
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+<div class="remarques">  
+<p class="remarque"> Le <strong class="title">type</strong> <code class="prettyprint lang-c">size_t</code> (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#size_t" target="_BLANK"></a>) est souvent employé pour les <strong>variables d'incrémentation</strong> mais il peut très bien être remplacé par <strong class="pros">n'importe quel type entier</strong> dont l'étendue des valeurs couvre la plage d'indexation de la boucle. </p>
+
+<p> En langage <strong>C</strong>, il est également possible d'employer un <strong class="defin">type énuméré</strong>, comme par exemple ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:8">
+  typedef enum {GREEN, YELLOW, RED} LightColor;
+  
+  for (LightColor color = GREEN; color <= RED; color++) {
+    duration[color] = durationInit[color];
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En <strong>C++</strong>, cette technique est possible mais <strong class="cons">moins commode</strong> puisqu'il faut coder une conversion explicite pour pouvoir incrémenter la variable d'itération de la boucle (cf. chap. C3‑IV <a class="previous" href="../C3-Numeration/Cc3-4_typesEnumeres.html#operationsEnCpp" target="_BLANK"></a>). </p>
+</div><!-- remarque -->  
+  
+
+<h4 id="dysfonctionnements"> Risques de dysfonctionnements </h4>
+
+
+<div class="important">
+<p> Rappelons (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#bornesIndexationUnidim" target="_BLANK"></a>) que  le codeur doit veiller à ce que le <strong class="title">parcours des éléments</strong> d'un tableau <strong class="defin">reste dans les bornes</strong> de ce dernier, quelle que soit la méthode employée –  indexation directe ou accès par pointeur. </p>
+
+<p> En effet, le compilateur n'interdit jamais l'accès à une adresse en mémoire. Mais une <strong>écriture</strong> dans un <strong class="warning">segment mémoire protégé</strong> engendre des <strong class="title">dysfonctionnements</strong> (<em class="english">segment fault</em>). </p>
+</div><!-- important -->
+
+
+<div class="exemples">
+<p class="exemple">  Après la déclaration supra <a class="supra" href="Cc5-4_tableauxManipulations.html#manipulation"></a> du tableau <code class="prettyprint lang-c">duration</code> à trois éléments (donc, indexés de <code class="prettyprint lang-c">0</code> à <code class="prettyprint lang-c">2</code>), des instructions comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">duration[-1] = 0; // out of range!</code>
+</span> <br>
+ou encore :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c">duration[3] = 0; // out of range!</code> 
+</span> <br>
+sont <strong>compilables</strong> et mais leur <strong class="cons">effet de bord</strong> peut être dévastateur lors de l'exécution. Non seulement on peut <strong class="warning">écraser une autre donnée du programme</strong> mais on peut même provoquer une <strong class="warning">erreur de segmentation</strong> (cf. chap. 5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#reference" target="_BLANK"></a>). </p>
+
+<p class="square"> À titre de <strong class="title">démonstration académique</strong>, observons le programme ci‑dessous, qui contient volontairement une <strong>petite erreur de codage</strong> : la condition de répétition de la première boucle <code class="prettyprint lang-c">for</code> est codée <code class="prettyprint lang-c">k <= 3</code> au lieu de <code class="prettyprint lang-c">k < 3</code> (cf. lignes nº 7). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+short duration[3] = {1, 1, 1};
+short durationInit[3] = {60, 5, 90};
+
+int main(void) {
+  for (size_t k = 0; k <= 3; k++){  // error: <= should be <
+    duration[k] = k * 10;
+    printf("%p %d\n", &duration[k], duration[k]);
+  }
+  for (size_t k = 0; k < 3; k++){ 
+    printf("%p %d\n", &durationInit[k], durationInit[k]);
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Il en résulte que lors de l'<strong>exécution</strong> : </p>
+
+<ul>
+  <li> la dernière itération (pour <code>k = 3</code>) de la première boucle  écrit la valeur <code>30</code> (évaluation de <code>k * 10</code>) sur l'emplacement mémoire (2 octets) consécutif à celui de <code class="prettyprint lang-c">duration[2]</code>, le dernier élément du tableau <code class="prettyprint lang-c">duration</code> ; </li>
+
+  <li> or à cet emplacement se trouve l'emplacement mémoire alloué à <code class="prettyprint lang-c">durationInit[0]</code> qui est le premier élément du tableau <code class="prettyprint lang-c">durationInit</code> ; sa valeur <code>60</code> est donc non intentionnellement <strong class="warning">écrasée</strong> ; </li>
+</ul>
+
+<p> C'est ce que l'on peut observer avec <strong class="OnlineGDB">OnlineGDB</strong> en sortie standard sur les 4<sup>e</sup> et 5<sup>e</sup> lignes (avec la même adresse <code>0x55c25367c016</code>) où figure respectivement les valeurs de <code class="prettyprint lang-c">duration[3]</code> et de <code class="prettyprint lang-c">durationInit[0]</code>) : </p>
+
+<!---------- ne pas indenter ---------->  
+<pre class="displayDark">
+0x55c25367c010 0
+0x55c25367c012 10
+0x55c25367c014 20
+<span style="color: darkorange">0x55c25367c016 30</span>
+<span style="color: darkorange">0x55c25367c016 30</span>
+0x55c25367c018 5
+0x55c25367c01a 90
+</pre>
+<!---------- ne pas indenter ---------->  
+
+</div><!-- exemple -->
+
+
+
+<h3 id="castTableaux"> Conversions de types de tableaux </h3>
+
+
+<h4> Conversions implicites </h4>
+
+
+<p> Rappelons qu'en langages <strong>C</strong> et <strong>C++</strong>, le compilateur met en œuvre de nombreuses <strong class="title">conversions implicites</strong> sur les <strong class="specialLB">données scalaires</strong> pour faciliter le codage des expressions calculatoires (cf. chap. C3‑VI <a class="previous" href="../C3-Numeration/Cc3-6_conversionsTypes.html#conversionsImplicites" target="_BLANK"></a>).  </p>
+
+<div class="important">
+<p> Dans le cas d'une données de type <strong class="title">tableau</strong>, hormis la dégradation systématique de son identificateur en pointeur sur son premier élément, <strong class="warning">aucune conversion implicite</strong> n'est opérée. </p>
+</div><!-- important -->
+
+<div class="complement">
+En effet, comme les <strong class="title">types</strong> de <strong class="specialLB"> tableaux</strong> diffèrent a priori les uns des autres par trop d'aspects –  nombre de dimensions, nombre d'éléments dans chaque dimension, types des éléments – ils sont réputés <strong class="warning">incompatibles</strong> <strong>entre eux</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Bien qu'aillant la même taille (6 octets), les types <code class="prettyprint lang-c">int8_t[2][3]</code> et <code class="prettyprint lang-c">int8_t[6]</code> diffèrent par leur structure. Le compilateur ne peut pas implicitement mettre en œuvre une conversion entre l'un et l'autre.  </p>	
+</div><!-- exemple -->
+
+
+<h4> Conversions explicites </h4>
+
+
+<p> Rappelons qu'en langages <strong>C</strong> et <strong>C++</strong>, il existe l'<strong class="title">opérateur de conversion explicite</strong> (<em class="english">cast operator</em>) qui s'applique aux <strong class="specialLB">données scalaires</strong> – types élémentaires, énumérés, pointeurs – pour permettre au codeur d' interpréter leur contenu en mémoire dans un type différent du leur (cf. chap. C3‑VI <a class="previous" href="../C3-Numeration/Cc3-6_conversionsTypes.html#cast" target="_BLANK"></a>).  </p>
+
+<div class="important">
+<p> Dans le cas des données de types <strong class="specialLB">tableaux</strong>,  comme les identificateurs sont systématiquement dégradés en pointeurs, les <strong class="title">conversions explicites</strong> ne peuvent être opérées que <strong class="defin">par pointeurs</strong> interposés. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les conversions explicites de types de tableaux sont <strong class="pros">intéressantes</strong> pour coder facilement des opérations de <strong class="title">copie de contenu</strong> entre des tableaux ayant des <strong>structures différentes</strong>. </p>
+</div><!-- complement -->
+
+
+
+
+<div id="ExempleConversion" class="exemples"><p class="exemples"></p> 
+
+<ol class="numbered">
+	<li> Pour copier les valeurs d'un <strong>tableau</strong> <strong class="specialLB">bidimensionnel</strong> <code class="prettyprint lang-c">heat</code> à 2 lignes et 3 colonnes dans le <strong>tableau</strong> <strong class="specialLB">unidimensionnel</strong> <code  class="prettyprint lang-c">heatStat</code> à 6 éléments (non initialisés), on peut coder le programme ci‑dessous : </li>
+  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+int main(void) {
+  int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} }; 
+  int8_t heatStat[6];
+
+  for (size_t k = 0; k < 6; k++) {
+    heatStat[k] = heat[k / 3][k % 3];
+    printf("%d ", heatStat[k]);       // for checking only
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<div class="nobullet"> où, pour l'élément d'indice <code class="prettyprint lang-c">k</code> du tableau <code class="prettyprint lang-c">heatStat</code>, on détermine l'<strong>indice de ligne</strong> et l'<strong>indice de colonne</strong> correspondant dans le tableau <code class="prettyprint lang-c">heat</code> respectivement par les expressions <code class="prettyprint lang-c">k / 3</code> et <code class="prettyprint lang-c">k % 3</code>, puisque ce tableau est structuré en lignes de 3 éléments. </div>
+
+	<div class="nobullet"> Mais on peut également coder la ligne nº 8 en opérant une  <strong class="title">conversion explicite</strong> de l'identificateur <code class="prettyprint lang-c">heat</code> en un simple pointeur d'entier 8 bits <code class="prettyprint lang-c">int8_t*</code> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:8">
+    heatStat[k] = ((int8_t*) heat)[k];
+    // heatStat[k] = *((int8_t*)heat + k); // other possible coding
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<div class="nobullet"> Un tel codage a le mérite d'éviter une éventuelle erreur de calcul puisqu'on a une <strong class="pros">indexation identique</strong> <code class="prettyprint lang-c">[k]</code> pour la <strong>l‑value</strong> et la <strong>r‑value</strong> de cette affectation. </div>
+
+	<li style="margin-top: 1em"> Réciproquement, pour copier les valeurs du <strong>tableau</strong> <strong class="specialLB">unidimensionnel</strong> <code class="prettyprint lang-c">heatStat</code> à 6 éléments dans le <strong>tableau</strong> <strong class="specialLB">bidimensionnel</strong> <code  class="prettyprint lang-c">heat</code> à 2 lignes et 3 colonnes, on peut coder le programme ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+int main(void) {
+  int8_t heatStat[6] = {22, 17, 10, 19, 15, 5}; 
+  int8_t heat[2][3]; 
+  for (size_t i = 0; i < 2; i++) {
+    for (size_t j = 0; j < 3; j++) {
+      heat[i][j] = heatStat[i*3 + j];
+      printf("%d ", heat[i][j]);      // for checking only
+    }
+   }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+		<div class="nobullet"> où, pour l'élément d'indice de ligne <code class="prettyprint lang-c">i</code> et de colonne <code class="prettyprint lang-c">j</code> du tableau <code class="prettyprint lang-c">heat</code>, on détermine l'<strong>indice d'élément</strong> <code class="prettyprint lang-c">k</code> correspondant dans le tableau <code class="prettyprint lang-c">heatStat</code> par l'expressions <code class="prettyprint lang-c">i*3 + j</code>, puisque le tableau <code class="prettyprint lang-c">heat</code> est structuré en lignes de 3 éléments. </div>
+    
+    <div class="nobullet"> Mais on peut également coder la ligne nº 9 en opérant une  <strong class="title">conversion explicite</strong> de l'identificateur <code class="prettyprint lang-c">heatStat</code> en un pointeur de tableau de 3 éléments du type <code class="prettyprint lang-c">int8_t</code> dont le descripteur est <code class="prettyprint lang-c">int8_t(*)[3]</code> (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#adresseTabUni" target="_BLANK"></a>) : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:8">
+    heat[i][j] = ((int8_t(*)[3]) heatStat)[i][j];
+    //heat[i][j] = *(*((int8_t(*)[3]) heatStat + i) + j); // other possible coding
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Là encore, même si le codage de la conversion est plus technique, il apporte <strong class="pros">une indexation identique</strong> <code class="prettyprint lang-c">[i][j]</code> pour la <strong>l‑value</strong> et la <strong>r‑value</strong> de l'affectation. </div>
+</ol><!-- numbered -->
+</div><!-- exemples -->
+
+
+
+<h3> Comparaison de tableaux </h3>
+
+
+
+<h4> Tests de supériorité et d'infériorité </h4>
+
+
+<div class="expert">
+<p> Sans même entrer dans des considérations syntaxiques ou de techniques de codage, rappelons qu'il n'existe <strong class="warning">pas de relation d'ordre total</strong> « naturelle » sur des <strong>objets non scalaires</strong> – donc en particulier sur les tableaux. </p>
+
+<p> En effet, on ne peut pas affirmer que, par exemple, le tableau <code>{2, 5}</code> est plus grand ou plus petit que le tableau <code>{5, 2}</code> sans fixer préalablement un <strong class="defin">critère spécifique de comparaison</strong> (comme, par exemple, attribuer des poids aux indices des éléments du tableau puis faire une somme pondérée à laquelle on appliquera la relation d'ordre usuelle sur les nombres réels). </p>
+
+<p> En conséquence, on retiendra la règle suivante. </p>
+</div><!-- expert -->
+
+<div class="important">
+<p>	Il est <strong class="warning">inconcevable</strong> d'employer directement les <strong class="title">opérateurs de comparaison</strong> <code class="prettyprint lang-c">&gt;</code> et <code class="prettyprint lang-c">&lt;</code> globalement entre des identificateurs de données de type <strong class="specialLB">tableau</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Néanmoins, il faut avoir conscience que si <code class="prettyprint lang-c">tab1</code> et <code class="prettyprint lang-c">tab2</code> sont deux tableaux déclarés de même type, alors une <strong>expression</strong> comme : <br>
+<span class="inline">
+   <code class="prettyprint lang-c">tab1 > tab2</code>
+</span> <br>
+serait <strong class="cons">compilée</strong> <strong class="warning">sans aucun avertissement</strong>. En effet, les identificateurs de tableaux étant convertis en pointeurs sur leurs premiers éléments respectifs, et les opérateurs de comparaison s'appliquant aux pointeurs, cette expression sera évaluée <em>vraie</em> si l'<strong>adresse</strong> attribuée à <code class="prettyprint lang-c">tab1</code> est supérieure à celle de <code class="prettyprint lang-c">tab2</code>, et fausse dans le cas contraire. </p>
+</div><!-- complement -->
+
+
+
+
+<h4> Tests d'égalité et de non‑inégalité </h4>
+
+
+<div class="complement">
+<p> Le principe d'évaluation d'une expression d'inégalité entre des identificateurs de tableaux exposé ci‑dessus vaut aussi pour les <strong class="title">opérateurs d'égalité</strong> <code class="prettyprint lang-c">==</code> et de <strong class="title">non‑égalité</strong> <code class="prettyprint lang-c">!=</code>. </p>
+
+<p> En effet, si <code class="prettyprint lang-c">tab1</code> et <code class="prettyprint lang-c">tab2</code> sont deux tableaux déclarés de même type, alors l'<strong>expression</strong> : <br>
+	<span class="inline">
+	 <code class="prettyprint lang-c">tab1 == tab2</code>
+</span> <br>
+serait <strong class="cons">compilable</strong> mais <strong>toujours évaluée</strong> <strong class="warning">fausse</strong> puisque les <strong>adresses</strong> des deux tableaux sont forcément différentes. </p>
+
+<p> Néanmoins, il est parfaitement sensé de vouloir tester l'égalité de deux tableaux de même type, </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Néanmoins, il est parfaitement <strong class="pros">sensé</strong> de tester l'<strong>égalité de deux tableaux de même type</strong> au regard du critère qu'il doivent avoir leurs <strong class="defin">éléments de même position deux à deux égaux</strong>. </p>
+
+<p> La solution usuelle est encore une fois de procéder par une <strong>boucle itérative</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Prolongeons notre exemple générique avec deux tableaux unidimensionnels déclarés de <strong>même type</strong> <code class="prettyprint lang-c">tab1</code> et <code class="prettyprint lang-c">tab2</code> et admettons qu'il comptent chacun <code class="prettyprint lang-c">N</code> <strong>éléments</strong>. </p>
+
+<p> Le code ci‑dessous implémente un <strong class="title">test d'égalité</strong> au sens où il détermine si leurs <strong>éléments de mêmes indices</strong> sont respectivement <strong class="defin">égaux</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+int main(void) {
+  int tab1[5] = {1, 2, 3, 4, 5}; 
+  int tab2[5] = {1, 2, 3, 4, 5}; 
+  bool arrayEquality = true;
+  for (size_t i = 0; i < 5; i++) {
+    if (tab1[i] != tab2[i]) {
+      arrayEquality = false;
+      break;
+    }
+  printf("tab1 %s tab2\n", arrayEquality ? "==" : "!=");  
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> L'algorithme de test est élémentaire : </p>
+<ul>
+  <li> on utilise la <strong>variable booléenne</strong> <code class="prettyprint lang-c">arrayEquality</code> déclarée en amont de la boucle itérative, (ligne n° 7) avec la valeur initiale <code class="prettyprint lang-c">true</code> ;  </li>
+
+  <li> dans la boucle itérative, dès la première différence constatée entre deux éléments de même indice, on affecte à <code class="prettyprint lang-c">arrayEquality</code>, la valeur <code class="prettyprint lang-c">false</code> et on sort immédiatement de la boucle. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> La problématique du test d'égalité de deux tableaux est l'occasion de rappeler que si l'on doit tester des <strong class="title">nombres décimaux</strong>, il ne faut <strong class="warning">surtout pas</strong> employer les opérateurs <code class="prettyprint lang-c">==</code> ou <code class="prettyprint lang-c">!=</code> (cf. chap. 3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#comparaisonFlottants" target="_BLANK"></a>). </p>
+
+<p> Par exemple, si <code class="prettyprint lang-c">tab1</code> et <code class="prettyprint lang-c">tab2</code> sont des tableaux d'éléments de type <code class="prettyprint lang-c">double</code>, alors dans le code ci‑dessus, il faut alors remplacer la ligne nº 12 par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:12">
+    if (fabs((tab1[i] - tab2[i]) / tab1[i]) <= 10 * DOUBLE_EPSILON) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">DOUBLE_EPSILON</code> est la pseudo‑constante de <strong class="defin">résolution</strong> du type <code class="prettyprint lang-c">double</code> définie dans le fichier d'en‑tête <code class="filename">float.h</code> de la bibliothèque standard du langage <strong>C</strong> (<code class="filename">cfloat</code> en <strong>C++</strong>) ; </li>
+
+	<li> <code class="prettyprint lang-c">10</code> est une valeur usuelle pour le <strong class="defin">coefficient de précision</strong>. </li>
+</ul>
+</div><!-- remarque -->
+
+
+
+<h3> Calcul de nombre d'éléments </h3>
+
+
+
+<p> Dans les manipulations de tableaux, il est très souvent indispensable de connaître le <strong class="title">nombre d'éléments</strong> d'un <strong class="specialLB">tableau</strong> ou d'une de ses <strong class="specialLB">dimensions</strong> (c'est-à-dire d'un sous-tableau). Néanmoins, pour déterminer cette information, il n'existe <strong class="warning">pas d'opérateur</strong> dans le noyau des langages <strong>C</strong> et <strong>C++</strong>, ni de <strong class="warning">fonction</strong> dans leurs bibliothèques standards respectives. </p>
+
+
+<h4 id="nbTotalElements"> Emploi de constantes déclarées </h4>
+
+
+<div class="complement">
+<p> Une <strong class="specialLB">solution usuelle</strong> consiste, pour chaque tableau employé, à préalablement <strong class="title">déclarer une constante</strong> (ou une pseudo‑constante) idoine <strong>pour chacune de ses dimensions</strong>, que l'on peut alors exploiter dès la déclaration du tableau lui‑même. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple">	Pour déclarer le tableau <code class="prettyprint lang-c">heat</code> des exemples précédents, on peut coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+#define NB_OF_LINES   2
+#define NB_OF_COLUMNS 3
+int8_t heat[NB_OF_LINES][NB_OF_COLUMNS] = { {22, 17, 10}, {19, 15, 5} };
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On peut ensuite coder des manipulations sur ce tableau en employant les pseudo‑constantes <code class="prettyprint lang-c">NB_OF_LINES</code> et <code class="prettyprint lang-c">NB_OF_COLUMNS</code> dans les conditions de répétition de boucles itératives, comme par exemple ci‑dessous pour déterminer la <strong>valeur maximale</strong> du tableau : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+int main(void) {	
+  int8_t heatMax = 0;    // heat set point can't be negative
+  for (size_t i = 0; i < NB_OF_LINES; i++) {
+    for (size_t j = 0; j < NB_OF_COLUMNS; j++) {
+      if (heat[i][j] > heatMax) {
+        heatMax = heat[i][j];
+      }
+    }  
+  }	
+  printf("Max. heat value = %d °C\n", heatMax);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemples -->
+
+
+<h4 id="routineNbElements"> Détermination de nombre d'éléments par routine </h4>
+
+
+<div class="complement">
+<p> Une autre solution consiste à coder une <strong class="title">routine</strong> – <strong class="specialLB">fonction</strong> ou <strong class="specialLB">pseudo‑fonction</strong> – qui <strong>calcule la taille</strong> d'un tableau par le rapport des valeurs rendues par l'opérateur <code class="prettyprint lang-c">sizeof</code> appliqué successivement au tableau et à son premier élément (puisque tous les éléments d'un tableau ont nécessairement la même taille). </p>
+
+<p> Ainsi, on peut coder la <strong class="specialLB">pseudo‑fonction</strong> ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#define nbOfElements(tab) (sizeof(tab)/sizeof(tab[0]))</code>
+</span> <br>
+Elle présente l'avantage, comme toutes les pseudo‑fonctions, d'employer des <strong class="pros">arguments non typés</strong> (cf. chap. C4‑III <a class="previous" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#typesArgumentsMacro" target="_BLANK"></a>). Elle peut donc être invoquée pour n'importe quel type de tableau ou de sous‑tableau. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> En employant cette pseudo‑fonction dans le programme de l'exemple précédent, on pourrait recoder les lignes nº 12 & 13 comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  for (size_t i = 0; i < nbOfElements(heat); i++) {
+    for (size_t j = 0; j < nbOfElements(heat[0]); j++) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> sachant que pour obtenir le nombre de colonnes du tableau, il suffit d'appliquer la pseudo‑fonction <code class="prettyprint lang-c">nbOfElements</code> à la <strong>première ligne</strong> <code class="prettyprint lang-c">heat[0]</code> (il s'agit d'un sous‑tableau). En effet, en langage <strong>C</strong> ou <strong>C++</strong>, dans un tableau bidimensionnel, toutes les lignes ont le <strong class="defin">même nombre d'éléments</strong>. </p>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4 id="nbElementsEntreDeux"> Nombre d'éléments entre deux éléments d'un tableau </h4>
+
+
+<div class="complement">
+<p> Pour calculer le <strong class="title">nombre d'éléments</strong> <strong class="specialLB">entre deux éléments</strong> d'un tableau, <strong>quelle que soit sa structure</strong>, il suffit de calculer la <strong class="defin">soustraction entre les adresses</strong> de ces deux éléments, puisque les éléments d'un tableaux sont toujours mémorisés les uns à la suite des autres. </p>
+
+<p> On rappelle à cette occasion que la <strong class="title">soustraction de deux pointeurs</strong> de <strong>même type</strong> est une <strong class="defin">opération définie</strong> avec un résultat de type <code class="prettyprint lang-c">ptrdiff_t</code> qui attend une spécification de conversion <code class="cmd">%ld</code> (cf. chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#soustractionPointeurs" target="_BLANK"></a>). </p>
+
+<p> <em class="remark">Attention</em> : la <strong>différence entre deux adresses</strong> <strong class="warning">exclut dans le compte l'une des deux adresses</strong>. Le même principe vaut pour toutes les différences entre des nombres considérés comme <strong>ordinaux</strong> (cf. l'exemple ci‑dessous). </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Après la déclaration supra du tableau <code class="prettyprint lang-c">heat</code> <a class="supra" href="Cc5-4_tableauxManipulations.html#nbTotalElements"></a>, l'instruction ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">printf("%ld\n", &heat[1][2] - &heat[0][1]);</code>
+</span> <br>
+affiche la valeur <code class="displayDark">4</code>. </p>
+
+<p> En effet, dans un tableau à 3 colonnes, entre le 3<sup>e</sup> élément de la 2<sup>e</sup> ligne (<code class="prettyprint lang-c">heat[1][2]</code>) exclu et le 2<sup>e</sup> élément de la 1<sup>e</sup> ligne (<code class="prettyprint lang-c">heat[0][1]</code>), il y a bien 4 éléments – de même qu'entre les nombres 6 (exclu) et 2, il y a 6 − 2 = 4 nombres (5, 4, 3, 2). </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Transmission d'un tableau comme argument et/ou valeur d'une fonction </h2>
+
+
+
+<h3> Problématique de la transmission d'une valeur de type <em>tableau</em> </h3>
+
+
+
+<p class="square"> Pour mémoire, en langages <strong>C</strong> et <strong>C++</strong>, <em class="remark">sauf dans le cadre d'une déclaration de donnée</em>, il est <strong class="warning">impossible</strong> de former une <strong>expression</strong> dont la <strong class="specialY">valeur</strong> est un <strong class="specialLB">tableau</strong> <a class="previous" href="Cc5-3_tableauxDeclarations.html#regleValeurs" target="_BLANK"></a>. </p>
+
+<div class="complement">
+<p> Il est donc <strong class="warning">impossible</strong> pour une <strong class="specialO">fonction</strong> de <strong class="title">retourner une valeur</strong> de type <strong class="specialLB">tableau</strong>, puisque c'est bien une <strong>expression</strong> qui est attendue après le mot-clef <code class="prettyprint lang-c">return</code>. </p>
+</div><!-- complement -->
+
+<p class="square"> Indirectement, le problème se pose dans les mêmes termes avec un appel de fonction pour la <strong class="title">transmission</strong> de la <strong class="specialY">valeur</strong> d'un <strong class="specialO">argument effectif</strong> à son <strong class="specialT">argument formel</strong> correspondant dans l'en‑tête de la fonction (cf. chap. C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#appelFonction" target="_BLANK"></a>). En effet, cette transmission opère comme une <strong class="defin">affectation</strong> où: </p>
+<ul>
+	<li> l'<strong class="specialT">argument formel</strong>, qui joue le rôle de la <strong class="specialM">l‑value</strong> de l'affectation, est traité comme <strong>expression</strong> ; autrement dit, s'il s'agit d'un <strong>identificateur de</strong> <strong class="specialLB">tableau</strong>, il est <strong class="warning">dégradé en un pointeur</strong> sur son premier élément ;  </li>
+
+	<li> l'<strong class="specialO">argument effectif</strong> est une <strong>expression</strong> qui joue le rôle de <strong class="specialMg">r‑value</strong> de l'affectation. </li>
+</ul>
+
+<div class="complement">
+<p>	Le mécanisme de <strong class="title">transmission d'argument</strong> par <strong class="specialY">valeur</strong> n'est donc <strong class="warning">pas utilisable</strong> pour des données de type <strong class="warning">tableau</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Imaginons qu'on ait codé une <strong>fonction</strong> <code class="prettyprint lang-c">firstRelDiff</code> qui retourne la <strong>différence relative</strong> des deux premiers éléments d'un tableau de <strong>type</strong> <code class="prettyprint lang-c">int8_t[3]</code> pris comme <strong class="specialT">argument formel</strong>. Pour mémoire, la différence relative entre deux nombres <strong>a</strong> (≠ 0) et <strong>b</strong> est égale à (<strong>b</strong> − <strong>a</strong>) / <strong>a</strong>. </p>
+
+<p> Pour tester une telle fonction, on aimerait bien former une <strong>expression d'appel</strong> comme par exemple : <br>
+ <span class="inline">
+  <code class="prettyprint lang-c" style="background: lightgray">firstRelDiff({60, 5, 90})</code>
+</span> </p>
+<p> Mais comme cela a été souligné supra, l'expression <code class="prettyprint lang-c" style="background: lightgray">{60, 5, 90}</code> n'est <strong class="warning">pas compilable</strong> en dehors d'une déclaration. </p>
+
+<p> On pourrait alors penser que pour surmonter cette difficulté, il suffirait de préalablement déclarer une constante comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">const int8_t tab[3] = {60, 5, 90};</code>
+</span> <br>
+puis de coder l'<strong>expression d'appel</strong> ainsi : <br>
+ <span class="inline">
+  <code class="prettyprint lang-c" style="background: lightgray">firstRelDiff(tab)</code>
+</span> </p>
+
+<p> Mais là encore, le compilateur signalerait inévitablement une <strong class="warning">erreur</strong>, au motif d'une incompatibilité de types, puisque : </p>
+<ul>
+	<li> le <strong>type</strong> de l'<strong class="specialO">argument effectif</strong> <code class="prettyprint lang-c" style="background: lightgray">tab</code> est implicitement dégradé en <code class="prettyprint lang-c">int8_t*</code> (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#decayArray" target="_BLANK"></a>) ; </li>
+
+	<li> alors que le <strong>type</strong> de l'<strong class="specialT">argument formel</strong> de la fonction <code class="prettyprint lang-c">firstRelDiff</code> est <code class="prettyprint lang-c">int8_t[3]</code> et ne pourrait donc pas se voir affecter une valeur de type pointeur. </li>
+</ul>
+</div><!-- exemple -->
+
+
+
+<h3 id="transmissionTableau"> Transmission d'un argument de type <em>tableau</em> </h3>
+
+
+<h4> Principe du recours à la transmission par adresse </h4>
+
+
+<div class="important">
+<p>	Puisque la transmission par valeur d'un argument de type tableau n'est pas possible, l'alternative consiste à <strong class="title">procéder par adresse</strong> (cf. chap. C5‑II <a class="previous" href="Cc5-2_pointeursApplications.html#transmissionAdresse" target="_BLANK"></a>), c'est‑à‑dire à coder l'<strong class="specialT">argument formel</strong> de la fonction sous la forme d'un <strong class="defin">pointeur de tableau</strong>. </p>
+
+<p> Dans l'expression d'appel de la fonction, l'<strong class="specialO">argument effectif</strong> doit alors être une expression dont la valeur est un <strong class="defin">pointeur de même type</strong> que celui de l'<strong class="specialT">argument formel</strong> – typiquement, un <strong>identificateur de tableau</strong> préalablement déclaré (puisque cet identificateur sera converti en pointeur lors de son évaluation). </p>
+</div><!-- important -->
+
+<div class="complement"> 
+<p> Encore faut‑il connaître la <strong class="title">syntaxe déclarative</strong> d'un <strong class="title">pointeur</strong> sur une donnée de type <strong class="title">tableau</strong>, c'est‑à‑dire un pointeur sur un <strong>élément du tableau</strong>. </p>
+<ul>
+	<li> Pour un <strong class="specialLB">tableau unidimensionnel</strong> de données d'un <strong>type élémentaire</strong>, la syntaxe déclarative est de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">
+    <span class="nocode"><strong style="color: green">descripteur de type</strong></span> * <span class="nocode"><strong class="specialN">identificateur</strong></span>;</code>
+  </span> <br>
+  puisqu'il s'agit simplement d'un pointeur sur un élément de type <strong class="specialG">descripteur de type</strong> (cf. chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#declarationPointeur" target="_BLANK"></a>). </li>
+
+	<li> Pour un <strong class="specialLB">tableau bidimensionnel</strong> de données d'un <strong>type élémentaire</strong>, la syntaxe déclarative est de la forme : <br>
+  <span class="inline">
+  	<code class="prettyprint lang-c">
+    <span class="nocode"><strong style="color: green">descripteur de type</strong></span> (* <span class="nocode"><strong class="specialN">identificateur</strong></span>)[<span class="nocode"><strong class="specialLB">nombre d'éléments</strong></span>];</code>
+  </span> <br>
+  en rappelant qu'un tableau bidimensionnel est un tableau de tableaux unidimensionnels (lignes).
+</li>
+</ul>
+<p>	Par ailleurs, comme pour toute déclaration, chaque forme syntaxique ci‑dessus peut être suivie d'une <strong>initialisation</strong>. </p>
+
+</div><!-- complement -->	
+
+<div class="remarques">
+<p class="remarque"> La deuxième forme déclarative ci‑dessus ne doit <strong class="warning">pas être confondue</strong> avec celles ci‑dessous : </p>
+<ul>
+  <li>
+    <code class="prettyprint lang-c"><span class="nocode"><strong style="color: green">descripteur de type</strong></span> * <span class="nocode"><strong class="specialN">identificateur</strong></span> [<span class="nocode"><strong class="specialLB">nombre d'éléments</strong></span>] <span class="nocode" style="color: darkgrey; font-style: normal;"></span>;</code> <br>
+    qui déclare un <strong>tableau de pointeurs</strong> ;  </li>
+
+  <li> 
+    <code class="prettyprint lang-c"><span class="nocode"><strong style="color: green">descripteur de type</strong></span> (* <span class="nocode"><strong class="specialN">identificateur</strong></span>)(<span class="nocode"><strong class="specialLG">liste de types</strong></span>);</span></code> <br>
+    qui déclare un <strong>pointeur de fonction</strong>.  </li>
+</ul>
+
+
+
+ </p>
+</div><!-- remarque -->
+
+
+
+
+<div class="exemples" id="exemplesArguments"><p class="exemples"></p>
+<ol class="numbered">	
+
+	<li> Le programme ci‑dessous montre une première solution de codage avec la fonction nommée <code class="prettyprint lang-c">firstRelDiff_1</code> pour illustrer la problématique de la <strong class="title">transmission d'un argument</strong> de type <strong class="specialLB">tableau unidimensionnel</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+float firstRelDiff_1(int8_t * tab) {
+  return (float) (tab[1] - tab[0]) / tab[0];
+} 
+
+int main(void) {
+  int8_t heatHigh[3] = {22, 17, 10};
+  printf("%g", firstRelDiff_1(heatHigh));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <li> Supposons maintenant que l'on veuille appliquer cette fonction a un <strong class="specialLB">tableau bidimensionnel</strong> comme <code class="prettyprint lang-c">heat</code>. Ici, on pourrait se contenter d'appeler la même fonction sur le premier élément de <code class="prettyprint lang-c">heat</code> (qui est un sous‑tableau de 3 éléments). Mais dans le cas général, il faut changer le <strong>type</strong> de l'<strong class="specialT">argument formel</strong> dans l'en‑tête de la fonction – autrement dit, coder une nouvelle fonction <code class="prettyprint lang-c">firstRelDiff_2</code> comme dans le programme ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+float firstRelDiff_2(int8_t (* tab)[3]) {
+  return (float) (tab[0][1] - tab[0][0]) / tab[0][0];
+}
+
+int main(void) {
+  int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} };
+  printf("%g", firstRelDiff_2(heat));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</ol><!-- numbered -->
+</div><!-- exemple -->
+
+
+<h4 id="codageTransmissionTableau"> Codage de la transmission d'un argument de type <em>tableau</em> </h4>
+
+
+<div class="complement">
+<p> Le codage de la <strong class="title">transmission d'un argument</strong> de type <strong class="specialLB">tableau</strong> est donc <strong class="warning">plus complexe</strong> que pour un argument de <strong>type scalaire</strong>. En effet, le fait de procéder systématiquement par adresse (puisque la transmission par valeur est impossible) a <strong class="cons">deux conséquences</strong> notables : </p>
+
+<ul>
+	<li> la <strong class="warning">perte de l'information</strong> du <strong>nombre d'éléments</strong> du tableau (ou de sa première dimension dans le cas d'un tableau multi‑dimensionnel), sachant qu'en revanche, la <strong class="defin">structure du tableau</strong> est « mémorisée » par le <strong>type du pointeur</strong> – cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#adresseTabMulti" target="_BLANK"></a> ; </li>
+
+	<li> la possibilité inhérente – donc le <strong class="warning">risque</strong> – de <strong class="warning">modifier</strong> <strong class="specialO">l'argument effectif</strong> alors que ce n'est pas toujours souhaitable. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> Ces observations conduisent à adopter les <strong class="title">précautions de codage</strong> suivantes : </p>
+<ul>
+	<li> Si le <strong class="specialLB">nombre d'éléments</strong> du tableau (ou de sa première dimension dans le cas d'un tableau multi‑dimensionnel) est une donnée nécessaire dans l'algorithme de la fonction, il suffit de le transmettre comme un <strong class="defin">argument supplémentaire</strong> de la fonction.  </li>
+
+  <div class="expert">
+	<div class="bullet"> On peut aussi avoir recours à une <strong>constante globale</strong> déclarée ou une <strong>pseudo‑constante</strong> mais une telle solution est <strong class="cons">moins portable</strong>. </div>
+  </div><!-- expert -->
+
+	<li> Pour <strong class="pros">prévenir le risque</strong> de <strong>modification accidentelle</strong> (par erreur de codage) de l'<strong class="specialO">argument effectif</strong> lors d'un appel de la fonction, il suffit de préfixer le <strong>mot‑clef</strong> <code class="prettyprint lang-c">const</code> dans le descripteur de type de l'<strong class="specialT">argument formel</strong> correspondant dans l'en‑tête de la fonction. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="exemples">
+<p class="exemple"> Pour illustrer ces aspects, codons un programme qui calcule, par l'intermédiaire d'une fonction, la <strong class="title">moyenne des éléments</strong> contenus dans un tableau d'entiers de type <code class="prettyprint lang-c">int8_t</code>. </p>
+
+<ol class="numbered">
+	<li> Prenons le cas d'un <strong class="specialLB">tableau unidimensionnel</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+float meanValue_1(const int8_t * tab, size_t nbElts) {
+  int sum = 0;
+  for (size_t k = 0; k < nbElts; k++) {
+    sum += tab[k];
+  }
+  return (float) sum / nbElts;
+}
+
+int main(void) {
+  int8_t heatHigh[3] = {22, 17, 10};
+  printf("%g", meanValue_1(heatHigh, 3));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Prenons le cas d'un <strong class="specialLB">tableau bidimensionnel</strong> :    </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+#define nbOfElements(tab) (sizeof(tab)/sizeof(tab[0]))
+
+float meanValue_2(const int8_t (* tab)[3], size_t nbLines) {
+  size_t nbColumns = nbOfElements(*tab);
+  int sum = 0;
+  for (size_t i = 0; i < nbLines; i++) {
+    for (size_t j = 0; j < nbColumns; j++) {
+      sum += tab[i][j];
+    }
+  }
+  return (float) sum / (nbLines * nbColumns);
+}
+
+int main(void) {
+  int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} };
+  printf("%g", meanValue_2(heat, 2));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> En utilisant la pseudo‑fonction <code class="prettyprint lang-c">nbOfElements</code> expliquée supra <a class="supra" href="Cc5-4_tableauxManipulations.html#routineNbElements"></a>, on détermine dans le corps de la nouvelle fonction <code class="prettyprint lang-c">meanValue_2</code> le <strong>nombre de colonnes</strong> du tableau par <strong class="defin">déréférencement</strong> du pointeur qui est transmis comme argument de la fonction (<code class="prettyprint lang-c">*tab</code> – cf. la ligne nº 7). En effet, le déréférencement d'un pointeur de tableau bidimensionnel donne un pointeur de tableau unidimensionnel. </div>
+</ol><!-- numbered -->
+
+<div class="expert">
+<p class="remarques" style="margin-top: 1em"></p>
+<ol class="numbered">
+  <li> Dans le programme pour <strong class="specialLB">tableau unidimensionnel</strong>, il n'est <strong class="warning">pas possible</strong> d'employer la pseudo‑fonction <code class="prettyprint lang-c">nbOfElements</code> pour se passer du 2<sup>e</sup> argument <code class="prettyprint lang-c">nbElts</code> de la fonction <code class="prettyprint lang-c">meanValue_1</code>. En effet, le programme suivant : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+#define nbOfElements(tab) (sizeof(tab)/sizeof(tab[0]))
+ 
+float meanValue_1(const int8_t * tab) {
+  int sum = 0;
+  for (size_t k = 0; k < nbOfElements(tab); k++) { // NOT WORKING! (random value)
+    sum += tab[k];
+  }
+  return (float) sum / nbElts;
+}
+ 
+int main(void) {
+  int8_t heatHigh[3] = {22, 17, 10};
+  printf("%g", meanValue_1(heatHigh));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> est bien <strong>compilable</strong> mais <strong class="warning">dysfonctionnel</strong>. En effet, la <strong class="defin">transmission par adresse</strong> de l'argument formel  <strong class="cons">perd l'information</strong> de la dimension de l'argument effectif. Lors de l'exécution, l'expression <code class="prettyprint lang-c">nbOfElements(tab)</code> prend une <strong class="warning">valeur aléatoire</strong>. </div>
+
+  <div class="nobullet"> En revanche, dans le programme pour <strong class="specialLB">tableau bidimensionnel</strong>, la pseudo‑fonction <code class="prettyprint lang-c">nbOfElements</code> permet d'extraire le <strong>nombre de colonnes</strong> de l'argument formel car cette information – la valeur <code class="prettyprint lang-c">3</code> –  est bien <strong class="pros">incluse</strong> dans la déclaration du type <code class="prettyprint lang-c">const int8_t (* tab)[3]</code>. A contrario, il n'est <strong class="warning">pas possible</strong> de la même manière d'extraire le <strong>nombre de lignes</strong> car cette information est <strong class="cons">perdue</strong> lors de la <strong class="defin">transmission par adresse</strong>. Il faut donc la passer comme 2<sup>e</sup>argument de la fonction <code class="prettyprint lang-c">meanValue_2</code>. </div>
+
+  <li> Le programme pour <strong class="specialLB">tableau bidimensionnel</strong> aurait pu être codé en faisant appel à la fonction <code class="prettyprint lang-c">meanValue_1</code>, qui présente l'avantage d'opérer sur un tableau unidimensionnel de n'importe quel nombre d'éléments. Il suffit, dans l'expression d'appel de cette fonction, de <strong class="defin">convertir</strong> le tableau bidimensionnel <code class="prettyprint lang-c">heat</code> en un <strong>tableau unidimensionnel</strong>, comme on l'a montré supra <a class="supra" href="Cc5-4_tableauxManipulations.html#ExempleConversion"></a>, et bien entendu, de changer le nombre d'éléments transmis dans l'instruction d'appel (<code class="prettyprint lang-c">6</code> au lieu de <code class="prettyprint lang-c">3</code>). </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:17">
+int main(void) {
+  int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} };
+  printf("%g", meanValue_1((int8_t*) heat, 6));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</ol>
+
+
+
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+
+<h3 id="retourFonctionTableau"> Retour par une fonction d'un <em>tableau</em> </h3>
+
+
+
+<div class="important">
+<p> Comme pour la transmission d'un argument, il est <strong class="warning">impossible</strong> procéder par <strong>valeur directe</strong> pour faire <strong class="title">retourner un tableau</strong> à une fonction. L'alternative consiste à <strong class="defin">retourner un pointeur</strong> sur une <strong>variable</strong> de type <strong class="specialLB">tableau</strong>. </p>
+
+<p> Pour éviter de recourir directement à une <strong class="cons">donnée globale</strong> (ce qui rend le code de la fonction malcommode à porter), il faut alors que cette variable pointée en sortie soit <strong class="defin">aussi transmisse comme argument</strong> de la fonction – et bien évidemment par l'intermédiaire d'un pointeur. </p>
+</div><!-- important -->
+
+
+<div class="exemples">
+<p class="exemple"> Pour illustrer cet aspect, on peut coder toutes sortes de fonctions qui effectuent du <strong class="title">calcul matriciel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Matrice_(mathématiques)#Addition_des_matrices_et_multiplication_par_un_scalaire" target="_BLANK">W</a>. Ainsi, le programme ci‑dessous met en œuvre une fonction <code class="prettyprint lang-c">multiplyArray</code> qui rend un tableau unidimensionnel dont les éléments prennent pour valeurs celles des éléments d'un tableau de même type, mais toutes <strong class="defin">multipliées par un coefficient</strong> <code class="prettyprint lang-c">a</code> passé comme argument. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+short * multiplyArray(short a, const short * inTab, 
+                      short * outTab, size_t nbElts) {
+  for (size_t k = 0; k < nbElts; k++) {
+    outTab[k] = a * inTab[k];
+  }
+  return outTab;
+}
+
+int main(void) {
+  short durationBase[3] = {6, 1, 18};
+  short duration[3];
+  multiplyArray(5, durationBase, duration, 3);
+  for (size_t k = 0; k < 3; k++) {
+    printf("durationBase[%zu] = %2d   duration[%zu] = %2d\n", 
+            k,    durationBase[k],    k,    duration[k]);
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p class="square"> Remarquons que l'appel de la fonction <code class="prettyprint lang-c">multiplyArray</code> (ligne nº 14) <strong>ignore sa valeur de retour</strong>. On pourrait alors se demander pourquoi ne pas tout simplement coder une fonction de type <code class="prettyprint lang-c">void</code> ? Mais il faut comprendre qu'on aurait pu l'appeler comme ci‑dessous dans une boucle itérative d'affichage (ligne nº 12), en l'appliquant à l'opération de sélection <code class="prettyprint lang-c">[k]</code> (puisqu'il s'agit d'un identificateur de tableau) :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:9">
+  for (size_t k = 0; k < 3; k++) {
+    printf("durationBase[%zu] = %2d   duration[%zu] = %2d\n", 
+           k,    durationBase[k],  k, 
+           multiplyArray(5, durationBase, duration, 3)[k]); 
+  }
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> Sauf qu'ici, une telle solution est bien <strong class="cons">moins efficace</strong> en termes de temps d'exécution, puisque toutes les valeurs du tableau de retour sont recalculées à chaque itération de la boucle <code class="prettyprint lang-c">for</code>. </p>
+
+<p class="square"> On peut aussi envisager une <strong class="title">variante</strong> de la fonction <code class="prettyprint lang-c">multiplyArray</code> avec <strong>un seul argument</strong> de type tableau, sur lequel elle produit un <strong>effet de bord</strong> :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+short * multiplyArray(short a, short * inOutTab, size_t nbElts);
+
+int main(void) {
+  short durationBase[3] = {12, 1, 18};
+  multiplyArray(5, durationBase, 3);
+  for (size_t k = 0; k < 3; k++) {
+    printf("durationBase[%zu] = %2d\n", k, durationBase[k]);
+  }
+}
+
+short * multiplyArray(short a, short * inOutTab, size_t nbElts) {
+  for (size_t k = 0; k < nbElts; k++) {
+    inOutTab[k] *= a;
+  }
+  return inOutTab;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ici, il n'est pas question d'appeler cette variante de la fonction <code class="prettyprint lang-c">multiplyArray</code> dans la boucle <code class="prettyprint lang-c">for</code> d'affichage, sinon le tableau <code class="prettyprint lang-c">durationBase</code> serait multiplié trois fois. En revanche, il est possible d'<strong class="defin">exploiter la valeur de retour</strong> d'une telle fonction dans le cadre d'une <strong class="title">composition de fonctions</strong>. Par exemple, si l'on a également défini une fonction <code class="prettyprint lang-c">addArray</code> (avec la même syntaxe que <code>multiplyArray</code>) pour ajouter une valeur <code class="prettyprint lang-c">b</code> à tous les éléments d'un tableau : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:21">
+short * addArray(short b, short * inOutTab, size_t nbElts) {
+  for (size_t k = 0; k < nbElts; k++) {
+    inOutTab[k] += b;
+  }
+  return inOutTab;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> alors l'instruction d'appel :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  arrayAdd(2, arrayMultiply(5, duration, 3), 3);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> ajoute <code class="prettyprint lang-c">2</code> à chaque élément du tableau <code class="prettyprint lang-c">duration</code> après les avoir multipliés par <code class="prettyprint lang-c">5</code>. Ce code est équivalent à  : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  arrayMultiply(5, duration, 3);
+  arrayAdd(2, duration, 3);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En termes de lisibilité, il est difficile de dire laquelle de ces deux solutions est la meilleure. </p>
+</div><!-- expert -->
+
+</div><!-- exemples -->
+
+
+
+<h3> Syntaxe explicite d'un argument de fonction de type tableau </h3>
+
+
+<div class="complement">
+<p> La <strong class="title">syntaxe</strong> de codage d'un <strong class="specialT">argument formel de fonction</strong> de type <strong class="specialLB">tableau</strong> <strong>sous forme de pointeur</strong> peut sembler <strong class="cons">obscure</strong> pour les codeurs débutants. À moins que l'identificateur de l'argument soit explicite, la seule lecture du prototype de la fonction ne permet pas de savoir si s'agit d'un pointeur de donnée scalaire ou de type tableau. De plus, la syntaxe de codage peut devenir <strong class="warning">complexe</strong> s'il s'agit d'un <strong>tableau de pointeurs</strong> – ou pire encore s'il s'agit en plus de <strong>pointeurs de fonctions</strong>. </p>
+
+<p> Toutefois, il est possible – et même recommandé – d'adopter la <strong class="title">syntaxe</strong> <strong class="pros"> explicite</strong> des tableaux avec les <strong class="title">crochets</strong> <code class="prettyprint lang-c">[]</code>, en se souvenant qu'en dehors du cadre d'une déclaration, tout <strong>identificateur de tableau</strong> est <strong class="defin">converti en pointeur</strong> sur son premier élément. Ainsi, un codage de la forme : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">
+  <span class="nocode"><strong style="color: green">descripteur de type</strong></span> <span class="nocode"><strong class="specialN">identificateur</strong></span>[] <span class="nocode" style="color: darkgrey; font-style: normal;">…</span></code>
+</span> <br>
+sera, lors de la compilation, <strong class="defin">équivalent</strong> à la forme avec pointeur déjà étudiée : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">
+  <span class="nocode"><strong style="color: green">descripteur de type</strong></span> * <span class="nocode"><strong class="specialN">identificateur</strong></span> <span class="nocode" style="color: darkgrey; font-style: normal;">…</span></code>
+</span> </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemples"> En reprenant les exemples supra <a class="supra" href="Cc5-4_tableauxManipulations.html#exemplesArguments"></a> des fonctions <code class="prettyprint lang-c">firstRelDiff_1</code> et <code class="prettyprint lang-c">firstRelDiff_2</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+float firstRelDiff_1(int8_t * tab) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+float firstRelDiff_2(int8_t (*tab)[3]) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p>	il est préférable, pour une <strong class="pros">meilleur lisibilité</strong>, de les coder comme ci‑dessous  :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+float firstRelDiff_1(int8_t tab[]) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+float firstRelDiff_2(int8_t tab[][3]) {
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemples -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> En termes de résultat de compilation, on a vraiment une <strong class="pros">équivalence « totale »</strong> <strong class="title">des deux syntaxes</strong>, au point qu'il est possible de l'adopter dans le prototype de la fonction mais pas dans l'en‑tête qui précède son corps de définition, et inversement. Évidemment, une telle pratique n'est <strong class="cons">pas recommandée</strong>. </li>
+
+	<li> Avec la <strong class="title">syntaxte explicite</strong>, il est également <strong class="pros">possible</strong> – à fin purement informative pour les lecteurs d'un programme source – de coder le <strong class="specialLB">nombre d'éléments</strong> du tableau entre les crochets. Mais une telle pratique n'est <strong class="cons">pas forcément recommandable</strong> car elle peut induire en erreur un codeur peu expérimenté. En fait, il serait même possible de coder <strong class="warning">n'importe quel nombre</strong> entre les crochets vides <code class="prettyprint lang-c">[]</code> ci‑dessus, car ce nombre serait tout simplement <strong class="defin">ignoré par le compilateur</strong> ! </li>
+</ol>
+</div><!-- remarques -->
+
+
+<div class="expert">
+<h4> Impossibilité de la syntaxe explicite pour les valeurs de retour d'une fonction </h4>
+
+<div class="complement">
+<p> La <strong class="title">syntaxe explicite</strong> de codage d'un <strong class="specialT">argument formel</strong> de type tableau <strong class="warning">ne peut pas s'appliquer</strong> pour coder le type des <strong>valeurs de retour d'une fonction</strong> quand il s'agit d'un <strong class="specialLB">pointeur sur tableau</strong>.  </p>
+
+<p> En effet, ce codage intervient dans le cadre d'une <strong class="specialG">déclaration</strong> dont l'<strong class="specialN">identificateur</strong> de la fonction est l'<strong>objet</strong>, donc s'il était codé comme un tableau, il serait interprété comme tel (et non pas comme une fonction) et ne serait <strong class="warning">pas converti en pointeur</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemples"> L'en‑tête de la fonction <code class="prettyprint lang-c">multiplyArray</code> proposée supra <a class="supra" href="Cc5-4_tableauxManipulations.html#retourFonctionTableau"></a> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:3">
+short * multiplyArray(<span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> ne peut pas se coder : </br>	
+<span class="inline">
+	<code class="prettyprint lang-c" style="background: lightgrey">short multiplyArray[](<span class="nocode">…</span></code>
+</span> <br>
+ni même : <br>
+<span class="inline">
+	<code class="prettyprint lang-c" style="background: lightgrey">short[] multiplyArray(<span class="nocode">…</span></code>
+</span> </p>
+
+<p> Dans les deux cas, le compilateur signale une <strong class="warning">erreur de syntaxe</strong>. </p>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Applications des tableaux </h2>
+
+
+<div class="complement">
+<p> Dans les systèmes administratifs, scientifiques ou techniques, de <strong>nombreuses données</strong> présentent de toute évidence une <strong class="title">structure de tableau</strong> : calendrier, relevé de mesures, valeurs de fonctions, etc. Même pour des données en petits nombres (déjà à partir de deux ou trois), il est très fréquent de recourir à des tableaux pour les structurer. Et lorsque leur nombre augmente (jusqu'à des millions…), on a intérêt à structurer les tableaux sur <strong class="specialLB">plusieurs dimensions</strong> pour <strong class="pros">accélérer les temps de traitements</strong> (tri, recherche d'éléments, etc.). </p>
+
+<p> Dans la pratique, les <strong class="title">applications</strong> des types tableaux sont donc <strong class="pros">considérables</strong>, notamment dans le domaine du <strong class="specialLB">calcul numérique</strong> (vecteurs, matrices) et il existe de nombreuses <strong class="defin">bibiothèques de fonctions</strong> opérant sur les tableaux. Elles seront évoquées en toute fin de chapitre. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Dans le cadre d'un <strong>cours d'initiation</strong> comme ici, il est difficile de donner un aperçu réaliste de cette multitude d'applications. Les <strong class="title">exemples académiques</strong> proposés ci‑après – en complément de tous ceux déjà présentés au fil de ce chapitre – ne sont nullement représentatifs d'une quelconque exhaustivité. Ils ont simplement pour vocation de montrer <strong>quelques possibilités de codage</strong> utiles pour un programmeur débutant. </p>
+
+<p> En particulier, on va voir comment <strong class="specialLB">coupler la déclaration d'un tableau</strong> à celle d'un <strong class="defin">type énuméré</strong> pour pouvoir identifier spécifiquement chaque élément d'un tableau, tout en permettant des traitements rationnalisés. </p>
+</div><!-- expert -->
+
+
+
+<h3> Exemples académiques </h3>
+
+
+<h4> Valeurs des cartes du jeu de Belote </h4>
+
+
+<div class="exemples">
+<p> Au chapitre C3‑IV <a class="previous" href="../C3-Numeration/Cc3-4_typesEnumeres.html#valeursExplicites" target="_BLANK"></a>, on avait présenté un exemple de <strong class="defin">type énuméré</strong> qui donnait pour le jeu de la <strong class="title">Belote</strong> les <strong>valeurs des cartes à l'atout</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Atout {
+  SEPT = 0, HUIT = 0, DAME = 3, ROI = 4, 
+  DIX = 10, AS = 11, NEUF = 14, VALET = 20
+};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Toutefois, cette solution n'est <strong class="cons">pas satisfaisante</strong> car il faut aussi pouvoir déterminer les valeurs des cartes des autres couleurs (non atout) et il n'est <strong class="warning">pas possible</strong> de définir un <strong>deuxième type énuméré</strong> avec les mêmes identificateurs de noms de cartes. </p>
+
+
+<p class="square"> Avec une structuration en <strong class="title">deux tableaux unidimensionnels</strong>, le problème exposé en préambule ne se pose plus : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Cartes {SEPT, HUIT, NEUF, DIX, VALET, DAME, ROI, AS};
+const uint8_t pointsCouleur[8] = {0, 0,  0, 10,  2, 3, 4, 11};
+const uint8_t pointsAtout[8]   = {0, 0, 14, 10, 20, 3, 4, 11};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ces deux tableaux <code class="prettyprint lang-c">pointsCouleur</code> et  <code class="prettyprint lang-c">pointsAtout</code> donnent les valeurs des cartes respectivement d'une <strong>couleur ordinaire</strong> et de la <strong>couleur de l'atout</strong> – et ce dans l'<strong class="defin">ordre croissant</strong> défini par le <strong class="defin">type énuméré</strong> <code class="prettyprint lang-c">Cartes</code> préalablement déclaré. </p>
+
+<p> Même si ce type énuméré est indépendant des tableaux, il est bien utile en termes de <strong class="pros">lisibilité</strong>, puisque les constantes énumérées <code class="prettyprint lang-c">SEPT</code>, <code class="prettyprint lang-c">HUIT</code>, etc.  peuvent être employées pour <strong>identifier nommément les indices</strong> des différents éléments de chaque tableau. Ainsi, l'expression : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">pointsAtout[VALET]</code>
+</span> <br>
+vaut <code class="prettyprint lang-c">20</code> conformément aux règles du jeu, et elle est <strong class="pros">bien plus libible</strong> que <code>pointsAtout[4]</code>.  </p>
+
+<div class="expert">
+<p> Par ailleurs, ces deux tableaux ayant la <strong>même structure</strong>, on peut déclarer préalablement un <strong class="specialG">type synonyme</strong> <code class="prettyprint lang-c">PointsCartes</code> puis déclarer les deux tableaux <code class="prettyprint lang-c">pointsCouleur</code> et <code class="prettyprint lang-c">pointsAtout</code>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:2">
+typedef const uint8_t PointsCartes[8];  
+PointsCartes pointsCouleur = {0, 0,  0, 10,  2, 3, 4, 11};
+PointsCartes pointsAtout   = {0, 0, 14, 10, 20, 3, 4, 11};
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+
+<p class="square"> Ces deux tableaux ayant la <strong>même structure</strong>, on peut aussi opter de les fusionner dans un <strong class="title">tableau bidimensionnel</strong> : </p> 
+
+<ul> 
+  <li> la <strong class="specialLB">première dimension</strong> (lignes) distinguant la <strong>catégorie de la carte</strong>, selon qu'il s'agit de l'atout ou d'une autre couleur ;  </li>
+
+  <li> la <strong class="specialLB">deuxième dimension</strong> (colonnes) codant l'<strong>ordre des cartes</strong> (sept, huit, etc.) comme dans les tableaux unidimensionnels précédent. </li>
+</ul>
+
+<p> Et comme pour l'ordre des cartes, il est commode de définir un autre <strong class="defin">type énuméré</strong> pour identifier de façon <strong class="pros">plus lisible</strong> les indices de <strong>catégories de cartes</strong>, comme cela est codé ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Categorie {ATOUT, COULEUR};
+enum Cartes {SEPT, HUIT, NEUF, DIX, VALET, DAME, ROI, AS};
+const uint8_t points[2][8] = { {0, 0, 14, 10, 20, 3, 4, 11},
+                               {0, 0,  0, 10,  2, 3, 4, 11} };
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ainsi, l'expression <code class="prettyprint lang-c">points[ATOUT][VALET]</code> prend la valeur <code class="prettyprint lang-c">20</code> conformément aux règles du jeu et elle est <strong class="pros">bien plus libible</strong> que <code>points[0][4]</code> </p>
+
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<h4> Mapping sur un port d'entrées-sorties d'une carte électronique </h4>
+
+
+<div class="complement">
+<p> Lorsqu'on relie des composants aux broches d'un <strong class="title">port d'entrées-sorties</strong> d'un <strong>microcontrôleur</strong> ou d'une carte de développement (<em class="mark">Arduino</em> ou autre…), il n'est pas toujours possible de respecter les <strong class="defin">contraintes de successions</strong> souhaitables pour les <strong>traitements répétitifs</strong> comme la déclaration des modes de fonctionnement des broches, les pilotages groupés (allumer une série de led), etc. </p>
+
+<p> Une solution consiste alors à déclarer un voire plusieurs <strong class="specialLB">tableaux</strong> qui <strong class="defin">regroupent par domaines d'emplois</strong> les <strong>numéros de broches</strong> du port d'entrée‑sortie. Les traitements répétitifs sont alors faciles à coder en utilisant l'indexation des tableaux dans des boucles itératives (<code class="prettyprint lang-c">for</code>). </p>
+
+<p> Et encore une fois, on peut s'appuyer sur un <strong>type énuméré</strong> pour rendre plus lisible le codade des actions particulières à effectuer sur telle ou telle broche. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Sur une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>, on souhaite commander en <strong>luminosité variable</strong> une <strong>série de 4 leds</strong> de couleurs différentes (verte, jaune, orange, rouge, par exemple). Malheureusement, sur ce modèle de carte, seules les broches nº 3, 5, 6, 9, 10, 11 disposent de la fonctionnalité <strong><em class="sigle">PWM</em></strong> requise (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>) ; parmi elles, il n'y a donc <strong class="cons">pas 4 broches consécutives</strong>. </p>
+
+<p> Pour surmonter cette difficulté, on déclare donc : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+enum VarLedColor : uint8_t {GREEN, YELLOW, ORANGE, RED};
+const uint8_t varLedPin[4] = {6, 9, 10, 11};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On peut ensuite très efficacement coder des <strong>traitements répétitifs</strong> sur ces broches, comme par exemple les configurer en sortie et les éteindre : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  for (uint8_t i = 0; i < nbOfElements(varLedPin); i++) {
+    pinMode(varLedPin[i], OUTPUT);
+    analogWrite(varLedPin[i], 0);
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Et on peut aussi coder des <strong>actions particulières</strong> de façon très lisible, comme par exemple allumer la led jaune avec une luminosité intermédiaire : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  analogWrite(varLedPin[YELLOW], 128);
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+<h3> Bibliothèques de fonctions opérant sur tableaux </h3>
+
+
+
+<p class="square"> En langage <strong class="title">C</strong>, il existe <strong class="title">quelques fonctions</strong> opérant sur les tableaux, déclarées dans le fichier d'en‑tête <code class="filename">stdilib.h</code> de la <strong class="defin">bibliothèque standard</strong>. En particulier, on trouve les fonctions <code class="cmd">qsort</code> (tri des éléments d'un tableau) et <code class="cmd">bsearch</code> (recherche d'un élément dans un tableau trié) – cf. <a class="external" href="https://fr.wikiversity.org/wiki/Fonctions_de_base_en_langage_C/stdlib.h#Algorithmes" target="_BLANK">W</a>. On étudiera dans la partie <span class="partie">C7</span> du module certains des algorithmes mis en œuvre par ces fonctions complexes. </p>
+
+<p> Par ailleurs, il existe un module de la bibliothèque standard dont le fichier d'en‑tête <code class="filename">string.h</code>, qui est consacré aux <strong class="title">chaînes de caractères</strong>, lesquelles sont implémentées comme des <strong>tableaux de « longueur variable »</strong>. Ce module sera étudié au chapitre suivant C5‑VI <a class="next" href="Cc5-6_chainesCaracteres.html" target="_BLANK"></a>. </p>
+
+
+
+<p class="square"> En langage <strong class="title">C++</strong>, on trouve bien entendu les éléments de code correspondant du <strong>C</strong>, respectivement déclarés dans les fichiers <code class="filename">cstdilib</code> et <code class="filename">cstring</code> (et il existe aussi le module spécifique <code class="filename">string</code>, beaucoup plus puissant, car basé sur la notion de classe). </p>
+
+<p> Mais surtout, on trouve <strong class="title">plusieurs modules</strong> de la <strong class="defin">bibliothèque standard</strong> consacrés aux <strong class="specialLB">tableaux</strong> qui n'existent <strong class="cons">pas en C</strong> : <code class="filename">vector</code>, <code class="filename">array</code>, <code class="filename">valarray</code> <a class="external" href="https://en.cppreference.com/w/cpp/header" target="_BLANK">C++</a>. </p>
+
+<p> Par ailleurs, d'<strong class="title">autres modules</strong> de bibliothèque <strong class="specialLG">non standards</strong> ont été développés pour mettre en œuvre du <strong>calcul numérique vectoriel et matriciel</strong> (algèbre linéaire – cf. <a class="external" href="https://en.wikipedia.org/wiki/Comparison_of_linear_algebra_libraries" target="_BLANK">W</a>). Là encore, il n'est pas question ici de présenter ces modules très techniques, qui sont tous codés dans le cadre de la programmation orientée objet, mais de simplement mentionner leur existence… </p>
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="I"
+  data-pageState="OK"
+  data-pageheadtitle="Types généralités"
+  data-pagefulltitle="Les types  –  généralités"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+
+<p class="square"> En programmation, d'une façon générale, le <strong class="title">type</strong> <strong>d'une donnée</strong> est une <strong class="defin">appellation catégorielle</strong> – <strong>entier</strong>, <strong>décimal</strong>, <strong>caractère</strong>, etc.) – qui détermine les <strong class="specialN">valeurs</strong> qu'elle peut prendre, avec inévitablement des <strong class="warning">limites</strong> du fait que l'espace mémoire alloué pour stocker la donnée n'est pas infini. </p>
+
+<p> On rappelle (cf. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html" target="_BLANK"></a>) qu'en langages <strong>C</strong> et <strong>C++</strong>, lors de la <strong class="defin">déclaration d'une donnée</strong> nommée (qui est un préalable à toute utilisation de cette dernière), le <strong class="title">codage de son type</strong> est <strong class="warning">obligatoire</strong> et <strong class="warning">définitif</strong>. A contrario, dans des langages interprétés comme <em class="mark">Matlab</em> ou <em class="mark">Python</em>, le typage des données peut être <em>implicite</em> et <em>dynamique</em> (une variable pouvant ainsi prendre des valeurs de différents types au cours de l'exécution d'un programme). </p>
+
+
+<p> Le <strong class="title">typage des données</strong> est donc un <strong class="defin">aspect essentiel du codage</strong> en <strong>C/C++</strong> et c'est pourquoi presque toute la partie <span class="partie">C3</span> de ce module de formation y est consacrée – et sachant qu'elle se limite aux <strong class="defin">types élémentaires</strong>. </p>
+
+<p  class="square"> Mais avant d'aborder en détail ces différents types, ce chapitre préliminaire se donne pour <strong class="title">objectif</strong> de présenter les <strong class="defin">bases du typage des données</strong>, à savoir : </p>
+
+<ul>
+  <li> la <strong class="specialLB">classification générale</strong> des <strong>types de données</strong> et leurs <strong class="specialLB">principales caractéristiques</strong> ; </li>
+
+  <li> la <strong class="specialLB">structure de la mémoire</strong> – essentielle pour comprendre ultérieurement l'<strong>encodage</strong> des données ; </li>
+
+  <li> la <strong class="specialLB">syntaxe</strong> des <strong>descripteurs de types</strong>, qui est indispensable au codage des déclarations de données ; </li>
+
+  <li> et enfin, des aspects plus approfondis – <strong class="specialLB">tailles</strong>, <strong class="specialLB">contraintes d'alignement</strong> – pour maîtriser le choix des types de données que l'on est amené à déclarer dans un programme. </li>
+</ul>
+
+
+<p> <em class="remark">Attention</em> : la <strong class="pros">bonne compréhension</strong> de tous ces aspects nécessite quelques <strong class="defin">connaissances préalables en numération</strong> qui ne seront que succintement rappelées. En cas de lacunes, on pourra se reporter à ce cours <a class="external" href="../doc/SI_43C&#32;-&#32;numeration.pdf" target="_BLANK"></a> et ce sujet de travaux dirigés <a class="external" href="../doc/SI_43TD&#32;-&#32;numeration.pdf" target="_BLANK"></a> de Sciences de l'ingénieur. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Principes généraux du typage </h2>
+
+
+<h3> Classification générale des types </h3>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on peut distinguer <strong class="title">deux catégories principales</strong> de <strong class="defin">types de données</strong> <a class="external" href="https://www.journaldev.com/26779/data-types-and-modifiers-in-c" target="_BLANK"></a> : </p>
+<ul>
+  <li> les <strong class="specialLB">types élémentaires</strong>, dit encore <strong class="speciaLB">primaires</strong> ; </li>
+
+  <li> les <strong class="specialLB">types dérivés</strong>, qui sont <strong>construits à partir de types élémentaires</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">normes</strong> respectives des langages <strong>C</strong> et <strong>C++</strong> n'emploient <strong class="warning">pas le même vocabulaire</strong> pour classer les catégories de types de données : </p>
+
+<ul>
+  <li> la norme du <strong class="specialLB">C</strong> parle de <strong>types dérivés</strong> mais pas de types élémentaires, bien que ce terme soit d'usage courant dans la littérature ; </li>
+
+  <li> la norme du <strong class="specialLB">C++</strong> parle de <strong>types fondamentaux</strong> (<em class="english">fundamental types</em>) et de <strong>types composés</strong> (<em class="english">compound types</em>). </li>
+</ul>
+</div><!-- remarque -->
+
+
+<h4> Les types élémentaires </h4>
+
+
+<div class="complement">
+<p> Les <strong class="title">types élémentaires</strong> sont <strong>peu nombreux</strong> (moins d'une vingtaine) et <strong class="defin">standards</strong> au langage – même si certaines de leurs caractéristiques dépendent parfois de l'implémentation (cf. chap C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#implementation" target="_BLANK"></a>). </p>
+
+<p> Ils spécifient des <strong>ensembles</strong> de <strong class="defin">valeurs numériques</strong> qui peuvent être : </p>
+
+<ul>
+  <li> <strong class="specialLB">booléennes</strong>, avec seulement <strong>deux valeurs</strong> possibles (<code>0</code> et <code>1</code>) ; </li>
+
+  <li> <strong class="specialLB">entières</strong> avec, pour chaque type, une <strong class="cons">valeur minimale</strong> et une <strong class="cons">valeur maximale</strong> délimitant l'ensemble des valeurs encodables dans le type ; </li>
+
+  <li> <strong class="specialLB">décimales</strong> avec, pour chaque type, deux <strong class="cons">valeurs minimales</strong> (normalisées et dénormalisées),  une <strong class="cons">valeur maximale</strong> délimitant l'ensemble des valeurs encodables, mais aussi des <strong class="warning">limites de précision</strong>. </li>
+</ul>
+
+<p> Quant aux types <strong class="specialG">caractères simples</strong>, ils n'ont <strong class="specialO">pas de type spécifique</strong> en langages <strong>C/C++</strong> – et ce bien qu'il existe un type nommé <code class="prettyprint lang-c">char</code>. En fait, ils constituent simplement une <strong>interprétation particulière d'</strong> <strong class="specialG">entiers</strong>. </p>
+</div><!-- complement -->
+
+
+<div id="typeVoid" class="remarques">
+<p class="remarque"> En langages <strong>C/C++</strong>, il existe aussi : </p>
+<ul>
+  <li> le <strong>type</strong> <strong class="specialV">vide</strong>, désigné par <strong>mot‑clef</strong> <code class="prettyprint lang-c">void</code> ; il ne constitue pas à proprement parler un type de donnée (il ne comporte aucune valeur) mais sert à définir certaines fonctions (cf. chap. C4‑I <a class="next" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#typeVoid" target="_BLANK"></a>) ; </li>
+
+  <li> des <strong class="title">types de données</strong> <strong class="specialT">complexes</strong> au <strong class="defin">sens mathématique</strong> du terme, c'est‑à‑dire avec des valeurs issues de l'ensemble ℂ ; toutefois, ces types ne sont pas forcément inclus dans toutes les implémentations. </li>
+</ul>
+</div><!-- remarque --> 
+
+<div class="expert">
+<p> Tous les <strong class="title">types élémentaires</strong> sont détaillés au fil des différents chapitres de cette partie <span class="partie">C3</span> du cours. </p>
+</div><!-- expert -->
+
+
+<h4> Les types dérivés </h4>
+
+
+<div class="complement">
+
+<p> Les <strong class="title">types dérivés</strong> sont des types de données codés dans les programmes <strong>à partir de types élémentaires</strong>, à l'aide de <strong class="defin">procédés constructeurs</strong> pour former :  </p>
+
+<ul>
+  <li> des <strong class="specialLB">énumérations</strong>, </li>
+
+  <li> des <strong class="specialLB">pointeurs</strong>, </li>
+
+  <li> des <strong class="specialLB">tableaux</strong>, </li>
+
+  <li> des <strong class="specialLB">structures hétérogènes</strong> par juxtapositon et superposition. </li>
+</ul>
+
+<p> Ces procédés constructeurs permettent de définir des types <strong class="pros">sans limite de variété</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered"> 
+  <li> En langage <strong>C</strong>, les <strong class="title">énumérations</strong> sont considérées comme des <strong class="specialG">types entiers</strong> (cf. chap. C3‑IV <a class="next" href="Cc3-4_typesEnumeres.html" target="_BLANK"></a>). </li>
+
+  <li> Les <strong class="title">fonctions</strong> (ommises dans la liste ci‑dessus) sont parfois considérées comme des <strong class="defin">types dérivés</strong>, mais ne sont <strong class="warning">pas</strong> des types de <strong class="warning">données</strong> (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#remarquesNormesDonnees" target="_BLANK"></a>). </li>
+</ol>
+</div><!-- remarque --> 
+
+<div class="expert">
+<p> À l'exception des énumérations (au regard de la remarque <em class="bold">A)</em> supra), les <strong class="title">types dérivés</strong> de données ne seront abordés que dans la partie <span class="partie">C5</span> du cours. </p>
+
+
+<h4 id="typeScalaire"> Notion de type scalaire </h4>
+
+
+<div class="complement">
+<p> On parle de <strong class="title">type scalaire</strong> pour désigner un <strong>type de données</strong> <strong class="specialLB">élémentaire</strong> ou <strong class="specialLB">dérivé</strong> – éventuellement <strong class="specialB">synonyme</strong>, cf. infra <a class="infra" href="Cc3-1_typesGeneralites.html#typedef"></a> – dont chaque <strong class="specialN">valeur</strong> est  représentable respectivement par <strong class="defin">un seul nombre</strong>. En conséquence : </p>
+<ul>
+  <li> ne sont <strong class="specialO">pas scalaires</strong>, les types de <strong class="specialLB">tableaux</strong> et de <strong class="specialLB">structures hétérogènes</strong> ; </li>
+
+  <li> a contrario, tous les <strong class="title">autres types</strong>, y compris les pointeurs, sont <strong>scalaires</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<p> La <strong class="title">notion de type scalaire</strong> est <strong class="warning">importante</strong> notamment pour caractériser les <strong class="defin">possitibilités de conversions</strong> de valeurs d'un type vers un autre type (cf. chap. C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#cast" target="_BLANK"></a>). </p>
+
+</div><!-- expert -->
+
+
+
+
+
+<h3 id="caracteristiques"> Caractéristiques générales des types élémentaires </h3>
+
+
+
+<div class="complement">
+<p> De façon générale, un <strong class="title">type élémentaire</strong> se <strong>caractérise</strong> par : </p>
+<ul>
+  <li> son <strong class="specialLB">descripteur</strong>, <strong>simple</strong> ou <strong>composé</strong>, sous forme de <strong class="defin">mots‑clefs</strong> pour spécifier les <strong>déclarations</strong> de données ou les <strong>conversions</strong> de valeurs ; </li>
+
+  <div class="exemples">
+  <p class="exemple"> <code class="prettyprint lang-c">unsigned short</code> est un <strong class="specialLB">descripteur</strong> de type <strong class="specialG">entier</strong> (implicitement, <code class="prettyprint lang-c">int</code>, ce mot‑clef pouvant ici être omis) composé de <strong>deux mots‑clefs</strong> : </p>
+  <ul>
+  	<li> <code class="prettyprint lang-c">unsigned</code> qui spécifie que les valeurs de ce type sont <strong class="specialG">sans signe</strong>, c'est‑à‑dire <strong>positives ou nulles</strong> ;  </li>
+
+  	<li> <code class="prettyprint lang-c">short</code> qui spécifie que les valeurs de ce type ont une <strong>petite étendue</strong> (pour se faire une idée, moins de cent mille). </li>
+  </ul>
+  </div><!-- exemple -->
+
+  <li> sa <strong class="specialLB">taille</strong> (<em class="english">size</em>), c'est‑à‑dire le <strong class="defin">nombre d'octets</strong> nécessaires pour stocker <strong>une valeur</strong> de ce type en mémoire ; </li>
+  
+  <div class="exemples">
+  <p class="exemple"> Le type <code class="prettyprint lang-c">unsigned short</code> a une <strong class="specialLB">taille</strong> de <strong>2 octets</strong>, quelle que soit l'implémentation (mais attention, ce n'est pas le cas pour tous les types). </p>
+  </div><!-- exemple -->
+
+  <li> son <strong class="specialLB">étendue</strong> (<em class="english">range</em>), c'est‑à‑dire l'<strong class="defin">intervalle</strong> (ou la réunion des intervalles) <strong>des valeurs encodables</strong> dans ce type ; l'étendue est déterminée par la taille et le format ; </li>
+
+  <div class="exemples">
+  <p class="exemple"> L'<strong class="specialLB">étendue</strong> du type <code class="prettyprint lang-c">unsigned short</code> est l'intervalle <em class="bold">{0, … 65&#8239;535}.</em> </p>
+  </div><!-- exemple -->
+
+  <li> son <strong class="specialLB">format d'encodage</strong>, c'est‑à‑dire la <strong class="defin">représentation en mémoire</strong> (par valeurs des bits) des <strong>valeurs du type</strong>, lors de l'exécution d'un programme ; </li>
+
+  <div class="exemples">
+  <p class="exemple"> Les valeurs de type <code class="prettyprint lang-c">unsigned short</code> sont encodées au <strong class="specialLB">format</strong> <strong>binaire naturel</strong> : <br>
+  <span class="inline">
+    <code>0</code>, <code>1</code>, <code>10</code>, <code>11</code>, <code>100</code>, etc.
+  </span> </p>
+  </div><!-- exemple -->
+  
+
+  <li> sa <strong class="specialLB">syntaxe</strong>, c'est‑à‑dire les règles de <strong class="defin">codage des valeurs</strong> dans un <strong>fichier source</strong>, ainsi que de <strong>saisie</strong> et d'<strong>affichage</strong> dans le cadre d'entrées-sorties.  </li>
+
+  <div class="exemples">
+  <p class="exemple"> Pour spécifier dans le code source qu'une <strong class="specialN">constante numérique</strong> appartient à un type <code class="prettyprint lang-c">unsigned</code>, on lui adjoint le <strong>suffixe</strong> <code class="prettyprint lang-c">U</code>, comme par exemple <code>1000U</code> pour coder la valeur « mille ». </p>
+  </div><!-- exemple -->
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="typedef"> Déclaration de types synonymes</h3>
+
+
+
+<div class="complement">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, il est possible de déclarer un <strong class="specialN">nouvel identificateur de type</strong> comme étant <strong class="title">synonyme</strong> d'un <strong class="specialG">descripteur de type</strong>, élémentaire ou dérivé. </p>
+
+<p> Cet identificateur ne code <strong class="warning">pas un nouveau type</strong>, mais simplement d'un <strong class="defin">alias</strong> d'un type élémentaire ou d'un type dérivé déjà déclaré. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> On code la <strong>déclaration</strong> d'un <strong class="title">type synonyme</strong> par une instruction de la forme <a class="external" href="https://en.wikipedia.org/wiki/Typedef" target="_BLANK">W</a> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">typedef &#8239;
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> &#8239;
+    <span class="nocode"><strong class="specialN">identificateur</strong></span>;
+  </code>
+</span> <br>
+où l'<strong class="specialN">identificateur</strong> est le nom choisi par le codeur pour désigner le nouveau descripteur synonyme du <strong class="specialG">descripteur de type</strong> initial. </p>
+
+<p> En observance de <strong class="pros">bonne pratique</strong>, on code usuellement cet <strong class="specialN">identificateur</strong> avec une <strong class="specialV">majuscule initiale</strong>. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> Pour des <strong class="title">déclarations de données</strong>, on peut alors employer ce <strong class="specialN">nouvel identificateur</strong> à la place du <strong class="specialG">descripteur de type</strong> dont il est synonyme , constantes ou variables. </p>
+
+<ul>
+  <li> C'est <strong class="pros">particulièrement utile</strong> pour les <strong>types dérivés</strong> ayant un descripteur très composé, notamment les tableaux (cf. chap. C5‑III <a class="next" href="../C5-StructuresPointeurs/Cc5-3_tableauxDeclarations.html" target="_BLANK"></a>). </li>
+
+  <li> C'est également utile lorsque l'on souhaite modifier facilement le type de nombreuses données dans un programme. En les déclarant via un type synonyme, il suffit de modifier la définition de ce type pour que cette modification impacte toutes les données déclarées avec soient impactées (avec le même principe que lorsqu'on déclare une constante pour représenter diverses occurrences d'une même valeur numérique dans un programme).  </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans un programme effectuant des calculs sur des <strong class="title">grandeurs électriques</strong> (tension, courant, etc.), on pourrait coder la définition de <strong>trois synonymes du type</strong> <code class="prettyprint lang-c">float</code> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+typedef float Voltage;
+typedef float Amperage;
+typedef float Power;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Par la suite, on pourrait employer ces nouveaux identificateurs pour <strong>déclarer des données</strong>, par exemple ainsi : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+int main(void) {
+  Amperage nominalCurrent = 3.0;
+  Voltage nominalVoltage = 12.0;
+  Power nominalPower = nominalVoltage * nominalCurrent;
+  //...
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Si ultérieurement, on souhaitait <strong class="pros">améliorer la précision</strong> de toutes less données déclarées de type <code class="prettyprint lang-c">Amperage</code>, il suffirait de <strong>changer la définition</strong> de ce dernier en utilisant par exemple le descripteur <code class="prettyprint lang-c">double</code>. </p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> La déclaration des <strong class="title">types synonymes</strong> n'est <strong class="warning">pas un gage de sécurité</strong> contre des opérations entre des données qu'on pourrait croire <strong>« hétérogènes »</strong>, mais qui ne le sont pas puiqu'il s'agit en fait de descripteurs différents du <strong class="defin">même type</strong>. </li>
+
+  <div class="nobullet"> Ainsi, dans l'exemple ci‑dessus, à la ligne nº 23, l'initialisation de la variable <code class="prettyprint lang-c">nominalPower</code> ne nécessite aucune conversion explicite, ce qui est <strong class="pros">bien commode</strong>, car ce calcul est <strong>conforme aux lois de la physique</strong>. </div>
+
+  <div class="nobullet"> Mais inversement, <strong class="cons">rien n'interdit</strong> de coder une instruction a priori <strong class="warning">insensée</strong> comme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c" style="background: lightgrey;">nominalVoltage = nominalCurrent + 3;</code>
+  </span> </div>
+
+  <li> Il existe une <strong class="title">autre possibilité</strong>  de définir un <strong>type synonyme</strong> en utilisant une directive <code class="prettyprint lang-c">#define</code> (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#define" target="_BLANK"></a>). C'est par exemple ainsi que l'<strong>identificateur</strong> <code class="prettyprint lang-c">bool</code> est défini comme synonyme du <strong>type</strong> <code class="prettyprint lang-c">_Bool</code> dans le fichier d'en‑tête <code class="filename">stdbool.h</code> de la bibliothèque standard du langage <strong>C</strong> (cf. chap. C3‑III <a class="next" href="Cc3-3_typesBooleens.html#defineBool" target="_BLANK"></a>). </li>
+</ol>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="structureMemoire"> Structure de la mémoire </h2>
+
+
+<p> Pour bien comprendre certains aspects du typage de données comme les notions de <strong class="specialLB">taille</strong> ou d'<strong class="specialLB">adresse</strong> et les <strong class="specialLB">contraintes d'alignement</strong> (cf. infra <a class="infra" href="Cc3-1_typesGeneralites.html#contraintesAlignement"></a>), il est nécessaire d'avoir quelques connaissances sur la <strong class="title">technologie des mémoires</strong>. Pour tout approfondissement, on pourra consulter  le lien suivant <a class="external" href="https://fr.wikibooks.org/wiki/Fonctionnement_d'un_ordinateur/Cellules_mémoires" target="_BLANK">W</a>. </p>
+
+
+
+<h3> Cellule mémoire – Notion de <em>bit</em> </h3>
+
+
+
+<div class="complement">
+<p> Dans l'architecture matérielle d'un système numérique (ordinateurs, carte à microcontrôleur, etc.), les <strong class="specialN">données</strong> sont le plus souvent stockées en <strong class="title">mémoire vive</strong> (<em class="bold"><em class="sigle">RAM</em></em> – <em class="english">random access memory</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Mémoire_vive" target="_BLANK">W</a> :  </p>
+<ul>
+  <li> cette technologie offre un <strong class="pros">temps d'accès très court</strong>, ce qui est essentiel pour la rapidité des traitements ; </li>
+
+  <li> son principal inconvénient est d'être <strong class="cons">volatile</strong> (elle doit rester sous tension pour conserver l'information). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="complement">
+<p> Les unités de mémoire vive sont constituées de <strong class="title">cellules</strong>, des circuits électroniques essentiellement à base de <strong>transistors</strong>. Sauf pour des applications spéciales (notamment les bus), les cellules mémoires sont conçus pour n'avoir que <strong class="defin">deux états stables</strong> : </p>
+
+<ul>
+    <li> l'<strong>état</strong> <strong class="defin">bas</strong>, interprété comme la <strong style="color : green">valeur</strong> <strong>binaire</strong> <code class="prettyprint lang-c">0</code> ; </li>
+
+    <li> l'<strong>état</strong> <strong class="defin">haut</strong>, interprété comme la <strong style="color : green">valeur</strong> <strong>binaire</strong> <code class="prettyprint lang-c">1</code>.  </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important" style="display: inline-block">
+  <img class="top-right" src="../img/bit.jpg" width="60px">
+<p>  L'<strong class="defin">information</strong> dans une <strong>cellule mémoire</strong> est appelée <strong class="title">bit</strong>, abréviation du nom composé anglais <strong>binary digit</strong>, c'est‑à‑dire « chiffre binaire ». </p>
+
+<p> Elle ne peut donc prendre que <strong style="color : green">deux valeurs</strong> : <code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Il existe principalement <strong class="title">deux technologies</strong> de <strong>mémoire vive</strong> : </p>
+
+<ul>
+  <li> la mémoire vive <strong class="specialLB">statique</strong> – ou <strong class="specialLB"><em class="sigle">SRAM</em></strong> pour <em class="english">static</em> <em class="sigle">RAM</em> <a class="external" href="https://fr.wikipedia.org/wiki/Static_Random_Access_Memory" target="_BLANK">W</a> ; </li>
+
+  <li> la mémoire vive <strong class="specialLB">dynamique</strong> – ou <strong class="specialLB"><em class="sigle">DRAM</em></strong> pour <em class="english">dynamic</em> <em class="sigle">RAM</em> <a class="external" href="https://fr.wikipedia.org/wiki/Mémoire_vive_dynamique" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- complementExpert -->
+
+
+<div class="expert">	
+<h4> Mémoire vive statique </h4>
+
+
+<div class="complement" style="display:inline-block;">
+  <img class="top-right" src="../img/SRAM_CMOS_6Tcell.jpg" width="350px">
+<p> Le schéma électronique ci‑contre représente une <strong>cellule mémoire</strong> <strong class="title"><em class="sigle">SRAM</em></strong> typique. Elle est constituée de 6 transistors <strong><em class="sigle">CMOS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Complementary_metal_oxide_semi-conductor" target="_BLANK">W</a> dont 4 forment un <strong>verrou</strong> (<em class="english">latch</em>) à deux inverseurs logiques en boucle (transistors <code>M1</code> à <code>M4</code>) : </p>
+
+<ul>
+  <li> la cellule est rendue <strong>accessible</strong> (<em class="english">enabled</em>) par la mise à l'état haut de la piste conductrice <code class="specialPB">WL</code> (<strong class="specialPB">word line</strong>) qui déclenche les transistors <code>M5</code> et <code>M6</code> ; </li>
+
+  <li> Les opérations de <strong>lecture</strong> et d'<strong>écriture</strong> sont mises en œuvre par la combinatoire des états haut et bas des pistes conductrices <code class="defin">BL</code> et <code class="defin" style="text-decoration:overline;">BL</code> (<strong class="defin">bit lines</strong>).</li>
+</ul>
+</div><!-- complement -->
+
+
+<p> La technologie <strong class="specialLB"><em class="sigle">SRAM</em></strong> est employée pour la <strong>mémoire intégrée</strong> dans les <strong class="title">microcontrôleurs</strong>, en raison de ses bonnes performances en termes de <strong class="pros">rapidité d'accès</strong> et de <strong class="pros">faible consommation</strong> électrique. En contre-partie, elle n'offre qu'une <strong class="cons">faible densité</strong> de cellules, du fait de sa « complexité » (6 transistors pour une seule cellule). </p>
+
+
+<div class="exemples" style="display: inline-block;">
+<p class="exemple"> Le microcontrôleur <strong class="title">Atmel ATmega328P</strong> intègre une unité de <strong class="specialLB"><em class="sigle">SRAM</em></strong> de <strong>2048 ko</strong> (2048 lignes de largeur 8 bits). Cela peut sembler peu mais cette unité tient dans un très petit espace – une toute petite partie du composant en fig. ci‑dessous. </p>
+<img class="top-left" src="../img/SRAM_ATmega.jpg">
+</div><!-- exemple -->  
+
+<!-- expert -->
+<h4> Mémoire vive dynamique </h4>
+
+
+<div class="complement" style="display:inline-block;">
+<img class="top-right" src="../img/DRAM_cell.jpg" width="200px">
+<p> Le schéma électronique ci‑contre représente une <strong>cellule mémoire</strong> <strong class="title"><em class="sigle">DRAM</em></strong> (<em class="english">dynamic random access memory</em>) typique : </p>
+
+<ul>
+  <li> le transistor <strong><em class="sigle">FET</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transistor_à_effet_de_champ" target="_BLANK">W</a> <code>M1</code> joue le rôle d'<strong>interrupteur</strong> pour l'accès à la cellule, déclenché par mise à l'état haut de la piste <code class="specialPB">WL</code> (<strong class="specialPB">word line</strong>) ; </li>
+
+  <li> l'information est mémorisée par un simple condensateur <code>Cs</code> (<em class="english">storage condensator</em>) ; une seule piste <code class="defin">BL</code> (<strong class="defin">bit line</strong>) suffit pour effectuer les opérations de <strong>lecture</strong> et d'<strong>écriture</strong>. </li>
+</ul>
+
+<p> Comme le condensateur se décharge en permanence, la cellule doit être <strong class="cons">rechargée périodiquement</strong> (avec une période de l'ordre de la milliseconde) pour garder son information, d'où le terme de <strong>mémoire dynamique</strong>. C'est un inconvénient en termes de consommation électrique. </p>
+</div><!-- complement -->
+
+<p> La technologie <strong class="specialLB"><em class="sigle">DRAM</em></strong> est employée pour les barrettes de mémoire montées sur les cartes mères des <strong class="title">ordinateurs</strong>, car elle offre une <strong class="pros">très haute densité</strong> de cellules. </p>
+
+
+<div class="exemples" style="display: inline-block";>
+<p class="exemple"> La <strong class="title">barrette mémoire</strong> en photo ci‑dessous comporte <strong>8 puces</strong> de <strong>1 Go</strong> chacune de <strong class="specialLB"><em class="sigle">SDRAM</em></strong> (<em class="english">synchronous</em> <em class="sigle">DRAM</em>) <<strong>em class="sigle">DDR4</em></strong> (<em class="english">double data rate 4<sup>th</sup> generation</em>) ; elle coûte seulement 40 € environ. </p>
+  <img class="top-left" src="../img/DDRAMcrucial8Go.png" style="max-width: 800px">
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+<h3> Unité de mémoire – Notion d'<em>octet</em> </h3>
+
+
+
+<div class="expert">
+<h4> Cas d'un microcontrôleur 8 bits </h4>
+
+
+<div class="complement">
+<p> Dans les <strong>microcontrôleurs Atmel</strong> à cœur <strong><em class="sigle">AVR</em> 8 bits</strong> employés dans les <strong>cartes</strong> <strong class="Arduino">Arduino</strong>, la <strong class="title">mémoire vive</strong> est structurée en une matrice à 8 colonnes de bits. Cette adéquation entre la largeur du bus et celle de la mémoire optimise les opérations de lecture et d'écriture des données stockées. </p>
+
+<div style="display:inline-block;">
+  <img class="top-right" src="../img/SRAM8map.png" width="550px">
+<ul>
+  <li> On parle alors de « <strong class="defin">mot</strong> » de <strong>8 bits</strong> pour désigner l'information stockée dans une <strong>ligne</strong> de la mémoire. </li>
+
+  <div class="nobullet"> Et on comprend alors le choix du terme « <strong class="specialPB">word line</strong> » utilisé pour désigner la piste conductrice qui permet l'<strong>accès</strong> à toute une <strong>ligne</strong> de la mémoire ; son <strong>numéro d'ordre</strong> dans la matrice détermine l'<strong class="specialPB">adresse</strong> du mot stocké sur cette ligne. </div>
+
+  <li> Chaque bit d'un mot est repéré par le <strong>numéro d'ordre</strong> de ses pistes <strong class="defin">bit lines</strong> dans la matrice, qu'on appelle le <strong class="defin">rang</strong> du bit dans le mot. </li>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p> D'un modèle de microcontrôleur <em class="sigle">AVR</em> à l'autre, seul change le <strong class="specialPB">nombre de lignes</strong>, par exemple : </p>
+<ul>
+  <li> <em class="bold">2048</em> pour l'<em class="mark">Atmel ATmega328P</em> qui équipe les cartes <em class="mark">Uno</em>, </li>
+
+  <li> <em class="bold">8092</em> pour l'<em class="mark">Atmel ATmega2560</em> qui équipe les cartes <em class="mark">Mega</em>… </li>
+</ul>
+
+
+<!-- expert -->
+<h4 id="architectures32bits"> Cas des architectures plus larges </h4>
+
+
+<div class="complement">
+<p> Sur les <strong class="title">architectures plus larges</strong> – carte à microcontrôleur <strong>32 bits</strong>, ordinateurs <strong>64 bits</strong> – la <strong class="specialLB">mémoire vive</strong> est organisée en <strong>matrices</strong> de largeur appropriée, respectivement 4 × 8 bits ou 8 × 8 bits.  Toutefois – et y compris sur d'autres types de mémoires (<em class="sigle">ROM</em>, mémoire de masse, etc.) – pour des raisons à la fois historiques et d'optimisation d'emploi des bits, la mémoire est toujours gérée en gardant le <strong>mot de 8 bit</strong> comme <strong class="defin">unité d'adressage</strong>. </p>
+
+<p> Dans le cas d'une mémoire vive de largeur <strong>32 bits</strong> comme sur la figure ci‑dessous, les <strong class="specialPB">word line</strong> sont <strong>numérotées</strong> <strong class="specialPB">de 4 en 4</strong> puisqu'elles contiennent chacune 4 octets.  </p>
+  <img class="top-left" src="../img/SRAM32map.png" style="max-width: 800px">
+<p> Pour effectuer une <strong class="title">opération</strong> sur une donnée stockée sur <strong class="specialLB">un seul octet</strong> d'une ligne, le <strong class="defin">mot entier</strong> est copié dans un registre et le microcontroleur lui applique une <strong>opération bit à bit</strong> avec un <strong>masque</strong> pour « cacher » les octets non concernés (cf. chap. C3‑III <a class="next" href="Cc3-3_typesBooleens.html#bitwizeOperators" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+<h4> Notion d'octet </h4>
+
+
+<div class="important" style="display: inline-block;">
+<p> Un <strong class="title">octet</strong> (en anglais, <strong>byte</strong>) est un <strong>groupe ordonné</strong> – on dit aussi un <strong>multiplet</strong> – de <strong class="defin">8 bits</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Octet" target="_BLANK">W</a> : </p>
+  <img class="top-right" src="../img/octet.png" width="500px">
+<ul>
+  <li> les <strong class="defin">bits</strong> d'un octet y sont repérés par leur <strong class="defin">rang</strong>, c'est‑à‑dire leur <strong>numéro d'ordre</strong>, qui va de <strong>0</strong> à <strong>7</strong> ; </li>
+
+  <li> l'<strong class="specialPB">adresse</strong> d'un octet donne sa <strong>position absolue</strong> dans la mémoire, techniquement appelée <strong class="specialPB">word line</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément, on parle de <strong><em class="english">8‑bit byte</em></strong>, le terme <em class="english">byte</em> signifiant non pas « octet » mais « morceau ». Néanmoins, on emploie presque toujours simplement le terme <strong class="title">byte</strong> car les cas où l'unité d'adressage ne fait pas exactement 8 bits sont très rares aujourd'hui (cf. le lien <a class="external" href="https://fr.wikipedia.org/wiki/Byte" target="_BLANK">W</a> donnant des détails historiques sur la notion d'octet). </p>
+
+<p> Par la combinatoire de ses bits, un <strong class="title">octet</strong> peut encoder <strong class="defin">256 valeurs</strong> (2<sup>8</sup>). </p>
+</div><!-- complement -->
+
+
+
+<h3 id="registres"> Registres de calcul </h3>
+
+
+
+<div class="important">
+<p> Dans le <strong>cœur</strong> d'un microprocesseur ou d'un microcontrôleur, les <strong class="defin">opérations de calcul</strong> sont effectuées sur des <strong>données</strong> qui ont été préalablement transférées depuis la mémoire dans des <strong class="title">registres</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Registre_de_processeur" target="_BLANK">W</a>. On peut dire que les données y sont temporairement <strong>enregistrées</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">registres</strong> sont des <strong class="defin">unités de mémoire vive</strong> situées <strong class="pros">au plus près</strong> de l'<strong>unité arithmétique et logique</strong> – en anglais, <em class="english">arithmetic and logic unit</em>, ou <em class="bold"><em class="sigle">ALU</em></em> – qui effectue les calculs. </p> 
+<div class="expert">
+<ul>
+   <li> Ils sont réalisés en <strong>technologie</strong> <strong class="specialLB"><em class="sigle">SRAM</em></strong> pour des questions évidentes de <strong class="pros">rapidité d'accès</strong>. </li>
+
+  <li> Leur <strong>largeur</strong> (en bits) est celle de la capacité des circuits de calcul de l'<strong><em class="sigle">ALU</em></strong>, en général identique à celle du <strong>bus</strong> du processus. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="expert">
+<div style="display: inline-block;" id="coutCalcul">
+  <img class="top-right" src="../img/AVRoverview.jpg" width="200px">
+<p> Le <strong>cœur <em class="sigle">AVR</em></em> 8 bits</strong> des microcontrôleurs employés sur la plupart des <strong class="Arduino">cartes Arduino</strong> dispose de <strong class="title">32 registres d'usage général</strong> (<em class="english">general purpose registers</em>). Ce nombre important permet de compenser la petite taille de l'architecture (cf. le schéma ci‑contre). </p>
+
+<p> En particulier, le microcontrôleur peut très bien effecter une <strong class="title">opération</strong> (addition, multiplication, etc.) sur deux données codées l'une et l'autre dans un type de taille <strong>8 octets</strong>, en mobilisant pour cela 3 × 8 = <strong>24 registres</strong> (8 registres pour chaque opérande et 8 registres pour le résultat). </p>
+
+<p> Toutefois, si le programme est soumis à des <strong class="title">exigences de vitesse</strong>, il faut veiller à <strong class="warning">ne pas employer des types</strong> <strong class="cons">surdimensionnés</strong>. En effet, en plus du temps nécessaire pour charger les opérandes et décharger le résultat dans la mémoire, il faut aussi compter le temps d'effectuer les calculs, octet par octet, et l'impact que représente l'occupation d'autant de registres, au détriment d'autres usages pour optimiser l'exécution. </p>
+
+<p> On comprend également pourquoi les types <strong>très grands types</strong> comme <code class="prettyprint lang-c">long double</code> ne sont <strong class="cons">pas implémentés</strong> à leur taille usuelle (12 octets  – cf. chap. C3‑V <a class="next" href="Cc3-5_typesFlottants.html#classificationFloat" target="_BLANK"></a>) sur une telle architecture ; sinon, il faudrait mobiliser 36 registres, or il n'y en a que 32 ! </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+<div class="expert">
+<h3 id="boutisme"> Conventions de boutisme </h3>
+
+
+<div class="important">
+<p> Dans un contexte informatique, le <strong class="title">boutisme</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Boutisme" target="_BLANK">W</a> – en anglais, <strong>endianness</strong> – est la convention qui détermine l'<strong class="defin">ordre de stockage des octets consécutifs</strong> d'une donnée dans la mémoire au sens large (mémoire vive, fichier, etc.). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Typiquement, ce stockage est effectué dans l'<strong class="defin">ordre croissant des adresses</strong> de la mémoire de deux manières possibles.  </p>
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/littleEndianness.png" width="300px" style="margin-top: 0.3em">
+  <li> Soit on commence par l'octet de <strong class="defin">bas rang</strong> – également dit de poids faible pour les données numériques, ou encore <strong><em class="sigle">LSB</em></strong> pour <em class="english">least significant byte</em> – et on parle alors de <strong class="specialLB">petit‑boutisme</strong>, en anglais <strong>little‑endianness</strong> (cf. la figure ci‑contre pour une donnée encodée sur 4 octets).  </li>
+
+  <div class="nobullet"> Lorsqu'on inscrit ces octets en ligne comme dans un mot mémoire de machine, ils sont ordonnées dans le <strong class="cons">sens inverse</strong> de <strong>lecture‑écriture des nombres</strong> et donc en <strong class="cons">discontinuité</strong> de la <strong>numérotation des bits</strong> (cf. la figure ci‑dessous).   </div>
+
+   <img class="top-left" src="../img/littleEndianness2.png" style="max-width: 800px">
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/bigEndianness.png" width="300px" style="margin-top: 0.3em">
+  <li> Soit on commence par l'octet de <strong class="defin">haut rang</strong> – également dit de <em>poids fort</em> pour les données numériques, ou encore <strong><em class="sigle">MSB</em></strong> pour <em class="english">most significant byte</em> – et on parle alors de <strong class="specialLB">gros‑boutisme</strong>, en anglais <strong>big‑endianness</strong> (cf. la figure ci‑contre pour une donnée encodée sur 4 octets).  </li>
+  </div><!-- display -->
+
+  <div class="nobullet"> Lorsqu'on inscrit ces octets en ligne comme dans un mot mémoire de machine, ils sont ordonnés dans le <strong class="pros">sens conventionnel</strong> de <strong>lecture‑écriture des nombres</strong> et donc dans la <strong class="pros">continuité</strong> de la <strong>numérotation des bits</strong> (cf. la figure ci‑dessous).   </div>
+    
+    <img class="top-left" src="../img/bigEndianness2.png" style="max-width: 800px">
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+
+<div style="display">
+  <img class="top-right" src="../img/microprocessorAMDrysen.png" width="150px" style="margin-top: 0.8em">
+<p> Le <strong class="title">choix d'une convention de boutisme</strong> est avant tout opéré dans la <strong class="defin">conception des architectures matérielles des processeurs</strong>, du fait que les octets sont traités par mots – typiquement, de <strong>8 octets</strong> sur un <strong>processeur 64 bits</strong>. Leur position relative dans le mot n'est pas indifférente pour l'implémentation des circuits de calcul. </p>
+
+<p> Certaines architectures peuvent même gérer les deux conventions et on parle alors de <strong class="specialLB">bi‑boutisme</strong>. De plus, les microprocesseurs récents (<em class="mark">x86</em>, <em class="mark">ARM</em>) possèdent en général une <strong>instruction</strong> qui opère la <strong class="defin">permutation de convention</strong> d'un mot mémoire.  </p>
+</div><!-- display -->
+
+<p> La <strong class="title">convention de boutisme</strong> est également un <strong class="defin">choix décisif</strong> pour les <strong>protocoles de communication</strong>, qui détermine l'ordre dans lequel les octets sont transmis et reçus sur une <strong>liaison</strong>.  </p>
+
+<p> Bien entendu, le <strong class="defin">système d'exploitation</strong> peut adopter une <strong>autre convention</strong> que celle de l'architecture pour tel ou tel aspect mais au prix de traitements supplémentaires. </p>
+
+<ul>
+  <li> Le <strong class="specialLB">petit‑boutisme</strong> est la convention adoptée par la <strong class="defin">grande majorité des architectures</strong> des machines – notamment celles à <strong>processeur x86</strong> <a class="external" href="https://en.wikipedia.org/wiki/X86" target="_BLANK">W</a> – et tous les systèmes d'exploitation (<em class="mark">Linux</em>, <em class="mark">Windows</em>) suivent cette convention. Quant aux processeur de la famille <strong>ARM</strong> <a class="external" href="https://en.wikipedia.org/wiki/ARM_architecture_family" target="_BLANK">W</a>, ils sont <strong class="pros">bi‑boutistes</strong> mais adoptent le <strong>petit‑boutisme par défaut</strong>.  </li>
+
+  <div class="nobullet"> Par ailleurs, la plupart des <strong class="defin">microcontrôleurs</strong>, notamment les <em class="mark">Atmel</em> et <em class="mark">ARM</em> équipant les cartes <strong class="Arduino">Arduino</strong> adoptent tous la convention de <strong class="specialLB">petit‑boutisme</strong>. </div>
+
+  <div class="nobullet"> C'est donc la convention adoptée pour la compilation des <strong>fichiers exécutables</strong> en <strong class="defin">programmation</strong> avec les langages <strong>C</strong> et <strong>C++</strong>. Par ailleurs, les compilateurs mettent à disposition un <strong>fichier d'en‑tête</strong> qui vient en extension de la bibliothèque standard avec des fonctions pour gérer les conventions de boutisme (notamment <code class="filename">endian.h</code> pour la bibliothèque <em class="mark">Glibc</em> de <em class="mark">Linux</em>). </div>
+
+  <li> Le <strong class="specialLB">gros‑boutisme</strong> quant à lui est la convention adoptée pour la mise en œuvre des <strong class="defin">protocoles de communication</strong>, en particulier avec la pile de protocoles <strong><em class="sigle">TCP/IP</em></strong>. Les octets y sont le plus souvent traités en <strong>mots de 32 bits</strong> et c'est toujours l'octet de haut rang qui est envoyé en premier. Si les machines qui communiquent sont opérées en petit‑boutisme, leur systèmes d'exploitation respectifs sont capables d'effectuer le changement de convention avec les composants matériels de la liaison (interface réseau – cf. chap. R2‑I <a class="previous" href="../../moduleR/R1-Generalites/Rc1-1_notionsFondamentales.html#carteReseau" target="_BLANK"></a>). </li>
+</ul>
+
+<p> Quant aux conventions de boutisme adoptées pour l'<strong class="defin">encodage des caractères larges</strong>, il sera abordé au chap. C3‑IX <a class="next" href="Cc3-9_typesCaracteresEtendus.html#boutisme" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Descripteurs de types élémentaires</h2>
+
+
+<h3 id="typesLangC"> Les types élémentaires du langage <em class="mark">C</em> </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C</strong>, pour composer un <strong class="specialG">descripteur de type élémentaire</strong>, on dispose des <strong class="title">mots‑clefs</strong> : </p>
+<span class="inline">
+	<code class="prettyprint lang-c">char</code> <code class="prettyprint lang-c">int</code> <code class="prettyprint lang-c">float</code> <code class="prettyprint lang-c">double</code> <code class="prettyprint lang-c">short</code> <code class="prettyprint lang-c">long</code> <code class="prettyprint lang-c">signed</code> <code class="prettyprint lang-c">unsigned</code>
+</span>
+</div><!-- important -->
+
+<div class="complement">
+<p> En termes d'<strong>usage syntaxique</strong>, on peut classer ces mots‑clefs comme ci‑dessous.</p>	
+<ul>
+  <li> les <strong class="title">mots‑clefs</strong> <strong class="specialLB">fondamentaux</strong> : </li>
+  <ul>
+    <li> <code class="prettyprint lang-c">char</code> (<em class="english">character</em>) pour les nombres <strong class="specialG">entiers</strong> <strong class="specialN">très courts</strong> ; </li>
+    
+    <div class="expert">
+    <div class="nobullet"> le mot‑clef « <code>char</code> » fait référence au fait que l'étendue des valeurs positives de ce type (<code>0</code> à <code>127</code>) permet d'encoder les <strong>caractères</strong> du jeu <strong><em class="sigle">ASCII</em> restreint</strong> (cf. <a class="external" href="https://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange" target="_BLANK">W</a> et le chap. C3‑VIII <a class="next" href="Cc3-8_typesCaracteres.html" target="_BLANK"></a>) ; quoi qu'il en soit, lorsqu'on déclare une variable de type char, on peut lui affecter des valeurs numériques comprises entre <code>-128</code> et <code>+127</code> ; </div>
+    </div><!-- expert -->
+
+    <li> <code class="prettyprint lang-c">int</code> (<em class="english">integer</em>) pour les nombres <strong class="specialG">entiers</strong> <strong class="specialN">standards</strong> ; </li>
+
+    <div class="nobullet">l'étendue des valeurs encodables dans ce type dépend de la machine cible pour laquelle le programme est compilé ; </div>
+
+    <li> <code class="prettyprint lang-c">float</code> (<em class="english">floating point decimal</em>) pour les nombres <strong class="specialG">décimaux</strong> <strong class="specialN">à virgule flottante</strong> simple précision ; </li>
+
+    <li> <code class="prettyprint lang-c">double</code> (<em class="english">double precision floating point decimal</em>) pour les nombres <strong class="specialG">décimaux</strong> <strong class="specialN">à virgule flottante</strong> <strong class="specialT">double précision</strong> ; </li>
+  </ul>
+
+  <li> les <strong class="title">mot‑clefs</strong> <strong class="specialLB">modificateurs</strong> :  </li>
+  <ul>
+    <li> <code class="prettyprint lang-c">short</code> et <code class="prettyprint lang-c">long</code>, en principe, décrivent un <strong>type</strong> ayant une <strong class="defin">taille</strong> respectivement <strong>diminuée</strong> et <strong>augmentée</strong> par rapport à la taille du type auquel le mot‑clef est appliqué ; </li>
+
+    <div class="exemples">
+    <p class="exemple"> Le <strong class="specialG">descripteur</strong> <code class="prettyprint lang-c">short int</code> désigne un type d'entiers encodés sur <strong>2 octets seulement</strong>, alors que le type <code class="prettyprint lang-c">int</code> est en général encodé sur 4 octet sur les ordinateurs de type PC usuels. </p>
+    </div><!-- exemple -->
+
+    <li> <code class="prettyprint lang-c">signed</code> et <code class="prettyprint lang-c">unsigned</code> adaptent le format d'un <strong>type entier</strong>, respectivement pour permettre ou non l'encodage de <strong class="defin">valeurs négatives</strong>, donc codées avec un <strong>signe</strong> « <code>-</code> ». </li>
+
+    <div class="exemples">
+    <p class="exemple"> Le <strong class="specialG">descripteur</strong> <code class="prettyprint lang-c">unsigned int</code> désigne un type d'entiers positifs ou nuls, autrement dit, <em>non négatifs</em>, donc <strong>sans signe</strong> « <code>-</code> ». </p>
+    </div><!-- exemple -->
+  </ul>
+</ul>
+</div><!-- complement -->
+
+
+<div class="remarques" id="remMotsClefs"><p class="remarques"></p>
+<ol class="remarques">
+  <li style="margin-bottom:0.2em"> Le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">int</code> est <strong class="specialLB">facultatif</strong> ; en particulier, toute donnée dont le type n'est pas spécifié dans sa déclaration se voit attribuer le type <code class="prettyprint lang-c">int</code>. </li>
+
+  <div class="exemples"><p class="exemple">
+   Le descripteur <code class="prettyprint lang-c">short int</code> se code simplement <code class="prettyprint lang-c">short</code>. </p>
+  </div><!-- exemple -->
+
+  <li style="margin-top:0.5em"> Le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">signed</code>, qui s'applique <strong>seulement aux types entiers</strong>, <strong class="warning">peut sembler</strong> <strong>implicite par défaut</strong> parce que sur les PC usuels (architecture <em class="mark">x86</em>), les types entiers fondamentaux sont signés par défaut, et il n'est alors pas nécessaire de coder le modificateur <code class="prettyprint lang-c">signed</code>. </li>
+
+  <div class="nobullet">Mais il existe aussi des <strong>architectures de machines</strong> pour lesquelles le type <code class="prettyprint lang-c">char</code> est <strong>par défaut</strong> <strong class="warning">non signé</strong> ! Pour des questions de portabilité, il est donc <strong class="pros">toujours préférable</strong> de coder <code class="prettyprint lang-c">signed char</code> pour décrire un type <code class="prettyprint lang-c">char</code> dont les données peuvent prendre des valeurs négatives. </div>
+
+  <li style="margin-bottom:0.2em"> Il n'y a en fait qu'un petit nombre de types élémentaires et on ne peut pas employer les <strong class="title">mots‑clefs modificateurs</strong> <code class="prettyprint lang-c">short</code> ou <code class="prettyprint lang-c">long</code> « à tout‑va ». </li>
+
+  <div class="exemples"><p class="exemples"></p>
+  <ul>
+    <li> Le descripteur <code>long float</code> n'est pas reconnu (il serait redondant avec <code>double</code>) ; </li>
+
+    <li> Le descripteur <code>short char</code> n'est pas reconnu, parce que le type <code>char</code> code déjà le type entier le plus petit possible. </li>
+  </ul>
+  </div><!-- exemple -->
+</ol>
+</div><!-- remarques -->
+
+
+<div class="expert">
+<h4 id="typesEnumeres"> Types énumérés </h4>
+
+
+<div class="important">
+<p> Les langages <strong>C/C++</strong> fournissent le <strong>mot‑clef</strong> <code class="prettyprint lang-c">enum</code> pour déclarer des  <strong class="title">types énumérés</strong> et leurs <strong class="specialN">données</strong>. </p>
+
+<p> Ces <strong class="specialN">données</strong> sont nécessairement à <strong class="specialG">valeurs entières</strong>  et ne doivent en principe prendre qu'un <strong class="defin">nombre réduit de valeurs</strong>, lesquelles sont désignées respectivement par autant d'<strong>identificateurs</strong> de <strong class="specialT">constantes entières</strong> listées lors de la déclaration du type. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Techniquement (selon les normes), les <strong class="title">types énumérés</strong> sont considérés comme des <strong class="defin">types dérivés</strong>, mais <strong class="pros">dans la pratique</strong>, en première « approximation », ils peuvent assimilés à des <strong>types entiers</strong> (en termes d'encodage, c'est‑à‑dire de stockage des valeurs en mémoire, ils utilisent les mêmes formats). </p>
+
+<p> <em class="remark">Attention</em> : en langage <strong class="warning">C++</strong>, les <strong class="title">données</strong> de <strong>types énumérés</strong> ne sont <strong class="warning">pas facilement manipulables</strong> comme les types entiers élémentaires. </p>
+</div><!-- complement -->
+
+<p> L'étude des types énumérés est approfondie au chapitre C3‑IV <a class="next" href="Cc3-4_typesEnumeres.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3> Les ajouts du langage <em class="mark">C++</em> </h3>
+
+
+
+<div class="important">
+<p> Le langage <strong class="title">C++</strong> intègre dans son noyau <strong class="pros">tous les types élémentaires</strong> du langage <strong>C</strong>. </p>
+
+<p> De plus, il reconnaît le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">bool</code> pour désigner le type de <strong class="defin">données booléennes</strong>, c'est‑à‑dire ne prenant que les deux valeurs possibles <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">bool</code> n'accepte <strong>aucun modificateur</strong>. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> En langage <strong>C</strong>, il existe le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">_Bool</code> depuis la norme <em class="mark">C99</em>. Quant au <strong class="specialG">descripteur</strong> <code class="prettyprint lang-c">bool</code>, il est défini comme un <strong>synonyme</strong> du type <code class="prettyprint lang-c">_Bool</code> et il ne peut être employé dans un programme qu'à condition d'y inclure le fichier d'en‑tête <code class="filename">stdbool.h</code> de la bibliothèque standard. </p>
+
+<p> La <strong class="title">norme C23</strong> prévoit d'intégrer le <strong class="specialG">mot‑clef</strong> <code class="prettyprint lang-c">bool</code> dans le noyau du langage <strong>C</strong>. </p>
+</div><!-- remarque -->
+
+<p> L'usage et les particularités du type <code class="prettyprint lang-c">bool</code> sont détaillés au chap. C3‑III <a class="next" href="Cc3-3_typesBooleens.html" target="_BLANK"></a>. </p>
+
+
+
+<h3> Les types spécifiques de la bibliothèque <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="important">
+<p> La <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong> fournit au codeur les <strong class="title">descripteurs</strong> <code class="prettyprint lang-c">byte</code> et <code class="prettyprint lang-c">word</code> (ce ne sont <strong class="warning">pas des mots‑clefs</strong> des langages <strong>C/C++</strong>) pour déclarer des <strong class="defin">mots binaires</strong>, c'est‑à‑dire des <strong>séquences de bits</strong> par multiples de 8. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Introduits dans le fichier <code class="filename">Arduino.h</code>, les <strong class="title">descripteurs</strong> <code class="prettyprint lang-c">byte</code> et <code class="prettyprint lang-c">word</code> redéfinissent par <code class="prettyprint lang-c">typedef</code> deux types synonymes d'<strong>entiers non signés</strong> : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">byte</code> est synonyme de <code class="prettyprint lang-c">unsigned char</code> ; </li>
+
+	<li> <code class="prettyprint lang-c">word</code> est synonyme de <code class="prettyprint lang-c">unsigned int</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Même s'ils sont fondamentalement des types entiers, les <strong class="title">descripteurs</strong> <code class="prettyprint lang-c">byte</code> et <code class="prettyprint lang-c">word</code> sont détaillés dans le chapitre C3‑III <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/Cc3-4_typesBooleens.html" target="_BLANK"></a> consacrés aux types de données booléennes car ils ont vocation à être manipulés avec des opérateurs booléens. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="typeExpression"> Détermination du type d'une expression </h3>
+
+
+
+<div class="important">
+<p> Toute <strong class="title">expression</strong> (ou sous‑expression) codée dans un programme source possède <strong>implicitement</strong> un <strong class="specialG">type</strong>, dans lequel sa valeur est temporairement encodée. </p>
+
+<p> Lors de l'évaluation de l'expression, son <strong class="specialG">type implicite</strong> est déterminé dans l'ordre de traitement des <strong>opérateurs</strong> qui la composent, en fonction des types de leurs <strong>opérandes</strong>, et conformément à des <strong class="defin">règles spécifiques</strong> à chaque opérateur. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Les <strong class="specialG">types</strong> des valeurs que donnent les <strong class="title">opérateurs élémentaires</strong> sont globalement décrits dans le tableau du chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a>, sachant que :     </p>
+<ul>
+  <li> dans le cas des <strong class="specialLB">opérateurs booléens</strong> et de <strong class="specialLB">comparaison</strong>, il s'agit <strong>toujours</strong> du type <code class="prettyprint lang-c">int</code> ; </li>
+
+  <li> mais dans le cas des <strong class="specialLB">autres opérateurs</strong>, le <strong class="specialG">type</strong> de la valeur <strong class="warning">dépend</strong> avant tout de celui des <strong>opérandes</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4 id="reglesTypageOperation"> Règles générales de détermination du type implicite d'une opération </h4>
+
+
+<div class="complement">
+<p> Pour garantir le <strong class="pros">meilleur résultat possible</strong> lors de l'<strong>évaluation d'une opération</strong>, le compilateur applique les <strong class="title">règles générales</strong> suivantes. </p> 
+<ul>
+  <li> <strong class="specialLB">Avant le traitement d'une opération</strong>, sauf pour la <strong class="specialM">l‑value</strong> d'une affectation (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#evaluationAffectation" target="_BLANK"></a>), chacun de ses <strong>opérande</strong> est <strong class="specialMg">implicitement promu</strong> dans un <strong class="specialG">type</strong> <strong class="pros">suffisamment grand</strong> pour minimiser les risques de débordements (cf. chap. C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#promotionsSystematiques" target="_BLANK"></a>), typiquement : </li>
+  <ul>
+    <li> pour les entiers, au moins le type <code class="prettyprint lang-c">int</code> – éventuellement <code class="prettyprint lang-c">unsigned</code> ; </li>
+
+    <li> pour les décimaux, au moins le type <code class="prettyprint lang-c">double</code>. </li>
+  </ul>
+   
+  <div class="nobullet"> Ensuite, tout dépend de l'opérateur et du typage des opérandes (après éventuellement promotion). </div>
+  <ul>
+    <li> dans le cas d'un <strong class="specialLB">opérateur unaire</strong>, le <strong class="specialG">type</strong> de la valeur est <strong class="defin">le même</strong> que celui de l'<strong>opérande</strong> ; </li>
+
+    <li> dans le cas d'un <strong class="specialLB">opérateur binaire</strong> : </li>
+    <ul>
+      <li> si l'opération est <strong>homogène</strong> – typiquement, entre deux opérandes de types entiers, ou de deux types décimaux – alors le <strong class="specialG">type</strong> de la valeur est <strong class="defin">le plus grand des deux</strong> ; </li>
+
+      <li> si l'opération est <strong>hétérogène</strong>, alors <strong class="defin">le type décimal prime</strong> sur le type entier. </li>
+    </ul>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemples"> Le tableau ci‑dessous donne le <strong class="specialG">type</strong> de l'<strong class="title">opération binaire</strong> <code class="prettyprint lang-c">a * b</code> où les opérandes <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> sont deux données déclarées chacune successivement dans <strong>différents types</strong>. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+  <tr>
+    <th style="text-align: right"> Opérandes  </th>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">a</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">b</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">a</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">b</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">a</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">b</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">a</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">b</code>  </td>
+  </tr>  
+  <tr>
+    <th style="text-align: right"> Type déclaré  </th>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">char</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">short</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">int</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">long</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">long</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">float</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> <code class="prettyprint lang-c">float</code>  </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">long double</code>  </td>
+  </tr>
+  <tr>
+    <th style="text-align: right"> Promotion  </th>
+    <td style="text-align: center; border-right-style: hidden;"> <code style="font-style: italic;">int</code>  </td>
+    <td style="text-align: center"> <code style="font-style: italic;">int</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> –  </td>
+    <td style="text-align: center"> –  </td>
+    <td style="text-align: center; border-right-style: hidden;"> –  </td>
+    <td style="text-align: center"> <code style="font-style: italic;">double</code>  </td>
+    <td style="text-align: center; border-right-style: hidden;"> <code style="font-style: italic;">double</code>  </td>
+    <td style="text-align: center"> –  </td>
+  </tr>
+  <tr>
+    <th> <code class="prettyprint lang-c">a * b</code> </th>
+    <td colspan="2" style="text-align: center"> <code style="font-style: italic; font-weight: bold;">int</code>  </td>
+    <td colspan="2" style="text-align: center"> <code style="font-style: italic; font-weight: bold;">long</code>  </td>
+    <td colspan="2" style="text-align: center"> <code style="font-style: italic; font-weight: bold;">double</code>  </td>
+    <td colspan="2" style="text-align: center"> <code style="font-style: italic; font-weight: bold;">long double</code>  </td>
+  </tr>  
+</table>
+</div><!-- overflow -->
+
+<p> Plus généralement, ces résultats de typage sont <strong class="defin">valables</strong> pour <strong>n'importe quel autre opérateur</strong> <strong class="title">arithmétique ou algébrique</strong>. </p>
+</div><!-- exemples -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="typesTailles"> Tailles des types et des objets  –  contraintes d'alignement </h2>
+
+
+<div class="complement">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, certaines <strong class="title">caractéristiques des types</strong> – taille, valeurs extrêmes, contraintes d'alignement d'adresse – peuvent <strong>varier selon</strong> <strong class="defin">l'implémentation</strong> <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#implementation" target="_BLANK"></a>. Or ces informations sont parfois indispensable pour coder les instructions d'un programmes. </p>
+
+<p> Plutôt que de laisser le codeur introduire ces caractéristiques sous formes de <strong>constantes littérales ou déclarées</strong> avec des valeurs extraites de documentations <strong class="cons">potentiellement obsolètes</strong>, les bibliothèques standards mettent à la disposition <strong class="title">plusieurs outils</strong> : </p>
+
+<ul>
+  <li> des <strong class="specialLB">fichiers de paramètres dimensionnels</strong> spécifiques aux <strong>types entiers</strong> et <strong>décimaux</strong> ; ils seront abordés dans leurs chapitres respectifs C3‑II <a class="next" href="Cc3-2_typesEntiers.html#limits" target="_BLANK"></a> et C3‑V <a class="next" href="Cc3-5_typesFlottants.html#caracteristiques" target="_BLANK"></a> ; </li>
+
+  <li> des <strong class="specialLB">types adaptatifs</strong> comme <code class="prettyprint lang-c">size_t</code> et leurs éléments de syntaxe associés ; </li>
+
+
+  <li> les <strong class="specialLB">opérateurs généraux</strong> <code class="prettyprint lang-c">sizeof</code> et <code class="prettyprint lang-c">_Alignof</code> (ou <code class="prettyprint lang-c">alignof</code> en <em class="mark">C++</em>). </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="size_t"> Le type <code class="prettyprint lang-c">size_t</code> </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">descripteur</strong>  <code class="prettyprint lang-c">size_t</code> désigne un <strong class="specialG">type</strong> <strong>entier non signé</strong>. Il est défini pour exprimer les valeurs rendues par l'<strong>opérateur</strong> <code class="prettyprint lang-c">sizeof</code>. </p>
+
+<p> La <strong class="title">valeur maximale</strong> encodable dans le type <code class="prettyprint lang-c">size_t</code> s'adapte à l'<strong>implémentation</strong>, afin qu'il permette d'exprimer la <strong class="defin">taille</strong> de <strong class="pros">n'importe quel objet</strong>, y compris un tableau, quel que soit son nombre d'éléments (donc potentiellement très grand). </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p>  Le <strong class="title">type</strong> <code class="prettyprint lang-c">size_t</code> n'est <strong class="cons">pas inclus</strong> dans le noyau du langage <strong>C</strong>, mais il est défini <strong class="pros">plusieurs fichiers d'en‑tête</strong> de sa bibliothèque standard, notamment <code class="filename">stddef.h</code>, <code class="filename">stdlib.h</code>, <code class="filename">stdio.h</code> et <code class="filename">string.h</code>. Sa définition, codée par de nombreuses directives de compilation conditionnelle, est <strong class="warning">très complexe</strong> (cf. par exemple <a class="external" href="https://github.com/gcc-mirror/gcc/blob/master/gcc/ginclude/stddef.h" target="_BLANK">G</a>). </p> 
+</div><!-- complementExpert -->
+
+<div class="complement">
+<p> On peut déterminer la <strong class="title">valeur maximale</strong> codable dans le type <code class="prettyprint lang-c">size_t</code> sur une <strong>implémentation</strong> donnée en affichant la valeur de la <strong class="defin">variable d'environnement</strong> <code class="prettyprint lang-c">SIZE_MAX</code> définie dans le fichier d'en‑tête <code class="filename">stdint.h</code> de la bibliothèque standard du langage <strong>C</strong>. </p>
+<ul>
+  <li> Dans un programme pour <strong>carte</strong> <strong class="Arduino">Arduino</strong>, il suffit de coder l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">Serial.println(SIZE_MAX);</code>
+  </span> <br>
+  sans oublier d'<strong>initialiser</strong> préalablement le <strong>moniteur série</strong> (cf. chap. C3‑X <a class="previous" href="Cc3-10_moniteurSerie.html#initialisation" target="_BLANK"></a>). </li>
+
+  <li> Dans un programme pour <strong class="specialT">ordinateur</strong> doté de la chaîne de compilation <strong>GCC</strong> (<strong class="cons">pas</strong> <em class="mark">Mingw‑g64</em>), il suffit de coder l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("%zu\n", SIZE_MAX);</code>
+  </span> <br>
+  où la <strong>spécification de conversion</strong> <code class="prettyprint lang-c">%zu</code> dans l'appel de la fonction <code class="prettyprint lang-c">printf</code> est spécifique pour afficher les valeurs du type <code class="prettyprint lang-c">size_t</code> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#specificationsConversion" target="_BLANK"></a>).  </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> La <strong class="title">variable d'environnement</strong> <code class="prettyprint lang-c">SIZE_MAX</code> vaut : </p>
+  <ul>
+    <li> <em class="bold">65&#8239;535</em> dans un programme compilé pour une carte à <strong>processeur 8 bits</strong> (<em class="mark">Arduino Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>, etc.) ; </li>
+
+    <li> <em class="bold">4&#8239;294&#8239;967&#8239;295</em> dans un programme compilé une carte à <strong>processeur 32 bits</strong>  (<em class="mark">Arduino Due</em>, <em class="mark">Zero</em>, <em class="mark">ESP8266</em>, etc.) ; </li> 
+
+    <li> <em class="bold">18&#8239;446&#8239;744&#8239;073&#8239;709&#8239;551&#8239;615</em> dans un programme compilé pour un ordinateur à <strong>architecture 64 bits</strong> et une chaîne de compilation adaptée à cette architecture (<em class="mark">GCC</em> ou <em class="mark">Mingw‑w64</em>). </li>
+  </ul>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Sur un PC avec un système <strong class="speciaLB">Windows</strong>, la <strong class="title">spécification de conversion</strong> <code class="prettyprint lang-c">%zu</code> n'est <strong class="warning">pas reconnue</strong> par la chaîne de compilation <em class="mark">Mingw‑w64</em> (plus précisément, ce composant fait défaut dans la bibliothèque standard de <em class="mark">Visual C++</em> qui se substitue à la bibliothèque standard <em class="mark">GNU glibc</em>). Il faut donc employer à la place la <strong class="defin">spécification de conversion</strong> du <strong>type entier</strong> ayant la <strong>même taille</strong> que <code class="prettyprint lang-c">size_t</code>, à savoir <code class="prettyprint lang-c">%I64u</code>. </li>
+
+  <li> Le <strong>type</strong> <code class="prettyprint lang-c">size_t</code> est souvent proposé par défaut par les éditeurs de code pour déclarer les <strong class="title">indices d'itération</strong> des boucles <code class="prettyprint lang-c">for</code> (et alors, une directive d'inclusion du fichier <code class="filename">stddef.h</code> ou <code class="filename">stdlib.h</code> est requise). Toutefois, ce choix n'est <strong class="cons">pas toujours optimal</strong> dans un <strong>programme</strong> <strong class="Arduino">Arduino</strong>. </li>
+
+  <div class="nobullet">En effet, si l'étendue des valeurs d'indice de la boucle est suffisamment réduite, il est préférable, pour une <strong class="pros">meilleure vitesse d'exécution</strong>, de choisir un type de taille <code>1</code> comme <code class="prettyprint lang-c">int8_t</code> ou <code class="prettyprint lang-c">uint8_t</code> (cf. chap. C3‑II <a class="next" href="Cc3-2_typesEntiers.html#stdint" target="_BLANK"></a>).  </div>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="sizeof"> L'opérateur <code class="prettyprint lang-c">sizeof</code> </h3>
+
+
+
+<div class="important">
+<p> L'<strong class="title">opérateur</strong> <strong>unaire</strong> <code class="prettyprint lang-c">sizeof</code> est défini comme un <strong>mot‑clef</strong> du langage <strong>C</strong>. Il s'applique à un <strong>opérande</strong> pouvant être : </p>
+<ul>
+  <li> un <strong class="specialG">descripteur de type</strong>, </li>
+
+  <li> ou une <strong class="specialN">expression</strong>. </li>
+</ul>
+<p> Il rend dans le type <code class="prettyprint lang-c">size_t</code> la valeur de la <strong class="defin">taille</strong> – c'est‑à‑dire le <strong>nombre d'octets</strong> employés pour le stockage dans l'implémentation du programme – du <strong class="specialG">descripteur de type</strong> ou de la valeur de l'<strong class="specialN">expression</strong> que forme son opérande. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il est <strong class="warning">vivement recommandé</strong> d'encapsuler l'opérande de l'opérateur <code class="prettyprint lang-c">sizeof</code> entre <strong>parenthèses</strong> <code class="prettyprint lang-c">()</code> pour éviter des confusions. </p>
+
+<div class="expert">
+<p> L'<strong class="title">opérateur</strong> <code class="prettyprint lang-c">sizeof</code> est <strong class="defin">valable</strong> pour les <strong class="specialLB">types élémentaires</strong>, et aussi pour tous les <strong class="specialLB">types dérivés</strong>, dont les tableaux et les structures hétérogènes. Néanmoins, pour s'appliquer à ces derniers (<code class="prettyprint lang-c">struct</code> et <code class="prettyprint lang-c">union</code>), il faut que le type ait été déclaré via <code class="prettyprint lang-c">typedef</code> (ou que l'opérateur <code class="prettyprint lang-c">sizeof</code> soit appliqué à une donnée déclarée de de ce type). </p>
+
+<p> Dans le tableau de classification des opérateurs du langage <strong>C</strong>, l'<strong class="title">opérateur</strong> <code class="prettyprint lang-c">sizeof</code> a le <strong class="defin">rang de priorité 2</strong> (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"> </p> 
+<ol class="numbered">
+<li> L'expression <code class="prettyprint lang-c">sizeof(unsigned int)</code> prend la <strong>valeur</strong> (nombre d'octets) : </li>
+<ul>
+  <li> <code class="cmd">2</code> si le programme est compilé pour une <strong>carte</strong> <strong class="Arduino">Arduino</strong> à cœur <em class="bold"><em class="sigle">AVR</em></em> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>, etc.) ;  </li>
+
+  <li> <code class="cmd">4</code> si le programme est compilé pour une <strong>carte</strong> <strong class="Arduino">Arduino</strong> à cœur <em class="bold"><em class="sigle">ARM</em></em> (<em class="mark">Due</em>, <em class="mark">Zero</em>, etc.) ou un <strong>PC</strong> ;  </li>
+</ul> 
+<div class="nobullet"> cette <strong class="warning">différence</strong> étant expliquée au chap. C3‑II <a class="next" href="Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>. </div>
+
+<li> L'expression <code class="prettyprint lang-c">sizeof(1 + 0.1)</code> prend la <strong>valeur</strong> (nombre d'octets) : </li>
+<ul>
+  <li> <code class="cmd">4</code> si le programme est compilé pour une <strong>carte</strong> <strong class="Arduino">Arduino</strong> à cœur <em class="bold"><em class="sigle">AVR</em></em> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>, etc.) ; </li>
+
+  <li> <code class="cmd">8</code> si le programme est compilé pour une <strong>carte</strong> <strong class="Arduino">Arduino</strong> à cœur <em class="bold"><em class="sigle">ARM</em></em> (<em class="mark">Due</em>, <em class="mark">Zero</em>, etc.) ou un <strong>PC</strong> ; </li>
+</ul> 
+<div class="nobullet">cette <strong class="warning">différence</strong> étant expliquée au chap. C3‑V <a class="next" href="Cc3-5_typesFlottants.html" target="_BLANK"></a>. </div>
+</ol>
+</div><!-- exemples --> 
+
+<div class="remarques">
+<p class="remarque"> Lors de l'<strong class="title">évaluation</strong> d'une expression composée avec l'<strong>opérateur</strong> <code class="prettyprint lang-c">sizeof</code>, son <strong>opérande</strong> n'est <strong class="warning">pas évalué</strong>, même s'il s'agit d'une <strong class="specialN">expression</strong> (seule sa taille est déterminée).  </p>
+</div><!-- remarque -->
+
+
+
+<div class="expert">
+<h3> L'opérateur <code class="prettyprint lang-c">_Alignof</code> (<code class="prettyprint lang-c">alignof</code> en <em class="mark">C++</em>)</h3>
+
+
+<h4> Problématique </h4>
+
+
+<div class="complement">
+<p> On a vu supra que sur des <strong class="specialLB">architectures 32 ou 64 bits</strong>, la <strong class="title">mémoire vive</strong> est organisée en <strong class="defin">mots de 4 ou 8 octets</strong> <a class="supra" href="Cc3-1_typesGeneralites.html#architectures32bits"></a>. Mais comme il peut y avoir des données de taille inférieure à la largeur d'un mot mémoire, il ne serait pas judicieux de stocker systématiquement les données les unes immédiatement à la suite des autres au fil de leur déclaration dans le code source. En effet, des <strong>données</strong> pourraient se trouver <strong class="cons">à cheval sur deux mots mémoire</strong> alors qu'elles pourraient tenir sur un seul mot si elles étaient décalées. </p>
+
+<p> Or une donnée stockée à cheval sur deux mots mémoires nécessite <strong class="cons">deux temps de processeur</strong> – au lieu d'un seul normalement – pour être chargée en registre. C'est pourquoi le <strong class="title">compilateur</strong> détermine lui‑même des <strong class="defin">contraintes d'alignement</strong> pour les adresses attribuées aux données afin de <strong class="pros">minimiser les chevauchements</strong> sur plusieurs mots. </p>
+</div><!-- complement -->
+
+<div class="exemples" style="display : flex; flex-direction: column">
+<p class="exemple"> Supposons qu'une <strong style="background:#fe98ff; padding-left:0.1em;padding-right:0.1em;">donnée A</strong> de taille <strong>4 octets</strong> soit stockée <strong class="cons">à cheval sur deux mots</strong> mémoire comme sur la figure ci‑dessous. </p>
+
+<img class="top-left" src="../img/SRAM32nonAligne.png" style="max-width: 800px">
+
+<p> Pour y accéder, en lecture ou en écriture, il faut transférer deux mots mémoire en registre. Pour une <strong class="pros">meilleure vitesse d'exécution</strong>, il est donc préférable de l'<strong class="defin">aligner sur un seul mot mémoire</strong> en décalant la <em style="background:#feff7f; padding-left:0.1em; padding-right:0.1em;">donnée C</em> d'un mot vers le haut, comme ci‑dessous : </p>
+
+<img class="top-left" src="../img/SRAM32aligne.png" style="max-width: 800px"> 
+
+<p> <em class="remark">Remarque</em> : cette organisation est <strong class="cons">moins performante</strong> en termes d'<strong>occupation de la mémoire</strong>, mais cet aspect est jugé <strong class="defin">moins important que la vitesse</strong>, surtout sur les machines où la mémoire est largement disponible (postes de travail, etc.). </p>
+</div><!-- exemple -->
+
+
+<h4 id="contraintesAlignement"> Notion de contrainte d'alignement – octets intercalaires</h4>
+
+
+<div class="important">
+<p> La <strong class="title">contrainte d'alignement</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Alignement_en_mémoire" target="_BLANK">W</a> d'une donnée en mémoire est la <strong>valeur entière positive</strong> dont son <strong class="specialG">adresse</strong> mémoire doit être <strong class="defin">multiple</strong>. </p>
+
+<p> Pour satisfaire aux contraintes d'alignement des données déclarées dans un programme, le compilateur réserve en mémoire des <strong class="title">octets intercalaires</strong> – en anglais, <strong>padding bytes</strong> – entre les données consécutives. Le contenu de ces octets est <strong class="cons">inutilisable</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Sur la 2<sup>e</sup> figure de l'exemple supra, <strong class="title">deux octets intercalaires</strong> sont insérés à la fin de la ligne <code>WL</code><strong>i</strong>. </p>
+</div><!-- exemple -->
+
+<p>  </p>  
+
+<div class="complement">
+<p> En règle générale, une <strong class="title">contrainte d'alignement</strong> dépend : </p>
+<ul>
+  <li> de la <strong>taille</strong> <strong class="specialG">t</strong> du <strong>type</strong> de la donnée ; </li>
+
+  <li> de la <strong>taille</strong> <strong class="specialY">n</strong> de l'<strong>architecture</strong> de la machine cible ; </li>
+
+  <li> de l'<strong>implémentation</strong>, c'est‑à‑dire des « choix » opérés par le compilateur. </li>
+</ul>
+<p> La <strong class="defin">règle générale</strong> est que l'<strong class="specialPB">adresse</strong> en mémoire de la donnée doit être un <strong>multiple</strong> de sa taille <strong class="specialG">t</strong> (ou de celle d'un de ses éléments s'il s'agit d'une donnée de type tableau), <strong>modulo</strong> la taille <strong class="specialY">n</strong> de l'architecture. </p>
+
+<p> Toutefois, le compilateur peut déroger à cette règle pour des questions d'optimisation. Et pour les <strong class="specialLB">types dérivés</strong> tels que les structures hétérogènes, le calcul d'une contrainte d'alignement peut être complexe ; d'où l'intérêt de l'opérateur <code class="prettyprint lang-c">_Alignof</code> qui permet au codeur de connaître et d'exploiter la contrainte d'alignment d'une donnée ou d'un type. </p>
+</div><!-- complement -->
+
+
+<h4> L'opérateur <code class="prettyprint lang-c">_Alignof</code> (<code class="prettyprint lang-c">alignof</code> en <em class="mark">C++</em>) </h4>
+
+
+<div class="important">
+<p> L'<strong class="title">opérateur</strong> <strong>unaire</strong> <code class="prettyprint lang-c">_Alignof</code> (ou <code class="prettyprint lang-c">alignof</code> en <strong class="title">C++</strong>) est un <strong>mot‑clef</strong>. Il s'applique à un <strong>opérande</strong> pouvant être : </p>
+<ul>
+  <li> un <strong class="specialG">descripteur de type</strong>, </li>
+
+  <li> ou une <strong class="specialN">expression</strong>. </li>
+</ul>
+<p> Il rend dans le type <code class="prettyprint lang-c">size_t</code> la valeur du  <strong class="defin">nombre</strong> dont doit être <strong>multiple</strong>, dans le code exécutable du programme, l'<strong class="specialPB">adresse</strong> d'une donnée du type spécifié par le <strong class="specialG">descripteur de type</strong> ou identique au type de l'<strong class="specialN">expression</strong> que constitue son opérande.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme pour l'opérateur <code class="prettyprint lang-c">sizeof</code>, les opérateurs <code class="prettyprint lang-c">_Alignof</code> et <code class="prettyprint lang-c">alignof</code> doivent être employés en codant leur opérande <strong>entre parenthèses</strong> <code class="prettyprint lang-c">()</code>. </p>
+
+<div class="expert">
+<p> Ces opérateurs sont également <strong class="defin">valables</strong> aussi pour <strong class="pros">tous les types</strong>, <strong class="specialLB">élémentaires</strong> et <strong class="specialLB">dérivés</strong>. </p>
+
+<p> Et ils ont le même <strong class="defin">rang de priorité 2</strong> (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Pour pouvoir effectuer une comparaison sur diverses architectures, dont les <strong>cartes</strong> <strong class="Arduino">Arduino</strong>, on emploie l'opérateur <code class="prettyprint lang-c">alignof</code> du <strong>C++</strong>. </p>
+
+<p> L'expression <code class="prettyprint lang-c">alignof(long double)</code> prend la <strong>valeur</strong> : </p>
+<ul>
+  <li> <code class="cmd">1</code> si le programme est compilé pour une carte à cœur <em class="bold"><em class="sigle">AVR</em></em> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>, etc.) ; en effet, sur une architecture <strong>8 bits</strong>, il n'y a a priori <strong class="pros">aucune contrainte d'alignement</strong> quel que soit le type considéré ; </li>
+
+  <li> <code class="cmd">8</code> si le programme est compilé pour une carte à cœur <em class="bold"><em class="sigle">ARM</em></em> (<em class="mark">Due</em>, <em class="mark">Zero</em>, etc.) ; dans cette implémentation, c'est aussi  la <strong>taille</strong> du type <code class="prettyprint lang-c">long double</code>  (lequel a la même taille – et donc, la même précision – que le type <code class="prettyprint lang-c">double</code>) ; </li>
+
+  <li> <code class="cmd">16</code> si le programme est compilé pour un <strong>PC 64 bits</strong> ; cette valeur est aussi égale à la taille du type <code class="prettyprint lang-c">long double</code> dans cette implémentation (même si en fait, seuls 12 des 16 bits sont réellement exploités – cf. chap. C3‑V <a class="next" href="Cc3-5_typesFlottants.html#largeursChamps" target="_BLANK"></a>). </li>
+</ul> 
+<p> On voit que la <strong class="defin">règle générale</strong> évoquée supra <a class="supra" href="Cc3-1_typesGeneralites.html#contraintesAlignement"></a> est <strong class="warning">prise en défaut</strong> au regard des deux dernières valeurs obtenues : le compilateur impose une <strong>contrainte d'alignement</strong> <strong class="warning">supérieure</strong> à la <strong>taille de l'architecture</strong>. </p>
+</div><!-- exemple --> 
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Comme avec l'opérateur <code>sizeof</code>, lors de l'<strong class="title">évaluation</strong> d'une expression composée avec les <strong>opérateurs</strong> <code class="prettyprint lang-c">_Alignoff</code> et  <code class="prettyprint lang-c">alignoff</code>, leur <strong>opérande</strong> n'est <strong class="warning">pas évalué</strong>, même s'il s'agit d'une <strong class="specialN">expression</strong> (seule sa contrainte d'alignement est déterminée).  </p>
+</div><!-- remarque -->
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

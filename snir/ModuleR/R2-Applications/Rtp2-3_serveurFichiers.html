@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="2"
+  data-pagenumber="3"
+  data-pageState="OK"
+  data-pageheadtitle="Serveur de fichiers"
+  data-pagefulltitle="Serveur de fichiers et FTP"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<!-- ajouter une partie serveur ftp -->
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">objectifs principaux</strong> de ce sujet de travaux pratiques sont d'<strong>exécuter</strong> et de <strong>comprendre</strong> la <strong class="defin">procédure d'installation</strong> et la <strong class="defin">mise en œuvre</strong> d'un <strong class="specialLB">serveur de fichiers</strong> et d'un <strong class="specialLB">serveur <em class="sigle">FTP</em></strong>, permettant à des utilisateurs de partager des ressources hors de leur machine. </p>
+
+<p> Un <strong class="title">objectif secondaire</strong> est de consolider la <strong class="defin">pratique</strong> des <strong>interfaces de commande de ligne</strong> déjà abordée dans le sujet de TP R2‑2. </p>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié le <strong>chapitre R2‑V</strong>  du cours. Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+
+<h3 class="nocount"> Environnement et matériel </h3>
+
+
+
+<p>	Les manipulations demandées sont à accomplir sur un <strong class="specialO">réseau local</strong> utilisant la pile de protocole <strong><em class="sigle">TCP/IP</em></strong> et disposant de tous les services attendus : <strong>passerelle</strong> vers l'Internet, serveur <strong><em class="sigle">DHCP</em></strong>, résolveur <strong><em class="sigle">DNS</em></strong>. </p>
+
+<div class="remarques">
+<p class="remarque"> La présence d'un <strong class="warning">serveur proxy</strong> comme ceux mis en œuvre par les <strong><em class="sigle">DSI</em></strong> académiques de l'Éducation nationale peut sérieusement <strong class="cons">compliquer les procédures d'installation</strong>. </p>
+</div><!-- remarque -->
+
+<p>  On requiert le matériel listé ci‑dessous : </p>
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/R2tp3_architecture.png" width="500px">
+<ul>
+  <li> pour jouer le rôle de <strong class="specialLB">client</strong>, un <strong class="title">poste de travail</strong> – de préférence un <strong>PC Linux</strong>, sinon un PC <em class="mark">Windows</em> avec service <code>ssh</code> activé dans le terminal <em class="mark">Powershell</em> (cela évite de recourir à un logiciel tiers comme <em class="mark">PuTTY</em>) ;  </li>
+
+  <li> pour jouer le rôle de <strong class="specialGr">serveur</strong>, un <strong class="title">nano‑ordinateur</strong> de type <strong class="Raspberry">Raspberry Pi 4</strong> (ou éventuellement <strong>3B</strong>), son <strong>bloc d'alimentation</strong> au secteur et une <strong>carte microSD</strong> de 8 Go minimum pour installer son système d'exploitation et ses logiciels ;  </li>
+
+  <div class="nobullet"> et associé à ce serveur, une <strong class="title">clef <em class="sigle">USB</em></strong> pour jouer le rôle de <strong class="specialN">support de stockage de masse</strong> et ainsi simuler un <strong><em class="sigle">NAS</em></strong> (cf. chap. R2‑V <a class="cours" href="Rc2-5_serveursFichiers.html#NAS" target="_BLANK"></a>). </div>
+</ul>
+
+<p> Ces deux machines doivent être l'une et l'autre <strong class="specialO">raccordées au réseau local</strong> – typiquement, via un <strong>switch</strong> comme sur la figure ci‑dessus – et se voir attribuer chacune une <strong>adresse <em class="sigle">IP</em></strong> sur le <strong class="defin">même segment</strong> pour pouvoir communiquer – ce qui est assuré avec la présence d'un serveur <strong><em class="sigle">DHCP</em></strong> sur le réseau local et la configuration appropriée des machines (cf. chap R2‑II <a class="cours" href="Rc2-2_dhcp.html" target="_BLANK"></a>). Évidemment, il faut connaître la <strong>plage d'adresses <em class="sigle">IP</em> dynamiques</strong> paramétrée par l'administrateur du réseau. </p>
+
+<p> Pour des questions pédagogiques, pour contrôler la <strong>carte</strong> <strong class="Raspberry">Raspberry Pi</strong>, plutôt que de lui raccorder spécifiquement un écran et un clavier, on fait le choix d'une <strong class="defin">connexion</strong> <code class="cmd">ssh</code> via un <strong>terminal de commandes en ligne</strong> sur le poste de travail. C'est en effet la solution usuellement adoptée dans un contexte professionnel, et tout particulièrement dans le domaine du <em class="english">cloud computing</em>. </p>
+</div><!-- display -->
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer toutes les <strong class="title">manipulations</strong>  méticuleusement <strong class="warning">dans l'ordre</strong> indiqué. Saisir les <strong class="defin">commandes en ligne</strong> par <strong>copier‑coller des commandes</strong> pour éviter les fautes de frappe et d'inattention. Dans une perspective de consolidation des connaissances, il est recommandé de bien <strong class="pros">comprendre</strong> le <strong>rôle de chaque commande</strong>, en consultant éventuellement les <strong>pages web</strong> données en référence. </p>
+
+<p> Répondre aux <strong class="title">explications demandées</strong> sur un <strong>cahier</strong> ou dans un <strong>fichier</strong>. </p>
+</div><!-- important -->
+
+
+<h4 style="padding-top: 1em"> I  –  Travail préparatoire </h4>
+
+<ol class="exercice">
+  <li style="padding-top: 0em;"> <em class="bold">Préparation du poste de travail</em> </li>
+    <img class="top-right" src="../img/workstation.png" width="90px" style="padding-top:0.0em">
+    <img class="top-right" src="../img/logoRaspberry.png" width="50px" style="padding-top:0.0em">
+    <img class="top-right" src="../img/angryIPscannerLogo.png" width="70px">
+  <div class="nobullet"> On applique la <strong class="pros">même procédure</strong> que dans le sujet de TP R2‑2 <a class="previous" href="Rtp2-2_serveurWeb.html#prepaPoste" target="_BLANK"></a>, à laquelle on se référera si le <strong class="title">poste de travail</strong> fourni n'est <strong class="cons">pas prêt</strong>, en particulier s'il ne dispose pas de l'utilitaire de gravage <strong class="Raspberry">Raspberry Pi Imager</strong> et d'un logiciel de scan de réseau comme par exemple <strong class="specialSG">Angry IP Scanner</strong>. </div>
+  
+  <img class="top-right" src="../img/logoFileZilla.png" width="80px" style="padding-top:0.0em">
+  <div class="nobullet"> De plus, on doit s'assurer que le poste de travail dispose d'un logiciel <strong class="title">client pour le protocole <em class="sigle">ftp</em></strong> . Si tel n'est pas le cas, installer <strong class="specialDR">FileZilla</strong>. Avec le système <strong class="Mint">Linux Mint</strong>, ce logiciel d'usage très courant est disponible via la <strong>logithèque</strong>. </div>
+
+  <li style="margin-top: 2em;"> <em class="bold">Préparation du système d'exploitation du serveur</em> </li>
+     <img class="top-right" src="../img/carteMicroSDlecteur.png" width="120px">
+  <div class="nobullet"> On applique la <strong class="pros">même procédure</strong> que dans le sujet de TP R2‑2 <a class="previous" href="Rtp2-2_serveurWeb.html#prepaServeur" target="_BLANK"></a>, à laquelle on se référera si le <strong class="title">système d'exploitation du serveur</strong> n'est <strong class="cons">pas prêt</strong> sur la <strong>carte MicroSD</strong> fournie. </div>
+
+  <li style="margin-top: 2em;"> <em class="bold">Mise en service et paramétrage du serveur</em> </li>
+    <img class="top-right" src="../img/RaspberryPi-and-SD.png" width="200px" style="padding-top:0.0em">
+  <div class="nobullet"> On applique la <strong class="pros">même procédure</strong> de mise en service, paramétrage (date, locale) que dans le sujet de TP R2‑2 <a class="previous" href="Rtp2-2_serveurWeb.html#prepaServeur" target="_BLANK"></a>, à laquelle on se référera. </div>
+
+  <div class="nobullet"> Rappelons que dans tous les cas : </div>
+  <ol class="questions">
+    <li> Il faut scanner le réseau local pour identifier l'<strong class="defin">adresse <em class="sigle">IP</em></strong> de la carte <strong class="Raspberry">Raspberry Pi</strong> ; on peut alors établir une <strong class="title">connexion</strong> en <code>ssh</code> via un terminal de commandes en ligne sur le poste de travail.   </li>
+  
+    <li> Il est recommandé d'effectuer une <strong class="title">mise à jour</strong> du système et des logiciels installés <a class="previous" href="Rtp2-2_serveurWeb.html#update" target="_BLANK"></a>. </li>
+  </ol><!-- questions -->
+</ol><!-- exercice I -->  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h4 style="padding-top: 2em" id="serveurSamba"> <em class="bold">II  –  Installation et test d'un serveur de fichiers</em> </h4>
+
+<div class="expert">
+<p> Cette procédure est inspirée de celle proposée au lien suivant <a class="external" href="https://raspberry-pi.fr/raspberry-pi-nas-samba/" target="_BLANK"></a>, avec toutefois un <strong class="warning">ordre différent</strong> d'exécution des opérations : les droits d'accès au répertoire public sont modifiés après le montage sur le support de masse, sinon ces modifications sont perdues lors du redémarrage du système. </p>
+</div><!-- expert -->
+
+<ol class="exercice">
+  <li style="padding-top: 0em;"> <em class="bold">Installation et paramétrage du logiciel <em class="mark">Samba</em></em> </li>
+
+  <ol class="questions">
+      <img class="top-right" src="../img/logoSamba.png" width="150px" style="padding-top: 0.2em;">
+    <li> En connexion <code>ssh</code> avec la carte <strong class="Raspberry">Rasberry Pi</strong>, <strong class="title">installer</strong> le logiciel <strong>serveur de fichiers</em></strong> <code>samba</code> (cf. chap. R2‑IV <a class="cours" href="Rc2-5_serveursFichiers.html#fileServers" target="_BLANK"></a>) :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> samba <span class="displayDarkRed">-y</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <li> <strong class="title">Éditer</strong> le <strong>fichier de configuration</strong> de <code>samba</code>, en activant la <strong>numérotation des lignes</strong> de l'éditeur <code>nano</code> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> <span class="displayDarkRed">-l</span> /etc/samba/smb.conf 
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <ul>
+      <li> Pour <strong>instaurer un contrôle d'accès</strong>, rechercher (à l'aide de la commande <code><em>Ctrl</em>-W</code> de l'éditeur <code>nano</code>) la section <code># Authentication #</code>  et dé‑commenter la ligne ci‑dessous pour qu'elle devienne active : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+  security = user
+</pre>
+<!---------- ne pas indenter ----------> 
+    
+      <li> Pour <strong>autoriser l'accès en écriture</strong> au répertoires principaux de stockage, rechercher la section <code>[homes]</code> et paramétrer :   </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+  read only = no
+</pre>
+<!---------- ne pas indenter ----------> 
+
+      <li> Pour <strong>configurer la partie publique</strong>, aller à la fin du fichier et ajouter :   </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+[public]
+  comment= Public Storage
+  path = /home/shares/public
+  valid users = @users
+  force group = users
+  create mask = 0660
+  directory mask = 0771
+  read only = no
+</pre>
+<!---------- ne pas indenter ---------->     
+
+    </ul>
+
+    <li> <strong class="title">Sauvegarder</strong> les modifications du fichier (<code><em>Crlt</em>-S</code>), <strong class="title">quitter</strong> l'édition (<code><em>Ctrl</em>-X</code>) et <strong class="title">relancer</strong> le logiciel <code>samba</code> :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo</span> /etc/init.d/smbd <span class="displayDarkGreen">restart</span>
+</pre>
+<!---------- ne pas indenter ---------->     
+
+    <li> <strong class="title">Ajouter l'utilisateur</strong> <code>pi</code> au logiciel <code>samba</code> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo smbpasswd</span> <span class="displayDarkRed">-a</span> pi
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> en saisissant et confirmant le <strong>même mot de passe</strong> que celui pour se connecter à la carte <strong class="Raspberry">Raspberry Pi</strong> (en cas de doute, demander à l'enseignant). </div> 
+  </ol><!-- questions exo II.1 -->      
+
+
+
+
+
+
+
+
+<li> <em class="bold">Installation et paramétrage du support de stockage de masse</em> </li>
+
+  <ol class="questions">
+    <li> <strong class="title">Brancher la clef <em class="sigle">USB</em></strong> sur un port de la carte <strong class="Raspberry">Raspberry Pi</strong>. </li>
+
+    <div class="nobullet"> <strong class="title">Déterminer l'identifiant</strong> attribué par le système à ce périphérique (<em class="english">storage device</em>) : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">dmesg</span> <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">grep</span> "sd"
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> Typiquement, on doit obtenir une ligne comme <code class="displayDark">sda: sda1</code> où <code>sda1</code> est l'identifiant cherché. </div>
+
+    <li> Si ce n'est pas déjà fait, <strong class="title">démonter</strong> le volume puis <strong class="title">formater la clef</strong> avec une <strong>partition</strong> <code>ext4</code> <a class="external" href="https://fr.wikipedia.org/wiki/Ext4" target="_BLANK">W</a> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">umount</span> /dev/sda1
+<span class="displayDarkGreen">sudo mkfs.ext4</span> /dev/sda1
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> Remarquer que la led intégrée à la c<strong>lef <em class="sigle">USB</em></strong> clignoter durant le formatage. </div>
+
+    <li> Dans le système de fichier de la carte, <strong class="title">créer le répertoire</strong> <code class="filename">public</code> et le futur <strong>point de montage</strong> de la clef :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mkdir</span> <span class="displayDarkRed">-p</span> /home/shares/public/disk1
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> sachant que pour le moment, le répertoire <code class="filename">share</code> appartient à l'<strong>utilisateur</strong> <code>root</code> et au <strong>groupe</strong> <code>root</code> et n'est pas accessible en écriture aux autres utilisateur – ce que l'on peut vérifier via la commande : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">ls</span> <span class="displayDarkRed">-l</span> /home/shares/
+</pre>
+<!---------- ne pas indenter ----------> 
+    
+    <div class="nobullet"> Ces propriétés et droits seront modifiés après montage du volume (question <em class="bold">2.e</em>). </div>
+    
+    <li> <strong class="title">Monter le volume</strong> <code class="cmd">sda1</code> à son point de montage (le répertoire <code class="filename">/home/shares/public/disk1</code>) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mount</span> /dev/sda1 /home/shares/public/disk1
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> puis <strong class="title">rendre le montage automatique</strong> au <strong>démarrage</strong> de la carte, en éditant le <strong>fichier</strong> <code class="filename">fstab</code> (<em class="english">file systems table</em>) :  </div>    
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> /etc/fstab
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> et tout à la fin du fichier, en ajoutant la <strong>ligne</strong> :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+/dev/sda1 /home/shares/public/disk1 auto noatime,nofail 0 0
+</pre>
+<!---------- ne pas indenter ---------->    
+
+    <div class="nobullet"> <strong class="title">Sauvegarder</strong> les modifications du fichier (<code><em>Crlt</em>-S</code>), <strong class="title">quitter</strong> l'édition (<code><em>Ctrl</em>-X</code>). </div>
+
+    <li> <strong class="title">Autoriser l'accès</strong> en lecture et écriture dans ce répertoire public aux utilisateurs du groupe <code>users</code> dont <code>pi</code> fait partie. Pour cela,  <strong class="defin">attribuer le groupe</strong> <code>users</code> et avec les <strong class="defin">droits d'écriture</strong> à au répertoire (et tous ses enfants) :  </li>
+
+<!-- A VERIFIER -->
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo chown</span> <span class="displayDarkRed">-R</span> root<span class="displayDarkBlue">:</span>users /home/shares/public
+<span class="displayDarkGreen">sudo chmod</span> <span class="displayDarkRed">-R</span> 775 /home/shares/public
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> <strong class="title">Vérifier</strong> que ce paramétrage est effectif :  </div>   
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">ls</span> <span class="displayDarkRed">-l</span> /home/shares/
+<span class="displayDarkGreen">ls</span> <span class="displayDarkRed">-l</span> /home/shares/public
+</pre>
+<!---------- ne pas indenter ----------> 
+    
+
+    <div class="nobullet"> <strong class="title">Vérifier</strong> également que l'<strong>utilisateur</strong> <code>pi</code> <strong class="defin">appartient</strong> bien au <strong>groupe</strong> <code>users</code> avec la commande <code class="displayDark">groups</code>.  </div>
+
+    <li> <strong class="title">Redémarrer</strong> la carte (<code class="displayDarkGreen">sudo reboot</code>), renouveler la connexion <code>ssh</code> et <strong class="title">vérifier</strong> à l'aide de la <code>commande</code> <code class="displayDark"><span class="displayDarkGreen">df</span> <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">grep</span> sda1</code> (<em class="english">disk‑free</em>) que le volume est bien monté automatiquement au démarrage. </li>
+
+    <div class="nobullet"> À l'aide de la même commande qu'à la question <em class="bold">2.e</em>, vérifier que les <strong>propriétés</strong> et <strong>droits</strong> du répertoire public n'ont <strong class="pros">pas changé</strong>.  </div>
+
+    <li> Sur la racine du volume <code class="filename">disk1</code>, <strong class="title">créer un fichier vide</strong> <code class="filename">testFile1.txt</code> :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">touch</span> /home/shares/public/disk1/testFile1.txt
+</pre>
+<!---------- ne pas indenter ---------->  
+
+    <div class="nobullet"> Dans ce fichier vide, ajouter le <strong class="title">message de bienvenue</strong> « Welcome to the NAS » :  </div> 
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">echo</span> 'Welcome to the NAS!' <span class="displayDarkBlue">>></span> /home/shares/public/disk1/testFile1.txt
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> Quelle commande aurait permis d'obtenir le même résultat que les deux commandes précédentes ? </div> 
+
+    <div class="nobullet"> <strong class="title">Vérifier</strong> que cet ajout est effectif : </div>    
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">cat</span> /home/shares/public/disk1/testFile1.txt
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+  </ol><!-- questions exo II.2 --> 
+  
+
+
+
+
+
+  <li> <em class="bold">Exploitation du serveur de fichiers</em> </li>
+  
+  <div class="nobullet"> Les manipulations sont à effectuer avec un PC à système <strong class="specialLB">Linux</strong> et <strong class="specialLB">Windows</strong>.  </div>
+
+  <ol class="questions">
+    <li> Sur un <strong>poste de travail</strong> <strong class="specialLB">Linux Mint</strong> (bureau <strong>Cinnamon</strong>), dans le <strong class="specialLB">panneau latéral</strong> d'une <strong class="title">fenêtre d'explorateur de fichiers</strong>, cliquer sur le lien <code class="filename">Réseau</code> et <strong class="defin">ouvrir l'accès</strong> au volume <code class="filename">disk1</code> via une procédure d'authentification pour l'utilisateur <code>pi</code>. </li>
+
+    <div class="nobullet"> Sur un <strong>poste de travail</strong> <strong class="specialLB">Windows</strong>, la procédure est similaire, il faut passer par la commande <code>ajouter un emplacement réseau</code> <a class="external" href="https://support.microsoft.com/fr-fr/windows/mapper-un-lecteur-réseau-dans-windows-10-29ce55d1-34e3-a7e2-4801-131475f9557d" target="_BLANK"></a>. </div>
+  
+    <li> Sur le <strong>poste de travail</strong>, <strong class="title">ouvrir le fichier</strong> <code class="filename">testFile1.txt</code> avec un éditeur (par exemple, <strong class="SublimeText">Sublime Text</strong>), puis <strong class="title">modifier son texte</strong> (par exemple, ajouter un point d'exclamation), sauvegarder et quitter. </li>
+
+    <div class="nobullet"> Sur la carte <strong class="Raspberry">Raspberry Pi</strong>, vérifier que cette modification est effective en affichant le contenu du fichier <code class="filename">testFile1.txt</code> dans le terminal de commandes en ligne. </div>
+
+    <li> Sur le <strong>poste de travail</strong>, <strong class="title">créer un nouveau fichier</strong> vide <code class="filename">testFile2.txt</code>. </li>
+
+    <div class="nobullet"> Sur la carte <strong class="Raspberry">Raspberry Pi</strong>, vérifier que ce fichier apparaît dans le volume <code class="filename">disk1</code>. </div>
+  </ol><!-- questions exo II.3 -->
+    
+
+</ol><!-- exercices serveur fichiers -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h4 style="padding-top: 2em" id="serveurFTP"> <em class="bold">III  –  Installation et test d'un serveur FTP</em> </h4>
+
+<p> La procédure indiquée permet de mettre en place un <strong class="title">serveur <em class="sigle">FTP</em></strong> (cf. chap. R2‑V <a class="external" href="Rc2-5_serveursFichiers.html#serveurFTP" target="_BLANK"></a>) avec <strong class="defin">contrôle d'accès</strong> sur le <strong>volume</strong> <code>disk1</code> créé à la section <em class="bold">2</em>. Deux approches sont successivement proposées : </p>
+<ul>
+  <li> avec le <strong class="specialLB">protocole <em class="sigle">FTP</em></strong>, donc <strong class="cons">sans chiffrement</strong> des échanges client‑serveur ; </li>
+
+  <li> avec le <strong class="specialLB">protocole <em class="sigle">FTPS</em></strong>, donc <strong class="pros">avec chiffrement</strong> des échanges client‑serveur par le <strong>protocole <em class="sigle">TLS</em></strong></a>. </li>
+</ul>
+  
+
+<ol class="exercice">
+  <li style="padding-top: 0em;"> <em class="bold">Installation et paramétrage du paquet <code class="cmd">vsftpd</code> en mode <em class="sigle">FTP</em></em> </li>
+
+  <ol class="questions">
+    <li> En connexion <code>ssh</code> avec la carte <strong class="Raspberry">Rasberry Pi</strong>, commencer par <strong class="title">installer</strong> le paquet <code>vsftpd</code> (cf. chap. R2‑V <a class="cours" href="Rc2-5_serveursFichiers.html#FTPserver" target="_BLANK"></a>) :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> vsftpd <span class="displayDarkRed">-y</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <li> Ensuite, avant toute configuration, il est recommandé de <strong class="title">sauvegarder une copie</strong> du fichier de configuration <code class="filename">vsftpd.conf</code>, pour y revenir en cas de dysfonctionnement : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo cp</span> /etc/vsftpd.conf /etc/vsftpd.conf_back 
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> On peut alors <strong class="title">éditer</strong> ce <strong>fichier de configuration</strong>, en activant la <strong>numérotation des lignes</strong> de l'éditeur <code>nano</code> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> <span class="displayDarkRed">-l</span> /etc/vsftpd.conf 
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> sachant que les différents <strong>paramètres à modifier</strong> ne sont <strong class="cons">pas regroupés</strong>. Il est donc commode de les rechercher à l'aide de la commande <code><em>Ctrl</em>-W</code> de l'éditeur <code>nano</code>. </div>
+
+    <li id="configFTP"> La <strong class="title">configuration par défaut</strong> de l'application <strong class="title">VsFTPD</strong> est <strong class="cons">restrictive</strong>. Les accès sont prévus mais peu sont autorisés. Pour rendre le serveur fonctionnel, il faut donc <strong class="defin">dé‑commenter la ligne d'affectation</strong> de chaque paramètre d'accès souhaité et/ou <strong>changer la valeur d'affectation</strong> pour obtenir les lignes suivantes. </li>
+    <ul>
+      <li> <code class="displayDark">write_enable=YES</code> <br>
+            Cela permet aux utilisateurs d'<strong>ajouter ou de supprimer des fichiers</strong> sur le serveur. </li>
+      
+      <!-- 
+      <li> <code class="displayDark">local_umask=022</code> <br>
+            Cela donne aux utilisateurs locaux le <strong>masque octal</strong> <code>022</code> (équivalent à <code>0022</code> – cf. <a class="external" href="https://fr.wikipedia.org/wiki/Umask" target="_BLANK">W</a>) pour le calcul des permissions d'accès aux fichiers sur le serveur. </li>
+      -->
+
+      <li> <code class="displayDark">idle_session_timeout=600</code> <br>
+           Cela fixe à <strong>10 min</strong> (600 s) le <strong>délai maximal entre deux commandes</strong> que le client doit respecter, sinon il perd la connexion au serveur (cela évite qu'un client inactif reste connecté indéfiniment.) </li>
+
+      <li> <code class="displayDark">ftpd_banner=Welcome to SNIR<span><strong class="specialY">x</strong></span> FTP service </code> <br>
+           où <strong class="specialY">x</strong> est un numéro attribué par l'enseignant. <br>
+           Le <strong>message de bienvenue</strong> est alors affiché au début d'une connexion. </li>
+
+      <li> <code class="displayDark">utf8_filesystem=YES </code> <br>
+           Les <strong>noms des dossiers et des fichiers</strong> transférés peuvent alors être composés avec des caractères pris dans l'<strong><em class="sigle">UCS</em></strong> et encodés au format <strong><em class="sigle">UTF‑8</em></strong> (cf. chap. C3‑IX <a class="next" href="../../ModuleC/C3-Numeration/Cc3-9_typesCaracteresEtendus.html" target="_BLANK">C</a>). </li>
+    </ul>
+
+    <div class="nobullet"> De plus, à la fin du fichier, ajouter la ligne suivante :  <br>
+    <span class="inline">
+      <code class="displayDark">local_root=/home/shares/public/disk1/</code>
+    </span> <br>
+    pour définir le <strong>dossier d'accès</strong> dans le système de fichiers du <strong>serveur <em class="sigle">FTP</em></strong>. </div>
+
+    <div class="nobullet">Pour finir, <strong>sauvegarder</strong> (<code><em>Ctrl</em>-S</code>) et quitter (<code><em>Ctrl</em>‑X</code>) l'édition. </div>
+     
+
+    <li> <strong class="title">Redémarrer le service</strong> pour prendre en compte ces modifications : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo systemctl restart</span> vsftpd
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> et vérifier qu'il s'exécute bien en <strong>tâche de fond</strong> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">systemctl status</span> vsftpd
+</pre>
+<!---------- ne pas indenter ---------->
+
+  </ol><!-- questions exo III.1 -->
+
+
+
+
+
+
+
+  <li style="padding-top: 1em;"> <em class="bold">Utilisation du serveur <em class="sigle">FTP</em> via la commande <code>ftp</code> et avec <em class="mark">FileZilla</em></em> </li>
+
+  <ol class="questions">
+    <li> Sur le <strong>poste de travail</strong>, dans un <strong class="defin">terminal de commandes en lignes</strong> créer un <strong class="title">répertoire</strong> et des <strong class="title">fichiers de test</strong> en exécutant la série de commandes ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">mkdir</span> FTP_LOCAL_1 <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">cd</span> FTP_LOCAL_1</span> <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">echo</span> "Test FTP ASCII 1" <span class="displayDarkBlue">></span> ftpTest1</span> <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">touch</span> ftpTest2</span> <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">echo</span> "Test FTP UTF-8 (nom du fichier)" <span class="displayDarkBlue">></span> fichierSécurité </span> <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">mkdir</span> FTP_LOCAL_2 <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">ls</span> <span class="displayDarkRed">-l</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> Lire attentivement l'affichage obtenu pour la dernière commande (<code>ls -l</code>) et <strong class="defin">vérifier</strong> l'exécution correcte de toutes les commandes précédentes. </div>
+
+    <li> Ensuite, établir une <strong class="title">connexion au serveur <em class="sigle">FTP</em></strong> en tant qu'utilisateur <code>pi</code> avec le <strong class="pros">même mot de passe</strong> que pour se connecter en <strong><em class="sigle">SSH</em></strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">ftp</span> pi@<span class="nocode"><strong class="specialLY">adresse IP de la carte</strong></span>
+</pre>
+<!---------- ne pas indenter ---------->    
+    
+    <div class="nobullet"> Le message paramétré dans le fichier de configuration s'affiche‑il ? </div>
+
+    <li> Maintenant, <strong class="title">exécuter</strong> les commandes suivantes <strong>une par une</strong>, en expliquant ce que fait chacune. Veiller à <strong class="warning">ne pas supprimer d'autres fichiers ou dossiers</strong> que ceux mis en œuvre dans le cadre de ce TP, tant sur le poste de travail que sur le serveur :  </li>
+    <ol>
+      <li> <code class="displayDark">pwd</code> puis <code class="displayDark">ls</code> </li>
+    
+
+      <li> <code class="displayDark">mk FTP</code> (ou <code>mkdir</code>) puis <code class="displayDark">ls</code> puis <code class="displayDark">cd FTP</code> puis <code class="displayDark">pwd</code> </li>
+
+      <li> <code class="displayDark">lpwd</code> (ou <code>!pwd</code>) puis <code class="displayDark">!ls</code> </li>  
+      
+      <li> <code class="displayDark">put ftpTest1</code> puis <code class="displayDark">ls</code> </li>
+
+      <li> <code class="displayDark">del ftpTest1</code> puis <code class="displayDark">ls</code> </li>
+
+      <li> <code class="displayDark">mput ftpTest1 ftpTest2</code> en confirmant par <code class="displayDark">a</code> (<em class="english">all</em>) puis <code class="displayDark">ls</code> </li>
+      
+      <li> <code class="displayDark">mk TEST_DIR</code> puis <code class="displayDark">cd TEST_DIR</code> puis <code class="displayDark">pwd</code> </li>
+
+      <li> <code class="displayDark">mput *</code> en confirmant par <code class="displayDark">p</code> (<em class="mark">prompt off</em>) puis <code class="displayDark">ls</code> </li>
+
+       <li> <code class="displayDark">mdel *</code> puis <code class="displayDark">ls</code> </li>
+
+      <li> <code class="displayDark">cd ..</code> puis <code class="displayDark">ls</code> </li>
+
+      <li> <code class="displayDark">ls TEST_DIR</code> puis <code class="displayDark">rm TEST_DIR</code> (ou <code>rmdir</code>) puis <code class="displayDark">ls</code> </li>
+
+      <li> <code class="displayDark">lcd FTP_LOCAL_2</code> puis <code class="displayDark">!ls -l</code></li>
+
+      <li> <code class="displayDark">get ftpTest1</code> puis <code class="displayDark">!ls -l</code> </li>
+
+      <li> <code class="displayDark">!rm ftpTest1</code> puis <code class="displayDark">!ls -l</code> </li>
+
+      <li> <code class="displayDark">mget ftpTest1 ftpTest2</code> puis <code class="displayDark">!ls -l</code> </li>
+
+      <li> <code class="displayDark">!rm ftp*</code> puis <code class="displayDark">!ls -l</code> puis <code class="displayDark">lcd ..</code> </li>
+
+      <li> <code class="displayDark">!rmdir FTP_LOCAL_2</code> (et non pas <code>!rm</code>) puis <code class="displayDark">!ls -l</code> </li>
+
+      <li> <code class="displayDark">cd ../..</code> puis <code class="displayDark">pwd</code> </li>
+
+      <li> <code class="displayDark">quit</code> (ou <code>exit</code>)</li>
+    </ol>
+    
+    <img class="top-right" src="../img/R2tp3_FileZillaNewSite.png" width="500px" style="margin-top: 0.5em">
+  <li id="FileZillaConfig"> Sur le <strong>poste de travail</strong>, lancer l'application <strong class="specialR">FileZilla</strong>. Dans le menu <code>Fichier</code>, <strong class="title">paramétrer une connexion</strong> au serveur via la commande <code>Gestionnaire de site…</code>, en cliquant sur le <strong>bouton</strong> <code class="cmd">Nouveau site</code>. </li>
+  <ul>
+    <li> Donner à la connexion le <strong class="defin">nom</strong> <code>RPI<span class="no-code"><strong class="specialY">x</strong></span></code> où <strong class="specialY">x</strong> est le <strong>même numéro</strong> que celui renseigné à la question <em class="bold">1.c</em> (cf. supra <a class="supra" href="Rtp2-3_serveurFichiers.html#configFTP"></a>) pour la bannière d'accueil.  </li>
+ 
+    <li> Renseigner tous les <strong>paramètres</strong> de l'onglet <code>Général</code> comme sur la capture d'écran ci‑dessus, en saisissant dans la rubrique <code>Hôte</code> l'<strong>adresse <em class="sigle">IP</em></strong> du <strong>serveur <em class="sigle">FTP</em></strong> </li>
+
+    <div class="nobullet"> <em class="remark">Remarque</em> : il n'est pas nécessaire de renseigner le <strong>nº de port</strong>, sauf si l'on souhaite utiliser un port non standard.</div> 
+  </ul>
+  <div class="nobullet"> Et pour finir, cliquer directement sur le <strong>bouton</strong> <code>Connexion</code>. </div>
+
+  <div class="nobullet"> Quel message s'affiche lors de l'établissement de la connexion ? </div>
+
+  <li> Dans le navigateur du <strong>site local</strong> (colonne de gauche), retrouver et ouvrir le <strong>dossier</strong> <code>FTP_LOCAL_1</code>. Effectuer alors des <strong class="title">manipulations</strong>  – création de dossiers, transferts de fichiers dans un sens et dans l'autre, suppression de fichiers, etc. – comme à la question <em class="bold">2.c</em> avec la commande en ligne <code>ftp</code>. </li>
+
+  <div class="nobullet"> Pour finir,<strong class="title"> terminer la connexion</strong> au serveur en cliquant sur le <strong>bouton de déconnexion</strong> dans la barre d'outils. </div>
+
+  </ol><!-- questions exo III.2 -->
+
+
+
+
+
+  <li style="padding-top: 0em;"> <em class="bold">Paramétrage et utilisation du paquet <code>vsftpd</code> en mode <em class="sigle">FTPS</em></em> </li>
+
+  <ol class="questions">
+    <li> En connexion <code>ssh</code> avec la carte <strong class="Raspberry">Raspberry Pi</strong>, éditer à nouveau le <strong class="title">fichier de configuration</strong> <code class="filename">vsftpd.conf</code> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> <span class="displayDarkRed">-l</span> /etc/vsftpd.conf 
+</pre>
+<!---------- ne pas indenter ---------->
+    
+    <div class="nobullet"> et <strong>activer le chiffrement</strong> avec le paramétrage ci‑dessous : <br>
+    <span class="inline">
+      <code class="displayDark">ssl_enable=YES</code>
+    </span> </div>
+
+    <div class="nobullet"><strong>Sauvegarder</strong> (<code><em>Ctrl</em>-S</code>) et <strong>quitter</strong> (<code><em>Ctrl</em>‑X</code>) l'édition puis <strong>redémarrer le service</strong> pour prendre en compte cette modification : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo systemctl restart</span> vsftpd
+</pre>
+<!---------- ne pas indenter ---------->
+    
+    <li> Sur le <strong>poste de travail</strong>, relancer l'application <strong class="specialR">FileZilla</strong>. Dans le menu <code>Fichier</code>, sélectionner la commande <code>Gestionnaire de site…</code> pour <strong class="title">modifier la connexion</strong> <code>RPI<span class="no-code"><strong class="specialY">x</strong></span></code>. Choisir pour la rubrique <code>Chiffrement</code> : <br>
+    <span class="inline">
+      <code class="cmd">Connexion explicite sur TLS</code>
+    </span> <br>
+    puis cliquer directement sur le <strong>bouton</strong> <code>Connexion</code>. </li>
+
+    <li> Vérifier que toutes les <strong class="title">manipulations</strong> effectuées à la question <em class="bold">2.d</em> sont <strong class="pros">faisables normalement</strong> avec ce protocole sécurisé par chiffrement. </li>
+
+
+
+
+    <!-- résoudre les problèmes avec la commande ftp-ssl (ls obtient 200 mais ne répond pas) -->
+
+  </ol><!-- questions exo III.3 -->  
+
+</ol><!-- exercices serveur FTP -->
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

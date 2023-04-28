@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="4"
+  data-pagenumber="II"
+  data-pageState="OK"
+  data-pageheadtitle="Portée données"
+  data-pagefulltitle="La portée et la durée de vie des données"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<!-- relecture 2023 section 1 et un peu plus -->
+<!-- il faut ajouter des figures et relire la suite -->
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/dataExample.png" width="500px" style="padding-top: 1.2em">
+<p class="square"> Les <strong class="title">données déclarées</strong>  <strong class="defin">constantes</strong> ou <strong class="defin">variables</strong> sont la matière d'œuvre sur laquelle un programme agit. Après l'étude des <strong>types</strong> (partie <span class="partie">C3</span> du module) qui constituent un aspect primordial dans la déclaration d'une donnée, on aborde maintenant <strong>deux autres aspects</strong> qui pourraient a priori paraître secondaires, mais qui sont néanmoins fondamentaux : la <strong class="specialLB">portée</strong> et la <strong class="specialLB">durée de vie</strong> d'une donnée. </p>
+</div><!-- display -->
+<ul>
+  <li> La <strong class="specialLB">portée</strong> caractérise le fait qu'une donnée déclarée soit <strong class="defin">globale</strong> (autrement dit accessible en lecture et écriture <strong>partout dans le code</strong>), ou au contraire <strong class="defin">locale</strong>, c'est‑à‑dire accessible seulement dans une <strong>partie limitée du code</strong> – typiquement, un <strong>bloc</strong>, et en particulier celui qui définit une <strong>fonction</strong>. </li>
+
+  <li> La <strong class="specialLB">durée de vie</strong> caractérise le fait qu'une donnée déclarée existe de façon  <strong class="defin">permanente</strong> ou <strong class="defin">temporaire</strong> au cours du processus d'<strong>exécution</strong> du programme. </li>
+</ul>
+
+<p> Ces deux aspects sont étroitement liés aux mécanismes d'<strong class="title">allocation mémoire</strong>, c'est‑à‑dire à la façon dont une donnée déclarée se voit attribuer un <strong class="defin">espace de stockage</strong> pour sa <strong>valeur</strong> dans la machine, avec une <strong>adresse</strong> pour la repérer. Ces mécanismes dépendent bien entendu de l'<strong>architecture matérielle</strong> (microprocesseur ou microcontrôleur, mémoire vive, bus…) et des aspects logiciels de <strong>bas niveau</strong> (jeu d'instruction, gestion de la mémoire, etc.) </p>
+
+<p class="square"> En règle générale, dans la plupart des langages de programmation, c'est le <strong class="title">positionnement dans le code</strong> d'une déclaration de donnée  qui détermine sa portée et sa durée de vie.  Mais en <strong>C</strong> et <strong>C++</strong>, il est possible d'imposer une <strong class="defin">classe d'allocation</strong> particulière à une donnée – la classe <strong class="specialO">statique</strong> – pour rendre <strong class="defin">permanente</strong> une <strong>donnée locale</strong> déclarée dans un bloc. Cette possibilité est essentielle pour éviter le recours à trop de  <strong class="cons">données globales</strong> dont le principal inconvénient est la visibilité universelle, qui expose au risque de <strong class="warning">modifications indésirables</strong>.  </p>
+
+<p class="square"> Tous ces aspects pourraient sembler secondaires dans un module de formation initiale à la programmation. Ils sont pourtant <strong class="pros">essentiels</strong> dans la perspective d'aborder la <strong>programmation modulaire</strong>, dont on ne cesse de souligner l'importance. Le présent chapitre y est donc entièrement consacré, avec l'<strong class="title">objectif</strong> de les présenter simplement dans l'ordre de cette introduction. </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="porteeDonnee"> Portée d'une donnée  –  notion de niveau visibilité </h2>
+
+
+
+<h3 id="niveauDonnee"> Niveau d'une donnée déclarée </h3>
+
+<!-- faire une figure -->
+
+<p> On a vu au chapitre C4‑I qu'en langages <strong>C</strong> et <strong>C++</strong>, le <strong class="defin">code source d'un programme</strong> est essentiellement constitué de <strong>fonctions</strong>, chacune étant définie par un <strong class="title">bloc d'instructions</strong> délimité par des accolades <code class="prettyprint lang-c">{ }</code>. De plus, un bloc de définition de fonction peut lui‑même contenir d'<strong class="specialLB">autres blocs</strong>, notamment de <strong>structures de contrôle</strong> (<code class="prettyprint lang-c">if</code>, <code class="prettyprint lang-c">while</code>, etc). </p>
+
+<div class="important">
+<p> Dans un fichier source, le <strong class="title">niveau de visibilité</strong> d'une <strong class="specialG">donnée déclarée</strong> est le <strong class="defin">numéro d'ordre hiérarchique</strong> du <strong class="specialN">bloc</strong> dans lequel elle est <strong>déclarée</strong> : </p>
+<ul>
+	<li> en partant de <strong class="defin">0</strong> pour le niveau le plus bas, c'est‑à‑dire <strong class="specialN">hors de tout bloc</strong> – y compris celui de la fonction principale <code class="prettyprint lang-c">main</code> ; </li>
+
+	<li> en incrémentant de <strong class="defin">1</strong> à chaque <strong>encapsulation</strong> dans un <strong class="specialN">bloc</strong>. </li>
+</ul>
+<p> De plus, un <strong class="specialT">argument formel de fonction</strong> peut être vu comme une <strong class="specialG">donnée déclarée</strong> au tout début du <strong>bloc de définition</strong> de cette fonction. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/structureBlocs.png" width="500px">
+<p> Partant de la structuration du code source en fonctions — selon le principe de programmation procédurale (cf. chap. C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#prgProcedurale" target="_BLANK"></a>) – on peut modéliser tout <strong class="title">fichier source</strong> par une <strong class="defin">structure en arbre</strong> dont : </p>
+
+<ul>
+	<li> la <strong>racine</strong> est le <strong class="defin">niveau 0</strong> ;  </li>
+
+	<li> chaque <strong class="defin">niveau hiérarchique 1, 2, 3…</strong> comporte éventuellement <strong>plusieurs branches indépendantes</strong>. </li>
+</ul>
+<p> La connaissance de cette structure est <strong class="pros">utile</strong> pour <strong>déterminer la visibilité d'une donnée</strong> dans telle ou telle branche, et à tel ou tel niveau.</p>
+</div><!-- complement -->
+
+
+
+<h3> Notion de donnée déclarée globale ou locale </h3>
+
+
+
+<div class="important">
+<p> Dans un fichier source, on dit d'une <strong class="specialG">donnée déclarée</strong> qu'elle est : </p>
+
+<ul>
+  <li> <strong class="title">globale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Variable_globale" target="_BLANK">W</a> si elle est de <strong class="defin">niveau 0</strong> ; </li>
+
+  <li> <strong class="title">locale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Variable_locale" target="_BLANK">W</a> si elle est de <strong class="defin">niveau supérieur ou égal à 1</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cette <strong class="title">distinction « globale/locale »</strong> joue un <strong class="warning">rôle primordial</strong> dans le cadre d'une <strong>programmation multi‑fichiers</strong>. En effet, lorsqu'on code une directive d'<strong class="specialLG">inclusion d'un fichier d'en‑tête</strong> dans un fichier source, il en résulte la <strong class="defin">fusion des niveaux 0</strong> de ces fichiers. Ainsi, toutes les données globales déclarées dans le fichier d'entête de bibliothèque sont également globales dans le fichier principal. </p> 
+</div><!-- complement -->
+
+<div id="exempleNiveaux" class="exemples">
+<p class="exemples"> Reprenons une version du <strong class="title">programme académique</strong> ayant servi d'exemple au chapitre C4‑I <a class="previous" href="Cc4-1_fonctionsGeneralites.html#exempleFinal" target="_BLANK"></a> pour illustrer la notion de fonction. Ce programme teste en boucle si <strong>deux nombres entiers</strong> strictement positifs saisis par l'utilisateur sont <strong>premiers entre eux</strong>. </p>
+
+<p> On indique ici par des <strong>commentaires</strong> les <strong class="defin">différents niveaux</strong> de ce programme, même si aucune variable n'y est déclarée. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+/* ========================= LEVEL 0 ======================= */
+
+void enteringNumber(unsigned n, unsigned * number);   // function prototype
+bool arePrime (unsigned a, unsigned b);               // idem
+
+
+int main(void) { 
+  /* ======================= MAIN - LEVEL 1 ======================= */ 
+  unsigned number1 = 0, number2 = 0;
+  while (true) {
+    /* ===================== MAIN - LEVEL 2 ======================= */
+    enteringNumber(1, &number1);
+    enteringNumber(2, &number2);
+    if (arePrime(number1, number2)) {
+      /* ===================== MAIN - LEVEL 3 ======================= */  
+      printf("%u et %u sont PREMIERS ENTRE EUX.\n", number1, number2);
+    }
+    else {
+      /* ================== MAIN - OTHER LEVEL 3 ==================== */
+      printf("%u et %u ne sont PAS premiers entre eux.\n", number1, number2);
+    }
+  }
+}
+
+/* ========================= LEVEL 0 ======================= */
+
+void enteringNumber(unsigned n, unsigned * number) {
+  /* ======================= FUNCTION1 - LEVEL 1 ======================= */ 
+  printf("Nombre entier %u (0 pour sortir): ", n);
+  scanf("%u", number);
+}
+
+/* ========================= LEVEL 0 ======================= */
+
+bool arePrime (unsigned a, unsigned b) {
+  /* ======================= FUNCTION2 - LEVEL 1 ====================== */ 
+  if (a == 0 || b == 0) exit(1);   /* <---- LEVEL 2  */
+  while (b != 0) {
+    /* ======================= FUNCTION2 - LEVEL 2 ====================== */
+    unsigned c = b;
+    b = a % b;      
+    a = c;
+  }
+  /* ======================= FUNCTION2 - LEVEL 1 ====================== */
+  return (a == 1);  
+}
+
+/* ========================= LEVEL 0 ======================= */
+
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+<h3 id="visibilite"> Notions de visibilité et de portée d'une donnée déclarée </h3>
+
+
+
+<div class="important">
+<p> On dit qu'une <strong class="specialG">donnée déclarée</strong> est <strong class="title">visible</strong> dans une <strong class="specialLB">partie du code source</strong> si son <strong>identificateur</strong> peut y être <strong class="pros">employé</strong> dans les expressions sans provoquer d'erreur de compilation au motif qu'il est inconnu. </p>
+
+<p> On appelle <strong class="title">portée</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Portée_(informatique)" target="_BLANK">W</a> ou <strong class="title">espace de visibilité</strong> – en anglais, <strong>scope</strong> – de la donnée toute la <strong class="defin">partie du code où elle est visible</strong>. </p>
+</div><!-- important -->
+
+<div class="remarques">
+<p class="remarque"> Le terme « <strong class="title">visibilité</strong> » est parfois aussi employé pour qualifier <strong>dans quelle mesure</strong> une donnée est <strong class="defin">accessible dans sa portée</strong>, c'est‑à‑dire le fait qu'elle soit « <strong class="specialO">publique</strong> », « <strong class="specialO">privée</strong> », etc.  </p>
+
+<p> Ces aspects plus spécifiques seront revus lors de l'étude de la <strong>programmation orientée objet</strong>. </p>
+</div><!-- remarque -->
+
+
+<h4> Relation entre la visibilité et le niveau d'une donnée déclarée </h4>
+
+
+
+<!-- faire une figure qui reprend partiellement celle avec l'arbre ci‑dessus -->
+<div class="important">
+<p> Une <strong class="title">donnée déclarée</strong> de <strong>niveau N</strong> est : </p>
+
+<ul>
+  <li> <strong class="defin">visible</strong> seulement <strong class="specialN">dans le bloc</strong> où elle est <strong>déclarée</strong> – donc y compris à l'intérieur des <strong>blocs encapsulés</strong> dans son bloc – mais attention, seulement dans la partie du bloc située <strong class="warning">après</strong> <strong>sa déclaration</strong> ; </li>
+
+  <li> <strong class="warning">invisible</strong> dans les <strong class="specialN">niveaux inférieurs</strong> à sa déclaration – c'est‑à‑dire dans les blocs qui encapsulent le sien – et dans tous les <strong class="specialN">autres blocs</strong> qui ne partent pas de la branche où elle est déclarée.</li>
+</ul>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemples"> Dans le <strong class="title">programme académique </strong>commenté supra <a class="supra" href="Cc4-2_porteeDonnees.html#exempleNiveaux"></a> : </p>
+<ul>
+  <li> il n'y a <strong class="pros">aucune variable globale</strong> ; </li>
+
+  <li> les <strong class="specialG">variables locales</strong> <code class="prettyprint lang-c">number1</code> et <code class="prettyprint lang-c">number2</code> sont visibles dans toute la fonction <code class="prettyprint lang-c">main</code> puisqu'elles sont déclarées au tout début de cette dernière ; </li>
+
+  <li> les <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> de la fonction <code class="prettyprint lang-c">arePrime</code> sont aussi considéré <strong>comme des variables locales</strong> ; ils sont visibles seulement dans le <strong>bloc de définition</strong> de cette fonction ; </li>
+
+  <li> la <strong class="specialG">variable locale </strong><code class="prettyprint lang-c">c</code> est visible seulement dans le <strong>bloc</strong> de la boucle <code class="prettyprint lang-c">while</code> de la fonction <code class="prettyprint lang-c">arePrime</code>.</li>
+</ul>
+</div><!-- exemple -->
+
+
+
+<h3 id="surcharge"> Surcharge d'un identificateur de donnée  –  notion de masquage </h3>
+
+
+
+<div class="important">
+<p> En programmation, on parle de <strong class="title">surcharge</strong> d'un <strong class="title">identificateur de donnée</strong> lorsque ce dernier désigne <strong class="defin">plusieurs données distinctes</strong> dans le code source d'un programme. </p>
+
+<p> Les langages <strong>C</strong> et <strong>C++</strong> <strong class="pros">autorisent</strong> la surcharge d'un identificateur de donnée si les déclarations dont il fait l'objet sont toutes inscrites dans des <strong>niveaux</strong> ou des <strong>branches</strong> <strong class="warning">différentes</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans ce cas, le compilateur interprète toutes les déclarations d'un <strong class="title">même identificateur</strong> comme autant de <strong class="defin">données différentes</strong>. Pour dissiper toute éventuelle confusion que pourrait faire un codeur débutant, la surcharge ne permet donc <strong class="warning">pas</strong> de <strong>changer le type</strong> d'une même donnée. </p>
+
+<p> Dans son espace de visibilité, une <strong class="specialG">donnée déclarée</strong> à un <strong>niveau N</strong> <strong class="title">masque</strong> toutes celles qui portent le même identificateur dès lors qu'elles sont déclarées à un <strong>niveau inférieur à N</strong>.  </p>
+
+<p> Cette pratique est néanmoins <strong class="cons">peu recommandée</strong>, dans la mesure où elle peut se révéler défavorable à la <strong>lisibilité</strong> du code. </p>
+</div><!-- complement -->
+
+
+<div id="exempleMasquage" class="exemples">
+<p class="exemple"> Dans l'environnement <strong class="Arduino">Arduino</strong>, on code le <strong class="title">programme volontairement confus</strong> ci‑dessous qui crée <strong class="defin">trois variables</strong> ayant le <strong class="specialN">même identificateur</strong> <code class="prettyprint lang-c">foo</code>. On leur donne des <strong class="specialG">types différents</strong> pour bien les distinguer. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+                        // ============ (LEVEL 0 - GLOBAL) 
+float foo = 0.0;        // declaration of var. "foo #1"  
+
+void setup() {          // ============ (LEVEL 1 - SETUP)
+  Serial.begin(9600);   
+  foo = 1.1;            // assignment of "foo #1"                
+  Serial.println(foo);  // display on the monitor -> 1.10 
+  int foo = 0;          // declaration of var. "foo #2"      
+  foo = 2.1;            // assignment of "foo #2"             
+  Serial.println(foo);  // display on the monitor -> 2 (int)
+}
+
+void loop() {           // =========== (LEVEL 1 - LOOP)
+  Serial.println(foo);  // display on the monitor -> 1.10
+  bool foo = true;      // declaration of var."foo #3"   
+  Serial.println(foo);  // display on the monitor -> 1 (true)
+  delay(100000);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> <em class="remark">Remarques</em>. </p>
+<ul>
+  <li> À la ligne nº 9, la <strong>valeur affectée</strong> à la <strong>variable</strong> <code class="prettyprint lang-c">foo</code> « nº 2 » n'est pas <code>2.1</code> mais <code class="prettyprint lang-c">2</code>. En effet, comme cette variable <code class="prettyprint lang-c">foo</code> est déclarée type <code class="prettyprint lang-c">int</code>, le compilateur tronque sa valeur par ajustement de type (cf. chap. C3‑VI <a class="previous" href="../C3-Numeration/Cc3-6_conversionsTypes.html#entierDecimal" target="_BLANK"></a>). </li>
+ 
+   <li> À la ligne nº 14, la <strong>valeur affichée</strong> sera <code class="cmd">1.10</code> car il s'agit de la <strong>variable</strong> <code class="prettyprint lang-c">foo</code> « nº 1 » (globale). En effet : </li>
+   <ul>
+      <li> elle n'est plus masquée par la variable locale <code class="prettyprint lang-c">foo</code> « nº 2 » – cette dernière n'existant pas en dehors de la fonction <code>setup</code> ;   </li>
+    
+      <li> elle n'a pas changé de valeur depuis l'affectation de la ligne nº 6. </li>
+    </ul>   
+</ul>
+</div><!-- expert --> 
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Durée de vie d'une donnée  –  allocation de mémoire </h2>
+
+
+<div class="expert">
+<p> Pour bien comprendre la notion qui va être abordée de <strong class="title">durée de vie</strong> d'une <strong class="specialG">donnée déclarée</strong>, il est nécessaire de <strong class="pros">bien connaître</strong> les bases de l'<strong class="defin">allocation de la mémoire vive</strong> durant l'exécution d'un programme compilé. Comme toujours avec les mécanismes de bas niveau, on est confronté à une <strong class="warning">technologie complexe</strong> qui dépend de l'<strong>architecture de la machine cible</strong> – celle sur laquelle le programme doit s'exécuter (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#implementation" target="_BLANK"></a>). Il n'est pas question ici de détailler cette technologie mais d'en exposer seulement quelques grands principes. Pour plus d'explications, on pourra se reporter à ces articles comme point de départ <a class="external" href="https://fr.wikipedia.org/wiki/Allocation_de_mémoire" target="_BLANK">W</a> <a class="external" href="https://en.wikipedia.org/wiki/Memory_segmentation" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/SRAM8map.png" width="400px" style="padding-top: 0.0em">
+<p> On rappelle avant tout que la <strong class="title">mémoire vive</strong> d'une machine est matériellement implémentée par des <strong>circuits matriciels spécialisés</strong>  (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#structureMemoire" target="_BLANK"></a>). D'un point de vue logiciel, quelle que soit la largeur en bits de l'architecture de la machine, on peut voir cette mémoire comme un <strong class="defin">très grand tableau d'octets</strong>, chacun étant indexé par une <strong class="specialPB">adresse</strong>. </p>
+
+<p> Dans ce tableau, l'<strong class="specialPB">adresse d'un élément</strong> (donnée, fonction) est l'adresse de son <strong>premier octet</strong>. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="allocationMemoire"> Mécanismes d'allocation de mémoire </h3>
+
+
+
+<p> Pour être précis, on doit distinguer <strong class="title">deux cas</strong>, selon que la <strong>machine cible</strong> du programme est : </p>
+<ul>
+  <li> un <strong class="specialLB">ordinateur</strong> (PC, serveur, carte <em class="mark">Raspberry Pi</em>…), c'est‑à‑dire une machine sur laquelle s'exécute un <strong>système d'exploitation </strong>qui gère simultanément de <strong class="defin">nombreux processus partageant la mémoire vive</strong>, typiquement un <em class="mark">PC</em>, un <em class="mark">Mac</em> ou même une <em class="mark">carte Raspberry Pi</em> ;  </li>
+
+  <li> ou une <strong class="specialLB">carte à microcontrôleur</strong>, c'est‑à‑dire une machine <strong>sans système d'exploitation</strong> et qui gère <strong class="defin">un seul programme utilisateur</strong> – lequel dispose donc de toute la mémoire vive. </li>
+</ul>
+
+
+<h4 id="machineX86"> Cas d'une machine cible de type ordinateur </h4>
+
+
+<div class="important">
+<p> Sur une machine cible de type <strong class="specialLB">ordinateur</strong> (typiquement, à architecture <em class="mark">x86</em>), au lancement de l'<strong class="defin">exécution d'un programme compilé</strong>, son code exécutable est placé en mémoire vive par le <strong>chargeur de programmes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chargeur_(informatique)" target="_BLANK">W</a>. Il se voit ainsi allouer un <strong class="title">espace mémoire</strong> délimité entre une <strong>adresse basse</strong> et une <strong>adresse haute</strong>, avec un intervalle potentiellement <strong class="pros">très grand</strong>, même pour un petit programme. </p> 
+
+<p> Chose essentielle, l'<strong class="title">espace mémoire</strong> alloué est adressé de façon <strong class="defin">virtuelle</strong> par le système d'exploitation <a class="external" href="https://fr.wikipedia.org/wiki/Mémoire_virtuelle" target="_BLANK">W</a> – à charge pour le <strong>contrôleur mémoire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Contrôleur_mémoire" target="_BLANK">W</a> de déterminer les emplacements physiques réels de stockage de tel ou tel mot. </p>
+
+<div class="expert">
+<p> La <strong class="title">virtualisation</strong> apporte une <strong class="pros">grande souplesse</strong> : si la mémoire <strong><em class="sigle">RAM</em></strong> vient à faire défaut, une fraction du disque dur de la machine peut être sollicitée comme <strong>espace d'échange</strong> pour s'y substituer (technique dite de <em class="english">swap</em> <a class="external" href="https://fr.wikipedia.org/wiki/Espace_d'échange" target="_BLANK">W</a>), sans qu'il soit nécessaire de changer l'espace d'adressage. </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Sur une machine <strong>64 bits</strong> <a class="external" href="https://en.wikipedia.org/wiki/64-bit_computing" target="_BLANK">W</a>, les <strong class="title">adresses virtuelles</strong> sont encodées sur <strong class="defin">48 bits</strong>, autrement dit elles sont exprimées sur <strong>12 digits hexadécimaux</strong>. Cette implémentation octroie environ <em class="bold">2,8 ×10<sup>14</sup></em> adresses – soit aujourd'hui de l'ordre de dix‑mille fois plus que le nombre d'octets de mémoire <strong><em class="sigle">RAM</em></strong> réellement disponibles sur les machines usuelles ! </p>
+
+<p> L'<strong class="title">espace mémoire</strong> se décompose en <strong class="specialLB">deux zones principales</strong>, l'une dite <strong class="specialGr">statique</strong>, l'autre <strong class="specialGr">dynamique</strong>. Et pour prévenir toute confusion grossière, précisons bien que ces <strong class="specialLGr">qualificatifs</strong> ne caractérisent <strong class="warning">pas</strong> la <strong>technologie matérielle</strong> de la mémoire vive de la machine – <strong><em class="sigle">SRAM</em></strong> ou <strong><em class="sigle">DRAM</em></strong> – mais la façon dont ces deux zones sont gérées d'un <strong class="defin">point de vue logiciel</strong>. </p>
+</div><!-- complement -->
+
+
+<p style="margin-top:1em"> Les explications ci‑dessous valent pour les chaînes de compilation <strong>GCC</strong>. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/allocationMemoireOrdi.png" width="450px" style="padding-top: 1em">
+<p class="square"> La <strong class="specialGr">zone statique</strong> est définie lors de génération du code exécutable du programme (compilation, etc.). Comme son nom l'indique, sa structure n'est pas susceptible de changer durant l'exécution du programme. En principe, elle comporte entre autre les <strong class="title">4 segments</strong> suivants : </p>
+
+<ul>
+  <li> <code class="inv" style="background:crimson;">.text</code> <a class="external" href="https://en.wikipedia.org/wiki/Code_segment" target="_BLANK">W</a>, accessible en <strong>lecture seule</strong>, où est copié le <strong class="specialDR">code exécutable</strong> de chaque <strong>fonction</strong> définie ou utilisée par le programme ; </li>
+
+  <li> <code class="inv" style="background:springgreen;">.rodata</code>, accessible en <strong>lecture seule</strong> également (le préfixe « <code>ro</code> » formant les initiales de <em class="english">read‑only</em>), où sont stockées les valeurs des <strong class="specialSG">constantes</strong> déclarées comme étant <strong>globales</strong> ou <strong>statiques</strong> ; </li> 
+
+  <li> <code class="inv" style="background:mediumseagreen;">.data</code> <a class="external" href="https://en.wikipedia.org/wiki/Data_segment" target="_BLANK">W</a>, accessible en <strong>lecture/écriture</strong> où sont stockées les valeurs des <strong class="specialG">variables</strong> déclarées <strong>globales</strong> ou <strong>statiques</strong> <em class="remark">et</em> qui sont <strong class="specialG">initialisées</strong> à une une <strong class="specialG">valeur non nulle</strong> ; </li>
+
+  <li> <code class="inv" style="background:green;">.bss</code> <a class="external" href="https://en.wikipedia.org/wiki/.bss" target="_BLANK">W</a> qui joue le <strong>même rôle</strong> que le segment <code>.data</code> mais pour les <strong class="specialDG">variables non initialisées</strong> ou encore initialisées avec la <strong>valeur</strong> <code class="prettyprint lang-c">0</code> lors de leur déclaration dans le code source – les variables non initialisées se voyant automatiquement attribuer la <strong>valeur</strong> <code class="prettyprint lang-c">0</code> <strong>par défaut</strong>. </li>
+</ul>
+</div><!-- display -->
+
+<p class="square"> Quant à la zone <strong class="specialGr">zone dynamique</strong>, elle comporte <strong class="title">deux zones variables</strong> « diamétralement disposées », et dévolues à des objets très différents. </p>
+
+<ul>
+  <li> La <strong class="specialLB">pile d'exécution</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Pile_d'exécution" target="_BLANK">W</a> – en anglais, <strong>call stack</strong> – est la zone dans laquelle chaque <strong>appel de fonction</strong> ou <strong>bloc</strong> se voit allouer, durant son exécution, un <strong class="defin">cadre</strong> (en anglais, <em class="english">frame</em>) pour le stockage de ses <strong>arguments formels</strong> et ses <strong>données locales</strong>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> L'allocation de cadres procède par <strong>empilements successifs</strong> dans l'ordre des appels de fonctions ou exécution de blocs, à partir de l'adresse haute de l'espace mémoire, sachant que tout cadre est libéré dès lors que l'exécution de la fonction ou du bloc s'achève. </div>
+  </div><!-- expert -->
+
+  <li> Le <strong class="specialLB">tas</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Tas_(allocation_dynamique)" target="_BLANK">W</a> – en anglais, <strong>heap</strong> – est la zone réservée pour le stockage des données <strong class="defin">allouées dynamiquement</strong> (en cours d'exécution), programmées avec les fonctions <code class="prettyprint lang-c">malloc</code> et <code class="prettyprint lang-c">free</code> déclarées dans le fichier d'en‑tête <code class="filename">stdlib.h</code> de la bibliothèque standard du langage <strong>C</strong> (ou les mots‑clefs <code class="prettyprint lang-c">new</code> et <code class="prettyprint lang-c">delete</code> en <strong>C++</strong>). </li>
+
+  <div class="expert">
+  <div class="nobullet"> Les techniques d'allocation dynamique sont étudiées en détail dans la partie <span class="partie">C6</span> du module. </div>
+
+  <!-- ajouter une référence précise quand le chap. sera rédigé -->
+  
+  <li> On trouve également des <strong class="specialO">liens</strong> (pointeurs) vers du code exécutable de fonctions de <strong>bibliothèques dynamiques</strong> compilés séparément et chargés ailleurs en mémoire, en même temps que le programme. </li>
+  </div><!-- expert -->
+</ul> 
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> La désignation des segments avec le <strong class="title">préfixe</strong> <code class="cmd">.</code> reprend la syntaxe adoptée dans les <strong>langages d'assemblage</strong>.  </li>
+
+  <li> La <strong class="title">segmentation</strong> de l'espace mémoire a notamment pour fonction de <strong class="pros">sécuriser l'exécution</strong> du programme. Ainsi, toute tentative d'écriture dans un segment <strong>read‑only</strong> (<code>.text</code> ou <code>.rodata</code>) déclenche une <strong class="warning">exception</strong> qui termine le processus d'exécution avec en sortie sur la console un message de la forme :   <br>
+  <span class="inline">
+    <code class="displayDark">Segmentation fault (core dumped)</code>
+  </span> </li>
+
+  <li> Le <strong class="title">segment</strong> <code class="inv" style="background:green;">.bss</code> permet de <strong class="pros">diminuer la taille du fichier exécutable</strong>. En effet, puisque dans ce segment, toutes les variables valent <code>0</code>, il est simplement défini dans le fichier exécutable par son adresse de départ et le nombre d'octets qu'il faut lui réserver. Lors du chargement du programme en mémoire, le segment est créé sur la base de ces deux informations. </li>
+
+  <li> La <strong class="title">pile</strong> et le <strong class="title">tas</strong> ont forcément chacun une <strong class="cons">taille limitée</strong> ; ils sont donc susceptibles de <strong class="warning">débordements</strong> si le programme les sollicite au delà de la capacité de la zone dynamique – d'où notamment l'expression <em class="english">stack overflow</em>… </li>
+</ol>
+<p> Pour plus de détails sur les mécanismes d'allocation de mémoire, on peut consulter cet article <a class="external" href="https://fr.wikipedia.org/wiki/Allocation_de_mémoire" target="_BLANK">W</a>. </p>
+</div><!-- remarques -->
+
+<div class="exemples" style="margin-top: 1em" id="exempleAllocOrdi">
+<p class="exemple"> Sur une poste de travail <em class="mark">x86‑64</em> à système <em class="mark">Linux</em>, compilé avec <em class="mark">GCC</em>, le programme académique ci‑dessous affiche les <strong class="title">adresses</strong> de <strong>différentes données déclarées</strong> ainsi que de la <strong>fonction </strong> <code class="prettyprint lang-c">main</code>. Il utilise l'<strong>opérateur d'adresse</strong> <code class="prettyprint lang-c">&</code> qui sera étudié en détail au chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html#operateurAdresse" target="_BLANK"></a>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+const char globalConstA = 0;
+const char globalConstB = 1;
+ 
+char globalVarC = 0;
+char globalVarD = 1;
+char globalVarE;
+ 
+int main(void) {
+  globalVarE = 1;
+  const char localConstF = 0;
+  const char localConstG = 1;
+  char localVarH = 0;
+  char localVarI = 1;
+  printf("%p: main (.text)\n", main);
+  printf("%p: A (.rodata)\n", &globalConstA);
+  printf("%p: B (.rodata)\n", &globalConstB);
+  printf("%p: D (.data)\n",   &globalVarD);
+  printf("%p: C (.bss)\n",    &globalVarC);
+  printf("%p: E (.bss)\n",    &globalVarE);
+  printf("%p: F (stack - main frame)\n", &localConstF);
+  printf("%p: G (stack - main frame)\n", &localConstG);
+  printf("%p: H (stack - main frame)\n", &localVarH);
+  printf("%p: I (stack - main frame)\n", &localVarI);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> La sortie standard obtenue sur la console permet de repérer la position des différents segments : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x557ef0466169: main (.text)
+0x557ef0467004: A (.rodata)
+0x557ef0467005: B (.rodata)
+0x557ef0469010: D (.data)
+0x557ef0469012: C (.bss)
+0x557ef0469013: E (.bss)
+0x7fffe1545de4: F (stack - main frame)
+0x7fffe1545de5: G (stack - main frame)
+0x7fffe1545de6: H (stack - main frame)
+0x7fffe1545de7: I (stack - main frame)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En premier lieu, on observe que, comme attendu, la <strong>fonction</strong> <code class="prettyprint lang-c">main</code> se voit attribuer une <strong>adresse « basse »</strong> (par rapport aux données), puisqu'elle est placée dans le segment <code class="inv" style="background:crimson;">.text</code>. </p>
+
+<p> De plus, sachant que toutes les données déclarées sont de type <code class="prettyprint lang-c">char</code>, donc encodées sur <strong>un seul octet</strong> et sans contraintes d'alignement (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#contraintesAlignement" target="_BLANK"></a>) : </p>
+<ul>
+  <li> les <strong>constantes globales</strong> <code class="cmd">A</code> et <code class="cmd">B</code> obtiennent des adresses consécutives ; elle sont placées dans le même segment <code class="inv" style="background:springgreen;">.rodata</code>, quelle que soit leur valeur ; </li>
+
+  <li> la <strong>variable globale</strong> <code class="cmd">D</code>, initialisée <strong class="defin">non nulle</strong> obtient une adresse dans le segment <code class="inv" style="background:mediumseagreen;">.data</code> ; ce dernier est nettement décalé de <code>.rodata</code> par environ <code>0x2000</code> octets ; </li>
+
+  <li> la <strong>variable globale</strong> <code class="cmd">C</code>, initialisée <strong class="defin">nulle</strong> pourrait sembler dans le même segment <code>.data</code>, mais on observe un « trou » de 1 octet ; en fait, elle obtient une adresse dans le segment <code class="inv" style="background:green;">.bss</code> ; </li>
+
+  <li> la <strong>variable globale</strong> <code class="cmd">E</code> <strong class="defin">non initialisée</strong> obtient une adresse consécutive à celle de C ; comme prévu, elle est placée dans le <code class="inv" style="background:green;">.bss</code> et donc, elle est <strong>implicitement initialisée</strong> <strong class="defin">nulle</strong> ; </li>
+
+  <li> les <strong>données locales</strong> <code class="cmd">F</code>,  <code class="cmd">G</code> et  <code class="cmd">I</code> se trouvent quant à elles beaucoup plus loin, dans la <strong class="specialLB">pile</strong>, et plus précisément dans le <strong class="defin">cadre</strong> alloué à la fonction <code class="prettyprint lang-c">main</code> ; peu importe alors que ces données soient constantes ou variables, initialisées ou non, leurs adresses sont consécutives.  </li>
+</ul>
+
+<div class="expert">
+<p> À noter que les adresses affichées sont bien <strong>virtuelles</strong>, puisque la différence entre la plus haute et la plus basse représente environ 46 × 10<sup>12</sup> octets, soit environ 3000 fois plus que la mémoire vive disponible sur le poste de travail (16 Go). </p>  
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert" id="nm">
+<p class="square"> Sur une machine à système d'exploitation <strong>Linux</strong>, on peut partiellement confirmer cette analyse de la <strong class="title">structuration des données</strong> d'un <strong>programme exécutable</strong> en affichant sa <strong class="defin">table des symboles</strong>. On peut le faire notamment grâce à la <strong>commande</strong> <code class="displayDark">nm</code> <a class="external" href="https://en.wikipedia.org/wiki/Nm_(Unix)" target="_BLANK">W</a> – <strong>name mangling</strong> <a class="external" href="https://en.wikipedia.org/wiki/Name_mangling" target="_BLANK">W</a>, le verbe <em class="english">to mangle</em> signifiant « essorer », « déchiqueter ». Il s'agit d'un utilitaire inclus dans le paquet <em class="mark">GNU Binary utilities</em> <a class="external" href="https://en.wikipedia.org/wiki/GNU_Binutils" target="_BLANK"></a> qui est usuellement déjà installé avec la plupart des distributions <em class="sigle">Linux</em>. Si tel n'est pas le cas, on peut y remédier, typiquement via la commande : <br>
+<span class="inline">
+  <code class="displayDark">$ sudo apt install binutils</code>
+</span>  </p>
+
+<p> La <strong class="title">commande</strong> <code class="displayDark">nm</code> affiche notamment tous les identificateurs de <strong class="defin">données globales</strong> et des <strong class="defin">fonctions</strong> déclarées dans les fichiers source d'un programme. Elle indique pour chacune son <strong>adresse</strong> et, par une <strong class="specialN">lettre‑code</strong>, le <strong>segment mémoire</strong> de stockage, à savoir : </p>
+<ul>
+  <li> <code class="displayDark">T</code> pour le segment <code class="inv" style="background:crimson;">.text</code> ;  </li>
+
+  <li> <code class="displayDark">R</code> pour le segment <code class="inv" style="background:springgreen;">.rodata</code> ;  </li>
+
+  <li> <code class="displayDark">D</code> pour le segment <code class="inv" style="background:mediumseagreen;">.data</code> ;  </li>
+
+  <li> <code class="displayDark">B</code> pour le segment <code class="inv" style="background:green;">.bss</code>.  </li>
+</ul>
+
+<p> Pour <strong class="specialLB">trier les symboles par adresses</strong> et non pas selon l'ordre alphabétique des identificateurs, il suffit d'appeler la commande <code>nm</code> avec l'<strong class="defin">option</strong> <code class="displayDark">-n</code>. Bien entendu, on trouve le détail des autres options en consultant le manuel de la commande ou sur une page web comme celle‑ci.  </p>
+
+<p> Toutefois, la <strong class="title">commande</strong> <em class="sigle">nm</em> affiche aussi les symboles d'<strong class="cons">autres objets « cachés »</strong>. Pour ne pas s'en encombrer, il est nécessaire de lui appliquer un filtre, typiquement avec la commande <code class="displaydark">grep</code> à adapter au cas par cas. </p>
+
+<div class="exemples">
+<p class="exemple"> Dans un terminal de commande en ligne sur une machine <em class="mark">Linux</em>, appliquons la <strong class="title">commande</strong> <code class="displayDark">nm</code> au fichier exécutable nommé <code class="filename">testSegments</code> du programme académique proposé supra <a class="supra" href="Cc4-2_porteeDonnees.html#exempleAllocOrdi"></a> :  <br>
+<span class="inline">
+  <code class="displayDark">$ nm -n testSegments | grep -v -e __* -v -e 8061*
+ </code>
+</span> <br>
+On obtient ci‑dessous l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0000000000001169 T main
+0000000000002004 R globalConstA
+0000000000002005 R globalConstB
+0000000000004010 D globalVarD
+0000000000004012 B globalVarC
+0000000000004013 B globalVarE
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> ou l'on retrouve bien la <strong class="defin">fonction</strong> <code>main</code> et toutes les <strong class="defin">données globales</strong> listées <strong class="pros">comme prévu</strong> chacune dans son segment supposé. </p>
+
+<p> Quant aux <strong>données locales</strong>, elles ne figurent <strong>pas dans la table des symboles</strong> puisqu'elles seront créées à la volée dans la pile lors de l'exécution du programme. </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+<h4 id="carteMicrocontroleur"> Cas d'une carte à microcontrôleur </h4>
+
+
+<div class="important">
+<p> Lorsque la machine cible est une <strong class="title">carte à microcontrôleur</strong>, l'<strong>allocation mémoire</strong> est globalement <strong class="pros">similaire</strong> à celle mise en œuvre sur un ordinateur, avec néanmoins <strong class="defin">quelques différences</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En effet, dans les configurations usuelles (cartes <strong class="Arduino">Arduino</strong>, à SoC <strong>ESP8266</strong>), la <strong>mémoire</strong> disponible :  </p>
+
+<ul>
+  <li> n'est pas externe mais <strong class="defin">intégrée</strong> au microcontrôleur ; elle n'est <strong class="defin">pas virtualisée</strong> (il n'y a ni système d'exploitation à proprement parler, ni contrôleur mémoire, ni espace d'échange qui justifie la virtualisation) ; </li>
+
+  <li> est <strong class="defin">beaucoup plus réduite</strong>, mais par ailleurs <strong class="defin">non partagée</strong> (elle est intégralement allouée au seul programme que la carte peut gérer) ; </li>
+
+  <li> est <strong class="defin">hétéroclite</strong> (<em class="english">flash</em>, <em class="sigle">SRAM</em>, <em class="sigle">EEPROM</em>) – notamment pour que le code exécutable du programme et certaines données puissent rester mémorisées même en l'absence d'alimentation électrique. </li>
+</ul>
+</div><!-- complement --> 
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/allocationMemoireCarte.png" width="450px" style="padding-top: 1em">
+<p class="square"> En conséquence, lorsque une carte est mise sous tension ou réinitialisée, la <strong class="specialGR">zone statique</strong> se trouve <strong>physiquement séparée</strong> : </p>
+
+<ul>
+  <li> le segment <code class="inv" style="background:crimson;">.text</code> reste stocké dans la <strong>mémoire non volatile</strong> (de type <em class="english">flash</em>) ; </li>
+
+  <li> les segments de données <code class="inv" style="background:mediumseagreen;">.data</code>, <code class="inv" style="background:springgreen;">.rodata</code> et <code class="inv" style="background:green;">.bss</code> sont chargés en mémoire vive (considérée comme dynamique bien que de technologie <em class="sigle">SRAM</em>) au début de l'exécution du programme.  </li>
+</ul>
+
+<p class="square"> Quant à la <strong class="specialGr">zone dynamique</strong>, elle adopte la <strong>même structure</strong> que dans un ordinateur : </p>
+
+<ul>
+  <li> le <strong class="specialLB">tas</strong> part de la fin de zone statique et s'étend dans le sens des <strong>adresses croissantes</strong>, au gré des allocations dynamiques programmées ; </li>
+
+  <li> la <strong class="specialLB">pile</strong> part de la fin de l'espace mémoire et s'étend dans le sens des <strong>adresses décroissantes</strong>, au gré des appels de fonction ;  </li>
+
+  <div class="expert">
+  <li> sauf qu'il n'y a pas de liens vers des éléments de bibliothèque dynamiques (le code exécutable est assemblé d'un seul bloc). </li>
+  </div><!-- expert -->
+</ul>
+</div><!-- display -->
+
+<div class="expert" id="remarqueCollision">
+<p> <em class="remark">Attention</em> :  l'espace mémoire étant très limité, les <strong class="warning">risques de collision</strong> entre la <strong>pile</strong> et le <strong>tas</strong> ne sont pas négligeables – sachant qu'un tel événement constitue en général un dysfonctionnement majeur du programme. Or si le compilateur peut calculer l'espace mémoire utilisé par la zone statique (cette information est toujours affiché dans le compte‑rendu de compilation), il ne peut pas anticiper les besoins du programme dans la zone dynamique. Le codeur doit donc faire preuve de vigilance, surtout s'il emploie des fonctions à <strong>boucles récursives</strong> ou des <strong>allocations dynamiques</strong> répétitives. </p>
+
+
+<p> Pour plus de détails sur ces aspects, on peut consulter cet article <a class="external" href="https://www.nongnu.org/avr-libc/user-manual/malloc.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<div class="exemples" style="margin-top: 1em">
+<p class="exemple"> Adaptons dans le framework <strong class="Arduino">Arduino</strong> l'exemple proposé supra <a class="supra" href="Cc4-2_porteeDonnees.html#exempleAllocOrdi"></a> pour une architecture <em class="mark">x86</em> :   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const char globalConstA = 0;
+const char globalConstB = 1;
+ 
+char globalVarC = 0;
+char globalVarD = 1;
+char globalVarE;
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println();
+
+  globalVarE = 1;
+  const char localConstF = 0;
+  const char localConstG = 0;
+  char localVarH = 0;
+  char localVarI = 1;
+  
+  Serial.println("Flash content:");
+  displaySymbol((void*) loop, "loop (.text)");
+  displaySymbol((void*) displaySymbol, "displaySymbol (.text)");
+  displaySymbol((void*) setup, "setup (.text)");
+
+  Serial.println();
+  Serial.println("SRAM content:");
+  displaySymbol(&globalVarD,   "D (.data)");
+  displaySymbol(&globalConstA, "A (.rodata)");
+  displaySymbol(&globalConstB, "B (.rodata)");
+  displaySymbol(&globalVarC,   "C (.bss)");
+  displaySymbol(&globalVarE,   "E (.bss)");
+  displaySymbol(&localConstF,  "F (stack - setup frame)");
+  displaySymbol(&localConstG,  "G (stack - setup frame)");
+  displaySymbol(&localVarH,    "H (stack - setup frame)");
+  displaySymbol(&localVarI,    "I (stack - setup frame)");
+}
+
+void loop() {
+  delay(1000);
+}
+
+void displaySymbol(const void * address, const char * text) {
+  Serial.print("0x"); Serial.print(int(address), HEX); 
+  Serial.print(": "); Serial.println(text);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> La fonction <code class="prettyprint lang-c">Serial.print</code> étant <strong class="pros">moins polyvalente</strong> que <code class="prettyprint lang-c">printf</code>, on a codé une <strong class="defin">fonction d'affichage spécifique</strong> un peu technique : elle utilise des <strong>pointeurs</strong> – notion qui est abordée seulement au chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->  
+
+<p> Simulé dans l'environnement <strong class="Tinkercad">Tinkercad</strong> qui émule une carte <strong class="Arduino">Arduino Uno</strong> (2048 octets de mémoire <em class="sigle">SRAM</em> pour les données), on obtient sur le <strong>moniteur série</strong> la sortie suivante :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite">
+Flash content:
+0xFC: loop (.text)
+0x104: displaySymbol (.text)
+0x82: setup (.text)
+
+SRAM content:
+0x100: D (.data)
+0x1F8: A (.rodata)
+0x1F9: B (.rodata)
+0x22A: C (.bss)
+0x22B: E (.bss)
+0x8F4: F (stack - setup frame)
+0x8F5: G (stack - setup frame)
+0x8F6: H (stack - setup frame)
+0x8F7: I (stack - setup frame)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Comme avec le programme précédent, on retrouve la <strong class="defin">même structuration des données</strong> mais dans un <strong>espace mémoire beaucoup plus restreint</strong> et avec quelques différences mineures – notamment le fait que c'est le segment <code class="inv" style="background:mediumseagreen;">.data</code> qui obtient l'adresse la plus basse dans la <strong><em class="sigle">SRAM</em></strong>). </p>
+
+<div class="expert">
+<p> À noter également que dans l'<strong class="title">espace d'adressage</strong> du microcontrôleur <em class="mark">Atmel ATmega328p</em> qui équipe la carte <em class="mark">Arduino Uno</em>  : </p>
+
+<ul>
+  <li> les adresses <code>0x000</code> à <code>0x0FF</code> sont celles des différents <strong>registres</strong> (cf. chap. C3‑1 <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#registres" target="_BLANK"></a>) ; elles viennent s'ajouter à celles de l'espace allouable aux données (2048 octets) ;  </li>
+
+  <li> l'<strong>adresse haute</strong> de la mémoire est donc <code>0x8FF</code>, puisque 0x8FF − 0x100 = 0x7FF = (2047)<sub>10</sub>.  </li>
+</ul>
+</div><!-- expert -->
+
+<p class="remarque"> Exécuté et compilé sur une <strong>vraie carte</strong> <strong class="Arduino">Arduino Uno</strong>, le programme donne des <strong class="pros">résultats similaires</strong>. </p>
+
+</div><!-- exemple -->
+
+
+
+<h3> Notions d'existence et de durée de vie d'une donnée </h3>
+
+
+
+<div class="important">
+<p> On dit qu'une donnée déclarée <strong class="defin">existe</strong> à un instant considéré de l'exécution d'un programme si, à cet instant, est alloué un <strong>espace mémoire adressable</strong> à cette donnée. On parle donc de <strong class="defin">durée de vie</strong> (en anglais, <em class="english">lifetime</em>) de la donnée pour désigner l'intervalle de temps durant lequel cette donnée existe, même si dans la pratique, on ne la quantifie jamais. </p>
+
+<p> Concrètement, on qualifie donc de <strong class="title">permanente</strong> une donnée qui existe sans discontinuer <strong>du début à la fin</strong> de l'exécution d'un programme. Sinon, on dit que la donnée est <strong class="title">temporaire</strong>. </p>
+</div><!-- important -->
+
+
+<h4> Relation entre l'existence et la déclaration d'une donnée </h4>
+
+
+<div class="important">
+<p> Compte tenu des mécanismes d'allocation de mémoire présentés supra, on peut énoncer les <strong class="title">règles générales</strong> suivantes :  </p>
+
+<ul>
+	<li> Toute <strong class="specialLB">donnée globale</strong> est <strong class="defin">permanente</strong> et ce sans considération du fait qu'elle soit déclarée <strong>avant ou après le point d'entrée</strong> du programme, à savoir la fonction <code class="prettyprint lang-c">main</code> en <strong>C/C++</strong> , la fonction <code class="prettyprint lang-c">setup</code> dans l'environnement <strong class="Arduino">Arduino</strong> (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html" target="_BLANK"></a>). </li>
+  
+  <div class="expert">
+  <div class="nobullet"> En effet, puisqu'elle est placée dans la <strong class="specialGr">zone statique</strong>, elle existe dès que le programme est chargé en mémoire et jusqu'à la fin de son processus d'exécution. </div> 
+  </div><!-- expert -->
+
+
+  <li>  Toute <strong class="specialLB">donnée locale</strong> est <strong class="defin">temporaire</strong>,  <strong class="warning">sauf instruction spécifique</strong> modifiant sa <strong>classe d'allocation</strong> (cf. infra <a class="infra" href="Cc4-2_porteeDonnees.html#classeAllocation"></a>). Plus précisément : </li>
+	<ul>
+		<li> sa <strong class="defin">durée de vie</strong> s'étend de l'instant où son instruction de déclaration est exécutée à l'instant où s'achève l'exécution du <strong>bloc</strong> dans lequel elle est déclarée ; </li>
+
+		<li> si le bloc est ré‑exécuté ultérieurement, la donnée reprend une <strong class="defin">nouvelle existence</strong> <strong class="warning">sans mémoire de son existence précédente</strong>. </li>
+	</ul>
+</ul>
+</div><!-- important -->
+
+
+<h4> Exemple académique </h4>
+
+
+<div class="exemples">
+<p> Reprenons l'<strong class="title">exemple volontairement confus</strong> élaboré supra <a class="supra" href="Cc4-2_porteeDonnees.html#exempleMasquage"></a> dans l'environnement <strong class="Arduino">Arduino</strong> avec <strong class="defin">trois variables</strong> différentes portant le <strong class="specialN">même identificateur</strong> <code class="prettyprint lang-c">foo</code>. Bien que contraire aux bonnes pratiques, ce programme permet d'illustrer la notion de <strong class="title">durée de vie</strong>. Tous les détails sont en <strong>commentaires</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+
+float foo = 0.0;        // global var. "foo #1" (.data segment) exists all along the run-time
+
+void setup() {
+ Serial.begin(9600);
+ foo = 1.1;             // global var. "foo #1" is modified   
+ Serial.println(foo);   // display on the monitor -> 1.10
+ int foo = 0;           // local var. "foo #2" starts to exist (stack - setup frame)
+ foo = 2.1;             // local var. "foo #2" is modified 
+ Serial.println(foo);   // display on the monitor -> 2 because "foo #2" is an int
+}                       
+                        // local var. "foo #2" has ceased to exist (the setup frame is freed)
+void loop() {
+  Serial.println(foo);  // display on the monitor -> 1.10 (it's global var. "foo #1")
+  bool foo = true;      // local var. "foo #3" starts to exist (stack - loop frame) 
+  Serial.println(foo);  // display on the monitor -> 1 ("foo #3" is a boolean true)
+}                       
+                        // local var. "foo #3" has ceased to exist (the bool frame is freed)
+
+// But just after that, a new local variable "foo #4" will be created in the stack during the next iteration of loop
+// and so on…
+// By the way, the global variable "foo #1" still and always exists 
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="classeAllocation"> Classes d'allocation de mémoire des données </h2>
+
+
+<div class="important">
+<p> Les langages <strong>C</strong> et <strong>C++</strong> mettent à la disposition du codeur plusieurs <strong>mots‑clefs</strong> – <code class="prettyprint lang-c">auto</code>, <code class="prettyprint lang-c">static</code>, <code class="prettyprint lang-c">register</code>, <code class="prettyprint lang-c">extern</code> et <code class="prettyprint lang-c">volatile</code> – pour imposer, lors de la <strong class="defin">déclaration d'une donnée</strong> un mécanisme spécifique d'<strong class="title">allocation de mémoire</strong>. </p>
+
+<p> On parle ici de <strong class="title">classes d'allocation</strong> de données, sachant que ce terme ne doit pas être confondu avec la notion de <em>classe</em> en programmation orientée objet. </p>
+</div><!-- important -->
+
+<p> Seuls les mots‑clefs <code class="prettyprint lang-c">auto</code>, <code class="prettyprint lang-c">static</code> et <code class="prettyprint lang-c">register</code> seront abordés dans ce chapitre. </p>
+
+<p> Le mot‑clef <code class="prettyprint lang-c">extern</code> sera présenté lors de l'étude des techniques de <strong>programmation multi‑fichiers</strong> (cf. chap. C4‑V <a class="next" href="Cc4-5_programmationMultifichiers.html#fichiersImplementation" target="_BLANK"></a>). Quant au mot‑clef <code class="prettyprint lang-c">volatile</code>, il est relatif aux <strong>interruptions</strong> et il ne sera pas étudié dans ce module. </p>
+
+
+<h3 id="classAutomatique"> La classe automatique </h3>
+
+
+<div class="important">
+<p> La <strong>classe</strong> <strong class="title">automatique</strong> regroupe toutes les <strong class="defin">données locales</strong> et <strong class="defin">temporaires</strong> ainsi que les <strong class="defin">arguments formels</strong> des fonctions qui sont <strong>gérés automatiquement</strong> dans la <strong class="specialLB">pile</strong> (alors que dans le tas, c'est au codeur de gérer lui‑même les allocations et libérations). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> En langage <strong>C</strong>, on peut imposer la <strong class="title">classe automatique</strong> à une donnée de <strong>niveau 1 ou plus</strong> en faisant précéder sa déclaration du mot‑clef <code class="prettyprint lang-c">auto</code>. Mais en règle générale, c'est <strong class="cons">inutile</strong>, car toute donnée locale est <strong>par défaut</strong> de classe automatique. Néanmoins, on peut pourrait éventuellement prendre cette précaution pour une donnée que l'on souhaite protéger d'une potentielle optimisations du compilateur. </p>
+
+<p> En langage <strong>C++</strong>, cette possibilité <strong class="warning">n'existe plus</strong>. À partir de la norme <em class="mark">C++11</em>, le mot‑clef <code class="prettyprint lang-c">auto</code> a été réservé pour un <strong>autre usage</strong> : le <strong class="specialG">typage automatique</strong> des données (cf. chap. C3‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#typageAutomatique" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<p> Aujourd'hui, il est vraiment difficile de trouver un exemple pertinent d'utilisation du mot‑clef <code class="prettyprint lang-c">auto</code> en langage <strong>C</strong>. </p>
+
+
+<h4> Initialisation </h4>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, une <strong class="defin">donnée locale</strong> de <strong class="title">classe automatique</strong> <strong class="warning">pas initialisée à zéro par défaut</strong> lors de l'exécution de sa déclaration si cette dernière ne comporte <strong class="cons">pas d'affectation</strong> – laquelle est, rappelons‑le, optionnelle (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>). </p>
+
+<p> Dans un tel cas, la donnée prend une <strong class="warning">valeur « aléatoire »</strong> : c'est l'interprétation dans le type de la donnée des valeurs des bits de l'espace mémoire qui lui est alloué (valeurs d'anciennes données automatiques qui occupaient cet espace avant que leur cadre soit « supprimé » – mais pas effacé). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En termes de <strong class="pros">bonnes partiques</strong>, on rappelle qu'il est préférable d'<strong>initialiser toute donnée locale</strong> – a fortiori s'il s'agit d'une constante – dès sa déclaration, même si cette affectation est écrasée peu après dans le code (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#varNonInit" target="_BLANK"></a>).  </p>
+</div><!-- complement -->
+
+
+<h3 id="classeStatique"> La classe statique </h3>
+
+
+<div class="important">
+<p> La <strong>classe</strong> <strong class="title">statique</strong> regroupe, comme son nom l'indique toutes les <strong>données</strong> stockées dans la <strong class="defin">zone statique</strong> (segments <code class="inv" style="background:mediumseagreen;">.data</code>, etc.), donc en particulier les <strong>données globales</strong>. </p>
+
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on peut imposer <strong class="title">classe statique</strong> à une donnée de <strong>niveau 1 ou plus</strong> (qui sont, par défaut, de classe automatique) en faisant précéder sa déclaration du mot‑clef <code class="prettyprint lang-c">static</code>. La donnée se voit alors allouer un espace mémoire dans la <strong>zone statique</strong>, et non pas dans la pile. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> La déclaration d'une donnée locale dans la <strong class="title">classe statique</strong> a des <strong class="warning">conséquences subtiles</strong> : </p>
+<ul>
+  <li> Elle ne modifie en rien la visibilité de la donnée, qui <strong class="defin">reste locale</strong>. </li>
+
+  <li> Elle accorde à la donnée une <strong class="defin">durée de vie permanente</strong> et donc une <strong>mémorisation de sa valeur</strong> même après la fin d'exécution de la fonction ou du bloc dans lequel est codé sa déclaration. Et notamment, si la fonction ou le bloc est de nouveau exécuté, la donnée n'est <strong>pas réinitialisée</strong> lors de l'exécution de l'instruction de déclaration et garde sa valeur précédente. </li>
+
+  <li> En conséquence, toute expression d'<strong class="defin">initialisation</strong> codée dans la déclaration d'une donnée statique codée est <strong class="warning">évaluée une seule fois</strong> : </li>
+  <ul>
+    <li> en <strong>C</strong>, lors de la <strong>compilation</strong> – en rappelant qu'il doit obligatoirement s'agir d'une expression constante (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>) ; en termes de temps d'exécution du programme, cette opération est considérée comme « <strong class="pros">gratuite</strong> ». </li>
+
+
+    <li> en <strong>C++</strong>, lors la <strong>première (et seule) exécution</strong> de la déclaration de la donnée dans tout le processus d'exécution du programme. </li>
+  </ul>
+
+  <div class="nobullet"> En l'<strong class="cons">absence d'expression d'initialisation</strong> dans la déclaration – ce qu'il est préférable d'éviter – la donnée se voit attribuer la <strong class="defin">valeur nulle</strong> (s'il s'agit d'une variable, elle est est tout simplement placée dans le segment <code class="inv" style="background:green;">.bss</code>). </div>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons le programme réactif de clignotement d'une led présenté au chapitre C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html#blinkReactif" target="_BLANK"></a>, appliqué à la led intégrée d'une carte <strong class="Arduino">Arduino</strong>, repérée par la pseudo‑constante <code class="prettyprint lang-c">LED_BUILTIN</code>. </p>
+
+<p> On avait déclaré <strong>deux données globales</strong> : </p>
+
+<ul>
+  <li> en ligne nº 1, la constante <code class="prettyprint lang-c">blinkHalfPeriod</code> pour mémoriser la demi‑période de clignotement souhaitée ; </li>
+
+  <li> en ligne nº 7, la variable <code class="prettyprint lang-c">previousMillis</code> pour mémoriser la valeur retournée par la fonction <code class="prettyprint lang-c">millis</code> lors du dernier changement d'état de la led. </li>
+</ul>
+
+<p> Mais au regard des <strong class="pros">bonnes pratiques</strong>, il est préférable de déclarer ces deux données <strong class="defin">locales</strong> dans la fonction <code class="prettyprint lang-c">loop</code> puisqu'elles ne sont pas utilisées ailleurs dans le code. Et bien évidemment, on leur attribue la <strong class="title">classe statique</strong>, ainsi qu'on peut le lire ci‑dessous dans la nouvelle version du programme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  static const unsigned blinkHalfPeriod = 1000; // 1 seconde
+  static unsigned long previousMillis = millis();
+  if (millis() - previousMillis >= blinkHalfPeriod) {
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On peut observer que : </p>
+
+<ul>
+  <li> dans le cas de <code class="prettyprint lang-c">previousMillis</code>, la classe statique est <strong class="warning">indispensable</strong>, sinon elle ne garderait pas en mémoire sa valeur puisqu'elle serait réinitialisée à chaque nouvelle itération de la fonction <code class="prettyprint lang-c">loop</code> ;  </li>
+
+  <li> dans le cas de <code class="prettyprint lang-c">blinkHalfPeriod</code>, la classe statique est <strong class="pros">préférable</strong>, pour éviter de re‑déclarer la même constante à chaque itération de la fonction <code class="prettyprint lang-c">loop</code>.  </li>
+</ul>
+</div><!-- exemple -->
+
+<div class="expert">
+<h4> Avantages des variables locales statiques par rapport aux variables globales </h4>
+
+<p> La déclaration d'une <strong class="pros">donnée locale statique</strong> plutôt que <strong class="cons">globale</strong> présente <strong>plusieurs avantages</strong> : </p>
+
+<ul>
+  <li> améliorer la <strong class="pros">lisibilité du code</strong> par le <strong>regroupement</strong> dans une même entité de toutes les instructions (déclarations et actions) nécessaires à une fonctionnalité ; </li>
+
+  <li> faciliter le <strong class="pros">travail réparti</strong> des équipes de codage, car :  </li>
+
+  <ul>
+    <li> la portée limitée des données locales permet le <strong>cloisonnement du programme</strong> en parties « étanches » ; une équipe en charge du développement d'une partie A ne pourra pas utiliser les données locales d'une partie B confiée à une autre équipe (toute tentative d'accéder à une donnée invisible étant rejetée dès la compilation) ; </li>
+
+    <li> les équipes peuvent utiliser les <strong>mêmes identificateurs</strong> sans risques de conflits, puisqu'ils ne sont visibles que dans leur partie (c'est très commode pour des identificateurs courants comme, par exemple, <code>previousMillis</code>).  </li>
+  </ul>
+</ul>
+
+
+<h4> Limites d'emploi des variables locales statiques </h4>
+
+
+<div class="complement">
+<p> Malgré tous les avantages constatés que cette pratique présente, il faut néanmoins rester prudent lors de l'attribution de la classe statique à une donnée locale. En particulier, il ne faut pas perdre de vue l'<strong class="title">unicité</strong> d'une telle donnée pour plusieurs appels de la même fonction. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Il serait tentant d'accentuer la modularité du programme précédent en créant une fonction <code class="prettyprint lang-c">blink</code> et de croire qu'il suffit alors d'appeler cette fonction pour faire clignoter <strong>plusieurs leds</strong>, comme dans le programme ci‑dessous.  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin1 = 7;
+const int ledPin2 = 13;
+
+void setup() {
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
+}
+
+void loop() {
+  blink(ledPin1, 1000); 
+  blink(ledPin2, 500);  // FAILING CODE: LED n° 1 does not blink!!!
+}
+
+void blink(const uint8_t ledPin, const unsigned long blinkHalfPeriod) {
+  static unsigned long previousMillis = millis();
+  if (millis() - previousMillis >= blinkHalfPeriod) {
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(ledPin, !digitalRead(ledPin));
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Car malheureusement, ce programme est <strong class="warning">défaillant</strong>, la <strong>même variable</strong> <code class="prettyprint lang-c">previousMillis</code> ne pouvant pas gérer <strong>deux temporisations différentes</strong>. </p>
+
+<p> Pour y remédier – et bien que cela puisse sembler laborieux – il n'y a pas d'autre choix (sans éléments de langage plus puissants) que de créer deux fonctions distinctes de clignotement, comme dans le code ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:9">
+void loop() {
+  blink1(ledPin1, 1000); 
+  blink2(ledPin2, 500);  
+
+void blink1(const uint8_t ledPin, const unsigned long blinkHalfPeriod) {
+  static unsigned long previousMillis = millis();
+  if (millis() - previousMillis >= blinkHalfPeriod){
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(ledPin, !digitalRead(ledPin));
+  }
+}
+
+void blink2(const uint8_t ledPin, const unsigned long blinkHalfPeriod) {
+  static unsigned long previousMillis = millis();
+  if (millis() - previousMillis >= blinkHalfPeriod) {
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(ledPin, !digitalRead(ledPin));
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p class="remarque"> Pour éviter une telle <strong class="cons">redondance</strong> de codage, il existe bien entendu des solutions. C'est en particulier l'un des grands intérêt de la <strong class="title">programmation orientée objet</strong>, qui consiste à associer les fonctions – on les appelle des <strong>méthodes</strong> – aux classes d'objets. Ainsi, lorsqu'on déclare un objet – on dit aussi instancier une classe – ce dernier se voit attribuer des méthodes dont les variables locales lui sont propres. </p>
+</div><!-- exemple -->
+
+
+<p> Et plus généralement, pour coder une <strong class="title">fonction récursive</strong> (c'est‑à‑dire qui s'appelle elle‑même), il faut <strong class="warning">ne pas employer de variable statique</strong>. Le risque est grand d'obtenir une exécution défectueuse, sans que le compilateur émette le moindre avertissement. </p>
+
+
+<h4> Restriction syntaxique en langage <em class="mark">C</em></h4>
+
+
+<div class="complement">
+<p> En langage <strong>C</strong>, dans une <strong class="title">boucle d'itération</strong> <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="previous" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>, les variables codées dans l'en‑tête ne doivent (et ne peuvent)<strong class="warning">pas</strong> être déclarées de <strong>classe statique</strong>. Ainsi, le compilateur signale une <strong class="warning">erreur</strong> si on code quelque chose comme : <br>
+<span class="inline" style="background: lightgrey;">
+  <code class="prettyprint lang-c">for (static int i = <span class="nocode">…</span> // Error (not possible in C)</code>
+</span>  </p>
+</div><!-- complement -->
+
+<p> En revanche, un tel codage est <strong class="defin">possible</strong> en <strong>C++</strong>, mais il importe d'en comprendre les conséquences. Car même si d'une façon générale, l'instruction d'initialisation d'une boucle <code class="prettyprint lang-c">for</code> n'est exécutée qu'une seule fois (juste avant la première itération du corps de la boucle), la variable d'itération n'est pas gérée de façon statique. En effet, si elle était statique, elle ne serait pas ré‑initialisée lors d'une <strong class="warning">deuxième exécution</strong> de la boucle (ici, on ne parle pas d'<em>itération</em> de son bloc). </p>
+
+<div class="exemples">
+<p class="exemple"> Dans le programme académique ci‑dessous, on a deux boucles <code class="prettyprint lang-c">for</code> imbriquées l'une dans l'autre, la deuxième étant régie par la variable d'itération <code class="prettyprint lang-c">i</code> déclarée <strong class="title">statique</strong>. </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:9">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  for (int j = 1; j <= 2; j++) {
+    for (static int i = 1; i <= 3; i++) {
+      printf("Hello World!\n");
+    }
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Il en résulte qu'en sortie standard sur la console d'exécution, la chaîne de caractère <code class="displayDark">Hello World!\n</code> est affichée <strong class="cons">seulement 3 fois</strong>, et non <strong class="warning">pas 6 fois</strong>. En effet : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">i</code> étant déclarée <strong>statique</strong>, elle n'est <strong class="warning">pas réinitialisée</strong> lors de la <strong>deuxième itération</strong> de première boucle <code class="prettyprint lang-c">for</code>, c'est‑à‑dire pour <code class="prettyprint lang-c">j</code> valant <code class="prettyprint lang-c">2</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">i</code> garde donc sa valeur <code class="prettyprint lang-c">4</code> affectée à la fin de la première itération de cette première boucle <code class="prettyprint lang-c">for</code> (pour <code class="prettyprint lang-c">j</code> valant 1) ;  </li>
+</ul>
+<p> La condition de répétition <code class="prettyprint lang-c">i <= 3</code> reste donc invalidée, et plus aucune itération du bloc de la deuxième boucle <code class="prettyprint lang-c">for</code> n'est exécutée.  </p>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3 id="register"> La classe registre </h3>
+
+
+
+<p> L'emploi d'une <strong>donnée</strong> de <strong class="specialLB">classe automatique</strong> consomme du <strong class="cons">temps d'exécution</strong> : </p>
+<ul>
+  <li> il faut d'abord lui <strong>allouer un espace mémoire</strong> dans la pile avant de pouvoir y accéder en lecture ou écriture ; </li>
+
+  <li> ensuite, comme toute donnée stockée dans la mémoire vive, un <strong>accès en lecture ou écriture</strong> prend également un peu de temps, surtout si cette mémoire est <strong class="cons">externe</strong> au processeur, comme c'est le cas avec la mémoire vive sur un ordinateur (il faut passer un bus et le contrôleur de mémoire pour déterminer l'adresse physique). </li>
+</ul>
+
+<div class="important">
+<p> Pour une <strong class="specialLB">donnée très utilisée</strong> déclarée dans une fonction, et à condition qu'elle soit de <strong class="specialG">type élémentaire</strong>, le compilateur prend souvent l'initiative de la stocker dans un <strong class="title">registre</strong> du processeur, c'est‑à‑dire un espace mémoire très proche de l'unité arithmétique et logique qui exécute les opérations (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#registres" target="_BLANK"></a>). </p> 
+
+<p> Une telle optimisation obéit à un <strong class="warning">algorithme complexe</strong>, car les registres existent en nombre restreint <a class="external" href="https://fr.wikipedia.org/wiki/Allocation_de_registres" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> En langage <strong>C</strong> et <strong>C++</strong>, le codeur peut indiquer au compilateur qu'il souhaite qu'une <strong class="specialLB">donnée automatique</strong> – c'est‑à‑dire une donnée locale ou un argument de fonction <strong>non statique</strong> – soit <strong class="title">préférentiellement stockée en registre</strong> plutôt que dans la pile. Il suffit de faire précéder sa déclaration du mot‑clef <code class="prettyprint lang-c">register</code>. </p>
+
+<p> Néanmoins, cette demande n'est <strong class="cons">pas forcément satisfaite</strong> (tout dépend de la complexité du programme et des ressources de la machine cible). </p>
+</div><!-- complement -->
+
+<p> Pour un <strong>codeur débutant</strong>, il est préférable de ne pas employer cette possibilité et de <strong class="pros">faire confiance au compilateur</strong>. Mal‑employée, elle peut avoir des effets contre‑productifs en termes de performance. </p>
+
+<div class="expert">
+<p> De plus, une donnée déclarée avec la classe <code class="prettyprint lang-c">register</code> (et même si cette demande n'est effectivement pas satisfaite par le compilateur) ne peut pas être la cible d'un pointeur – plus précisément, on ne peut <strong class="warning">pas</strong> lui appliquer l'<strong class="title">opérateur d'adresse</strong> <code class="prettyprint lang-c">&</code>. En particulier, on ne peut donc pas saisir sa valeur via la fonction <code class="prettyprint lang-c">scanf</code> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#scanf" target="_BLANK"></a>). </p>
+
+
+<p> D'ailleurs, en langage <strong>C</strong>, cette restriction peut être aussi le réel motif pour lequel on emploie cette classe d'allocation : <strong class="pros">empêcher tout pointage sur la donnée</strong>, donc toute possibilité de la modifier « insidieusement ». En revanche, en langage <strong>C++</strong>, cet intérêt n'existe pas, car il reste toujours la possibilité de déclarer une <strong>référence</strong> sur la donnée (cf. chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html#reference" target="_BLANK"></a>). </p>
+
+
+</div><!-- expert -->
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

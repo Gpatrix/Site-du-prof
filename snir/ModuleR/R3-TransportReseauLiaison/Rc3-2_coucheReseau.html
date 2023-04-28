@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="3"
+	data-pagenumber="II"
+	data-pageState="chantier"
+	data-pageheadtitle="Couche réseau"
+	data-pagefulltitle="La couche réseau  –  le protocole IP"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+<p class="square"> On rappelle (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#coucheReseau" target="_BLANK"></a>) que la <strong class="title">couche réseau</strong> est principalement assurée par le <strong class="title">protocole <em class="sigle">IP</em></strong> – pour <strong>Internet Protocol</strong> – dont coexistent actuellement <strong class="specialLB">deux versions</strong> : <strong>IPv4</strong> et <strong>IPv6</strong>. Les différents formats d'adresses et toutes les notions qui en découlent – masque de (sous‑)réseau, adresse de broadcast, etc. – ont été exposés en détail au chapitre R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage#IPv4.html" target="_BLANK"></a>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/routing.png" width="400px">
+<p> Le <strong class="title">protocole <em class="sigle">IP</em></strong> est chargé d'effectuer le <strong class="defin">routage</strong> des <strong class="specialDO"><em class="sigle">PDU</em></strong> (<em class="english">protocol data units</em>) à travers le réseau depuis une machine émettrice jusqu'à une ou plusieurs machine(s) destinataire(s), par des <strong class="pros">routes non déterminées à l'avance</strong> – et éventuellement différentes d'un <strong><em class="sigle">PDU</em></strong> à l'autre (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#routage" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+<p>	Simple en apparence lorsqu'il est mis en œuvre de façon statique dans un petit réseau (cf. les exemples traités dans les sujets de TP R1‑1 <a class="TP" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/Rtp1-1_architectures.html" target="_BLANK"></a> et TP R2‑1 <a class="TP" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/Rtp2-1_dhcp_dns.html" target="_BLANK"></a>), le <strong class="title">routage</strong> devient de plus en plus <strong class="specialO">laborieux</strong> et <strong class="warning">complexe</strong> quand le <strong>nombre de nœuds</strong> du réseau augmente, ainsi que le <strong>trafic</strong>. Pour minimiser les risques de <strong class="cons">congestion</strong>, on doit alors employer des algorithmes qui gèrent des <strong class="defin">tables de routage dynamiques</strong> dans les machines (postes terminaux, routeurs…), typiquement : </p>
+
+<ul>
+	<li> dans un <strong>réseau local</strong>, des protocoles comme <strong class="specialLB"><em class="sigle">RIP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Routing_Information_Protocol" target="_BLANK">W</a> (<em class="english">routing information protocol</em>) ou encore <strong class="specialLB"><em class="sigle">OSPF</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Open_Shortest_Path_First" target="_BLANK">W</a> (<em class="english">open shortest path first</em>) ; </li>
+
+	<li> sur les réseaux de transport de l'<strong>Internet</strong>, constitués en <strong>systèmes autonomes</strong> (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#WAN" target="_BLANK"></a>), un protocole comme <strong class="specialLB"><em class="sigle">BGP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Border_Gateway_Protocol" target="_BLANK"></a> (<em class="english">border gateway protocol</em>). </li>
+</ul>
+<p> Ainsi, les <strong class="pros">meilleures routes</strong> peuvent alors être choisies au regard de l'<strong class="defin">état réel du réseau</strong> à l'instant donné. </p>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheReseau2.png" width="300px" style="margin-top: 1.2em;">
+<p class="square"> Dans le modèle <strong><em class="sigle">OSI</em></strong>, la <strong class="title">couche réseau</strong> peut être vue comme : </p>
+<ul>
+	<li>  <strong>la plus haute</strong> des <strong class="specialR">couches basses</strong>, c'est‑à‑dire les couches dont la mise en œuvre est assurée non plus seulement sur les machines émettrices et destinataires, mais <strong class="specialDO">de proche en proche</strong> par tous les nœuds du réseau ;  </li>
+
+	<li> <strong>la plus basse</strong> des <strong class="specialG">couches purement logicielles</strong>, donc encore assurée par un composant du <strong>système d'exploitation</strong> de la machine ou du <strong>programme utilisateur</strong> dans le cas d'une carte à microcontrôleur ; en effet, immédiatement en dessous, la <strong class="specialPR">couche liaison</strong> fait déjà intervenir des algorithmes mis en œuvre par des composants matériels microprogrammés intégrés sur les interfaces réseau (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#carteReseau" target="_BLANK"></a>).   </li>
+</ul>
+
+<p> À ce double titre, la <strong class="title">couche réseau</strong> joue un <strong class="defin">rôle d'interface essentiel</strong>. </p>
+</div><!-- display -->
+	
+<p class="square"> Ce chapitre a donc pour vocation de présenter le <strong class="title">protocole de routage <em class="sigle">IP</em></strong> ainsi que quelques <strong class="specialLB">autres protocoles</strong> de la couche <em>réseau</em> – <strong><em class="sigle">RIP</em></strong> bien entendu, mais également <strong class="specialLB"><em class="sigle">ICMP</em></strong>, déjà introduit au chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#ICMP" target="_BLANK"></a>. </p>
+
+<p> On ne reviendra pas sur la notion d'<strong>adresse <em class="sigle">IP</em></strong> qui a déjà été détaillée dans le chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html" target="_BLANK"></a>. </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Architecture matérielle et logicielle pour le routage </h2>
+
+
+
+<p> On rappelle que, en référence au modèle <strong><em class="sigle">OSI</em></strong>, la <strong class="specialDO">couche réseau</strong> est prise en charge par <strong>tout équipements</strong> qui possède une <strong class="defin">configuration <em class="sigle">IP</em></strong> – cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#DT" target="_BLANK"></a> :  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/IPmachines.png" width="400px" style="margin-top:0.2em">
+	<li> bien évidemment, toutes les <strong class="defin">machines</strong> située à une <strong>extrémité de l'arborescence</strong> d'un réseau local, à savoir les postes de travail, serveurs, imprimantes, scanner, smartphone, smartTV, téléphone <em class="sigle">IP</em>, caméra <em class="sigle">IP</em>, objet connecté en <em class="mark">Ethernet</em> ou <em class="mark">Wi‑Fi</em>, etc. </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/IProuterSwitch.png" width="400px" style="margin-top:0.2em">
+	<li> mais aussi les <strong>nœuds d'interconnexion</strong> des réseaux, à savoir les <strong class="defin">routeurs</strong> et les <strong class="defin">switchs</strong> dits de <strong class="defin">niveau 3</strong>. </li>
+  </div><!-- display -->
+</ul>
+<p> En revanche, les <strong>switchs « ordinaires »</strong> – dits de <strong>niveau 2</strong> – qui sont des équipements « plug‑and‑play » sans interface utilisateur (et sans configuration <em class="sigle">IP</em>), ne participent pas au routage. Ils opèrent <strong>seulement</strong> au niveau de la <strong class="specialR">couche liaison</strong> comme l'illustre la figure ci‑dessous issue du chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#lowerVShigherLayers" target="_BLANK"></a></p>
+  <img class="top-left" src="../img/comViaModeleOSI.png"> 
+
+
+
+<h3> Machines terminales </h3>
+
+
+
+<div class="important">
+<p> Sur un équipement terminal, le <strong class="title">protocole de routage <em class="sigle">IP</em></strong> est assuré par un composant logiciel du <strong class="defin">système d'exploitation</strong> ou du <strong class="defin">firmware</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Firmware" target="_BLANK">W</a>. Sauf sur les équipements anciens, les deux versions <strong>IPv4</strong> et <strong>IPv6</strong> sont a priori pris en charge. </p>
+
+<p> En règle générale, l'équipement est <strong>configuré par défaut</strong> en <strong class="defin"><em class="sigle">DHCP</em> <em class="mark">IPv4</em></strong> (cf. chap. R2‑II <a class="previous" href="../R2-Applications/Rc2-2_dhcp.html" target="_BLANK"></a>) pour pouvoir être <strong class="pros">automatiquement opérationnel</strong> dès son branchement dans un réseau local. Mais il est toujours possible de le reconfigurer autrement via son interface utilisateur. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On verra infra <a class="infra" href="Rc3-2_coucheReseau.html#routageNoeudTerminal"></a> que sur une telle machine, la <strong class="title">mise en œuvre</strong> du <strong>protocole de routage <em class="sigle">IP</em></strong> est <strong class="pro">simple</strong>. </p>
+
+<p> En effet, même dans le cas d'une machine qui possède plusieurs interfaces réseau fonctionnant simultanément (cas par exemple d'une imprimante réseau <em class="mark">Ethernet</em> et <em class="mark">Wi‑Fi</em>), l'<strong class="specialDO">émission de paquets <em class="sigle">IP</em></strong> est systématiquement routée vers la <strong>passerelle par défaut</strong> spécifiée par la configuration <em class="sigle">IP</em> de l'interface utilisée. La machine ne fait <strong class="defin">pas fonction de routeur</strong>, c'est‑à‑dire qu'elle n'a pas à transférer des paquets reçus sur une interface vers une autre interface. </p>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4 id="carteMicrocontroleur"> Cas d'une carte à microcontrôleur <em class="mark">Arduino</em> </h4>
+
+
+<div style="display: inline-block;"> 
+	 <img class="top-right" src="../img/ArduinoEthernetShield.png" width="250px" style="padding-top: 0.0em">	
+<p> On a vu au chapitre R3‑I <a class="previous" href="Rc3-1_coucheTransport.html#carteMicrocontroleur" target="_BLANK"></a> que sur une <strong class="Arduino">carte Arduino</strong> équipée d'un <strong class="specialN">shield Ethernet</strong>, il est facile d'envoyer et de recevoir des datagrammes via le <strong class="title">protocole <em class="sigle">UDP</em></strong>. En effet, le <strong>module de bibliothèque</strong> <code class="filename">Ethernet</code> fournit une <strong class="defin"><em class="sigle">API</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Interface_de_programmation" target="_BLANK">W</a> (<em class="english">application programmation interface</em>) qui permet de coder des communications au niveau de la <strong class="specialO">couche transport</strong> sans avoir à ce soucier des détails de la mise en œuvre des couches inférieures – notamment de la couche réseau, et donc du protocole <em class="sigle">IP</em>. </p>
+</div><!-- display -->
+
+<div class="complement">
+<p> Aussi le <strong>module</strong> <code class="filename">Ethernet</code> ne fournit <strong class="cons">pas de méthodes publiques</strong> pour envoyer et recevoir spécifiquement des <strong class="title">paquets <em class="sigle">IP</em></strong> indépendamment d'un datagramme <strong><em class="sigle">UDP</em></strong>. </p>
+
+<p> Mais cela ne pose <strong class="pros">pas de problème</strong> tant que l'on ne souhaite pas utiliser ou développer un autre protocole de la couche transport. Le fait est que le protocole <strong><em class="sigle">UDP</em></strong> est suffisamment <strong class="pros">polyvalent</strong> pour s'adapter aux applications courantes d'une carte à microcontrôleur. (Le protocole <em class="sigle">TCP</em> est quant à lui trop lourd et complexe à mettre en œuvre sur une machine qui ne peut exécuter qu'un seul programme à la fois.) </p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+
+<h3> Routeurs </h3>
+
+  
+<div style="display: inline-block;"> 
+  <img class="top-right" src="../img/routeurSymbole.png" width="80px" style="padding-top: 0.2em">
+<p> La notion de <strong class="title">routeur</strong> (cf. son symbole générique représenté ci‑contre) a été abordée à maintes reprises dans les chapitres précédents, notamment au chap. RI‑2 <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#routage" target="_BLANK"></a>. Rappelons qu'il s'agit bien évidemment de l'équipement privilégié du routage, qui permet d'assurer l'<strong class="defin">interconnexion entre des réseaux distincts</strong>, soit en termes de <strong>propriété</strong> (public/privé, systèmes autonomes), de <strong>sécurité</strong> (différents segments d'un même <em class="sigle">LAN</em>) ou de <strong>technologie de liaison</strong> (<em class="mark">Ethernet</em>/<em class="mark">Wi‑Fi</em> ou autre). </p>
+</div><!-- display -->
+
+<div style="display: inline-block;"> 
+  <img class="top-right" src="../img/gatewaySymbole.png" width="80px" style="padding-top: 0.2em">
+<p> Rappelons également qu'un routeur est qualifié de <strong class="title">passerelle</strong> lorsqu'il interconnecte deux réseaux dont les <strong>technologie de liaison</strong> sont <strong class="defin">différentes</strong>. On privilégie alors le symbole ci‑contre. </p>
+</div><!-- display -->
+
+<div class="important">
+<p> Technologiquement, un <strong class="title">routeur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Routeur" target="_BLANK">W</a> est un équipement qui doit exécuter simultanément plusieurs processus complexes. Il repose donc sur une <strong class="defin">architecture à microprocesseur</strong> avec un véritable <strong class="defin">système d'exploitation</strong> qui est chargé en mémoire <strong><em class="sigle">RAM</em></strong> au démarrage (ce qui nécessite un certain temps). De plus, un routeur intègre : </p>
+
+<ul>
+	<li> de la mémoire <strong class="defin"><em class="sigle">NVRAM</em></strong> (<em class="english">non‑volatile <em class="sigle">RAM</em></em>) pour sauvegarder sa <strong>configuration</strong> – en particulier sa <strong>table de routage</strong> – en cas de rupture de son alimentation électrique ; </li>
+
+	<li> de la mémoire <strong class="defin">flash</strong> ou <strong><em class="sigle">ROM</em></strong> pour stocker son <strong>système d'exploitation</strong> – la technologie <strong class="defin">flash</strong> étant privilégiée pour permettre les <strong class="pros">mises à jour</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement" id="interfacesRouteurs">
+<p> En tant qu'équipement d'interconnexion, un <strong>routeur</strong> dispose forcément de <strong class="title">plusieurs interfaces réseau</strong> associées à des <strong class="title">ports physiques</strong> qui peuvent être <strong>variés</strong> d'un modèle à l'autre et qu'il faut <strong class="warning">ne pas confondre</strong>. </p>
+<ul>
+	<li> On a presque toujours <strong class="specialN">au moins deux</strong> <strong class="specialLB">ports d'interconnexion</strong> à technologie <strong>Ethernet</strong> ou autre (<em class="mark">fiber‑channel</em> par exemple, – cf. chap. R2‑V <a class="previous" href="../R2-Applications/Rc2-5_serveursFichiers.html#fiberChannel" target="_BLANK"></a>) pour lequel le routeur assure sa fonction principale de routage.  </li>
+	
+	<div style="display: inline-block;"> 
+  <img class="top-right" src="../img/routerPorts1.png" width="300px" style="padding-top: 0.0em">
+  <div class="nobullet"> Dans le cas d'un <strong class="title">routeur‑passerelle</strong> (box d'abonné, routeur <em class="mark">Wi‑Fi</em> domestique, ou autre), il est courant que l'un des ports soit multiplexé et forme un <strong class="specialLB">switch</strong> pour déployer un <strong><em class="sigle">LAN</em></strong> en aval. Par opposition, le deuxième port est alors étiqueté <strong class="specialO"><em class="sigle">WAN</em></strong> (<em class="english">wide area network</em>) comme on peut le voir sur la photo ci‑contre (face arrière d'un routeur <em class="mark">Cisco RV215W</em>, présenté plus en détail au chap. R3‑IV <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html#routeursWiFi" target="_BLANK"></a>).  </div>
+	</div><!-- display -->   
+	
+	<div style="display: inline-block;"> 
+  	<img class="top-right" src="../img/routerPorts2.png" width="150px" style="padding-top: 0.5em">	
+	<li> Sur les routeurs adaptés aux grands réseaux (modèles de type rack), on trouve aussi au moins un <strong class="specialLB">port console</strong>, et éventuellement <strong class="specialLB">port auxiliaire</strong>, qui permettent l'un comme l'autre d'<strong class="defin">administrer le routeur</strong> depuis un poste de travail en local – ce qui est utile lorsque le réseau n'est <strong>pas opérationnel</strong> ou pas encore configuré et qu'on ne peut donc opérer une connexion à distance. </li>
+  </div><!-- display -->
+  
+
+  <div class="expert" style="display: inline-block;" id="HWIC"> 
+  	<img class="top-right" src="../img/cableRJ45-USB.png" width="200px" style="padding-top: 0.0em">	
+	<div class="nobullet"> <em class="remark">Attention</em> ! Bien que doté d'un connecteur <strong><em class="sigle">RJ45</em></strong> (pour des raisons historiques), un <strong class="specialLB">port console</strong> n'est <strong class="warning">pas</strong> un port <em class="mark">Ethernet</em> mais d'un <strong class="specialO">port série <em class="mark">RS232</em></strong>. Il nécessite donc un <strong class="specialO">câble spécial <em class="sigle">RJ45/USB</em></strong> (anciennement <em class="sigle">RJ45/DB9</em>). Sur les modèles récents, une <strong class="pros">connectivité <em class="sigle">USB</em></strong> est également disponible. </div>
+  </div><!-- display -->
+
+  <li id="extensionRouteurCisco"> Sur certains modèles de <strong class="title">routeurs haut de gamme</strong>, des <strong>slots d'extension</strong> sont prévus pour intégrer des modules d'<strong class="specialLB">interfaces complémentaires</strong> en fonction des besoins – cf. en photo ci‑dessous la face avant du modèle <em class="mark">Cisco 2901</em>, avec 4 slots vacants pour recevoir des modules <em class="sigle">HWIC</em> (<em class="english">high speed <em class="sigle">WAN</em> interface card</em>). </li>
+    <img class="top-left" src="../img/Cisco2901.png" style="max-width: 1000px">
+  
+  <div class="expert">
+  <div class="nobullet"> À titre d'<strong class="defin">exemples</strong>, parmi les modules <em class="sigle">HWIC</em> disponibles, on trouve (figurés de gauche à droite sur la photo ci‑dessus) :  </div> 
+  <ul>
+   	<li> une <strong>interface Wi‑Fi</strong> (réf. <em class="sigle">HWIC‑AP‑AG‑B</em>) avec deux sorties <em class="sigle">RP‑TNC</em> pour raccorder des antennes, procurant une portée maximale d'environ 600 m (pour plus de détails, cf. le chap. R3‑IV <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html#HWIC" target="_BLANK"></a>) ;     </li>
+
+   	<li> un <strong>modem <em class="sigle">ADSL</em></strong> (réf. <em class="sigle">HWIC‑1ADSLI</em>) pour un raccordement du routeur à l'Internet via une liaison haut‑débit cuivre ;  </li>
+
+   	<li> une paire d'<strong>interfaces série <em class="sigle">WAN</em></strong> (réf. <em class="sigle">HWIC‑2A/S</em>) compatibles avec divers protocoles (<em class="sigle">RS232</em>, <em class="sigle">RS530</em>, <em class="sigle">X.21</em>, <em class="sigle">V.35</em>…) encore utilisés pour des applications industrielles ; </li>
+
+   	<li> un <strong>switch</strong> (réf. <em class="sigle">HWIC‑4ESW</em>) à 4 ports <em class="mark">Ethernet 10/100</em> à alimentation de puissance (<em class="mark">PoE</em>). </li>
+   </ul>
+</ul>
+
+</div><!-- complement -->
+
+
+
+<h4> Gamme de modèles </h4>
+
+
+
+<p> Les <strong class="title">fabricants de routeurs</strong> (<em class="mark">Cisco Systems</em> <a class="external" href="https://fr.wikipedia.org/wiki/Cisco_Systems" target="_BLANK">W</a>, <em class="mark">Juniper Networks</em> <a class="external" href="https://fr.wikipedia.org/wiki/Juniper_Networks" target="_BLANK">W</a>, <em class="mark">Ericsson</em> <a class="external" href="https://en.wikipedia.org/wiki/Ericsson" target="_BLANK">W</a>, <em class="mark">Nokia Networks</em> <a class="external" href="https://fr.wikipedia.org/wiki/Nokia_Networks" target="_BLANK">W</a>… – cf. la liste <a class="external" href="https://en.wikipedia.org/wiki/List_of_networking_hardware_vendors" target="_BLANK">W</a>) offrent chacun une <strong class="defin">vaste de gamme de produits</strong> pour répondre à toutes sortes de besoins. Dans cette variété, on peut déjà faire une distinction entre : </p>
+<ol class="numbered">
+	<li> Les routeurs <strong class="specialLB">grand public</strong> (qui peuvent également convenir pour des usages professionnels – <em class="sigle">TPE</em>, cabinet médical, etc.). On trouve dans cette catégorie : </li>
+  <ul>
+    <div style="display: inline-block;"> 
+  		<img class="top-right" src="http://www.lycee-ferry-versailles.fr/snir/moduleR/img/routerWiFi.png" width="200px" style="padding-top: 0.0em">
+  	<li> les <strong class="defin">routeurs Wi‑Fi</strong>, qui permettent de <strong>déployer un <em class="sigle">WLAN</em></strong> (<em class="english">wireless local area network</em>) au sein d'un <strong><em class="sigle">LAN</em></strong> – cf. par exemple le modèle miniature <em class="mark">Tp‑Link AC250</em> en photo ci‑contre ; </li>
+    
+    <div class="expert">
+    <div class="nobullet"> ces aspects seront étudiés en détail au chap. R3‑IV <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html#routeursWiFi" target="_BLANK"></a> ; </div>
+    </div><!-- expert -->
+    </div><!-- display -->
+    
+
+    <div style="display: inline-block;"> 
+  		<img class="top-right" src="http://www.lycee-ferry-versailles.fr/snir/moduleR/img/routerFirewallNetgate.png" width="200px" style="padding-top: 0.0em">
+  	<li> les <strong class="defin">routeurs pare‑feu</strong>, qui permettent de <strong>sécuriser un <em class="sigle">LAN</em></strong> avec des fonctionnalités avancées de routage – cf. par exemple le modèle miniature <em class="mark">Netgate 1100 pfSense+</em> en photo ci‑contre ; </li>
+
+    <div class="expert">
+    <div class="nobullet"> ces aspects seront étudiés en détail au chap. R4‑II <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R4-Securite/Rc4-2_proxyParefeu.html" target="_BLANK"></a> ; </div>
+    </div><!-- expert -->
+  	</div><!-- display -->
+  </ul>
+
+	<li> Les routeurs « <strong class="specialLB">professionnels</strong> », parmi lesquels on peut distinguer ceux conçus pour les <strong>infrastructures réseau</strong> usuelles et ceux destinés à fonctionner en <strong>milieu industriel</strong>. </li>
+</ol>
+
+
+
+
+
+
+<h4> Système d'exploitation d'un routeur </h4>
+
+
+<ul>
+	<li> <strong>Cisco IOS</strong> <a class="external" href="https://en.wikipedia.org/wiki/Cisco_IOS" target="_BLANK"></a> </li>
+
+	<li> <strong>Junos</strong> <a class="external" href="https://en.wikipedia.org/wiki/Junos_OS" target="_BLANK"></a>, <em class="sigle">OS</em> des routeurs de la marque <em class="mark">Juniper</em>, basé sur <em class="mark">FreeBSD</em> <a class="external" href="https://en.wikipedia.org/wiki/FreeBSD" target="_BLANK">W</a>  </li>
+
+	<li> <strong>VyOS</strong> <a class="external" href="https://en.wikipedia.org/wiki/VyOS" target="_BLANK">W</a>, open‑source, basé sur <em class="mark">Debian</em></li>
+
+	<li> <strong>OpenWRT</strong> <a class="external" href="https://fr.wikipedia.org/wiki/OpenWrt" target="_BLANK">W</a>, distribution <em class="mark">GNU/Linux</em> minimale pour systèmes embarqués.  </li>
+</ul>
+
+
+
+
+
+
+
+<h3> Switch de niveau 3 </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/layer3switch.png" width="100px" style="padding-top: 0.2em">
+<p> Contrairement à un switch « ordinaire », dit de <strong>niveau 2</strong>, un <strong class="title">switch de niveau 3</strong> – en anglais, <strong>layer‑3 switch</strong> et par extension <strong>Multilayer switch</strong> <a class="external" href="https://en.wikipedia.org/wiki/Multilayer_switch" target="_BLANK">W</a> – possède des <strong class="defin">fonctionnalités de routage</strong>, notamment entre des <strong><em class="sigle">VLAN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_local_virtuel" target="_BLANK"></a> (<em class="english">virtual local area network</em>). Ces fonctionnalités sont <strong class="cons">moins variées</strong> que celle d'un routeur, mais offrent en contre‑partie de meilleures performances en <strong class="pros">rapidité</strong> et un <strong class="pros">coût très compétitif</strong>. </p>
+
+<p> Dans un <strong>réseau local</strong>, le recours à des <strong class="title">switchs de niveau 3</strong> est donc très souvent <strong class="pros">privilégié</strong> plutôt qu'une combinaison <em>routeurs/switchs (de niveau2)</em> pour <strong>segmenter le réseau</strong>.  </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Technologiquement, un <strong class="title">switch de niveau 3</strong> présente une <strong class="defin">architecture très différente</strong> de celle d'un <strong>routeur</strong> <a class="external" href="https://community.fs.com/fr/blog/layer-3-switch-vs-router-what-is-your-best-bet.html" target="_BLANK"></a>.   </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le protocole de routage <em class="mark">IPv4</em> </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheReseau.png" width="200px">
+<p> Le <strong class="title">protocole <em class="sigle">IP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Protocol" target="_BLANK">W</a> (<em class="english">Internet protocol</em>) est le <strong class="defin">protocole de routage</strong> employé pour transmettre les <strong><em class="sigle">PDU</em></strong> issus de la couche <em>transport</em> <strong>dans</strong> et <strong>entre</strong> les réseaux informatiques dits « à pile <strong><em class="sigle">TCP/IP</em></strong> » – en particulier l'Internet. C'est le principal protocole de la <strong class="specialDO">couche réseau</strong>. </p>
+
+<p> Il co‑existe actuellement <strong>deux versions</strong> de ce protocole : </p>
+<ul>
+	<li> <strong class="specialLB">IPv4</strong>, basé sur des <strong>adresses</strong> encodées sur <strong>32 bits</strong> et principalement spécifié par la <strong><em class="sigle">RFC 791</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc791" target="_BLANK"></a> (1981) ;  </li>
+
+	<li> <strong class="specialLB">IPv6</strong>, basé sur des <strong>adresses</strong> encodées sur <strong>128 bits</strong> et principalement spécifié par la <strong><em class="sigle">RFC 8200</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc8200" target="_BLANK"></a> (1998) ;  </li>
+</ul>
+
+<p> La <strong class="title">transition</strong> de <strong class="specialLB">IPv4</strong> à <strong class="specialLB">IPv6</strong> est en cours mais pourrait durer encore très longtemps <a class="external" href="https://fr.wikipedia.org/wiki/Transition_d'IPv4_vers_IPv6" target="_BLANK">W</a>.   </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Absolument <strong class="warning">central et incontournable</strong> dans la <strong>pile <em class="sigle">TCP/IP</em></strong> comme dans le modèle <strong><em class="sigle">OSI</em></strong>, le <strong class="title">routage <em class="sigle">IP</em></strong> recouvre <strong class="specialLB">trois grands aspects</strong> : </p>
+
+<ul>
+	<li> l'<strong class="specialLB">adressage</strong> des machines (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html" target="_BLANK"></a>) ; </li>
+
+	<li> les <strong class="specialLB">paramètres techniques</strong> nécessaires au routage – <strong>fragmentation</strong>, <strong>durée de vie</strong>, etc. – qu'on retrouve encodés dans les <strong>en‑têtes</strong> des paquets <strong><em class="sigle">IP</em></strong> (cf. infra <a class="infra" href="Rc3-2_coucheReseau.html#datagramme"></a>) ; </li>
+
+	<li> les <strong class="specialLB">algorithmes de routage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Routage_IP" target="_BLANK">W</a>, mis en œuvre de façon <strong class="defin">dynamique</strong> par divers protocoles – <strong><em class="sigle">RIP</em></strong>, <strong><em class="sigle">IGRP</em></strong>, <strong><em class="sigle">OSFP</em></strong>, <strong><em class="sigle">BGP</em></strong>… </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="caracteristiques"> Caractéristiques </h4>
+
+
+<div class="complement">
+<p> Le <strong class="title">protocole <em class="sigle">IP</em></strong> présente <strong class="defin">deux points communs</strong> avec <strong><em class="sigle">UDP</em></strong> (cf. chap. R3‑I <a class="previous" href="Rc3-1_coucheTransport.html#UDP" target="_BLANK"></a>) : </p>
+
+<ul>
+	<li> il opère <strong class="defin">sans connexion</strong> au sens où, lors de l'émission de données, <strong>aucune réservation de liaison</strong> n'est effectuée (la route n'est pas déterminée), et <strong>aucune synchronisation</strong> entre les machines émettrice et destinataire(s) n'est mise en œuvre à son niveau ;  </li>
+
+	<li> il est réputé <strong class="defin">non fiable</strong>, au sens où il n'apporte <strong>pas de garantie</strong> absolue que les données seront effectivement transmises comme prévu ; on dit donc qu'il s'agit d'un protocole de type <strong class="defin">best‑effort</strong> <a class="external" href="https://en.wikipedia.org/wiki/Best-effort_delivery" target="_BLANK">W</a>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Néanmoins, le <strong class="title">protocole <em class="sigle">IP</em></strong> permet de mettre en œuvre un <strong class="pros">contrôle d'intégrité</strong> par <strong>somme de contrôle</strong> ainsi qu'un <strong class="pros">contrôle de réception</strong> par épuisement la <strong>durée de vie</strong> d'un paquet (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/datagrammeIPv4"></a>).  </div>
+  </div><!-- expert -->
+</ul>
+
+<p> Ces similitudes font qu'on emploie parfois le terme de « <strong class="title">datagramme</strong> » <strong><em class="sigle">IP</em></strong> plutôt que de <strong>paquet</strong>. </p>
+
+<p> De plus, le <strong class="title">protocole <em class="sigle">IP</em></strong> prévoit la <strong class="defin">fragmentation</strong> et la <strong class="defin">défragmentation</strong> des <strong><em class="sigle">PDU</em></strong> issues de la couche <em>transport</em> qui n'ont pas été correctement dimensionnés pour respecter les <strong><em class="sigle">MTU</em></strong> (<em class="english">maximum transmission unit</em>) imposés par la <strong class="specialPR">couche liaison</strong> – cf. chap. R3‑I <a class="previous" href="Rc3-1_coucheTransport.html#longueurDatagramme" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="datagrammes"> Format des paquets IPv4 </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> Un <strong class="title">paquet</strong> du protocole <strong class="title">IPv4</strong> présente des <strong class="defin">points communs</strong> avec un paquet <strong><em class="sigle">TCP</em></strong> (cf chap. R3‑I <a class="previous" href="Rc3-1_coucheTransport.html#formatPaquetTCP" target="_BLANK"></a>). Il comporte : </p>
+<ul>
+	<li> un <strong class="specialDO">en‑tête</strong> (<strong class="specialDGr">header</strong> ou <strong><em class="sigle">PCI</em></strong> pour <em class="english">protocol control information</em> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#principesComm" target="_BLANK"></a>) de <strong class="defin">20 à 60 octets</strong>, composé de <strong>11 champs</strong> obligatoires et d'autres optionnels, chacun de différentes largeurs ;  </li>
+
+	<li> une <strong class="specialO">charge utile</strong> (<strong class="specialDGr">payload</strong> ou <strong><em class="sigle">SDU</em></strong> pour <em class="english">service data unit</em>) de <strong>taille variable</strong> qui constitue un <strong class="specialN"><em class="sigle">PDU</em> du protocole</strong> qui fait appel à <strong><em class="sigle">IP</em></strong> pour son routage (le plus souvent <strong><em class="sigle">TCP</em></strong> ou <strong><em class="sigle">UDP</em></strong> mais aussi <strong><em class="sigle">ICMP</em></strong>…). </li>
+</ul>
+	<img class="top-left" src="../img/IPdatagram.png" style="max-width: 600px">
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Détaillons maintenant les différents <strong class="title">champs d'en‑tête</strong> (<em class="english">header's fields</em>) d'un paquet <strong><em class="sigle">IP</em></strong>.  </p>
+<ul>
+	<li> Le champ <strong class="specialDO">version</strong> utilisée du protocole est encodée en binaire naturel sur <strong>4 bits</strong> ; elle ne peut prendre que la valeur <code class="cmd">4</code> (<code>0b01100</code>) pour <strong>IPv4</strong>.   </li>
+
+  <div class="expert">
+	<div class="nobullet"> <em class="remark">Remarque</em> : dans un paquet <strong>IPv6</strong>, l'en‑tête commence également par un champ de <strong>version</strong> encodé sur 4 bits, avec la valeur <code>6</code>, mais ensuite, le format est différent.  </div>
+  </div>
+
+	<li> Le champ <strong class="specialDO"><em class="sigle">IHL</em></strong> – pour <em class="english"><em class="sigle">IP</em> header length</em> – exprime la <strong class="defin">longueur de l'en‑tête</strong> en nombre de <strong>mots de 32 bits</strong>, encodée en binaire naturel sur <strong>4 bits</strong>. Selon la longueur cumulée des champs d'option (cf. infra), le champ <strong><em class="sigle">IHL</em></strong> ne peut prendre des valeurs allant de <code class="cmd">5</code> (<code>0b0101</code>) pour signifier 5 × 4 = 20 octets à <code>15</code> (<code>0b1111</code>) pour signifier 15 × 4 = 60 octets. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Ce champ joue le <strong class="defin">même rôle</strong> que celui de <strong>décalage</strong> dans l'en‑tête d'un paquet <strong><em class="sigle">TCP</em></strong> : il permet de <strong>déterminer le début de la charge utile</strong> dans le paquet <strong><em class="sigle">IP</em></strong> sans devoir procéder à une analyse supplémentaire. </div>
+  </div><!-- expert -->
+
+	<li> L'octet composite <strong class="specialDO"><em class="sigle">DSCP - EN</em></strong> (anciennement désigné <strong><em class="sigle">ToS</em></strong> pour <em class="english">type of service</em>) est consacré à la <strong>qualité de service</strong> choisie pour le paquet. </li>
+
+	<div class="expert">
+  <div class="nobullet"> Cet octet se compose : </div>
+	<ul>
+		<li> du champ <strong class="specialDO"><em class="sigle">DSCP</em></strong> (<em class="english">differentiated service code point</em>) encodé sur les <strong>6 premiers bits</strong>, qui est utilisé par le protocole <strong>DiffServ</strong> <a class="external" href="https://en.wikipedia.org/wiki/Differentiated_services" target="_BLANK">W</a> ; </li>
+
+		<li> du champ <strong class="specialDO"><em class="sigle">ECN</em></strong> (<em class="english">explicit congestion notification</em>) codé sur les 2 derniers bits pour signaler l'occurrence d'une <strong class="cons">congestion</strong> sur un nœud du réseau (cf. chap. R3‑I <a class="previous" href="Rc3-1_coucheTransport.html#ECN" target="_BLANK"></a>). </li>
+  </ul>
+  </div><!-- expert -->
+
+  <li> Le champ <strong class="specialDO">longueur totale</strong> (<strong class="specialDGr">total length</strong>) exprime le <strong>nombre d'octets</strong> du paquet <strong><em class="sigle">IP</em></strong> (en‑tête et données). Il est encodé en binaire naturel comme un entier non signé sur <strong>16 bits</strong>, donc compris entre <code>0</code> et <code>65535</code>. </li> 
+  
+  <div class="expert">
+  <div class="nobullet">	Mais comme on l'a vu rappelé <a class="supra" href="Rc3-2_coucheReseau.html#caracteristiques"></a>, la <strong class="pros">limite de taille</strong> est en pratique bien plus forte : un <strong>paquet <em class="sigle">IP</em></strong> doit <strong class="warning">ne pas excéder</strong> le <strong><em class="sigle">MTU</em></strong> (<em class="english">maximum transmission unit</em>) des liaisons qu'il emprunte. </div>
+  </div><!-- expert -->
+
+  <li> Le champ <strong class="speciaDO">identification</strong> est un <strong class="defin">numéro</strong> encodé en binaire naturel sur <strong>16 bits</strong>. Il sert à identifier le <strong><em class="sigle">PDU</em> de niveau supérieur</strong> (<em class="sigle">UDP</em>, <em class="sigle">TCP</em>, <em class="sigle">ICMP</em>…), ce qui indispensable pour le reconstituer dans le cas où il a été fragmenté. </li>
+
+  <li> Le <strong class="specialDO">mot composite</strong> encodé sur <strong>16 bits</strong> renseigne sur la <strong class="defin">fragmentation</strong> adoptée. Il est constitué d'un champ de <strong>trois drapeaux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Drapeau_(informatique)" target="_BLANK">W</a> (bits de signalisation, en anglais <em class="english">flags</em>) et un champ d'indication du <strong>décalage de fragment</strong>. </li>
+
+  <div class="expert" style="display: inline-block;">
+	<div class="nobullet"> Dans le champ des <strong class="specialDO">drapeaux</strong> : </div>	
+	  <img class="top-right" src="../img/IPcompositeWord.png"  width="300px">
+ 	<ul>
+		<li> le <strong>bit</strong> <code class="cmd">RSV</code> (<em class="english">reserved</em>) est <strong>réservé</strong> pour un usage ultérieur, il est <strong>toujours</strong> mis à <code class="cmd">0</code> ; </li>
+
+		<li> le <strong>bit</strong> <code class="cmd">DF</code> signifie <strong>don't fragment</strong>, autrement dit la valeur <code class="cmd">1</code> indique que le paquet ne peut <strong class="warning">pas</strong> être fragmenté ; </li>
+
+		<li> le <strong>bit</strong> <code class="cmd">MF</code> signifie <strong>more fragments</strong>, autrement dit la valeur <code class="cmd">1</code> indique que d'autres fragments suivent ; il est donc mis à <code class="cmd">0</code> pour le <strong>dernier fragment</strong> ou pour un <strong>paquet sans fragmentation</strong>. </li>
+  </ul>
+
+  <div class="nobullet"> Quant au champ de <strong class="specialDO">décalage du fragment</strong> (<strong class="specialDGr">fragment offset</strong>), il s'agit d'un nombre encodé en binaire naturel sur <strong>13 bits</strong>, donc allant de <code>0</code> à <code>8191</code>. En cas de fragmentation, ce nombre donne le <strong>décalage du fragment</strong> dans le <strong><em class="sigle">PDU</em> de niveau supérieur</strong>, exprimée en <strong>mots de 64 bits</strong> (8 octets), sachant que la valeur maximale 8191 × 8 = 65528 suffit pour positionner le premier octet du dernier fragment dans le cas du <strong><em class="sigle">PDU</em></strong> le plus grand possible. </div>
+  </div><!-- expert -->
+
+	<li> Le champ <strong class="specialDO"><em class="sigle">TTL</em></strong> – pour <strong>time to live</strong> – exprime en théorie, par un nombre entier encodé en binaire naturel sur <strong>8 bits</strong> (donc une valeur de <code>0</code> à <code>255</code>) le <strong class="defin">nombre de secondes restantes</strong> avant que le datagramme soit considéré comme <strong>non‑routable</strong>, et donc <strong class="warning">à supprimer</strong>. </li>
+
+	<div class="expert">
+		<ul>
+			<li> Mais un tel fonctionnement est <strong class="cons">difficile à implémenter</strong> : en plus de maintenir une horloge synchronisée entre les différents routeurs, il faudrait ajouter dans l'en‑tête du paquet <em class="sigle">IP</em> un champ pour mémoriser l'instant de son émission (typiquement, un <em class="english">timestamp Unix</em>). </li>
+
+			<div class="nobullet"> En réalité, la valeur du champ <strong class="specialDO"><em class="sigle">TTL</em></strong> subit simplement une <strong>décrémentation unitaire</strong> à chaque <strong>routeur traversé</strong> par le datagramme. C'est donc un <strong class="defin">décompteur de sauts</strong> (<em class="english">hop decount</em>). </div>
+
+			<li> Et le premier routeur qui met sa valeur à <em class="bold">0</em> <strong class="warning">met fin au routage</strong> du paquet, puis signale l'événement à l'adresse d'émission par un <strong><em class="sigle">PDU</em></strong> spécifique via le protocole <strong><em class="sigle">ICMP</em></strong>. </li>
+		</ul>
+  <div class="nobullet">  </div>
+  </div><!-- expert -->
+
+	<div class="nobullet"> Ce dispositif <strong class="pros">évite</strong> qu'un <strong>paquet <em class="sigle">IP</em></strong> <strong class="cons">tourne sans fin</strong> dans un circuit du réseau – ce qui, par accumulation avec d'autres paquets dans la même situation, engendrerait des congestions. </div>
+
+	<li> Le champ <strong class="specialDO">protocole</strong> indique par un <strong>code conventionnel</strong> encodé en binaire naturel sur <strong>8 bits</strong> (donc de <code>0</code> à <code>255</code>) quel <strong class="defin">protocole de niveau supérieur</strong> le paquet <strong><em class="sigle">IP</em></strong> encapsule. </li>
+
+  <div class="expert"> 
+  <div class="nobullet"> Ce code vaut par exemple <code class="cmd">1</code> pour <strong><em class="sigle">ICMP</em></strong>, <code class="cmd">6</code> pour <strong><em class="sigle">TCP</em></strong>, <code class="cmd">17</code> pour <strong><em class="sigle">UDP</em></strong>…  (on peut trouver une liste assez complète de ces codes au lien suivant <a class="external" href="https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers" target="_BLANK">W</a>).  </div>
+  </div><!-- expert -->
+
+	<li> Le champ <strong class="specialDO">somme de contrôle</strong> (<strong class="specialDGr">checksum</strong>), encodée sur <strong>16 bits</strong> utilise la <strong>même formule</strong> que celle des protocoles <strong><em class="sigle">UDP</em></strong> et <strong><em class="sigle">TCP</em></strong> (cf. chap. R3‑I <a class="previous" href="Rc3-1_coucheTransport.html#datagramme" target="_BLANK"></a>). </li>
+
+  <li> Les champs d'<strong class="specialDO">adresses IPv4</strong> d'<strong>émission</strong> et de <strong>destination</strong> sont encodées dans leur format originel, c'est‑à‑dire en binaire naturel sur <strong>32 bits</strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage#IPv4.html" target="_BLANK"></a>). </li>
+
+	<li> Enfin, les champs d'<strong class="specialDO">options</strong> adoptent le <strong class="defin">même format</strong> que pour dans un <strong>paquet <em class="sigle">TCP</em></strong> (cf. chap. R3‑I <a class="previous" href="Rc3-1_coucheTransport.html#formatPaquetTCP" target="_BLANK"></a>). Facultatifs, ils peuvent prendre de <em class="bold">0</em> à <em class="bold">10</em> <strong>mots</strong> de <strong>32 bits</strong>, chaque mot pouvant présenter 1 à 3 octets de remplissage garnis exclusivement de bits <code>0</code> (<strong>padding</strong>).  </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3> Problématique générale du routage </h3>
+
+
+
+<p> Pour bien comprendre la  <strong class="title">problématique du routage</strong>, rappelons tout d'abord (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#routage" target="_BLANK"></a> et chap. RI‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#coucheReseau" target="_BLANK"></a>) comment le <strong class="specialDO">protocole <em class="sigle">IP</em></strong> opère : la route empruntée par <strong>chaque paquet <em class="sigle">IP</em></strong> est déterminée <strong class="defin">de proche en proche</strong> par les différents routeurs qu'il traverse, comme une <strong class="defin">succession de sauts</strong> – en anglais, <strong>hops</strong> – et ce jusqu'à ce qu'il atteigne l'interface réseau de l'<strong>adresse <em class="sigle">IP</em> destinataire</strong> du paquet. </p>  
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/IProutingNextHop.png" width="180px">
+<p> À chaque nœud du réseau atteint par un <strong class="specialDO">paquet <em class="sigle">IP</em></strong>, la <strong class="title">problématique du routage</strong> se résume donc essentiellement dans le <strong class="defin">choix du prochain saut</strong> – en anglais, <strong>next hop</strong> – pour <strong class="pros">optimiser la route</strong> du paquet vers sa destination. Autrement dit, il s'agit de choisir sur <strong class="specialN">quelle interface réseau</strong> du nœud il faut transmettre le paquet. </p>
+</div><!-- important -->
+
+
+
+<h4> Cas d'un réseau local </h4>
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/IProutingExampleLAN.png" width="400px">
+<p> Dans le cas d'un <strong>réseau local</strong> comme celui très simple représenté sur la figure ci‑contre à titre d'exemple générique, la <strong class="title">problématique du routage</strong> pourrait sembler « <strong class="defin">inexistante</strong> » dans la mesure où, systématiquement, il n'y a qu'<strong class="pros">une seule route possible</strong>, très facile à déterminer.  </p>
+
+<p> En effet, supposons qu'un poste de travail du <strong><em class="sigle">LAN 1</em></strong> émette un <strong class="specialDO">paquet <em class="sigle">IP</em></strong>.  </p>
+<ul>
+	<li> Pour le <strong class="specialLB">premier saut</strong>, le poste de travail n'a pas d'autre choix que de router ce paquet au <strong>routeur‑passerelle</strong> dont l'adresse figure dans sa configuration <em class="sigle">IP</em> – c'est ce qu'on appelle la <strong>route par défaut</strong> (cf. infra <a class="infra" href="Rc3-2_coucheReseau.html#defaultRoute"></a>).  </li>
+
+	<li> Et pour le <strong class="specialLB">saut suivant</strong>, ce routeur passerelle n'a lui non plus aucun choix. En effet : </li>
+  <ul>
+  	<li> si l'adresse destinataire du paquet appartient au <strong>réseau <em class="sigle">IP2</em></strong> et le routeur transmet le paquet via l'interface reliée à ce réseau. </li>
+  
+  	<li> sinon, le routeur transmet le paquet via son interface reliée au <strong><em class="sigle">WAN</em></strong>, qui constitue a priori la route par défaut pour ce nœud. </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Cas d'un réseau d'interconnexion </h4>
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/IProutingInterconnectionNetwork.png" width="500px">
+<p> <em class="remark">Attention</em> : dans un <strong class="specialGr">réseau d'interconnexion</strong>, la <strong class="title">problématique du routage</strong> est <strong class="warning">plus complexe</strong> car, en règle générale : </p>
+<ul>
+	<li> il y a <strong class="defin">plusieurs routes possibles</strong>, certaines étant bien meilleures que d'autres, en fonction de la <strong>topologie</strong> du réseau mais aussi du <strong>trafic en cours</strong> sur l'ensemble du réseau ; </li>
+
+	<li> la route peut comporter un <strong class="defin">dizaine de sauts</strong> – voire plus – passant par des routeurs qui n'appartiennent pas tous au même opérateur de transport.  </li>
+</ul>
+</div><!-- display -->
+
+<div class="remarques" style="display: inline-block;">
+	<img class="top-right" src="../img/IPpoint2pointNetwork.png" width="350px">
+<p class="remarque"> On rappelle que dans un <strong>réseau d'interconnexion</strong>, chaque <strong class="title">liaison entre deux routeurs</strong> doit constituer <em class="remark">à elle seule</em> un <strong class="defin">réseau <em class="sigle">IP</em></strong> <strong class="specialN">à part entière</strong>, dont les interfaces en liaison des deux routeurs sont les uniques hôtes (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesBackbone" target="_BLANK"></a>). On parle de <strong class="defin">liaison point‑à‑point</strong>. </p>
+
+<p> S'il s'agit d'un réseau d'interconnexion <strong>public</strong> adressé en <strong>IPv4</strong>, on a recours à un <strong class="specialLB">masque de sous‑réseau</strong> <strong class="pros">le plus grand possible</strong>, typiquement en <code class="cmd">/30</code> pour économiser au maximum les plages d'adresses publiques disponibles (en voie d'épuisement, cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#IPv4depleting" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+
+
+<h3> Les tables de routage </h3>
+
+
+
+<div class="important">
+<p> Dans un <strong>réseau</strong> à pile de protocoles <strong><em class="sigle">TCP/IP</em></strong>, toute machine constituant un <strong class="defin">nœud du réseau</strong> – poste de travail, serveur, routeur, cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#noeud" target="_BLANK"></a> – utilise une <strong class="title">table de routage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Table_de_routage" target="_BLANK">W</a> pour <strong>émettre ou router des paquets <em class="sigle">IP</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/IProutingPrinciple.png" width="500px">	
+<p> Fondamentalement, la <strong class="title">table de routage</strong> d'une machine est une structure de donnée de type <strong class="defin">tableau bidimensionnel</strong>, dont chaque <strong>ligne</strong> met en relation une <strong class="specialG">adresse de réseau de destination</strong> (en général, en première colonne), ainsi que son <strong class="specialG">masque associé</strong>, avec les éléments suivants.  </p>
+</div><!-- display -->
+<ul>
+	<li> On a d'abord l'<strong>adresse <em class="sigle">IP</em></strong> de <strong class="specialO">passerelle</strong> (<em class="english">gateway</em> – cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#publicPrive" target="_BLANK"></a>) dans le réseau, laquelle constitue le <strong>prochain saut</strong> (<em class="english">next hop</em>) sur la route d'un <strong>paquet <em class="sigle">IP</em></strong> vers le réseau de destination. </li>
+
+	<div class="nobullet"> Lorsque le <strong class="specialG">réseau destinataire</strong> est le <strong>réseau local</strong> de la machine ou un réseau <strong>directement raccordé</strong>, il n'est pas nécessaire de router le message à une passerelle. Dans la colonne <strong class="specialO">passerelle</strong>, on renseigne la <strong>méta‑adresse</strong> <code class="cmd">0.0.0.0</code> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>) qui signifie que cette adresse est inutile. </div>
+
+	<li> On a également un <strong>identificateur</strong> ou une <strong>adresse <em class="sigle">IP</em></strong> d'<strong class="specialO">interface réseau</strong> (<em class="english">network interface controller</em> ou <strong><em class="sigle">NIC</em></strong> – cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#carteReseau" target="_BLANK"></a>) de la machine, interface qui doit être hébergée dans le même (sous‑)réseau que la passerelle ou l'hôte destinataire. C'est donc par cette interface qu'un paquet doit émis pour atteindre sa destination. </li>
+
+	<li> On trouve aussi une valeur <strong class="specialO">métrique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Métrique_(routage)" target="_BLANK">W</a> qui quantifie le <strong>« coût »</strong> du prochain saut en termes de performances de routage (nombre de sauts, temps, bande passante, etc…). Cet élément est essentiel pour permettre à la machine de choisir la <strong class="pros">meilleure route</strong> pour le paquet. </li>
+
+	<li> La table comporte également des <strong class="specialGr">indicateurs</strong> de type <strong>drapeau</strong> (<em class="english">flags</em>) ainsi que d'<strong>autres colonnes</strong> diverses qui facilitent le travail des algorithmes de routages. Ces éléments dépendent du système d'exploitation de la machine. </li>
+</ul>
+<p> Typiquement, une <strong>table de routage</strong> adopte une <strong class="title">disposition des colonnes</strong> comme ci‑dessous : </p>
+	<img class="top-left" src="../img/IProutingTable.png" style="max-width: 600px">
+</div><!-- complement -->
+
+<p> Les <strong class="specialLB">adresses de destination</strong> constituent les <strong class="title">entrées de la table</strong>. Afin qu'elles ne soient pas trop nombreuses, ce sont des <strong class="defin">adresses de réseau</strong> et non <strong class="warning">pas d'interface</strong>. </p>
+<div class="expert">
+<ul>
+	<li> En effet, l'<strong class="specialN">adresse <em class="sigle">IP</em> de l'interface de destination</strong> est inscrite dans l'<strong class="specialDO">en‑tête du paquet <em class="sigle">IP</em></strong>. Une fois que ce dernier atteint le réseau dans laquelle l'interface est hébergée, le routage proprement dit est terminé et l'acheminement du paquet jusqu'à la machine de destination est du ressort de la <strong class="specialPR">couche liaison</strong>, via le protocole <strong><em class="sigle">ARP</em></strong> (cf. infra <a class="infra" href="Rc3-2_coucheReseau.html#ARP"></a>). </li>
+
+	<li> Néanmoins, il est possible d'ajouter une <strong class="specialG">adresse <em class="sigle">IP</em> d'interface</strong> comme destination une table de routage en utilisant le <strong class="specialG">masque <em class="sigle">CIDR</em></strong> <code>/32</code>. </li>
+</ul>
+</div><!-- expert -->
+
+<p> Le <strong class="title">format</strong> d'une table de routage dépend aussi de la <strong class="specialLB">version</strong> du protocole utilisé (<strong class="specialLB">IPv4</strong> ou <strong class="specialLB">IPv6</strong>).  </p>
+
+<p> Sur un <strong>poste de travail</strong> ou  un <strong>routeur</strong>, la <strong class="title">table de routage</strong> peut être affichée dans un <strong>terminal de commandes en ligne</strong> de diverses manières : </p>
+<ul>
+	<li> sous <strong class="specialLB">Windows</strong>, notamment par la commandes <code class="displayDark">route print</code> ;    </li>
+
+	<li> sous <strong class="specialLB">Linux</strong>, notamment par la commandes <code class="displayDark">route  -n</code> (avec l'option <code class="displayDark">-6</code> en <strong>IPv6</strong>) ; </li>
+
+	<li> sous <strong class="specialLB">Cisco IOS</strong>, par la commande <code class="displayDark">show ip route</code> (<code class="displayDark">ipv6</code> en <strong>IPv6</strong>). </li>
+</ul>
+
+
+<h4 id="routageNoeudTerminal"> Cas d'un nœud terminal – notion de route par défaut </h4>
+
+
+
+<div class="important">
+<p> En principe, dans une <strong>table de routage</strong> de <strong>tout nœud</strong> de réseau figure, parmi les adresses de destination une <strong class="defin">entrée particulière</strong>, dite <strong class="title">adresse de routage par défaut</strong>. Elle s'écrit <code class="cmd">0.0.0.0/0</code> en <strong>IPv4</strong>. </p>
+
+<p> Cette adresse de destination répond pour toutes celles qui <strong class="defin">n'appartiennent à aucun réseau enregistré</strong> dans la table de routage. Elle permet donc de router un datagramme ayant <strong>destination inconnue</strong> de la machine vers un autre routeur, en faisant l'hypothèse que ce dernier est mieux informé. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le fait d'attribuer une <strong class="title">adresse de routage par défaut</strong> à la table de routage d'un nœud du réseau <strong class="pros">évite le risque de perte</strong> d'un datagramme <em class="sigle">IP</em> dans la mesure où il est impossible de garantir systématiquement la complétude de la table de routage. </p>
+
+<p> La <strong>limite de durée de vie</strong> (<em class="sigle">TTL</em>) imposée aux datagrammes est alors essentielle pour empêcher que certains d'entre eux soient routés indéfiniment sur un circuit constitué de passerelles associées à des adresses de routage par défaut. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/exemplePAN.png" width="300px">
+<p class="exemple"> On considère un <strong>poste de travail</strong> à système <strong>Linux</strong> doté d'une interface <code>enp0s31f6</code> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#listeInterfaces" target="_BLANK"></a>). </p>
+
+<ul>
+	<li> Il est reliée par liaison <strong>Ethernet</strong> à une <strong>box de <em class="sigle">FAI</em></strong> dont le réseau local prend par défaut l'<strong>adresse <em class="sigle">IP</em></strong> <code class="cmd">192.168.0.0/24</code>.</li>
+
+	<li> Dans ce réseau local, la box assure la fonction de routeur passerelle avec une interface réseau d'<strong>adresse <em class="sigle">IP</em></strong> <code class="cmd">192.168.0.254</code>. </li>
+
+	<li> Elle assure également la fonction de <strong>serveur <em class="sigle">DHCP</em></strong> et a attribué au poste de travail l'<strong>adresse <em class="sigle">IP</em></strong> <code class="cmd">192.168.0.16</code>. </li>
+</ul>
+
+<p> Par la commande <code class="displayDark">route -n</code>, on obtient alors la <strong class="title">table de routage</strong> du poste de travail comme celle ci‑dessous :  </p>
+</div><!-- display -->
+<pre class="displayDark">
+Table de routage IP du noyau
+Destination     Passerelle      Genmask         Indic Metric Ref    Use Iface
+0.0.0.0         192.168.0.254   0.0.0.0         UG    100    0        0 enp0s31f6
+169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 enp0s31f6
+192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 enp0s31f6
+</pre>
+
+<p> Dans cette table : </p>
+<ul>
+	<li> La <strong class="specialLB">première ligne</strong> est la <strong class="defin">route par défaut</strong> (cf. infra <a class="infra" href="Rc3-2_coucheReseau.html#defaultRoute" target="_BLANK"></a>). Valable pour <strong class="pros">tous les réseaux externes de destination</strong> – désignés de façon générique par la méta‑adresse <code class="defin">0.0.0.0</code> (idem pour leur masque) – elle passe inévitablement par la <strong class="specialGr">passerelle</strong> qu'intègre la <strong>box du <em class="sigle">FAI</em></strong>.  </li>
+
+	<li> La <strong class="specialLB">seconde ligne</strong> définit la route vers toutes les <strong class="defin">adresses de liaison locale</strong> <code class="cmd">169.254.0.0/16</code> (cf. chap. R2‑II <a class="previous" href="../R2-Applications/Rc2-2_dhcp.html#APIPA" target="_BLANK"></a>). Elle ne nécessite pas de passer par la passerelle du réseau (d'où la méta‑adresse <code>0.0.0.0</code>). </li>
+
+	<li> La <strong class="specialLB">troisième ligne</strong> définit la route vers toutes les <strong class="defin">adresses privées locales</strong> <code class="cmd">192.168.0.0/24</code> du <strong><em class="sigle">PAN</em></strong> dans lequel le poste de travail est hébergé. Elle ne nécessite pas de passer par la passerelle du réseau (d'où la méta‑adresse <code>0.0.0.0</code>). </li>
+</ul>
+
+<div class="expert">
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h4 id="defaultRoute"> Cas d'un nœud d'interconnexion – notion de DFZ </h4>
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Default-free_zone" target="_BLANK"></a></p>
+
+
+<h3> Outils d'analyse du routage </h3>
+
+<!-- 
+
+Linux 
+  sudo apt install inetutils-traceroute
+  commande traceroute
+  option -I: utilisation de ICMP et non pas UDP
+
+Windows 
+  commande tracert  
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Protocoles de gestion des routes <em>réseau</em> </h2>
+
+
+<h3> Généralités </h3>
+
+
+<div class="important">
+<p> À tout nœud du réseau, le <strong class="title">routage</strong> proprement dit consiste, pour chaque <strong>datagramme reçu</strong>, à déterminer l'<strong>adresse <em class="sigle">IP</em></strong> de la <strong class="specialT">passerelle</strong> du <strong>prochain saut</strong> (<em class="english">next hop</em>), et donc l'<strong class="specialT">interface</strong> sur laquelle émettre le datagramme. </p>
+
+<p> Pour cela, il faut un <strong class="title">algorithme</strong> qui trouve les <strong>entrées</strong> de la <strong class="defin">table de routage</strong> correspondant à l'adresse de destination du datagramme et, s'il y en a plusieurs, qui choisisse <strong class="pros">la meilleure</strong> en comparant leurs métriques respectives.  </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> L'<strong class="title">algorithme  de routage</strong> le plus courant consite à lire la table de routage dans l'<strong class="defin">ordre décroissant des adresses</strong>, de façon à toujours choisir le <strong class="pros">réseau le plus spécifique</strong> (<em class="english">longest prefix match</em> – <a class="external" href="https://en.wikipedia.org/wiki/Longest_prefix_match" target="_BLANK">W</a>) auquel appartient l'<strong>adresse <em class="sigle">IP</em> destinataire</strong> du datagramme. </p>
+
+<p> Une étape préalable consiste à calculer l'<strong class="defin">identifiant de réseau</strong> (<em class="english">net identifier</em> – cf. cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesRemarquables" target="_BLANK"></a>) de l'adresse <em class="sigle">IP</em> destinataire du datagramme pour pouvoir procéder par <strong>tests d'égalité</strong> avec les adresses de réseaux consituant les entrées de la table de routage. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> <a class="external" href="http://mariepascal.delamare.free.fr/IMG/pdf/RoutageStatiquepPpt.pdf" target="_BLANK"></a></p>
+</div><!-- complement -->
+
+
+
+<h3 id="RIP"> Le protocole RIP </h3>
+
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Routing_Information_Protocol" target="_BLANK">W</a> </p>
+
+
+
+<h3 id="OSPF"> Le protocole OSPF </h3>
+
+
+<p> <a class="external" href="http://malm.tuxfamily.org/doc/qr_chap1_algo.htm" target="_BLANK"></a> </p>
+
+
+
+<h3> Les protocoles de gestion des routes de l'Internet </h3>
+
+
+<h4 id="BGP"> Le protocole BGP </h4>
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Border_Gateway_Protocol" target="_BLANK">W</a> </p>
+
+
+<h4 id="IGP"> Les protocoles IGP </h4>
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Interior_gateway_protocol" target="_BLANK">W</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le protocole ARP </h2>
+
+
+<p> Rappel. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#ARP" target="_BLANK"></a> </p>
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Address_Resolution_Protocol" target="_BLANK">W</a> </p>
+
+
+
+<p> Cf. chap. R3‑III </p>
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le protocole ICMP </h2>
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Control_Message_Protocol" target="_BLANK">W</a> </p>
+
+<!-- sert à la signalisation des flux IP ?? -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les mécanismes de translation d'adresse </h2>
+
+
+<h3 id="NAT"> NAT </h3>
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Network_address_translation" target="_BLANK">W</a> </p>
+
+
+
+
+
+<h2> Le routage en <em class="mark">IPv6</em> </h2>
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/IPv6" target="_BLANK">W</a> </p>
+
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="1"
+	data-pagenumber="II"
+	data-pageState="OK"
+	data-pageheadtitle="C & C++"
+	data-pagefulltitle="Les Langages C et C++"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/TiobeIndex.png" width="500px" style="margin-top: 1.5em">
+<p class="square"> Il y a une cinquantaine d'années, lorsque le <strong>langage</strong> <strong class="title">C</strong> a été inventé, il est rapidement devenu incontournable dans l'univers de la programmation, et aujourd'hui encore, il reste l'un des plus employés (sur l'index <em class="mark">Tiobe</em> <a class="external" href="https://fr.wikipedia.org/wiki/Index_TIOBE" target="_BLANK">W</a>, il est régulièrement classé nº 1 <a class="external" href="https://www.tiobe.com/tiobe-index/" target="_BLANK"></a>).  Un tel succès n'a rien de fortuit. On dit que c'est un langage qui « <strong class="defin">fait confiance au codeur</strong> », au sens où il met à sa disposition un <strong class="pros">syntaxe très puissance</strong> qui tolère de nombreux mécanismes interdits dans d'autres langages. Qui se priverait d'un tel outil de développement ? </p>
+</div><!-- display -->
+
+
+<p>	Le revers de la médaille, c'est que le langage <strong class="title">C</strong> nécessite une <strong class="warning">stricte discipline</strong> dans la façon de coder pour ne pas créer des programmes incidemment défectueux. Pour un débutant – et a fortiori s'il est autodidacte – cette discipline est <strong class="cons">difficile à acquérir</strong>. Et bien évidemment, lorsqu'il s'agit de développer des programmes de systèmes cruciaux (contrôle‑commande de véhicules, de centrales électriques…), ce n'est pas un outil à employer à la légère.  </p>
+
+
+<p class="square"> Aussi le langage <strong class="title">C</strong> reste <strong class="defin">primordial</strong> dans un <strong>cursus d'apprentissage professionnel</strong> en informatique. En effet :   </p>
+
+<ul>
+	<li> de <strong class="pros">très nombreux logiciels</strong> ont été écrits en <strong class="title">C</strong>, leur <strong>maintenance</strong> requiert d'énormes besoins en compétences ; </li>
+
+	<li> la <strong class="pros">souplesse</strong> des <strong>instructions de bas niveau</strong> de <strong class="title">C</strong> et leur <strong class="pros">vitesse</strong> <strong>d'exécution</strong> le rendent incontournable pour toutes les applications en prise directe avec le <strong>matériel</strong> (commandes de microcontrôleurs, systèmes d'exploitation, pilotes de périphériques…) ; </li>
+
+	<li> la <strong class="pros">syntaxe épurée</strong> de <strong class="title">C</strong> font qu'il <strong>a inspiré de nombreux langages</strong> généralistes plus évolués ou dédiés, en premier lieu <strong class="specialLB">C++</strong> (qui sera également présenté), mais aussi <strong>C♯</strong> et <strong>Objective‑C</strong> bien entendu, et encore <em class="mark">Java</em>, <em class="mark">JavaScript</em>, <em class="mark">Perl</em>… <a class="external" href="https://en.wikipedia.org/wiki/List_of_C-family_programming_languages" target="_BLANK">W</a> (autant de langages qui se disputent le top‑10 de l'index <em class="mark">Tiobe</em>).
+	</li>
+</ul>
+
+
+<p class="square"> Avant de commencer l'étude de la programmation proprement dite, ce chapitre a pour <strong class="title">objectifs</strong> : </p>
+
+<ul>
+	<li> de donner <strong class="specialLB">quelques repères</strong> (historique, principales caractéristiques, domaines d'emploi) sur les <strong>langages</strong> <strong class="title">C</strong> et <strong class="title">C++</strong> ; </li>
+
+	<li> de présenter sommairement des <strong class="specialLB">outils logiciels</strong> pour commencer à programmer dans ces deux langages, et en premier lieu, d'introduire la notion de <strong>chaîne de compilation</strong> ; </li>
+
+	<li> d'évoquer également la <strong class="specialLB">notion d'implémentation</strong> et de sensibiliser déjà à la question du choix de la <strong>norme du langage</strong> employé. </li>
+</ul>
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le langage <em class="mark">C</em> </h2>
+
+
+
+<h3> Bref historique </h3>
+
+
+
+<div class="complement" style="display: inline-block">
+	<img class="top-right" src="../img/logo_C3.png" width="100px">
+<p> Le langage <strong class="title">C</strong> <a class="external" href="https://fr.wikipedia.org/wiki/C_(langage)" target="_BLANK">W</a> a été mis au point dans les <strong>années 1970</strong>, essentiellement par Dennis Ritchie et Ken Thompson au sein des laboratoires <em class="mark">Bell</em> dans le but de recoder le système d’exploitation <strong>Unix</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Unix" target="_BLANK">W</a>. </p>
+</div><!-- complement -->
+
+
+<div class="important">
+<p> Fondé sur un <strong>standard ouvert</strong> (les spécifications sont librement accessibles), le langage <strong class="title">C</strong> fait l’objet de <strong class="defin">normes</strong> depuis 1989. La plus récente, dite <strong>C18</strong> (parfois notée <em class="mark">C17</em>), est référencée <em class="sigle">ISO/IEC 9899:2018</em>. La prochaine version est déjà prévue pour 2023 <a class="external" href="https://en.cppreference.com/w/c/language/history" target="_BLANK">C</a>. </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Comme toutes les <strong class="title">normes</strong>, celles du <strong>langage</strong> <strong class="title">C</strong> ne sont pas gratuites. Néanmoins, on trouve sur l'internet en libre accès le <strong class="cons">brouillon</strong> de la norme <strong>C11</strong> <a class="external" href="http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1570.pdf" target="_BLANK">C</a>. </p>
+</div><!-- expert -->
+
+
+
+<h3> Principales caractéristiques </h3>
+
+
+
+<h4> Caractéristiques générales </h4>
+
+
+<div class="important">
+<p> Le langage <strong class="title">C</strong> est un <strong>langage littéral généraliste</strong> <strong class="defin">compilé</strong> conçu pour la <strong>programmation</strong> <strong class="defin">impérative</strong> et <strong class="defin">structurée</strong> (cf. chap. C1‑I <a class="previous" href="Cc1-1_langagesGeneralites.html#catergoriesLangages" target="_BLANK"></a>). </p>
+
+<p> Il est particulièrement bien adapté à la <strong>programmation</strong> <strong class="defin">procédurale multi‑fichiers</strong>. Il permet l'emploi de <strong class="defin">bibliothèques</strong> de fonctions pré‑compilées. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Comme tout langage compilé, <strong class="title">C</strong> garantit une assez bonne  <strong class="title">portabilité</strong> des programmes :</p>
+
+<ul>
+	<li> en principe, il suffit de disposer du <strong>code source</strong> du programme et d'une <strong>chaîne de compilation</strong> munie de sa <strong>bibliothèque standard</strong> pour générer un <strong class="specialBG">code exécutable</strong> sur une architecture de machine souhaitée (processeur, mémoire…) ;</li>
+
+	<li> mais en réalité, ce n'est <strong class="cons">pas toujours si simple</strong>, car la norme du langage laisse un certain nombre de <strong>libertés d'implémentation</strong> aux compilateurs (cf. infra <a class="infra" href="Cc1-2_langagesCetCpp.html#implementation" target="_BLANK"></a>), et par ailleurs, les compilateurs ne respectent pas tous exactement la norme.  </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Syntaxe </h4>
+
+
+<div class="complement">
+<p> Le langage <strong class="title">C</strong> emploie une <strong class="title">syntaxe</strong> dite <strong class="defin">semi‑symbolique</strong>. En effet, par rapport à d'autres langages plus verbeux (<em class="mark">Delphi</em>, <em class="mark">ST</em>…) : </p>
+<ul>
+	<li> les symboles <code class="prettyprint lang-c">{</code> et <code class="prettyprint lang-c">}</code> remplacent respectivement les mot‑clefs <code>begin</code> et <code>end</code> ; </li>
+
+	<li> les abréviations <code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">char</code>, <code class="prettyprint lang-c">bool</code> remplacent les noms de types <code>integer</code>, <code>character</code>, <code>boolean</code>… </li>
+</ul>
+<p> Cela donne un <strong>code source</strong> <strong class="pros">concis</strong>, rapide à lire et écrire pour les initiés, mais cela peut déboussoler les débutants. </p>
+</div><!-- complement -->
+
+
+<h4> Typage </h4>
+
+
+<div class="complement">
+<p> Le langage <strong class="title">C</strong> met en œuvre un <strong class="title">typage des données</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Type_(informatique)#Typage" target="_BLANK">W</a> : </p>
+
+<ul>
+	<li> <strong class="defin">explicite</strong> car toute constante, variable ou fonction doit être déclarée en spécifiant son type ;</li>
+
+	<li> <strong class="defin">statique</strong> car aucune variable ne peut changer de type en cours d'exécution ;</li>
+
+	<li> <strong class="defin">faible</strong> car le compilateur tolère une grande part d'hétérogénéité de typage dans les expressions (il procède à de nombreuses conversions implicites durant l'évaluation des expressions).</li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Points forts </h4>
+
+
+<div class="important">
+<p> Le langage <strong class="title">C</strong> permet de <strong class="pros">coder facilement</strong> des <strong class="defin">opérations de bas niveau</strong> comme des manipulations de données au sein même de la mémoire de la machine, grâce à des variables de types <strong class="specialLB">pointeurs</strong> (cf. chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>) très simples à manipuler. </p>
+
+<p> De plus, grâce au <strong class="specialLB">préprocesseur</strong> intégré à sa chaîne de compilation, il possède une <strong class="pros">grande puissance d'expression</strong> pour coder des <strong class="defin">programmes modulaires</strong> et <strong class="defin">portables</strong> (cf. chap. C1‑I <a class="previous" href="Cc1-1_langagesGeneralites.html#enjeux" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+
+<h4> Points faibles </h4>
+
+
+<div class="complement">
+<p> Le langage <strong class="title">C</strong> n'est <strong class="cons">pas adapté à la programmation orientée objet</strong>. C'est pour cela que d'autres langages comme <strong class="title">C++</strong> ont été inventés. </p>
+
+<p> De plus, en comparaison d'autres langages plus modernes (<em class="mark">Java</em>, <em class="mark">JavaScrit</em>, <em class="mark">Python</em>…), il n'est pas très commode pour manipuler des <strong class="cons">structures de données à tailles variables</strong> (chaînes de caractères, listes, etc.). </p>
+</div><!-- complement -->
+
+
+
+<h3> Domaines d'emploi </h3>
+
+
+
+<div class="complement">
+<p> Le langage <strong class="title">C</strong> constitue un choix privilégié pour le codage des <strong class="defin">systèmes d'exploitation</strong> et des composants logiciels qui les complètent : <strong>pilotes</strong> d'équipements, implémentations de <strong>protocoles</strong> de communication, logiciels <strong>serveurs</strong>, etc.  </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> La liste ci‑dessous donne <strong class="title">quelques exemples emblématiques</strong> – mais elle ne constitue qu'un <strong>tout petit aperçu</strong> – des logiciels codés en langage <strong>C</strong>. </p>
+<ul>
+	<li> <em class="mark">GIMP</em> <a class="external" href="https://fr.wikipedia.org/wiki/GIMP" target="_BLANK">W</a>, logiciel libre d'édition et de manipulation d'images ;  </li>
+
+	<li> <em class="mark">GNU</em><em class="mark">/Linux</em> <a class="external" href="https://fr.wikipedia.org/wiki/Linux" target="_BLANK">W</a>, adaptation du système <em class="mark">Unix</em> pour ordinateurs personnels ;  </li>
+
+	<li> <em class="mark">Radare2</em> <a class="external" href="https://fr.wikipedia.org/wiki/Radare2" target="_BLANK">W</a>, outil de retro‑ingénierie pour l'analyse des fichiers binaires  ;  </li>
+
+  <li> <em class="mark">BIND</em> <a class="external" href="https://fr.wikipedia.org/wiki/BIND" target="_BLANK">W</a>, serveur <em class="sigle">DNS</em> ;  </li>
+
+	<li> <em class="mark">Zend Engine</em> <a class="external" href="https://en.wikipedia.org/wiki/Zend_Engine" target="_BLANK">W</a>, moteur d'interprétation du langage <em class="mark">php</em> ; </li>
+
+	<li> <em class="mark">NGINX</em> <a class="external" href="https://fr.wikipedia.org/wiki/NGINX" target="_BLANK">W</a>, logiciel de serveur web ; </li>
+
+	<li> <em class="mark">Apache</em> <a class="external" href="https://fr.wikipedia.org/wiki/Apache_HTTP_Server" target="_BLANK">W</a>, logiciel de serveur web ; </li>
+
+	<li> <em class="mark">Postfix</em> <a class="external" href="https://fr.wikipedia.org/wiki/Postfix" target="_BLANK">W</a>, logiciel de messagerie électronique ; </li>
+
+	<li> <em class="mark">Asterisk</em> <a class="external" href="https://fr.wikipedia.org/wiki/Asterisk_(logiciel)" target="_BLANK">W</a>, logiciel de serveur de téléphonie (<em class="sigle">IPBX</em>) ; </li>
+
+	<li> <em class="mark">Jami</em> <a class="external" href="https://fr.wikipedia.org/wiki/Jami_(logiciel)" target="_BLANK">W</a>, logiciel de téléphonie (<em class="english">soft phone</em>) ; </li>
+
+	<li> <em class="mark">Libopus</em> <a class="external" href="https://fr.wikipedia.org/wiki/Opus_Interactive_Audio_Codec" target="_BLANK">W</a>, codec des signaux audio ; </li>
+
+	<li> <em class="mark">Mosquitto</em> <a class="external" href="https://mosquitto.org" target="_BLANK"></a>, implémentation du protocole de communication <em class="sigle">MQTT</em>. </li>
+</ul>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le langage <em class="mark">C++</em> </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<p> Le langage <strong class="title">C++</strong> <a class="external" href="https://fr.wikipedia.org/wiki/C++" target="_BLANK">W</a> a été créé dans les <strong>années 1980</strong>, par Bjarne Stroustrup au sein des laboratoires <em class="mark">Bell</em> comme une <strong class="defin">extension</strong> au langage <strong>C</strong>. </p>
+<ul>
+	<li> L'ensemble des <strong class="defin">bibliothèques</strong> de <strong>C</strong> sont <strong>a priori</strong> <strong class="pros">utilisables</strong> dans un code source compilé en <strong class="title">C++</strong>. </li>
+
+	<li> Cependant, un programme compilable en <strong>C</strong> ne l'est pas nécessairement en <strong class="title">C++</strong>, qui impose certaines <strong class="cons">restrictions</strong>.</li>
+</ul>
+</div><!-- important -->
+
+<div class="expert">	  
+<p> Comme celles du langage <em class="mark">C</em>, les <strong class="title">normes</strong> du <strong>C++</strong> ne sont pas gratuites. Néanmoins, on trouve sur l'internet en libre accès un <strong class="cons">brouillon</strong> de la norme <strong>C++17</strong> <a class="external" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf" target="_BLANK">C++</a>. Même s'il est signalé comme incomplet, incorrect et mal formaté (cf. la note en bas de la première page), ce brouillon donne pour les débutants un aperçu très pertinent du texte officiel de la norme. </p>
+</div><!-- expert -->
+
+
+<h4> Principaux apports </h4>
+
+
+<div class="complement" style="display: inline-block">
+	<img class="top-right" src="../img/logoC++.png" width="100px">
+
+<p> Les principaux apports du langage <strong class="title">C++</strong> sont les concepts fondamentaux pour la <strong class="title">programmation orientée objet</strong>, notamment : </p>
+
+<ul>
+	<li> les <strong class="defin">classes</strong> de variables, auxquelles on peut associer spécifiquement des <strong>fonctions</strong> qu'on appelle <strong class="defin">méthodes</strong> ; </li>
+
+	<li> l'<strong class="defin">héritage</strong>, c'est‑à‑dire le fait qu'une <strong>sous-classe</strong> de variables dispose (hérite) de toutes les méthodes de la classe dont elle est issue ;</li>
+
+	<li> la <strong class="defin">surcharge</strong>, c'est‑à‑dire le fait qu'on puisse utiliser les <strong>mêmes identificateurs</strong> pour définir des <strong>fonctions semblables</strong> d'une classe à une autre ; en particulier, cela permet d'employer les opérateurs usuels <code>+ - * /</code>, etc. sur des objets plus complexes que de simples nombres. </li>
+</ul>
+
+<p> Les concepts de la programmation orientée objet sont tellement <strong class="pros">performants</strong> en termes de lisibilité et de fiabilité qu'ils sont devenus <strong class="title">incontournables</strong>, même pour la programmation de <strong>cartes à microcontrôleurs</strong>. Par exemple, la mise en œuvre usuelle des <em>liaisons séries</em> et plus généralement des bus de données (<em class="sigle">SPI</em>, <em class="sigle">I²C</em>, etc.) sur les cartes <em class="mark">Arduino</em> repose sur l'emploi de classes. </p>
+</div><!-- complement -->
+
+<p> Le langage <strong class="title">C++</strong> est libre de droits et fait l'objet de <strong class="defin">normes</strong> depuis 1998. La plus récente, dite <strong>C++20</strong>, est référencée <em class="sigle">ISO/IEC 14882:2020</em>, mais elle n'est pas encore prise en charge par toutes les chaînes de compilation. </p>
+
+
+
+<h3 id="CppApplis"> Domaines d'emploi </h3>
+
+
+
+<div class="complement">
+<p> Avec la puissance expressive apportée par les concepts de la programmation orientée objet, le langage <strong class="title">C++</strong> constitue un <strong class="pros">choix privilégié</strong> pour le codage d'<strong class="defin">applications</strong> pour postes de travail : logiciels de <strong>bureautique</strong>, de <strong><em class="sigle">CAO</em></strong>, de <strong>simulation</strong>, d'<strong>animation</strong>, de <strong>communication</strong>…  </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> La liste ci‑dessous donne <strong class="title">quelques exemples emblématiques</strong> des logiciels codés en langage <strong>C++</strong>. </p>
+<ul>
+  <li>  <em class="mark">Microsoft Office</em> <a class="external" href="https://fr.wikipedia.org/wiki/Microsoft_Office" target="_BLANK">W</a> (suite bureautique qu'on ne présente plus), ainsi que d'autres logiciels phares de la firme de Redmond, comme <em class="mark">Outlook</em> ; </li>
+
+  <li>  <em class="mark">LibreOffice</em> <a class="external" href="https://fr.wikipedia.org/wiki/LibreOffice" target="_BLANK">W</a>, suite bureautique libre et <em class="english">open‑source</em> ; </li>
+
+  <li>  <em class="mark">Adobe Illustrator</em> <a class="external" href="https://fr.wikipedia.org/wiki/Adobe_Illustrator">W</a>, logiciel de dessin vectoriel ; </li>
+
+  <li>  <em class="mark">Code::Blocks</em> <a class="external" href="https://fr.wikipedia.org/wiki/Code::Blocks">W</a>, environnement intégré de développement ; </li>
+
+  <li>  <em class="mark">FileZilla</em> <a class="external" href="https://fr.wikipedia.org/wiki/FileZilla">W</a>, logiciel client <em class="sigle">FTP</em> (transferts de fichiers entre hôtes distants) ; </li>
+
+	<li>  <em class="mark">Blink</em> <a class="external" href="https://fr.wikipedia.org/wiki/Blink_(moteur_de_rendu)" target="_BLANK">W</a>, moteur de rendu du navigateur <em class="mark">Chrome</em> ; </li>
+
+	<li>  <em class="mark">WebKit</em> <a class="external" href="https://fr.wikipedia.org/wiki/WebKit" target="_BLANK">W</a>, moteur de rendu du navigateur <em class="mark">Safari</em> ;  </li>
+
+	<li>  <em class="mark">7-Zip</em> <a class="external" href="https://fr.wikipedia.org/wiki/7-Zip" target="_BLANK">W</a>, utilitaire de compression de données ;  </li>
+
+	<li> <em class="mark">3CX</em> <a class="external" href="https://en.wikipedia.org/wiki/3CX_Phone_System" target="_BLANK">W</a>, logiciel de téléphonie VoIP. </li>
+</ul>
+<p> Mais encore une fois, insistons sur le fait qu'il ne s'agit là que d'un <strong>tout petit aperçu</strong> d'une réalité industrielle immense. Il existe d'innombrables logiciels inconnus du grand public qui sont codés en <strong>C++</strong>. </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Outils logiciels de programmation en <em>C</em> et <em>C++</em></h2>
+
+
+
+<h3> Les chaînes de compilation  –  généralités</h3>
+
+
+
+<div class="important">
+<p> Sauf recours à un environnement de programmation en ligne (cf. chap. C1‑I <a class="previous" href="Cc1-1_langagesGeneralites.html#envOnLine" target="_BLANK"></a>), il est <strong class="warning">indispensable</strong> d'installer sur le poste de travail au moins une <strong class="title">chaîne de compilation</strong> <strong>C</strong>/<strong>C++</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chaîne_de_compilation" target="_BLANK">W</a> – en anglais, <strong>toolchain</strong> – pour pouvoir compiler et exécuter les programmes composés dans ces langages. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Pour un débutant, l'<strong class="title">installation</strong> d'une chaîne de compilation peut parfois sembler <strong>« transparente »</strong> : </p>
+<ul>
+	<li> si l'on emploie un <strong>environnement intégré de développement</strong> que l'on a téléchargé avec un <strong class="defin">installateur combiné</strong> qui inclut la chaîne de compilation ;  </li>
+
+	<li> si le poste de travail fonctionne avec une distribution usuelle du système d'exploitation <em class="mark">Linux</em> comme <em class="mark">Ubuntu</em>, <em class="mark">Mint</em>, <em class="mark">Debian</em>, etc. où la chaîne de compilation est <strong class="defin">installée par défaut</strong>. </li>
+</ul>
+
+<p> Dans tous les cas, il est préférable de savoir <strong>précisément où</strong> est installée cette chaîne de compilation et <strong>quelle est sa version</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Les composants logiciels des chaînes de compilation seront détaillés au chapitre C4‑IV <a class="next" href="../C4-Fonctions/Cc4-4_chaineCompilation.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="GCC"> Les chaînes de compilation <em class="mark">GCC</em> et <em class="mark">MinGW</em> </h3>
+
+
+<div class="complement">
+<p> Dans le monde académique (enseignement, recherche… ), et aussi dans une part non négligeable des entreprises qui développent des logiciels, on emploie principalement les chaînes de compilation élaborées dans le cadre du <strong>projet <em class="mark">GNU</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Projet_GNU" target="_BLANK">W</a>, qui est fédérateur du monde du <strong class="pros">logiciel libre</strong>. En anglais, on parle de <strong><em class="mark">GNU</em> toolchain</strong>. </p>
+
+<p> Ces chaînes de compilation sont distribuées sous <strong class="defin">licence <em class="mark">GNU GPL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Licence_publique_générale_GNU" target="_BLANK">W</a> (<em class="english">general public licence</em>) <strong>version 3</strong> .</p>
+</div><!-- complement -->
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/GCClogo.png" width="120px">
+<p> Parmi ces chaînes de compilation, on trouve une famille d'<strong>outils emblématiques</strong> désignés par le sigle <strong class="title"><em class="mark">GCC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_Compiler_Collection" target="_BLANK">W</a> – lequel signifiait originellement <em class="mark">GNU C</em> <em class="english">Compiler</em> et aujourd'hui <strong class="title"><em class="mark">GNU</em> <em class="english">Compiler Collection</em></strong>. 
+
+<p> Pour la plupart des architectures de machines, une chaîne de compilation <strong class="title"><em class="mark">GCC</em></strong> regroupe notamment un <strong class="defin">ensemble de compilateurs</strong> de différents langages, dont <strong>C</strong>, <strong>C++</strong>, <em class="mark">Fortran</em>, <em class="mark">Ada</em>, <em class="mark">Go</em>, <em class="mark">D</em>… </p>
+</div><!-- important -->
+
+
+<div class="expert">
+<p> De plus, dans les archives d'installation, à une chaîne de compilation <strong><em class="mark">GCC</em></strong> est le plus souvent associée un <strong class="title">débogueur GDB</strong> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_Debugger" target="_BLANK">W</a>. C'est un outil logiciel du <strong>projet <em class="mark">GNU</em></strong> (donc, ouvert et gratuit) qui permet l'<strong class="defin">exécution pas à pas d'un programme</strong> – à condition que son <strong>code source</strong> soit <strong class="pros">disponible</strong>. </p>
+
+<p> À partir d'un certain niveau de complexité des programmes développés, un <strong class="title">débogueur</strong> est <strong class="warning">indispensable</strong> pour la <strong class="defin">mise au point</strong>. Il facilite grandement la recherche des causes de dysfonctionnement. </p>	
+</div><!-- expert -->
+
+
+<h4 id="installationGCC"> Procédures d'installation </h4>
+
+
+<p> La procédure d'<strong class="title">installation</strong> de <strong class="title"><em class="mark">GCC</em></strong> dépend du <strong class="specialLB">système d'exploitation</strong> du poste de travail. </p>
+<ul>
+	<li> Avec une distribution <strong class="specialLB">Linux</strong> usuelle, dans un <strong>terminal</strong> de commande : </li> 
+  <ul>
+  	<li> On <strong>vérifie</strong> si l'installation est déjà faite en saisissant par exemple les commandes <code class="displayDark"><span class="displayDarkGreen">type</span> <span class="displayDarkWhite">gcc</span></code> <strong>et</strong> <code class="displayDark"><span class="displayDarkGreen">type</span> <span class="displayDarkWhite">gc++</span></code> (on peut aussi employer la commande <code>which</code>). </li>
+
+  	<div class=""> Si les paquets de <em class="mark">GCC</em> sont <strong class="pros">correctement installés</strong>, on doit obtenir respectivement une sortie de la forme : <br>
+    <span class="inline">
+  		<code class="displayDark">gcc is /usr/bin/gcc</code>   ou   <code class="displayDark">gcc is hashed (/usr/bin/gcc)</code>
+  	</span>	<br>
+  	et <strong class="pros">idem</strong> pour <code class="cmd">g++</code>. </div>
+
+  	<li> Si, typiquement, on obtient une <strong class="warning">sortie erronée</strong> comme : <br>
+    <span class="inline">
+  		<code class="displayDark">bash: type: g++ : not found</code>
+  	</span>	<br>
+    alors l'<strong>installation des paquets</strong> de <strong><em class="mark">GCC</em></strong> n'est <strong class="cons">pas finalisée</strong>. Avec une distribution <em class="mark">Linux</em> issue de la branche <strong>Debian</strong> (<em class="mark">Ubuntu</em>, <em class="mark">Mint</em>, etc.), une solution commode consiste à installer le <strong class="defin">méta‑paquet</strong> <code class="filename">build-essential</code> via la commande ci‑dessous (cf. ce lien pour plus d'informations <a class="external" href="https://linuxhint.com/install-build-essential-ubuntu/" target="_BLANK"></a>) : <br>
+  	<span class="inline">
+  		<code class="displayDark"><span class="displayDarkGreen">sudo apt install</span> <span class="displayDarkWhite">build-essential</span></code>
+  	</span>	</li>
+
+  	<div class="expert">
+  	<div class="nobullet"> <em class="remark">Remarque</em>. <code class="filename">build-essential</code> contient notamment le <strong>paquet</strong> <code class="filename">binutils</code> qui regroupe des <strong class="defin">composants indispensables</strong> à la chaîne de compilation <strong>GCC</strong> – notamment l'<strong>assembleur</strong> <strong class="specialLB">AS</strong> et l'<strong>éditeur de lien</strong> <strong class="specialLB">LD</strong>, ainsi que d'autres outils. Ces aspects seront revus en détail au chap. C4‑IV <a class="next" href="../C4-Fonctions/Cc4-4_chaineCompilation.html#assemblerAS" target="_BLANK"></a>. </div>
+  	</div><!-- expert -->
+
+
+  	<li> On peut ensuite vérifier quelle <strong>version</strong> de <strong><em class="mark">GCC</em></strong> est installée via les commandes <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">--version</span></code> et <code class="displayDark"><span class="displayDarkGreen">g++</span> <span class="displayDarkRed">--version</span></code>. Typiquement, avec <strong class="Mint">Linux Mint 21</strong>, on obtient une <strong>version 11.3</strong>, qui est récente et qui <strong class="pros">convient parfaitement</strong> pour exécuter tous les exercices de ce module de formation. </li>
+  </ul>
+
+	<li> Sur un PC <strong class="specialLB">Windows</strong>, il faut installer le logiciel <strong class="title">MinGW</strong> <a class="external" href="https://fr.wikipedia.org/wiki/MinGW" target="_BLANK">W</a> dont le nom signifie <em class="english">Minimalist GNU for Windows</em>. Cette chaîne de compilation existe depuis 2005 dans une version pour architectures 64 bits, nommée <strong>Mingw‑w64</strong> <a class="external" href="https://en.wikipedia.org/wiki/Mingw-w64" target="_BLANK">W</a>. </li>
+
+	<ul>
+		<li> Dans un <strong>terminal de commande</strong> usuel, on <strong>vérifie</strong> si cette chaîne de compilation est installée en tapant la commande <code class="displayDark"><span class="displayDarkGreen">where</span> <span class="displayDarkWhite">gcc</span></code> (<code class="displayDarkGreen">where.exe</code> sur un terminal <em class="mark">PowerShell</em>). </li>
+
+		<li> Si aucun chemin n'est trouvé par le système, en principe, on télécharge un <strong>installateur</strong>, typiquement au lien suivant <a class="external" href="https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win32/Personal Builds/mingw-builds/installer/mingw-w64-install.exe/download" target="_BLANK"></a>. </li>
+
+		<div class="nobullet"> Il suffit ensuite d'effectuer les choix usuels en cliquant sur les boutons indiqués. Il est recommandé de placer le <strong>répertoire d'installation</strong> directement sous la racine du disque système, typiquement <code class="filename">C:\MinGW</code>.</div>
+
+		<div class="nobullet"> Toutefois, si cette solution n'est pas opérationnelle, une alternative consiste à installer l'environnement intégré de développement <strong class="Codeblocks">Code::Blocks</strong> avec le compilateur associé <strong class="defin">MinGW</strong> (cf. infra <a class="infra" href="Cc1-2_langagesCetCpp.html#installationCodeBlocks"></a>). </div>
+
+		<div class="nobullet"> Il faut également s'assurer que le chemin complet (typiquement, <code class="filename">C:\MinGW\bin</code>) vers les fichiers exécutables (<code class="filename">gcc</code>, <code class="filename">g++</code>, etc.) figure dans la <strong>variable d'environnement</strong> <code class="cmd">PATH</code> en tapant la commande <code class="displayDark"><span class="displayDarkGreen">echo</span> <span class="displayDarkWhite">%PATH%</span></code> (<code class="displayDarkGreen">$Env:Path</code> sur un terminal <em class="mark">PowerShell</em>). Si tel n'est pas le cas, on peut y remédier en suivant par exemple la procédure décrite au lien suivant <a class="external" href="https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/" target="_BLANK"></a>. </div>
+
+		<li> On peut ensuite vérifier quelle <strong>version</strong> de <strong>Mingw‑w64</strong> est installée. Pour cela, on ouvre un nouveau terminal de commande et on saisit <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-v</span></code> (attention, un seul tiret et non pas deux comme sous <em class="mark">Linux</em>). </li>
+	</ul>
+</ul>
+
+
+<div class="remarques">
+<p class="remarques"> Il faut <strong class="warning">ne pas confondre</strong> la <strong class="specialO">commande système</strong> <code class="cmd">gcc</code> avec « la » <strong class="specialT">chaîne de compilation</strong> <strong><em class="mark">GCC</em></strong> : </p>
+
+<ul>
+	<li> La <strong class="specialO">commande</strong> <code class="cmd">gcc</code> appelle la chaîne de compilation du langage <strong>C</strong> installée sur le poste de travail, aussi bien sous <em class="mark">Windows</em> que <em class="mark">Linux</em>.  </li>
+
+	<li> Mais entre ces deux systèmes d'exploitation, la <strong class="specialT">chaîne de compilation</strong> employée n'est <strong class="warning">pas exactement la même</strong> – <strong>Mingw‑w64</strong> étant une <strong class="cons">version réduite</strong> de <strong><em class="mark">GCC</em></strong>. </li>
+
+  <div class="nobullet">Pour un même programme source, on peut donc obtenir des résultats différents selon que l'on emploie l'une ou l'autre de ces chaînes de compilation. </div>
+</ul>
+</div><!-- remarque -->
+
+
+<h4 id="gccEmploi"> Mode d'emploi rudimentaire </h4>
+
+
+<div class="important">
+<p> L'<strong class="title">emploi rudimentaire</strong> d'une chaîne de compilation <strong><em class="mark">GCC</em></strong> ou <strong>MinGW</strong> installée sur un poste de travail est <strong class="pros">très simple</strong>. Pour un programme source codé en <strong>C</strong> et destiné à s'exécuter sur la <strong>même machine</strong> – compilation dite <strong class="defin">native</strong> – on saisit dans un terminal une commande de la forme : <br>
+<span class="inline">
+  <code class="displayDark" style="padding-top: 0.1em; padding-bottom: 0.2em;"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-Wall</span> <span class="nocode"><strong class="specialMG">fichier source</strong></span> <span class="displayDarkRed">-o</span> <strong class="specialBG">fichier exécutable</strong></span></code>
+</span>	<br>
+et idem pour un programme en <strong>C++</strong> avec la commande <code class="cmd">g++</code>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Dans cette forme : </p>
+<ul>
+	<li> l'option <code class="cmd">-Wall</code> stipule l'affichage dans la console de <strong class="warning">tous</strong> (<em class="english">all</em>) les avertissements (« <code>W</code> » est l'initiale de <em class="english">warnings</em>) émis par le compilateur ; </li>
+
+	<li> <strong class="specialG">fichier source</strong> est le <strong>chemin relatif d'accès</strong> au fichier du programme source, lequel est conventionnellement doté de l'extension <code class="filename">.c</code> ; </li>
+
+	<li> l'option <code class="cmd">-o</code> stipule que la <strong>sortie</strong> (<em class="english">output</em>) est spécifiée par l'argument suivant <strong class="specialBG">fichier exécutable</strong> qui est également un <strong>chemin relatif d'accès</strong> ; le fichier est créé s'il n'existe pas, sinon il est écrasé ; </li>
+	<ul>
+		<li> sous <strong class="specialLB">Windows</strong>, ce fichier doit être nommé avec l'extension <code class="filename">.exe</code> (en l'absence d'extension, le système la lui attribue automatiquement) ; </li>
+
+		<li> sous <strong class="specialLB">Linux</strong>, il est d'usage de ne lui donner <strong>aucune extension</strong>. </li>
+	</ul>
+</ul>
+</div><!-- complement -->
+
+<p> Pour simplifier la pratique, il est préférable que le terminal de commande agisse depuis un <strong class="pros">même répertoire</strong> où sont placés le fichier source et le fichier exécutable – on parle alors de <strong class="specialM">répertoire de projet</strong>. Alors les chemins relatifs d'accès se réduisent respectivement aux <strong>noms des fichiers</strong> <strong class="specialG">source</strong> et <strong class="specialBG">exécutable</strong>. </p>
+
+<div class="remarques">
+<p class="remarques"> Dans la commande <code class="cmd">gcc</code>, la <strong class="title">gestion des avertissements</strong> admet un <strong class="defin">très grand nombre d'options</strong> (avec un système <em class="mark">Linux</em>, cf. le résultat de la commande  <code class="displayDark"><span class="displayDarkGreen">man</span> <span class="displayDarkWhite">gcc</span> <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">grep</span> <span class="displayDarkWhite">'\-W'</span></code>). En particulier, on peut citer les deux options ci‑dessous : </p>
+<ul>
+	<li> <code class="cmd">-Wextra</code> qui affiche des <strong class="specialO">avertissements supplémentaires</strong>, dont les causes sont considérées comme étant suffisamment moins risquées en termes de dysfonctionnements potentiels du programme pour pouvoir être passées sous silence, mais qu'il peut être pertinent d'afficher quand même ; </li>
+
+	<li> <code class="cmd">-Werror</code> qui convertit artificiellement tout avertissement affiché en une <strong class="warning">erreur</strong> de compilation, bloquant ainsi la production d'un code objet. </li>
+</ul>
+
+<p> Pour une <strong class="defin">programmation vraiment sûre</strong>, il est <strong class="pros">recommandé</strong> d'employer ces sous‑options. On saisit donc toute commande de compilation de la forme : <br>
+<span class="inline">
+  <code class="displayDark" style="padding-top: 0.1em; padding-bottom: 0.1em;"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-Wall -Wextra -Werror</span> <span class="nocode"><strong class="specialY">…</strong></span></code>
+</span>	</p>
+</div><!-- remarques -->
+
+
+<h4> Exécution d'un programme compilé </h4>
+
+
+<div class="complement">
+<p> Lorsque le compilateur ne signale <strong class="pros">aucune erreur</strong>, un nouveau fichier exécutable est donc produit. En règle générale, l'<strong class="title">exécution</strong> du programme s'effectue simplement en saisissant le <strong>chemin d'accès</strong> de ce fichier, qui constitue en quelque sorte une nouvelle commande. En particulier, si le terminal de commande est exécuté depuis le répertoire du fichier exécutable : </p>
+<ul>
+	<li> Sous <strong class="specialLB">Windows</strong>, on saisit la commande : <br>
+	<span class="inline">
+		<code class="displayDark" style="padding-top: 0.1em; padding-bottom: 0.1em;"><span class="nocode"><strong class="specialBG"> fichier exécutable</strong></span><span class="displayDarkYellow" >.exe</span></code>
+	</span> <br>
+	Il s'agit en fait d'un <strong>chemin relatif</strong> que le système transforme automatiquement en chemin absolu par l'ajout du préfixe <code>.\</code>. </li>
+
+	<li> Sous <strong class="specialLB">Linux</strong>, on saisit la commande : <br>
+	<span class="inline">
+		<code class="displayDark" style="padding-top: 0.1em; padding-bottom: 0.1em;"><span class="displayDarkYellow">./</span><span class="nocode"><strong class="specialBG">fichier exécutable</strong></span></code>   (a priori sans extension)
+	</span> <br>
+	Il s'agit ici d'un <strong>chemin absolu</strong> qui utilise l'abréviation <code class="displayDarkYellow">.</code> pour coder le répertoire courant.  </li>
+</ul>	
+</div><!-- complement -->
+
+
+
+<h3 id="Onlinegdb"> L'environnement de programmation <em class="mark">OnlineGDB</em> </h3>
+
+
+
+<div class="complement" style="display: inline-block;"> 
+	<img class="top-right" src="../img/logoOnLineGDB.png" width="120px">
+<p> <strong class="OnlineGDB">OnlineGDB</strong> <a class="external" href="https://www.onlinegdb.com/" target="_BLANK"></a> est un <strong class="defin">environnement de programmation</strong> <strong class="specialG">en ligne</strong>, c'est‑à‑dire mis en œuvre via une <strong>page web</strong>. Principalement conçu pour <strong>C</strong> et <strong>C++</strong>, il prend en charge une quinzaine de langages, dont <em class="mark">Java</em>, <em class="mark">Python</em>, <em class="mark">Ruby</em>, <em class="mark">Perl</em>…
+ </p>
+
+<p> Sa première version date de 2016. </p>
+</div><!-- complement -->	
+
+
+<h4> Caractéristiques remarquables </h4>
+
+
+<p> <strong class="OnlineGDB">OnlineGDB</strong> utilise des <strong>serveurs distants</strong> pour compiler et exécuter les programmes en ligne. Pour les langages <strong>C</strong> et <strong>C++</strong>, il exploite la chaîne de compilation <strong>GCC 5.4.1</strong> et le débogueur <strong>GDB 7.11.1</strong>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/OnlineGDB-options.png" width="250px">
+<p> L'<strong class="title">interface</strong> se présente de façon très classique avec : </p>
+<ul>
+	<li> un <strong>cadre d'édition</strong> central et un cadre inférieur qui simule une <strong>console d'exécution</strong> ; </li>
+
+	<li> une <strong>barre d'outil</strong> minimale, dotée d'un bouton <code>Run</code> <span class="specialG">▶</span> qui compile puis exécute (en l'absence d'erreurs) le programme saisi dans le cadre d'édition ; </li>
+
+	<li> un bouton de <strong>paramètres</strong> <span class="specialY">⚙</span> via lequel on peut également spécifier des <strong class="specialO">options de compilation</strong> avec un éditeur de ligne de commande ; on y accède en cliquant sur <code>Extra Compiler Flags</code>.</li>
+</ul>
+</div><!-- display -->
+
+<div class="expert">
+<p> Pour garantir un minimum de disponibilité à un grand nombre d'utilisateurs, il leur impose certaines <strong class="cons">limitations</strong>, notamment : </p>
+<ul>
+	<li> un code source dont chaque <strong>fichier</strong> ne dépasse pas 100 ko et 200 ko au total ;</li>
+
+	<li> un <strong>temps de compilation</strong> de 10 secondes maximum ; </li>
+
+	<li> que le programme exécutable n'ait <strong>aucune interaction</strong> avec d'autres pages web. </li>
+</ul>
+
+<p> D'autres <strong class="pros">fonctionnalités avancées</strong> sont disponibles dans une <strong>panneau latéral droit</strong> rétractable. </p>
+</div><!-- expert -->
+
+
+
+
+<h3 id="SublimeText"> L'éditeur de code <em class="mark">Sublime Text</em> </h3>
+
+
+
+<div class="complement" style="display: inline-block;"> 
+	<img class="top-right" src="../img/logoSublimeText.png" width="120px">
+<p> <strong class="Sublime">Sublime Text</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Sublime_Text" target="_BLANK">W</a> est un <strong class="defin">éditeur de code</strong> <strong>multiplateforme</strong> (<em class="mark">Linux</em>, <em class="mark">Windows</em>, <em class="mark">MacOS</em>). Développé initialement par Jon Skinner, il est distribué en <strong>shareware</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Shareware" target="_BLANK">W</a> par la société <em class="mark">Sublime HQ</em>, et jusqu'à présent <strong class="pros">sans limite de durée d'utilisation</strong> (mais périodiquement, le logiciel invite l'utilisateur à acquérir une licence). </p>
+
+<p> Sa première version date de 2008. Il est disponible en <strong>version 4</strong> depuis mai 2021. </p>
+</div><!-- complement -->	
+
+
+<h4> Caractéristiques remarquables </h4>
+
+
+<p> Dans un cadre d'étude des bases de l'informatique comme celui dans lequel s'inscrit ce module de formation, le choix d'employer <strong class="Sublime">Sublime Text</strong> est d'abord motivé par le fait qu'il est aussi considéré comme une <strong class="pros">solution de référence</strong> pour la <strong class="defin">programmation web</strong> (<em class="sigle">HTML</em>/<em class="sigle">CSS</em>/<em class="sigle">JS</em>…). Il permet donc d'éviter aux étudiants de s'investir dans plusieurs environnements au moment où il est préférable de consacrer l'essentiel des efforts cognitifs à l'acquisition de nombreux éléments de langage. </p>
+
+<p> De plus, cet éditeur de code possède de <strong class="pros">nombreux atouts</strong>, parmi lesquels on peut citer : </p>
+<ul>
+	<li> la <strong>légèreté</strong>, le lancement étant quasi-instantané sur un poste de travail, même avec une configuration peu performante ;  </li>
+
+	<li> une <strong>interface réduite</strong> qui optimise l'espace pour l'édition du code ;  </li>
+
+	<li> la <strong>sauvegarde automatique</strong> de la saisie (à tout moment, le logiciel garde en mémoire son état intégral et, même en cas de fermeture inopinée, même lors d'un arrêt brutal du système, le contenu des fichiers est restitué tel quel lorsqu'il est à nouveau relancé) ;  </li>
+
+	<li> tous les <strong>outils modernes de développement</strong> (multi‑fenêtrage, visualisation miniature du contenu du fichier, coloration syntaxique spécifique au langage, auto‑complétion, macro‑commandes, raccourcis clavier, etc.) ; </li>
+
+	<li> le <strong>paramétrage des préférences</strong> par fichiers au format <code class="filename">.json</code> <a class="external" href="https://fr.wikipedia.org/wiki/JavaScript_Object_Notation" target="_BLANK">W</a> (<em class="mark">JavaScript objet notation</em>) ;  </li>
+
+	<li> un <strong>grand nombre d'extensions</strong> (<em class="english">plugins</em>) développés par la communauté des utilisateurs qui permettent d'augmenter considérablement ses fonctionnalités au gré des besoins de chacun. </li>
+</ul>
+
+
+<h4 id="installationSublime"> Installation </h4>
+
+
+<p> L'<strong class="title">installation</strong> de <strong class="Sublime">Sublime Text</strong> ne pose <strong class="pros">pas de difficulté particulière</strong> : </p>
+<ul>
+	<li> avec <strong class="specialLB">Windows</strong>, on télécharge un <strong>installateur</strong> <code>setup.exe</code> et on suit la procédure usuelle, comme pour tout logiciel ;   </li>
+
+	<li> avec <strong class="specialLB">Linux</strong>, selon la distribution, on peut soit passer par la <strong>logithèque</strong> ou un <strong>installateur de paquet</strong>. </li>
+</ul>
+<p> La page web générale pour son <strong>téléchargement</strong> est ici <a class="external" href="https://www.sublimetext.com/download" target="_BLANK"></a>. </p>
+
+
+<h4 id="priseEnMainSublime"> Prise en main </h4>
+
+
+<p> Une fois le logiciel installé, son emploi est très intuitif. Dans le menu <code>View</code>, on peut afficher ou cacher le <strong>panneau latéral</strong> <code>Side Bar</code> qui permet de naviguer dans une arborescence de fichiers. On peut directement y <strong class="pros">glisser‑déposer des icônes</strong> de répertoires pour accéder à leur contenu. </p>
+
+<div style="display : inline-block">
+	<img class="top-right" src="../img/fenetreSublimeText.png" width="600px">
+<p> Pour augmenter les fonctionnalités de l'éditeur, on peut ajouter des <strong class="title">extensions</strong> via le menu <code>Tools/Command Palette</code>, à commencer par celle intitulée <code>Package control</code> qui permet d'ajouter ou supprimer des <strong>paquets optionnels</strong>. Les <strong>messages d'installation</strong> (déroulement, succès ou échec…) sont affichés dans la <strong>barre de notification</strong> tout en bas à gauche de la fenêtre principale. </p>
+
+<p> Parmi les <strong class="specialLB">paquets recommandés</strong> pour la programmation en langages <strong>C/C++</strong>, on peut citer notamment : </p>
+
+<ul>
+	<li> <code class="cmd">BracketHighlighter</code> qui permet de visualiser, dans la barre de numérotation les lignes, les <strong>paires de délimiteurs</strong> correspondants (parenthèses, accolades, crochets…) dès lors qu'on sélectionne l'un des deux avec le curseur ;  </li>
+
+	<li> <code class="cmd">Package Development</code> qui permet de paramétrer facilement la <strong>coloration syntaxique</strong> des éléments d'un code source selon le langage employé ;  </li>
+
+	<li> <code class="cmd">Language - French - Français</code> qui offre un dictionnaire de <strong>correction orthographique</strong> en français (pour vérifier les entrées‑sorties textuelles et les commentaires).  </li>
+</ul>
+</div><!-- display -->
+
+
+
+<h3 id="CodeBlocks"> L'environnement de développement intégré <em class="mark">Code::Blocks</em> </h3>
+
+
+
+<div class="complement" style="display: inline-block;"> 
+	<img class="top-right" src="../img/logoCodeBlocks.png" width="120px">
+<p> <strong class="Codeblocks">Code::Blocks</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Code::Blocks" target="_BLANK">W</a> est un <strong class="defin">environnement intégré de développement</strong> <strong>multiplateforme</strong> (<em class="mark">Linux</em>, <em class="mark">Windows</em>, <em class="mark">MacOS</em>). Logiciel <strong class="pros">libre</strong> et <strong class="pros">open‑source</strong>, il est distribué sous <strong>licence <em class="mark">GNU GPL</em> version 3</strong> (cf. supra <a class="supra" href="Cc1-2_langagesCetCpp.html#GCC"></a>). </p>
+
+<p> Sa première version date de 2005. Il est disponible en <strong>version 20.03</strong> depuis mars 2020. </p>
+</div><!-- complement -->	
+
+
+<h4> Caractéristiques remarquables </h4>
+
+
+<p> Outre sa gratuité et sa fiabilité, <strong class="Codeblocks">Code::Blocks</strong> réunit de nombreuses qualités qui font de lui un <strong class="pros">excellent choix</strong> comme <strong>premier <em class="sigle">IDE</em></strong> pour un programmeur débutant en langages <strong>C/C++</strong>. </p>
+
+<ul>
+	<li> Il intégre un <strong>bouton « Run »</strong> qui lance automatiquement la <strong>compilation</strong> du programme (celui du projet actif) et, en l'absence d'erreur, son <strong>exécution</strong> dans une fenêtre pop‑up de console. Il n'est donc pas nécessaire de composer un script de compilation comme dans la plupart des autres <em class="sigle">IDE</em>.</li>
+
+	<li> Pour chaque projet, il ne créé qu'un <strong>nombre restreint de fichiers</strong>, ce qui permet de retrouver facilement les fichiers exécutables. </li>
+
+	<li> Son <strong>paramétrage</strong> (en particulier le choix de la coloration syntaxique) s'effectue via des <strong>fenêtres de dialogue</strong> et non pas par des fichiers de codage. </li>
+
+	<li> Il offre un <strong>grand nombre d'options</strong> en matière de compilation et d'<strong>extensions</strong>. </li>
+</ul>
+
+
+<h4 id="installationCodeBlocks"> Installation </h4>
+
+
+
+<p> L'<strong class="title">installation</strong> de <strong class="Codeblocks">Code::Blocks</strong> ne pose <strong class="pros">pas de difficulté particulière</strong> : </p>
+<ul>
+	<li> Avec <strong class="specialLB">Linux</strong>, selon la distribution, on peut soit passer par la <strong>logithèque</strong> ou un <strong>installateur de paquet</strong>. </li>
+
+	<li> Avec <strong class="specialLB">Windows</strong>, on télécharge un <strong>installateur</strong> <code>setup.exe</code> (<strong>Binary release</strong>) et on suit la procédure usuelle, comme pour tout logiciel.   </li>
+
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/CodeBlocksInstallWin.png" width="400px">
+  <div class="nobullet"> La page web générale pour son <strong>téléchargement</strong> est ici <a class="external" href="https://www.codeblocks.org/downloads/binaries/" target="_BLANK"></a>. <em class="remark">Attention</em> : </div>
+
+		
+	<ul>
+		<li> pour un <strong>débutant</strong>, il est recommandé de sélectionner une version <strong class="pros">avec installateur</strong> (<code>setup</code>) ; </li>
+
+		<li> on peut choisir une version <strong>avec</strong> la chaîne de compilation <strong class="defin">MinGW</strong> si cette dernière n'est <strong class="cons">pas encore installée</strong> sur le poste de travail. </li>
+	</ul>
+</div><!-- display -->
+</ul>
+
+<p> Dans tous les cas, il est utile de s'assurer que le chemin vers les fichiers exécutables de <strong>MinGW</strong> sont correctement renseignés dans <strong class="Codeblocks">Code::Blocks</strong>. Pour cela, il faut ouvrir le menu <code class="cmd">Settings/Compiler…</code> et sélectionner l'onglet <code class="cmd">Toolchain Executables</code> puis saisir le bon chemin dans le champ <code>Compiler's installation directory</code>. </p>
+
+
+<h4> Prise en main </h4>
+
+
+<p> La <strong class="title">prise en main</strong> de <strong class="Codeblocks">Code::Blocks</strong> est relativement <strong class="pros">simple</strong>. Pour créer un nouveau programme, on suit la procédure suivante : </p>
+<ol class="numbered">
+	<li> Via le menu <code>File</code> ou le raccourci dans l'onglet <code>Start here</code> de la zone centrale, on sélectionne l'option <code>New Projet</code> et on choisit l'option <code>Console application</code>. </li>
+
+	<li> Puis on se laisse guider pour choisir le langage (<em class="mark">C</em> ou <em class="mark">C++</em>), le <strong>nom du projet</strong> et le répertoire général dans lequel il sera sauvegardé.  </li>
+
+	<li> Enfin, dans le cadre des exercices d'apprentissage de la programmation, il est <strong>inutile</strong> de demander la création d'une configuration <code>release</code> ; une configuration <code>debug</code> suffit. </li>
+</ol>
+
+<div style="display : inline-block">
+	<img class="top-right" src="../img/fenetreCodeblocks.png" width="600px">
+<p> Une fois que le répertoire de projet est ouvert dans l'<strong>espace de travail</strong> <code>Workspace</code>, il suffit de naviguer dans son arborescence affichée dans le <strong>panneau latéral</strong> <code>Managment</code> et de double‑cliquer sur le nom du fichier <code class="filename">main.c</code> pour qu'il s'ouvre en mode édition dans un onglet de la zone centrale (cf. figure ci‑contre). Ensuite : </p>
+<ul>
+	<li> en cliquant sur le bouton <code>Build</code> <span class="specialY">⚙</span> (compilation), le compte‑rendu du compilateur s'affiche dans l'onglet <code>Build log</code> situé dans le cadre inférieur ; </li>
+
+	<li> en cliquant sur le bouton <code>Run</code> <span class="specialG">▶</span>, la dernière version du fichier exécutable engendré par la compilation s'exécute. </li>
+</ul>
+</div><!-- display -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Notion d'implémentation  –  Choix de la norme du langage</h2>
+
+
+
+<h3 id="implementation"> Notions d'implémentation </h3>
+
+
+
+<div class="important">
+<p> En programmation, on parle d'<strong class="title">implémentation</strong> d'un langage pour désigner telle ou telle <strong class="defin">chaîne de compilation</strong>, dans une <strong>version</strong> précise, qui permet de produire du code exécutable pour une <strong>architecture</strong> de <strong class="defin">machine cible</strong> donnée – c'est‑à‑dire la machine sur laquelle le code doit s'exécuter. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Pour garantir une <strong class="pros">uniformité satisfaisante</strong> des résultats de compilation, les <strong class="title">normes</strong> respectives des langages <strong>C</strong> et <strong>C++</strong> imposent des <strong class="defin">spécifications</strong> que les chaînes de compilation doivent respecter. </p>
+
+<p> Toutefois, les normes accordent aussi certaines <strong class="defin">libertés</strong> aux compilateurs. Cela est nécessaire pour une <strong class="pros">bonne adaptation</strong> des programmes aux <strong>différentes architectures</strong> de machines, en particulier, pour le stockage en mémoire des données. En effet, il serait contre‑productif d'imposer les mêmes contraintes pour un PC à processeur 64 bits avec 16 Go de mémoire et une carte à microcontrôleur 8 bits avec seulement 2 ko de mémoire. </p>
+
+<p> On dit alors que <strong>certains aspects du langage</strong> « <strong class="defin">dépendent de</strong> <strong class="title">l'implémentation</strong> ». Il en découle qu'un code source peut donc être compilable sur une machine et pas sur une autre. Cette <strong class="warning">variabilité</strong> de compilation ne simplifie par l'apprentissage du langage, et tout débutant doit avoir en conscience pour se prémunir de certaines erreurs classiques. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<div class="exemples">
+<p class="exemple"> Pour des raisons historiques de techniques d'encodage, la norme impose pour le <strong class="specialG">type</strong> d'entier standard <code class="prettyprint lang-c">int</code> une <strong class="title">étendue de valeurs</strong> <strong class="warning">au moins comprise</strong> entre <em class="bold">−32&#8239;767</em> et <em class="bold">+32&#8239;767</em> seulement. Mais : </p>
+<ul>
+	<li> sur un <strong class="specialLB">PC</strong> ou même un microcontrôleur à <strong>architecture 32 bits</strong>, l'étendue est beaucoup plus grande – typiquement, elle va de <em class="bold">−2&#8239;147&#8239;483&#8239;648</em> à <em class="bold">+2&#8239;147&#8239;483&#8239;647</em> – cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a> ; </li>
+
+	<li> sur une <strong class="Arduino">carte Arduino</strong> à architecture <strong>8 bits</strong>, la valeur minimale vaut <em class="bold">−32&#8239;768</em>. </li>
+</ul>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3 id="versionCompilateur"> Versions des normes </h3>
+
+
+<div class="important">
+<p> Les <strong>normes</strong> des langages <strong>C</strong> et <strong>C++</strong> font régulièrement l'objet de <strong class="title">révisions</strong>, qui apportent de <strong class="defin">nouveaux éléments syntaxiques</strong>. La version d'une norme est usuellement exprimée par les deux derniers chiffres de son <strong class="specialLB">millésime</strong>, comme dans <strong>C11</strong> (année 2011). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En règle générale, les <strong>chaînes de compilation</strong> sont <strong class="pros">mises à jour</strong> quelques temps après chaque nouvelle norme. Ainsi, la <strong>version 11.3</strong> de <strong class="defin">GCC</strong> met par défaut en œuvre la <strong class="specialLB">norme C17</strong> du langage <strong>C</strong> avec de surcroît des <strong>extensions spécifiques</strong> dites <strong>GNU</strong>. Toutefois, on peut choisir de compiler un programme conformément à une norme différente :  </p>
+
+<ul>
+	<li> Avec la <strong>commande</strong> <code class="cmd">gcc</code> (chaînes de compilation <em class="mark">GCC</em> ou <em class="mark">MinGW</em>), on emploie l'option <code class="cmd">-std=</code> suivie d'une sous‑option de la forme <code class="cmd">c⦁⦁</code> (<em class="remark">attention</em>, en minuscule) où les deux chiffres <code class="cmd">⦁⦁</code> désignent le <strong class="specialLB">millésime</strong> de la norme, qui peut prendre les valeurs <code class="cmd">90</code>, <code class="cmd">99</code>, <code class="cmd">11</code>, <code class="cmd">17</code> ou <code class="cmd">18</code> (équivalentes) et <code class="cmd">2x</code> (version expérimentale pour la norme <em class="mark">C20</em>). </li>
+
+	<div class="nobullet"> Il en va de même avec la <strong>commande</strong> <code class="">g++</code> qui admet des sous‑options de la forme <code class="cmd">c++⦁⦁</code> avec comme valeurs possibles <code class="cmd">98</code>, <code class="cmd">03</code>, <code class="cmd">11</code>, <code class="cmd">14</code>, <code class="cmd">17</code> et <code class="cmd">2a</code> (version expérimentale pour la norme <em class="mark">C++20</em>). </div>
+
+	<div class="exemples"><p class="exemples"></p> 
+  <ul>
+  	<li> La commande <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-std=c11</span> <span class="nocode"><strong class="specialY">…</strong></span></code> lance une compilation en langage <strong>C</strong> conforme à la norme <strong class="title">C11</strong>. </li>
+
+  	<li> La commande <code class="displayDark"><span class="displayDarkGreen">g++</span> <span class="displayDarkRed">-std=c++17</span> <span class="nocode"><strong class="specialY">…</strong></span></code> lance une compilation en langage <strong>C++</strong> conforme à la norme <strong class="title">C++17</strong>. </li>
+  </ul>
+  </div><!-- exemples -->
+
+	<li> Dans l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::blocks</strong>, pour <strong>sélectionner</strong> le <strong class="specialLB">millésime</strong> d'une norme de compilateur, il suffit de <strong>cocher une case d'option</strong> dans le menu <code>Settings/Compiler…</code> (cf. la capture d'écran ci‑dessous). </li>
+  	<img class="top-left" src="../img/compilerSettings.png" style="max-width: 800px">
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert" id="varEnvVersion">
+<p> Avec la plupart des <strong class="title">environnements de programmation en ligne</strong>, il n'est <strong class="cons">pas toujours possible</strong> de <strong>sélectionner</strong> telle ou tel <strong class="specialLB">millésime</strong> de la norme du langage. Par exemple, sur <strong class="OnlineGDB">OnlineGDB</strong>, on ne peut pas choisir la norme pour le langage <strong>C</strong> – alors que pour le <strong>C++</strong>, on a le choix entre les normes <em class="mark">C++11</em> (choix par défaut), <em class="mark">C++14</em> et <em class="mark">C++17</em>. </p>
+
+<p> En revanche, lors de l'<strong class="title">exécution d'un programme</strong>, est <strong class="pros">toujours possible</strong> de <strong>savoir</strong> quel est le <strong class="title">millésime</strong> de la norme employé. Il suffit pour cela de coder une instruction qui affiche la valeur d'une <strong class="defin">variable d'environnement</strong> spécifique :  </p>	
+
+<ul>
+	<li> en langage <strong>C</strong>, la variable <code class="prettyprint lang-c">__STDC_VERSION__</code> ;  </li>
+
+	<li> en langage <strong>C++</strong>, la variable <code class="prettyprint lang-c">__cplusplus</code>.  </li>
+</ul>
+
+<p> Ces variables sont l'une et l'autre de type <code class="prettyprint lang-c">long int</code>. Elles expriment de gauche à droite l'<strong>année</strong> et le <strong>numéro du mois</strong> de la version de la norme. </p>
+
+<div class="exemples"><p class="exemples"> Exécutée sous <strong class="OnlineGDB">OnlineGDB</strong> : </p>
+	<ul>
+		<li> L'instruction <code class="prettyprint lang-c">printf("%ld\n", __STDC_VERSION__);</code> affiche la valeur <code class="displayDark">199901</code>, ce qui signifie que le compilateur compile en langage <strong>C</strong> conformément à la norme <strong class="title">C99</strong> (janvier). </li>
+
+		<li> L'instruction <code class="prettyprint lang-c">printf("%ld\n", __cplusplus);</code> affiche la valeur <code class="displayDark">201103</code>, ce qui signifie que, par défaut, le compilateur compile en langage <strong>C++</strong> conformément à la norme <strong class="title">C11</strong> (mars). </li>
+	</ul>
+</div><!-- exemples -->
+</div><!-- expert -->
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

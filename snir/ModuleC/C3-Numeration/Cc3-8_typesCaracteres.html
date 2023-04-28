@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="VIII"
+  data-pageState="OK"
+  data-pageheadtitle="Caractères simples"
+  data-pagefulltitle="Les types de caractères simples"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<!-- relecture déc. 2022 -->
+
+
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/lettre_A.png" width="200px" style="padding-top: 1.3em;">
+<p class="square"> On a vu au chapitre C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#typesLangC" target="_BLANK"></a> que les types <code class="prettyprint lang-c">signed char</code> et <code class="prettyprint lang-c">unsigned char</code> sont en fait des <strong class="specialG">types entiers</strong>. Toutefois, le mot‑clef « <code>char</code> » (première syllabe du mot anglais <em class="english">character</em>) réfère bien à la <strong class="title">notion de caractère</strong> parce que l'étendue des valeurs positives de ces types suffit pour inclure tous les <strong>codes</strong> de n'importe quel <strong class="defin">jeu de caractères</strong> dits <strong class="defin"><em class="sigle">ASCII</em></strong> (restreint ou étendu).  </p>
+</div><!-- display -->
+
+<p> Établie dans les années 1960, la <strong class="title">norme <em class="sigle">ASCII</em></strong> (pour <em class="english">American standard code for information interchange</em>) a d'abord introduit un <strong class="defin">jeu de 128 caractères</strong> encodés sur <strong>7 bits</strong>. Qualifié aujourd'hui de <strong class="defin">restreint</strong>, ce jeu comprenait <strong class="cons">seulement</strong> (cf. la figure ci‑dessous) : </p>
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ASCII_charset.png" width="250px" style="padding-top: 0.3em;">
+<ul>
+  <li> <strong>quelques symboles</strong> d'usage très général (signes de ponctuation, opérateurs, délimiteurs), etc. </li>
+
+  <li> les <strong>10 chiffres décimaux</strong> dits arabes, </li>
+
+  <li> les <strong>26 lettres</strong> majuscules et minuscules de l'<strong>alphabet latin</strong>, </li>
+
+  <li> des <strong>caractères spéciaux</strong> – espace arrière, tabulation, etc. – qui sont <strong>non imprimables</strong> (donc non représentés ci‑contre). </li>
+</ul>
+</div><!-- display -->
+
+<p class="square"> Pour répondre aux <strong class="title">besoins des pays non anglophones</strong>, ce jeu restreint a rapidement été complété pour former des <strong class="defin">jeux étendus</strong> de caractères encodés sur <strong>8 bits</strong> avec, pour chacun : </p>
+<ul>
+  <li> une <strong class="specialLB">partie fixe</strong>, constituée du <strong class="defin">jeu restreint</strong> susmentionné ; </li>
+  
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/ISO-8859-1.png" width="250px" style=" margin-top: 0.5em;">
+  <li> une <strong class="specialLB">partie étendue</strong> constituée d'une <strong class="defin">page de code</strong> parmi <strong class="pros">diverses possibles</strong> ; sachant que chaque page de code avait pour but de fournir les caractères nécessaires à l'expression d'une ou plusieurs <strong>langues</strong> avec, typiquement, des lettres latines accentuées pour certaines langues européennes, ou bien tout l'alphabet grec, ou encore l'alphabet cyrillique, ou arabe, etc. (cf. en figure ci‑contre les caractères imprimables de la partie étendue du jeu <strong><em class="sigle">ISO‑8859‑1</em></strong> dit aussi <strong>latin‑1</strong>). </li>
+  </div><!-- display -->
+</ul>
+
+<div class="expert">
+<p> Quelle que soit la page de code adoptée, tout caractère d'un <strong>jeu <em class="sigle">ASCII</em> étendu</strong> reste encodable sur <strong class="defin">un seul octet</strong>. C'est pourquoi, dans le code source d'un programme, on parle de <strong class="title">caractère simple</strong> pour qualifier une donnée dont la valeur est prise dans un tel jeu de caractères. Mais il existe aussi la notion de <strong class="specialLB">caractère large</strong>, encodé sur <strong class="defin">plusieurs octets</strong>, qui sera abordée au chapitre C3‑IX <a class="next" href="Cc3-9_typesCaracteresEtendus.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+<p class="square"> Même si la <strong class="title">norme <em class="sigle">ASCII</em></strong> est <strong class="defin">de plus en plus souvent remplacée</strong> par les nouveaux systèmes d'encodage dit <strong>Unicode</strong>, elle reste encore <strong class="pros">très employée</strong> dans les systèmes informatiques. D'ailleurs, elle ne disparaîtra probablement jamais dans la mesure où les codes du <strong>jeu <em class="sigle">ASCII</em> restreint</strong> sont intégralement repris dans le <strong class="defin">format <em class="sigle">UTF‑8</em></strong> pour encoder les 128 premiers caractères du <strong>jeu de caractères universels</strong> <strong><em class="sigle">UCS</em></strong>. </p>
+
+<p> La <strong class="title">norme <em class="sigle">ASCII</em></strong> est donc <strong class="defin">incontournable</strong> dans l'apprentissage de la programmation et doit être parfaitement maîtrisée. Ce chapitre a donc pour <strong class="title">objectif</strong> de présenter en détail : </p>
+
+<ul>
+  <li> le <strong class="specialLB">jeu <em class="sigle">ASCII</em> restreint</strong>, ainsi que diverses <strong>pages de code</strong> de <strong class="specialLB">jeu <em class="sigle">ASCII</em> étendu</strong>, notamment celle dite <strong>Latin‑1</strong> qui reste la plus employée en Europe ; </li>
+
+  <li> la <strong class="specialLB">syntaxe de codage</strong> des <strong>valeurs de caractères</strong> en langages <strong>C</strong> et <strong>C++</strong> ; </li>
+
+  <li> la <strong class="specialLB">manipulation</strong> des <strong>valeurs de caractères</strong>, en particulier les fonctions déclarées dans le fichier d'en‑tête <code class="filename">ctype.h</code> de la bibliothèque standard du langage <strong>C</strong>. </li>
+</ul>
+
+<div class="expert">
+<p> Quant au <strong class="title">standard Unicode</strong> et ses différents <strong>formats d'encodage</strong> – <strong><em class="sigle">UTF‑8</em></strong>, <strong><em class="sigle">UTF‑16</em></strong>, etc. – ils seront abordés au chapitre C3‑XI <a class="next" href="Cc3-9_typesCaracteresEtendus.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les jeux de caractères ASCII </h2>
+
+
+<div class="expert">
+<p> Avant que les normes <em class="mark">Unicode</em> ne viennent uniformiser les pratiques, diverses standards d'encodage des caractères ont émergé dans l'histoire de l'informatique, au gré des évolutions techniques. Encore aujourd'hui, certains normes anciennes coexistent avec les standard modernes. Et même, <strong class="defin">quelques domaines</strong> restent exclusivement tributaires du <strong class="title">jeu <em class="sigle">ASCII</em> restreint</strong>. On peut notamment citer les adresses de <strong>courrier électronique</strong>, les en‑têtes de message de certains <strong>protocoles de communication</strong>, ou encore la syntaxe fondamentale des <strong>langages de programmation</strong>.  </p>
+
+<p> <strong class="pros">Réputés élémentaire</strong> – en tout cas bien moins complexe que les formats d'encodage <em class="mark">Unicode</em> (<em class="sigle">UTF‑8</em>, <em class="sigle">UTF‑16</em>…) – la <strong class="title">norme <em class="sigle">ASCII</em></strong> recèle tout de même <strong class="cons">quelques difficultés</strong>, en particulier pour l'emploi des différents <strong>jeux étendus</strong>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="jeuRestreintASCII"> Le jeu ASCII restreint </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">jeu de caractères <em class="sigle">ASCII</em></strong> dit <strong class="title">restreint</strong> <a class="external" href="https://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange" target="_BLANK">W</a> – en anglais, <strong>non extended <em class="sigle">ASCII</em> character set</strong>, aussi dit <strong><em class="sigle">US‑ASCII</em></strong>, et normalisé <em class="sigle">ISO/IEC 646</em> <a class="external" href="https://fr.wikipedia.org/wiki/ISO/IEC_646" target="_BLANK">W</a> – comprend <strong>128 caractères</strong>, dont <strong>95 imprimables</strong>. On y trouve notamment : </p>
+
+<ul>
+  <li> les <strong class="defin">lettres de l'alphabet latin</strong> (<em class="english">uppercase and lowercase letters</em>) et les <strong class="defin">chiffres décimaux</strong> (<em class="english">decimal digits</em>) ;  </li>
+
+  <li> des <strong class="defin">symboles d'usage général</strong> tels que les signes de ponctuation, les opérateurs mathématiques, les délimiteurs (parenthèses, etc.). </li>
+</ul>
+
+<p> Ce jeu suffit pour écrire des textes en <strong>langue anglaise</strong> (ou américaine…) et coder des programmes dans la plupart des <strong>langages de programmation</strong>. </p>
+
+<p> Le <strong class="title">jeu <em class="sigle">ASCII</em> restreint</strong> est intégralement encodable dans les <strong class="defin">valeurs positives</strong> du <strong>type</strong> <code class="prettyprint lang-c">signed char</code> (cf. chap. C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#remMotsClefs" target="_BLANK"></a>) des langages <strong>C</strong> et <strong>C++</strong>.   </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément, le <strong class="title"><strong>jeu</strong> <em class="sigle">ASCII</em> restreint</strong> est encodé sur les <strong>7 premiers bits</strong> d'un octet (en partant du rang 0), avec des codes allant de <span class="framedSmall"><code>0x00</code></span> à <span class="framedSmall"><code>0x7F</code></span> (<code>0</code> à <code>127</code> en valeurs décimales). On y trouve les deux catégories suivantes (cf. le tableau ci‑après). </p>
+
+<ul>
+  <li> Les  <strong class="specialLB">95 caractères imprimables</strong>  <a class="external" href="https://fr.wikipedia.org/wiki/Caractère_graphique" target="_BLANK">W</a> – codes <span class="framedSmall"><code>0x20</code></span> à <span class="framedSmall"><code>0x7E</code></span>, représentés dans la table ci‑dessous sur <span style="background: white; padding-left: 0.1em; padding-right: 0.1em; ">fond blanc</span> – sont constitués chacun d'un <strong class="defin">symbole graphique</strong> indissociable – son <strong>glyphe</strong>, cf. infra <a class="infra" href="Cc3-8_typesCaracteres.html#valeurCaractere"></a>. </li>
+  
+    <li>  Les <strong class="specialLB">33 caractères de contrôles</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Caractère_de_contrôle" target="_BLANK">W</a> – codes <span class="framedSmall"><code>0x00</code></span> à <span class="framedSmall"><code>0x1F</code></span> formant le <strong>jeu de contrôle C0</strong> <a class="external" href="https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_controls" target="_BLANK">W</a>, ainsi que le code <span class="framedSmall"><code>0x7F</code></span>, tous représentés dans la table ci‑dessous sur <span style="background: #FFCCCC; padding-left: 0.1em; padding-right: 0.1em; ">fond rouge</span> – n'ont <strong class="defin">pas de symbole</strong> mais sont désignés par un <strong class="defin">sigle</strong>. </li>
+
+  <div class="nobullet"> Ces caractères servent à effectuer une <strong>action sur le périphérique</strong> (console d'exécution, imprimante, etc.) sur lequel ils sont envoyés : par exemple un saut de ligne, un effacement, un signal sonore, etc.  </div>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples" style="display: inline-block;">
+  <img class="top-right" src="../img/backspace.png" width="150px" style=" margin-top: 0.2em;">
+<p class="exemple"> Le <strong class="specialLB">caractère de contrôle</strong>  <strong><em class="sigle">BS</em></strong> (<em class="mark">backspace</em>, code <code>0x08</code>, généré par la touche <span class="touche">⟵</span> du clavier <a class="external" href="https://fr.wikipedia.org/wiki/Retour_arrière" target="_BLANK">W</a>) effectue un <strong>effacement</strong> du dernier caractère saisi et <strong>recul du curseur</strong> au caractère précédent dans un environnement d'exécution. </p>
+</div><!-- exemple -->
+
+
+<h4 id="tableASCIIrestreint"> Table du jeu ASCII restreint </h4>
+
+
+<p> Le <strong class="title">jeu <em class="sigle">ASCII</em> restreint</strong> est usuellement présenté de façon <strong class="pros">compacte</strong> sous la forme d'une <strong class="defin">table</strong> de <strong>8 lignes</strong> (numérotées de <code>0_</code> à <code>7_</code>) par <strong>16 colonnes</strong> (numérotées de <code>_0</code> à <code>_F</code>), comme ci‑dessous. </p>
+
+<p> Les caractères y sont présentés dans l'<strong class="defin">ordre</strong> de leur <strong class="title">code décimal croissant</strong> – c'est‑à‑dire de <em class="bold">0</em> à <em class="bold">127</em>, le numéro étant <strong>noté en indice</strong> en bas à droite dans chaque case. </p>
+
+<img class="inline" src="../img/ASCIItable1.png" width="99%" style="padding-top: 0.5em; padding-right: 0.3em; padding-left: 0.2em; padding-bottom: 0.5em">
+
+<p> Le <strong class="title">code <em class="sigle">ASCII</em> hexadécimal</strong> d'un caractère est constitué de <strong class="defin">deux digits</strong>, chacun formant un <strong>quartet</strong> de bits – l'un de <strong>poids faible</strong>, l'autre de <strong>poids fort</strong>. Ces deux digits sont respectivement le <strong>numéro de colonne</strong> et le <strong>numéro de ligne</strong> du caractère. C'est pourquoi dans la table : </p>
+<ul>
+  <li> le numéro de colonne est noté <strong><em class="sigle">LSQ</em></strong> (<em class="english">least significant quartet</em>) ; </li>
+
+  <li> la numéro de ligne est notée <strong><em class="sigle">MSQ</em></strong> (<em class="english">most significant quartet</em>). </li>
+</ul>
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="specialLB">caractère</strong> « <em class="bold">#</em> » (<em class="english">hash</em>, code décimal n° 35) a le <strong class="title">code hexadécimal</strong> <code class="cmd">0x23</code> car situé sur la ligne <code>2_</code> (<em class="sigle">MSQ</em>) et la colonne <code>_3</code> (<em class="sigle">LSQ</em>). Et en effet, on a bien <em class="bold">35</em> = <em class="bold">2</em> × 16 + <em class="bold">3</em>. </p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+
+<ol class="littered">
+  <li> Le <strong class="title">code <em class="sigle">ASCII</em></strong> d'un caractère est une <strong class="defin">valeur entière purement ordinale</strong>. Il n'a <strong class="warning">aucun sens cardinal</strong> (c'est‑à‑dire qu'il ne représente aucune sorte de <em>quantité</em>) ; il indique seulement le <strong>numéro d'ordre</strong> du caractère dans un système de classification a priori arbitraire.  </li>
+
+  <li> Néanmoins, la <strong class="title">classification</strong> des caractères n'est <strong class="pros">pas arbitraire</strong>. Leur position dans la table a été judicieusement choisie par les concepteurs de la norme.  </li>
+
+  <ul>
+    <li> Ils sont <strong>regroupés par catégories et familles</strong> – d'abord les caractères de contrôles, puis quelques symboles, puis les chiffres, puis les majuscules et enfin les minuscules. Néanmoins, les symboles sont dispersés pour ne pas contrarier certains alignements. </li>
+
+    <li> Pour les chiffres et les lettres, l'<strong>ordre usuel</strong> (numérique, alphabétique) prévaut. </li>
+
+    <li> On observe des <strong>alignements remarquables</strong> par rapport au codage hexadécimal : 
+    </li>
+    <ul>
+      <li> le caractère de contrôle <strong><em class="sigle">NUL</em></strong> a le code <code>0x0</code> ; on a vu qu'il est notamment employé pour marquer la fin des chaînes de caractères de style <em>C</em> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#C-style_string" target="_BLANK"></a>) ;</li>
+
+      <li> le caractère d'un <strong>chiffre</strong> a un code dont le digit hexadécimal de poids faible vaut précisément ce chiffre (ainsi, « <em class="bold">0</em> » a le code <code>0x3<em class="remark">0</em></code>, « <em class="bold">1</em> » a le code <code>0x3<em class="remark">1</em></code>, etc.) ; </li>
+
+      <li> la <strong>1<sup>re</sup> lettre</strong> de l'alphabet a un code dont le digit hexadécimal de poids faible est <code>1</code> (« <em class="bold">A</em> » est codé <code>0x4<em class="remark">1</em></code>,  « <em class="bold">a</em> » est codé <code>0x6<em class="remark">1</em></code>) ;  </li>
+
+      <li> la <strong>différence</strong> du code hexadécimal d'une <strong>minuscule</strong> moins celui de sa <strong>majuscule</strong> correspondante vaut toujours <code>0x20</code> (ici, c'est une valeur cardinale, elle signifie qu'il y a 32 caractères d'écart ces deux lettres). </li>
+    </ul>
+  </ul>
+
+  <li> Le caractère « <strong class="title">espace</strong> » (code <code>0x20</code>) est désigné par un <strong>sigle</strong> – <strong><em class="sigle">SP</em></strong> – du fait qu'il possède un <strong class="warning">glyphe vide</strong>, mais il est considéré comme <strong class="defin">imprimable</strong>  – ce n'est <strong class="warning">pas</strong> un <strong>caractère de contrôle</strong>.  </li>
+    
+    <img class="top-right" src="../img/teletype.png" width="300px">
+
+  <li> Les <strong class="title">caractères de contrôle</strong> sont issus de la technologie obsolète du <strong>téléscripteur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Téléscripteur" target="_BLANK">W</a> (en anglais, <em class="english">teletype</em> – cf. fig. ci‑contre). Aujourd'hui, beaucoup de ces caractères (comme <em class="sigle">SOH</em>, <em class="sigle">STX</em>, etc.) ne sont <strong class="cons">plus employés</strong>. </li>
+
+  <div class="nobullet"> Cas particulier, le <strong class="specialLB">caractère</strong> <strong><em class="sigle">DEL</em></strong> (<em class="english">delete</em>, code <code>0x7F</code>, généré par la touche <span class="touche">SUPR</span> du clavier <a class="external" href="https://fr.wikipedia.org/wiki/Touche_de_suppression" target="_BLANK">W</a>) fait partie des caractères de contrôle qui sont encore utilisés. Il ne doit pas être confondu avec <em class="sigle">BS</em> (<em class="english">backspace</em>). Pour cela, il est placé en dernière position du jeu restreint et il est rattaché au <strong>jeu de contrôle C1</strong> <a class="external" href="https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C1_controls" target="_BLANK">W</a> (norme <em class="sigle">ISO 6429</em>) qui complète usuellement les 32 premiers caractères communs non affectés de la partie étendue des jeux <strong><em class="sigle">ISO‑8859</em></strong>. </div>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="jeuxEtendusASCII"> Jeux ASCII étendus </h3>
+
+
+
+<div class="important">
+<p> Les <strong class="title">jeux de caractères <em class="sigle">ASCII</em></strong> dit <strong class="title">étendus</strong>  <a class="external" href="https://fr.wikipedia.org/wiki/ASCII_étendu" target="_BLANK">W</a> – en anglais, <strong>extended <em class="sigle">ASCII</em></strong> ou <strong>high <em class="sigle">ASCII</em></strong> – sont des jeux de <strong>256 caractères</strong>, encodés sur <strong>8 bits</strong>. Ils incluent tous une première <strong class="defin">partie commune</strong> « fixe » constituée du <strong class="specialLB">jeu <em class="sigle">ASCII</em> restreint</strong>, lequel va du code <code>0</code> jusqu'au code <code>127</code> inclus.  </p>
+
+<p> La <strong class="specialLB">partie étendue</strong> d'un tel jeu de caractères va donc du code <code>128</code> au code <code>255</code>. Elle contient des caractères pour exprimer une ou plusieurs <strong>langues</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+ <p> Il existe <strong>plusieurs centaines</strong> de <strong class="title">jeux <em class="sigle">ASCII</em></strong> étendus</strong>, mais à peine une quinzaine sont encore utilisés (et de moins en moins). Ils permettent de couvrir <strong class="pros">la plupart des langues</strong>, sauf celles du groupe <strong><em class="sigle">CJK</em></strong> (chinese, Japanese, Korean) <a class="external" href="https://en.wikipedia.org/wiki/CJK_characters" target="_BLANK">W</a> qui nécessitent beaucoup plus de caractères, donc un encodage plus large. </p>
+  
+<p> La <strong class="specialLB">partie étendue</strong> d'un <strong>jeu <em class="sigle">ASCII</em></strong> peut être définie par différents « standards », selon le <strong>système d'exploitation</strong> de la machine. En particulier : </p>
+<ul>
+  <li> les systèmes <strong>Linux</strong> privilégient les jeux étendus définis par les différentes <strong class="defin">parties numérotées</strong> de la <strong class="defin">norme <em class="sigle">ISO/IEC 8859</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/ISO/IEC_8859" target="_BLANK">W</a> ; dans un tel jeu, les 32 codes allant de <span class="framedSmall"><code>0x80</code></span> à <span class="framedSmall"><code>0x9F</code></span> sont usuellement affectés à caractères du <strong>jeu de contrôle C1</strong> <a class="external" href="https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C1_controls" target="_BLANK"></a> ; ils ne comptent donc que <strong>96 caractères imprimables</strong> supplémentaires – soit <strong>191</strong> au total en comptant ceux du jeu <em class="sigle">ASCII</em> restreint ; </li>
+
+  <li> les systèmes <strong>Windows</strong> utilisent plutôt des jeux spécifiques hérités de la technologie <strong><em class="sigle">IBM</em></strong> et appelés <strong class="defin">pages de code</strong> <a class="external" href="https://en.wikipedia.org/wiki/Windows_code_page" target="_BLANK">W</a> abrégés <strong class="defin"><em class="sigle">CP</em></strong> – pour <em class="english">code page</em> – suivi d'un <strong class="defin">numéro</strong> ; dans un tel jeu, les 32 codes allant de <span class="framedSmall"><code>0x80</code></span> à <span class="framedSmall"><code>0x9F</code></span> sont usuellement affectés à <strong>caractères imprimables</strong> – ce qui fait potentiellement un total de <strong>223</strong> en comptant ceux du jeu <em class="sigle">ASCII</em> restreint. </li> 
+</ul>
+
+<p> Quel que soit le système d'exploitation, il est en principe possible de mettre en œuvre <strong class="pros">n'importe que jeu <em class="sigle">ASCII</em> étendu</strong> dans un <strong>éditeur de code</strong> ou dans un <strong>terminal</strong> de commandes en ligne dès lors que ce jeu de caractères est installé sur la machine. </p>
+</div><!-- complement -->
+
+
+<h4 id="ASCIIfrancais"> Jeux ASCII étendus pour la langue française </h4>
+
+
+<div class="important">
+<p> Le <strong>jeu <em class="sigle">ASCII</em> étendu</strong> <strong class="title">le plus employé</strong> est celui de la norme <strong class="defin"><em class="sigle">ISO/IEC 8859‑1</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/ISO/IEC_8859-1" target="_BLANK">W</a>, également désigné <strong class="defin">Latin‑1</strong> (cf. la table ci‑dessous).  </p>
+
+<p> Outre l'anglais, ce jeu permet d'exprimer une <strong class="pros">vingtaine de langues</strong> (allemand, espagnol, italien, néerlandais, danois, etc.), mais malheureusement <strong class="cons">pas complètement le français</strong> : il manque les ligatures « <em class="bold">œ</em> » et « <em class="bold">Œ</em> » et la majuscule accentuée « <em class="bold">Ÿ</em> »).  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> De plus, dans  le <strong class="title">jeu <em class="sigle">ASCII</em> étendu Latin‑1</strong>, il <strong class="cons">manque</strong> le symbole monétaire <em class="bold">€</em> qui est indispensable aux langues européennes depuis l'introduction (en 2002) de la devise <strong>euro</strong>. </p>
+</div><!-- complement -->
+
+<img class="inline" src="../img/iso8859-1_table.png" width="99%" style="padding-top: 0.5em; padding-right: 0.3em; padding-left: 0.2em; padding-bottom: 0.5em">
+
+
+<div class="complement">
+<p> Pour permettre une <strong class="pros">expression complète du français</strong>, plusieurs <strong class="title">variantes du jeu <em class="sigle">ISO/IEC 8859‑1</em></strong> ont été créées.  </p>
+<ul>
+  <li> Le jeu <strong class="specialLB"><em class="sigle">ISO/IEC 8859‑15</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/ISO/IEC_8859-15" target="_BLANK">W</a>, dit aussi <strong>Latin‑9</strong> ; il ne diffère du jeu <em class="mark">Latin‑1</em> que sur les codes suivants :   </li>
+  
+  <img class="top-left" src="../img/iso8859-15.png" style="width:  700px;max-width: 700px">
+
+  <li> La page de code <strong class="specialLB">Windows <em class="sigle">CP1252</em></strong>, dite aussi <strong>code <em class="sigle">ANSI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Windows-1252" target="_BLANK">W</a> ; elle remplace tout le <em>jeu de contrôle C1</em> (sauf <em class="sigle">DEL</em>)  par les <strong>caractères imprimables</strong> suivants :   </li>
+
+  <img class="top-left" src="../img/Ascii_CP1252.png">
+</ul>
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Dans les jeux <strong>Latin‑1</strong>, <strong>Latin‑9</strong> et <strong><em class="sigle">CP1252</em></strong>, on trouve <strong class="title">deux caractères spéciaux</strong> car n'ayant pas de glyphe : </li>
+  <ul>
+    <li> l'<strong class="defin">espace insécable</strong>, code <code>0xA0</code> et notée <strong><em class="sigle">NBSP</em></strong> (<em class="english">no break space</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Espace_insécable" target="_BLANK">W</a> ; </li>
+
+    <li> la <strong class="defin">césure conditionnelle</strong>, code <code>0xAD</code> et notée <strong><em class="sigle">SHY</em></strong> (<em class="english">soft hyphenation</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Trait_d'union_conditionnel" target="_BLANK">W</a>. </li>
+  </ul>
+
+  <li> Dans la partie étendue du jeu <strong>Latin‑1</strong>, comme dans la partie restreinte, la <strong class="title">différence</strong> de code d'une <strong>minuscule</strong> moins celui de sa <strong>majuscule</strong> est presque partout <strong class="defin">constante</strong> et vaut <code>0x20</code>. </li>
+
+  <li> Dans la page de code <strong><em class="sigle">CP1252</em></strong>, on trouve certains <strong class="title">codes non attribués</strong> (cases vides à <span style="background: #FFFFCC; padding-left: 0.1em; padding-right: 0.1em; ">fond jaune</span>). Ils ont été laissés ainsi pour d'éventuels usages à venir. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<div class="expert">
+<h4> Autres jeux ASCII étendus </h4>
+
+
+<p> La norme <strong><em class="sigle">ISO/IEC 8859</em></strong> définit une <strong class="title">quinzaine de jeux</strong> de <strong>caractères <em class="sigle">ASCII</em> étendus</strong>. Ceux représentés en figure ci‑dessous en donne un aperçu pour les langues à <strong class="defin">alphabets non‑latin</strong> (codes <code>0xA0</code> à <code>0xFF</code>).  </p>
+
+<img class="top-left" src="../img/ISO8859_charsets.png">
+
+<p> Pour ces jeux, on trouve aussi une <strong class="title">page de code Windows</strong> correspondante, qui comportent potentiellement <strong class="pros">32 caractères imprimables supplémentaires</strong>. Même si elles adoptent des <strong class="warning">dispositions complètement différentes</strong>, elles répondent aux mêmes besoins que les normes <em class="sigle">ISO</em> ci‑dessus (cf. la figure ci‑dessous – codes <code>0x80</code> à <code>0xFF</code>). </p>
+
+<img class="top-left" src="../img/Windows_CP.png">
+
+</div><!-- expert -->
+
+
+<div class="expert">
+<h3> Cas des environnements de programmation </h3>
+
+
+<h4 id="linuxISO"> Sous <em class="mark">Linux</em> </h4>
+
+
+<div class="complement">
+<p> Sous <strong class="title">Linux</strong>, l'encodage des caractères par défaut est en général le <strong class="defin">format à taille variable</strong> <strong><em class="sigle">UTF‑8</em></strong>. Il est appliqué aussi bien dans les <strong>éditeurs de code</strong> que dans les <strong>terminaux</strong> de commandes en ligne. </p>
+
+<p> Ce format prend en charge le <strong class="pros">catalogue universel des caractères</strong> (<strong><em class="sigle">UCS</em></strong> – cf. chap. C3‑XI <a class="external" href="Cc3-9_typesCaracteresEtendus.html#UCS" target="_BLANK"></a>). Sauf application spécifique, il n'est donc a priori pas nécessaire de sélectionner tel ou tel jeu de caractères puisque tous sont potentiellement affichables ou saisissables (dans une chaîne de caractères). </p>
+</div><!-- complement -->
+
+
+<p> Même s'il n'est pas question ici de détailler le fonctionnement des <strong class="title">paramètres régionaux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Paramètres_régionaux" target="_BLANK">W</a> (<em class="english">locale</em>) sous <strong>Linux</strong>, dans un terminal de commande <strong>bash</strong> : </p>
+<ul>
+  <li> l'<strong class="specialLB">encodage des caractères</strong> en vigueur peut être affiché via la commande <code class="displayDarkGreen">locale charmap</code> ;  </li>
+
+  <li> la <strong class="specialLB">liste</strong> de tous les formats encodages disponibles  peut être affiché via la commande <code class="displayDarkGreen">locale <span class="displayDarkRed">-m</span></code>.  </li>
+</ul>
+
+<p> De plus, durant le <strong>processus d'exécution dans un terminal</strong> d'un programme codé en langage <strong>C</strong> ou <strong>C++</strong>, le <strong class="specialLB">paramètre régional de langue</strong> <strong>par défaut</strong> est désigné <code>C</code> et le format d'encodage est typiquement <strong><em class="sigle">UTF‑8</em></strong>, lequel est <strong class="cons">incompatible</strong> avec les <strong>codes <em class="sigle">ASCII</em> étendus</strong>. Mais dans le code source du programme, on peut <strong class="defin">modifier ces paramètres régionaux</strong> en : </p>
+<ul>
+  <li> ajoutant la directive :   <br>
+  <span class="inline">
+  <code class="prettyprint lang-c">#include &lt;locale.h&gt;</code>
+</span> </li>
+
+  <li> et dans la fonction <code class="prettyprint lang-c">main</code> (ou autre), en codant l'instruction : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">SetLocale(LC_CTYPE, <span class="nocode"><strong class="defin">encodage local</strong></span>);</code>
+</span> <br>
+  où l'<strong class="defin">encodage local</strong> est codé par une chaîne de caractères comme par exemple <code class="prettyprint lang-c">"fr_FR.iso-8859-1"</code> ;  </li>
+</ul>
+<p> à condition bien entendu que la locale <code>fr_FR.iso-8859-1</code> soit générée sur le système (pour cela, cf. le sujet de TP R2‑2 <a class="TP" href="../../ModuleR/R2-Applications/Rtp2-2_serveurWeb.html#paramSystem" target="_BLANK"></a>). </p>
+
+<p> Toutefois, certaines distributions comme <strong class="Mint">Linux Mint</strong> n'autorisent au système <strong class="cons">aucun autre encodage qu'<em class="sigle">UTF‑8</em></strong> <a class="external" href="https://github.com/linuxmint/mintlocale/issues/74" target="_BLANK">G</a>. Aussi, pour <strong class="title">changer l'encodage</strong> des caractères dans le flot de sortie lors de l'exécution d'un programme, une autre solution simple consiste à recourir à l'<strong>utilitaire</strong> <code class="displayDark">luit</code> <a class="external" href="https://linux.die.net/man/1/luit" target="_BLANK"></a>. Enchaîné à la commande d'exécution d'un programme, il <strong class="defin">transcode le flot de sortie</strong> de ce dernier dans le format spécifié en paramètre. Par exemple, la commande : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">luit</span> <span class="displayDarkRed">-encoding</span> iso-8859-1 <span class="displayDarkGreen">printf</span> '\xA9\n' </code>
+</span> <br>
+produit l'affichage <code class="displayDark">©</code>. C'est bien le caractère dont le code est <code>0xA9</code> dans le jeu étendu <strong><em class="sigle">ISO/IEC 8859‑1</em>. </strong> </p>
+
+<div class="exemples">
+<p class="exemple"> Le programme académique ci‑dessous permet d'afficher la <strong>partie étendue imprimable</strong> du jeu <strong class="title"><em class="sigle">ISO/IEC 8859‑1</em></strong> sur une machine à système <strong class="specialLB">Linux</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt; 
+
+char * charset = "ISO-8859-1";
+
+int main(void) {
+  printf("\n    %s", charset);
+  for (int c = 0xA0; c <= 0xFF; c++) {
+    if (c % 0x10 == 0) printf("\n ");
+    if (c == 0xA0) printf("\n ");
+    printf("%c", c);
+  }
+  printf("\n\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Si l'on se contente de compiler et d'<strong>exécuter directement</strong> ce programme, on obtient en sortie standard l'<strong class="cons">affichage défectueux</strong> suivant :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+
+    ISO-8859-1
+ 
+ ����������������
+ ����������������
+ ����������������
+ ����������������
+ ����������������
+ ����������������
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Pour obtenir l'<strong class="pros">affichage souhaité</strong>, une solution consiste à l'exécuter <strong class="defin">via la commande</strong> <code>luit</code> comme ci‑dessous : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">luit</span> <span class="displayDarkRed">-encoding</span> iso-8859-1 ./displayCharsetLin </code>
+</span> <br>
+où <code>displayCharsetLin</code> est le nom du fichier exécutable du programme. On obtient alors : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+
+    ISO-8859-1
+ 
+  ¡¢£¤¥¦§¨©ª«¬­®¯
+ °±²³´µ¶·¸¹º»¼½¾¿
+ ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ
+ ÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß
+ àáâãäåæçèéêëìíîï
+ ðñòóôõö÷øùúûüýþÿ
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<h4 id="windowsCP"> Sous <em class="mark">Microsoft Windows</em> </h4>
+
+
+<p> Les systèmes d'exploitation <strong class="title">Microsoft Windows</strong> utilisent en interne le format d'encodage <strong class="defin"><em class="sigle">UTF‑16LE</em></strong>. Toutefois, ce n'est pas cet encodage qui est appliqué par défaut dans les <strong>environnements de programmation</strong> (éditeurs de code et consoles d'exécution ou <em class="sigle">IDE</em>). </p>
+
+<p> Prenons l'exemple de <strong class="Codeblocks">Code::Blocks</strong> (cf. chap.  C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#CodeBlocks" target="_BLANK"></a>). Dans les versions pour l'<strong>Europe occidentale</strong> sur système <em class="mark">Windows</em>, l'encodage des caractères est en général paramétré en <strong class="defin"><em class="sigle">ASCII</em> étendu</strong> avec : </p>
+
+<ul>
+  <li> dans la fenêtre d'<strong>édition de code</strong>, la <strong>page de code</strong> <strong class="defin"><em class="sigle">CP1252</em></strong> ; </li>
+
+  <li> dans la <strong>console d'exécution</strong>, la <strong>page de code</strong> <strong class="defin"><em class="sigle">CP850</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Page_de_code_850" target="_BLANK">W</a> héritée du système d'exploitation <strong><em class="sigle">MS‑DOS</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/MS-DOS" target="_BLANK">W</a>. </li>
+</ul>
+
+<p> Or dans leur partie étendue, ces deux pages de code sont <strong class="warning">différentes</strong>. En particulier, contrairement à la page <strong><em class="sigle">CP1252</em></strong>, la page <strong><em class="sigle">CP850</em></strong> n'inclut <strong class="cons">pas</strong> les ligatures « <em class="bold">œ</em> » et « <em class="bold">Œ</em> » ni les lettres accentuées « <em class="bold">ÿ</em> » et « <em class="bold">Ÿ</em> ». </p>
+
+<p> De même, c'est la page de code <strong class="defin"><em class="sigle">CP850</em></strong> qui est activée par défaut dans un <strong>terminal de commande</strong> <strong class="specialN">CMD</strong> ou <strong class="specialDB">PowerShell</strong>. Dans tous les cas, on peut le constater en exécutant la commande <code class="displayDark">chcp</code> sans argument. </p>
+
+<div class="complement">
+<p> Sous <em class="mark">Windows</em>, si les entrées‑sorties d'un programme comportent des éléments de texte en français, il est recommandé d'<strong>employer préférentiellement la </strong> <strong class="title">page de code</strong> <strong class="defin"><em class="sigle">CP1252</em></strong> dans la console d'exécution.  </p>
+</div><!-- complement -->
+
+<p> En langages <strong>C</strong> et <strong>C++</strong>, pour <strong class="title">changer la page de code</strong> de la console d'exécution d'un programme, on peut : </p>
+<ul>
+  <li> directement <strong>dans la console</strong>, saisir la commande : <br>
+  <span class="inline">
+    <code class="displayDark">chcp <span class="nocode"><strong class="defin">n° de page</strong></span></code>
+  </span> </li>
+
+  <li> ou bien, dans le <strong>code source</strong> du programme : </li>
+  <ul>
+    <li> ajouter la directive :   <br>
+    <span class="inline">
+    <code class="prettyprint lang-c">#include &lt;windows.h&gt;</code>
+  </span> </li>
+
+    <li> et dans la fonction <code class="prettyprint lang-c">main</code> (ou autre), coder l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">SetConsoleOutputCP(<span class="nocode"><strong class="defin">n° de page</strong></span>);</code>
+  </span> </li>
+  </ul>
+</ul>
+
+<div class="expert">
+<p> De plus, la console doit être paramétrée (via ses propriétés) avec une <strong class="title">police d'affichage</strong> <strong class="defin">à chasse fixe</strong> <a class="external" href="https://en.wikipedia.org/wiki/List_of_monospaced_typefaces" target="_BLANK">W</a> (<em class="english">monospace font</em>) suffisamment <strong class="pros">riche</strong> pour inclure tous les caractères de la page de code – par exemple, une police comme <span style="font-size: 85%; font-family: 'Source code Pro'">Source Code Pro</span> <a class="external" href="https://adobe-fonts.github.io/source-code-pro/" target="_BLANK"></a>. </p>
+
+<p> Enfin, l'éditeur de code doit éventuellement être paramétré ; par exemple,  sous <strong class="Codeblocks">Code::Blocks</strong>, dans l'onglet <code>Encoding settings</code> ouverte via le menu <code>Settings/Editor…</code>, il faut choisir l'option <code>As default encoding</code>. </p>
+</div><!-- expert -->
+
+<div class="exemples">
+<p class="exemple"> Le programme académique ci‑dessous permet d'afficher la <strong>partie étendue</strong> de la <strong>page de code</strong> <strong class="title"><em class="sigle">CP1252</em></strong> sur une machine à système <strong class="specialLB">Windows</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt; 
+#include &lt;windows.h&gt; 
+
+int cp = 1252;
+
+int main(void) {
+  SetConsoleOutputCP(cp); 
+  printf("\n      CP%d", cp);
+  for (int c = 0x80; c <= 0xFF; c++) {
+    if (c % 0x10 == 0) printf("\n ");
+    if (c == 0x80) printf("\n ");
+    printf("%c", c);
+  }
+  printf("\n\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<h4 id="Aduino"> Cas du logiciel <em class="mark">Arduino</em> <em class="sigle">IDE</em> </h4>
+
+
+<p> Rappelons que le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> s'exécute sur la <strong class="defin">machine virtuelle <em class="sigle">JRE</em></strong> (<em class="mark">Java Runtime Environment</em> – cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_arduinoTinkercad.html#ArduinoIDE" target="_BLANK"></a>). En conséquences, l'encodage des caractères dans l'<strong class="title">éditeur de code</strong> et dans la fenêtre du <strong class="specialV">moniteur série</strong> n'est pas géré par le système d'exploitation de la machine physique hôte. Il est imposé dans le code source du logiciel <strong class="Arduino">Arduino</strong> pour adopter le <strong class="defin">format <em class="sigle">UTF‑8</em></strong>. </p>
+
+<div class="complement">
+<p> L'<strong class="title"><em class="sigle">UTF‑8</em></strong> (<em class="english">8‑bit Unicode transformation format</em> – cf. chap. C3‑IX <a class="next" href="Cc3-9_typesCaracteresEtendus.html#formatUTF-8" target="_BLANK"></a>) est un <strong>format d'encodage des caractères</strong> de <strong class="defin">taille variable</strong> (de 1 à 4 octets). </p>
+
+<p> Il est <strong class="pros">compatible</strong> avec le <strong>jeu <em class="sigle">ASCII</em> restreint</strong> : les codes <code>0x00</code> à <code>0x7F</code> correspondent respectivement aux mêmes valeurs de caractères dans les deux systèmes d'encodage. </p>
+</div><!-- complement -->
+
+
+<p> Cette connaissance est décisive lorsque, dans un programme pour <strong>carte</strong> <strong class="Arduino">Arduino</strong>, on souhaite afficher sur le <strong class="specialV">moniteur série</strong> des caractères <strong>hors du jeu <em class="sigle">ASCII</em> restreint</strong> (par exemple, des lettres accentuées). </p>
+
+<ul>
+  <li> Tant que ces caractères sont <strong>saisis sous forme de symboles</strong> dans l'éditeur de code source, la compatibilité est totale, puisque les deux fenêtres opèrent avec le <strong class="pros">même format d'encodage</strong>. </li>
+
+  <div class="exemples">  
+  <p class="exemple">  L'instruction <code class="prettyprint lang-c">Serial.print("é");</code> affiche bien le caractère « <em class="bold">é</em> » sur le moniteur série. </p>
+  </div><!-- exemples -->
+
+  <li> En revanche, si les caractères sont <strong>saisis sous forme de codes</strong> (c'est‑à‑dire via une séquence d'échappement – cf. infra <a class="infra" href="Cc3-8_typesCaracteres.html#sequenceEchap"></a>), il est impératif de <strong class="warning">ne pas employer les codes <em class="sigle">ASCII</em> étendus</strong> mais ceux de l'<strong class="defin"><em class="sigle">UTF‑8</em></strong>. </li>
+
+  <div class="exemples"> 
+  <p class="exemple"> On pourra aussi coder <code class="prettyprint lang-c">Serial.print("\xC3\xA9");</code> pour afficher un « <em class="bold">é</em> » sur le moniteur série, puisque le code <strong><em class="sigle">UTF‑8</em></strong> de cette lettre est <code>0xC3A9</code> (2 octets <a class="external" href="https://fr.wikipedia.org/wiki/UTF-8#Exemples" target="_BLANK">W</a>). </p>
+  </div><!-- exemples -->
+</ul>  
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Syntaxe de codage d'une valeur de caractère </h2>
+
+
+
+<h3 id="carIsole"> Syntaxe générale pour une valeur de caractère « isolé » </h3>
+
+
+
+<div class="important">
+<p> Dans un programme en langage <strong>C</strong> ou <strong>C++</strong>, on code une <strong class="title">valeur de caractère</strong> <strong  class="defin">isolé</strong>, (au sens où elle n'est pas formée au sein d'une chaîne de caractères), en la délimitant par des <strong class="specialO">guillemets simples</strong> <code class="prettyprint lang-c">''</code> – à <strong class="warning">ne pas confondre</strong> avec les guillemets doubles <code>""</code> qui sont réservés aux chaînes de caractères. </p>
+
+<p> Dans la <strong>chaîne de format</strong> d'un appel d'une <strong>fonction d'entrée‑sortie standard</strong> du fichier d'en‑tête <code class="filename">stdio.h</code>, on impose cette valeur via la <strong class="specialDR">spécification de conversion</strong> <code class="cmd" style="color: darkorange;">%c</code> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#specificationsConversion" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="exemples">
+
+<p class="exemple"> L'<strong>expression</strong> <code class="prettyprint lang-c">'2'</code> code la <strong class="title">valeur de caractère</strong> « <em class="bold">2</em> » (le chiffre) – et non <strong class="warning">pas</strong> la <strong class="specialLB">valeur numérique</strong> <code class="prettyprint lang-c">2</code> (le nombre). </p>
+
+<p> Dans un programme compilé et exécuté sur <strong class="OnlineGDB">OnLineGDB</strong> (chaîne de compilation <em class="mark">GCC</em> sous <em class="mark">Linux</em>) :  </p>
+<ul>
+  <li> l'instruction <code class="prettyprint lang-c">printf("%c", '2');</code> affiche <code class="displayDark">2</code> ; <br>
+  c'est la <strong class="title">valeur de caractère</strong> du caractère  « <em class="bold">2</em> » ; </li>
+
+  <li> l'instruction <code class="prettyprint lang-c">printf("%d", '2');</code> affiche <code class="displayDark">50</code> ; <br>
+  c'est la <strong class="specialLB">valeur décimale</strong> du <strong class="defin">code <em class="sigle">ASCII</em></strong> du caractère « <em class="bold">2</em> » ;  </li>
+
+  <li> l'instruction <code class="prettyprint lang-c">printf("%x", '2');</code> affiche <code class="displayDark">32</code> ; <br>
+  c'est la <strong class="specialLB">valeur hexadécimale</strong> du <strong class="defin">code <em class="sigle">ASCII</em></strong> du caractère « <em class="bold">2</em> ».</li>
+</ul>
+</div><!-- exemples -->
+
+
+<div class="remarques">
+<p class="remarque"> Une <strong>expression</strong> de la forme 
+  <code class="prettyprint lang-c">'<span class="nocode"><strong class="specialO">caractère</strong></span>'</code> est évaluée par défaut : </p>
+
+<ul>
+  <li> dans le type <code class="prettyprint lang-c">int</code> en langage <strong>C</strong> ; </li>
+
+  <li> dans le type <code class="prettyprint lang-c">unsigned char</code> en langage <strong>C++</strong> ; </li>
+</ul>
+
+<p> On peut constater cette différence avec, par exemple, l'instruction : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">printf("%zu", sizeof('2'));</code>
+</span> <br>
+Compilée et exécutée dans un programme sur <strong class="OnlineGDB">OnLineGDB</strong>, cette instruction affiche : </p>
+<ul>
+  <li> la valeur <code class="displayDark">4</code> en langage <strong>C</strong> ;   </li>
+
+  <li> la valeur <code class="displayDark">1</code> en langage <strong>C++</strong> ;    </li>
+</ul>
+<p> ces deux valeurs correspondant bien respectivement à la <strong>taille en octets</strong> des types <code class="prettyprint lang-c">int</code> et <code class="prettyprint lang-c">unsigned char</code>.</p>
+</div><!-- remarque -->
+
+
+
+<h3 id="valeurCaractere"> Notion de valeur de caractère </h3>
+
+
+
+<h4 id="valeurCarImprimable"> Cas des caractères imprimables – syntaxe automorphe </h4>
+
+
+<div class="important">
+<p> Pour un <strong class="specialLB">caractère imprimable</strong>, la <strong class="title">valeur de caractère</strong> est directement son  <strong class="defin">propre symbole graphique</strong> – on dit aussi son <strong class="defin">glyphe</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Glyphe" target="_BLANK">W</a>, mais ici <strong>sans considérations typographiques</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block">
+  <img class="top-right" src="../img/glyphe.png" width="150px">
+<p> <strong class="warning">Sauf</strong> pour <strong>quelques symboles réservés</strong> dans un contexte particulier, dans un programme, on emploie la <strong class="defin">syntaxe automorphe</strong> – c'est‑à‑dire directement son <strong class="defin">glyphe</strong> – pour coder une <strong class="title">valeur de caractère</strong> (de même qu'en français, on peut désigner le chiffre « <em class="bold">2</em> » par lui‑même). </p>
+
+<div class="expert">
+<p> Idéalement, la valeur d'un caractère doit être <strong class="pros">la même</strong> pour l'édition du <strong>code source</strong> et pour l'affichage ou la saisie sur une <strong>console d'exécution</strong>. Mais on a vu supra <a class="supra" href="Cc3-8_typesCaracteres.html#jeuxEtendusASCII"></a> que cette condition n'est <strong class="cons">pas toujours</strong> satisfaite par défaut dans la <strong>partie étendue d'un jeu <em class="sigle">ASCII</em></strong>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<h4> Cas des caractères de contrôle – séquence d'échappement </h4>
+
+
+<div class="expert">
+<div class="important">
+<p> Pour un <strong  class="specialLB">caractère de contrôle</strong>, la <strong class="title">valeur de caractère</strong> est une <strong class="warning">notion abstraite</strong> puisqu'il n'a <strong>pas de glyphe</strong> et que son nom, ni même son sigle, ne sont jamais saisis lors de l'édition du code source et encore moins affichés dans une console lors de l'exécution.  </p>
+</div><!-- important -->
+</div><!-- expert -->
+
+
+<div class="complement">
+  <div class="expert">
+<p> En effet, on ne code par exemple <strong class="warning">ni</strong> <code class="prettyprint lang-c" style="background: lightgrey;">'backspace'</code> <strong class="warning">ni</strong> <code class="prettyprint lang-c" style="background: lightgrey;">'BS'</code> pour exprimer la valeur de caractère isolée du « retour arrière » du curseur. </p>
+
+<p> Mais bien évidemment, il existe en langages <strong>C/C++</strong> d'autres manières de procéder.  </p>
+</div><!-- expert -->
+<ul>
+  <li> La <strong>saisie dans le code source</strong> d'un caractère de contrôle s'effectue par une <strong>suite de symboles</strong> préfixée par le <strong>symbole réservé</strong> « contre‑oblique » (<em class="english">antislash</em>) <code class="prettyprint lang-c">\</code> ; on parle de <strong class="defin">séquence d'échappement</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Séquence_d'échappement" target="_BLANK">W</a>. </li>
+  
+  <div class="nobullet"> Par exemple, la valeur de caractère isolé <strong><em class="sigle">BS</em></strong> se code <code class="prettyprint lang-c">'\b'</code>. </div>
+    
+  <li> Lors de l'<strong>exécution</strong>, un caractère de contrôle ne produisant pas un symbole mais une <strong class="defin">action</strong>, sa valeur n'a en général <strong class="cons">pas de représentation statique</strong>. </li>
+
+  <div class="nobullet"> C'est typiquement le cas avec le caractère <strong><em class="sigle">BS</em></strong> dont la valeur ne peut apparaître dans une chaîne qu'en comparant celle‑ci avant et après exécution. </div>
+
+  <div class="expert"></div>
+  <div class="nobullet"> Toutefois, pour visualiser la valeur de caractère d'un caractère de contrôle – typiquement, via un appel comme <code class="prettyprint lang-c">printf("%c", '\b')</code> – il est prévu de le faire apparaître sous la forme d'un <strong class="specialMg">symbole de substitution</strong>. On parle alors de <strong class="specialV">mode graphique</strong> d'affichage. </div>
+  <ul>
+    <li> Dans les <strong class="specialLB">terminaux Linux</strong> qui, par défaut, utilisent le format <strong><em class="sigle">UTF‑8</em></strong>, c'est soit l'<strong class="specialMg">espace</strong> (code <code>0x20</code>), soit le <strong class="specialMg">caractère spécial de remplacement</strong> � (<em class="mark">Unicode</em> U+FFFD <a class="external" href="https://unicode-table.com/fr/FFFD/" target="_BLANK"></a>) qui est employé ;  </li>
+  
+    <li> Sous <strong class="specialLB">Windows</strong>, tout dépend de la <strong>page de code</strong> sélectionnée – cf. par exemple le <strong class="specialMg">jeu</strong> de symboles de substitution pour le <strong>jeu de contrôle C0</strong> (codes <code>0x00</code> à <code>0x1F</code>) et le caractère <em class="mark"><em class="sigle">DEL</em></em> défini par la page de code <strong><em class="sigle">CP850</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Page_de_code_850#Table_de_codage_graphique" target="_BLANK">W</a>. </li>
+  </ul>
+  <!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Dans tous les cas, une <strong class="title">valeur de caractère</strong> reste une <strong class="defin">interprétation dans un format particulier</strong> (ici graphique, et non pas numérique) des bits stockés en mémoire ou dans un registre de calcul lors de l'exécution d'une programme – de même que toute valeur numérique est une interprétation dans un format donné (typiquement, une base de numération). </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="sequenceEchap"> Codage des valeurs de caractères par séquences d'échappement </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, les <strong class="title">séquences d'échappement</strong> permettent de coder <strong class="defin">n'importe quelle valeur de caractère</strong>, qu'il soit <strong>imprimable ou non</strong>. </p>
+
+<p> Il existe <strong class="specialLB">différentes syntaxes possibles</strong> : </p>
+<ul>
+  <li> certaines sont <strong class="pros">très courtes</strong> mais <strong class="cons">spécifiques</strong> à tel ou tel caractère ; </li>
+
+  <li> d'autres sont <strong class="cons">plus longues</strong> mais <strong class="pros">polyvalentes</strong>. </li>
+</ul>
+<p> Toutes les séquences d'échappement commencent par le <strong class="defin">préfixe</strong> <code class="prettyprint lang-c">\</code>. </p>
+</div><!-- important -->
+
+
+<h4> Syntaxe spécifique pour les symboles réservés </h4>
+
+
+<p> Rappelons (cf. supra <a class="supra" href="Cc3-8_typesCaracteres.html#valeurCarImprimable"></a>) que la <strong>syntaxe automorphe</strong> supra n'est <strong class="warning">pas possible</strong> pour certains <strong class="title">symboles réservés</strong> du langage <em class="mark">C</em> qui remplissent un rôle particulier dans un contexte donné. Il s'agit des caractères : <br>
+<span class="inline">
+  <code class="cmd">'</code>    <code class="cmd">"</code>    
+  <code class="cmd">\</code>
+</span> </p>
+<p> En effet, leur <strong>codage direct</strong> – soit en tant que valeur isolée, soit au sein d'une chaîne de caractères – engendrerait pour le compilateur une <strong class="cons">confusion</strong> avec leur rôle de délimiteur ou de préfixe. </p>
+
+
+<div class="complement">
+<p> Aussi, pour coder la valeur de ces trois caractères, on peut recourir respectivement aux <strong class="title">séquences d'échappement</strong> : <br>
+<span class="inline">
+  <code class="cmd" style="color: darkorange;">\'</code>    <code class="cmd" style="color: darkorange;">\"</code>    
+  <code class="cmd" style="color: darkorange;">\\</code>
+</span> </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"> On peut afficher : </p>
+<ul>
+   <li> <code class="displayDark">'</code> (<em class="english">single quote</em>, code <code>0x27</code>) par l'appel <code class="prettyprint lang-c">printf("%c", '\'')</code> ;  </li>
+   
+   <div class="expert">
+   <div class="nobullet"> mais il est également <strong class="pros">possible</strong> de coder <code class="prettyprint lang-c">printf("'")</code>…  </div>
+   </div><!-- expert --> 
+
+   <li> <code class="displayDark">"</code> (<em class="english">double quote</em>, code <code>0x22</code>) par l'appel <code class="prettyprint lang-c">printf("\"")</code> ;  </li>
+
+   <div class="expert">
+   <div class="nobullet"> mais il est également <strong class="pros">possible</strong> de coder <code class="prettyprint lang-c">printf("%c", '"')</code>…  </div>
+   </div><!-- expert --> 
+
+   <li> <code class="displayDark">\</code> (<em class="english">bacslash</em>, code <code>0x5C</code>) par l'appel <code class="prettyprint lang-c">printf("\\")</code>.  </li>
+
+   <div class="expert">
+   <div class="nobullet"> Et là, il est  <strong class="warning">impossible</strong> de coder ni <code style="background: lightgrey;">printf("%c", '\')</code> ni <code style="background: lightgrey;">printf("\")</code>.  </div>
+   </div><!-- expert --> 
+ </ul>
+
+</div><!-- exemple -->
+
+
+
+
+<h4 id="caracteresControle"> Syntaxe spécifique pour les caractères de contrôle usuels </h4>
+
+
+<div class="complement">
+<p> Les <strong>caractères de contrôle</strong> <strong class="cons">les plus usuels</strong> sont codables par une <strong class="title">séquence d'échappement</strong> <strong class="defin">abrégée</strong> de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">\<span class="nocode"><strong>lettre</strong></span></code>
+</span> <br>
+Ces séquences sont listées dans le tableau ci‑dessous. </p>
+</div><!-- complement -->
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>  <th> Caractère </th>
+        <th> Séquence  </th>
+        <th> Mnémonique  </th>
+        <th> Action  </th>  
+  </tr>
+  <tr>
+    <td> <strong><em class="sigle">BEL</em></strong> </td>
+    <td style="text-align: center;">  <code class="cmd" style="color: darkorange;">\a</code> </td>
+    <td style="padding-left: 1em;"> <strong>a</strong><em>lert</em> </td>
+    <td style="padding-left: 1em;"> émission d'un <strong>signal sonore</strong></td>
+  </tr>
+  <tr>
+    <td> <strong><em class="sigle">BS</em></strong> </td>
+    <td style="text-align: center;">  <code class="cmd" style="color: darkorange;">\b</code> </td>
+    <td style="padding-left: 1em;"> <strong>b</strong><em>ackspace</em> </td>
+    <td style="padding-left: 1em;"> saut du curseur au <strong>caractère précédent avec effacement</strong> </td>
+  </tr>
+  <tr>
+    <td> <strong><em class="sigle">FF</em></strong> </td>
+    <td style="text-align: center;">  <code class="cmd" style="color: darkorange;">\f</code> </td>
+    <td style="padding-left: 1em;"> <strong>f</strong><em>orm feed</em> </td>
+    <td style="padding-left: 1em;"> saut du curseur à la <strong>page suivante</strong> </td>
+  </tr>
+  <tr>
+    <td> <strong><em class="sigle">LF</em></strong> </td>
+    <td style="text-align: center;">  <code class="cmd" style="color: darkorange;">\n</code> </td>
+    <td style="padding-left: 1em;"> <strong>n</strong><em>ew line (line feed)</em> </td>
+    <td style="padding-left: 1em;"> saut du curseur à la <strong>ligne suivante</strong> </td>
+  </tr>
+  <tr>
+    <td> <strong><em class="sigle">CR</em></strong> </td>
+    <td style="text-align: center;">  <code class="cmd" style="color: darkorange;">\r</code> </td>
+    <td style="padding-left: 1em;"> <em>carriage <strong>r</strong>eturn</em> </td>
+    <td style="padding-left: 1em;"> retour du curseur en <strong>début de ligne</strong> </td>
+  </tr>
+  <tr>
+    <td> <strong><em class="sigle">HT</em></strong> </td>
+    <td style="text-align: center;">  <code class="cmd" style="color: darkorange;">\t</code> </td>
+    <td style="padding-left: 1em;"> <em>horizontal <strong>t</strong>abulation</em> </td>
+    <td style="padding-left: 1em;"> saut du curseur à la <strong>tabulation horizontale</strong> suivante </td>
+  </tr>
+  <tr>
+    <td> <strong><em class="sigle">VT</em></strong> </td>
+    <td style="text-align: center;">  <code class="cmd" style="color: darkorange;">\v</code> </td>
+    <td style="padding-left: 1em;"> <em><strong>v</strong>ertical tabulation</em> </td>
+    <td style="padding-left: 1em;"> saut du curseur à la <strong>tabulation verticale</strong> suivante </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<div class="remarques"> 
+<p class="remarque"> Dans les systèmes d'exploitation <strong class="specialLB">Microsoft Windows</strong>, un <strong class="title">saut de ligne</strong> codé <code class="cmd" style="color: darkorange;">\n</code> est systématiquement associé à un <strong>retour chariot</strong> pour constituer la <strong>séquence</strong> <strong class="specialO"><em class="sigle">CR</em> <em class="sigle">LF</em></strong>, issue de la technologie des machines à écrire <a class="external" href="https://www.youtube.com/watch?v=EiyZSX0OnBM" target="_BLANK">Y</a>. Le codeur n'a pas besoin de coder explicitement le caractère <strong><em class="sigle">CR</em></strong>. </p>
+</div><!-- remarque -->
+
+
+<h4 id="syntaxeGeneraleSeqEchap"> Syntaxe générale </h4>
+
+
+<div class="important">
+<p> <strong>Toute valeur de caractère simple</strong> d'un <strong>jeu <em class="sigle">ASCII</em> restreint ou étendu</strong> peut être codée via une <strong class="title">séquence d'échappement</strong> formée du <strong>préfixe</strong> <code class="cmd" style="color: darkorange;">\x</code> – et non <strong class="warning">pas</strong> <code>\0x</code> – suivi du <strong class="specialO">code <em class="sigle">ASCII</em> hexadécimal</strong> du caractère. </p>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemples"> </p>
+
+<ol class="numbered">
+  <li> <code class="cmd" style="color: darkorange;">\x1B</code> code la valeur de caractère <strong><em class="sigle">ESC</em></strong> (caractère de contrôle <em class="english">escape</em>) ; </li>
+
+  <li> <code class="cmd" style="color: darkorange;">\x41</code> code la valeur de caractère « <em class="bold">A</em> » dans le jeu <strong><em class="sigle">ASCII</em> restreint</strong> ; </li>
+
+  <li> <code class="cmd" style="color: darkorange;">\x80</code> code la valeur de caractère « <em class="bold">€</em> » dans le jeu <strong><em class="sigle">ASCII</em> étendu</strong> avec la page de code <strong><em class="sigle">CP1252</em></strong>. </li>
+</ol>
+</div><!-- exemples -->
+
+<div class="remarques" id="sequenceOctale"> 
+<p class="remarque"> Il existe aussi un <strong class="title">syntaxe alternative</strong> préfixée par <code class="prettyprint lang-c">\</code> suivi du <strong>code <em class="sigle">ASCII</em> octal</strong> du caractère. La base 8 étant désuète, cette syntaxe est aujourd'hui <strong class="warning">vivement déconseillée</strong>. Mais il important de se souvenir de son existence pour détecter d'éventuelles erreurs de codage. </p>
+
+<p> <em class="remark"><em class="bold">Exception</em></em> : on emploie encore la <strong class="title">séquence d'échappement octale</strong> <code class="cmd" style="color: darkorange;">\0</code>, car elle est <strong class="pros">encore plus simple</strong> que <code>\x0</code>. Elle code <strong class="specialLB">le caractère <em class="sigle">NUL</em></strong> qui est utilise comme marqueur de <strong>fin de chaîne de caractères</strong> en langage <strong>C</strong> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#chaineCaracteres" target="_BLANK"></a>). </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="manipCaracteres"> Manipulation des valeurs de caractères simples </h2>
+
+
+
+<h3> Opérations générales </h3>
+
+
+
+<div class="important">
+<p> Les <strong class="specialG">types</strong> de <strong>caractères simples</strong> <code class="prettyprint lang-c">signed char</code> et <code class="prettyprint lang-c">unsigned char</code> étant fondamentalement des types entiers, <strong class="title">toutes les opérations</strong> <strong class="defin">sur les entiers</strong> sont <strong>syntaxiquement applicables</strong> aux <strong class="defin">valeurs caractère</strong>. </p>
+
+<p> Néanmoins, <strong class="specialO">certaines opérations</strong> n'ont a priori <strong class="warning">aucun sens</strong>. Par exemple, que pourrait bien représenter l'expression valide <code>'a' * 'b'</code> ? </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Partant du fait souligné supra que les <strong class="defin">codes <em class="sigle">ASCII</em></strong> doivent être considérés avant tout comme des <strong>nombres ordinaux</strong> <a class="supra" href="Cc3-8_typesCaracteres.html#jeuRestreintASCII"></a>, les <strong class="title">opérations pertinentes</strong> sur les <strong class="defin">valeurs de caractères simples</strong> sont celles listées ci‑dessous.  </p>
+
+<ul>
+  <li> L'<strong class="specialLB">affectation</strong> d'une <strong class="specialO">valeur de caractère</strong> à une <strong>donnée déclarée</strong> ; elle procède comme n'importe quelle affectation. </li> 
+
+  <div class="exemples">
+  <p class="exemple"> L'instruction <code class="prettyprint lang-c">char firstDigit = '0';</code> déclare une variable nommée <code>firstDigit</code> et lui affecte la valeur de caractère « <em class="bold">0</em> », c'est‑à‑dire le <strong>chiffre zéro</strong> (à ne pas confondre avec le caractère <em class="sigle">NUL</em>). </p>
+  </div><!-- exemple --> 
+
+  <li> La <strong  class="specialLB">différence</strong> entre <strong class="specialO">deux valeurs de caractères</strong> ; elle prend une <strong>valeur cardinale</strong>, à savoir le <strong class="defin">nombre de caractères</strong> séparant ces deux valeurs dans un <strong>jeu <em class="sigle">ASCII</em> restreint ou étendu</strong>. </li>
+
+  <div class="exemples">
+  <p class="exemple"> L'expression <code class="prettyprint lang-c">'m' - 'a'</code> donne le <strong class="defin">nombre de lettres</strong> comprises entre les lettres « <em class="bold">m</em> »  et « <em class="bold">a</em> » (l'une des deux non comptée) dans le <strong>jeu <em class="sigle">ASCII</em> restreint</strong>. </p>
+  </div><!-- exemple -->
+
+  <li> L'<strong class="specialLB">ajout</strong> ou la <strong class="specialLB">soustraction</strong> d'une <strong>valeur entière</strong> à une <strong class="specialO">valeur de caractère</strong> ; elle retourne une <strong>valeur ordinale</strong> qui exprime un <strong class="defin">décalage</strong> de position dans un <strong>jeu <em class="sigle">ASCII</em> restreint ou étendu</strong>. </li>
+
+  <div class="exemples">
+  <p class="exemple"> L'expression <code class="prettyprint lang-c">'A' + 0x20</code> prend une valeur égale à celle de <code>'a'</code>. En effet, dans le <strong>jeu <em class="sigle">ASCII</em></strong> restreint, toute lettre minuscule est positionnée par rapport à sa majuscule correspondante avec un décalage de <code>32</code> (<code>0x20</code>) positions – cf. supra <a class="supra" href="Cc3-8_typesCaracteres.html#tableASCIIrestreint"></a>. </p>
+  </div><!-- exemple -->
+
+  <li> Toute <strong class="specialLB">comparaison</strong> entre <strong class="specialO">deux valeurs de caractères</strong> – égalité, différence, etc. ; elle prend une <strong>valeur booléenne</strong> selon la <strong>position</strong> des deux valeurs de caractères dans le <strong>jeu <em class="sigle">ASCII</em></strong>. </li>
+
+  <div class="exemples">
+  <p class="exemple"> L'expression <code class="prettyprint lang-c">('A' <= c) && (c <= 'Z')</code> prend la valeur <code>1</code> si la valeur de caractère de la variable <code>c</code> est <strong class="defin">comprise</strong> entre les lettres « <em class="bold">A</em> » et « <em class="bold">Z</em> » dans le <strong>jeu <em class="sigle">ASCII</em> restreint</strong> – autrement dit s'il s'agit d'une lettre <strong>majuscule</strong>. </p>
+  </div><!-- exemple -->
+</ul>
+
+</div><!-- complement -->
+
+
+
+<h3 id="ctype"> Les fonctions du module de bibliothèque <code>ctype</code> </h3>
+
+
+
+<div class="important">
+<p> Le <strong>fichier d'en‑tête</strong> <code class="filename">ctype.h</code> de la bibliothèque standard du langage <strong>C</strong> (<code class="filename">cctype</code> en <strong>C++</strong>) met à disposition du codeur <strong class="title">14 fonctions</strong> opérant sur des valeurs de <strong cldefin>caractères simples</strong> <a class="external" href="https://en.cppreference.com/w/c/string/byte" target="_BLANK">C</a> : </p>
+
+<ul>
+  <li> 12 fonctions de <strong class="specialLB">test</strong>,</li>
+
+  <li> 2 fonctions <strong class="specialLB">manipulation</strong>. </li>
+</ul>
+
+<p> Il est <strong class="pros">recommandé</strong> d'employer ces fonctions plutôt que de coder ses propres solutions pour obtenir les mêmes résultats. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme avec tout module de bibliothèque, pour pouvoir l'utiliser dans un programme, il faut d'abord coder la <strong>directive d'inclusion</strong> de son fichier d'en‑tête, à savoir en <strong>C</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;ctype.h&gt;</code>
+</span> </p>
+
+<div class="expert">
+<p> De plus, ces fonctions peuvent s'appliquer à des valeurs de caractères prises dans les <strong>jeux <em class="sigle">ASCII</em> étendus</strong> mais à condition que l'encodage des caractères soit correctement paramétré dans le terminal d'exécution (cf. supra <a class="supra" href="Cc3-8_typesCaracteres.html#linuxISO"></a>).  </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<h4 id="fonctionsTest"> Fonctions de test de caractères </h4>
+
+
+<div class="complement">
+<p> Les <strong class="title">fonctions de test</strong> déterminent l'<strong class="defin">appartenance</strong> d'une valeur de caractère à une <strong>famille remarquable</strong> (lettre, chiffre, caractère de contrôle, etc.) au sein d'un  <strong>jeu <em class="sigle">ASCII</em> restreint</strong> ou étendu. </p>
+
+<p> Chaque fonction prend un <strong class="specialO">argument</strong> de <strong>type</strong> <code class="prettyprint lang-c">int</code> mais dont la valeur doit être comprise dans l'étendue du <strong>type</strong> <code class="prettyprint lang-c">unsigned char</code> (c'est‑à‑dire entre <code>0x00</code> et <code>0xFF</code>). Elle retourne dans le <strong>type</strong> <code class="prettyprint lang-c">int</code> : </p>
+
+<ul>
+  <li> la <strong class="defin">valeur</strong> <code class="cmd">0</code> en cas de <strong>non appartenance</strong> de l'argument à la famille spécifiée par le nom de la fonction ; </li>
+
+  <li> sinon, une <strong class="defin">valeur non nulle</strong> – mais <strong class="warning">pas forcément</strong> la valeur <code class="cmd">1</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<p> Toutes ces fonctions de test sont listées dans le tableau ci‑dessous. </p>
+
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>  <th width="20em"> La fonction </th>
+        <th style="padding-left: 1em; text-align: left;"> teste si l'argument est… </th>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isalnum</code> </td>
+    <td style="padding-left: 1em;"> un caractère <strong>alphanumérique</strong> (lettre ou chiffre) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isalpha</code> </td>
+    <td style="padding-left: 1em;"> un caractère <strong>alphabétique</strong> (lettre) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">islower</code> </td>
+    <td style="padding-left: 1em;"> une lettre <strong>minuscule</strong>, dite « bas de casse » (<em class="english">lower case</em>) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isupper</code> </td>
+    <td style="padding-left: 1em;"> une lettre <strong>majuscule</strong>, dite « haut de casse » (<em class="english">upper case</em>) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isdigit</code> </td>
+    <td style="padding-left: 1em;"> un chiffre <strong>décimal</strong> (<em class="english">digit</em>) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isxdigit</code> </td>
+    <td style="padding-left: 1em;"> un chiffre <strong>hexadécimal</strong> (<em class="english">hexadecimal digit</em>) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">iscntrl</code> </td>
+    <td style="padding-left: 1em;"> un caractère de <strong>contrôle</strong>  </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isspace</code> </td>
+    <td style="padding-left: 1em;"> un caractère d'<strong>espacement</strong> (<em class="sigle">SP</em>, <em class="sigle">FF</em>, <em class="sigle">LF</em>, <em class="sigle">CR</em>, <em class="sigle">HT</em> ou <em class="sigle">VT</em>)  </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isblank</code> </td>
+    <td style="padding-left: 1em;"> un caractère « <strong>blanc</strong> » (<em class="sigle">SP</em> ou <em class="sigle">HT</em>)   </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">isprint</code> </td>
+    <td style="padding-left: 1em;"> un caractère <strong>imprimable</strong>, c'est‑à‑dire un caractère qui n'est ni « blanc », ni de contrôle </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">ispunct</code> </td>
+    <td style="padding-left: 1em;"> un signe de <strong>ponctuation</strong>, c'est‑à‑dire un caractère imprimable qui n'est ni une lettre, ni un chiffre </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<div class="exemples"><p class=exemples></p>
+<p class="square" style="margin-top:0em"> Quelle que soit l'implémentation : </p>
+<ul>
+  <li> L'appel <code class="prettyprint lang-c">isdigit('O')</code> retourne la <strong>valeur</strong> <code class="cmd">0</code> – nulle, donc <em>faux</em> au sens booléen – parce que le caractère « O » (lettre) n'est <strong class="defin">pas un chiffre</strong>.  </li>
+
+  <li> L'appel <code class="prettyprint lang-c">isalpha('o')</code> retourne une <strong>valeur non nulle</strong>, donc <em>vrai</em> au sens booléen – parce que le caractère « o » est <strong class="defin">bien une lettre</strong>, sachant que :  </li>
+
+  <ul>
+    <li> sur un PC <em class="mark">Linux</em> avec la chaîne de compilation <em class="mark">GCC</em>, on obtient la valeur <code class="cmd">1024</code> ; </li>
+
+    <li> sur un PC <em class="mark">Windows</em> avec la chaîne de compilation <em class="mark">Mingw‑w64</em>, on obtient la valeur <code class="cmd">2</code>.</li>
+  </ul>
+</ul>
+
+<div class="expert">
+<p class="square"> Sous <strong class="specialLB">Linux</strong>, en ayant généré la <strong>locale</strong> <code class="cmd">fr_FR.iso-8859-15</code> (encodage <em>Latin‑9</em>), on peut tester le <strong class="title">programme académique</strong> suivant (fichier <code class="filename">testAlpha.c</code>) qui teste si le caractère « <em class="bold">œ</em> »  (code <code>0xBD</code>) est bien une lettre (fonction <code>isalpha</code>) :  </p>
+<ul>
+  <li> avec le paramètre <code>LC_CTYPE</code> <strong>par défaut</strong>, à savoir <code>"C.UTF‑8"</code>)  </li>
+
+  <li> avec le paramètre <code>LC_CTYPE</code> fixé à <code class="cmd">"fr_FR.iso-8859-15"</code>. </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;locale.h&gt;
+ 
+int main(void) {
+  unsigned char c = '\xBD'; // char 'œ' in ISO-8859-15 (latin-9)
+  printf("!!isalpha('%c') returns:\n", c);
+  printf("\t%d with default C encoding\n", !!isalpha(c));
+  setlocale(LC_CTYPE, "fr_FR.iso-8859-15");
+  printf("\t%d with Latin-9 encoding\n", !!isalpha(c));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En exécutant les commandes : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+gcc testAlpha.c -o testAlpha 
+luit -encoding iso-8859-15 ./testAlpha
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> on obtient la sortie standard attendue : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+!!isalpha('œ') returns:
+        0 with default C encoding
+        1 with Latin-9 encoding
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Remarque</em> : il n'est <strong class="cons">pas possible</strong> de tester ce programme sur <strong class="OnlineGDB">OnlineGDB</strong>, car on ne peut pas générer la <em class="english">locale</em> <code>fr_FR.iso-8859-15</code> sur le serveur d'exécution. </p>
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+<h4 id="fonctionsManip"> Fonctions de manipulation de caractères </h4>
+
+
+<div class="complement">
+<p> Les deux <strong class="title">fonctions de manipulation</strong> sont des fonctions de <strong class="defin">conversion de casse</strong> : respectivement, elles convertissent une lettre <strong>majuscule</strong> en <strong>minuscule</strong> et réciproquement. </p>
+
+<p> Comme les fonctions de test, chacune prend un <strong class="specialO">argument</strong> de <strong>type</strong> <code class="prettyprint lang-c">int</code> mais dont la valeur doit être comprise dans l'étendue du <strong>type</strong> <code class="prettyprint lang-c">unsigned char</code> (c'est‑à‑dire entre <code>0x00</code> et <code>0xFF</code>). Elle retourne dans le <strong>type</strong> <code class="prettyprint lang-c">int</code> la <strong>valeur décimale du code <em class="sigle">ASCII</em></strong> : </p>
+
+<ul>
+  <li>  de la <strong class="defin">minuscule</strong> (<code>tolower</code>) ou la <strong class="defin">majuscule</strong> (<code>toupper</code>) correspondant à l'argument si ce dernier est une <strong>lettre</strong> ayant une telle correspondance dans le jeu <strong><em class="sigle">ASCII</em></strong> ; </li>
+
+  <li> de l'<strong class="specialO">argument</strong> lui‑même dans tous les <strong class="cons">autres cas</strong> (c'est‑à‑dire si la conversion n'est pas possible, notamment s'il ne s'agit pas d'une lettre ou s'il s'agit d'une lettre déjà de la casse demandée). </li>
+</ul>
+</div><!-- complement -->
+
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>  <th width="20em"> la fonction </th>
+        <th style="padding-left: 1em; text-align: left;"> convertit l'argument (lettre) en… </th>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">tolower</code> </td>
+    <td style="padding-left: 1em;"> <strong>minuscule</strong> (<em class="english">lower case</em>) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">toupper</code> </td>
+    <td style="padding-left: 1em;"> <strong>majuscule</strong> (<em class="english">upper case</em>) </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+
+<div class="exemples"><p class=exemples></p>
+<p class="square" style="margin-top:0em"> Quelle que soit l'implémentation : </p>
+<ul>
+  <li> L'expression d'appel <code class="prettyprint lang-c">toupper('a')</code> retourne la valeur <code>65</code> qui est le <strong>code <em class="sigle">ASCII</em></strong> de la majuscule « <em class="bold">A</em> » correspondant à la lettre minuscule codée en argument.  </li>
+
+  <li> L'expression d'appel <code class="prettyprint lang-c">toupper('1')</code> retourne la valeur <code>49</code>, à savoir le <strong>code <em class="sigle">ASCII</em></strong> du caractère « <em class="bold">1</em> », parce qu'il s'agit d'un <strong class="warning">chiffre</strong> et qu'il n'est donc <strong class="cons">pas possible</strong> de le convertir en majuscule. </li>
+</ul>
+
+<div class="expert">
+<p class="square"> Sous <strong class="specialLB">Linux</strong>, en ayant généré la <strong>locale</strong> <code class="cmd">fr_FR.iso-8859-15</code> (encodage <em>Latin‑9</em>), on peut tester le <strong class="title">programme académique</strong> suivant (fichier <code class="filename">testUpper.c</code>) qui détermine la majuscule correspondante à la lettre « <em class="bold">œ</em> »  (code <code>0xBD</code>) :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;locale.h&gt;
+ 
+int main(void) {
+  unsigned char c = '\xBD'; // char 'œ' in ISO-8859-15 (Latin-9)
+  printf("Upper case of '%c' is '%c'.\n", c, toupper(c));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En exécutant les commandes : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+gcc testCtype.c -o testCtype 
+luit -encoding iso-8859-15 ./testCtype
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> on obtient la sortie standard attendue : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Upper case of 'œ' is 'Œ'.
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Remarque</em> : la <strong>fonction</strong> <code class="prettyprint lang-c">toupper</code> retourne bien la majuscule « <em class="bold">Œ</em> » correspondante à la minuscule « <em class="bold">œ</em> » alors que la <strong class="title">différence des codes <em class="sigle">ASCII</em></strong> de ces deux lettres <strong class="warning">ne vaut pas</strong> <code>0x20</code> mais seulement <code>0x1</code> – contrairement à ce qu'il en est pour la quasi‑totalités des autres lettres du jeu étendu <em>Latin‑9</em>. </p>
+
+<p> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">toupper</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/toupper" target="_BLANK">C</a> n'est donc <strong class="warning">pas</strong> implémentée par le simple décalage constant <code class="prettyprint lang-c">+ 0x20</code>  du <strong>code <em class="sigle">ASCII</em></strong> de son argument. </p>
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="5"
+  data-pagenumber="I"
+  data-pageState="OK"
+  data-pageheadtitle="Pointeurs généralités"
+  data-pagefulltitle="Les pointeurs  –  généralités"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<!-- ajouter le mot-clef restrict -->
+
+
+<div class="exergue">
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/pointeurGeneralite.png" width="400px" style="margin-top: 1.2em">
+<p class="square"> Un <strong class="title">pointeur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Pointeur_(programmation)" target="_BLANK">W</a> est une <strong class="defin">donnée</strong> dont la <strong>valeur</strong> est une <strong class="specialPB">adresse</strong> du segment <strong>mémoire</strong> attribué au programme lors de son exécution sur la machine cible. </p>
+
+<p> C'est une <strong class="defin">notion fondamentale</strong> en programmation, spécifique aux <strong>langages compilés</strong>. Rappelons que dans le <strong class="specialBG">code exécutable</strong> d'un programme compilé, plus <strong>aucun identificateur</strong> n'est employé : les données et les fonctions sont accédées uniquement via leurs <strong class="specialPB">adresses</strong> respectives (cf. chap. C4‑IV <a class="previous" href="../C4-Fonctions/Cc4-4_chaineCompilation.html#codeIntermediaire" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+<p> La <strong class="title">notion de pointeur</strong> permet de coder facilement dans le programme source des <strong class="defin">opérations de bas niveau</strong> en allant manipuler directement la mémoire, mais aussi des <strong class="defin">opérations haut niveau</strong> sur des <strong>données structurées</strong> et les <strong>fonctions</strong>. Apparue assez tôt dans l'histoire de la programmation (<em class="mark">Algol68</em>, <em class="mark">Pascal</em>…), c'est avec le <strong>langage</strong> <strong class="title">C</strong> que les pointeurs acquièrent toute leur <strong class="warning">puissance</strong>. En effet, on y trouve :   </p>
+
+<ul>
+  <div style="display: inline-block;">  
+    <img class="top-right" src="../img/pointeurOperateurs.png" width="400px" style="margin-top: 0.5em">
+  <li> des <strong class="specialLB">éléments de langage</strong> <strong class="pros">les plus simples possibles</strong> qui optimisent la concision des expressions manipulant les pointeurs et les adresses – l'opérateur de <strong>déréférencement</strong> <code class="prettyprint lang-c">*</code> et l'opérateur d'<strong>adresse</strong> <code class="prettyprint lang-c">&</code> sont codés chacun par <strong class="pros">un seul symbole</strong> ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">  
+    <img class="top-right" src="../img/pointeurArithmetique.png" width="400px" style="margin-top: 0.5em">
+  <li> l'implémentation d'une <strong class="specialLB">arithmétique spécifique</strong> aux pointeurs, qui permet de <strong>passer d'une donnée à la suivante</strong> par une <strong class="pros">simple incrémentation</strong>, sans devoir préciser la taille en mémoire des données – ce qui est très utile dans une <strong class="defin">structure de donnée homogène</strong> comme un tableau, une chaîne de caractère, un fichier. </li>
+  </div><!-- display -->
+</ul>
+
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/panneauRouteGlissante.png" width="150px" style="margin-top: 1.5em">
+<p class="square"> Mais cette puissance a une <strong class="cons">contre‑partie</strong>. L'emploi des pointeurs présente des <strong class="warning">risques</strong> en termes de <strong class="title">sécurité du code</strong> : si un programme peut accéder et modifier très facilement à une zone de la mémoire, le moindre débordement a toutes les « chances » d'engendrer à l'exécution une <strong class="warning">erreur de segmentation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Erreur_de_segmentation" target="_BLANK">W</a>, qui sera très difficile à prévenir lors de la compilation. </p>
+</div><!-- display -->
+
+<p> C'est pourquoi le développement du <strong>langage C++</strong> a notamment eu pour objectif de <strong class="pros">réduire l'emploi des pointeurs</strong> et, pour cela, a introduit  la <strong class="title">notion de référence</strong> (cf. chap. C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#transmissionReference" target="_BLANK"></a>), qui permet : </p>
+<ul>
+  <li> d'<strong class="defin">accéder à la valeur d'une donnée</strong> (comme avec l'opérateur de déréférencement sur un pointeur) ; </li>
+
+  <li> mais <strong class="warning">pas à son adresse</strong> (comme avec l'opérateur d'adresse). </li>
+</ul>
+<div class="expert">
+<p> Les <strong class="title">différences</strong> entre les notions de <strong class="specialLB">référence</strong> et de <strong class="specialLB">pointeur</strong> sont <strong class="defin">subtiles</strong>. En <strong>C++</strong>, plutôt que de les percevoir comme concurrentes, il est plus pertinent de les considérer comme <strong class="pros">complémentaires</strong> pour coder dans les programmes des <strong>fonctionnalités optimisées</strong> en termes de simplicité de codage, de vitesse d'exécution et de sécurité de fonctionnement. </p>
+</div><!-- expert -->
+
+<p class="square"> Ce premier chapitre de la partie <span class="partie">C5</span> du module a pour <strong class="title">objectif</strong> d'introduire ces notions et d'en expliciter tous les <strong class="title">aspects fondamentaux</strong>. On abordera donc les points suivants :  </p>
+
+<ul>
+  <li> la <strong class="specialLB">notion d'adresse</strong> d'une donnée et les <strong>opérateurs d'adresse</strong> et de <strong>déréférencement</strong> qui permettent respectivement de passer d'une donnée à son adresse et réciproquement ;  </li>
+
+  <li> la <strong class="specialLB">déclaration</strong> d'une donnée – constante ou variable – de <strong class="specialG">type pointeur</strong> ; </li>
+
+  <li> l'<strong class="specialLB">arithmétique des pointeurs</strong> et les <strong>opérations</strong> que l'on peut leur appliquer (affectations, incrémentations, décrémentations, comparaisons, conversions, etc.) ; </li>
+
+  <li> la <strong class="specialLB">notion de référence</strong> (en <strong>C++</strong> uniquement), sa syntaxe de <strong>déclaration</strong>, ses possibilités de manipulation des données, etc. </li>
+</ul>
+
+<p> Tous ces aspects devront être bien assimilés pour pouvoir en étudier les <strong class="pros">nombreuses applications</strong> dans les chapitres suivants, consacrés respectivement aux applications directes des pointeurs et aux données structurées – tableaux, structures hétérogènes, etc. </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- partie 1 relue en avril 2023 -->
+
+<h2> Notions préliminaires </h2>
+
+
+<h3 id="notionAdresse"> Notion d'adresse d'une donnée </h3>
+
+
+
+<h4> Rappels et précisions sur la mémoire vive </h4>
+
+
+<div  class="complement" style="display: inline-block">
+  <img class="top-right" src="../img/RAMvirtuellePC.png" width="400px">
+<p> On rappelle (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#structureMemoire" target="_BLANK"></a>) que la <strong class="title">mémoire vive</strong> (<strong><em class="sigle">RAM</em></strong>) d'un ordinateur peut être <strong class="defin">virtuellement</strong> représentée comme un  <strong class="specialGr">immense tableau d'octets</strong> pour stocker des <strong>données</strong> ou des <strong>codes d'instructions</strong> (cf. la figure ci‑contre pour une architecture 64 bits avec des adresses codées sur 48 bits). </p>
+
+<p> Dans ce tableau, chaque <strong>octet</strong> est repéré par un <strong class="specialPB">numéro d'ordre</strong> – qu'on appelle son <strong class="defin">adresse</strong> – et qui est établi à partir d'une <strong>adresse « zéro »</strong>. Il est d'usage d'exprimer les adresses en <strong>base 16</strong> pour faciliter leur lecture. On emploie souvent le <strong>préfixe</strong> <code class="cmd"><span style="color:gray;">0x</span></code> ou <code class="cmd"><span style="color:gray;">0X</span></code> pour signaler cet aspect, comme en codage. </p>
+</div><!-- complement -->
+
+
+
+<div class="expert">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/RAMprogPC.png" width="400px" style="margin-top:1.2em">
+<p class="square"> Par défaut, un programme s'exécutant sur un <strong>ordinateur</strong> se voit allouer « seulement » un <strong class="title">segment</strong> d'environ de <strong>4 Mo</strong> de la <strong><em class="sigle">RAM</em></strong> par le <strong class="specialO">chargeur de programme</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chargeur_(informatique)" target="_BLANK">W</a> (un composant du système d'exploitation de la machine). En effet, de nombreux programmes s'exécutent en parallèle les uns des autres et se partage la <strong><em class="sigle">RAM</em></strong>. </p>
+
+<p> Ce segment alloué est <strong class="defin">virtuellement continu</strong> et les <strong class="title">adresses</strong> des données éventuellement affichées lors de l'exécution du programme sont <strong class="defin">virtuelles</strong>. En pratique, l'emplacement réel des données est géré par le <strong class="specialO">contrôleur de mémoire</strong> <a class="external" href="https://en.wikipedia.org/wiki/Memory_controller" target="_BLANK">W</a>, un circuit intégré spécialisé usuellement localisé sur le <strong>northbridge</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Northbridge" target="_BLANK">W</a> de la carte mère de la machine.  </p>
+
+<p> Par ailleurs, on rappelle que ce segment se divise en <strong class="specialT">deux zones</strong>, dites <strong class="specialLB">statique</strong> et <strong class="specialLB">dynamique</strong>, elles‑mêmes subdivisées en <strong>plusieurs segments</strong> <code class="inv" style="background:crimson;">.text</code>, <code class="inv" style="background:mediumseagreen;">.data</code>, etc. (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#machineX86)" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/RAMprogArduinoUno.png" width="400px" style="margin-top:1.2em">
+<p class="square"> Dans le cas d'un programme s'exécutant <strong>carte à microcontrôleur</strong>, c'est la <strong class="title">quasi‑totalité</strong> de la <strong class="title"><em class="sigle">RAM</em></strong> qui est allouée au programme lors de son téléversement, puisque le microcontrôleur ne peut exécuter qu'<strong class="cons">un seul programme utilisateur</strong> à la fois.  </p>
+
+<p> Toute <strong class="title">adresse</strong> d'une donnée indique son <strong class="defin">emplacement réel</strong> – et non pas virtuel. Il n'y a <strong>pas de contrôleur de mémoire</strong>, cette dernière étant intégrée dans le microcontrôleur. </p>
+
+<p> Par ailleurs, ce segment est réparti un peu différemment que sur un ordinateur. </p>
+<ul>
+  <li> Le <strong>segment</strong> <code class="inv" style="background:crimson;">.text</code> qui regroupe le code machine des fonctions est écrit dans une <strong class="defin">mémoire non volatile</strong> (<em class="english">flash</em>) qui possède son <strong>propre espace d'adressage</strong> – par exemple, <code class="cmd"><span style="color:gray;">0x</span>0000</code> à <code class="cmd"><span style="color:gray;">0x</span>7FFF</code> sur le microcontrôleur <strong>Atmel 328P</strong> d'une carte <strong class="Arduino">Arduino Uno</strong>. </li>
+
+  <li> Les <strong>autres segments</strong> de la <strong class="specialLB">zone statique</strong> et toute la <strong class="specialLB">zone dynamique</strong> sont eux placés dans la <strong><em class="sigle">RAM</em></strong>. </li>
+
+  <li> En général, une plage basse de la <strong><em class="sigle">RAM</em></strong> est <strong>réservée</strong> pour le fonctionnement du microcontrôleur – par exemple, de <code class="cmd"><span style="color:gray;">0x</span>00</code> à <code class="cmd"><span style="color:gray;">0x</span>FF</code> sur le microcontrôleur <strong>Atmel 328P</strong>. C'est notamment là que sont placés tous ses <strong class="defin">registres</strong>. </li>
+
+  <li> Le microcontrôleur ou la carte peut éventuellement embarquer une <strong class="defin">mémoire <em class="sigle">EEPROM</em></strong> qui possède, là encore, son <strong>propre espace d'adressage</strong>. </li>
+</ul>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ul>
+  <li> Avec un <strong>ordinateur</strong> et/ou un <strong>compilateur</strong> <strong class="title">32 bits</strong>, l'<strong class="specialPB">adresse la plus haute</strong> était <code class="cmd"><span style="color:gray;">0x</span>FFFFFFFF</code>, elle correspondait au numéro d'ordre 4&#8239;294&#8239;967&#8239;295 – autrement dit, la mémoire virtuelle était <strong class="cons">limitée</strong> à un volume de <em class="bold">4,3 Go</em>.  </li>
+
+  <li> Sur une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>, l'adresse la plus haute est <code class="cmd"><span style="color:gray;">0x</span>08FF</code> (2303), puisque son microcontrôleur ne dispose que de <strong>2 ko</strong> (2048 octets) de <strong><em class="sigle">RAM</em></strong> pour les données, auxquelles s'ajoutent 256 octets de <strong>registres</strong>. </li>
+</ul>
+</div><!-- remarque -->
+
+<!-- limite relecture -->
+
+<h4 id="adresseDonnee"> Adresse d'une donnée </h4>
+
+
+<div class="complement">
+<p> On rappelle (cf. chap. C2‑III <a class="previous" href="../C2-Elementslangage/Cc2-3_declarationDonnees.html#notionDonnee" target="_BLANK"></a>) qu'en programmation, une <strong class="title">donnée</strong> est un « objet » dont on connaît a priori <strong>trois caractéristiques</strong> : </p>
+
+<ul>
+  <li> son <strong class="defin">identificateur</strong>, qui est choisi par le codeur dans le <strong>code source</strong> ; </li>
+
+  <li> son <strong class="specialG">type</strong>, également choisie dont une caractéristique essentielle est la <strong class="specialLG">taille</strong>, c'est‑à‑dire le <strong>nombre d'octets</strong> nécessaires pour stocker la valeur de la donnée en mémoire ; </li>
+
+  <li> sa <strong class="specialGr">valeur</strong> qui peut varier au gré des affectations codées, et qui est encodée en mémoire dans les octets alloués – et c'est la seule caractéristique de la donnée qui soit susceptible de changer au cours de l'exécution du programme. </li>
+</ul>
+
+<p> Ces trois caractéristiques peuvent donc être <strong>explicitement codées</strong> dans la déclaration de la donnée. </p>
+</div><!-- complement -->
+
+<div class="important" style="display: inline-block">
+  <img class="top-right" src="../img/adresseDonnee.png" width="350px" style="margin-top:0.2em">
+<p> Il existe une quatrième <strong>caractéristique fondamentale</strong> d'une donnée qui est son <strong class="title">adresse</strong>. C'est l'<strong>adresse du</strong> <strong class="defin">1<sup>e</sup> octet</strong> (dans l'ordre des adresses) qui est alloué pour stocker la valeur de la donnée en mémoire. </p>
+
+<p> En langage <strong>C</strong>, la <strong class="specialPB">valeur</strong> d'une adresse peut être affichée en <strong>sortie standard</strong> à l'aide de la <strong class="specialDR">spécification de conversion</strong> <code class="prettyprint lang-c">%p</code> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#specificationsConversion" target="_BLANK"></a>). </p>
+
+<p> Contrairement à ses autres caractéristiques, l'adresse d'une données n'est pas explicitement codable dans sa déclaration. Elle est attribuée non <strong class="warning">pas</strong> <strong>par le codeur</strong> mais <strong class="specialLB">par la machine</strong>. </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Plus précisément, l'<strong class="title">attribution de l'adresse</strong> d'une donnée par la machine dépend de sa <strong>classe d'allocation en mémoire</strong> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#allocationMemoire" target="_BLANK"></a>). Cette attribution est effectuée : </p>
+<ul>
+  <li> soit par la <strong class="defin">chaîne de compilation</strong> lors de la construction du <strong>segment</strong> <code class="inv" style="background:mediumseagreen;">.data</code> ou <code class="inv" style="background:springgreen;">.rodata</code> du fichier exécutable sur la machine cible, s'il s'agit d'une donnée de <strong class="specialO">classe statique</strong> ; </li>
+
+  <li> soit par le <strong class="defin">processeur de la machine cible</strong> lors de l'exécution du programme : </li>
+  <ul>
+    <li> dans la <strong class="specialDGr">pile</strong> s'il s'agit d'une donnée de <strong class="specialM">classe automatique</strong> ; </li>
+
+    <li> ou dans le <strong class="specialDGr">tas</strong>, s'il s'agit d'une donnée déclarée par <strong class="specialMg">allocation dynamique</strong>.</li>
+  </ul> 
+</ul>
+
+
+<h4 id="contraintesAlign"> Ordre d'adressage et contraintes d'alignement </h4>
+
+
+<p> Dans chaque segment de la mémoire allouée au programme, l'<strong class="title">attribution des adresses</strong> aux données est effectuée au fur et à mesure de leur déclaration dans un <strong>ordre croissant</strong> ou <strong>décroissant</strong> selon la chaîne de compilation et la machine cible. Par exemple, le compilateur de l'environnement de simulation en ligne <strong class="Tinkercad">Tinkercad</strong> procède par ordre croissant alors que celui de l'environnement <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> procède par ordre décroissant. </p>
+
+<p> De plus, les adresses des données de taille supérieure ou égale à 2 octets répondent à des  <strong class="title">contraintes d'alignement</strong> (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#contraintesAlignement" target="_BLANK"></a>) en fonction de l'architecture de la machine cible : en règle générale, l'adresse attribuée est toujours un <strong>multiple de la taille</strong> de la donnée et pour pour respecter cette contrainte d'alignement, le compilateur laisse éventuellement des <strong class="cons">octets inexploités</strong> entre des données. </p>
+</div><!-- expert -->
+
+
+<div class="exemples" id="notionAdresseExemple">
+<p class="exemple"> Considérons le <strong class="title">programme académique</strong> suivant qui servira aussi de base  pour illustrer par la suite toutes les notions fondamentales : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+#include &lt;stdio.h&gt;
+
+int   a = 2047;
+short b = 5;
+int   c = -10;
+
+int main(void) {
+  printf("a: %p\nb: %p\nc: %p\n", &a, &b, &c);
+  return 0;
+}  
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Il affiche successivement les <strong>valeurs hexadécimales</strong> des <strong class="specialPB">adresses</strong> des variables <code class="prettyprint lang-c">a</code>, <code class="prettyprint lang-c">b</code> et <code class="prettyprint lang-c">c</code> dans cet ordre. Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, il produit typiquement une sortie comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+a: 0x555f381b8010
+b: 0x555f381b8014
+c: 0x555f381b8018
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> En faisant abstraction des digits <code>0x555f381b8</code>, on peut faire les observations suivantes : </p>
+
+<ul>
+  <li> Les 3 adresses sont bien des <strong>multiples de 4</strong> (on rappelle que <code>0x10</code> vaut 16 en base 10). Cela est attendu puisque les données déclarées sont de <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code> qui est usuellement encodé sur 4 octets.  </li>
+
+  <li> La variable <code class="prettyprint lang-c">b</code> étant de <strong class="specialG">type</strong> <code class="prettyprint lang-c">short</code>, elle est stockée seulement sur les <strong>2 octets</strong> d'adresse <code>0x14</code> et <code>0x15</code>. </li>
+
+  <div class="nobullet"> Donc les octets d'adresse <code>0x16</code> et <code>0x17</code> sont <strong class="cons">inexploités</strong> en respect des <strong class="warning">contraintes d'alignement</strong>. </div>
+</ul>
+
+<p> <em class="remark">Remarque</em>. Si ce programme était codé pour une carte <strong class="Arduino">Arduino</strong>, les valeurs d'adresse obtenues seraient <strong>beaucoup plus petites</strong>, car la mémoire vive (<strong><em class="sigle">SRAM</em></strong>) intégrée au microcontrôleur est très réduite (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>). </p>
+
+<p> De plus, avec l'architecture <strong><em class="sigle">AVR</em> 8 bits</strong> d'une carte <strong class="Arduino">Uno</strong>, on n'aurait <strong class="pros">pas de contraintes d'alignement</strong> ; autrement dit, l'adresse de la variable <code class="prettyprint lang-c">c</code> serait seulement à 2 octets de celle de <code class="prettyprint lang-c">b</code> (et non pas à 4 octets comme ci‑dessus). </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3 id="operateurAdresse"> Opérateur unaire d'adresse <code class="prettyprint lang-c">&</code> </h3>
+
+
+
+<div class="important" style="display: inline-block">
+  <img class="top-right" src="../img/operateurAdresse.png" width="320px" style="margin-top:0.2em">
+<p> Dans une code source, pour désigner l'<strong class="specialPB">adresse</strong> d'une donnée, les langages <strong>C</strong> et <strong>C++</strong> fournissent l'<strong class="title">opérateur d'adresse</strong> (en anglais, <em class="english">address‑of operator</em>), appelé aussi opérateur de <strong class="title">référencement</strong>, dont le symbole est <code class="prettyprint lang-c">&</code> (caractère « esperluette », en anglais <em class="english">ampersand</em> <a class="external" href="https://fr.wikipedia.org/wiki/Esperluette" target="_BLANK">W</a>). </p>
+
+<p> C'est un <strong>opérateur</strong> <strong class="defin">unaire</strong> qui, dans le tableau de classification des opérateurs du langage <strong>C</strong>, a le <strong class="defin">rang 2</strong> de <strong>priorité</strong>  (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>). Comme la plupart des opérateurs unaires, son <strong>sens d'associativité</strong> est de <strong class="defin">droite à gauche</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> L'<strong class="title">opérateur d'adresse</strong> ne s'applique <strong class="warning">pas</strong> à <strong>n'importe quelle expression</strong>, mais seulement à une <strong class="specialM">l‑value</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-Elementslangage/Cc2-4_manipulationDonnees.html#affectation" target="_BLANK"></a>), typiquement un <strong class="defin">identificateur de donnée déclarée</strong>. En effet, dans un code source, une expression est destinée à être évaluée dans un <strong>registre de calcul</strong> du processeur, mais pas à être stockée durablement dans la <strong><em class="sigle">RAM</em></strong>, donc elle n'a pas d'adresse. </p>
+
+
+<p> En conséquence, lorsque l'<strong class="title">opérateur</strong> <code class="prettyprint lang-c">&</code>  s'applique à un <strong class="defin">simple identificateur</strong>, il est <strong class="cons">inutile</strong> d'encapsuler ce dernier dans des <strong>parenthèses</strong>, par exemple comme <code>&(a)</code>. </p>
+
+<p> Par ailleurs, les <strong class="title">expressions</strong> <code class="prettyprint lang-c">&a</code> et <code class="prettyprint lang-c">& a</code> sont syntaxiquement <strong class="defin">équivalentes</strong> en vertu du format libre des langages <strong>C</strong> et <strong>C++</strong>) ; néanmoins, la <strong>première forme</strong> est usuellement <strong class="pros">préférée</strong>. </p>
+
+
+<div class="expert">
+<p> Par ailleurs, l'expression <code class="prettyprint lang-c">&a</code> n'est elle‑même <strong class="warning">pas une l‑value</strong>. En effet, le codeur ne peut pas changer l'adresse d'une donnée, que cette dernière soit locale ou globale. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Après une déclaration de variable globale comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">int a = 2047;</code>
+</span> <br>
+l'<strong class="title">expression</strong> <code class="prettyprint lang-c">&a</code> prend pour valeur l'<strong class="specialPB">adresse</strong> de la variable <code class="prettyprint lang-c">a</code> <strong>attribuée par la machine</strong>. </p>
+
+<div class="expert">
+<p> Cette <strong class="specialPB">adresse</strong> ne peut pas être déterminée lors du codage. La valeur <code><span style="color:gray;">0x</span>0x555f381b8010</code> affichée lors de l'exécution de l'exemple supra <a class="supra" href="Cc5-1_pointeursgeneralites.html#notionAdresseExemple"></a> n'est qu'une <strong>possibilité</strong> parmi tant d'autres. </p>
+</div><!-- expert -->
+</div><!-- exemple --> 
+
+
+<div class="expert">
+<h4 id="afficheAdresseArduino"> Cas de l'environnement <em class="mark">Arduino</em> </h4>  
+
+<div class="exemples"><p class="exemple"></p>
+<p class="square" style="margin-top: 0em"> Dans l'environnement <strong class="Arduino">Arduino</strong>, la valeur de l'<strong class="title">expression</strong> <code class="prettyprint lang-c">&a</code> n'est <strong class="cons">pas affichable</strong> par une instruction de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.println(&a, HEX); // type error!</code>
+</span> <br>
+car <code class="prettyprint lang-c">&a</code> n'est <strong class="warning">pas de type entier</strong> comme attendu par la méthode <code class="prettyprint lang-c">println</code>, mais d'un <strong class="specialO">type dérivé</strong> qu'on pourrait qualifier approximativement de « pointeur d'entier » (qu'on va étudier à la section suivante). </p>
+
+<p> En revanche, si on impose à l'expression <code class="prettyprint lang-c">&a</code> une <strong class="defin">conversion explicite</strong> (un <em class="english">cast</em>, cf. chap. C3‑VII <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/Cc3-7_conversionsTypes.html#cast" target="_BLANK"></a>) vers le type <code class="prettyprint lang-c">int</code>, il devient <strong class="pros">possible d'afficher</strong> sa valeur par la méthode <code class="prettyprint lang-c">println</code>. Ainsi, le programme pour une carte <strong class="Arduino">Arduino Uno</strong> (ou sa simulation dans <strong class="Tinkercad">Tinkercad</strong>) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+int a = 2047;
+
+void setup(){
+  Serial.begin(9600);
+  Serial.println(int(&a), HEX); // OK
+}
+
+void loop(){}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> affiche la valeur d'<strong class="specialPB">adresse</strong> <code class="cmd"><span style="color:gray;">0x</span>100</code> sur le moniteur série (256 en décimal). </p>
+<div style="display: inline-block">
+  <img class="top-right" src="../img/adressesSRAM.png" width="350px" style="padding-top: 0.5em">
+<ul>
+  <li> Comme sur toute autre machine, cette adresse correspond au numéro hexadécimal du <strong>premier octet</strong> – ici, l'octet de poids faible (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#boutisme" target="_BLANK"></a>) – sur lequel la valeur de la <strong>variable</strong> <code class="prettyprint lang-c">a</code> est encodée (les 255 adresses inférieures à <code><span style="color:gray;">0x</span>100</code> étant réservés aux registres du microcontrôleur). </li>
+
+  <div class="nobullet"> Cette adresse est située au tout début du segment <code class="inv" style="background:mediumseagreen;">.data</code> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#allocationMemoire" target="_BLANK"></a>). </div>
+
+  <li> Et comme la variable <code class="prettyprint lang-c">a</code> est de type <code class="prettyprint lang-c">int</code> qui est ici encodé sur <strong>deux octets</strong> (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>), l'<strong class="specialPB">adresse</strong> <code class="cmd"><span style="color:gray;">0x</span>101</code> contient l'octet de poids fort <code>0000 0111</code> de sa valeur <code class="prettyprint lang-c">2047</code> (en effet, 2047 = 2048 − 1 = 2<sup>11</sup> − 1 et s'écrit <code>111  1111 1111</code> en binaire).</li>
+</ul>
+
+<p class="square"> L'<strong class="specialPB">adresse</strong> <strong class="defin">immédiatement consécutive</strong> à <code class="prettyprint lang-c">&a</code> est codable par l'<strong>expression</strong> <code class="prettyprint lang-c">&a + 1</code> et vaut ici <code class="cmd"><span style="color:gray;">0x</span>102</code>. Il apparaît donc clairement que les valeurs rendues par l'opérateur d'adresse <code class="prettyprint lang-c">&</code> n'obéissent pas aux règles usuelles de calcul sur les entiers. Cette <strong class="title">arithmétique spécifique</strong> aux pointeurs est détaillée plus loin. </p>
+</div><!-- display -->
+
+<p> De plus : </p>
+<ul>
+  <li> si la <strong>variable</strong> <code class="prettyprint lang-c">a</code> avait été <strong class="specialO">déclarée localement</strong> dans la fonction <code class="prettyprint lang-c">setup</code>, elle se serait vu attribuer l'adresse <code><span style="color:gray;">0x</span>8F6</code> (2294 en décimal) ; cette adresse est située à l'extrémité haute de la zone de mémoire dynamique alloué au programme, et correspond à l'emplacement réservé pour l'exécution de la fonction <code  class="prettyprint lang-c">setup</code> dans la <strong class="specialDGr">pile</strong> ;</li>
+
+  <li> si la <strong>variable</strong> <code  class="prettyprint lang-c">a</code> était locale mais déclarée de classe <strong class="specialO">statique</strong> (cf. chap. C4‑II <a class="external" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeAllocation" target="_BLANK"></a>), alors elle obtiendrait l'adresse <code><span style="color:gray;">0x</span>100</code> comme si elle était globale. </li>
+</ul>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3 id="operDeref"> Opérateur unaire de déréférencement <code class="prettyprint lang-c">*</code></h3>
+
+
+
+<div class="important" style="display: inline-block">
+  <img class="top-right" src="../img/operateurDeref.png" width="320px" style="margin-top:0.2em">
+<p> Dans une code source, pour désigner la <strong class="specialLGr">valeur</strong> contenue dans la mémoire à une <strong class="specialPB">adresse</strong> d'une donnée, les langages <strong>C</strong> et  <strong>C++</strong> fournissent l'<strong class="title">opérateur de déréférencement</strong></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Opérateur_de_déréférencement" target="_BLANK">W</a> (en anglais, <em class="english">dereference operator</em>), appelé aussi opérateur d'<strong class="title">indirection</strong>, dont le symbole est <code class="prettyprint lang-c">*</code>. </p>
+
+<p> Comme l'opérateur d'adresse, c'est un <strong>opérateur</strong> <strong class="defin">unaire</strong> qui a le <strong class="defin">rang 2</strong> de <strong>priorité</strong>  (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>) et un <strong>sens d'associativité</strong> de <strong class="defin">droite à gauche</strong>. </p>
+</div><!-- important -->  
+
+<div class="complement">
+<p> L'<strong class="title">opérateur de déréférencement</strong> ne s'applique <strong class="warning">pas</strong> à <strong>n'importe quelle expression</strong>, mais seulement à celles dont la valeur est une adresse, typiquement des <strong class="defin">pointeurs</strong> (cf. infra <a class="infra" href="Cc5-1_pointeursgeneralites.html#declarationPointeur" target="_BLANK"></a>). </p> 
+
+<p> En conséquence, lorsque l'opérateur de déréférencement s'applique à un <strong class="defin">simple identificateur</strong>, il est <strong class="cons">inutile</strong> d'encapsuler ce dernier dans des <strong>parenthèses</strong>, par exemple comme <code>*(p)</code>. </p>
+
+<p> Par ailleurs,  les <strong class="title">expressions </strong><code class="prettyprint lang-c">*p</code> et <code class="prettyprint lang-c">* p</code> sont syntaxiquement <strong class="defin">équivalentes</strong> (en vertu du format libre des langages <em>C</em> et  <em>C++</em>). Néanmoins, la <strong>première forme</strong> est usuellement <strong class="pros">préférée</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons l'exemple supra <a class="supra" href="Cc5-1_pointeursgeneralites.html#notionAdresse"></a> de la variable déclarée <code class="prettyprint lang-c">int a = 2047;</code>. </p>
+
+<p> L'expression <code class="prettyprint lang-c">&a</code> prend pour valeur l'adresse de <code class="prettyprint lang-c">a</code>, donc l'<strong class="title">expression</strong> <code class="prettyprint lang-c">*(&a)</code> – qui se code tout simplement <code class="prettyprint lang-c">*&a</code> – prend la valeur courante encodée à cette adresse, c'est‑à‑dire tout simplement la <strong class="specialLGR">valeur</strong> de la variable <code class="prettyprint lang-c">a</code>, ici <code class="prettyprint lang-c">2047</code>. </p>
+</div><!-- exemple -->
+
+<div class="complement">
+<p> Plus généralement, sachant que les <strong class="title">opérateurs</strong> <code class="prettyprint lang-c">*</code> et <code class="prettyprint lang-c">&</code> sont <strong class="defin">réciproques</strong>, on peut considérer que : </p>
+<ul>
+  <li> les <strong>expressions</strong> <code class="prettyprint lang-c">*&a</code> et <code class="prettyprint lang-c">a</code> sont <strong>équivalentes</strong> ; </li>
+
+  <li> les <strong>expressions</strong> <code class="prettyprint lang-c">&*p</code> et <code class="prettyprint lang-c">p</code> sont <strong>équivalentes</strong>. </li>
+</ul>
+
+
+
+   </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Plus précisément, l'<strong class="title">opérateur de déréférencement</strong> ne s'applique <strong class="warning">pas</strong> à <strong>n'importe quelle valeur d'adresse</strong> : encore faut‑il déjà que cette dernière correspondent à celle d'un <strong class="defin">identificateur déclaré</strong>. </p>
+
+<p> Pour bien comprendre cette subtilité, reprenons l'exemple précédent dans l'environnement <strong class="Arduino">Arduino</strong> : </p>
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/adressesSRAMa.png" width="300px">
+
+<ul>
+  <li> l'adresse <code class="cmd"><span style="color:gray;">0x</span>101</code> ne correspond pas à – on dit ne <strong>pointe</strong> pas sur – une donnée déclarée ; l'expression <code class="grey">*0x101</code> n'aurait donc aucun sens ; </li>
+
+  <li> et de toute façon, même l'<strong>expression</strong> <code class="grey">*0x100</code> <strong class="warning">ne peut pas être employée</strong> dans un code source puisque, rappelons‑le, l'adresse <code class="cmd"><span style="color:gray;">0x</span>101</code> n'est attribuée seulement lors de la compilation (si la donnée est de classe statique) ou de l'exécution (si la donnée est de classe automatique). </li>
+</ul>
+</div><!-- display -->
+
+<p> <strong>En conclusion</strong>, l'opérateur de déréférencement ne peut a priori s'appliquer qu'à une expression qui pointe sur une donnée déclarée, c'est‑à‑dire un <strong class="defin">pointeur</strong>… </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- relecture partielle avril 2023 - ajouter des figures -->
+
+
+<h2 id="lesPointeurs"> Les pointeurs  –  déclarations et caractéristiques </h2>
+
+
+
+<p> La simplicité de la définition générale donnée en introduction (« un pointeur est une donnée dont la valeur est une adresse ») ne doit pas tromper. La <strong class="title">notion de pointeur</strong> en langages <strong>C</strong> et <strong>C++</strong> est <strong class="warning">pleine de subtilités</strong>, à l'image de la syntaxe pour la mettre en œuvre. Pour en maîtriser l'usage, il est indispensable de comprendre et connaître tous les aspects détaillés ci‑après. </p>
+
+
+
+<h3 id="declarationPointeur"> Déclaration générale d'un pointeur de donnée </h3>
+
+
+<div class="important">
+<p> Quel que soit le <strong class="specialG">type</strong> <strong>de donnée</strong> considéré, élémentaire ou dérivé, on peut <strong class="title">déclarer une donnée de type pointeur</strong> <strong>de ce</strong> <strong class="specialG">type</strong> via la syntaxe simple suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> * <span class="nocode"><strong class="specialN">identificateur</strong></span> <span class="nocode" style="color: darkgrey; font-style: normal;">[</span>=
+    <span class="nocode"><strong>expression</strong><span style="color: darkgrey; font-style: normal;">]</span></span>;</code>
+</span> <br>
+où optionnellement, on peut coder l'affectation d'une <strong>valeur initiale</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Précisons cette syntaxe. </p>
+<div style="display: inline-block;">  
+    <img class="top-right" src="../img/pointeurOperateurs.png" width="400px" style="margin-top: 0.5em"> 
+<ul>
+  <li> Le <strong class="specialG">descripteur de type</strong> spécifie le <strong class="specialG">type</strong> de <strong>données</strong> sur lesquelles le pointeur déclaré est destiné <strong class="defin">à pointer</strong>. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Il peut s'agir d'un <strong>type élémentaire</strong> ou <strong>dérivé</strong>, anonyme ou non, et son descripteur peut inclure le modificateur <code class="prettyprint lang-c">const</code>. </div>
+  </div><!-- expert -->
+
+  <li> L'<strong class="specialN">identificateur</strong> désigne <strong class="defin">le pointeur</strong> ainsi déclaré. C'est une <strong>nouvelle donnée</strong> dans le programme, avec toutes les caractéristiques d'une donnée (type, identificateur, valeur, adresse).</li>
+
+  <li> Le <strong>symbole</strong> <code class="prettyprint lang-c">*</code> n'est <strong class="warning">pas l'opérateur de déréférencement</strong> . C'est un <strong class="defin">symbole déclaratif</strong> qui permet de composer toutes sortes de <strong class="specialG">descripteurs de types de pointeurs</strong>.   </li>
+
+  <li> L'<strong>expression</strong> (facultative) affecte une <strong>valeur initiale</strong> au pointeur déclaré. Elle doit nécessairement prendre une valeur d'<strong class="specialPB">adresse</strong> : </li>
+
+  <ul>
+    <li> soit l'<strong>adresse d'une donnée</strong> « ordinaire » (pas un pointeur) via l'<strong class="defin">opérateur d'adresse</strong> <code class="prettyprint lang-c">&</code>, </li>
+
+    <li> soit la valeur d'un <strong>autre pointeur</strong> (éventuellement incrémenté ou décrémenté). </li>
+  </ul>
+</ul>
+<p> À la suite d'une déclaration de cette forme, l'<strong>expression</strong> <code class="prettyprint lang-c">*<span class="nocode"><strong class="specialN">identificateur</strong></span></code> formée avec l'<strong class="defin">opérateur de déréférencement</strong> est une <strong class="specialM">l‑value</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#syntaxeAffectation" target="_BLANK"></a>). </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<div id="exempleDeclarationPointeur" class="exemples">
+<p class="exemple"> Considérons les deux <strong class="title">déclarations académiques</strong> suivantes : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int number = 5;
+int * pointer = &number;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> La <strong>ligne nº 2</strong> est la déclaration d'une variable nommée <code class="prettyprint lang-c">pointer</code> (le symbole <code class="prettyprint lang-c">*</code> n'est pas inclus dans cet identificateur) telle que : </p>
+
+<ul>
+  <li> le <strong class="specialG">type</strong> de cette variable est « <strong>pointeur d'entier standard</strong> » – son descripteur est <code class="prettyprint lang-c">int*</code> (le symbole <code class="prettyprint lang-c">*</code> est bien inclus dans ce descripteur) ; </li>
+
+  <li> la <strong>valeur initiale</strong> de cette variable est l'<strong class="specialPB">adresse</strong> de la variable <code class="prettyprint lang-c">number</code>.</li>
+</ul>
+
+<p class="square"> À la suite de cette déclaration, tant que la variable <code class="prettyprint lang-c">pointer</code> n'aura pas fait l'objet d'une autre affectation, l'<strong class="title">expression</strong> <code class="prettyprint lang-c">*pointer</code> (composée avec l'opérateur de déréférencement) prendra la <strong class="specialLGr">valeur courante</strong> de la variable <code class="prettyprint lang-c">number</code> (c'est‑à‑dire <code class="prettyprint lang-c">5</code> pour le moment) et suivra les affectations ultérieures dont <code class="prettyprint lang-c">number</code> pourrait faire l'objet. Ainsi, en codant par la suite : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:3">
+number = 0;
+printf("%d\n", *pointer);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> on obtient lors de l'exécution l'affichage <code class="displayDark">0</code>. </p>
+
+<p> De plus, l'<strong class="title">expression</strong> <code class="prettyprint lang-c">*pointer</code> est une <strong class="specialM">l‑value</strong>, donc si par exemple on code ensuite : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+*pointer = 3;
+printf("%d\n", number);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> on obtient lors de l'exécution l'affichage <code class="displayDark">3</code> et  ainsi, on observe que la variable <code class="prettyprint lang-c">number</code> a été <strong class="defin">modifiée par l'intermédiaire de</strong> <code class="prettyprint lang-c">pointer</code>. Autrement dit, tant qu'aucune affectation ne vient changer la valeur initiale de <code class="prettyprint lang-c">pointer</code> (c'est‑à‑dire l'adresse sur laquelle il pointe), l'<strong class="title">expression</strong> <code class="prettyprint lang-c">*pointer</code> permet d'<strong class="defin">accéder aux valeurs</strong> de la variable <code class="prettyprint lang-c">number</code>, aussi bien en <strong class="defin">lecture</strong> qu'en <strong class="defin">écriture</strong>. On peut donc dire qu'elle en constitue un <strong class="title">alias</strong> – du moins temporairement…</p>
+
+<p class="square"> Car si par la suite on code : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+int otherNumber = 10;
+pointer = &otherNumber;
+printf("%d\n", *pointer);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors on obtient lors de l'exécution l'affichage <code class="displayDark">10</code>. En effet, l'<strong class="title">expression</strong> <code class="prettyprint lang-c">*pointer</code> suit maintenant la <strong class="specialLGr">valeur</strong> de la <strong>variable</strong> <code class="prettyprint lang-c">otherNumber</code> et non plus celle de <code class="prettyprint lang-c">number</code>. La <strong>valeur</strong> du pointeur <code class="prettyprint lang-c">pointer</code> a changé ! </p>
+
+<p> De même, on peut changer la valeur d'un pointeur en lui affectant celle d'un autre pointeur déjà déclaré, par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+int * otherPointer = &number;
+pointer = otherPointer;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> de sorte que maintenant, le pointeur <code class="prettyprint lang-c">pointer</code> pointe à nouveau sur la variable <code class="prettyprint lang-c">number</code>. </p>
+
+<p> <strong>En conclusion</strong>, on voit que l'on peut très facilement <strong class="title">changer de variable pointée</strong> par un pointeur avec un <strong class="defin">autre pointeur</strong>. C'est donc un <strong class="pros">outil très polyvalent</strong> et on verra qu'il est particulièrement commode pour accéder aux différents champs d'une donnée structurée (tableau, chaîne de caractère, etc.).  </p>
+</div><!-- exemple -->
+
+
+
+<h4> Choix du format de déclaration </h4>
+
+
+<div class="important"> 
+<p>  Dans la <strong>déclaration d'un pointeur</strong>, les <strong class="title">caractères d'espacement</strong> autour du <strong>symbole</strong> <code class="prettyprint lang-c">*</code> (qui, rappelons‑le, n'est pas l'opérateur de déréférencement) n'ont <strong class="defin">aucune importance syntaxique</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> <strong>Syntaxiquement</strong>, les quatre déclarations ci‑dessous sont <strong class="defin">équivalentes</strong> : </p>
+
+<ol class="numbered">
+  <li> <code class="prettyprint lang-c">int * p = &a;</code> </li>
+
+  <li> <code class="prettyprint lang-c">int* p  = &a;</code> </li>
+
+  <li> <code class="prettyprint lang-c">int *p  = &a;</code> </li>
+
+  <li> <code class="prettyprint lang-c">int*p   = &a;</code> </li>
+</ol>
+<p> mais en termes de lisibilité et de robustesse, le <strong>format nº 1</strong> est <strong class="pros">à privilegier</strong>. </p>
+
+<div class="expert">
+<p> En effet, dans le cadre de déclarations plus complexes, les formats de codage ci‑dessus ne sont <strong class="warning">pas équivalents</strong>. Dans l'exemple supra : </p>
+
+<ul>
+  <li> Le <strong>format nº 2</strong> qui « colle » le symbole <code class="prettyprint lang-c">*</code> au descripteur de type <code class="prettyprint lang-c">int</code> met bien en évidence le fait que la variable déclarée est de type <strong>pointeur d'entier</strong> (<code class="prettyprint lang-c">int*</code>). En revanche : </li>
+  <ul>
+    <li> ce format devient moins « clair » si le <strong class="specialG">descripteur de type</strong> est composé de <strong>plusieurs mots‑clef</strong>, qui sont nécessairement séparés par au moins un espace ; par exemple, dans <code class="prettyprint lang-c">unsigned int*</code>, le symbole <code class="prettyprint lang-c">*</code> s'applique à <code class="prettyprint lang-c">unsigned int</code> et non <strong class="warning">pas seulement</strong> à <code class="prettyprint lang-c">int</code> ; </li>
+
+    <li> de format  n'est pas « compatible » avec l'<strong>opérateur séquentiel</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#operateurSequentiel" target="_BLANK"></a>) ; en effet, si l'on code : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int a = 5, b = 3;
+int* p = &a, q = &b; // inconsistent initializer!
+</pre>
+<!---------- ne pas indenter ---------->
+
+    on obtient une <strong class="warning">erreur</strong> – ou a minima un <strong class="specialO">avertissement</strong> – de compilation, car la variable <code class="prettyprint lang-c">q</code> est en fait ici déclarée de type <code class="prettyprint lang-c">int</code> et non <strong class="warning">pas</strong> <code>int*</code> ; dès lors, l'initialisation <code class="prettyprint lang-c">q = &b;</code> est inconsistante ; syntaxiquement, il faut donc coder : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:2">
+int* p = &a, *q = &b; // OK, but not easy to read
+</pre>
+<!---------- ne pas indenter ---------->
+
+    où le symbole <code class="prettyprint lang-c">*</code> est associé à l'<strong class="specialN">identificateur</strong>, et non <strong class="warning">pas</strong> au <strong class="specialG">descripteur de type</strong> de la variable déclarée. </li>
+  </ul>
+
+  <li> Le <strong>format nº 3</strong> qui « colle » le symbole <code class="prettyprint lang-c">*</code> à l'<strong class="specialN">identificateur</strong> du pointeur est donc plus satisfaisant, mais il peut induire en erreur un codeur débutant pour les <strong>affectations ultérieures</strong> à la déclaration d'un pointeur ; en effet, si on souhaite changer la valeur de <code class="prettyprint lang-c">p</code> (c'est‑à‑dire l'adresse sur laquelle il pointe), il faut coder par exemple <code class="prettyprint lang-c">p = &b;</code> et <strong class="warning">surtout pas</strong> <code class="grey">*p = &b;</code> – affectation qui est inconsistante puisque, par déréférencement, <code class="prettyprint lang-c">*p</code> est de type <code class="prettyprint lang-c">int</code>, donc on ne peut lui affecter une adresse. </li>
+
+  <li> Quant au <strong>format nº 4</strong>, il n'est évidemment pas satisfaisant, car <strong class="warning">trop tassé</strong> (cf. les recommandations d'aération horizontale du code, chap. C2‑IX <a class="preivous" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#aeration" target="_BLANK"></a>). </li>
+
+  <li> En définitive, le <strong>format nº 1</strong> avec <strong class="defin">un espace de part et d'autre</strong> du symbole <code class="prettyprint lang-c">*</code> est sans doute <strong class="pros">le plus satisfaisant</strong>. Dans le cas d'une déclaration séquentielle, il doit être employé comme ci‑dessous :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:2">
+int * p = &a, * q = &b; // much better!
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ul>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3> Type d'un pointeur  –  déclaration d'un type synonyme </h3>  
+
+
+
+<div class="important">
+<p> Le <strong class="title">type</strong> d'un <strong class="specialLB">pointeur</strong> (variable ou constant) est un <strong class="defin">type dérivé</strong> du <strong class="specialG">type</strong> des <strong>données</strong> qu'il peut pointer. </p>
+
+<p> Son <strong class="defin">descripteur</strong> se code en ajoutant le <strong>symbole suffixe</strong> <code class="prettyprint lang-c">*</code> au <strong class="specialG">descripteur de type</strong> des données pointées, c'est‑à‑dire de la forme :  </p>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> *</code>
+</span> 
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Le descripteur <code class="prettyprint lang-c">unsigned int *</code> code un type de <strong class="specialLB">pointeur</strong> sur des <strong>entiers standards non signés</strong>. </p>
+</div><!-- exemple -->
+
+
+<h4> Déclaration d'un type synonyme de pointeur </h4>
+
+
+<div class="complement">
+<p> Rappelons qu'en langages <strong>C</strong> et <strong>C++</strong>, on peut déclarer un<strong class="title"> type synonyme</strong> de n'importe quel type, élémentaire ou dérivé, à l'aide du mot‑clef <code class="prettyprint lang-c">typedef</code> (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typedef" target="_BLANK"></a>). </p>
+
+<p> Lorsqu'on déclare un type synonyme d'un type de pointeur, il est d'usage de <strong>préfixer son identificateur</strong> par la lettre <code class="prettyprint lang-c">P</code> majuscule (puisqu'il s'agit d'un identificateur de type) pour en signaler la « nature ». </p>
+</div><!-- complement -->
+
+<div class="exemples"> 
+<p class="exemple"> Le code ci‑dessous déclare comme synonyme de <code class="prettyprint lang-c">unsigned int *</code> le type <code class="prettyprint lang-c">P_uint</code>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+typedef unsigned int * P_uint;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Cet identificateur <code class="prettyprint lang-c">P_uint</code> peut alors être directement employé comme descripteur de type pour déclarer des pointeurs. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:2">
+int a = 5, b = 3;
+P_uint p = &a, q = &b;
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h3 id="constantVSlectureSeule"> Pointeur constant <em>versus</em> pointeur en « lecture seule » </h3>
+
+
+<div class="complement">
+<p> Dans une forme syntaxique plus générale de la <strong class="title">déclaration d'un pointeur</strong>, le mot‑clef <code class="prettyprint lang-c">const</code> peut apparaître en <strong class="defin">deux positions</strong>. Il importe de distinguer ce qu'implique chacun des cas, sachant qu'ils peuvent éventuellement être combinés, c'est‑à‑dire qu'il y ait <strong>deux occurrences</strong> du mot-clef <code class="prettyprint lang-c">const</code> dans la même déclaration. </p>
+</div><!-- complement -->
+
+
+<h4  id="pointeurConstant"> Pointeur constant </h4>
+
+
+<div class="important">
+<p> Une déclaration de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> * const
+    <span class="nocode"><strong class="specialN">identificateur</strong></span> =
+    <span class="nocode"><strong>expression</strong></span>
+  </code>
+</span> <br>
+déclare un <strong class="title">pointeur constant</strong> au sens où sa <strong>valeur</strong> – l'<strong class="specialLB">adresse</strong> de la donnée sur laquelle il pointe –  n'est <strong class="warning">pas modifiable</strong>. Elle est fixée par l'<strong>expression</strong> d'initialisation, laquelle est <strong>obligatoire</strong> dans la déclaration. </p>
+</div><!-- important --> 
+
+<div class="complement">
+<p> En revanche, même si un pointeur <code class="prettyprint lang-c">p</code> est déclaré <strong class="title">constant</strong>, si la donnée qu'il pointe est une <strong class="defin">variable</strong>, alors l'expression <code class="prettyprint lang-c">*p</code> : </p>
+
+<ul>
+  <li> est <strong>susceptible de varier</strong> au gré des changement de valeur de cette variable ; </li>
+
+  <li> peut faire l'objet d'<strong>affectations</strong> dont elle est la <strong>l-value</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Après les déclarations : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+int a = 5, b = 3;
+int * const p = &a;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<ul>
+  <li> il n'est <strong class="warning">pas possible</strong> de coder (dans une fonction, <code class="prettyprint lang-c">main</code> ou autre) une instruction comme <code class="grey">p = &b;</code> puisque <code class="prettyprint lang-c">p</code> est un <strong class="title">pointeur constant</strong> ;   </li>
+
+  <li> en revanche, il est <strong class="defin">possible</strong> de coder <code class="prettyprint lang-c">*p = 1;</code> pour changer la valeur de la variable <code class="prettyprint lang-c">a</code>. </li>
+</ul>
+</div><!-- exemple -->
+
+
+<h4  id="pointeurLectureSeule"> Pointeur en « lecture seule » </h4>
+
+
+<div class="important">
+<p> Une déclaration de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">const
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> *
+    <span class="nocode"><strong class="specialN">identificateur</strong></span>
+    </span> <span class="nocode" style="color: darkgrey; font-style: normal;">[</span>=
+    <span class="nocode"><strong>expression</strong><span style="color: darkgrey; font-style: normal;">]</span></span>;</code>
+  </code>
+</span> <br>
+déclare un <strong class="title">pointeur en « lecture seule »</strong> au sens où il ne peut <strong class="warning">pas modifier</strong> la <strong class="specialGr">valeur</strong> de la donnée sur laquelle il pointe. </p>
+</div><!-- important --> 
+
+<div class="complement">
+<p> Autrement dit, si l'on déclare un pointeur <code class="prettyprint lang-c">p</code> en <strong class="title">« lecture seule »</strong>, il n'est pas possible de coder une instruction de la forme <code class="prettyprint lang-c">*p = <span class="nocode"><strong>expression</strong></span>;</code>. </p>
+
+<p> En revanche, la donnée sur laquelle <code class="prettyprint lang-c">p</code> pointe peut être une <strong class="defin">variable</strong>. Dans ce cas, elle peut elle‑même faire l'objet d'<strong>affectations</strong>, avec pour conséquence des changement de valeur de l'expression <code class="prettyprint lang-c">*p</code>, qui n'est donc <strong class="warning">pas constante</strong>. </p>
+
+<p> De plus, contrairement à un pointeur constant, un pointeur en <strong class="title">« lecture seule »</strong> peut changer de valeur, c'est‑à‑dire de donnée pointée. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Après les instructions : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+int main(void) {
+  int a = 5, b = 3;
+  const int * p = &a;
+</pre>
+<!---------- ne pas indenter ---------->
+<ul>
+  <li> il n'est <strong class="warning">pas possible</strong> de coder une instruction comme <code class="grey">*p = 1</code> puisque <code class="prettyprint lang-c">p</code> est en <strong class="title">« lecture seule »</strong> ;   </li>
+
+  <li> en revanche, il est <strong class="defin">possible</strong> de coder <code class="prettyprint lang-c">a = 1;</code> ou encore <code class="prettyprint lang-c">p = &b;</code> c'est‑à‑dire deux instructions qui font changer la valeur de l'expression <code class="prettyprint lang-c">*p</code>. </li>
+</ul>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Opérations sur les pointeurs  –  arithmétique spécifique </h2>
+
+
+<div class="complement">
+<p> Rappelons que même si une <strong class="specialLB">adresse</strong> mémoire est représentée par un <strong>nombre entier positif</strong>, la valeur d'un pointeur n'est pas assimilée à un type entier (comme <code>unsigned long</code> ou autre). En langages <strong>C</strong> et <strong>C++</strong>, un <strong class="title">pointeur</strong> est forcément d'un <strong class="specialO">type dérivé</strong> du type de données qu'il pointe : par exemple <code class="prettyprint lang-c">int*</code>, <code class="prettyprint lang-c">char*</code>, <code class="prettyprint lang-c">float*</code>, etc. </p>
+
+
+<p> Il en résulte qu'a priori, on ne devrait pas pouvoir appliquer aux pointeurs les opérateurs de calcul sur les entiers. La force des langages <strong>C</strong> et <strong>C++</strong> consiste à <strong class="pros">surcharger les symboles</strong> : </p>
+
+<ul>
+  <li> des <strong>opérateurs arithmétiques</strong> binaires <code class="prettyprint lang-c">+</code> et <code class="prettyprint lang-c">-</code>, </li>
+
+  <li> ainsi que des <strong>opérateurs à affectation composée</strong> <code class="prettyprint lang-c">++</code>, <code class="prettyprint lang-c">--</code>, <code class="prettyprint lang-c">+=</code>, <code class="prettyprint lang-c">-=</code> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#compoundOperators" target="_BLANK"></a>), </li>
+</ul>
+
+<p>  pour pouvoir les appliquer aux <strong class="title">pointeurs</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Toutefois, certaines opérations comme l'<strong class="cons">addition</strong> de deux pointeurs (c'est‑à‑dire deux adresses) – sans parler de la <strong class="cons">multiplication</strong> ni de la <strong class="cons">division</strong> – n'auraient <strong class="warning">aucun sens !</strong> </p>
+
+<p> Les seules opérations valides sont les <strong class="defin">incrémentations</strong> et <strong class="defin">décrémentations</strong> – éventuellement <strong>multiples</strong> – ainsi que la <strong class="defin">soustraction</strong>. De plus, ces opérations obéissent à une <strong class="warning">arithmétique spécifique</strong>, dont le codeur débutant doit prendre pleinement conscience. </p>
+</div><!-- important -->
+
+
+
+<h3 id="arithmetique"> Opérations arithmétiques sur les pointeurs </h3>
+
+
+
+<div class="important">
+<p>  Si on déclare un pointeur avec une adresse initiale comme ci‑dessous  : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> * p =
+    <span class="nocode"><strong>adresse</strong></span>;
+  </code>
+</span> <br>
+alors l'instruction d'<strong class="title">incrémentation unitaire</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">p++;</code>
+</span> <br>
+augmente la valeur de <code class="prettyprint lang-c">p</code> (l'<strong>adresse</strong> qu'il pointe) d'un nombre égal à <code class="prettyprint lang-c">sizeof(<span class="nocode"><strong class="specialG">descripteur de type</strong></span>)</code>, c'est‑à‑dire de la <strong class="specialLG">taille</strong> du <strong class="specialG">type</strong> de données pointées par <code class="prettyprint lang-c">p</code>  (donc, le <strong>nombre d'octets</strong> nécessaires au stockage d'une donnée – cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#sizeof" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Par un principe similaire, la <strong class="title">décrémentation unitaire</strong> <code class="prettyprint lang-c">p--</code> diminue de la valeur de <code>p</code> de la <strong class="specialLG">taille</strong> du <strong class="specialG">type</strong> de données qu'il pointe. </p>
+
+<p> Et plus généralement : </p>
+<ul>
+  <li> l'itération <strong class="defin">n</strong> <strong>fois</strong> d'une incrémentation de <code class="prettyprint lang-c">p</code>, codée <code class="prettyprint lang-c">p += <span class="nocode"><strong class="defin">n</strong></span></code> augmente la valeur de <code class="prettyprint lang-c">p</code> de <strong class="defin">n</strong> fois la <strong class="specialLG">taille</strong> du <strong class="specialG">type</strong> de données qu'il pointe ; </li>
+
+  <li> l'itération <strong class="defin">n</strong> <strong>fois</strong> d'une décrémentation de <code class="prettyprint lang-c">p</code>, codée <code class="prettyprint lang-c">p -= <span class="nocode"><strong class="defin">n</strong></span></code> diminue la valeur de <code class="prettyprint lang-c">p</code> de <strong class="defin">n</strong> fois la <strong class="specialLG">taille</strong> du <strong class="specialG">type</strong> de données qu'il pointe. </li>
+</ul>
+
+<p> <strong class="warning">Attention</strong>, avec des données hétérogènes, rien ne garantit que l'<strong>adresse</strong> pointée après incrémentation ou décrémentation d'un pointeur soit celle d'une donnée déclarée <strong class="defin">compatible</strong> avec le type des données qu'il pointe. Le déréférencement du pointeur peut alors n'avoir <strong class="cons">aucun sens</strong> dans la mesure où il interprète dans un type une zone de la mémoire réservée au stockage d'une donnée d'un autre type. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Observons justement ce qui se passe avec des <strong class="warning">données hétérogènes</strong>. Simulé dans l'environnement <strong class="Tinkercad">Tinkercad</strong>, le programme <strong class="Arduino">Arduino</strong> ci‑dessous affiche dans la fenêtre du moniteur série les <strong>valeurs indiquées en commentaires</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+uint8_t   a = 8;
+uint8_t * p = &a;
+uint16_t  b = 256;
+
+void setup(){
+  Serial.begin(9600);
+  Serial.println("Adr Val");
+
+  Serial.print(int(&a), HEX); Serial.print(" "); // 100 (address of a)
+  Serial.println(a);                             //   8 (expected value of a)
+
+  Serial.print(int(&b), HEX); Serial.print(" "); // 103 (address of b)
+  Serial.println(b);                             // 256 (expected value of b)
+
+  p += 3;
+  Serial.print(int(p), HEX);  Serial.print(" "); // 103 (new address of p)
+  Serial.println(*p);                            //   0 (nonsense value!)
+}
+
+void loop(){}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Après exécution de l'incrémentation <code class="prettyprint lang-c">p += 3</code> (ligne nº 15), l'expression <code class="prettyprint lang-c">*p</code> prend la valeur <code class="prettyprint lang-c">0</code> car à l'adresse <code><span style="color:gray;">0x</span>103</code> se trouve l'<strong>octet de poids faible</strong> du mot de 16 bits qui encode en binaire naturel l'entier <code class="prettyprint lang-c">256</code> (la valeur de la variable <code class="prettyprint lang-c">b</code>). En effet, cette valeur se code <code>1 0000 0000</code> en binaire naturel, donc : </p>
+
+<ul>
+  <li> <code>0000 0000</code> sur l'octet d'adresse <code><span style="color:gray;">0x</span>103</code>, </li>
+
+  <li> <code>0000 0001</code> sur l'octet d'adresse <code><span style="color:gray;">0x</span>104</code>. </li>
+</ul>
+
+<p> Le déréférencement de <code class="prettyprint lang-c">p</code> ne correspond donc pas à une donnée stockée, mais seulement une partie de celle‑ci ! </p>
+</div><!-- exemple -->
+
+
+<div class="important">
+<p> <strong>En règle générale</strong>, les <strong class="title">opérations arithmétiques</strong> sur les <strong class="specialLB">pointeurs</strong> sont donc réservées :</p>
+
+<ul>
+  <li> aux <strong class="defin">pointeurs d'octets</strong> ou de <strong class="defin">caractères étendus</strong>, pour scanner une zone de la mémoire vive, un fichier, un flux d'entrées-sorties… ;  </li>
+
+  <li> ou aux <strong class="defin">structures de données homogènes</strong>, c'est‑à‑dire de <strong class="pros">même type</strong> – <strong>tableaux</strong>, <strong>fichiers</strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="expert">
+<h4 id="soustrationPointeurs"> Soustraction entre deux pointeurs dans un tableau </h4>
+
+
+<div class="complement">
+<p> Les langages <strong>C</strong> et <strong>C++</strong> autorisent également d'opérer une <strong class="title">soustraction</strong> entre <strong class="specialLB">deux pointeurs</strong> de <strong class="title">même type</strong> – ce qui est tout particulièrement le cas dans un <strong class="defin">tableau</strong> de données (cf. chap. C5‑III <a class="next" href="Cc5-3_tableauxDeclarations.html" target="_BLANK"></a>). </p>
+
+<ul>
+  <li> La soustraction entre deux pointeurs de même type calcule le <strong class="defin">nombre de données</strong> <strong>entre les adresses pointées</strong> par ces deux pointeurs, avec un <strong class="warning">signe</strong> (c'est‑à‑dire, éventuellement négatif). </li>
+
+  <li> Ce <strong class="defin">résultat</strong> est une valeur de type <code class="prettyprint lang-c">ptrdiff_t</code> <a class="external" href="https://en.cppreference.com/w/c/types/ptrdiff_t" target="_BLANK">C</a> – un <strong class="warning">type spécial</strong> défini dans le fichier d'en-tête <code class="filename">stddef.h</code> de la bibliothèque standard du langage <strong>C</strong> (<code class="filename">cstddef</code> en  <strong>C++</strong>), au même titre que <code class="prettyprint lang-c">size_t</code> (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#size_t" target="_BLANK"></a>). </li>
+
+  <div class="nobullet"> Dans les <strong>entrées‑sorties standards</strong> (cf. chap. C2‑VI <a class="previous" href="../C2-Elementslangage/Cc2-6_entreesSortiesStandards.html#specificationsConversion" target="_BLANK"></a>, les valeurs de types <code class="prettyprint lang-c">ptrdiff_t</code> sont compatibles avec la <strong class="specialDR">spécification de conversion</strong> <code class="cmd">%d</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Le type <code class="prettyprint lang-c">ptrdiff_t</code> dépend de la <strong>machine cible</strong>. Si cette dernière possède une grande mémoire vive (plus de 4 Go), une valeur de ce type ne peut pas être convertie en entier standard signé <code class="prettyprint lang-c">int</code>, car l'étendue des valeurs codable dans ce type se borne à seulement 2 milliards environ (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>). </p>
+
+<p> Pour pouvoir être exploitée (calcul, affichage, etc.) sur une telle machine, une valeur de type <code class="prettyprint lang-c">ptrdiff_t</code> doit donc être convertie dans un type plus grand, comme <code class="prettyprint lang-c">long long</code>. </p>
+</div><!-- remarque -->
+
+<p> La pratique des soustractions de pointeurs sera étudiée au chapitre C5‑IV <a class="next" href="Cc5-4_tableauxManipulations.html#nbElementsEntreDeux" target="_BLANK"></a> consacré à la manipulation des tableaux. </p>
+</div><!-- expert -->
+
+
+
+<h3> Opérateurs de comparaison entre pointeurs </h3>
+
+
+
+<div class="expert">
+<p> Comme les <strong class="specialLB">adresses</strong> sont, d'un <strong class="defin">point de vue mathématique</strong>, des <strong>nombres entiers</strong>, il est parfaitement possible de concevoir sur leur ensemble les <strong class="title">relations d'ordre total</strong> usuelles, que l'on note respectivement « <em class="bold"><</em> » et « <em class="bold">></em> ». </p>
+</div><!-- expert -->
+
+
+<div class="important">
+<p>  Tous les <strong class="title">opérateurs de comparaison</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-Elementslangage/Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a>) des langages <strong>C</strong> et <strong>C++</strong> s'appliquent aux <strong class="specialLB">pointeurs</strong>, à condition qu'ils soient de <strong class="defin">même type</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ici, on ne peut pas parler de surcharge car il n'y a <strong class="specialO">aucune différence conceptuelle</strong> entre l'application des opérateurs de comparaison aux entiers et aux pointeurs. Si <code class="prettyprint lang-c">p</code> et <code class="prettyprint lang-c">q</code> sont <strong>deux pointeurs</strong> de <strong class="defin">même type</strong> :  </p>
+
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">p == q</code> est <strong>non nulle</strong> – c'est‑à‑dire <strong>vraie</strong> – si et seulement si <code class="prettyprint lang-c">p</code> et <code class="prettyprint lang-c">q</code> ont la <strong>même valeur</strong>, autrement dit s'ils pointent sur la <strong class="specialLB">même adresse</strong> ;  </li>
+
+  <li> l'expression <code class="prettyprint lang-c">p > q</code> est <strong>non nulle</strong> – c'est‑à‑dire <strong>vraie</strong> – si et seulement si la valeur (l'<strong class="specialLB">adresse</strong> sur laquelle il pointe) de <code class="prettyprint lang-c">p</code> est <strong>supérieure</strong> (comme numéro d'ordre) à celle de <code class="prettyprint lang-c">q</code> ; </li>
+
+  <li> et même principe pour <code class="prettyprint lang-c">p < q</code> …</li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Considérons le programme académique <strong class="Arduino">Arduino</strong> ci‑dessous, qui déclare deux pointeurs d'entiers standards <code class="prettyprint lang-c">p</code> et <code class="prettyprint lang-c">q</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int a = 5, b = 3;
+int * p = &a, * q = &b;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println(p < q);
+}
+void loop() {}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Lors de l'exécution sur une carte <strong>Uno</strong>, l'évaluation de l'expression <code class="prettyprint lang-c">p < q</code> donne la valeur affichée (ligne nº 6) : </p>
+<ul>
+  <li> <code class="displayWhite">0</code> avec <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong>, car l'attribution des adresses aux données procède dans l'ordre inverse de leurs déclarations respectives (<code class="prettyprint lang-c">a</code> obtient l'adresse <code><span style="color:gray;">0x</span>102</code> et <code class="prettyprint lang-c">b</code> l'adresse <code><span style="color:gray;">0x</span>100</code>) ;  </li>
+
+  <li> <code class="displayWhite">1</code> en simulation sous <strong class="Tinkercad">Tinkercad</strong>, car l'attribution des adresses aux données procède dans l'ordre de leurs déclarations respectives (<code class="prettyprint lang-c">a</code> obtient l'adresse <code><span style="color:gray;">0x</span>100</code> et <code class="prettyprint lang-c">b</code> l'adresse <code><span style="color:gray;">0x</span>102</code>). </li>
+</ul>
+</div><!-- exemple -->
+
+
+
+<h3> Conversions de types de pointeurs </h3>
+
+
+
+<div class="complement">
+<p> On a vu au chapitre C3‑VII <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/Cc3-7_conversionsTypes.html#conversionsImplicites" target="_BLANK"></a> qu'afin de simplifier le codage des expressions, les compilateurs des langages <strong>C</strong> et <strong>C++</strong> mettaient en œuvre des de nombreuses <strong class="defin">conversions implicites</strong> sur des valeurs de <strong class="specialG">types élémentaires</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p>  À quelques exceptions près (cas des identificateurs de tableaux, cf. chap. C5‑III <a class="next" href="Cc5-3_tableauxDeclarations.html#identificationTab" target="_BLANK"></a>), il n'y a <strong class="warning">aucune conversion implicite</strong> prévue sur les <strong class="title">pointeurs</strong>. </p>
+
+<p> Lorsqu'on rencontre dans une expression un <strong>incompatibilité de types</strong> avec un <strong class="title">pointeur</strong>, il faut donc recourir à une <strong class="defin">conversion explicite</strong> (<em class="english">cast</em> – cf. chap. C3‑VII <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/Cc3-7_conversionsTypes.html#cast" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+
+<div class="expert">
+<h4> Conversion d'un pointeur en entier </h4>
+
+
+<p> On a vu supra <a class="supra" href="Cc5-1_pointeursgeneralites.html#afficheAdresseArduino"></a> que pour <strong>afficher</strong> la valeur d'une <strong class="specialLG">adresse</strong> sur le moniteur série dans l'environnement <strong class="Arduino">Arduino</strong>, il fallait la convertir en entier (de type <code class="prettyprint lang-c">int</code> par exemple), car c'est le type attendu du premier argument des méthodes <code class="prettyprint lang-c">print</code> et <code class="prettyprint lang-c">println</code>. </p>
+
+<div class="complement">
+<p> Plus généralement, pour <strong class="title">convertir un pointeur en entier</strong>, il faut choisir un <strong>type</strong> dont la <strong class="specialLG">taille</strong> est <strong class="pros">suffisante</strong> au regard de l'étendue des valeurs des adresses sur la machine cible du programme. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans l'environnement de compilation en ligne <strong class="OnlineGDB">OnlineGDB</strong>, les programmes sont compilés sur une architecture <strong>64 bits</strong>. On peut choisir le type <code class="prettyprint lang-c">unsigned long</code>, encodé sur 64 bits, pour afficher la valeur décimale d'un pointeur, comme dans le programme ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  int a = 5, * p = &a;
+  printf("%p %lu", p, (unsigned long) p);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On obtient par exemple l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x7ffff1a474d4 140737247474900
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p class="remarque"> On peut observer la <strong>virtualité</strong> de l'adresse de la variable <code class="prettyprint lang-c">a</code> qui est affichée. En effet, même si cette dernière est locale – donc placée dans la pile, c'est‑à‑dire tout en bas du segment mémoire attribué au programme – il est invraisemblable que ce segment compte environ 140&#8239;000 milliards d'adresses ! </p>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+<h4 id="exempleFloat"> Conversions entre pointeurs de types différents </h4>
+
+
+<div class="complement">
+<p> On peut affecter à un <strong class="specialLB">pointeur</strong> la valeur de <strong class="pros">n'importe quelle</strong> <strong>adresse de donnée déclarée</strong>, même si cette dernière n'est pas du type pointé par le pointeur. Il suffit de <strong class="title">convertir explicitement</strong> cette adresse dans le type du pointeur. </p>
+
+<p> Une telle affectation permet d'interpréter la valeur d'une donnée dans un format d'encodage différent de son type déclaré. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Rappelons que la fonction <code class="prettyprint lang-c">printf</code> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#printf" target="_BLANK"></a>) permet d'afficher en hexadécimal l'<strong>encodage d'une donnée</strong> de type signé <code class="prettyprint lang-c">int</code> : il suffit d'utiliser la spécification de conversion <code class="prettyprint lang-c">%X</code>, comme dans le programme ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  int a = -1;
+  printf("%d is encoded %X", a, a);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ainsi, avec l'environnement de compilation en ligne <strong class="OnlineGDB">OnlineGDB</strong>, on obtient l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+-1 is encoded 0xFFFFFFFF
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, en complément à 2, l'entier relatif <code class="cmd">-1</code> est bien encodé comme <code>1…1</code> (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#entiersSignes)" target="_BLANK"></a>). </p>
+
+<p class="square"> Mais il n'est <strong class="cons">pas possible</strong> de procéder de même pour une donnée de type <code class="prettyprint lang-c">float</code> (ou de tout autre type flottant). En effet, si on code : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  float a = 1.0;
+  printf("%.1f is encoded %X", a, a); // does NOT work!
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> avec <strong class="OnlineGDB">OnlineGDB</strong>, le compilateur émet un avertissement et on obtient une sortie incorrecte : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+main.c:14:26: warning: format ‘%X’ expects argument of type ‘unsigned int’, but argument 3 has type ‘double’ [-Wformat=] 
+1.0 is encoded A5A3A868
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Pour surmonter cet obstacle, il suffit de recourir à un <strong class="specialLG">pointeur</strong> de type <strong>entier non signé</strong> de <strong class="defin">même taille</strong>, ici comme <code class="prettyprint lang-c">uint32_t</code> (4 octets). Le code ci‑dessous implémente une telle solution :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+float a = 1.0;
+uint32_t * p = (uint32_t*) &a;
+
+int main(void) {
+  printf("%.1f is encoded %X\n", a, *p);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> et avec <strong class="OnlineGDB">OnlineGDB</strong>, on obtient l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+1.0 is encoded 3F800000
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> On peut vérifier que la valeur hexadécimale <code class="displayDark">3F800000</code> est conforme à l'encodage binaire de la valeur <code class="prettyprint lang-c">1.0</code> dans le type <code class="prettyprint lang-c">float</code> (cf. chap. C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#encodageFloats" target="_BLANK"></a>) par l'analyse détaillée de la figure ci‑dessous : </p>
+
+  <img class="top-left" src="../img/pointeurIntFloat.png">
+  
+<p> que l'on peut <strong>décoder en partant de la gauche</strong> : </p>
+<ul>
+  <li> le <strong class="specialO">bit de signe</strong> vaut <strong class="specialO">s</strong> = <em class="bold">0</em> ; </li>
+
+  <li> l'<strong class="specialLB">exposant décalé</strong> vaut <strong class="specialLB">q</strong> = <em class="bold">127</em> (<code>0111 1111</code> en binaire) ; </li>
+
+  <li> le <strong class="specialMg">significande</strong> vaut <strong class="specialMg">f</strong> = <em class="bold">0</em> ; </li>
+</ul>
+
+<p> En définitive, on obtient bien  (−1)<sup><em class="bold" style="color: orange">0</em></sup> × (1 + <em class="bold" style="color: magenta">0,0</em>) × 2<sup><em class="bold" style="color: deepskyblue">127</em> − 127</sup>  =  2<sup>0</sup>  =  <em class="bold">1,0</em>. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- relecture 2023 partie ci‑dessous -->
+
+
+<h2 id="reference"> Notion de référence </h2>
+
+
+
+<h3> Motivation </h3>
+
+
+
+<p> Comme on a pu le constater, les <strong class="title">pointeurs</strong> constituent un <strong class="pros">outil très puissant</strong> de programmation, puisqu'ils permettent de <strong>lire</strong> et <strong>écrire</strong> le contenu précis de n'importe quelle adresse du segment de mémoire allouée à un programme. Cependant leur emploi présente aussi un <strong class="warning">risque</strong> non négligeable de provoquer des <strong class="cons">erreurs d'exécution</strong> qu'il est difficiles d'anticiper. </p>
+
+<div class="expert">
+<p> Typiquement, une opération d'écriture via un pointeur qui déborde du segment alloué au programme constitue ce qu'on appelle une <strong class="cons">erreur de segmentation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Erreur_de_segmentation" target="_BLANK">W</a>, en anglais <em class="english">segment fault</em>. Si elle n'est pas encadrée par un mécanisme de surveillance (comme lorsqu'on exécute un programme dans un terminal de commandes en ligne), une erreur de segmentation peut compromettre le bon fonctionnement du système d'exploitation et ainsi faire « planter » la machine. Un tel dysfonctionnement, <strong class="warning">inacceptable sur un produit fini</strong>, n'est pas si rare lors des essais de portage d'une application sur une nouvelle architecture matérielle. </p>
+</div><!-- expert -->
+
+<div class="important">
+<p> Dans l'objectif d'<strong class="pros">améliorer la fiabilité du codage</strong> des programmes, le langage <strong>C++</strong> <strong class="defin">n'interdit pas</strong> l'emploi des <strong class="specialLB">pointeurs</strong>, pour des raisons évidentes de compatibilité. Mais il fournit au codeur le <strong class="defin">concept alternatif</strong> de <strong class="title">référence</strong>, certes moins puissante, mais en beaucoup <strong class="pros">plus sûre</strong>. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> <p> De plus, c'est une notion <strong class="pros">moins complexe</strong> que celle de <strong class="specialLB">pointeur</strong> mais là encore, le codeur débutant doit accorder la plus grande attention aux détails pour ne pas faire de confusion – d'autant plus que le langage <strong>C++</strong> surcharge le symbole <code class="prettyprint lang-c">&</code> pour la <strong>déclaration</strong> des <strong class="title">références</strong> (donc à <strong class="warning">ne pas confondre</strong> avec l'<strong>opérateur d'adresse</strong>). </p> </p>
+</div><!-- complement -->
+
+
+
+
+
+<h3 id="declarationRef"> Déclaration et caractéristiques d'une référence </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C++</strong> (et non en <em class="mark">C</em>), partant d'une <strong>donnée préalablement déclarée</strong> dans un type élémentaire ou dérivé, anonyme ou non, la <strong class="defin">déclaration d'une</strong> <strong class="title">référence</strong> <strong>sur cette donnée</strong> se code via la forme syntaxique (simplifiée) : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> &
+    <span class="nocode"><strong class="specialN">identificateur de référence</strong></span> =
+    <span class="nocode"><strong>identificateur de donnée</strong></span>;
+  </code>
+</span> </p>
+<p> La <strong class="title">référence</strong> ainsi déclarée se comporte alors <strong class="warning">définitivement</strong> comme un <strong class="defin">alias</strong> de la donnée. C'est une <strong class="specialM">l‑value</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-Elementslangage/Cc2-4_manipulationDonnees.html#affectation" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/reference.png" width="300px" style="margin-top:0.2em">
+<p> Dans la forme syntaxique supra : </p>
+<ul>
+  <li> le <strong class="specialG">descripteur de type</strong> est celui de la <strong>donnée</strong> préalablement déclarée ;  </li>
+
+  <li> l'<strong class="specialN">identificateur de référence</strong> désigne la <strong class="title">référence</strong> déclarée ; </li>
+
+  <li> l'<strong>identificateur de donnée</strong> est celui de la donnée préalablement déclarée (il n'est <strong class="warning">pas</strong> composé avec l'opérateur d'<strong>adresse</strong> comme pour un pointeur) ; on l'appelle le <strong class="specialT">référent</strong> ; </li>
+</ul>
+
+<p> On peut déclarer un <strong class="pros">nombre illimité</strong> de références que l'on souhaite pour une <strong>même donnée</strong>. En revanche, soulignons bien qu'il  n'est <strong class="warning">pas possible</strong> pour une même <strong class="title">référence</strong> de <strong>changer</strong> de <strong class="specialT">référent</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Procédons avec un <strong class="title">exemple académique</strong> similaire à celui proposé pour illustrer la déclaration d'un pointeur (cf. exemple supra <a class="supra" href="Cc5-1_pointeursgeneralites.html#exempleDeclarationPointeur"></a>) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int number = 5;
+int & refNumber = number;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> À partir de la donnée <code class="prettyprint lang-c">number</code> déclarée en ligne n° 2, la <strong class="title">référence</strong> déclarée <code class="prettyprint lang-c">refNumber</code> aura <strong>toujours la même valeur</strong> que son <strong class="specialT">référent</strong> qui est <code class="prettyprint lang-c">number</code>, et ce quelles que soient les affectations effectuées sur l'une ou l'autre. Par exemple, dans l'extrait de code ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  number = 10; // refNumber = number = 10
+  refNumber++; // refNumber = number = 11
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> la variable <code class="prettyprint lang-c">number</code> est <strong class="defin">modifiée</strong> aussi bien par <strong>affectation directe</strong> ou par l'intermédiaire de son <strong class="specialT">référent</strong>. Autrement dit, si on l'on code par la suite : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:12">
+  int otherNumber = 7; 
+  refNumber = otherNumber; 
+  otherNumber = 2;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors <code class="prettyprint lang-c">refNumber</code> prend la <strong>valeur</strong> <code>7</code> mais pour autant, elle ne devient <strong>pas un alias</strong> de <code class="prettyprint lang-c">otherNumber</code>. Car après exécution de l'instruction de la ligne nº 14 qui modifie la valeur de <code class="prettyprint lang-c">otherNumber</code>, la référence <code class="prettyprint lang-c">refNumber</code> ne vaut pas <code class="prettyprint lang-c">2</code> mais encore <code class="prettyprint lang-c">7</code>. </p>
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> En langage <strong>C++</strong>, une <strong class="title">référence</strong> n'est <strong class="warning">pas une donnée</strong>. Elle partage avec son <strong class="specialT">référent</strong> la <strong>même valeur</strong>, la <strong>même adresse</strong>  et le <strong>même type</strong> ; seuls leurs identificateurs diffèrent. </p>
+</div><!-- remarque -->
+
+<div class="expert">
+<h4 id="referenceConstante"> Référence constante </h4>
+
+
+<div class="complement">
+<p> Dans la <strong>forme syntaxique générale</strong> de déclaration d'une référence présentée supra <a class="supra" href="Cc5-1_pointeursgeneralites.html#declarationRef"></a>, le <strong class="specialG">descripteur de type</strong> peut contenir le <strong>mot‑clef</strong> <code class="prettyprint lang-c">const</code>, même si son <strong class="specialT">référent</strong> est une <strong class="defin">variable</strong>. On parle alors de <strong class="title">référence constante</strong>. </p>
+
+<p> Après une telle déclaration, mais <em class="remark">dans toute sa portée</em> seulement, la <strong>valeur</strong> du <strong class="specialT">référent</strong> – et donc aussi de la référence – devient <strong class="specialY">immuable</strong> comme une <strong>constante</strong>, ce qui peut être pertinent dans un contexte particulier (fichier, corps d'une fonction, etc.). </p>
+</div><!-- complement -->
+
+<div class="exemple">
+<p class="exemple"> Dans le <strong class="title">code académique</strong> ci‑dessous, la <strong>variable</strong> <code class="prettyprint lang-c">a</code> devient <strong class="specialY">immuable</strong> à partir de la ligne nº 22. Elle ne peut plus faire l'objet d'<strong>aucune affectation</strong> dans toute la portée de la référence <code class="prettyprint lang-c">ref_a</code>. </p> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  int a = 7; 
+  // ...
+  const int & ref_a = a;
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Une <strong class="title">référence constante</strong> peut même avoir pour <strong class="specialT">référent</strong> une <strong>constante littérale</strong> (valeur numérique, caractère, etc.).  </p>
+</div><!-- remarques -->
+</div><!-- expert -->
+
+
+
+<h3> Applications des références </h3>
+
+
+
+<h4 id="transmissionReference"> Transmission par référence des arguments d'une fonction </h4>
+
+
+<div class="complement">
+<p> La notion de <strong class="title">référence</strong> trouve sa <strong>principale application</strong> dans la <strong class="defin">transmission des arguments</strong> d'une fonction lorsque cette dernière doit en <strong class="warning">modifier les valeurs</strong>. Cet aspect a été présenté de façon anticipée au chap. C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#transmissionReference" target="_BLANK"></a> parce qu'il est très facile à mettre en œuvre. </p>
+
+<p> Après avoir exposé en détail la notion de référence, on est en mesure de mieux comprendre <strong>comment procède cette transmission</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons l'<strong class="title">exemple classique</strong> ci‑dessous de la fonction <code class="prettyprint lang-c">swapInt</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;cstdio&gt;
+
+void swapInt(int & a, int & b) { 
+  int c = a;
+  a = b;
+  b = c;
+}
+
+int main(void) { 
+  int nb1 = 1, nb2 = 2;
+  printf("BEFORE swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+  swapInt(nb1, nb2);
+  printf(" AFTER swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Dans l'en‑tête (ligne nº 3) : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    void swapInt(int & a, int & b)
+  </code>
+</span> <br>
+les deux <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> apparaissent comme des déclarations de <strong>références non initialisées</strong>. </p>
+
+<p> Implicitement, c'est lors d'un appel de la fonction (ligne nº 12 : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    swapInt(nb1, nb2);
+  </code>
+</span> <br>
+où <code>nb1</code> et <code>nb2</code> sont deux variables préalablement déclarées, que les déclarations des arguments prennent leur valeur initiale. Tout se passe comme si, lors de l'exécution, le programme complétait les déclarations des <strong class="title">références</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> par : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">int & a = nb1;</code> </li>
+
+  <li> <code class="prettyprint lang-c">int & b = nb2;</code> </li>
+</ul>
+<p> Elles deviennent alors des <strong class="defin">alias</strong> de <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> et, durant l'exécution du code de la fonction, toute <strong>affectation</strong> sur les premières <strong class="pros">modifie</strong> respectivement les valeurs de ces dernières. </p>
+</div><!-- exemple -->
+
+<div class="expert">
+<p> On verra au chapitre C5‑II <a class="next" href="Cc5-2_pointeursApplications.html#transmissionAdresse" target="_BLANK"></a> à suivre qu'il est possible d'obtenir le même résultats à l'aide de pointeurs – c'est ce qu'on appelle la <strong class="title">transmission par adresse</strong>. Néanmoins, en langage <strong>C++</strong>, il est préférable d'adopter la transmission des arguments par référence, car elle évite les problèmes de non initialisation de pointeurs.  </p>
+
+<p> D'ailleurs, lorsque qu'une fonction admet des <strong class="defin">arguments structurés</strong>, il faut <strong class="pros">privilégier</strong> la <strong class="title">transmission par référence</strong> plutôt que par valeurs, <em class="remark">même</em> si les appels de cette fonction n'ont pas pour vocation de modifier leurs arguments effectifs. En effet, cela rend le traitement des appels de fonction <strong class="pros">plus rapides à exécuter</strong> puisque qu'une référence a une représentation en mémoire aussi légère que celle d'un pointeur. Et si l'on craint, par une erreur de codage, un risque de modification d'un argument effectif par la fonction, alors il suffit de préfixer le <strong class="specialG">descripteur de type</strong> de son argument formel avec le <strong>mot‑clef</strong> <code class="prettyprint lang-c">const</code> (cf. supra <a class="supra" href="Cc5-1_pointeursgeneralites.html#referenceConstante"></a>). </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Récapitulatif des déclarations et expressions </h2>
+
+
+<div class="expert">
+<p> On a pu voir tout au long de ce chapitre qu'en langages <strong>C</strong> et <strong>C+</strong>, l'emploi des <strong class="title">pointeurs</strong> et des <strong class="title">références</strong> passe par l'usage d'une <strong class="warning">syntaxe subtile</strong> : </p>
+<ul>
+  <li> les symboles <code class="prettyprint lang-c">*</code> et <code class="prettyprint lang-c">&</code> n'ont <strong class="warning">pas le même sens</strong> selon qu'ils sont employés dans une <strong class="defin">déclaration</strong> ou dans une <strong class="defin">instruction</strong> autre que déclarative ; </li>
+
+  <li> les données de type <strong>pointeur</strong> ou <strong>référence</strong> n'ont <strong class="warning">pas les mêmes propriétés</strong> et, en conséquence, ne se manipulent pas de la même manière. </li>
+</ul>
+
+<p> Dans les chapitres à suivre de la partie <span class="partie">C5</span>, les descripteurs de types de pointeurs seront plus complexes. Pour pouvoir les aborder sereinement, il est indispensable de bien maîtriser les éléments essentiels de ce chapitre. </p>
+</div><!-- expert -->
+
+<div class="complement">
+<p> Les tableaux ci‑dessous ont pour but de faire une synthèse, sur la base de <strong class="title">trois exemples académiques</strong> de déclarations. Pour chacune sont listées quelques <strong class="specialLB">expressions remarquables</strong> dont on donne (sous couvert d'existence) le <strong>type</strong>, la <strong>valeur</strong>, l'<strong>adresse</strong> et des <strong>exemples d'affectations possibles</strong>. </p>
+
+<p> <em class="remark">Notations</em> : </p>
+<ul>
+  <li> <code>XXX</code> et <code>YYY</code> représentent des <strong>adresses arbitraires</strong> que le codeur ne peut a priori pas connaître au moment du codage du programme ;</li>
+
+  <li> « – » représente une <strong>absence d'adresse</strong>, ce qui signifie que l'expression n'est <strong class="warning">pas une l‑value</strong> (donc elle ne peut pas faire l'objet d'une affectation). </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h4> Après la déclaration <code class="prettyprint lang-c">int num = 5;</code> </h4>
+
+<div style="overflow-x: auto; margin: 0.5em;">
+<table style="width: 840px; margin: 0em;">
+  <tr>
+    <th class="blue" width="130px"> expression </th>
+    <th class="blue" width="90px" > type </th>
+    <th class="blue" width="90px" > valeur </th>
+    <th class="blue" width="90px" > adresse </th>
+    <th class="blue" width="440px"> exemples d'affectations possibles </th>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c"> num</code> </td>
+    <td style="text-align: center;"> <code>int </code> </td>
+    <td style="text-align: center;"> <code>5</code> </td>
+    <td style="text-align: center;"> <code>XXX</code> </td>
+    <td style="margin-left: 1em;"> <code class="prettyprint lang-c">num = 7;</code> 
+                                   <code class="prettyprint lang-c">num = otherNum;</code> 
+                                   <code class="prettyprint lang-c">num++;</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">&num</code> </td>
+    <td style="text-align: center;"> <code>int*</code> </td>
+    <td style="text-align: center;"> <code>XXX</code> </td>
+    <td style="text-align: center;"> <code>–</code>  </td>
+    <td style="margin-left: 1em;">   <span style="color: red"> ✘ </span> (<code>&num</code> n'est pas une <em>l‑value</em>) </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code>*num</code> </td>
+    <td colspan="5"> <strong class="warning">non valide</strong> (<code>num</code> n'est pas un pointeur) </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<h4> Après la déclaration  <code class="prettyprint lang-c">int * ptr = &amp;num;</code> </h4>
+
+
+<div style="overflow-x: auto; margin: 0.5em;">
+<table style="width: 840px; margin: 0em;">
+  <tr>
+    <th class="blue" width="130px"> expression </th>
+    <th class="blue" width="90px" > type </th>
+    <th class="blue" width="90px" > valeur </th>
+    <th class="blue" width="90px" > adresse </th>
+    <th class="blue" width="440px"> exemples d'affectations possibles </th>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c"> ptr</code> </td>
+    <td style="text-align: center;"> <code>int*</code> </td>
+    <td style="text-align: center;"> <code>XXX</code> </td>
+    <td style="text-align: center;"> <code>YYY</code> </td>
+    <td style="margin-left: 1em;">   <code  class="prettyprint lang-c">ptr = &otherNum;</code> 
+                                     <code class="prettyprint lang-c">ptr = otherPtr;</code> 
+                                     <code class="prettyprint lang-c">ptr++;</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">&ptr</code> </td>
+    <td style="text-align: center;"> <code>int**</code> </td>
+    <td style="text-align: center;"> <code>YYY</code> </td>
+    <td style="text-align: center;"> <code>–</code> </td>
+    <td style="margin-left: 1em;">   <span style="color: red"> ✘ </span> (<code>&ptr</code> n'est pas une <em>l‑value</em></span>) </td>
+
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">*ptr</code> </td>
+    <td style="text-align: center;"> <code>int </code> </td>
+    <td style="text-align: center;"> <code>num</code> </td>
+    <td style="text-align: center;"> <code>XXX</code> </td>
+    <td style="margin-left: 1em;">   <code  class="prettyprint lang-c">*ptr = otherNum;</code> 
+                                     <code  class="prettyprint lang-c">*ptr = *otherPtr;</code> 
+                                     <code  class="prettyprint lang-c">*ptr++;</code> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+
+<h4> Après la déclaration  <code class="prettyprint lang-c">int & refNum = num;</code> </h4>
+
+
+<div style="overflow-x: auto; margin: 0.5em;">
+<table style="width: 840px; margin: 0em;">
+  <tr>
+    <th class="blue" width="130px"> expression </th>
+    <th class="blue" width="90px" > type </th>
+    <th class="blue" width="90px" > valeur </th>
+    <th class="blue" width="90px" > adresse </th>
+    <th class="blue" width="440px"> exemples d'affectations possibles </th>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c"> refNum</code> </td>
+    <td style="text-align: center;"> <code>int </code> </td>
+    <td style="text-align: center;"> <code>num</code> </td>
+    <td style="text-align: center;"> <code>XXX</code> </td>
+    <td style="margin-left: 1em;">   <code  class="prettyprint lang-c">refNum = otherNum;</code> 
+                                     <code  class="prettyprint lang-c">refNum++;</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">&refNum</code> </td>
+    <td style="text-align: center;"> <code>int*</code> </td>
+    <td style="text-align: center;"> <code>XXX</code> </td>
+    <td style="text-align: center;"> <code>–</code> </td>
+    <td style="margin-left: 1em;">   <span style="color: red"> ✘ </span> (<code>&refNum</code> n'est pas une <em>l‑value</em></span>) </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code>*refNum</code> </td>
+    <td colspan="5"> <strong class="warning">non valide</strong> (<code>refNum</code> n'est pas un pointeur) </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

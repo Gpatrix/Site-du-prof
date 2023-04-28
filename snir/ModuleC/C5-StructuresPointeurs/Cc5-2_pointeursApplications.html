@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="5"
+  data-pagenumber="II"
+  data-pageState="OK"
+  data-pageheadtitle="Pointeurs applications"
+  data-pagefulltitle="Les pointeurs  –  applications"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+<p class="square"> Après l'étude des aspects fondamentaux des notions de <strong class="title">pointeur</strong> et de <strong class="title">référence</strong> (cf. chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>), on aborde dans le présent chapitre les <strong class="title">applications</strong> de ces éléments de langage. </p>
+
+<p> Dans la pratique, ces applications sont <strong class="pros">très nombreuses</strong>, notamment pour la <strong class="defin">manipulation des tableaux</strong> et des <strong class="defin">fichiers</strong>. Toutefois, ces techniques de codage seront étudiées dans des chapitres ultérieurs car elles nécessitent préalablement un exposé détaillé des structures de données manipulées. </p>
+
+<p> Ici, on se limitera à des <strong class="title">applications directes</strong> sur des éléments juste un peu plus complexes que de simples données élémentaires. En particulier, on exposera : </p>
+
+<ul>
+  <li> la <strong class="specialLB">transmission par adresse</strong> d'un argument de <strong class="defin">fonction</strong>, qui sera comparée avec la <strong>transmission par référence</strong> présentée aux chapitres C4‑I et C5‑I ; </li>
+
+  <li> l'utilisation d'un <strong class="specialLB">pointeur de pointeur</strong>, car un pointeur est lui‑même une donnée (de type dérivé) et comme toute donnée, elle peut être pointée. </li>
+</ul>
+
+<p> Loin d'être seulement académiques, ces applications sont fréquentes en codage professionnel, notamment pour la manipulation des données des <strong>tableaux multidimensionnels</strong> (cf. chap. C5‑IV). Elles doivent être bien maîtrisées à l'issue de ce chapitre. </p>
+
+
+<p class="square"> Ce chapitre est également l'occasion d'aborder quelques <strong class="title">applications et notions avancées</strong> des pointeurs : </p>
+
+<ul>
+  <li> l'emploi d'un <strong class="specialLB">pointeur de fonction</strong> ; en effet, l'identificateur d'une fonction étant lui‑même converti en un <strong class="title">pointeur</strong> vers le segment mémoire <code>.text</code> où le code exécutable de la fonction est stockée, un pointeur de fonction est aussi un <strong class="defin">pointeur de pointeur</strong> ; </li>
+
+  <li> les notions de <strong  class="specialLB">pointeur nul</strong> et de <strong class="specialLB">pointeur générique</strong>, qui permet de pointer a priori <strong class="pros">n'importe quel type de donnée</strong>, quelle que soit sa structure. </li>
+</ul>
+
+<p> Ces notions ne deviennent indispensables que dans le cadre d'<strong class="warning">opérations complexes</strong>. Néanmoins, il est utile d'en prendre connaissance dès maintenant pour mesurer l'étendue les potentialités du concept de pointeur. Dans cet objectif, la présentation de ces aspects reste ici superficielle. </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+<h2> Applications élémentaires </h2>
+
+
+
+<h3 id="transmissionAdresse"> Transmission d'arguments d'une fonction par adresse </h3>
+
+
+
+<div class="complement">
+<p> On rappelle que : </p>
+
+<ul>
+  <li> la <strong>syntaxe usuelle</strong> de codage d'une <strong class="defin">fonction</strong> implique une <strong class="title">transmission par valeur</strong> des <strong class="specialO">arguments effectifs</strong> de l'expression d'appel aux <strong class="specialT">arguments formels</strong> de déclaration et définition de la fonction (cf. chap. C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#appelFonction" target="_BLANK"></a>) ; il n'est donc <strong class="warning">pas possible</strong> ainsi de <strong>modifier la valeur d'une variable</strong> qui serait passée comme <strong class="specialO">argument effectif</strong> dans l'appel d'une telle fonction ;  </li>
+
+  <img class="top-left" src="../img/transmissionValeurs.png" style="max-width: 800px">
+
+  <li> pour qu'une fonction puisse <strong>modifier la valeur d'une variable</strong> passé comme argument effectif, on peut mettre en œuvre une <strong class="title">transmission par référence</strong> en langage <strong class="title">C++</strong>, en déclarant les arguments formels comme des <strong class="specialLB">références</strong> (cf. chap. C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#transmissionReferenceSyntaxe" target="_BLANK"></a> pour la syntaxe et chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#transmissionReference" target="_BLANK"></a> pour l'explication du mécanisme de transmission). </li>
+</ul>
+
+<p> En langage <strong class="title">C</strong> aussi, on peut <strong>modifier la valeur d'une variable</strong> passée comme <strong class="specialO">argument effectif</strong> lors de l'appel d'une fonction : il suffit d'opérer avec un <strong class="defin">pointeur</strong> sur cette variable. C'est ce qu'on appelle la <strong class="title">transmission par adresse</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="important">
+<p> La syntaxe de la <strong class="title">transmission par adresse</strong> <strong>d'argument d'une fonction</strong>  obéit au <strong>même principe général</strong> que celui de la transmission par référence, mais avec des <strong class="defin">pointeurs</strong>. </p>
+
+<ul>
+	<li> Dans l'<strong class="specialLB">en‑tête</strong> de la fonction, tout <strong class="specialT">argument formel</strong> transmis par adresse est déclaré comme un <strong class="defin">pointeur non initialisé</strong>, c'est-à-dire via la syntaxe : <br>
+	<span class="inline">
+    	<code class="prettyprint lang-c">
+    		<span class="nocode"><strong style="color : green;">descripteur de type</strong></span> * <span class="nocode"><strong>identificateur du pointeur</strong></span>
+  		</code>
+	</span> </li>
+
+	<li> Dans le <strong class="specialLB">corps de définition de la fonction</strong>, on peut coder des <strong class="defin">expressions avec ce pointeur</strong>, et en particulier le <strong>déréférencer</strong> pour lire ou écrire la valeur de la donnée qu'il pointe. </li>
+
+	<li> Dans l'<strong class="specialLB">appel de la fonction</strong>, l'<strong class="specialO">argument effectif</strong> correspondant à cet argument formel doit nécessairement être une <strong class="specialM">l‑value</strong>, c'est‑à‑dire typiquement une <strong class="defin">adresse de variable</strong> de la forme <code class="prettyprint lang-c">&<span class="nocode"><strong>identificateur de variable</strong></span></code>. C'est cet argument effectif qui constitue la <strong>valeur initiale de pointeur</strong> affectée à l'<strong class="specialT">argument formel</strong> correspondant au tout début de l'exécution de l'appel. </li>
+</ul>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons l'<strong class="title">exemple académique</strong> de la fonction <code class="prettyprint lang-c">swapInt</code> qui <strong>permute la valeur de deux variables</strong>, proposée pour illustrer la syntaxe du passage d'argument par référence en <strong>C++</strong> (cf. chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#transmissionReference" target="_BLANK"></a>). </p>
+
+<p class="square"> Rappelons que si l'on code le programme comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+void swapInt(int a, int b) { // warning: THIS DOES NOT WORK!
+  int c = a;
+  a = b;
+  b = c;
+}
+
+int main(void) { 
+  int nb1 = 1, nb2 = 2;
+  printf("BEFORE swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+  swapInt(nb1, nb2);
+  printf(" AFTER swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/transmissionValeur.png" width="350px">
+<p> l'exécution n'est <strong class="cons">pas satisfaisante</strong> (les variables <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> restent inchangées). En effet, lors de l'appel de la fonction <code class="prettyprint lang-c">swapInt</code> (ligne n° 9), les valeurs des <strong class="specialO">arguments effectifs</strong> <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> stockées dans le segment <code class="inv" style="background:mediumseagreen;">.data</code> sont affectées aux <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> de la fonction, qui sont mémorisés temporairement dans la <strong class="specialDGr">pile</strong>, un peu comme si le programme exécutait les instructions : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">int a = nb1;</code> </li>
+
+  <li> <code class="prettyprint lang-c">int b = nb2;</code> </li>
+</ul> 
+
+<p>  C'est donc dans la <strong class="specialDGr">pile</strong> que la permutation des valeurs est opérée par la fonction, et non <strong class="warning">pas</strong> dans le segment <code class="inv" style="background:mediumseagreen;">.data</code>. </p>
+</div><!-- display -->
+
+<p class="square"> En utilisant des <strong class="title">pointeurs</strong>, le programme devient : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int nb1 = 1, nb2 = 2;
+
+void swapInt(int * p, int * q) {  // arguments are pointers
+  int c = *p;
+  *p = *q;
+  *q = c;
+} 
+
+int main(void) {
+    printf("BEFORE swap: nb1 = %d, nb2 = %d\n", nb1, nb2);
+    swapInt(&nb1, &nb2);    
+    printf(" AFTER swap: nb1 = %d, nb2 = %d\n", nb1, nb2);
+    return 0;
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/transmissionAdresse.png" width="350px">
+<p> Lors de l'appel de la fonction <code class="prettyprint lang-c">swapInt</code> (ligne n° 9), comme ses <strong class="specialO">arguments effectifs</strong> sont des <strong>adresses de variables</strong>, leur transmission aux <strong class="specialT">arguments formels</strong> de la fonction vient compléter la déclaration de ces derniers :  </p>
+<ul>
+  <li> <code class="prettyprint lang-c">int * p = &amp;nb1;</code> </li>
+
+  <li> <code class="prettyprint lang-c">int * q = &amp;nb2;</code> </li>
+</ul> 
+<p> Depuis la <strong class="specialDGr">pile</strong>, les <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">p</code> et <code class="prettyprint lang-c">q</code> pointent alors respectivement sur <strong class="specialO">arguments effectifs</strong> <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> dans le segment <code class="inv" style="background:mediumseagreen;">.data</code>. C'est donc dans ce segment que la permutation des valeurs est opérée et ainsi, le programme devient <strong class="pros">effectif</strong>. </p>
+</div><!-- display -->
+</div><!-- exemples -->
+
+
+<div class="expert">
+<h4> Comparaison avec la transmission par référence </h4>
+
+
+<p> On a vu au chapitre C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#transmissionReferenceSyntaxe" target="_BLANK"></a> que la <strong class="title">transmission par référence</strong> est <strong class="pros">très simple</strong> à coder. </p>
+<ul>
+  <li> Dans l'<strong class="specialLB">en‑tête</strong> de la fonction (prototype et définition), il suffit de déclarer les <strong class="specialLB">arguments formels</strong>. </li>
+
+  <li> Pour le reste du code – <strong class="specialLB">corps de définition</strong> de la fonction et <strong class="specialLB">expressions d'appels</strong> – rien ne change par rapport à la syntaxe de la transmission par valeur, au détail près que les <strong class="specialT">arguments effectifs</strong> doivent être réduits à des identificateurs de variables déclarées.</li>
+</ul>
+  </p>
+
+<p> En comparaison, le codage d'une fonction à <strong class="title">transmission par adresse</strong> est <strong class="warning">plus technique</strong>. En plus de déclarer déclarer les arguments formels comme des <strong class="defin">pointeurs</strong> dans l'<strong class="specialLB">en‑tête</strong> de la fonction (prototype et définition), il faut : </p>
+
+<ul> 
+	<li> dans le <strong class="specialLB">corps de la fonction</strong>, employer l'<strong class="defin">opérateur de déréférencement</strong> pour manipuler les données pointées par les arguments passés par adresse ; </li> 
+
+	<li> dans un <strong class="specialLB">appel de fonction</strong>, employer l'<strong class="defin">opérateur d'adresse</strong> pour passer les <strong class="specialO">arguments effectifs</strong>. </li>
+</ul>
+
+<p> Mais cette technicité présente un <strong class="pros">avantage en termes de lisibilité</strong> du code. En effet, dans un appel de fonction, l'emploi de l'<strong>opérateur d'adresse</strong> devant un <strong class="specialO">argument effectif</strong> explicite le fait que la fonction <strong class="warning">modifie</strong> <strong>la valeur de cet argument</strong>. Si la transmission était opérée par référence, il faudrait se reporter à l'en‑tête de la fonction pour savoir qu'une modification intervient. </p>
+</div><!-- expert -->
+
+
+
+<h3> Pointeur de pointeur </h3>
+
+
+
+<div class="complement">
+<p> On a vu au chapitre C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#declarationPointeur" target="_BLANK"></a> qu'un <strong class="specialLB">pointeur</strong> déclaré est une <strong class="defin">donnée à part entière</strong> avec, en particulier, une <strong>adresse</strong>. Rien n'interdit donc de déclarer un <strong class="title">pointeur</strong> qui <strong>pointe sur cette adresse</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p>	La <strong>déclaration</strong> d'un <strong class="title">pointeur de pointeur</strong> obéit à une syntaxe similaire à celle pour déclarer un pointeur « ordinaire » (cf. le lien supra) mais en y codant <strong>deux symboles</strong> <code>*</code> au lieu d'un seul, donc ainsi : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> ** <span class="nocode"><strong class="specialN">identificateur</strong></span> <span class="nocode" style="color: darkgrey; font-style: normal;">[</span>=
+    <span class="nocode"><strong>expression</strong><span style="color: darkgrey; font-style: normal;">]</span></span>;</code>
+</span></p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">p_a</code> est une donnée préalablement déclarée de type <code class="prettyprint lang-c">int*</code> (pointeur d'entier standard) qui pointe sur une donnée <code class="prettyprint lang-c">a</code> de type <code class="prettyprint lang-c">int</code>, alors l'instruction :  <br>
+<span class="inline">
+	<code class="prettyprint lang-c">
+		int ** pp_a = &amp;p_a;
+	</code>
+</span> </br>
+déclare une variable <code class="prettyprint lang-c">pp_a</code> qui pointe sur l'adresse de <code class="prettyprint lang-c">pa</code>. </p>
+
+<p class="remarque"> On peut aussi coder cette déclaration :  <br>
+<span class="inline">
+	<code class="prettyprint lang-c">
+		int* * pp_a = &amp;p_a;
+	</code>
+</span> </br>
+afin de mieux visualiser le fait que les valeurs pointées par <code class="prettyprint lang-c">pp_a</code> sont de type <code class="prettyprint lang-c">int*</code>. </p>
+</div><!-- exemple -->
+
+
+<h4> Déréférencement simple et double</h4>
+
+<div class="important">
+<p> On peut appliquer <strong>une</strong> ou <strong>deux fois</strong> (par composition) l'<strong class="title">opérateur de déréférencement</strong> <code class="prettyprint lang-c">*</code> à un <strong class="defin">pointeur de pointeur</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">pp_a</code> est un <strong class="title">pointeur de pointeur</strong> déclaré comme supra, alors :  </p>
+<ul>
+	<li> l'<strong>expression</strong> <code class="prettyprint lang-c">*pp_a</code> donne la valeur de <code class="prettyprint lang-c">p_a</code>, c'est‑à‑dire l'adresse de <code class="prettyprint lang-c">a</code> ; </li>
+
+	<li> l'<strong>expression</strong> <code class="prettyprint lang-c">**pp_a</code> donne la valeur de <code class="prettyprint lang-c">a</code>. </li>
+</ul>
+</div><!-- exemple -->
+
+
+<h4> Intérêt </h4>
+
+
+<div class="complement">
+<p> La notion de <strong class="title">pointeur de pointeur</strong> est <strong class="pros">utile</strong> pour effectuer des opérations systématiques sur des <strong class="defin">tableaux bidimensionnels</strong> (par exemple, des matrices). Grâce à ce genre de types, on peut donc coder des fonctions qui modifient des tableaux en prenant pour argument formel un pointeur de tableaux – cf. les chap. C5‑III <a class="next" href="Cc5-3_tableauxDeclarations.html" target="_BLANK"></a> et C5‑IV <a class="next" href="Cc5-4_tableauxManipulations.html" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> Contrairement à un pointeur, une <strong class="title">référence</strong> n'est <strong class="warning">pas une donnée</strong>. On ne peut donc <strong class="warning">pas</strong> déclarer un « <em>pointeur de référence</em> ». </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Applications avancées </h2>
+
+
+
+<h3 id="pointeurFonction"> Pointeur de fonction </h3>
+
+
+<div class="complement">
+<p> Pour bien comprendre la notion de pointeur de fonction, il faut savoir qu'en langages <strong>C</strong> et <strong>C++</strong>, dans le code source d'un programme, hormis lors de sa déclaration, toute occurrence de l'<strong class="defin">identificateur de fonction employé seul</strong>, c'est‑à‑dire sans liste d'arguments effectifs délimitée par des parenthèses, est implicitement converti par le compilateur en un <strong class="specialLB">pointeur</strong> dans le segment <code class="inv" style="background:crimson;">.text</code> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#allocationMemoire" target="_BLANK"></a>) sur la <strong>première instruction machine</strong> de la fonction désignée par cet identificateur. Il s'agit donc d'un <strong class="title">pointeur de fonction</strong> et cette notion peut être exploitée dans des déclarations et des manipulations (affectations, déréférencements, passages d'argument de fonction, etc.)  </p>
+</div><!-- complement -->
+
+
+<!-- ajouter une figure -->
+
+<h4> Déclaration d'un pointeur de fonction </h4>
+
+
+<div class="important">
+<p> Un <strong class="title">pointeur de fonction</strong> est un pointeur dont la valeur est l'<strong class="specialLB">adresse</strong> que le compilateur attribue à la <strong>première instruction machine</strong> d'une fonction dans le segment <code class="inv" style="background:crimson;">.text</code> du programme. </p>
+
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on déclare un tel pointeur via la forme syntaxique : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong></span> (*
+    <span class="nocode"><strong class="specialN">identificateur</strong></span>)
+    (<span class="nocode"><strong class="specialLG">liste de types</strong></span>)
+    <span class="nocode"><span style="color: darkgrey; font-style: normal;"> [ </span>
+    </span>
+     =
+    <span class="nocode"><strong>expression</strong>
+       <span style="color: darkgrey; font-style: normal;"> ] </span>
+    </span>;
+  </code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette syntaxe : </p>	
+<ul>
+  <li> le <strong class="specialG">descripteur de type</strong> spécifie le type des <strong>valeurs retournées</strong> par <em>les</em> fonctions que le pointeur peut pointer ; </li>
+
+  <li> l'<strong class="specialN">identificateur</strong> désigne le <strong class="title">pointeur de fonction</strong> déclaré ; </li>
+
+  <li> la <strong class="specialLG">liste de types</strong> est celle des <strong>descripteurs de types</strong> des <strong class="specialT">arguments formels</strong> pris par les fonctions que le pointeur peut pointer – ces descripteur de type étant séparés les uns des autres par le délimiteur <code class="prettyprint lang-c">,</code> ; </li>
+
+  <li> l'<strong>expression</strong> (facultative) affecte une <strong>valeur initiale</strong> au pointeur déclaré ; elle peut être soit un autre pointeur de fonction, soit un identificateur de fonction, avec dans tous les cas l'obligation que cette fonction ait la <strong>même forme</strong> (valeur retournée, nombre et types de arguments) que celle imposée par les éléments de déclaration ci‑dessus. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans le <strong class="title">code académique</strong> ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  int sum(int a, int b) {return a + b;}
+  int (*p_f) (int, int) = sum;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<ul>
+  <li> on déclare d'abord la <strong>fonction</strong> <code class="prettyprint lang-c">sum</code> qui retourne une valeur entière égale à l'addition des valeurs de ses deux arguments entiers ; </li>
+
+  <li> puis on déclare <code class="prettyprint lang-c">p_f</code>, un <strong class="title">pointeur de fonction</strong> rendant une valeur entière et prenant deux arguments entiers, et on donne à ce pointeur la fonction <code class="prettyprint lang-c">sum</code> comme <strong>valeur initiale</strong>. </li>
+</ul>
+
+<p> Mais notons bien que le pointeur <code class="prettyprint lang-c">p_f</code> pourrait pointer sur n'importe quelle autre fonction de même forme, c'est-à-dire prenant deux arguments entiers et rendant pour valeur un entier. Ainsi, on pourrait coder par la suite :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  int dif(int a, int b) {return a - b;}
+  *p_f = dif;
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Plus la déclaration d'un pointeur de fonction est <strong class="warning">complexe</strong>, plus il est opportun de l'effectuer via un <strong class="defin">nouveau type</strong>, grâce au mot‑clef <code class="prettyprint lang-c">typedef</code> (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typedef" target="_BLANK"></a>).</p>
+</div><!-- remarque -->
+
+
+
+<h4> Déréférencement d'un pointeur de fonction </h4>
+
+
+<div class="important">
+<p> Le <strong class="title">déréférencement</strong> d'un <strong>pointeur de fonction</strong> est une expression qui implémente un <strong class="defin">appel de la fonction</strong> qu'il pointe. La syntaxe d'une telle opération recourt aux <strong>parenthèses</strong> comme dans la déclaration d'un pointeur de fonction (mais sans le descripteur de type) : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">(*
+    <span class="nocode"><strong class="specialN">identificateur</strong></span>)
+    (<span class="nocode"><strong class="specialO">liste des arguments effectifs</strong></span>)
+  </code>
+</span> </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> En reprenant les déclarations de l'<strong class="title">exemple académique</strong> précédent (lignes nº 10 & 11), l'instruction ci‑dessous : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:12">
+  result = (*p_f) (2, 3);
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> affecte à une variable entière (déclarée préalablement) <code class="prettyprint lang-c">result</code> la valeur rendue par la fonction pointée <code class="prettyprint lang-c">sum</code> avec pour ses deux arguments effectifs respectivement les valeurs <code class="prettyprint lang-c">2</code> et <code class="prettyprint lang-c">3</code>. </p>
+</div><!-- exemple -->
+
+
+<h4> Application académique : une calculatrice en ligne </h4>
+
+
+<div class="exemples">
+<p class="exemple"> Pour comprendre l'intérêt des pointeurs de fonctions, examinons le programme ci‑dessous, qui implémente une <strong class="title">calculatrice rudimentaire</strong> effectuant en boucle les <strong class="specialLB">opérations arithmétiques</strong> usuelles saisies par l'utilisateur en <strong>notation « mathématique » directe</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef int (* FunctionPointer)(int, int);
+
+int sum(int a, int b) {return a + b;}
+int dif(int a, int b) {return a - b;}
+int mul(int a, int b) {return a * b;}
+int dvd(int a, int b) {if (b != 0) return a / b; else exit(1);}
+
+FunctionPointer functionMap(char operatorSymbol) {
+  switch (operatorSymbol) {
+    case '+' : return sum;
+    case '-' : return dif;
+    case '*' : return mul;
+    case '/' : return dvd;
+    default  : exit(0);
+  }
+}
+
+int main(void) {
+  char o; // operator symbol
+  printf(" + - * / calculator / * - + \n");
+  do {
+    int a, b;  // operands
+    printf("> ");
+    scanf("%d %c %d", &a, &o, &b);
+    printf("= %d\n", (*functionMap(o)) (a, b));
+  }
+  while (o == '+' || o == '-' || o == '*' || o == '/');
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> On peut faire les observations suivantes. </p>
+
+<ul>
+  <li> À la ligne nº 4, on déclare un <strong class="specialG">type synonyme</strong> de pointeur de fonction à valeurs retournées de type <code class="prettyprint lang-c">int</code> et prenant deux arguments de type <code class="prettyprint lang-c">int</code>, comme dans les exemples académiques précédents. On le nomme <code class="prettyprint lang-c">FunctionPointer</code> avec une majuscule comme pour tout identificateur de types. </li>
+
+  <div class="nobullet"> Cette définition sert seulement à simplifier le codage de l'en‑tête de la fonction <code class="prettyprint lang-c">functionMap</code> définie ensuite. </div>
+
+  <li> Aux lignes nº 6 à 9, on définit les <strong class="specialLB">quatre fonctions</strong> <code class="prettyprint lang-c">sum</code>, <code class="prettyprint lang-c">dif</code>, <code class="prettyprint lang-c">mul</code> et <code class="prettyprint lang-c">dvd</code> correspondant respectivement aux <strong>opérateurs arithmétiques</strong> <code class="prettyprint lang-c">+ - * /</code> du langage <strong>C</strong>. </li>
+
+  <li> Aux lignes nº 11 à 19, on définit la fonction <code class="prettyprint lang-c">functionMap</code> qui retourne le <strong class="specialLB">pointeur sur la fonction</strong> correspondant au <strong>symbole de l'opérateur</strong> passé en argument (de type caractère). </li>
+
+  <li> À la ligne nº 27, par appel de la fonction <code class="prettyprint lang-c">scanf</code>, on lit l'<strong>opération saisie par l'utilisateur</strong> comme en notation mathématique. On mémorise les valeurs entières des deux opérandes <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> et le symbole <code class="prettyprint lang-c">o</code> de l'opération. </li>
+
+  <li> À la ligne nº 28, on affiche le <strong class="pros">résultat</strong> de l'opération, calculé par déréférencement du pointeur de fonction retourné par la fonction <code class="prettyprint lang-c">functionMap</code> appliquée au caractère <code class="prettyprint lang-c">o</code> saisi par l'utilisateur. </li>
+
+  <div class="nobullet"> Les <strong class="specialO">arguments effectifs</strong> de cet appel de fonction indirect (via un pointeur de fonction) sont les opérandes  <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> saisis par l'utilisateur. </div>
+</ul>
+</div><!-- expert -->
+
+<p> En exécutant ce programme sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient en sortie standard, par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+ + - * / calculator / * - + 
+> 2 + 3
+= 5
+> 7 * 8
+= 56
+…
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemples -->
+
+
+
+
+
+<h3> Pointeur générique </h3>
+
+
+
+<p> On a vu que tout <strong class="specialLB">pointeur</strong> possède a priori un <strong class="specialG">type spécifique</strong> à la donnée ou fonction sur laquelle il pointe. Mais cette contrainte se révèle parfois <strong class="cons">rédhibitoire</strong>, notamment si l'on souhaite pointer des données de différents types ou des fonctions ayant un nombre différent d'arguments. </p>
+
+
+<div class="important">
+<p> Pour y remédier, les langages <strong>C</strong> et <strong>C++</strong> permettent de déclarer un <strong class="title">pointeur générique</strong>, c'est-à-dire <strong class="defin">non typé</strong>, codé par le descripteur <code class="prettyprint lang-c">void *</code>. </p>
+
+<p> Un tel pointeur peut alors a priori pointer sur <strong class="pros">n'importe quel type de donnée</strong>. Par affectation, il suffit de lui donner une adresse ou la valeur d'un pointeur typé, quel que soit ce dernier. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En revanche, un <strong class="title">pointeur générique</strong> est <strong class="cons">moins facilement manipulable</strong> qu'un pointeur typé. Puisque rien ne permet de déterminer ce qu'il pointe hormis une adresse, il ne peut être l'objet d'<strong>aucune opération arithmétique</strong> (incrémentation, etc.) ni d'<strong>aucun déréférencement direct</strong>. Pour obtenir le contenu de la mémoire qu'il pointe, il faut procéder à une <strong class="defin">conversion explicite</strong> vers le type de pointeur souhaité. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Considérons le programme académique ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+  int a = 5;
+  float b = 0.1;
+  void * p = &a;
+  printf("a = %d\n", *((int*) p));   // displays 5
+  p = &b;
+  printf("b = %g\n", *((float*) p)); // displays 0.1
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Après avoir déclaré deux variables <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> de types différents, on déclare le pointeur générique <code class="prettyprint lang-c">p</code> et on lui affecte l'adresse de l'entier standard <code class="prettyprint lang-c">a</code> (ligne nº 7). Ensuite : </p>
+<ul>
+  <li> on peut obtenir la valeur de <code class="prettyprint lang-c">a</code> par déréférencement de <code class="prettyprint lang-c">p</code>, mais seulement après une conversion explicite dans le type <code class="prettyprint lang-c">int*</code> (ligne nº 8) ; </li>
+
+  <li> puis on peut affecter à <code class="prettyprint lang-c">p</code> l'adresse de <code class="prettyprint lang-c">b</code> et obtenir sa valeur, par déréférencement de <code class="prettyprint lang-c">p</code>, mais seulement après une conversion explicite dans le type <code class="prettyprint lang-c">float*</code> (ligne nº 10) ; </li>
+</ul>
+</div><!-- exemple -->
+
+
+
+<h3 id="nullPtr"> Pointeur nul </h3>
+
+
+
+<div class="important">
+<p> Le langages <strong>C</strong> et <strong>C++</strong> définissent également le <strong class="title">pointeur nul</strong> qui est codé <code class="prettyprint lang-c">NULL</code> ou tout simplement <code class="prettyprint lang-c">0</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">pointeur nul</strong> correspond à une <strong class="defin">adresse « zéro » inexistante</strong> qui, bien entendu, <strong>ne peut pas être déréférencée</strong> mais qui permet de faire des <strong class="specialLB">tests à zéro</strong>. </p>
+
+<p> C'est également la <strong class="defin">valeur retournée</strong> par les <strong class="specialLB">fonctions de recherche d'élément dans un tableau</strong> en cas d'<strong>échec</strong> de la recherche. </p>
+</div><!-- complement -->
+
+
+
+<div class="exemples"> 
+<p class="exemple"> Après la déclaration :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c">int * p = NULL;</code>
+</span> <br>
+on peut coder une bifurcation de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">if (p != NULL)
+  <span class="nocode">…</span>
+  </code>
+</span> <br>
+pour vérifier si, entre‑temps, le pointeur <code class="prettyprint lang-c">p</code> a fait ou non l'objet d'une nouvelle affectation. </p>
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="1"
+	data-pagenumber="II"
+	data-pageState="OK"
+	data-pageheadtitle="Architecture"
+	data-pagefulltitle="Architecture des réseaux"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+
+<p class="square"> Comme toutes les constructions structurées, un réseau informatique est avant tout caractérisé par son <strong class="title">architecture</strong>, notamment : </p>
+
+<ul>
+	<li> le <strong class="defin">nombre</strong> et la <strong class="defin">diversité des éléments</strong> qui le composent, </li>
+
+	<li> l'<strong class="defin">étendue géographique</strong> couvrant la totalité de ces éléments, </li>
+
+	<li> mais sa <strong class="defin">topologie</strong>, c'est‑à‑dire la manière globale dont ses éléments sont reliés. </li>
+</ul>
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/carteRoutiere.jpg" height="300px" style="margin-top: 0.5em">
+  <img class="top-right" src="../img/carteRFF.jpg" height="300px" style="margin-top: 0.5em">
+<p> Par <strong class="title">analogie</strong>, si l'on considère un <strong>réseau ferroviaire</strong>, on peut distinguer plusieurs types de <em>liaisons</em> (<em class="sigle">TGV</em>, <em class="sigle">TER</em>, etc.) et une topologie présentant des <em>pôles étoilés</em> et de nombreux <em>nœuds terminaux</em>. </p>
+
+<p> Dans le cas d'un <strong>réseau routier</strong>, on a également plusieurs types de voies (rues, grandes avenues, autoroutes), mais aussi d'<em>interconnexions</em> (carrefours, échangeurs…), et une topologie essentiellement <em>maillée</em>, où les impasses sont rares. </p>
+</div><!-- display -->
+
+
+<p class="square"> L'<strong class="title">architecture des réseaux informatiques</strong> est en général <strong class="warning">plus complexe</strong> à analyser que celles des autres réseaux. En effet : </p>
+
+<ul>
+	<li> la <strong class="defin">diversité des éléments</strong> est <strong class="warning">très grande</strong> – qu'on songe aux différents types de liaisons : câbles électriques, fibre optique, ondes – avec de très nombreuses catégories dans chaque technologie ;  </li>
+
+	<li> à la <strong class="defin">structure matérielle</strong> d'un réseau se superposent toujours <strong class="defin">plusieurs couches logicielles</strong> qui peuvent <strong class="warning">changer radicalement la topologie</strong> mise en œuvre. </li>
+
+  <div class="expert">
+  <div class="nobullet"> (Par exemple, un <em class="english">hub</em> réalise une topologie dite en <em>bus</em> alors que les liaisons matérielles forment une <em>étoile</em>, tout simplement parce que le hub n'opère aucun routage – il se contente de diffuser les signaux qu'il reçoit sur l'ensemble de ses ports.) </div>
+  </div><!-- expert -->
+</ul> 
+
+<div class="expert">
+<p>  Toutefois, l'<strong class="title">architecture des réseaux informatiques</strong> a évolué ces vingt dernières années avec une <strong class="pros">tendance à l'uniformisation</strong>. Sauf dans les réseaux dits « industriels » ou  apparentés, les topologies en bus ou en anneau sont devenues obsolètes, même à grande échelle. La connaissance de ces topologies ne présente désormais qu'un intérêt secondaire, réservé pour la maintenance de réseaux anciens ou la spécialisation sur des technologies spécifiques.  </p>
+</div><!-- expert -->
+
+<p class="square"> Dans le prolongement du chapitre R1‑I, ce cours a pour principal <strong class="title">objectif</strong> de dresser un <strong>panorama des architectures les plus courantes</strong> de réseaux informatiques.   </p>
+
+<ul>
+	<li> Des <strong class="specialLB">éléments de la théorie des graphes</strong> sont donnés en préambules, car ils recèlent des <strong>concepts fondamentaux</strong> pertinents pour décrire la <strong class="defin">topologie</strong> des réseaux. </li>
+
+	<li> Puis on aborde les <strong class="specialLB">principes généraux</strong> de l'architecture des réseaux, en détaillant les notions de <strong class="defin">nœud</strong> et de <strong class="defin">liaison</strong>, de <strong>réseau</strong> <strong class="defin">public</strong> ou <strong class="defin">privé</strong>, etc. </li>
+
+	<li> Puis on décrit les <strong class="specialLB">architectures usuelles</strong> des réseaux informatiques en procédant par <strong class="defin">critère d'échelle</strong>, c'est‑à‑dire selon la classification usuelle des réseaux dits personnels, locaux, métropolitains, étendus. </li>
+
+	<li> Enfin, on présente quelques <strong class="specialLB">logiciels d'analyse et de simulation</strong> des réseaux informatiqyes, qui permettent d'un part de <strong class="defin">visualiser l'architecture</strong> d'un réseau existant, et d'autre par de <strong class="defin">simuler toutes sortes d'architectures</strong> pour en expérimenter le comportement. </li>
+</ul>	
+
+<div class="expert">
+<p> Cette présentation reste néanmoins <strong class="cons">superficielle</strong>. Seule l'étude détaillée des <strong>protocoles de communication</strong> permettra ultérieurement d'acquérir une véritable compréhension de l'architecture opérationnelle des réseaux, en tenant compte des aspects logiciels qui sont les plus souvent primordiaux. </p>
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Éléments de la théorie des graphes </h2>
+
+
+<div class="expert">
+<p> Dans ce chapitre, il n'est évidemment pas question de mettre en avant une formalisation abstraite des <strong>réseaux informatiques</strong> par la <strong class="title">théorie des graphes</strong>, mais simplement d'employer le <strong class="pros">vocabulaire précis</strong> pour y décrire les aspects analogues que l'on observe dans toutes sortes de réseaux. </p>
+</div><!-- expert -->
+
+
+
+<h3> Notion de graphe </h3> 
+
+
+
+<div class="important">
+<p> Informellement, un <strong class="title">graphe</strong> – au sens de la <strong>théorie des graphes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Théorie_des_graphes" target="_BLANK">W</a> – est un <strong class="defin">objet mathématique</strong> composé de : </p>
+<div style="display:inline-block">
+	<img class="top-right" src="../img/graphe.jpg" width="200px">
+<ul>
+	<li> <strong class="specialO">nœuds</strong>, encore appelés <strong>sommets</strong> ; </li>
+
+	<li> et d'<strong class="specialT">arcs</strong> – ou <strong>liaisons</strong> – entre les nœuds ;  </li>
+</ul>
+<p> en faisant abstraction de toute « nature » spécifique à quoi pourraient correspondre ces nœuds et ces arcs. </p>
+</div><!-- display -->
+<p> On <strong class="title">schématise</strong> usuellement un graphe comme ci‑dessus, avec des <strong>ronds</strong> pour les <strong class="specialO">nœuds</strong>, des <strong>traits</strong> (ou éventuellement des flèches) pour les <strong class="specialT">arcs</strong>. </p>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block">
+	<img class="top-right" src="../img/londonUnderground.jpg" width="400px">
+<p> De même que les <strong class="title">nombres</strong> permettent de <strong class="defin">modéliser</strong> toutes sortes de phénomènes concrets en termes de <strong>quantité</strong> et d'<strong>ordre</strong>, les <strong class="title">graphes</strong> constituent un concept général très utile de <strong class="defin">représentation abstraite</strong> de <strong>structures</strong>, notamment dans le domaine des <strong>réseaux</strong> de transport, de distribution électrique, de communication… </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> De plus, la <strong class="title">théorie des graphes</strong> apporte des <strong class="defin">outils d'analyse</strong> (concepts, théorèmes, algorithmes) pour <strong>caractériser</strong> et <strong>évaluer les performances</strong> des structures modélisées par des graphes. </p>
+</div><!-- expert -->
+
+
+
+
+<h4> Détail des éléments d'un graphe </h4>
+
+
+
+<div class="complement">
+<p>	La définition générale d'un graphe peut s'enrichir de <strong class="title">concepts plus élaborés</strong>. En particulier, il est très usuel : </p>
+<ul>
+	<li> de distinguer <strong class="defin">plusieurs types</strong> de <strong class="specialO">nœuds</strong> ; </li>
+
+	<li> d'associer des <strong class="defin">orientations</strong> et des <strong>valeurs numériques</strong> (ou <em>poids</em>) aux <strong class="specialT">arcs</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Ces concepts supplémentaires permettent de <strong class="defin">modéliser</strong> des <strong class="warning">aspects très complexes</strong> dans les réseaux, par exemple des longueurs de liaisons, des temps de parcours, des débits, etc. Ils ouvrent aussi le champ de la théorie des graphes à des méthodes d'analyse mathématique comme la <strong>recherche opérationnelle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Recherche_oérationnelle" target="_BLANK">W</a> et l'<strong>optimisation combinatoire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Optimisation_combinatoire" target="_BLANK">W</a>.  </p>
+</div><!-- expert -->
+
+
+
+<h3> Notion de chemin dans un graphe </h3>
+
+
+
+<div class="important">
+<p> Dans un <strong class="specialLB">graphe orienté</strong>, on appelle <strong class="title">chemin</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chemin_(théorie_des_graphes)" target="_BLANK">W</a> une <strong class="defin">succession de liaisons</strong> permettant de <strong class="defin">relier deux nœuds</strong>, l'un étant considéré comme le <strong>nœud de départ</strong> et l'autre le <strong>nœud d'arrivée</strong>. </p>
+
+<p> Dans un <strong class="specialLB">graphe non orienté</strong>, on parle de <strong class="title">chaîne</strong> pour désigner la même notion, mais sans distinction entre les deux nœuds. </p>
+
+<p> Si les <strong>nœuds de départ et d'arrivée</strong> sont <strong class="defin">identiques</strong>, on parle de <strong class="title">circuit</strong>. </p>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block">
+	<img class="top-right" src="../img/plusCourtChemin.png" width="400px">
+<p> La notion de chemin permet d'exprimer les <strong class="title">problématiques</strong> suivantes, pour deux nœuds donnés dans un graphe : </p>
+<ul>
+	<li> l'<strong class="defin">existence d'un chemin</strong>, en tenant compte de l'orientation éventuelle des liaisons ; </li>
+
+	<li> la recherche du <strong class="defin">plus court chemin</strong>, en tenant compte des poids associés aux liaisons. </li>
+</ul>
+<p> Ces problématiques ont une <strong class="pros">grande pertinence</strong> dans toutes sortes de contextes de modélisation (réseaux de transport, etc.). </p>
+</div><!-- complement -->
+
+
+
+<h3 id="topologiesRemarquables"> Topologies remarquables des graphes </h3>
+
+
+
+<div class="important">
+<p> On parle de <strong class="title">topologie</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Théorie_des_graphes#Topologies" target="_BLANK">W</a> pour désigner telle ou telle <strong class="defin">structure particulière</strong> qu'on peut concevoir dans un <strong>graphe</strong>. </p> 
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/topologies.jpg" width="200px">
+<p> Pour les <strong>réseaux informatiques</strong>, on distingue quelques <strong class="title">topologies remarquables</strong> : </p>
+	
+<ul>
+	<li> L'<strong class="specialLB">arbre</strong>  est une topologie dans laquelle on distingue un nœud <strong>racine</strong>, des nœuds <strong>feuilles</strong> et <strong class="defin">aucun circuit</strong>.  </li>
+
+	<div class="expert">
+	<div class="nobullet"> (Peu importe l'orientation choisie de représentation du graphe : la racine peut très bien se situer en bas et les feuilles en haut.) </div>
+	</div><!-- expert -->
+
+	<li> Le <strong class="specialLB">bus</strong> est une topologie <strong class="defin">sans circuit</strong> dans laquelle tout chemin est une <strong>partie</strong> d'<strong class="defin">un seul et même chemin</strong> (celui reliant les deux nœuds extrêmes). </li>
+
+	<div class="expert">
+	<div class="nobullet"> (Le terme de « bus » peut faire référence à la représentation usuelle d'une ligne d'autobus sans ramification.) </div>
+	</div><!-- expert -->
+
+	<li> l'<strong class="specialLB">anneau</strong> est une topologie presque comme celle de <strong class="defin">bus</strong> mais dans laquelle les nœuds extrêmes sont reliés et forment <strong class="defin">un circuit unique</strong>. </li>
+
+	<li> le <strong class="specialLB">maillage</strong> – structure dans laquelle chaque nœud est relié à plusieurs nœuds voisins pour <strong class="defin">diversifier les chemins</strong> possibles entre deux nœuds donnés.  </li>
+</ul>
+</div><!-- complement -->
+
+<p> Il est fréquent qu'un <strong>réseau informatique</strong> soit <strong class="defin">localement architecturé</strong> selon <strong class="title">diverses topologies</strong>. En effet, chaque topologie présente des <strong class="pros">avantages</strong> et des <strong class="cons">inconvénients</strong> en termes de <strong>performances</strong> (débits), de <strong>complexité</strong>, de <strong>fiabilité</strong>, de <strong>sécurité</strong>, de <strong>coût</strong>… Ainsi : </p>
+
+<ul>
+	<li> la topologie en <strong class="specialLB">bus</strong> est <strong class="pros">économique</strong> du point de vue du <strong>câblage</strong> mais nécessite des <strong class="cons">protocoles complexes</strong> d'accès au médium (avec gestion des collisions), puisqu'il est partagé par tous les nœuds ; </li>
+
+	<li> à l'inverse, la topologie en <strong class="specialLB">arbre</strong> est <strong class="cons">coûteuse</strong> du point de vue du <strong>câblage</strong> mais supprime les zones de collisions ; elle est donc <strong class="pros">performante</strong> en termes de <strong>débits</strong> ; </li>
+
+	<li> la topologie en <strong class="specialLB">anneau</strong>, et plus encore la topologie <strong class="specialLB">maillée</strong>, sont <strong class="cons">complexes</strong> puisqu'entre deux nœuds existent plusieurs chemins, mais cette redondance présente l'avantage d'une <strong class="pros">meilleure fiabilité</strong>, en cas de défaillance d'une liaison. </li>
+</ul>
+
+<div class="remarques">
+<p class="remarque"> Le terme de « <strong class="title">topologie</strong> » ne doit pas être confondu avec celui employé pour désigner une <strong>autre branche des mathématiques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Topologie" target="_BLANK"></a> consacrée à l'étude des objets géométriques en termes de connexité, de compacité, de distances, etc. </p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Architecture générale des réseaux informatiques </h2>
+
+
+<p> En rappel de l'introduction de ce chapitre, soulignons bien ceci : l'architecture d'un réseau informatique ne peut être comprise qu'en tenant compte des <strong>technologies</strong> <strong class="title">matérielles</strong> <strong class="warning">et</strong> <strong class="title">logicielles</strong> mises en œuvre (sachant que les technologies logiciels peuvent être implémentées en parties par des circuits électroniques). </p>
+
+<p> Cette remarque préliminaire vaut pour <strong>tous les éléments constitutifs d'un réseau</strong> : les nœuds comme les liaisons ne peuvent être correctement identifiés qu'au regard des aspects matériels et logiciels. </p>
+
+
+
+<h3 id="noeud"> Notion de nœud dans un réseau </h3>
+
+
+
+<div class="important">
+<p> Dans un réseau informatique, on appelle <strong class="title">nœud</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nœud_(réseau)" target="_BLANK">W</a> toute <strong class="defin">machine</strong> susceptible d'adopter un <strong class="defin">comportement « intelligent »</strong> au sens où elle ne se contente pas d'émettre systématiquement les mêmes signaux que ceux qu'elle reçoit. </p>	
+
+<p> Très souvent, un nœud est doté d'une <strong>adresse logicielle</strong> – typiquement une adresse <em class="bold"><em class="sigle">IP</em></em>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans un réseau informatique, les <strong class="title">nœuds</strong> sont typiquement les <strong class="defin">ordinateurs</strong>, <strong class="defin">serveurs</strong>, <strong class="defin">routeurs</strong>… Toutefois,	même si un nœud est identifiable au sens de la <strong>théorie des graphes</strong> (il semble à la jonction de plusieurs liaisons), il peut être pertinent, à un certain niveau d'abstraction, de ne <strong class="warning">pas</strong> le considérer comme tel. C'est notamment le cas : </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/Tbnc.png" width="100px" style="margin-top: 0.5em">
+	<li> d'une <strong class="specialLB">simple dérivation</strong> de câblage comme celles qui peuvent être  employées (aujourd'hui, très rarement) en technologie <em class="sigle">RJ45</em> ou <em class="sigle">BNC</em> – cf. photo ci‑contre ; en effet, un élément électriquement <strong>passif</strong> ne peut pas avoir un comportement intelligent ;  </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/repeteurWifi.png" width="150px" style="margin-top: 0.5em">
+	<li> d'un <strong class="specialLB">répéteur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Répéteur" target="_BLANK">W</a>, quelle que soit sa technologie (filaire, sans‑fil, etc.), car sa seule fonction est juste de <strong>prolonger une liaison</strong> ; en termes de topologie, il est pertinent de ne pas considérer de nœud intermédiaire dans cette liaison ; </li>
+	</div><!-- display -->
+  
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/hub.png" width="200px" style="margin-top: 0.5em">
+	<li> et même un <strong class="specialLB">concentrateur</strong> <em>Ethernet</em> <a class="external" href="https://fr.wikipedia.org/wiki/Hub_Ethernet" target="_BLANK">W</a> (en anglais, <em class="english">hub</em>), car il n'assure <strong>aucune fonction de routage ni de commutation</strong> (il transmet les données qu'il reçoit à tous les équipements qui lui sont raccordés. </li>
+
+  <div class="expert">
+	<div class="nobullet"> Attention, ce type de <strong class="cons">machine obsolète</strong> ne doit <strong class="warning">pas être confondu</strong> avec un <strong>commutateur</strong> (<em class="english">switch</em>) qui, lui, constitue bien un nœud de réseau, même s'il n'est pas toujours doté d'une adresse <strong><em class="sigle">IP</em></strong>. En effet, il est capable de sélectionner un destinataire parmi les équipements qui lui sont raccordés et de lui transmettre exclusivement des données. </div>
+  </div><!-- expert -->
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->	
+
+
+
+<h3> Types de liaisons dans un réseau </h3>
+
+
+
+<div class="important">
+<p> Dans un réseau, une <strong class="title">liaison</strong> entre deux nœuds est dite : </p>
+<ul>
+	<li> <strong class="specialLB">simplex</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Communication_simplex" target="_BLANK">W</a> si les données ne peuvent y transiter que dans <strong class="defin">un seul sens</strong> ; </li>
+
+	<li> <strong class="specialLB">half duplex</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Duplex_(canal_de_communication)" target="_BLANK">W</a> si les données peuvent y transiter dans <strong class="defin">les deux sens</strong> mais <strong class="cons">pas simultanément</strong> ; </li>
+
+	<li> <strong class="specialLB">full duplex</strong> (cf. le lien supra) si les données peuvent y transiter dans <strong class="defin">les deux sens</strong> et <strong class="pros">simultanément</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p>	Dans les <strong>réseaux informatiques</strong>, les liaisons de type <strong class="title">simplex</strong> sont <strong class="cons">rares</strong>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/cableFTP.png" width="250px">
+<p> Dans les <strong>réseaux locaux</strong>,	les liaisons sont le plus souvent réalisées en <strong class="title">full duplex</strong>. C'est notamment le cas avec le standard <strong class="specialV">Ethernet commuté</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Ethernet#Évolution_majeure:_Ethernet_commuté_(les_switches)" target="_BLANK">W</a> qui s'est imposé. Avec les câbles à <strong>paires torsadées</strong> – la solution technique de loin la plus utilisée aujourd'hui – au moins <strong class="defin">deux paires</strong> peuvent être requises, <strong>une pour chaque sens</strong> de transmission. </p>
+</div><!-- display -->	
+</div><!-- complement -->
+
+<div class="expert" id="multiplexage">
+<p> Dans les <strong>liaisons à grande distance</strong>, sur un médium de transmission constitué de <strong class="cons">deux conducteurs seulement</strong> (typiquement, une liaison série), il existe <strong class="title">diverses techniques de multiplexage</strong> pour implémenter une liaison de type <strong>duplex</strong>. </p>
+<ul>
+	<li> Le <strong class="specialLB">multiplexage fréquentiel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multiplexage_fréquentiel" target="_BLANK">W</a> consiste à répartir les signaux sur <strong>deux plages de fréquences distinctes</strong> de la bande passante du médium (une pour chaque sens). </li>
+
+	<div class="nobullet">Plus particulièrement désignée <strong><em class="sigle">FDD</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Duplex_(telecommunications)#Frequency-division_duplexing" target="_BLANK">W</a> (<em class="english">frequency‑division duplexing</em>), cette technique est par exemple employée sur <em>la</em> paire torsadée du câble téléphonique (<em class="sigle">RTC</em> – cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#reseauRTC" target="_BLANK"></a>) dans la boucle locale qui raccorde un abonné à l'Internet par une liaison dite <strong><em class="sigle">ADSL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/ADSL" target="_BLANK">W</a>.  </div>
+
+
+	<li> Le <strong class="specialLB">multiplexage temporel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multiplexage_temporel" target="_BLANK">W</a> consiste à répartir périodiquement des signaux dans le temps, selon une <strong>période suffisamment courte</strong> pour donner l'illusion que les communications opèrent simultanément dans les deux sens. </li>
+
+	<div class="nobullet">Plus particulièrement désignée <strong><em class="sigle">TDD</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Duplex_(telecommunications)#Time-division_duplexing" target="_BLANK">W</a> (<em class="english">time‑division duplexing</em>), cette technique était employée dans les liaisons <em>Ethernet</em> anciennes connectées par des hubs. </div> 
+</ul>
+</div><!-- expert -->
+
+
+<h4> Modulation dans une liaison à grande distance </h4>
+
+
+<div class="complement">
+<p> Dans les systèmes numériques, l'<strong>information</strong> est le plus souvent codée sous forme binaire par <strong class="defin">deux niveaux de tension remarquables</strong>  – typiquement, 0 - 5 V. Mais il n'est <strong class="warning">pas commode</strong> de transmettre sous cette forme les données sur de <strong class="title">longues distances</strong> : </p>
+
+<ul>
+	<li> en bande de base (c'est‑à‑dire sans modulation), le <strong>potentiel haut</strong> (5 V) n'est <strong class="warning">pas suffisant</strong>, il est rapidement atténué par les <strong class="cons">chutes de tension</strong> inhérentes à la résistance des conducteurs (laquelle est proportionnelle à sa longueur) ; </li>
+
+	<li> et par ailleurs, les <strong>signaux logiques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Signal_logique" target="_BLANK">W</a> sont en fait constitués d'<strong class="warning">harmoniques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Harmonique_(électricité)" target="_BLANK"></a> dont les hautes fréquences peuvent facilement atteindre les <strong class="cons">limites de la bande passante</strong> des conducteurs ; il en résulte un « émoussage » des créneaux (fronts montants et descendants) que devraient normalement présenter les signaux. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> Pour pallier ces problèmes, il existe <strong>diverses techniques</strong> d'amplification, d'encodage et de <strong class="title">modulation du signal</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modulation_du_signal" target="_BLANK">W</a> (modulation d'amplitude, de fréquence, de phase, etc.). Une telle opération et sa démodulation réciproque sont opérées par des <strong>machines dédiées</strong> appelées <strong class="specialLB">modem</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modem" target="_BLANK">W</a>(pour <em class="english">modulator‑demodulator</em> en anglais), qui constituent alors les deux nœuds d'extrémité de la liaison.  </p>
+</div><!-- important -->
+
+<div class="expert"> 
+<p> Le <strong class="title">coût</strong> en termes de <strong class="title">débit</strong> des opérations de modulation et de démodulation peut être <strong class="pros">compensé</strong> par certaines techniques de modulation numérique qui mettent en œuvre des <strong class="defin">symboles multi‑bits</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Rapidité_de_modulation" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+
+
+<h4> Spécificité des liaisons sans fil </h4>
+
+
+<div class="complement">
+<p> À toutes les échelles de réseaux, il existe des technologies permettant d'établir des liaisons dites <strong class="title">sans‑fil</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_sans_fil" target="_BLANK">W</a>(en anglais, <strong>wireless</strong>) : <em class="mark">Bluetooth</em>, <em class="mark">Wi‑Fi</em>, <em class="mark">WiMAX</em>, et toutes les technologies de la téléphonie mobile (<em class="sigle">GSM</em>, <em class="sigle">GPRS</em>, <em class="sigle">UMTS</em>, <em class="sigle">LTE</em>…). Elles sont principalement motivées par : </p>
+<ul>
+	<li> la <strong class="pros">mobilité</strong> qu'elles confèrent aux <strong>nœuds terminaux</strong> (ordinateurs portables, smartphones…) raccordés ainsi aux réseaux ; </li>
+
+	<li> d'éventuelles <strong class="pros">économies</strong> d'infrastructures (par l'absence de câbles à installer). </li>
+</ul>
+<p> En contre‑partie, les <strong class="title">performances</strong> en termes de <strong>débits</strong> et de <strong>fiabilité de connexion</strong> sont en général <strong class="cons">moindres</strong> qu'avec des liaisons câblées ou fibrées. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> En termes de <strong class="title">topologie</strong>, cette mobilité se traduit d'abord par le <strong class="defin">caractère éphémère</strong> des <strong>nœuds terminaux</strong> et donc de leur <strong>liaison</strong> dans le réseau. De plus, pour augmenter la mobilité des appareils connectés, en particulier dans les réseaux de grandes tailles, on a tendance à <strong class="defin">multiplier les points d'accès</strong> possibles. Lorsqu'un appareil se déplace physiquement dans le réseau, il est alors souhaitable que sa liaison change automatiquement pour se raccorder au point d'accès le plus proche. On parle d'<strong class="specialLB">itinérance</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Itinérance_(téléphonie)" target="_BLANK">W</a> (en anglais, <strong>roaming</strong>), un concept n'existe pas seulement en téléphonie. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="partage"> Techniques de partage d'un médium de transmission </h3>
+
+
+
+<div class="important">
+<p> Dans un réseau informatique, et comme d'ailleurs dans n'importe quel réseau de transport, sauf cas particuliers et extrémités, le <strong class="title">médium de transmission</strong> des liaisons – c'est‑à‑dire le <strong>support physique</strong> des communications – doit presque toujours être <strong class="defin">partagé</strong> entre diverses machines souhaitant communiquer. </p>
+
+<p> C'est évidemment le cas des <strong class="specialLB">liaisons sans fil</strong> qui utilisent un médium forcément commun (le champs électromagnétique ambiant), mais aussi des <strong class="specialLB">liaisons filaires</strong> lorsqu'elles occupent une place « stratégique » dans l'architecture du réseau, en particulier si elles sont <strong>proches de la racine</strong> dans une topologie en arbre. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il existe <strong>différentes</strong> <strong class="title">techniques de partage</strong> d'un médium. La plus usuelle – celle mise en œuvre par le <strong class="specialO">protocole <em class="sigle">TCP</em></strong> – repose sur la <strong class="specialLB">fragmentation des données</strong> en <strong class="defin">paquets</strong>, chaque paquet étant numéroté et portant l'adresse des interfaces émettrices et réceptrices. On peut ainsi faire transiter les uns après les autres des paquets issus de communications différentes, au gré de la demande. La durée de transit d'un paquet représente alors une unité indivisible de temps d'occupation du médium. </p>
+
+<div class="expert">
+<p> Cette technique s'apparente à du <strong class="specialLB">multiplexage temporel</strong> (cf. supra <a class="supra" href="Rc1-2_architecture#multiplexage"></a>), mais <strong>sans périodicité stricte</strong> puisque les paquets peuvent être de taille variable, et même transmis dans un ordre indifférent, ce qui apporte une grande souplesse dans les réseaux fortement sollicités. Elle sera <strong class="pros">revue en détail</strong> au chapitre R3‑I <a class="next" href="../R3-TransportReseauLiaison/Rc3-1_coucheTransport.html" target="_BLANK"></a>. </p>
+
+
+<p> Une autre technique importante est le <strong class="specialLB">multiplexage fréquentiel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multiplexage_fréquentiel" target="_BLANK">W</a> (<em class="sigle">FDM</em> pour <em class="english">frequency division multiplexing</em>). Basée sur le même principe que le <em class="sigle">FDD</em> (<em class="english">frequency division duplexing</em> – cf. supra <a class="supra" href="Rc1-2_architecture#multiplexage"></a>), cette technique consiste transmettre les données issues de différentes communications sur diverses <strong>bandes de fréquence</strong> dans la bande passante autorisée par le médium. Superposés lors de la transmission, les signaux sont séparés par filtrage à la réception. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+
+<h3 id="routage"> Notion de routage </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/topologie_maillee.png" width="200px" style="padding-top: 0.0em">
+<p> Dans un <strong>réseau informatique</strong>, en particulier lorsqu'il s'agit d'une infrastructure de transport de données à grandes distances, toute <strong class="defin">succession des liaisons</strong> parcourues par l'information transmise d'un nœud à un autre est appelée <strong class="title">route</strong>. Elle correspond à la notion de <strong>chemin</strong> dans un graphe. </p>
+
+  <img class="top-right" src="../img/routeurSymbole.png" width="80px" style="padding-top: 0.2em">
+<p> Pour une transmission de données, la <strong class="defin">détermination d'une route</strong> s'appelle le <strong class="title">routage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Routage" target="_BLANK">W</a>. Cette tâche est accomplie <strong>de proche en proche</strong> par des machines dédiées appelées <strong class="title">routeurs</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Routeur" target="_BLANK">W</a> (cf. le symbole usuel ci‑contre pour ce type de nœud). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le routage est une <strong class="warning">tâche complexe</strong> qui est assujettie à des protocoles mis en œuvre de façon sur le réseau – en particulier le <strong>protocole <em class="sigle">IP</em></strong> – sur la base des <strong>adresses logiques</strong> attribuées à ses nœuds. </p>
+
+<p>	Sans entrer dans les détails, chaque routeur dispose d'une <strong class="title">table de routage</strong> qui, pour chaque <strong>adresse <em class="sigle">IP</em></strong> de <strong class="specialO">réseau local destinataire</strong>, indique l'<strong>adresse <em class="sigle">IP</em></strong> de l'<strong class="specialT">interface réseau d'un routeur voisin</strong> qui est sur une « <strong>bonne route</strong> » pour mener au réseau destinataire ; en anglais, on parle de <strong>next hop</strong>, c'est‑à‑dire de « prochain saut ». Le routage entre deux réseaux locaux éloignés est ainsi déterminé <strong class="defin">de proche en proche</strong> par les routeurs. </p>
+</div><!-- complement -->
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/routage.png" width="400px" >
+<p> La <strong>table de routage</strong> d'un routeur peut être <strong class="defin">renseignée par un technicien</strong> réseau dans un fichier de configuration. On parle alors de <strong class="title">routage statique</strong>. </p>
+
+<p> Mais il existe aussi des technologies de <strong class="title">routage dynamique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Routage_dynamique" target="_BLANK">W</a>. Dans un <strong class="specialLB">réseau local</strong>, on peut configurer les routeurs pour qu'ils utilisent le <strong class="defin">protocole <em class="sigle">RIP</em></strong> (<em class="english">routing information protocol</em>) qui permet aux routeurs d'<strong>enrichir automatiquement leur table de routage</strong> au fur et à mesure des requêtes de routage qui leur sont soumises. </p>
+<ul>
+	<li> Lorsqu'un paquet de données comporte une <strong>adresse <em class="sigle">IP</em></strong> de <strong class="specialO">réseau destinataire</strong> ne figurant <strong class="cons">pas dans la table de routage</strong>, le routeur interroge ses nœuds voisins, qui eux‑mêmes peuvent récursivement <strong class="defin">propager la requête</strong> de proche en proche, jusqu'à obtenir une réponse positive. </li>
+
+	<li> Cette réponse remonte alors la chaîne de requête jusqu'au routeur qui en était à l'origine. Ce dernier peut alors <strong class="pros">compléter sa table de routage</strong> et router le paquet. </li>
+</ul>
+
+<p> À l'échelle de l'<strong class="specialLB">Internet</strong>, la <strong>gestion des tables de routage</strong> est assurée par d'<strong class="warning">autres protocoles plus complexes</strong>, dits applicatifs, notamment <strong class="defin"><em class="sigle">BGP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Border_Gateway_Protocol" target="_BLANK">W</a> (<em class="english">border gateway protocol</em>) qui permet le partage de routes entre systèmes autonomes (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#Internet" target="_BLANK"></a>). </p>
+
+<p> Tous ces aspects seront <strong class="pros">revus en détail</strong> au chapitre R3‑II <a class="next" href="../R3-TransportReseauLiaison/Rc3-2_coucheReseau.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<h4> Cas des réseaux locaux </h4>
+
+
+<div class="complement"> 
+<p> Dans un <strong>réseau local</strong>, on parle préférentiellement de <strong class="title">chemin</strong> pour désigner la <strong class="defin">succession des liaisons</strong> permettant à deux machines de communiquer. </p>
+</div><!-- complement -->
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/topologie_arbre.png" width="200px" >
+<p> Lorsque le réseau local adopte une <strong class="defin">topologie en arbre</strong> (c'est presque toujours le cas aujourd'hui), alors il n'y a qu'<strong class="pros">un seul chemin possible</strong> entre deux machines. La problématique de la recherche du chemin est donc plus simple que celle du routage. Elle est réalisée par <strong class="title">commutation</strong>, sur la base des <strong>adresses physiques</strong> – dites <strong><em class="sigle">MAC</em></strong> (cf. chap. R1‑III <a class="next" href="Rc1-3_adressage.html#adresseMAC" target="_BLANK"></a>) – des machines. </p>
+
+	<img class="top-right" src="../img/switchSymbole.png" width="100px" >
+<p> Une machine assurant la fonction de commutation est appelée un <strong class="title">commutateur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Commutateur_réseau" target="_BLANK">W</a> (cf. son symbole usuel ci‑contre). Dans la pratique, on le désigne par son terme anglais <strong>switch</strong>. </p>
+</div><!-- important -->
+
+
+<h4> Notion de lien local </h4>
+
+
+<div class="important">
+<p> Dans un réseau, on considère implicitement le <strong class="title">lien local</strong> (en anglais, <strong>link‑local</strong>) comme étant l'ensemble des <strong>nœuds</strong> qui sont <strong class="defin">reliés</strong> entre eux <strong class="defin">sans routeur intermédiaire</strong>, c'est‑à‑dire soit directement, soit via un ou plusieurs <strong>commutateurs</strong> (cf. l'exemple en figure ci‑dessous). </p>
+</div><!-- important -->
+
+<img class="top-left" src="../img/link-local.png">
+
+<div class="complement">
+<p> La notion découle en fait de celle d'<strong class="title">adresse de lien local</strong> – en anglais, <strong>link‑local address</strong> <a class="external" href="https://en.wikipedia.org/wiki/Link-local_address" target="_BLANK">W</a> – qui existe aussi bien en <strong>IPv4</strong> (cf. chap. R1‑III <a class="next" href="Rc1-3_adressage.html#adressesPriveesSpeciales" target="_BLANK"></a>) qu'en <strong>IPv6</strong> (cf. chap. R1‑III <a class="next" href="Rc1-3_adressage.html#IPv6LinkLocal" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+
+
+<h3 id="publicPrive"> Notions de réseau public et privé </h3>
+
+
+
+<div class="important">
+<p> On qualifie de <strong class="title">privé</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_privé" target="_BLANK">W</a> un <strong>réseau informatique</strong> dont les <strong class="defin">nœuds</strong> ne sont <strong class="defin">pas accessibles</strong> <strong>par routage</strong> depuis des réseaux externes (hormis son nœud d'interconnexion – la <em>passerelle</em>, cf. infra).  Par opposition, on qualifie de <strong class="title">public</strong> tout <strong>réseau</strong> qui n'est <strong class="defin">pas privé</strong>. </p>
+
+<p>	À l'intérieur d'un réseau privé, si les communications opèrent avec les <strong class="pros">mêmes protocole que pour l'Internet</strong>, on parle d'<strong class="title">Intranet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Intranet" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Les <strong>qualificatifs</strong> « <strong class="title">public</strong> » et « <strong class="title">privé</strong> » appliqués aux réseaux n'ont donc <strong class="warning">aucun rapport</strong> avec le fait que l'organisme qui gère tel ou tel réseau ait un <strong>statut juridique</strong> public ou privé. Typiquement : </p>
+<ul>
+	<li>  les <strong class="specialLB">réseaux domestiques</strong> des particuliers et les réseaux des entreprises ou d'autres organismes (universités, ministères, etc.) sont principalement constitués en réseaux <strong class="title">privés</strong> ; ils peuvent néanmoins comprendre une <strong class="defin">partie publique</strong>, par exemple pour donner un accès général à des serveurs de données ; </li>
+
+	<li> les <strong class="specialLB">grands réseaux</strong> (<em class="english">backbones</em>) des <strong>opérateurs de transport</strong> de l'Internet, et leurs <strong>réseaux d'accès</strong> sont des réseaux <strong class="title">publics</strong>, à l'exception de certaines <strong class="defin">parties privés</strong>.</li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="passerelle"> Interconnexion entre deux réseaux </h4>
+
+
+<div class="important" style="display: inline-block;"> 
+<p> Le <strong class="title">nœud d'interconnexion</strong> entre <strong>deux réseaux</strong> distincts parce qu'ils sont l'un <strong class="specialLB">public</strong> et l'autre <strong class="specialLB">privé</strong> ou qu'ils mettent en œuvre des <strong class="specialO">technologies de transmission différentes</strong>, est appelé <strong class="defin">passerelle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Passerelle_(informatique)" target="_BLANK">W</a> – en anglais, <strong>gateway</strong>. </p>
+  <img class="top-right" src="../img/gatewaySymbole.png" width="80px" >
+<p> Une <strong class="title">passerelle</strong> est le plus souvent représenté par le <strong class="defin">même symbole</strong> qu'un routeur, mais aussi parfois avec un <strong class="defin">signe distinctif</strong> comme celui figuré ci‑contre. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Une <strong class="title">passerelle</strong> est un équipement de type <strong>routeur</strong> qui intègre également d'autres fonctionnalités, typiquement : </p>
+<ul>
+	<li> un <strong>modem</strong>, et on parle alors de <strong class="specialLB">modem‑routeur</strong> ; </li>
+
+	<li> un <strong>module Wi‑Fi</strong> (interface, antenne) et on parle alors de <strong class="specialLB">routeur Wi‑Fi</strong>. </li>
+</ul>
+<p> Ainsi, une <strong>box d'abonné</strong> à l'Internet est un équipement qui, usuellement, intègre <strong class="title">deux passerelles</strong> : </p>
+<ul>
+	<li> un <strong class="specialLB">modem‑routeur</strong> pour l'interconnexion entre le <strong>réseau local</strong> et l'<strong>Internet</strong> ; </li>
+
+	<li> un <strong class="specialLB">modem‑routeur</strong> pour l'interconnexion, au sein du réseau local, entre le réseau <strong>Ethernet</strong> et le réseau<strong> WiFi</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="Expert">
+<p> Techniquement, on attribue aux interfaces des machines d'un <strong class="title">réseau privé</strong> des <strong>adresses <em class="sigle">IP</em></strong> dites <strong class="title">privées</strong> parce que <strong class="warning">non routables</strong> <strong>sur l'Internet</strong>, au sens où elles sont exclues des tables de routage dans les parties publiques du réseau global (cf. chap. R1‑III <a class="next" href="Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>).  </p>
+
+<p> Pour que les applications clientes s'exécutant sur les machines d'un réseau privé puissent néanmoins envoyer des requêtes et obtenir des réponses à l'extérieur du réseau, la passerelle met alors en œuvre une technique logicielle dite de <strong class="title">translation d'adresse</strong> </strong> <a class="external" href="https://fr.wikipedia.org/wiki/Network_address_translation" target="_BLANK">W</a> — en anglais, <em class="english">network address translation</em> ou <strong><em class="sigle">NAT</em></strong>.	</p>
+</div><!-- Expert -->
+
+
+<div class="expert>">
+<h4 id="#DMZ"> Notion de zone démilitarisée (DMZ) </h4>
+
+
+<div class="complement">
+<p> Dans un <strong>réseau privé</strong>, une <strong class="title">zone démilitarisée</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Zone_démilitarisée_(informatique)" target="_BLANK">W</a> – en anglais, <em class="english">demilitarized zone</em>, abrégé <strong class="title"><em class="sigle">DMZ</em></strong> – est un <strong>sous‑réseau</strong> dont les interfaces sont rendues <strong class="defin">accessibles depuis l'extérieur</strong> (en général, l'Internet). Il s'agit donc d'une <strong class="defin">partie publique</strong>. </p>
+
+<p> Typiquement, on y héberge des <strong>serveurs</strong> de pages web, de messagerie, etc. </p>
+</div><!-- complement -->
+
+<p> Lorsqu'un réseau comporte une <strong><em class="sigle">DMZ</em></strong>, il est <strong class="warning">impératif</strong> que le reste du réseau – la <strong>partie privée</strong> – soit <strong class="pros">protégée</strong> des intrusions depuis l'extérieur. On utilise pour cela un composant logiciel appelé <strong class="title">pare‑feu</strong> <a class="external" href="https://fr.wikipedia.org/wiki/pare‑feu_(informatique)" target="_BLANK">W</a> (en anglais, <em class="english">firewall</em>). </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/dmz2firewall.png" width="250px" >
+<p> Par ailleurs, une <strong><em class="sigle">DMZ</em></strong> n'est pas nécessairement accessible sans restriction depuis la partie privée du réseau. Un autre logiciel pare‑feu peut également gérer les autorisations internes d'accès aux ressources stockées dans la <strong><em class="sigle">DMZ</em></strong>. Une <strong class="title">architecture classique</strong> consiste donc à isoler la <strong><em class="sigle">DMZ</em></strong> entre <strong class="defin">deux pare‑feu</strong> (cf. fig. ci contre). </p>
+</div><!-- display -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="reseauVirtuel"> Notions de réseau virtuel  </h3>
+
+
+
+<div class="important">
+<p> Dans un réseau informatique – voire plusieurs réseaux interconnectés – il est possible par diverses techniques de <strong class="defin">sélectionner certains nœuds</strong> pour former un <strong>(sous‑)</strong><strong class="title">réseau virtuel</strong> distinct du reste du réseau formé par les autres nœuds. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Deux notions ne doivent pas être confondues :  </p>
+<ul>
+	<li> Si, dans un <strong>réseau local</strong> (<em class="sigle">LAN</em> – cf. infra <a class="infra" href="Rc1-2_architecture#lan"></a>), on délimite un sous‑réseau par un <strong class="defin">plan d'adressage <em class="sigle">IP</em></strong> approprié (cf. chap. R1‑III <a class="next" href="Rc1-3_adressage.html" target="_BLANK"></a>), on parle de <strong class="title"><em class="sigle">VLAN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_local_virtuel" target="_BLANK">W</a> (<em class="english">virtual local area network</em>). </li>
+
+	<li> Si, <strong>à grande échelle</strong>, grâce à des solutions logicielles spécifiques, on établie des <strong class="defin">liaisons « privilégiées »</strong> entre  des machines situées dans des réseaux locaux différents, on crée une sorte de réseau local virtuel et on parle alors de <strong class="title"><em class="sigle">VPN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_privé_virtuel" target="_BLANK">W</a> (<em class="english">virtual private network</em>). </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> Encore une fois, on voit que les <strong class="title">aspects logiciels</strong> ont une <strong class="warning">importance déterminante</strong> en termes de compréhension de l'architecture des réseaux : </p>
+<ul>
+	<li> <strong>deux machines</strong> peuvent être <strong>voisines</strong>, raccordées au même commutateur, et pourtant <strong class="warning">ne pas pouvoir communiquer</strong> parce qu'elles sont adressées sur <strong>deux <em class="sigle">VLAN</em> distincts</strong>, sans passerelle commune ; </li>
+
+	<li> <strong>deux machines</strong> peuvent être <strong>très distantes</strong>, raccordées à deux réseaux locaux distincts, mais <strong class="defin">pouvoir communiquer</strong> parce qu'elles sont reliées par un <strong>même <em class="sigle">VPN</em></strong>. </li>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3 id="diffusion"> Types de diffusion </h3>
+
+
+
+<div class="important">
+<p> Dans un réseau informatique, l'<strong class="defin">émission de donnée</strong> peut opérer via plusieurs <strong class="title">types de diffusion</strong>, selon le <strong>nombre d'adresses destinataires</strong> des données. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les différents <strong class="title">types de diffusion</strong> sont les suivants.  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/diffusionUnicast.png" width="200px"  style="margin-top:0.5em">
+	<li> La diffusion à <strong>destinataire unique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Unicast" target="_BLANK">W</a> est communément appelée <strong class="specialLB">unicast</strong> (on peut aussi parler de diffusion <em>point à point</em>). À proprement parler, il ne s'agit pas de diffusion mais simplement d'<strong class="defin">émission</strong>. </li>
+
+	<div class="nobullet"> C'est le type d'émission qui est <strong class="pros">le plus souvent utilisée</strong> car bien adapté aux <strong>applications courantes de l'Internet</strong> : envoi de courriel (y compris avec des destinataires multiples, chacun faisant l'objet d'une émission <em class="english">unicast</em>), accès à une page web, un fichier, etc.  </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/diffusionMulticast.png" width="200px" style="margin-top:0.5em">
+	<li> La diffusion à <strong>destinataires multiples</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multicast" target="_BLANK">W</a> est appelée communément <strong class="specialLB">multicast</strong> (on peut aussi parler de diffusion <em>multipoint</em> ou de <em>multidiffusion</em>). </li>
+  
+  <div class="nobullet"> En <strong class="specialO">IPv4</strong> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#adresses" target="_BLANK"></a>), ce type de diffusion n'est pour le moment employé que dans un <strong class="cons">nombre limité d'applications</strong>, par exemple en <strong>radio ou télévision <em class="sigle">IP</em></strong> (streaming du direct à l'antenne), via des <strong class="defin">adresses spécifiques</strong> et des mécanismes d'<strong class="defin">abonnement</strong>. </div>
+
+  <div class="nobullet"> Mais en <strong class="specialO">IPv6</strong>, le recours au <strong class="specialLB">multicast</strong> est beaucoup plus courant, car il <strong class="pros">remplace le broadcast</strong>.  </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/diffusionBroadcast.png" width="200px"  style="margin-top:0.5em">
+	<li> La <strong>diffusion générale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Broadcast_(informatique)" target="_BLANK">W</a> est communément appelée <strong class="specialLB">broadcast</strong> ;  elle couvre <strong>toutes les adresses</strong> d'un (sous‑)réseau. </li>
+
+  <div class="nobullet"> Ce type de diffusion est <strong>fréquent en</strong> <strong class="specialO">IPv4</strong> via une adresse particulière, dite de <strong class="defin">adresse de broadcast</strong> dont chaque réseau ou sous‑réseau est doté. Y font appel des protocoles de gestion du réseau comme <strong><em class="sigle">ARP</em></strong> (<em class="english">address resolution protocol</em>) ou encore <strong><em class="sigle">DHCP</em></strong> (<em class="english">dynamic host configuration protocol</em>), lorsqu'un hôte d'un réseau n'ayant pas d'adresse <em class="sigle">IP</em> cherche à entrer en contact avec un serveur d'adresse. </div>
+
+  <div class="nobullet"> Techniquement commode, la diffusion <strong class="specialLB">broadcast</strong> présente évidemment l'inconvénient de <strong class="cons">peser sur le trafic</strong> des réseaux ; c'est pourquoi elle est <strong class="pros">abandonnée</strong> en <strong class="specialO">IPv6</strong> au profit de la diffusion <strong>multicast</strong>.  </div>
+  </div><!-- display -->
+
+  <div class="expert" style="display: inline-block;">
+		<img class="top-right" src="../img/diffusionAnycast.png" width="200px"  style="margin-top:0.5em">
+	<li> Il existe également la diffusion dite <strong class="specialLB">anycast</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Anycast" target="_BLANK">W</a> (sans terme équivalent en français) qui consiste à cibler la <strong class="defin">première adresse accessible</strong> figurant dans une <strong>liste d'hôtes </strong>pour fournir un service demandé.  </li>
+
+  <div class="nobullet"> La diffusion <strong class="specialLB">anycast</strong> est appliquée pour certains <strong>services très sollicités</strong> comme ceux du <strong><em class="sigle">DNS</em></strong> (<em class="english">domain name system</em> – cf. chap. R2‑I <a class="next" href="../R2-Applications/Rc2-1_dns_url.html" target="_BLANK"></a>) ou du protocole <strong><em class="sigle">NTP</em></strong> (<em class="english">network time protocol</em> – cf. chap. R2‑VI <a class="next" href="../R2-Applications/Rc2-6_serviceTemps.html" target="_BLANK"></a>). En effet, ces services sont assurés par des <strong class="defin">pools de serveurs</strong> pour supporter des demandes en grands nombres ; lors d'une requête par un client, elle est diffusée en <strong class="specialLB">anycast</strong> vers le <strong class="pros">premier disponible</strong> parmi eux.  </div>
+  </div><!-- expert -->
+</ul>
+</div> <!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="echelleReseaux"> Architecture des réseaux par critère d'échelle </h2>
+
+
+
+<div class="expert">
+<p> Le <strong class="title">choix de l'architecture</strong> d'un réseau informatique dépend bien entendu de sa fonction principale (réseau domestique, boucle locale, réseau de transport, etc.) mais aussi de son <strong class="defin">échelle</strong> – c'est‑à‑dire de son <strong>étendue géographique</strong>, mais aussi de son <strong>nombre de nœuds</strong>. On peut facilement concevoir qu'il est plus économique d'opter pour une topologie en anneau plutôt qu'en maillage pour un réseau à grande échelle. </p>
+
+<p>	Dans la pratique, on distingue principalement <strong class="title">quatre grands types de réseaux</strong> par ordre croissant d'échelle : les <strong class="specialLB">réseaux personnels</strong>, les <strong class="specialLB">réseaux locaux</strong>, les <strong class="specialLB">réseaux métropolitains</strong> et les <strong class="specialLB">réseaux étendus</strong>. </p>
+
+<p> Ce critère de classement reste un peu <strong class="cons">subjectif</strong>, il ne doit pas être considéré comme strict car il existe une sorte de continuum de tailles entre deux catégories successives. </p>
+</div><!-- expert -->
+
+
+
+
+<h3 id="pan"> Réseaux personnels (PAN) </h3>
+
+
+
+<div class="important"> 
+<p> Un <strong class="title">réseau personnel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_personnel" target="_BLANK">W</a> – en anglais <em class="english">personal area network</em> ou <strong class="title"><em class="sigle">PAN</em></strong> – est un réseau informatique constitué : </p>
+<ul>
+	<li> de <strong class="defin">quelques nœuds</strong> – de l'ordre d'<strong>une dizaine</strong> maximum ; </li>
+
+	<li> de <strong class="defin">liaisons courtes</strong> – quelques <strong>dizaines de mètres</strong> tout au plus. </li>
+</ul>
+</div><!-- important -->
+
+
+
+
+<h4> Réseaux personnels sans fil (WPAN) </h4>
+
+
+<div class="complement"> 
+<p>	Un <strong>réseau personnel</strong> <strong class="title">sans fil</strong> (en anglais, <strong class="title"><em class="sigle">WPAN</em></strong>) est un réseau personnel où la communication entre les nœuds est opérée <strong class="defin">sans liaisons câblées</strong>. </p>
+
+<p> Son éventuel nœud de raccordement à l'Internet (borne <em class="mark">Wi‑Fi</em> publique ou antenne de téléphonie mobile) n'est pas toujours considéré comme faisant partie du réseau. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered" style="display: inline-block;">
+		<img class="top-right" src="../img/bluetoothLogo.png" width="80px" style="padding-top: 0em" >
+	<li> Un simple <strong class="title">smartphone</strong> et ses <strong class="title">accessoires</strong> (montre, casque, enceinte…) constitue un <strong><em class="sigle">WPAN</em></strong>. La technologie de liaison dominante est basée sur la norme <strong>Bluetooth</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bluetooth" target="_BLANK">W</a>. Elle forme des topologies en <strong>étoiles</strong> qui sont animées selon un modèle maître‑esclaves.</li>
+
+	<li> De même, certains <strong class="title">systèmes embarqués domotiques</strong> peuvent former, à une échelle un peu plus grande (bâtiment), un  <em class="sigle">WPAN</em></strong>, à l'aide de technologies de liaison comme <strong>ZigBee</strong> <a class="external" href="https://fr.wikipedia.org/wiki/ZigBee" target="_BLANK">W</a>, <strong>Z‑Wave</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Z-Wave" target="_BLANK">W</a>, <strong>Enocean</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Enocean" target="_BLANK">W</a>… Ces réseaux peuvent être architecturés selon diverses topologies : en étoile, maillée… </li>
+</ol>
+</div><!-- exemple -->
+
+
+<h4> Réseaux domestiques </h4>
+
+
+<div class="important">
+<p> Lorsqu'un réseau personnel est déployé à l'échelle d'un <strong class="defin">appartement</strong> ou d'une <strong class="defin">petite maison</strong>, on parle de <strong class="title">réseau domestique</strong>. </p>
+
+<p> Au delà d'une certaine échelle – <strong>grande maison très équipée</strong> – on peut parfois considérer qu'il s'agit d'un <strong class="specialLB">réseau local</strong> même si son usage est « domestique ». </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En règle générale, ces réseaux adoptent une <strong class="title">topologie en arbre</strong> avec pour <strong class="defin">racine</strong> la <strong>box</strong> d'abonné à l'Internet, usuellement fournie par le <strong><em class="sigle">FAI</em></strong>. </p>
+
+<p> En apparence simple, car de faibles dimensions, une <strong class="title">box <em class="sigle">FAI</em></strong> remplit de <strong class="defin">nombreuses fonctions</strong>. </p>
+<ul>
+  <li> Dans le <strong class="specialLB">réseau local</strong>, elle intègre : </li>
+  <ul>
+  	<li> un <strong>commutateur</strong> (<em class="english">switch</em>) à 4 ou 5 ports <em class="sigle">RJ45</em> ; </li>
+
+  	<li> une <strong>routeur Wi‑Fi</strong> pour offrir un point d'accès sans fils ; </li>
+  </ul>
+
+	<li> Pour l'accès à l'<strong class="specialLB">Internet</strong>, elle intègre : </li>
+  <ul>
+		<li> un <strong>routeur passerelle</strong> qui lui permet de jouer le rôle de passerelle par défaut du réseau ; </li>
+
+		<li> un <strong>modem <em class="sigle">ADSL</em></strong> ou <strong>fibre</strong>, afin de transmettre les données sur la liaison longue distance de la boucle locale. </li>
+	</ul>
+</ul>
+<p> De plus, elle assure également des fonctions de <strong class="defin">téléphonie <em class="sigle">IP</em></strong> et de <strong class="defin">télévision <em class="sigle">IP</em></strong> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#reseauInformatique" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Typiquement, un <strong class="title">réseau domestique</strong> peut raccorder : </p>
+<ul>
+	<li> un ou plusieurs <strong>ordinateurs</strong> et divers <strong>périphériques</strong> (imprimante, serveur de stockage dit <em class="sigle">NAS</em> <a class="external" href="https://fr.wikipedia.org/wiki/Serveur_de_stockage_en_réseau" target="_BLANK">W</a>, etc.), qui peuvent être reliés à la box par connexion : </li>
+
+  <ul>
+  	<li> filaire – et éventuellement via un switch supplémentaire ;</li>
+
+  	<li> sans‑fil – et éventuellement via un routeur <em class="mark">Wi‑Fi</em> plus puissant ; </li>
+
+  	<li> <em class="sigle">CPL</em> <a class="external" href="https://fr.wikipedia.org/wiki/Courants_porteurs_en_ligne" target="_BLANK">W</a> (courant porteur de ligne) ; </li>
+  </ul>
+	
+
+	<li> un <strong>téléphone</strong> « fixe » raccordé à la box par un câble téléphonique, éventuellement multi‑postes ; </li>
+
+	<li> une « <strong>box <em class="sigle">TV</em></strong> » associé à un téléviseur, qui est éventuellement raccordée à box principale par <em class="sigle">CPL</em> ; </li>
+
+	<li> divers <strong>appareils mobiles</strong> itinérants (smartphones, tablettes, etc.) reliés à la box par Wi‑Fi. </li>
+</ul>
+
+<p> La figure ci‑dessous donne un <strong>exemple possible d'architecture</strong> pour un tel réseau domestique déjà bien développé. </p>
+
+<img class="top-left" src="../img/reseauDomestique.png">
+</div><!-- exemple -->
+
+
+
+<h3 id="lan"> Réseaux locaux (LAN) </h3>
+
+
+
+<div class="important"> 
+<p> Un <strong class="title">réseau local</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_local" target="_BLANK">W</a> – en anglais <em class="english">local area network</em> ou <strong class="title"><em class="sigle">LAN</em></strong> – est un réseau informatique plus grand qu'un réseau personnel, mais dont l'étendue reste limitée à un voire <strong class="defin">quelques bâtiments</strong> réparties sur une ou <strong>plusieurs parcelles voisines</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Typiquement, il s'agit d'un réseau d'<strong class="defin">entreprise</strong> ou un organisme de <strong>taille moyenne</strong>, d'un <strong class="defin">lycée</strong> ou d'un <strong class="defin">petit campus universitaire</strong>. Un <strong class="title">réseau local</strong> peut comporter : </p>
+<ul>
+	<li> <strong>plusieurs centaines de nœuds</strong>, raccordés selon une <strong class="title">topologie en arbre</strong> voire <strong>mixte</strong> maillée‑arbre, réalisée par des routeurs et des commutateurs montés en cascade ; </li>
+
+	<li> des <strong>liaisons</strong> dépassant parfois la <strong>centaine de mètres</strong>, ce qui oblige alors à employer des technologies réservées usuellement aux réseaux plus grands (répéteurs, fibre optiques, etc.).  </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> La figure ci‑dessous illustre une <strong class="title">architecture possible</strong> pour un <strong>petit <em class="sigle">LAN</em></strong>, parmi un nombre incalculable d'autres possibilités. </p>
+	<img class="top-left" src="../img/LANtopology2.jpg">
+</div><!-- exemple -->
+
+<div class="expert">
+<p> L'<strong class="title">architecture d'un <em class="sigle">LAN</em></strong> peut devenir <strong class="warning">très complexe</strong> lorsque : </p>
+<ul>
+	<li> en plus des ordinateurs et des périphériques d'usage courant (imprimantes, scanners…), de nombreux <strong>téléphones fixes</strong> sont raccordés pour exploiter au mieux les protocoles <strong>VoIP</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Voix_sur_IP" target="_BLANK"></a> ; </li>
+
+	<li> l'organisme (entreprise ou autre) centralise ses fichiers sur des <strong>serveurs</strong> et met en œuvre des stratégies locales de stockage et de sauvegarde à travers un sous‑réseau appelé <em class="bold"><em class="sigle">SAN</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_de_stockage_SAN" target="_BLANK">W</a> (<em class="english">stockage area network</em>) ; </li>
+
+	<li> <strong>plusieurs points d'accès</strong> à l'Internet sont nécessaires, en raison soit du nombre important d'utilisateurs, soit de l'éloignement géographique des bâtiments ; </li>
+
+	<li> des possibilités sont offertes aux utilisateurs de se connecter au <em class="sigle">LAN</em> depuis l'extérieur, c'est‑à‑dire de mettre en place un <strong>accès distant</strong> sur <strong><em class="sigle">DMZ</em></strong> <a class="supra" href="Rc1-2_architecture#DMZ"></a> ou via un <strong><em class="sigle">VPN</em></strong> <a class="supra" href="Rc1-2_architecture#reseauVirtuel"></a>… </li>
+</ul>
+</div><!-- expert -->
+
+
+<div class="expert">
+<h4> Réseaux locaux « industriels » </h4>
+
+
+<div class="complement">
+<p> On peut aussi déployer un réseau local pour faire communiquer des <strong class="defin">équipements techniques</strong> (capteurs, actionneurs, composants de distribution d'énergie…) dans un <strong class="warning">environnement « difficile »</strong>, c'est‑à‑dire soumis à des <strong>contraintes sévères</strong> (températures, vibrations, normes de sécurité, etc.), par exemple : </p>
+<ul>
+	<li> un <strong>véhicule</strong> (automobile, camion, avion…) ;</li>
+
+	<li> une <strong>machine‑outil</strong> ou, à plus grande échelle, <strong>ligne de production</strong> industrielle ; </li>
+
+	<li> une <strong>salle de concert</strong>, un <strong>stade sportif</strong>, etc. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> On parle alors de <strong class="title">réseau local</strong> « <strong class="specialO">industriel</strong> » et ce concept se distingue de celui de réseau local usuel parce que l'on a recours à des <strong class="defin">topologies</strong> et des <strong class="defin">technologies spécialisées</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples" style="display: inline-block;">
+	<img class="top-right" src="../img/busCAN.png" width="500px">
+<p class="exemple"> Dans les <strong class="title">environnements confinés</strong> comme les véhicules ou les machines‑outils, pour minimiser les faisceaux de câbles, on privilégie la <strong>topologie en bus</strong> et on parle alors de <strong class="specialO">bus de terrain</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bus_de_terrain" target="_BLANK">W</a> (en anglais, <em class="english">fieldbus</em>). </p>
+
+<p> La figure illustrant ici l'emploi du <strong>bus de terrain</strong> <strong class="specialO"><em class="sigle">CAN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bus_de_données_CAN" target="_BLANK">W</a> (controller area network) ne donne qu'une <strong class="cons">représentation très simplifiée</strong> de la réalité. Aujourd'hui, même un simple véhicule particulier peut comporter <strong>plusieurs dizaines de composants</strong> communicants : actionneurs, capteurs de fin de course, etc. </p>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3> Réseaux métropolitains (MAN) </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">réseau métropolitain</strong> <a class="external" href="https://en.wikipedia.org/wiki/Metropolitan_area_network" target="_BLANK">W</a> (en anglais <em class="english">metropolitan area network</em> ou <strong class="title"><em class="sigle">MAN</em></strong>) est un réseau informatique qui s'étend à l'échelle d'une <strong class="defin">grande agglomération</strong> ou d'un <strong>vaste territoire</strong> (département).  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Principalement, on distingue <strong>deux sortes</strong> de <strong class="title">réseaux métropolitains</strong>, appelés respectivement <strong class="specialLB">réseaux de collecte</strong> et <strong class="specialLB">réseaux de transport</strong>. </p>
+<ul>
+	<li> Les <strong class="specialLB">réseaux de collecte</strong> des fournisseurs d'accès agrègent respectivement l'ensemble des <strong>boucles locales</strong> qu'ils gèrent ; ces réseaux comprennent aussi des <strong>serveurs</strong> dédiés aux communications (résolveurs et miroirs de bases de données <em class="sigle">DNS</em>, serveurs <em class="sigle">DHCP</em>…). </li>
+
+	<div class="nobullet">	En général, ces réseaux présentent des <strong class="defin">topologies mixtes</strong> <strong class="warning">assez complexes</strong> (anneau, étoiles, maillage…). </div>
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/MAN.png" width="400px" style="padding-top: 0.5em">
+	<li> Les <strong class="specialLB">réseaux de transport</strong> à l'échelle métropolitaine sont mis en place par des entreprises ou d'autres organismes pour <strong>relier des réseaux locaux</strong> sur des <strong>sites distants</strong> les uns des autres. Le plus souvent, les liaisons sont constituées en <strong>fibre optique noire</strong> (non activée) appartenant à des opérateurs d'infrastructures, auxquelles les entreprises raccordent des routeurs à haute à performance. </li>
+
+	<div class="nobullet"> Ces réseaux se limitent en général à <strong>quelques liaisons</strong>. Quand cela est opportun, on opte pour une <strong class="defin">topologie en boucle</strong> qui offre une <strong>redondance simple</strong> de routes. </div>
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Réseaux métropolitains sans fils </h4>
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/WiMAX_logo.png" width="100px">
+<p> À l'échelle d'un réseau métropolitain, la technologie de connexion sans fil la plus développée actuellement la norme dite <strong class="title">WiMAX</strong> <a class="external" href="https://fr.wikipedia.org/wiki/WiMAX" target="_BLANK">W</a> (<em class="english">Worldwide Interoperability for Microwave Access</em>). Toutefois, en France, elle n'est accessible que sur un petit nombre de territoires, principalement ceux qui sont mal desservis par les réseaux d'accès à l'Internet câblés ou fibrés, pour lesquels elle offre une solution de substitution. </p>
+</div><!-- complement -->
+
+<p> Depuis une douzaine d'années, le <strong class="title">développement</strong> de la technologie <strong>WiMAX</strong> semble <strong class="cons">freiné</strong> <a class="external" href="https://www.nextinpact.com/archive/46016-WiMAX-boucle-locale-radio-arcep.htm" target="_BLANK"></a>. On peut émettre l'hypothèse qu'il est <strong class="warning">concurrencé</strong> par celui des systèmes de <strong class="defin">téléphonie mobile</strong>, dont la clientèle est bien établie et dont l'<strong>étendue nationale</strong> et même <strong>internationale</strong> répond mieux aux besoins de mobilité sans cesse accrus. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="WAN"> Réseaux étendus (WAN) – systèmes autonomes </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">réseau étendu</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_étendu" target="_BLANK">W</a> (en anglais <em class="english">wide area network</em> ou <strong class="title"><em class="sigle">WAN</em></strong>) est un réseau informatique ou téléphonique qui s'étend à l'échelle d'une <strong class="defin">d'un pays</strong>, d'un <strong class="defin">continent</strong>, voire de la <strong>planète entière</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">réseaux étendus</strong> sont de type <strong class="defin">dorsale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dorsale_Internet" target="_BLANK">W</a> (en anglais, <em class="english">backbone</em>), c'est‑à‑dire des <strong>réseaux de transport</strong> de données qui relient des réseaux métropolitains ou des réseaux locaux. Ils sont constituées de <strong>liaisons fibrées</strong> à très haut débit installées sur des longues distances par des opérateurs de câblage qui les louent aux opérateurs de transport (sauf s'ils en sont eux‑mêmes). </p>  
+
+<p> Les dorsales adoptent le plus souvent une <strong class="defin">topologie faiblement maillée</strong> constituée principalement de <strong>boucles</strong> qui, comme pour les <strong><em class="sigle">MAN</em></strong> d'interconnexion, assurent à moindre coût une redondance simple. </p>
+
+<p> De tels réseaux sont appelés <strong class="title">systèmes autonomes</strong> car ils sont administrés par des <strong>entreprises</strong> ou des <strong>organismes nationaux</strong> qui sont chacun libres de choisir leur <strong class="defin">stratégies de routage</strong>. Pour garantir le bon fonctionnement de l'ensemble du réseau mondial de transport ainsi constitué, ils coopèrent via des protocoles de <strong>partages de routes</strong>.   </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> En <strong class="specialLB">France métropolitaine</strong> (c'est‑à‑dire hors départements et territoires d'Outre‑mer), les <strong class="title">principaux réseaux étendus</strong> sont : </li>
+  <ul>
+		<li> les réseaux des <strong>opérateurs de télécommunication</strong>, notamment : </li>
+		<ul>
+			<li> <em class="mark">Orange</em> (ancien opérateur historique du <em class="sigle">RTC</em>) dont le réseau ne semble pas publié ; </li>
+
+			<li> <em class="mark">Bouygues</em> (qui est également une compagnie de travaux publics) dont la dorsale est nommée <em class="mark">Axione</em> <a class="external" href="https://www.axione.com/nous-connaitre/nos-implantations/" target="_BLANK"></a> ;</li>
+
+			<li> <em class="mark">Free</em> (détenu par le groupe <em class="mark">Iliad</em>) dont la dorsale est nommée <em class="mark">Proxad</em> <a class="external" href="https://www.universfreebox.com/article/38737/Free-publie-la-carte-de-son-reseau-de-transmission-longue-distance-110-000-km-lineaires-de-fibre-optique" target="_BLANK"></a> ; </li>
+
+			<li> <em class="mark">Numericable</em>‑<em class="sigle">SFR</em>  <a class="external" href="https://fr.wikipedia.org/wiki/Numericable" target="_BLANK">W</a> (détenu par le groupe <em class="mark">Altice</em>, qui est issu d'anciennes compagnies de distribution d'eau) <a class="external" href="https://www.generationcable.net/tag/backbone/" target="_BLANK"></a> ; </li>
+		</ul>
+
+	<li> le réseau <em class="sigle">RENATER</em> (<em>réseau national de télécommunications pour la technologie, l’enseignement et la recherche</em>) <a class="external" href="https://www.renater.fr/fr/reseau" target="_BLANK"></a>, qui est aussi l'opérateur de transport du <em class="sigle">RIE</em> (<em>réseau interministériel de l'état</em>) <a class="external" href="https://www.renater.fr/fr/RIE" target="_BLANK"></a>. </li>
+	</ul>
+
+	<li> À l'échelle du <strong class="specialLB">continent européen</strong>, on peut notamment citer : </li>
+  <ul>
+	  <li> le réseau de l'opérateur <em class="mark">Orange</em> <a class="external" href="https://www.orange.com/sirius/reseau/cartes_cable/ebn_version_ft.htm" target="_BLANK"></a> ;  </li>
+
+		<li> le réseau de l'hébergeur <em class="sigle">OVH</em> <a class="external" href="https://www.ovh.sn/apropos/technologies/reseau.xml" target="_BLANK"></a> ;  </li>
+
+		<li> le réseau <em class="mark">Géant</em> <a class="external" href="https://www.geant.org/Networks/Pan-European_network/Pages/GEANT_topology_map.aspx" target="_BLANK"></a>. </li>
+  </ul>
+</ol>
+</div><!-- exemples -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Logiciels d'analyse et de simulation de réseaux informatiques </h2>
+
+
+
+
+<h3 id="scannerReseau"> Logiciels d'analyse de réseaux </h3>
+
+
+
+<div class="important">
+<p> À partir d'un <strong class="defin">ordinateur hôte</strong> correctement raccordé et configuré, il est possible de <strong class="title">déterminer tout ou partie de l'architecture</strong> d'un <strong class="defin">réseau local</strong> à l'aide de <strong>protocoles</strong> comme : </p>
+<ul>
+	<li> <strong><em class="sigle">ICMP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Control_Message_Protocol" target="_BLANK">W</a> (<em class="mark">Internet control message protocol</em> – mis en œuvre notamment par la commande <code>ping</code>),</li>
+
+	<li> <strong><em class="sigle">ARP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Address_Resolution_Protocol" target="_BLANK">W</a> (<em class="mark">address resolution protocol</em>) ; </li>
+
+	<li> ou <strong><em class="sigle">SNMP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Simple_Network_Management_Protocol" target="_BLANK">W</a> (<em class="mark">simple network management protocol</em>). </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il existe de <strong class="title">nombreux logiciels</strong> qui <strong class="defin">automatisent</strong> l'emploi de ces protocoles pour apporter aux utilisateurs une <strong class="pros">présentation conviviale</strong> des résultats (liste des machines, cartographie topologique, etc.). Les pages web suivantes <a class="external" href="https://fr.wikipedia.org/wiki/Catégorie:Logiciel_d'analyse_du_réseau_informatique" target="_BLANK">W</a> <a class="external" href="https://advanced-ip-scanner.fr.softonic.com/windows/alternatives" target="_BLANK"></a> fournissent une <strong>liste partielle</strong> de ces logiciels avec d'autres dédiés à des tâches plus spécifiques (analyse de trames, etc.).  </p>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> <strong class="title">Pour débuter</strong>, il est évidemment recommandé de se faire la main avec divers <strong class="pros">logiciels gratuits</strong>. Ceux proposés ci‑dessous permettent de <strong>scanner toutes les adresses <em class="sigle">IP</em></strong> dans une <strong>plage</strong> spécifiée. Ils présentent les résultats sous forme d'un <strong class="defin">tableau</strong> dont les <strong>colonnes</strong> (adresse <strong><em class="sigle">MAC</em></strong>, nom du constructeur, etc.) peuvent être <strong>paramétrées</strong> et <strong>triées</strong>.  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/advancedIPscannerLogo.png" width="80px" style="padding-top:0.5em">
+	<li> <strong class="specialLB">Advanced IP Scanner</strong> <a class="external" href="https://www.advanced-ip-scanner.com/fr/" target="_BLANK"></a> est un utilitaire analyseur de réseaux qui s'exécute sur systèmes <strong class="cons">Windows uniquement</strong>. Il peut également visualiser les éventuels <strong>dossiers partagés</strong> sur les hôtes ayant une interface active, ainsi que les <strong>serveurs <em class="sigle">FTP</em></strong>.  </li>
+  </div><!-- display -->
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/angryIPscannerLogo.png" width="80px" style="padding-top:0.5em">
+	<li> <strong class="specialLB">Angry IP Scanner</strong> <a class="external" href="https://angryip.org/" target="_BLANK"></a> est un utilitaire analyseur de réseaux <strong class="pros">multi‑plateforme</strong> et <strong class="pros">open‑source</strong>. Il peut également déterminer les <strong>ports logiciels ouverts</strong> sur les hôtes ayant une interface active.  </li>
+  </div><!-- display -->
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/nmapLogo.png" width="80px" style="padding-top:0.5em">
+	<li> <strong class="specialLB">Nmap</strong> <a class="external" href="https://nmap.org/" target="_BLANK"></a> est un utilitaire analyseur de réseaux <strong class="pros">multi‑plateforme</strong> <strong class="pros">open‑source</strong>. Avec son interface graphique <strong class="specialLB">Zenmap</strong>, il permet de <strong>cartographier</strong> la topologie du réseau. </li>
+  </div><!-- display -->
+</ul>
+
+<div class="expert">
+<p> <em class="remark">Attention</em> :  on ne peut faire <strong class="pros">bon usage</strong> de ces logiciels qu'à condition d'avoir déjà une connaissance suffisante de la <strong>technologie</strong> des réseaux (notamment l'adressage – cf. chap. R1‑III <a class="next" href="Rc1-3_adressage.html" target="_BLANK"></a>). Pour une utilisation experte, il est également sage prendre le temps de lire le <strong>mode d'emploi</strong>. </p>
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+
+<h3> Logiciels de simulation de réseaux </h3>
+
+
+
+<div class="important">
+<p> Un logiciel <strong class="title">simulateur de réseaux</strong> permet d'étudier le fonctionnement de <strong class="defin">toutes sortes d'architectures</strong> de réseau <strong class="pros">sans matériel</strong> autre qu'un simple poste de travail.  </p>
+
+<p> Certains logiciels permettent également d'étudier en détail le <strong class="defin">déroulement des protocoles</strong> de communication les plus usuels en visualisant l'acheminement et le contenu (partiel) des paquets de données. </p>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Il existe divers <strong class="title">simulateurs de réseaux</strong> relativement <strong class="defin">simples</strong>, notamment : </p>
+<ul>
+	<li> <strong class="specialLB">Filius</strong> <a class="external" href="https://www.lernsoftware-filius.de/Herunterladen" target="_BLANK"></a>, qui est <strong class="pros">open source</strong>, <strong class="pros">gratuit</strong> (licence <em class="sigle">GPL 2</em>ou <em class="sigle">3</em>), pour système <strong>Windows</strong> et <strong>Linux Ubuntu</strong> ;  </li>
+
+	<li> <strong class="specialLB">Netsim</strong> <a class="external" href="http://fr.lagache.free.fr/netsim/index.php?lang=fr" target="_BLANK"></a>, <strong class="pros">plus élaboré</strong> que <em class="mark">Filius</em> mais en contre‑partie, <strong class="cons">payant</strong> et limité aux systèmes <strong class="cons">Windows seulement</strong>.  </li>
+</ul>
+</div><!-- exemples -->
+
+
+<h4 id=CPT> Le logiciel <em class="mark">Cisco Packet Tracer</em> </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/ciscoPacketTracerLogo.png" width="80px">
+<p> <strong class="title">Packet Tracer</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Packet_Tracer" target="_BLANK">W</a> est un <strong class="defin">simulateur de réseau</strong> développé par l'entreprise américaine <strong class="Cisco">Cisco Systems</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Cisco_Systems" target="_BLANK">W</a>, numéro un mondial des équipements réseaux (switch, routeurs, serveurs…). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> <strong class="title">Packet Tracer</strong> est un logiciel <strong class="pros">multi‑plateforme</strong> sous <strong class="cons">licence propriétaire</strong>. Il est néanmoins <strong class="defin">distribué gratuitement</strong> aux centres de formation et aux étudiants pour préparer les certifications <strong><em class="sigle">CCNA</em></strong> (<em class="english">Cisco certified network associate</em>) et <strong><em class="sigle">CCNP</em></strong> (<em class="english">Cisco certified network professional</em>) sur les équipements de la marque <strong class="Cisco">Cisco</strong>.  </p>
+
+<div class="expert">
+<p> Cette <strong class="title">stratégie</strong> est souvent <strong class="pros">gagnante à long terme</strong> car le manque à gagner sur les licences est compensé par la grande visibilité de la marque et la tendance forte des entreprises à acheter des équipements sur lesquels leurs collaborateurs sont formés. </p>
+</div><!-- expert -->
+
+<p> Par rapport aux simulateurs de réseaux usuel, <strong class="title">Packet Tracer</strong> présente plusieurs <strong class="pros">intérêts</strong> : </p>
+<ul>
+	<li> simuler une <strong>grande variété d'équipements</strong> et de <strong>protocoles</strong> ; </li>
+
+	<li> présenter une <strong>vue physique</strong> des installations (représentation des locaux et des faces techniques des équipements), très complémentaire de la classique représentation topologique du réseau simulé ;  </li>
+
+	<li> être <strong>interfaçable</strong> avec certains équipements <em class="mark">Cisco</em> sur un réseau réel pour interagir avec.</li>
+</ul>
+
+<p> Néanmoins, il reste <strong class="cons">limité</strong> et ne peut simuler toute la complexité que présentent les réseaux informatiques dans la réalité. </p>
+</div><!-- complement -->
+
+<p> La <strong class="title">procédure d'installation</strong> du logiciel est conditionnée à la <strong class="defin">création d'un compte</strong> à la <strong class="Cisco">Networking academy</strong>, via la page web accessible au lien suivant <a class="external" href="https://www.netacad.com/courses/packet-tracer/introduction-packet-tracer" target="_BLANK"></a>. </p>
+<ul>
+	<li> Sur cette page, il suffit de cliquer sur le bouton <code class="cmd">Sign up today</code>, de sélectionner la langue <code>English</code> (seul choix) puis de <strong>compléter le formulaire</strong> de souscription (gratuite) à un compte <strong class="Cisco">Netacad</strong>… </li>
+
+	<li> Une fois que le compte est créé, il suffit de s'y connecter. On peut alors télécharger le fichier d'installation de <strong class="Cisco">Packet Tracer</strong> qu'on trouve via le menu <code>Ressources</code>. </li>
+
+	<li> Après l'installation, lors du lancement de <strong class="Cisco">Packet Tracer</strong>, il est encore nécessaire de valider la procédure par une connexion au compte <strong class="Cisco">Netacad</strong> (sinon le logiciel se ferme automatiquement). </li>
+
+	<div class="nobullet"> Toutefois, l'application <strong class="Cisco">Cisco Packet Tracer</strong> peut fonctionner <strong class="pros">sans compte Netacad</strong> à condition qu'elle soit lancée lorsque le poste de travail ne dispose <strong>pas de connexion à l'Internet</strong>. </div>
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/deconnexionReseau.png" width="200px" style="margin-top:0.5em">
+  <div class="nobullet"> Pour cela, il suffit donc de <strong>désactiver temporairement l'interface réseau</strong> (cf. la capture d'écran ci‑contre avec le système <em class="mark">Linux Mint</em>) juste avant le lancement de l'application. Ensuite, l'interface peut être réactivée sans que cela provoque de fermeture inopinée de l'application. </div>
+  </div><!-- display -->
+</ul>
+
+
+
+<div class="expert">
+<h4> Alternatives à <em class="mark">Cisco Packet Tracer</em> </h4>
+
+
+<p> D'<strong class="title">autres constructeurs</strong> proposent des simulateurs de réseaux pour leurs propres équipements, par exemple :  </p>
+<ul>
+	<li> <strong class="specialLB">Junosphere</strong> pour les équipements de la marque <strong>Juniper</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Juniper_Networks" target="_BLANK">W</a> ;  </li>
+
+	<li> <strong class="specialLB">eNSP</strong> pour les équipements de la marque <strong>Huawei</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Huawe" target="_BLANK">W</a>. </li>
+</ul>
+
+<p> Il existe également le simulateur <strong class="title">GNS3</strong> <a class="external" href="https://en.wikipedia.org/wiki/Graphical_Network_Simulator-3" target="_BLANK">W</a> qui est <strong class="pros">multi‑plateforme</strong>, <strong class="pros">open‑source</strong> et <strong class="pros">gratuit</strong>. </p>
+</div><!-- expert -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

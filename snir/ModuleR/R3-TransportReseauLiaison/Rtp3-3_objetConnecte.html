@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="3"
+  data-pagenumber="3"
+  data-pageState="OK"
+  data-pageheadtitle="Objet connecté"
+  data-pagefulltitle="Commande à distance d'un objet connecté"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> L'<strong class="title">objectif principal</strong> de ce sujet de travaux pratiques est découvrir les <strong>bases de l'</strong><strong class="title">IoT</strong> (<em class="english">Internet of things</em> – cf. cours, chap. R3‑V <a class="cours" href="Rc3-5_technologiesWPAN.html" target="_BLANK"></a>). </p>
+
+
+<p> On expérimente un <strong class="specialN">objet connecté</strong> <strong class="title">démonstrateur</strong> constitué d'une <strong class="specialDR">simple led</strong> commandée par un <strong>microcontrôleur à SoC Wi‑Fi</strong>. Avec ce système, on doit pouvoir : </p>
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/Rtp33_led-phone.png" width="200px" style="padding-top: 0.0em">
+<ul>
+  <li> <strong class="specialLB">connaître l'état</strong> de la led en temps‑réel (accès au système en « lecture ») ; </li>
+
+  <li> la <strong class="specialLB">piloter en tout‑ou‑rien</strong> (accès au système en « écriture ») ; </li>
+</ul>
+<p> et ce <strong class="pros">à distance</strong> sur une <strong class="defin">page web</strong> – autrement dit via n'importe quel <strong>client <em class="sigle">HTTP</em></strong> connecté au réseau (poste de travail, smartphone, etc.). </p>
+</div><!-- display -->
+
+<p> Dans la continuité des choix technologiques de ce module de formation, on opte pour une implémentation du <strong class="specialLB">micrologiciel de commande</strong> codée en <strong>C++</strong> dans l'environnement <strong class="Arduino">Arduino</strong>. Quant aux <strong class="specialLB">pages web</strong> de pilotage des objets, on se propose de les implémenter de diverses façons : </p>
+<ul>
+  <li> par des <strong>fichiers embarqués</strong> <strong class="specialR"><em class="sigle">HTML</em></strong> et <strong class="title"><em class="sigle">CSS</em></strong> interfacées avec le micrologiciel via des <strong>fonctions de <em class="english">callback</em></strong> codées en <strong class="specialY">JavaScript</strong> ;  </li>
+
+  <li> par des <strong>solutions « low code »</strong> comme <strong class="defin">Jeedom</strong>  ou <strong class="specialDR">Node‑RED</strong> (cf. cours <a class="cours" href="Rc3-5_technologiesWPAN.html" target="_BLANK"></a>).</li>
+</ul>
+
+<p> Ce thème et la progression proposée s'inspirent en grande partie d'une série de vidéos didactiques <a class="external" href="https://www.youtube.com/playlist?list=PLuQznwVAhY2WBKCbDroQeXWFmPYFyIf-_" target="_BLANK">Y</a> publiées par <strong>Éric Peronnin</strong>, professeur au département <strong><em class="sigle">GEII</em></strong> de l'<strong><em class="sigle">IUT</em> de Nantes</strong>. </p>
+
+<p> Un <strong class="title">objectif secondaire</strong> est d'exploiter un <strong class="specialLB">routeur Wi‑Fi</strong> dont la phase de configuration s'appuie sur les connaissances acquises avec le logiciel <strong class="Cisco">Cisco Packet Tracer</strong> dans le sujet de TP R3‑1 <a class="previous" href="Rtp3-1_routageRIP.html#exo2" target="_BLANK"></a>. </p>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié les <strong>chapitres R3‑IV</strong> et <strong>R3‑V</strong> du cours. Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+
+<h3 class="nocount"> Environnement </h3>
+
+
+<p> Les manipulations demandées sont à accomplir sur un <strong class="title">réseau local</strong> (<strong class="title"><em class="sigle">LAN</em></strong>) utilisant la pile de protocole <strong><em class="sigle">TCP/IP</em></strong>, raccordé à l'<strong>Internet</strong> </p>
+
+<p> <em class="remark">Attention</em> ! Le traitement des exercices nº 8 & 9 requiert un <strong class="title">accès à l'Internet</strong> avec un <strong class="specialN">serveur proxy académique</strong> <strong class="warning">transparent</strong>. Si tel n'est pas le cas, on peut rencontrer des problèmes d'accès à divers composants logiciels des applications <strong class="defin">Jeedom</strong> et <strong class="specialRD">Node‑RED</strong>. </p>
+
+<p> En conséquence, par souci d'uniformité, les figures topologiques des exercices nº 4 à 7 ci‑dessous sont représentées avec un accès à l'Internet via une <strong class="title">box <em class="sigle">FAI</em></strong>. Néanmoins, ces exercices peuvent en principe être traités via un réseau pédagogique avec un serveur proxy transparent. </p>
+
+
+<h3 class="nocount"> Équipement </h3>
+
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/routeurCiscoRV215W.png" width="300px" style="padding-top: 0.2em">
+  <li> Un <strong class="specialLB">routeur Wi‑Fi</strong> – par exemple, le <strong>Cisco RV215W</strong> <a class="Exécuter" href="https://www.cisco.com/c/en/us/support/routers/rv215w-wireless-n-vpn-router/model.html" target="_BLANK"></a> en photo ci‑contre – créera un <em class="mark"><em class="sigle">WLAN</em></em> avec un <strong>point d'accès sans‑fil</strong> pour l'objet connecté et pour tout smartphone permettant de contrôler l'objet à distance. </li>
+  
+  <div class="nobullet"> Cet équipement n'est pas indispensable si le <strong><em class="sigle">LAN</em></strong> possède lui‑même un point d'accès sans‑fil dont les <strong>identifiants de connexion</strong> (<strong><em class="sigle">SSID</em></strong> et <strong>mot de passe</strong>) sont <strong class="pros">connus</strong>. </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/ESP8266-SBC-Joy-It2.png" width="200px" style="padding-top: 0.2em">
+  <li> Une <strong class="specialLB">carte à microcontrôleur</strong> à SoC <strong>Wi‑Fi</strong> – par exemple, la <strong>SBC‑NodeMCU</strong> (cf. chap. C1‑III <a class="external" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#cartesWifi" target="_BLANK"></a>) en photo ci‑contre – constituera la carte électronique de l'objet connecté. Son micrologiciel (programme utilisateur) pourra embarquer un <strong>serveur web</strong>. </li>
+
+  <div class="nobullet"> Tout autre modèle à SoC <strong>ESP8266</strong> (par exemple, <em class="mark">Wemos D1R1</em>, etc.) programmable avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> peut convenir. </div>
+  </div><!-- display -->
+
+  <div class="remarques"> 
+  <p class="remarque"> Pour programmer la carte à microcontrôleur, d'<strong>autres environnements de développement</strong> comme <em class="mark">Visual Studio Code</em> ou <em class="mark">Community</em> peuvent convenir. Il suffit alors d'adapter les consignes de TP. </p>
+  </div><!-- remarque -->
+  
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/Rtp33_montage.png" width="300px" style="padding-top: 0.2em">
+  <li> Une <strong class="specialLB">platine d'expérimentation</strong> (<em class="english">breadboard</em>) équipée d'une <strong class="specialDR">led rouge</strong>, d'une <strong>résistance</strong> de limitation de courant (typiquement 220 Ω), et de <strong>deux fils</strong> de raccordement à la carte (<em class="english">jumpers</em>), câblés conformément à la figure ci‑contre, prototypera la partie opérative du système. </li>
+  </div><!-- display -->
+  
+  
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/RaspberryPi.png" width="300px" style="padding-top: 0.2em">
+  <li> Un <strong class="specialLB">nano‑ordinateur</strong> <strong class="Raspberry">Raspberry Pi</strong> jouera le rôle de <strong>box domotique</strong> (exercice 8) puis de <strong>broker <em class="sigle">MQTT</em></strong> (exercice 9). Dans les deux cas, il est préférable qu'un système d'exploitation <em class="mark">Raspberry Pi OS lite</em> (sans bureau) soit <strong class="pros">déjà installé</strong> avec l'accès <code class="cmd">ssh</code> activé pour permettre le contrôle par un terminal de commandes en ligne sur le poste de travail (cf. sujet de TP R2‑2 <a class="previous" href="../R2-Applications/Rtp2-2_serveurWeb.html" target="_BLANK"></a>). </li>
+  </div><!-- display -->
+
+  <li> Un <strong class="specialLB">poste de travail</strong> (typiquement, un PC) servira de <strong>terminal de programmation</strong> et d'<strong>interface de commande</strong> de l'objet. </li>
+
+  <li> Éventuellement, un <strong class="specialLB">smartphone</strong> sera utile pour montrer la possibilité de <strong>contrôle de l'objet connecté</strong> par un autre <strong>client <em class="sigle">HTTP</em></strong> raccordé au réseau local. </li>
+</ul>
+
+<p> L'architecture de réseau à constituer doit donc être conforme à la figure ci‑dessous.</p>
+
+<img class="top-left" src="../img/Rtp33_architecture.png">
+
+<p> Mais dans un premier temps, le poste de travail doit être <strong>raccordé au <em class="sigle">LAN</em></strong> et disposer d'un accès à l'Internet pour pouvoir configurer le routeur. </p>
+
+
+
+
+
+
+ 
+	
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer toutes les manipulations demandées en veillant au <strong class="warning">respect des consignes</strong>, bien <strong>dans l'ordre</strong> et sans oublier d'étape. En cas de doute sur un branchement ou une manipulation, ne pas hésiter à solliciter l'enseignant. Au fur et à mesure, penser à <strong class="specialG">sauvegarder</strong> les modifications apportées aux programmes.</p>
+</div><!-- important -->
+
+
+<ol class="exercice">
+
+  <li id="exo1" style="margin-top: 2em;"> <em class="bold">Préparation du poste de travail et de l'objet connecté </em> </li>
+
+  <img class="top-right" src="../img/Rtp33_configObject.png" width="400px" style="padding-top: 0.2em">
+
+	<ol class="questions">
+		<li> Réaliser le montage de la <strong class="title">partie opérative</strong> de l'objet connecté conformément à la figure supra avec la <strong class="specialDR">led rouge</strong> connectée à la <strong>broche</strong> <code class="cmd">D7</code> de la carte.</li>
+
+    <li> Sur le poste de travail, lancer l'application <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. Procéder à l'<strong class="title">installation des cartes à SoC ESP8266</strong> si elles ne font pas encore partie de la liste de celles qui sont déjà reconnues par l'application, en suivant la procédure indiquée au chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#gestionnaireCartes" target="_BLANK"></a>. 
+    </li>
+
+    <div class="nobullet"> Sur l'<strong><em class="sigle">IDE</em></strong>, dans le menu <code>Outils/Type de carte</code>, sélectionner alors <code class="cmd">NodeMCU 0.9 (ESP-12 Module)</code>. </div>
+
+    <li> Créer un <strong class="title">nouveau croquis</strong> nommé <code class="filename">nodemcuTest.ino</code> et coder un programme qui fait clignoter la led du montage (cf. chap. C2‑VIII <a class="previous" href="../../ModuleC/C2-ElementsLangage/Cc2-8_gestionTemps.html#blinkDelay" target="_BLANK">C</a>). </li>
+    <ul>
+      <li> En consultant le plan de brochage de la carte (cf. le lien donné au chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#cartesWifi" target="_BLANK">C</a>), déterminer le <strong>numéro de la broche</strong> du port numérique de la carte à coder dans le programme de clignotement. </li>
+    
+      <li> <strong>Téléverser</strong> le programme et vérifier sa bonne exécution. </li>
+    </ul>
+
+    <li> Modifier le code source pour vérifier que le <strong class="title">moniteur série</strong> est opérationnel, en réglant la vitesse de transmission à <em class="bold">115200 baud</em> (cf. chap. C3‑X <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-10_moniteurSerie.html#vitesseTransmission" target="_BLANK">C</a>). Faire afficher la <strong>version du compilateur</strong> <strong class="specialLB">C++</strong> utilisée par l'<strong><em class="sigle">IDE</em></strong> (cf. chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#chaineCompil" target="_BLANK">C</a>). </li>
+  </ol><!-- questions (exo 1) -->
+    
+
+
+
+
+
+
+
+
+  <li id="exo2" style="margin-top: 2em;"> <em class="bold">Prise en main et configuration du routeur</em> </li>
+
+  
+  <ol class="questions">
+
+    <li> Configurer le <strong class="title">poste de travail</strong> en <strong>client <em class="sigle">DHCP</em></strong> (cf. chap. R2‑II <a class="previous" href="../R2-Applications/Rc2-2_dhcp.html" target="_BLANK"></a>) et <strong class="warning">supprimer</strong> tout recours à un <strong>proxy server</strong> (serveur mandataire). </li>
+    
+    <img class="top-right" src="../img/Rtp33_configRouter.png" width="450px" style="padding-top: 0.2em">
+
+    <li> En laissant le <strong>routeur hors tension</strong>, avec des câbles <em class="mark">Ethernet</em>, <strong>relier</strong> l'une des prises <strong><em class="sigle">RJ45</em></strong> de son port <strong class="specialLB"><em class="sigle">LAN</em></strong> au <strong>poste de travail</strong> pour que ce dernier joue dans un premier temps le rôle de <strong class="defin">terminal de configuration</strong>. </li>
+
+    <div class="nobullet"> Éventuellement, il est déjà possible de relier également  le routeur au <strong>réseau local</strong> (et donc à l'Internet) via la prise <strong><em class="sigle">RJ45</em></strong> de son port <strong class="specialO"><em class="sigle">WAN</em></strong>. Il faut juste que l'adresse de la passerelle par défaut du réseau ne soit <strong class="warning">pas conflictuelle</strong> avec celle qu'adopte par défaut le routeur lorsqu'il est réinitialisé (en effet, ce dernier s'auto‑attribue l'adresse <code>192.168.1.1</code> après sa ré‑initialisation). </div>
+
+    <div class="nobullet"> <em class="remark">Remarque</em> : la liaison à l'Internet rend la procédure de <strong>réinitialisation</strong> <strong class="pros">plus rapide</strong>, mais elle n'est pas indispensable. </div>
+
+
+    <li> Mettre le <strong class="title">routeur</strong> <strong>sous tension</strong> et : </li>
+
+    <ul>
+    	<li> attendre l'<strong>achèvement de son démarrage</strong> – c'est‑à‑dire jusqu'à ce que sa led <em class="bold" style="color: springgreen; background: black; padding-left: 0.1em; padding-right: 0.1em">⏻</em> <strong class="specialN">ne clignote plus</strong> ;  </li>
+
+    	<li> avec une pointe de jumper ou  un trombone, appuyer au moins <strong>10 secondes</strong> sur le bouton <code>Reset</code> ;  sa led  <em class="bold" style="color: springgreen; background: black; padding-left: 0.1em; padding-right: 0.1em">⏻</em> <strong class="specialSG">clignote</strong> durant toute la procédure de <strong class="title">réinitialisation</strong>. </li>
+    </ul>
+
+    
+    <li> Sur le poste de travail, avec un logiciel navigateur, se connecter à l'<strong><em class="sigle">URL</em></strong> <code class="filename">http://192.168.1.1</code> puis, sans tenir compte de l'avertissement de sécurité, accéder à la page web de <strong class="title">connexion au routeur</strong> avec les <strong>identifiants par défaut</strong> (<em class="english">login</em>/<em>mot de passe</em>) <code class="cmd">cisco</code>/<code class="cmd">cisco</code> (tout en minuscules). </li>
+
+    <li> Annuler la procédure de démarrage rapide et procéder au <strong class="title">paramétrage du routeur</strong>. Pour plus de détails, on pourra se référer à la notice de l'équipement – cf. le lien suivant <a class="external" href="https://www.cisco.com/c/dam/en/us/td/docs/routers/csbr/rv215w/quick_start/rv215w_qsg_fr.pdf" target="_BLANK"></a>. </li>
+
+    <ul>
+      <li> Donner au routeur le <strong>nouveau mot de passe</strong> proposé par votre enseignant. Avec identifiant associé, le noter dans un fichier pour le retrouver en cas d'oubli ultérieur. </li>
+
+      <div class="nobullet"> Après la déconnexion automatique, se reconnecter au routeur avec le nouveau mot de passe. </div>
+
+      <li> Dans le menu <code>NetWorking/LAN</code>, donner à l'interface réseau du <strong class="specialLB"><em class="sigle">LAN</em></strong> du routeur une <strong>configuration <em class="sigle">IP</em></strong> <strong class="pros">non conflictuelle</strong> avec celle de la passerelle du <strong class="specialG">futur réseau</strong> auquel le routeur sera raccordé sur son port <strong class="specialG"><em class="sigle">WAN</em></strong> (typiquement, <code class="cmd" style="color: dodgerblue;">192.168.<span class="nocode"><strong class="warning">x</strong></span>.1/24</code> avec <strong class="warning">x ≠ 1</strong> si l'adresse de la passerelle sur le <strong class="specialG"><em class="sigle">WAN</em></strong> est <code style="color: green;">192.168.1.1/24</code>). Par exemple, on prendra <strong class="warning">x</strong> = <em class="bold">10</em>, <em class="bold">20</em>, <em class="bold">30</em>… (demander à l'enseignant la valeur de <strong class="warning">x</strong> à choisir). </li>
+
+      <div class="nobullet"> Garder les <strong>réglages par défaut</strong> du service <strong><em class="sigle">DHCP</em></strong> du <strong class="specialLB"><em class="sigle">LAN</em></strong> – activé avec une plage de <strong>50 adresses</strong> à partir de l'adresse <code style="color: dodgerblue;">100</code>. </div>
+
+      <li> Dans le menu <code>Wireless</code>, cocher la case du premier réseau de la table, cliquer sur le bouton <code>Edit</code> et lui donner l'<strong>identifiant</strong> (<strong class="specialLB"><em class="sigle">SSID</em></strong> <em class="english">name</em>) <code class="cmd">ciscoWAP<span class="nocode"><strong class="warning">x</strong></span></code> avec <strong class="warning">x</strong> = <em class="bold">10</em>, <em class="bold">20</em>, <em class="bold">30</em>… (comme pour les adresses <em class="sigle">IP</em> ci‑dessus) pour différentier chaque point d'accès mis en œuvre dans la salle de TP. Cliquer sur le bouton <code>Save</code>. </li>
+
+      <div class="nobullet"> Cliquer sur le bouton <code>Edit Security Mode</code> puis : </div>
+
+      <ul style="list-style: circle;">
+        <li> laisser le <strong>mode de sécurité</strong> par défaut, c'est‑à‑dire <strong>WPA2 Personal - <em class="sigle">TKIP/AES</em></strong> ; </li>
+
+        <li> saisir la <strong>clef de sécurité</strong>  – c'est‑à‑dire le <strong class="specialLB">mot de passe</strong> pour l'accès au réseau sans‑fil – proposé par votre enseignant. Avec l'identifiant associé, le noter dans un fichier pour le retrouver en cas d'oubli ultérieur. </li>
+      </ul>
+
+      <div class="nobullet"> Cliquer sur le bouton <code>Save</code>. </div>
+
+      <li> Dans le menu <code>Administration/Time Settings</code>, choisir le <strong>fuseau horaire</strong> de la France. Activer l'<strong>option <em class="sigle">DST</em></strong> (<em class="english">daylight saving time</em>) et renseigner les dates de passage de l'heure d'été et de l'heure d'hiver (cf. chap. R2‑VI <a class="previous" href="../R2-Applications/Rc2-6_serviceTemps.html#DST" target="_BLANK"></a>). Cliquer sur le bouton <code>Save</code>. </li>
+    </ul>
+    
+    <img class="top-right" src="../img/Rtp33_configWLAN.png" width="400px" style="padding-top: 0.2em">
+
+    <li> Une fois la configuration du routeur terminée, si cela n'est pas déjà fait, <strong class="title">raccorder le routeur</strong> par sa prise <strong class="specialG"><em class="sigle">WAN</em></strong> au réseau donnant accès à l'Internet (réseau pédagogique ou box de <em class="sigle">FAI</em></strong></strong> pour s'affranchir de tout serveur proxy). </li>
+
+    <div class="nobullet"> En ligne de commande depuis le poste de travail, procéder aux <strong class="title">vérifications</strong> que toutes les connexions du <strong class="specialLB"><em class="sigle">LAN</em></strong> sont opérationnelles : </div>
+    <ul>
+      <li> accès à l'Internet depuis le <strong>poste de travail</strong> ; </li>
+    
+      <li> détection et connexion au réseau sans‑fil par un <strong>smartphone</strong>.  </li>
+    </ul>
+  </ol><!-- questions (exo 2) -->
+
+
+
+
+
+
+
+
+
+
+
+
+  <li id="exo3" style="margin-top: 2em;"> <em class="bold">Programme de connexion sans‑fil de l'objet au réseau</em> </li>
+
+  <img class="top-right" src="../img/Rtp33_connectObject.png" width="400px" style="padding-top: 0.2em">
+  
+  <div class="nobullet"> <em> On commence par vérifier que l'<strong class="specialN">objet connecté</strong> est capable de se connecter au <strong class="specialLB"><em class="sigle">WLAN</em></strong> mis en œuvre par le <strong>routeur Wi‑Fi</strong>. On opte pour une <strong class="defin">configuration <em class="sigle">IP</em> statique</strong> dans la mesure où l'objet connecté est destiné par la suite à embarquer un serveur web.  </em> </div> 
+
+
+  <ol class="questions">
+    <li> <strong class="title">Télécharger</strong> le dossier d'archive du <strong>code source</strong> du programme au lien suivant <a class="cours" href="../prog/R3tp3_ObjetConnecte/R3tp3ex3_ConnectionTest_elv.zip" target="_BLANK"></a>, le décompresser et ouvrir le <strong>fichier principal</strong> <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </li>
+
+    <li> Apporter au code source les <strong class="title">adaptations</strong> suivantes : </li>
+
+    <ul>
+      <li> Dans le fichier <code class="filename">connectionID.h</code>, modifier les <strong>identifiants de connexion</strong> au réseau <strong>Wi‑Fi</strong> – <strong class="specialLB"><em class="sigle">SSID</em></strong> et <strong class="specialLB">mot de passe</strong> –  pour qu'ils soient conformes au paramétrage du <strong>point d'accès</strong> opéré précédemment sur le routeur. </li>
+
+      <li> Dans le fichier <code class="filename">setupUtilities.h</code>, modifier les <strong>adresses <em class="sigle">IP</em></strong> de la <strong>configuration statique</strong> conformément au paramétrage du <strong class="specialLB"><em class="sigle">WLAN</em></strong> mis en place. </li>
+
+      <div class="nobullet"> Pour les <strong>adresses <em class="sigle">IP</em></strong> des résolveurs <strong><em class="sigle">DNS</em></strong>, on pourra utiliser celles de résolveurs publics (cf. chap. R2‑I <a class="previous" href="../R2-Applications/Rc2-1_dns_url.html#DNSpublic" target="_BLANK"></a>) ou encore celles obtenues par le <strong>poste de travail</strong> via le protocole <strong><em class="sigle">DHCP</em></strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#accesParam" target="_BLANK"></a>). </div>
+    </ul>
+
+
+    <li> Procéder au <strong class="title">téléversement</strong> du programme dans la carte. Une fois l'opération achevée, procéder au vérifications suivantes. </li>
+
+    <ul>
+      <li> La <strong class="specialDB">led intégrée</strong> de la carte doit <strong>s'allumer et s'éteindre</strong> selon que la fonctionnalité <strong>Wi‑Fi</strong> est active ou non sur le routeur.  Cette fonctionnalité est contrôlable par appuis longs sur le bouton lumineux <code>On/Off</code> sur la face avant. </li>
+
+      <li>  L'affichage sur le <strong>moniteur série</strong> doit confirmer la <strong class="specialLB">connexion</strong> de l'objet au réseau local via le point d'accès fourni par le routeur et indiquer les <strong>adresses <em class="sigle">IP</em></strong> de sa configuration. La <strong>force du signal</strong> (cf. chap. R3‑IV <a class="cours" href="Rc3-4_coucheLiaisonWifi.html#forceSignal" target="_BLANK"></a>) est‑elle satisfaisante ? </li>
+
+      <li> Lors d'une déconnexion, <strong>décoder</strong> le code numérique de la <strong>cause</strong> indiquée sur le moniteur série <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiType.h" target="_BLANK"></a>.  </li>
+
+      <li> L'objet connecté doit <strong>répondre à une commande</strong> <code>ping</code> émise par le poste de travail. </li>
+    </ul>
+  </ol><!-- questions (exo 3) --> 
+
+
+
+
+
+
+
+
+
+
+  <li id="exo4" style="margin-top: 2em;"> <em class="bold">Programme de serveur web rudimentaire</em> </li>
+
+  <img class="top-right" src="../img/Rtp33_webServer.png" width="450px" style="padding-top: 0.2em">
+  
+  <div class="nobullet"> <em> On installe maintenant sur l'<strong class="specialN">objet connecté</strong> un programme qui met en œuvre un <strong class="title">serveur web</strong> pour contrôler la <strong class="specialDR">led</strong>, c'est‑à‑dire <strong>afficher et modifier</strong> son état allumé/éteint. Les <strong>pages web</strong> embarquées sont <strong class="cons">minimales</strong> (elles n'ont même pas d'en‑tête). </em> </div>
+
+  <ol class="questions">
+    <li> <strong class="title">Télécharger</strong> le dossier d'archive du code source au lien suivant <a class="cours" href="../prog/R3tp3_ObjetConnecte/R3tp3ex4_WebServer_elv.zip" target="_BLANK"></a>, le décompresser et ouvrir le <strong>fichier principal</strong> <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </li>
+
+    <li> Écraser les fichiers <code class="filename">connectionID.h</code> et <code class="filename">setupUtilities.h</code> avec ceux de l'exercice 3 pour utiliser les mêmes <strong>identifiants de connexion</strong> et la même <strong>configuration <em class="sigle">IP</em></strong> de la carte.   </li>
+
+    <li> Procéder au <strong class="title">téléversement</strong> du programme dans la carte. Une fois l'opération achevée, <strong class="title">vérifier</strong> le bon fonctionnement du serveur web de la manière suivante en utilisant un navigateur s'exécutant sur le <strong>poste de travail</strong> et sur un <strong>smartphone</strong> connecté au <strong class="specialLB"><em class="sigle">WLAN</em></strong>. </li>
+    <ul>
+      <li> Dans la barre d'adresse du navigateur, saisir l'<strong><em class="sigle">URL</em></strong> : <br>
+      <span class="inline">
+        <code class="filename">http://<span class="nocode"><strong class="specialO">adresse <em class="sigle">IP</em> carte ESP8266</strong></span></code>
+      </span> <br>
+      et constater que s'affiche alors une page web presque vide, avec pour titre « <strong>Web server main page</strong> ». </li>
+
+      <li> Dans la barre d'adresse, ajouter à l'<strong><em class="sigle">URL</em></strong> le segment <code class="filename">led_on</code>. Vérifier alors que la <strong class="specialDR">led rouge</strong> <strong class="specialN">s'allume</strong> et que la page web affichée confirme cet état avec le titre « <strong>LED on</strong> ». </li>
+
+      <li> Procéder de même pour vérifier que la <strong class="specialDR">led rouge</strong> <strong class="specialN">s'éteint</strong> en ajoutant le segment <code class="filename">led_off</code> à l'<strong><em class="sigle">URL</em></strong> de la page principale, avec confirmation par affichage du titre « <strong>LED off</strong> ». </li>
+    </ul>
+
+    <li> Dans le <strong class="title">code source</strong>, quel <strong>appel de fonction</strong> permet d'afficher l'état de la led dans le navigateur ? Comment s'appelle l'<strong>action</strong> qu'effectue cette fonction et que signifie la valeur de son <strong>premier argument</strong> ? (cf. chap. R2‑III <a class="previous" href="../R2-Applications/Rc2-3_webClient.html#protocoleHTTP" target="_BLANK"></a>) </li>
+  </ol><!-- questions (exo 4) --> 
+
+
+
+
+
+
+
+
+  <li id="exo5" style="margin-top: 2em;"> <em class="bold">Programme de page web interactive</em> </li>
+
+  <div class="nobullet"> <em>Le programme de l'exercice précédent permet de connaître l'état de la led et de la contrôler à distance, mais l'<strong>interface utilisateur</strong> – qui procède par commandes saisies dans la barre d'adresse du navigateur – n'est <strong class="cons">pas commode</strong> à utiliser. On va donc voir comment embarquer dans le programme une <strong class="title">page web</strong> qui réunit <strong class="specialLB">deux boutons interactifs</strong> <strong>« ON »</strong> et <strong>« OFF »</strong> et un champ d'<strong class="specialLB">affichage de l'état</strong> de la led</em>. </div> 
+
+  <ol class="questions">
+    <li> <strong class="title">Télécharger</strong> le dossier d'archive du code source au lien suivant <a class="cours" href="../prog/R3tp3_ObjetConnecte/R3tp3ex5_InteractiveWebPage_elv.zip" target="_BLANK"></a>, le décompresser et ouvrir le <strong>fichier principal</strong> <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </li>
+
+    <li> Comme précédemment, écraser les fichiers <code class="filename">connectionID.h</code> et <code class="filename">setupUtilities.h</code> avec ceux de l'exercice 3 pour utiliser les mêmes <strong>identifiants de connexion</strong> et la même <strong>configuration <em class="sigle">IP</em></strong> de la carte. </li>
+
+    <li> Procéder au <strong class="title">téléversement</strong> du programme dans la carte. Une fois l'opération achevée, tester son <strong class="specialLB">exécution</strong> via la page web de l'objet connecté, en cliquant sur les boutons <span class="framedSmall"><code>ON</code></span> et <span class="framedSmall"><code>OFF</code></span>.  </li>
+
+    <li> * Dans le <strong class="title">code source</strong> : </li>
+    <ul>
+      <li> Comment la <strong>page web</strong> est‑elle stockée ? </li>
+
+      <li> Quel <strong>appel de fonction</strong> permet d'afficher la page web ? </li>
+
+      <li> Comment un <strong>appui sur un bouton</strong> est‑il traité ? </li>
+
+      <li> Comment l'<strong>état de la led</strong> est‑il affiché dans la page ? </li>
+    </ul>
+  </ol><!-- questions (exo 5) --> 
+
+
+
+
+
+
+
+
+
+  <li id="exo6" style="margin-top: 2em;"> <em class="bold">Programme de page web dynamique </em> </li>
+
+  <div class="nobullet"> <em>L'inconvénient du programme de l'exercice précédent est qu'il <strong class="cons">recharge l'intégralité de la page web</strong> à chaque appui sur l'un des boutons. Non gênante ici, cette approche devient problématique avec une page ayant un contenu plus riche. On va donc voir comment embarquer implémenter une <strong class="pros">page web dynamique</strong> avec des fonctionnalités <strong class="defin">Ajax</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Ajax_(informatique)" target="_BLANK">W</a> (<em class="english">Asynchronous JavaScript and XML</em>).</em> </div>  
+
+  <ol class="questions">
+    <li> <strong class="title">Télécharger</strong> le dossier d'archive du code source au lien suivant <a class="cours" href="../prog/R3tp3_ObjetConnecte/R3tp3ex6_DynamicWebPage_elv.zip" target="_BLANK"></a>, le décompresser et ouvrir le <strong>fichier principal</strong> <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </li>
+
+    <li> Comme précédemment, écraser les fichiers <code class="filename">connectionID.h</code> et <code class="filename">setupUtilities.h</code> avec ceux de l'exercice 3 pour utiliser les mêmes <strong>identifiants de connexion</strong> et la même <strong>configuration <em class="sigle">IP</em></strong> de la carte. </li>
+
+    <li> Procéder au <strong class="title">téléversement</strong> du programme dans la carte. Une fois l'opération achevée, tester son <strong class="specialLB">exécution</strong> dans la page web de l'objet connecté, en cliquant sur les boutons <span class="framedSmall"><code>ON</code></span> et <span class="framedSmall"><code>OFF</code></span>.  </li>
+
+    <div class="nobullet"> Recharger la page web. Qu'observe‑t‑on ? </div>
+
+    <li> * Dans le <strong class="title">code source</strong>, par rapport au programme de l'exercice précédent, qu'est‑ce qui a changé pour les <strong>fonctions de callback</strong> du serveur web <a class="external" href="https://fr.wikipedia.org/wiki/Fonction_de_rappel" target="_BLANK">W</a> pour allumer et éteindre la led ? </li>
+
+    <div class="nobullet"> Où les fonctionnalités <strong>Ajax</strong> sont‑elles codées ? </div>
+  </ol><!-- questions (exo 6) --> 
+
+
+
+
+
+
+
+
+
+  <li id="exo7" style="margin-top: 2em;"> <em class="bold">Programme de page web <em>responsive</em> </em> </li>
+
+  <div class="nobullet"> <em>L'inconvénient principal du programme de l'exercice précédent est que la page web n'est <strong class="cons">pas responsive</strong> : elle ne s'adapte pas au terminal qui la consulte. Pour y remédier, on peut bien entendu coder des feuilles de style en <em class="sigle">CSS</em>. On se propose de montrer plutôt comment embarquer et utiliser un <strong class="defin">framework</strong> <a class="external" href="https://en.wikipedia.org/wiki/CSS_framework" target="_BLANK">W</a> suffisamment léger : <strong>Milligram</strong> <a class="external" href="https://milligram.io/" target="_BLANK"></a>. </em></div>  
+
+  <ol class="questions">
+    <li> <strong class="title">Télécharger</strong> le dossier d'archive du code source au lien suivant <a class="cours" href="../prog/R3tp3_ObjetConnecte/R3tp3ex7_ResponsiveWebPage_elv.zip" target="_BLANK"></a>, le décompresser et ouvrir le fichier <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </li>
+
+    <li> Comme précédemment, écraser les fichiers <code class="filename">connectionID.h</code> et <code class="filename">setupUtilities.h</code> avec ceux de l'exercice 3 pour utiliser les mêmes <strong>identifiants de connexion</strong> et la même <strong>configuration <em class="sigle">IP</em></strong> de la carte. </li>
+
+    <li> Procéder au <strong class="title">téléversement</strong> du programme dans la carte. Une fois l'opération achevée, tester son <strong class="specialLB">exécution</strong> dans la page web de l'objet connecté, en cliquant sur les boutons <span class="framedSmall"><code>ON</code></span> et <span class="framedSmall"><code>OFF</code></span>.  </li>
+
+    <li> Observer attentivement la <strong class="title">page web</strong> de l'objet connecté, sur le <strong>smartphone</strong> et sur le <strong>poste de travail</strong>. L'affichage est adaptatif ? </li>
+
+    <li> En analysant le <strong class="title">code source</strong>, comment la mise en forme de la page web est‑elle implémentée ? </li>
+  </ol><!-- questions (exo 7) --> 
+
+
+
+
+
+
+
+
+
+  <li id="exo8" style="margin-top: 2em;"> <em class="bold">Programme de page web avec <em class="sigle">API</em> </em> </li>
+
+  <img class="top-right" src="../img/Rtp33_Jeedom.png" width="500px" style="padding-top: 0.2em">
+
+  <div class="nobullet"> <em>On souhaite pouvoir intégrer l'objet connecté à un <strong class="specialLB">réseau domotique</strong>. Pour cela, il est nécessaire de mettre en place une <strong class="title">API</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Interface_de_programmation" target="_BLANK">W</a> (application programming interface). Dans le cas d'un serveur Web, l'API peut prendre la forme d'une série de segments d'URL (cf. chap. R2‑I <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applictions/Rc2-1_dns_url.html#formatURL" target="_BLANK"></a>).</em> </div>  
+
+  <ol class="questions">
+    <li> <strong class="title">Télécharger</strong> le dossier d'archive du code source au lien suivant <a class="cours" href="../prog/R3tp3_ObjetConnecte/R3tp3ex8_WebPageWithAPI_elv.zip" target="_BLANK"></a>, le décompresser et ouvrir le fichier <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </li>
+
+    <li> Comme précédemment, écraser les fichiers <code class="filename">connectionID.h</code> et <code class="filename">setupUtilities.h</code> avec ceux de l'exercice 3 pour utiliser les mêmes <strong>identifiants de connexion</strong> et la même <strong>configuration <em class="sigle">IP</em></strong> de la carte. </li>
+
+    <li> Procéder au <strong class="title">téléversement</strong> du programme dans la carte. Une fois l'opération achevée, vérifier que la carte est bien connectée au réseau <em class="mark">Wi‑Fi</em>. </li>
+
+    <div class="nobullet"> Tester le <strong class="specialLB">bon fonctionnement</strong> du programme en accédant à la <strong>page web</strong> du serveur embarqué dans l'objet connecté. Saisir successivement dans la barre d'adresse les trois <strong class="defin">commandes <em class="sigle">API</em></strong> indiquées en commentaires dans le <strong>fichier source</strong> <code class="filename">.ino</code> du programme, sous la ligne <code class="prettyprint lang-c">// API commands</code>. </div>
+    
+    <li> Raccorder une <strong class="title">box Jeedom</strong> au port <strong class="specialLB"><em class="sigle">LAN</em></strong> du routeur.  </li>
+
+    <div class="nobullet"> Pour installer une <strong class="defin">box Jeedom</strong> sur une carte <strong class="Raspberry">Raspberry Pi</strong>, on pourra se reporter à la procédure décrite au sujet de TP nº R3‑2 <a class="previous" href="Rtp3-2_domotique.html#exo1" target="_BLANK"></a>. </div>
+    
+    <li> Une fois la <strong class="title">box Jeedom</strong> mise en service, exécuter les étapes suivantes. </li>
+    <ul>
+      <li> Installer et activer le <strong>plugin</strong> <strong class="specialG">Script</strong> (gratuit). </li>
+
+      <li> Dans le menu <span class="Noir">Plugins/Programmation/Script</span>, ajouter un <strong>nouveau script</strong> ; l'associer à un <strong>objet</strong> défini dans la box (par exemple, <code>Maison</code>). Dans l'onglet <code>Équipement</code>, cocher les cases <code>Activer</code> et <code>Visible</code>.   </li>
+
+      <li> Dans l'onglet <code>Commandes</code>, ajouter : </li>
+      <ul style="list-style: circle;">
+        <li> <strong>deux commandes</strong> <code>HTTP</code> de type <code>Action</code>, nommées <code class="cmd">ON</code> et <code class="cmd">OFF</code> pour respectivement <strong>allumer</strong> et <strong>éteindre</strong> la led ;   </li>
+
+        <li> <strong>une commande</strong> <code>HTTP</code> de type <code>Info</code>, nommée <code class="cmd">STATE</code> pour afficher l'<strong>état</strong> de la led.</li>
+      </ul>
+      <div class="nobullet"> Les <strong class="defin">requêtes <em class="sigle">HTTP</em></strong> de ces commandes sont les mêmes que les <strong>commandes <em class="sigle">API</em></strong> testées à la question <em class="bold">c)</em>. </div>
+
+      <li> <strong>Vérifier</strong> le bon fonctionnement de ces commandes directement dans la page de script, puis dans le <code>Dashboard</code> de l'application <strong class="defin">Jeedom</strong>. </li>
+    </ul>
+    <div class="nobullet"> Pour plus de détails sur toute cette procédure, on pourra consulter ce lien <a class="external" href="https://www.youtube.com/watch?v=vnvJgVTcGyM&list=PLuQznwVAhY2WBKCbDroQeXWFmPYFyIf-_&index=9" target="_BLANK">Y</a>. </div>
+  </ol><!-- questions (exo 8) --> 
+
+
+
+
+
+  
+
+
+
+
+  <li id="exo9" style="margin-top: 2em;"> <em class="bold">Contrôle à distance de la led par protocole <em class="sigle">MQTT</em> et interface <em class="mark">Node‑RED</em></em> </li>
+
+  <img class="top-right" src="../img/Rtp33_NodeRED.png" width="500px" style="padding-top: 0.2em">
+
+  <div class="nobullet"> <em>On souhaite pouvoir contrôler à distance la led par l'intermédiaire d'un <strong class="specialO">broker MQTT</strong> (cf. chap. R3‑V <a class="cours" href="Rc3-5_technologiesWPAN.html#protocoleMQTT" target="_BLANK"></a>) implémenté sur un nano‑ordinateur <strong class="Raspberry">Raspberry Pi</strong>. Afin que l'interface de commande soit conviviale et localisée dans une <strong>page web</strong>, on recourt à l'outil de développement <strong class="specialDR">Node‑RED</strong>.</em> </div> 
+
+  <ol class="questions">
+    <li> Télécharger le dossier d'archive du code source au lien suivant <a class="cours" href="../prog/R3tp3_ObjetConnecte/R3tp3ex9_mosquittoClient_elv.zip" target="_BLANK"></a>, le décompresser et ouvrir le fichier source <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </li>
+
+    <li> Comme aux exercices précédents, coder les <strong class="title">adaptations</strong> nécessaires au code source (identifiants de connexion <em class="mark">Wi‑Fi</em>, configuration <strong><em class="sigle">IP</em></strong> statique) pour permettre la connexion sans‑fil de l'objet dans le <strong class="specialLB"><em class="sigle">WLAN</em></strong>.   </li>
+
+    <div class="nobullet"> De plus, saisir l'<strong>adresse <em class="sigle">IP</em></strong> du <strong class="specialO">broker <em class="sigle">MQTT</em></strong> dans le <strong class="specialLB"><em class="sigle">WLAN</em></strong>, conformément au plan d'adressage indiqué par la figure. </div>
+
+    <div class="nobullet"> Par ailleurs, dans le code source du programme, relever les <strong class="specialN">noms des topics</strong> relatifs respectivement à l'<strong>état</strong> et à la <strong>commande</strong> de la <strong class="specialDR">led</strong>. </div>
+
+    <li> Installer le module de <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong> nommée <code>PubSubClient</code> (cf. chap. C4‑VI <a class="cours" href="../../ModuleC/C4-Fonctions/Cc4-6_programmationModulaire.html#ajoutModuleArduino" target="_BLANK">C</a>). Procéder au <strong class="title">téléversement</strong> du programme dans la carte. </li>
+
+    <div class="nobullet">Une fois l'opération achevée, tester son <strong class="specialLB">exécution</strong> en ouvrant le moniteur série. Pour le moment, seule la connexion au réseau <em class="mark">Wi‑Fi</em> peut être confirmée. La connexion au <strong class="specialLB">broker <em class="sigle">MQTT</em></strong> n'est <strong>pas encore opérationnelle</strong> puisque ce dernier n'est pas encore installé.  </div> 
+
+    <li> Mettre en service une carte <strong class="Raspberry">Raspberry Pi</strong> avec un système sans bureau et une <strong>configuration <em class="sigle">IP</em> statique</strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#RaspberryPi" target="_BLANK"></a>) conforme aux spécifications de la figure ci‑dessus. La raccorder au <strong class="specialLB"><em class="sigle">WLAN</em></strong> sur le routeur avec un câble <em class="mark">Ethernet</em> au switch du port <strong class="specialLB"><em class="sigle">LAN</em></strong>. </li>
+
+    <div class="nobullet"> En cas d'installation d'un <strong>nouveau système</strong>, on pourra se reporter à la procédure décrite dans le sujet de TP nº R2‑2 <a class="previous" href="../R2-Applications/Rtp2-2_serveurWeb.html#prepaServeur" target="_BLANK"></a>. </div>
+
+    <div class="nobullet"> Dans tous les cas, depuis un terminal de commande en ligne sur le poste de travail, ouvrir une <strong>session</strong> <code class="cmd">ssh</code> sur la carte <strong class="Raspberry">Raspberry Pi</strong> et penser à <strong>mettre à jour</strong> le système. </div>
+
+    <li> Sur la carte <strong class="Raspberry">Raspberry Pi</strong>, <strong class="title">installer</strong> les paquets <code>mosquitto</code> et <code>mosquitto clients</code> (cf. chap. R3‑V <a class="cours" href="Rc3-5_technologiesWPAN.html#mosquitto" target="_BLANK"></a>). Puis, comme indiqué dans le cours, paramétrer l'<strong>application</strong> <strong class="specialO">broker</strong> et redémarrer le système. </li>
+    
+    <div class="nobullet"> Lancer alors l'application en tant que <strong class="title">service</strong>. Dans le moniteur série de l'<strong><em class="sigle">IDE</em></strong> <em class="mark">Arduino</em>, vérifier que le <strong class="specialT">client <em class="sigle">MQTT</em></strong> de la carte <strong>NodeMCU</strong> a pu se connecter au broker. </div>
+
+    <li> Dans le terminal de commande en ligne de la carte <strong class="Raspberry">Raspberry Pi</strong>, saisir la commande d'<strong class="specialDB">abonnement</strong> :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+mosquitto_sub -t LED/state 
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> On doit normalement obtenir l'affichage <code class="displayDark">0</code> – c'est‑à‑dire <strong class="specialN">led éteinte</strong> – toutes les secondes. </div>
+
+    <div class="nobullet"> Saisir alors la commande de <strong class="specialDG">publication</strong> :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+mosquitto_pub -t LED/command -m "#on" 
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> La led doit normalement <strong class="specialDR">s'allumer</strong>. Vérifier également que le résultat de la commande d'<strong class="specialDB">abonnement</strong> supra affiche alors la valeur <code class="displayDark">1</code>. </div>
+
+    <div class="nobullet"> Recommencer la même commande mais avec le message <code class="displayDark">"#off"</code> ; la led doit normalement <strong class="specialN">s'éteindre</strong>. </div>
+
+
+
+    <li> Via la <strong>session</strong> <code class="cmd">ssh</code> sur la carte <strong class="Raspberry">Raspberry Pi</strong>, installer l'<strong>application de développement</strong> <strong class="specialDR">Node‑RED</strong> (cf. cours, chap. R3‑V <a class="cours" href="Rc3-5_technologiesWPAN.html#NodeRED" target="_BLANK"></a>). </li> 
+
+    <div class="nobullet"> Suivre la procédure indiquée de paramétrage général de l'application. </div>
+
+    <li> Démarrer l'application (commande <code>node-red-start</code>) et dans un <strong>navigateur</strong> sur le poste de travail, se connecter à l'<strong>adresse <em class="sigle">IP</em> du broker</strong> sur le <strong>port 1880</strong> pour afficher la page web d'<strong class="title">interface de développement</strong>. </li>
+
+    <div class="nobullet"> Via le menu principal, exécuter la commande <code>Manage palette</code> et ajouter à l'interface la <strong>palette de nœuds</strong> <code>node-red-dashboard</code>. </div>
+    
+
+    <li> Dans la fenêtre de développement de <strong class="specialDR">Node‑RED</strong> (onglet <code>Flow 1</code> par défaut), créer les <strong class="title">nœuds</strong> suivants et les <strong class="title">liaisons</strong> entre eux pour afficher l'<strong>état de la led</strong>. </li>
+
+    <ul>
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_mqttLedState.png" width="300px" style="padding-top: 0.2em">
+      <li> Créer un <strong>nœud</strong> <code class="cmd">mqtt in</code> (palette <em class="english">network</em>), un <strong>nœud</strong> <code class="cmd">text</code> (palette <em class="english">dashboard</em>) et les relier entre‑eux, conformément à la capture d'écran ci‑contre. </li>
+      </div><!-- display -->
+
+      <li> Paramétrer le <strong>nœud</strong> <code class="cmd">mqtt in</code> en renseignant pour l'<strong>adresse <em class="sigle">IP</em></strong> du <strong class="specialO">broker</strong> la valeur <code>localhost</code> (puisque <strong class="specialDR">Node‑RED</strong> est installé sur la même machine) et le nom du <strong>topic</strong> de l'état de la led (cf. question <em class="bold">9.d</em> supra). </li>
+      
+      
+      <li> Paramétrer le <strong>nœud</strong> <code class="cmd">text</code> en créant au passage un <strong class="specialLB">groupe</strong> (<code>ui_group</code>) nommée <code>NodeMCU</code> et dans cette zone, un <strong class="specialLB">block</strong> (<code>tab</code>) nommé <code>LED</code>. </li>
+
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_mqttLedState2.png" width="300px" style="padding-top: 0.2em">
+      <div class="nobullet"> Dans l'onglet <code>Flow 1</code>, le réseau des deux nœuds créés doit alors être conforme à la capture d'écran ci‑contre. </div>
+      </div><!-- display -->
+      
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_led_ui1.png" width="300px" style="padding-top: 0.2em">
+      <li> Cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedfull" style="background: firebrick; color: white;"><code>Deploy</code></span> et vérifier la page web d'<strong class="title">interface utilisateur</strong> en ouvrant dans le navigateur un <strong>nouvel onglet</strong> avec l'<strong><em class="sigle">URL</em></strong> : <br>
+      <span class="inline"><code class="filename">http://<span class="nocode"><strong class="specialO">adresse <em class="sigle">IP</em> broker</strong></span>:1880/ui</code>
+      </span> <br>
+      On doit obtenir un résultat conforme à la capture d'écran ci‑contre. </li>
+    </ul>
+
+    <li> Dans la fenêtre de développement de <strong class="specialDR">Node‑RED</strong>, créer maintenant les <strong class="title">nœuds</strong> suivants et les <strong class="title">liaisons</strong> entre eux pour <strong>commander la led</strong>. </li>
+
+    <ul>
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_mqttLedCommand.png" width="300px" style="padding-top: 0.2em">
+      <li> Créer un <strong>nœud</strong> <code class="cmd">switch</code> (palette <em class="english">dashboard</em>), un <strong>nœud</strong> <code>mqtt out</code> (palette <em class="english">network</em>) et les relier entre‑eux, conformément à la capture d'écran ci‑contre. </li>
+      </div><!-- display -->
+
+      <li> Paramétrer le <strong>nœud</strong> <code class="cmd">switch</code> en saisissant les <strong>chaînes de caractères</strong> (<code>string</code>) à envoyer comme <code>On Payload</code> et <code>Off Payload</code> respectivement pour allumer et éteindre la led – cf. le code source de la fonction <code class="prettyprint lang-c">mqttCallback</code> dans le programme de la carte <em class="mark">NodeMCU</em>. </li>
+
+
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_mqttLedCommand2.png" width="300px" style="padding-top: 0.2em">
+      <li> Paramétrer le <strong>nœud</strong> <code class="cmd">mqtt out</code> en renseignant le broker (<code>localhost</code>) et le <strong>topic</strong> de commande de la led (cf. question <em class="bold">9.d</em> supra). </li>
+
+      <div class="nobullet"> La structure doit alors être conforme à la capture d'écran ci‑dessus. </div>
+      </div><!-- display -->
+
+         <img class="top-right" src="../img/R3tp3_led_ui2.png" width="300px" style="padding-top: 0.2em">
+      <li> Cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedfull" style="background: firebrick; color: white;"><code>Deploy</code></span> et vérifier le résultat en ouvrant la page web d'<strong class="title">interface utilisateur</strong>. On doit normalement obtenir un résultat conforme à la capture d'écran ci‑contre. </li>
+    </ul>
+
+    <li> <strong class="title">Tester</strong> maintenant le fonctionnement de l'interface :  <strong class="specialR">allumer</strong> et <strong class="specialN">éteindre</strong> la led avec le <strong>switch</strong>. </li>
+    
+    <div class="nobullet"> Ouvrir et tester le fonctionnement de cette page d'interface sur un <strong>smartphone</strong>. Le rendu est‑il satisfaisant sur un petit écran (en d'autres termes, la page web est‑elle <em class="english">responsive</em>) ? </div>
+
+      <img class="top-right" src="../img/R3tp3_ledStateChart.png" width="300px" style="padding-top: 0.2em">
+    <li> On souhaite afficher un <strong class="title">diagramme d'historique</strong> des valeurs d'état de la led dans l'heure en cours. Pour cela, sur la fenêtre de développement, ajouter un <strong>nœud</strong> <code class="cmd">chart</code> et relier son entrée à la sortie du nœud <code>mqtt_in</code>, conformément à la conformément à la capture d'écran ci‑contre. </li>
+
+    <div class="nobullet"> Paramétrer ce nœud pour que l'<strong>axe des abscisses</strong> porte sur la journée en cours avec des repères de la forme <code>HH:mm</code>, et que l'<strong>axe des ordonnées</strong> soit graduées avec les repères <code>0</code> (<code>min</code>) et <code>1</code> (<code>max</code>). </div>
+    
+    <div style="display: inline-block;">
+      <img class="top-right" src="../img/R3tp3_led_ui3.png" width="300px" style="padding-top: 0.2em">
+    <div class="nobullet"> Cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedfull" style="background: firebrick; color: white;"><code>Deploy</code></span> et vérifier le résultat en ouvrant la page web d'<strong class="title">interface utilisateur</strong>. À l'aide du switch, changer plusieurs fois l'état de la led. On doit normalement obtenir un résultat similaire à celui de la capture d'écran ci‑contre. </div>
+    </div><!-- display -->
+
+    <li> On souhaite enregistrer un <strong class="title">fichier d'historique</strong> des valeurs d'état de la led dans la journée en cours, enregistrées au <strong>format</strong> <code class="filename">csv</code> <a class="external" href="Rtp3-3_objetConnecte.html" target="_BLANK"></a> <a class="external" href="https://fr.wikipedia.org/wiki/Comma-separated_values" target="_BLANK">W</a> (<em class="english">comma‑separated values</em>). Pour cela, sur la fenêtre de développement, effectuer les tâches suivantes.</li>
+    <ul>
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_ledStateTrigger1.png" width="500px" style="padding-top: 0.2em">
+      <li> Créer un <strong>nœud</strong> <code class="cmd">trigger</code> (palette <em class="english">function</em>) et un <strong>nœud</strong> <code class="cmd">debug</code> (palette <em class="english">function</em>) et les relier en chaîne à la sortie du nœud <code>mqtt_in</code>, conformément à la figure ci‑contre. </li>
+      
+      <div class="nobullet"> Paramétrer le <strong>nœud</strong> <code class="cmd">trigger</code> pour qu'il émette un <strong>timestamp</strong> puis attende d'être réinitialisé (<code>wait to be reset</code>) lorsque la valeur du message qu'il reçoit (<code>msg.payload</code>) vaut <code>0</code>. Nommer ce nœud « <code>timestamp on 0</code> ». </div>
+      </div><!-- display -->
+
+      <div class="nobullet"> Cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedfull" style="background: firebrick; color: white;"><code>Deploy</code></span> puis, via l'interface utilisateur,  allumer et éteindre la led. Dans le panneau latéral droit de la fenêtre de développement, ouvrir l'<strong>onglet</strong> <code class="cmd">Debug messages</code>. Vérifier que la valeur affichée correspond à un <strong class="title">timestamp</strong> récent, par exemple en consultant la page web au lien suivant <a class="external" href="https://www.unixtimestamp.com/" target="_BLANK"></a>. </div>
+
+      <div class="nobullet"> Entre les nœuds <code>trigger</code> et <code>debug</code>, insérer un <strong>nœud</strong> <code class="cmd">function</code> (palette <em class="english">function</em>), le nommer format et le définir avec le code <strong class="specialY">Javascript</strong> ci‑dessous : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-js linenums:1">
+msg.payload = (new Date(msg.payload)).toLocaleTimeString();
+return msg;
+</pre>
+<!---------- ne pas indenter ---------->  
+
+      <div class="nobullet"> Cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedfull" style="background: firebrick; color: white;"><code>Deploy</code></span> puis, via l'interface utilisateur, allumer et éteindre la led. Dans l'<strong>onglet</strong> <code class="cmd">Debug messages</code> du panneau latéral droit, vérifier que la valeur affichée correspond à l'<strong class="title">heure courante</strong>. </div>
+     
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_ledStateTrigger2.png" width="500px" style="padding-top: 0.2em">
+      <li> De la même manière, créer une <strong>séquence de nœuds</strong> <code class="cmd">trigger</code> et <code class="cmd">debug</code> pour récupérer la valeur du message issu du nœud <code>mqtt_in</code> (<code>existing msg objet</code>). </li>
+
+      <div class="nobullet"> Cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedfull" style="background: firebrick; color: white;"><code>Deploy</code></span> et vérifier dans l'<strong>onglet</strong> <code class="cmd">Debug messages</code> qu'à chaque allumage-extinction de la led, onobtient la <strong class="title">valeur d'état</strong> <code class="prettyprint lang-c">1</code>  de la led puis l'heure courante lors de cet événement. </div>
+      </div><!-- display -->
+
+      <div class="nobullet"> Entre ces deux nœuds <code>trigger</code> et <code>debug</code>, insérer un <strong>nœud</strong> <code class="cmd">delay</code> (palette <em class="english">function</em>) et le paramétrer avec la <strong>valeur</strong> <code>10 ms</code>. Vérifier alors que dans l'<strong>onglet</strong> <code class="cmd">Debug messages</code>, l'heure <em class="remark">puis</em> la valeur d'état <code>1</code> de la led sont affichées <strong class="title">dans cet ordre</strong>.  </div>
+
+      <li> Copier‑coller la structure des 6 nœuds précédemment crées et apporter les modifications nécessaires pour récupérer la <strong class="title">valeur d'état</strong> <code class="prettyprint lang-c">0</code> de la led, précédée de l'<strong class="title">heure courante</strong> lors de cet événement. </li>
+
+      <div class="nobullet"> Déployer ces changements et vérifier le résultat. </div>
+      
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/R3tp3_ledStateJoin.png" width="500px" style="padding-top: 0.2em">
+      <li> Supprimer les nœuds <code>debug</code> puis ajouter un <strong>nœud</strong> <code class="cmd">join</code> (palette <em class="english">function</em>) ainsi qu'un <strong>nœud</strong> <code class="cmd">write file</code> (palette <em class="english">storage</em>). Les relier conformément à la capture d'écran ci‑contre. </li>
+
+      <div class="nobullet"> Paramétrer le <strong>nœud</strong> <code class="cmd">join</code> en mode manuel pour créer une chaîne de caractères en joignant ses parties avec le <strong>symbole</strong> <code class="prettyprint lang-c">,</code> après réception de <code class="prettyprint lang-c">2</code> <strong>parties</strong>. </div>
+
+      <div class="nobullet"> Paramétrer le <strong>nœud</strong> <code class="cmd">write file</code> en renseignant le <strong>chemin</strong> d'accès au fichier : <br>
+      <span class="inline">
+        <code class="filename">/home/pi/documents/LEDhistoric.csv</code>
+      </span> <br>
+      et en choisissant l'<strong>encodage</strong> <code class="cmd">ascii</code>. </div>
+
+      <div class="nobullet"> Par ailleurs, <strong>créer ce fichier</strong> dans l'arborescence de la carte <strong class="Raspberry">Raspberry Pi</strong> via un terminal de commandes en lignes en <code>ssh</code> (commande <code>touch</code>). </div>
+
+      <div class="nobullet"> Cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedfull" style="background: firebrick; color: white;"><code>Deploy</code></span> et vérifier que les changements d'état de la led sont correctement enregistrés dans le fichier <code class="filename">LEDhistoric.csv</code> (commande <code>touch</code>). </div>
+      </div><!-- display -->
+
+      <li> Chercher une solution pour afficher sur la page d'interface <strong>non pas</strong> <code>0/1</code> mais le <strong class="title">texte</strong> <code class="cmd">Off/On</code> pour l'état de la led sur la page d'interface. </li>
+    </ul>
+    
+    
+
+    
+
+    
+  </ol><!-- questions (exo 9) -->
+
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

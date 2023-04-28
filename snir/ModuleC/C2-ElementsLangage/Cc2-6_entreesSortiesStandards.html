@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="VI"
+  data-pageState="OK"
+  data-pageheadtitle="E-S standards"
+  data-pagefulltitle="Les entrées‑sorties standards  –  Rudiments"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="exergue">
+
+<p class="square"> En programmation, on appelle <strong class="title">entrées‑sorties</strong> <a class="external " href="https://fr.wikipedia.org/wiki/entrées-sorties" target="_BLANK">W</a> – en anglais, <strong>input‑output</strong>, termes abrégés par le sigle <em class="bold"><em class="sigle">IO</em></em> – les <strong class="defin">échanges de données</strong> entre : </p>
+
+<ul>
+  <li> la <strong class="specialN">machine</strong> – au sens large, il peut s'agir d'un ordinateur, d'une carte à microcontrôleur, etc. – sur laquelle s'exécute le programme ;  </li>
+
+  <li> et des <strong class="specialV">périphériques</strong> de cette machine – au sens large également (écran, clavier, imprimante, disque… <a class="external " href="https://fr.wikipedia.org/wiki/Périphérique_informatique" target="_BLANK">W</a>). </li>
+</ul>
+
+<div style="display: inline-block;">
+<p> Si la machine est un <strong class="specialN">ordinateur</strong> de type poste de travail et si les périphériques sont respectivement :   </p>
+<img class="top-right" src="../img/ESstandards.png" width="450px">
+
+<ul>
+  <li> pour l'affichage de données (<em style="color:darkviolet">périphérique de sortie</em>), une fenêtre du moniteur, dite <strong class="specialV">console d'exécution</strong> du programme, </li>
+
+  <li> pour la saisie de données (<em style="color:darkviolet">périphérique d'entrée</em>), le <strong class="specialV">clavier</strong> principal de la machine, </li>
+</ul>
+
+<p> alors on parle d'<strong class="title">entrées‑sorties</strong> <strong class="specialLB">standards</strong>. </p>
+</div><!-- display -->
+
+
+<p class="square"> Même dans ce cadre restreint apparemment simple (il n'est pas question ici ni de <em>souris</em>, ni d'<em>affichage graphique</em>), les opérations d'<strong class="title">entrées‑sorties standards</strong> sont <strong class="warning">très complexes</strong>. Elles mettent en œuvre des <strong>objets « cachés »</strong> (des mémoires tampons, en anglais <em class="english">buffers</em>) avec de nombreux paramètres et font appel à des <strong>dispositifs spécialisés</strong> (des circuits intégrés) en interaction avec le <strong>système d'exploitation</strong> de la machine. </p>
+
+<div class="expert">
+<p> <strong class="cons">Peu visibles</strong> au premier plan des <strong>interfaces homme‑machine</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Interactions_homme-machine" target="_BLANK">W</a> des logiciels récents, qui opèrent plutôt via des interfaces <em>graphiques</em>, les <strong class="title">entrées‑sorties standards</strong> sont <strong class="pros">néanmoins essentielles</strong> dans l'apprentissage de la programmation pour deux raisons : </p>
+
+<ul>
+  <li> elles restent très utilisées pour la <strong class="specialLB">mise au point</strong> et l'<strong class="specialLB">installation des programmes</strong> (en particulier sous un système d'exploitation comme <em class="mark">Linux</em>), </li>
+
+  <li> elles constituent la base des méthodes de <strong class="specialLB">lecture & écriture sur fichiers</strong>, des opérations très fréquentes en informatique, qui seront étudiées au chapitre C5‑VIII. </li>
+</ul>
+</div><!-- expert -->
+
+<p class="square"> Dans un objectif d'<strong class="title">initiation minimale</strong>, après avoir exposé quelques <strong class="specialLB">généralités</strong> incontournables, ce chapitre ne donne qu'un <strong class="cons">premier aperçu</strong> des <strong>deux fonctions d'entrées‑sorties standards</strong> <strong class="pros">les plus usuelles</strong> en langage <strong>C</strong> : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">printf</code> pour les <strong class="specialLB">sorties standards formatées</strong> (affichage de message et de données sur le terminal d'exécution) ; </li>
+
+  <li> <code class="prettyprint lang-c">scanf</code> pour les <strong class="specialLB">entrées standards formatées</strong> (saisies de données par le clavier) ;  </li>
+</ul>
+<p> le but étant simplement de pouvoir coder un minimum d'<strong>interactions de l'utilisateur avec les programmes</strong> au cours de leur exécution. En plus des règles élémentaires de syntaxe, de <strong class="title">nombreux exemples</strong> sont proposés. Ils ont tous été testés dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong> (chaîne de compilation <strong>GCC</strong>). </p>
+
+<div class="expert">
+<p> Quant aux <strong class="title">autres fonctions</strong> d'entrées‑sorties standards (<code>put</code>, <code>get</code>, etc.), elles seront abordées au chapitre C5‑VII qui leur est entièrement dédié <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/Cc5-7_flotsEntreesSorties.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Généralités </h2>
+
+
+
+<h3> Variété des syntaxes d'entrées‑sorties </h3>
+
+
+
+<p> Les <strong>langages C</strong> et <strong>C++</strong> emploient des <strong class="warning">syntaxes très différentes</strong> pour les opérations d'<strong  class="title">entrées‑sorties standards</strong>. De plus, leur <strong class="defin">étude détaillée</strong> n'est <strong class="cons">pas envisageable</strong> dès maintenant , car ces opérations font appel à des concepts avancés (pointeurs, flots…). </p>
+
+
+<div class="expert">
+<p>  Par ailleurs, afin d'<strong class="pros">éviter les confusions</strong> chez les codeurs débutants, dans ce module de formation, seules les <strong>fonctions d'entrées‑sorties</strong> du <strong class="title">langage C</strong> seront abordées, et <strong class="cons">pas celles</strong> du <strong>C++</strong>. En effet, dans ce langage, on utilise le module de bibliothèque <code class="prettyprint lang-c">iostream</code>, comme dans le programme <em class="english">Hello world</em> (cf. TP C1‑1 <a class="TP" href="../C1-Generalites/Ctp1-1_environnements.html#helloWorldCpp" target="_BLANK"></a>) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;iostream&gt;
+
+int main() {
+  std::cout << "Hello World!" << endl;
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p>  Mais dans un premier temps,  ces éléments de langage ne sont pas indispensables car même en <strong>C++</strong>, il est parfaitement <strong class="pros">possible</strong> d'employer les fonctions du langage <strong class="title">C</strong> – à condition d'inclure le fichier d'en‑tête <code class="prettyprint lang-c">cstdio</code> de la bibliothèque standard (cf. infra). </p>
+
+<p> Enfin, les <strong class="title">entrées‑sorties par moniteur série</strong> avec les <strong class="Arduino">cartes Arduino</strong> seront étudiées au chap. C3‑X <a class="next" href="../C3-Numeration/Cc3-10_moniteurSerie.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3> Le module <code class="prettyprint lang-c">stdio</code> de la bibliothèque standard du langage <em class="mark">C</em> </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, les <strong class="defin">fonctions d'entrées‑sorties standards</strong> (et aussi celles sur fichiers)  sont regroupées dans un <strong class="title">module</strong> de la <strong class="title">bibliothèque standard</strong> dont le <strong>fichier d'en‑tête</strong> est <code class="filename">stdio.h</code> <a class="external" href="http://www.cplusplus.com/reference/cstdio/" target="_BLANK">C</a>. </p>
+
+<p> Il faut donc coder au début du fichier source du programme la <strong>directive</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;stdio.h&gt;</code>
+</span><br>
+pour pouvoir employer ces fonctions. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ce module comporte <strong class="title">plusieurs dizaines de fonctions</strong>. Seules les <strong class="pros">deux plus usuelles</strong> seront présentées ci‑après : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">printf</code> pour les <strong class="specialLB">sorties</strong> avec un affichage de données sur la <strong class="specialV">console</strong>, </li>
+
+  <li> <code class="prettyprint lang-c">scanf</code> pour les <strong class="specialLB">entrées</strong> avec une saisie de données au <strong class="specialV">clavier</strong>. </li>
+</ul>
+
+<p> Toutes les deux mettent en œuvre des <strong class="defin">mécanismes de formatage</strong>, d'où le suffixe « <code class="prettyprint lang-c">f</code> » de leur identificateur. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Comme expliqué au chap. C2‑I <a class="previous" href="Cc2-1_squeletteCode.html#cPlusPlus" target="_BLANK"></a>, il est <strong class="pros">possible</strong> d'employer les <strong class="defin">fonctions de la bibliothèque standard</strong> du <strong>C</strong> dans un programme codé en <strong class="title">langage C++</strong>, dont chaque module existe dans une variante adaptée. Pour exploiter les fonctions d'entrées‑sorties standards, il suffit de coder la directive : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;cstdio&gt;</code>
+</span></p>
+</div><!-- expert -->
+
+
+
+<h3 id="chaineCaracteres"> Notion de chaîne de caractères </h3>
+
+
+
+<div class="important">
+<p> En programmation, on appelle <strong class="title">chaîne de caractère</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chaîne_de_caractères" target="_BLANK">W</a> – en anglais, <em class="english">string of characters</em>, abrégé <strong>string</strong> – une <strong class="defin">suite de valeurs de caractères</strong> – a priori, n'importe quels symboles, y compris des caractères de contrôle comme <strong><em class="sigle">HT</em></strong> (tabulation horizontale), <strong><em class="sigle">CR</em></strong> (retour chariot), <strong><em class="sigle">LF</em></strong> (nouvelle ligne)… cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK"></a>. </p>
+
+<p> Cette suite de caractères forme <strong>conjointement, dans leur ordre donné</strong>, une <strong class="defin">valeur particulière</strong> d'un <strong class="specialG">type</strong> de donnée reconnu comme tel et nommé le plus souvent <code>string</code>.  </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> À cette définition déjà loin d'être simple s'ajoute la difficulté sous‑jacente que le <strong class="defin">nombre de caractères</strong> d'une chaîne – on dit sa <strong class="title">longueur</strong> – est a priori <strong class="warning">variable</strong> durant l'exécution du programme, ce qui augure des <strong class="cons">problèmes d'allocation mémoire</strong> nécessaire à son stockage. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> C'est pourquoi la notion de chaîne de caractères n'est pas détaillée maintenant, mais beaucoup plus loin dans ce module (cf. chap. C5‑VI <a class="next" href="../C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html" target="_BLANK"></a>). </p>
+
+<p> Néanmoins, il est indispensable de disposer dès à présent de <strong class="pros">quelques connaissances</strong> sur cette notion, car les <strong class="title">fonctions d'entrées‑sorties</strong> <code class="prettyprint lang-c">printf</code> et <code class="prettyprint lang-c">scanf</code> déclarées dans le fichier d'en‑tête <code class="filename">stdio.h</code> admettent comme <strong class="specialO">premier argument</strong> un objet de ce type. </p>
+</div><!-- expert -->
+
+
+<h4 id="C-style_string"> Rudiment de syntaxe des chaînes de caractères en langage <em class="mark">C</em> </h4>
+
+
+<div class="complement">
+<p> Dans le noyau du langage <strong>C</strong>, il n'y a <strong class="warning">pas de type</strong> dénommé <code>string</code>. On emploie <strong>à la place</strong> : </p>
+<ul>
+  <li> soit un <strong class="specialLB">tableau de caractères</strong> (typiquement, <code class="prettyprint lang-c">char[]</code> – cf. chap. C5‑III <a class="next" href="../C5-StructuresPointeurs/Cc5-3_tableauxDeclarations.html" target="_BLANK"></a>) ;  </li>
+
+  <li> soit un <strong class="specialLB">pointeur sur caractères</strong> (typiquement, <code class="prettyprint lang-c">char *</code> – cf. chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>). </li>
+</ul>
+<p> On parle de <strong class="title">chaîne de « style <em class="mark">C</em> »</strong> – <strong>C‑style string</strong> en anglais <a class="external" href="https://en.wiktionary.org/wiki/C-style_string" target="_BLANK">W</a>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Quant aux <strong class="title">constantes littérales</strong> <strong class="defin">chaînes de caractères</strong>, elles sont codées en <strong>C</strong> et en <strong>C++</strong> entre une paire de <strong class="specialO">délimiteurs</strong> <code class="prettyprint lang-c">"<span class="nocode"></span>"</code> dits <strong>doubles guillemets droits</strong> ou encore <strong>guillemets dactylographiques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Guillemet#Guillemets_en_informatique" target="_BLANK">W</a> (<em class="english">double quotation marks</em>, abrégé <em class="english">double quotes</em> en anglais). Il en est de même dans la plupart des langages de programmation. </p>
+
+<p> Implicitement, une constante littérale chaîne de caractères codées ainsi comporte toujours <strong class="warning">un caractère de plus</strong> <strong>à la fin</strong> qui est toujours le <strong class="specialLB">caractère <em class="sigle">NUL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Caractère_nul" target="_BLANK">W</a>. Il s'agit d'un <strong class="defin">caractère spécial</strong> : </p>
+<ul>
+  <li> <strong>sans glyphe</strong> (pas de symbole affiché) ; </li>
+
+  <li> à <strong>valeur entière</strong> <code class="prettyprint lang-c">0</code> (aussi bien en code <em class="sigle">ASCII</em> ou en <em class="sigle">UTF‑8</em>). </li>
+</ul>
+<p> Il signale la fin de la chaîne – en anglais, on parle de <strong>null‑terminated string</strong> <a class="external" href="https://en.wikipedia.org/wiki/Null-terminated_string" target="_BLANK">W</a>.   </p>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+  <li> <code class="prettyprint lang-c">"Hello"</code> code une <strong class="title">constante littérale</strong> formant une chaîne de <strong class="specialO">5 + 1 caractères</strong>. </li>
+
+  <li> <code class="prettyprint lang-c">"x"</code> code une <strong class="title">constante littérale</strong> formant une chaîne de <strong class="specialO">1 + 1 caractères</strong> – à <strong class="warning">ne pas confondre</strong> avec <code class="prettyprint lang-c" style="background: lightgrey;">'x'</code> qui est une <strong>valeur de caractère isolé</strong> (cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#carIsole" target="_BLANK"></a>). </li>
+
+ <li> <code class="prettyprint lang-c">""</code> code une <strong class="title">constante littérale</strong> qui est la « <strong>chaîne vide</strong> », mais qui comporte en fait <strong class="specialO">1 caractère</strong> – le caractère <strong><em class="sigle">NUL</em></strong>. </li>
+
+ <li> L'instruction ci‑dessous est la <strong class="title">déclaration d'une chaîne de type tableau</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">char endingMessage[20] = "Good bye!";</code>
+</span> </li>
+
+<div class="nobullet"> <em class="remark">Remarque</em> : on prend toujours la précaution de <strong class="pros">surdimensionner le nombre d'éléments du tableau</strong> (ici <code class="prettyprint lang-c">20</code>) pour d'éventuelles modifications de la variable avec un contenu ultérieur qui serait plus long. </div>
+</ul>
+</div><!-- exemples -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="printf"> La fonction d'affichage <code>printf</code> </h2>
+
+
+
+<h3> Syntaxe d'appel </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, un <strong class="title">affichage formaté</strong> sur la <strong class="specialV">console d'exécution</strong> du programme se code par une <strong>expression d'appel</strong> de la fonction <code>printf</code>, avec la syntaxe suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">printf(<span class="nocode"><strong class="specialO">chaîne de format</strong></span> <span class="nocode" style="color: darkgrey;">[</span>,
+    <span class="nocode"><strong class="specialT">expression 1</strong></span>, 
+    <span class="nocode"><strong class="specialT">expression 2</strong></span>, 
+    <span class="nocode">…</span>, 
+    <span class="nocode"><strong class="specialT">expression n</strong></span><span class="nocode" style="color: darkgrey;"> ]</span>)
+  </code>
+</span> <br>
+sachant que <code>printf</code> retourne une <strong>valeur</strong> de type <code class="prettyprint lang-c">int</code> (le nombre de caractères affichés – valeur qui peut être exploitée pour gérer des scénarios limites). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: block">
+<p> Dans cette syntaxe, on peut apporter les précisions suivantes : </p>
+
+<ul>
+  <li> La <strong class="specialO">chaîne de format</strong> code la trame de la <strong class="defin">chaîne de caractères à afficher</strong>. Elle peut être : </li>
+  <ul>
+    <div class="expert">
+    <li> une <strong>expression</strong> dont la valeur est une <strong>chaîne de caractères</strong> – cette possibilité ne sera pas décrite dans ce chapitre (cf. chap. C5‑VI <a class="next" href="../C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html" target="_BLANK"></a>) ; </li>
+    </div><!-- expert -->
+
+    <li> une <strong>suite de caractères</strong> saisie entre <strong>guillemets doubles</strong> <code class="prettyprint lang-c">""</code>, a priori composée de caractères <strong><em class="sigle">ASCII</em></strong> (cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK"></a>) voire <strong><em class="sigle">UTF‑8</em></strong> (cf. chap. C3‑IX <a class="next" href="../C3-Numeration/Cc3-9_typesCaracteresEtendus.html#formatUTF-8" target="_BLANK"></a>) selon l'implémentation ;</li>
+
+    <li> et optionnellement assortie de <strong>n</strong> <strong class="specialDR">spécifications de conversion</strong>, chacune préfixée par le <strong>symbole</strong> <code class="prettyprint lang-c">%</code>.</li>
+  </ul>
+
+  <li>  À chaque <strong class="specialDR">spécification de conversion</strong> doit correspondre <strong>une et une seule</strong> <strong class="specialT">expression</strong> respectivement dans l'ordre de codage après la chaîne de format. Chacune doit : </li>
+
+  <ul>
+    <li> être <strong>évaluable</strong> au moment du traitement de l'instruction, </li>
+
+    <li> être <strong>compatible</strong> en termes de <strong class="specialG">typage</strong> à sa <strong class="specialDR">spécification de conversion</strong> correspondante. </li>
+  </ul>
+
+  <img class="top-left" src="../img/ESspecifConvPrintf.jpg" style="max-width: 700px">
+</ul>
+</div><!-- complement -->
+
+<p> Des exemples sont données infra <a class="infra" href="Cc2-6_entreesSortiesStandards.html#exemplesPrintf"></a>, après le détail de la syntaxe des spécifications de conversions.</p>
+
+
+
+<h3 id="specificationsConversion"> Syntaxe de codage des spécifications de conversion </h3>
+
+
+
+<p> Le <strong class="title">codage</strong> des <strong class="specialDR">spécifications de conversion</strong> obéit à une <strong class="cons">syntaxe complexe</strong> qu'il n'est pas question de détailler complètement dans ce chapitre d'introduction. </p>
+
+
+<div class="important">
+<p> Une <strong class="title">spécification de conversion</strong> est un élément de code dans une <strong class="specialO">chaîne de format</strong> qui détermine la <strong class="defin">présentation de la valeur</strong> de son <strong class="specialT">expression correspondante</strong>, avec laquelle existe toujours une <strong class="specialG">contrainte de typage</strong>. </p>
+
+<p> Elle est constituée du <strong class="specialDR">préfixe</strong> <code class="prettyprint lang-c">%</code> suivi d'une <strong class="specialDR">séquence de caractères codes</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les quelques <strong class="specialDR">caractères codes</strong> de <strong class="title">formatage basique</strong> sont détaillés dans le tableau ci‑dessous. Ils sont valables aussi bien pour les appels des <strong>fonctions</strong> <code class="prettyprint lang-c">printf</code> et <code class="prettyprint lang-c">scanf</code>. Pour tout complément, on pourra se référer à cette page web de référence <a class="external" href="http://www.cplusplus.com/reference/cstdio/printf/" target="_BLANK">C</a>. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Caractère <br> code </th> 
+    <th> Types <br> requis </th> 
+    <th> Format <br> d'affichage </th> 
+    <th> Mnémonique </th>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">d</code> <em style="font-size: 80%">ou</em> <code class="cmd" style="color: crimson;">i</code> </td>
+    <td style="text-align: center;"> <strong class="specialG">entiers signés</strong> </td> 
+    <td style="padding-left: 1em;"> valeur en <strong class="defin">base 10</strong> </td> 
+    <td style="text-align: center;"> <em class="english"><strong>d</strong>ecimal</em> <br> <em class="english"><strong>i</strong>nteger</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">u</code> </td>
+    <td style="text-align: center;"> <strong class="specialG">entiers non signés</strong></td> 
+    <td style="padding-left: 1em;"> valeur en <strong class="defin">base 10</strong> </td> 
+    <td style="text-align: center;"> <em class="english"><strong>u</strong>nsigned</em>  </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">x</code> </td>
+    <td style="text-align: center;"> <strong class="specialG">entiers</strong> </td> 
+    <td style="padding-left: 1em;"> valeur en <strong class="defin">base 16</strong> </td> 
+    <td style="text-align: center;"> <em class="english">he<strong>x</strong>adecimal</em>  </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">g</code> </td>
+    <td style="text-align: center;"> <strong class="specialG">décimaux</strong> (flottants) </td> 
+    <td style="padding-left: 1em;"> valeur décimale, <strong class="defin">format le plus court</strong> </td> 
+    <td style="text-align: center;"> <em class="english"><strong>g</strong>eneral</em>  </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">f</code> </td>
+    <td style="text-align: center;"> <strong class="specialG">décimaux</strong> (flottants) </td> 
+    <td style="padding-left: 1em;"> valeur décimale, <strong class="defin">virgule fixe</strong> </td> 
+    <td style="text-align: center;"> <em class="english"><strong>f</strong>ixed point</em>  </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">e</code> </td>
+    <td style="text-align: center;"> <strong class="specialG">décimaux</strong> (flottants) </td> 
+    <td style="padding-left: 1em;"> valeur décimale, <strong class="defin">virgule flottante</strong> </td> 
+    <td style="text-align: center;"> <em class="english"><strong>e</strong>xponent</em>  </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">c</code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">int</code> </td> 
+    <td style="padding-left: 1em;"> <strong class="defin">valeur de caractère</strong> </td> 
+    <td style="text-align: center;"> <em class="english"><strong>c</strong>haracter</em>  </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">s</code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">char*</code> </td> 
+    <td style="padding-left: 1em;"> <strong class="defin">chaîne de caractères</strong> </td> 
+    <td style="text-align: center;"> <em class="english"><strong>s</strong>tring</em>  </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd" style="color: crimson;">p</code> </td>
+    <td style="text-align: center;"> <strong class="specialG">pointeurs</strong> </td> 
+    <td style="padding-left: 1em;"> <strong class="defin">adresse</strong> hexadécimale </td> 
+    <td style="text-align: center;"> <em class="english"><strong>p</strong>ointer</em>  </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+  <li> On peut facilement afficher <strong>diverses présentations</strong> d'une même <strong class="title">valeur entière</strong> :  </li>
+  <ul>
+    <li> <code class="prettyprint lang-c">printf("%d", 65);</code> affiche <code class="displayDark">65</code> <br>
+    (valeur en base 10) ;  </li>
+  
+    <li> <code class="prettyprint lang-c">printf("%x", 65);</code> affiche <code class="displayDark">41</code> <br>
+    (valeur en base 16 – en effet, 65 = 4 × 16 + 1) ;  </li>
+
+    <li> <code class="prettyprint lang-c">printf("%c", 65);</code> affiche <code class="displayDark">A</code> <br>
+    (car 65 est le code <em class="sigle">ASCII</em> de la lettre « A » – cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK"></a>).  </li>
+  </ul>
+  
+  <li> On peut facilement afficher <strong>diverses présentations</strong> d'une même <strong class="title">valeur décimale</strong> :  </li>
+  <ul>
+    <li> <code class="prettyprint lang-c">printf("%g", 12.3);</code> affiche <code class="displayDark">12.3</code> <br>
+    (notation optimisée) ;  </li>
+  
+    <li> <code class="prettyprint lang-c">printf("%f", 12.3);</code> affiche <code class="displayDark">12.300000</code> <br>
+    (notation à virgule fixe avec par défaut 6 décimales) ;  </li>
+
+    <li> <code class="prettyprint lang-c">printf("%e", 12.3);</code> affiche <code class="displayDark">1.230000e+01</code> <br>
+    (notation exponentielle).  </li>
+  </ul>
+
+  <li> On peut afficher une <strong class="title">chaîne de caractères</strong> <strong>directement</strong> ou <strong>indirectement</strong> : </li>
+  <ul>
+    <li> <code class="prettyprint lang-c">printf("Hello!");</code> affiche <code class="displayDark">Hello!</code> <br>
+    (codage direct) ;  </li>
+  
+    <li> <code class="prettyprint lang-c">printf("%s", "Hello!");</code> affiche <code class="displayDark">Hello!</code> <br>
+    (codage indirect) ;  </li>
+  </ul>
+  <div class="nobullet"> le codage indirect permettant de stocker la <strong class="specialT">chaîne de caractère à afficher</strong> dans une <strong>donnée</strong> variable ou constante. </div>
+</ol>
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque">  Il n'existe <strong class="cons">pas de spécification de conversion</strong> qui permettent d'<strong>afficher en base 2</strong> la valeur d'une expression de type entier. </p>
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4> Prise en compte de la taille du type de l'expression à afficher </h4>  
+
+
+<div class="complement">
+<p> La <strong class="title">spécification</strong> <code class="cmd">%<span style="color: crimson;">d</span></code> est <strong class="pros">polyvalente</strong> pour les expressions de <strong class="specialG">types entiers</strong> qui entrent dans l'étendue des valeurs du type standard <code class="prettyprint lang-c">int</code> – autrement dit, pour des expressions de <strong>type</strong> <code class="prettyprint lang-c">short</code> ou <code class="prettyprint lang-c">char</code>. </p>
+
+<p> Il en va de même pour les <strong class="title">spécifications</strong> <code class="cmd">%<span style="color: crimson;">g</span></code>, <code class="cmd">%<span style="color: crimson;">f</span></code> et <code class="cmd">%<span style="color: crimson;">e</span></code> qui sont <strong class="pros">compatibles</strong> avec toutes les expressions de <strong class="specialG">types décimaux</strong> qui entrent dans l'étendue du type <code class="prettyprint lang-c">double</code> – autrement dit, celles de <strong>type</strong> <code class="prettyprint lang-c">float</code>. </p>
+</div><!-- complement -->
+
+<p class="square"> Mais lorsque l'<strong class="specialT">expression</strong> à afficher est d'un type <strong class="title">plus grand</strong> que <code class="prettyprint lang-c">int</code> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>) ou <code class="prettyprint lang-c">double</code> (cf. chap. C3‑V <a class="next" href="../C3-Numeration/Cc3-5_typesFlottants.html#classificationFloat" target="_BLANK"></a>), il est nécessaire d'<strong>ajouter d'autres</strong> <strong class="specialDR">caractères codes</strong> à la spécification de conversion pour qu'elle soit <strong class="defin">compatible</strong> avec toutes les valeurs de l'expression. On code comme indiqué dans le tableau ci‑dessous .  </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Spécification <br> de conversion </th> 
+    <th> Type de <br> l'expression </th> 
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">ld</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">long</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">lu</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">unsigned long</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">lld</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">long long</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">llu</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">unsigned long long</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">Lg</span></code> <em>ou</em> <code class="cmd">%<span style="color: crimson;">Lf</span></code> <em>ou</em> <code class="cmd">%<span style="color: crimson;">Le</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">long double</code> </td>
+  </tr>
+</table>
+</div><!-- overflow -->  
+
+<div class="remarques" id="remPrintfWindows">
+<p class="remarque"> Sur un <strong class="title">PC Windows</strong> avec la chaîne de compilation <strong>Mingw‑w64</strong>, les fonctions d'entrées‑sorties sont implémentée par une <strong class="cons">ancienne bibliothèque</strong> du logiciel d'exécution (run‑time), basée sur une architecture 32 bits. Il en résulte que dans cet environnement, certaines <strong class="specialDR">spécifications de conversion</strong> ne sont <strong class="cons">pas reconnues</strong>, avec éventuellement une <strong class="pros">alternative</strong> :  </p>
+<ul>
+  <li> <code class="cmd">%<span style="color: crimson;">lld</span></code> et <code class="cmd">%<span style="color: crimson;">llu</span></code> doivent être respectivement <strong class="defin">remplacées</strong> par <code class="cmd">%<span style="color: crimson;">I64d</span></code> et <code class="cmd">%<span style="color: crimson;">I64u</span></code> ;  </li>
+
+  <li> <code class="cmd">%<span style="color: crimson;">Lg</span></code>, <code class="cmd">%<span style="color: crimson;">Lf</span></code> et <code class="cmd">%<span style="color: crimson;">Le</span></code> n'ont <strong class="warning">pas d'alternative</strong>.  </li>
+</ul>
+</div><!-- remarque -->
+
+
+<p class="square"> Par ailleurs, on peut <strong class="title">forcer une conversion</strong> dans un <strong class="defin">type entier de taille plus petite</strong> que celui de l'<strong class="specialT">expression</strong> correspondante – avec à la clef un éventuel rebouclage cyclique – en codant les spécifications conformément au tableau ci‑dessous. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Spécification <br> de conversion </th> 
+    <th> Type forcé </th> 
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">hhd</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">char</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">hhu</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">unsigned char</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">hd</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">short</code> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">%<span style="color: crimson;">hu</span></code> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">unsigned short</code> </td>
+  </tr>
+</table>
+</div><!-- overflow --> 
+
+<div class="exemples"><p class="exemple"> </p>
+<ul>
+  <li> <code class="prettyprint lang-c">printf("%hhd", 200);</code> affiche <code class="displayDark">-56</code> <br>
+  (valeur déterminée par <strong class="warning">rebouclage cyclique</strong> dans le type <code class="prettyprint lang-c">char</code> dont l'étendue est {−128, +127}) ;  </li>
+
+  <li> alors que <code class="prettyprint lang-c">printf("%d", 200);</code> affiche <code class="displayDark">200</code> normalement. <br>
+ </li>
+</ul>
+</div><!-- exemple -->
+
+
+<!-- expert -->
+<h4> Prise en compte des types non signés </h4>
+
+
+<div class="complement">
+<p> La <strong class="title">spécification</strong> <code class="cmd">%<span style="color: crimson;">u</span></code> est <strong class="defin">nécessaire</strong> pour toute <strong class="specialT">expression</strong> de <strong>type</strong> <code class="prettyprint lang-c">unsigned int</code> ou <strong>plus grand</strong>. Sinon, l'affichage de sa valeur sera <strong class="warning">non conforme</strong> (avec un rebouclage cyclique) dès qu'elle dépasse la borne supérieure <code class="prettyprint lang-c">INT_MAX</code> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#debordements" target="_BLANK"></a>).  </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Après la déclaration <code class="prettyprint lang-c">unsigned a = 3000000000;</code> on constate que :  </p>
+<ul>
+  <li> <code class="prettyprint lang-c">printf("%d", a);</code> affiche <code class="displayDark">-1294967296</code> <br>
+  (valeur <strong class="warning">non conforme</strong> à celle de <code class="prettyprint lang-c">a</code>) ;  </li>
+
+  <li> <code class="prettyprint lang-c">printf("%u", a);</code> affiche <code class="displayDark">3000000000</code> <br>
+  (valeur <strong class="defin">conforme</strong> à celle de <code class="prettyprint lang-c">a</code>).  </li>
+</ul>
+</div><!-- exemple -->
+
+
+
+<!-- expert -->
+<h4 id="controleEspacement"> Contrôle de l'espacement d'affichage</h4>
+
+
+<div class="complement">
+<p> Dans une <strong class="specialDR">spécification de convertion</strong>, on peut imposer le <strong>nombre de caractères</strong> comme un <strong class="defin">cadre</strong> dans lequel la valeur de l'expression correspondante doit s'inscrire. En anglais, on parle de <strong>padding</strong>. </p>
+
+<p> Ce nombre de caractères se code <strong class="defin">juste après le préfixe</strong> <code class="prettyprint lang-c">%</code>. </p>
+</div><!-- complement -->
+
+<p> Par défaut, la valeur est <strong class="title">alignée à droite</strong> dans le cadre ainsi spécifié. Et si la taille de ce dernier est insuffisante, la valeur n'est <strong>pas tronquée</strong> mais <strong class="cons">déborde du cadre</strong>. </p>
+
+<p> Pour imposer un <strong class="title">alignement à gauche</strong>, il suffit de coder le <strong>symbole</strong> <code class="prettyprint lang-c">-</code> juste avant le nombre de caractères du cadre dans la spécification de conversion. </p>
+
+<div class="exemples"><p class="exemples"> </p>
+<ul>
+  <li> <code class="prettyprint lang-c">printf("%4d", 1);</code> affiche <code class="displayDark">   1</code> <br>
+  (alignement de la valeur à droite dans un cadre de 4 caractères) ; </li>
+
+  <li> <code class="prettyprint lang-c">printf("%-4d", 1);</code> affiche <code class="displayDark">1   </code> <br>
+  (alignement de la valeur à gauche dans un cadre de 4 caractères) ; </li>
+
+  <li> <code class="prettyprint lang-c">printf("%4d", 12345);</code> affiche <code class="displayDark">12345</code> <br>
+  (débordement du cadre de 4 caractères). </li>
+</ul>
+</div><!-- exemple -->
+
+
+<!-- expert -->
+<h4 id="zerosInitiaux"> Affichage de zéros non significatifs </h4>
+
+
+<div class="complement">
+<p> Dans une <strong class="specialDR">spécification de conversion</strong> <strong>alignée à droite</strong> avec un <strong>cadre suffisamment grand</strong>, on peut imposer l'affichage de <code class="prettyprint lang-c">0</code> <strong class="title">non significatifs</strong> sur tous les caractères vacants du cadre <strong>à gauche de la valeur</strong>.  </p>
+
+<p> Il suffit de coder le <strong>chiffre</strong> <code class="prettyprint lang-c">0</code> <strong class="defin">juste avant</strong> le nombre de caractères du cadre dans la spécification de conversion. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"> Dans un cadre de 3 caractères :  </p>
+<ul>
+  <li> <code class="prettyprint lang-c">printf("%03d", 9);</code> affiche <code class="displayDark">009</code> <br>
+  (deux « <code>0</code> » non significatifs car la valeur s'affiche sur 1 caractère) ; </li>
+
+  <li> <code class="prettyprint lang-c">printf("%03d", 98);</code> affiche <code class="displayDark">098</code> <br>
+  (un « <code>0</code> » non significatif car la valeur s'affiche sur 2 caractères) ; </li>
+
+ <li> <code class="prettyprint lang-c">printf("%03d", 987);</code> affiche <code class="displayDark">987</code> <br>
+  (aucun « <code>0</code> » non significatif car la valeur s'affiche sur 3 caractères). </li>
+</ul>
+</div><!-- exemple -->
+
+
+<!-- expert -->
+<h4> Affichage des valeurs décimales </h4>
+
+
+<p> Ce point n'est abordé qu'au chapitre C3‑V avec l'étude des <strong class="specialG">types décimaux</strong> <a class="next" href="../C3-Numeration/Cc3-5_typesFlottants.html#specificationsConversion" target="_BLANK"></a>. </p>
+
+</div><!-- expert -->
+
+
+
+<h3 id="caracteresSpeciaux"> Codage de quelques caractères spéciaux </h3>
+
+
+
+<div class="important">
+<p> Certains <strong class="title">caractères spéciaux</strong> ou <strong>particuliers</strong> du jeu <strong><em class="sigle">ASCII</em></strong> peuvent être inclus dans la <strong class="specialO">chaîne de format</strong> via une <strong>lettre-code</strong> préfixée par le <strong>symbole</strong> <code class="prettyprint lang-c">\</code> formant ce qu'on appelle une <strong class="defin">séquence d'échappement</strong> (cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#sequenceEchap" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">séquences d'échappement</strong> les plus usuelles sont : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">\n</code> pour effectuer un <strong>saut de ligne</strong> (pour <strong>n</strong><em class="english">ewline</em>) ; </li>
+
+  <li> <code class="prettyprint lang-c">\t</code> pour effectuer un <strong>saut de tabulation</strong> horizontale (pour <strong>t</strong><em class="english">abulation</em>) ; </li>
+
+  <li> <code class="prettyprint lang-c">\a</code> pour émettre un <strong>avertissement sonore</strong> (pour <strong>a</strong><em class="english">lert</em>) ; </li>
+
+  <li> <code class="prettyprint lang-c">\\</code> pour afficher le <strong>caractère</strong> « <code>\</code> » ; </li>
+
+  <li> <code class="prettyprint lang-c">\"</code> pour afficher le <strong>caractère</strong> « <code>"</code> » ; </li>
+
+  <li> <code class="prettyprint lang-c">\'</code> pour afficher le <strong>caractère</strong> « <code>'</code> ». </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Par ailleurs, dans la <strong class="specialO">chaîne de format</strong>, il faut <strong>coder</strong> <code class="prettyprint lang-c">%%</code> et non <strong class="warning">pas</strong> <code class="prettyprint lang-c">\%</code> pour afficher une occurrence du <strong>caractère</strong> « <code>%</code> » dans la console d'exécution. </p>
+
+<p> En effet, cette syntaxe spécifique est nécessaire parce que dans une chaîne de format, le caractère « <code>%</code> » joue un rôle particulier. En revanche, dans le codage d'une constante littérale <strong class="defin">chaîne de caractères</strong> en général, cette syntaxe spécifique <strong>ne doit pas être employée</strong> sinon elle produit deux caractères « <code>%</code> » de suite.</p>
+</div><!-- expert -->
+
+
+
+<h3 id="exemplesPrintf"> Exemples pratiques </h3>
+
+
+
+<div class="exemples">
+<ol class="numbered">
+  <li> La célèbre instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("Hello, World!<span class="nocode"><code>\n</code></span>");</code>
+  </span> <br>
+  affiche <code class="displayDark">Hello, World!</code> et passe à la ligne suivante. </li>
+
+  <div class="nobullet"> Ici, il n'y a <strong>aucune</strong> <strong class="specialDR">spécifications de conversion</strong>, donc <strong>aucune</strong> <strong class="specialT">expression</strong> associée. </div>
+
+  <li> Après la déclaration <code class="grey">float nominalVoltage = 12.0;</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("Unom = <span class="nocode"><code>%g</code></span> V", nominalVoltage);</code>
+  </span> <br>
+  affiche <code class="displayDark">Unom = 12 V</code>. </li>
+
+  <div class="nobullet"> Ici, il y a <strong>une</strong> <strong class="specialDR">spécifications de conversion</strong> <code class="cmd">%g</code> associée à l'<strong class="specialT">expression</strong> <code class="prettyprint lang-c">nominalVoltage</code>. </div>
+
+
+  <li> Après la déclaration <code class="grey">unsigned day = 1, month = 9, year = 2019;</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("<span class="nocode"><code>%02u</code></span>/<span class="nocode"><code>%02u</code></span>/<span class="nocode"><code>%u</code></span>", day, month, year);</code>
+  </span> <br>
+  affiche <code class="displayDark">01/09/2019</code>. </li>
+
+  <div class="nobullet"> Ici, il y a <strong>trois</strong> <strong class="specialDR">spécifications de conversion</strong> associées respectivement aux <strong class="specialT">expressions</strong> <code class="prettyprint lang-c">day</code>, <code class="prettyprint lang-c">month</code> et <code class="prettyprint lang-c">year</code> qui prennent toutes les trois une valeur entière non signée. Les valeurs respectives du jour et du mois s'incrivent sur deux chiffres avec un zéro non significatif si elles sont à un chiffre comme dans l'exemple ci‑dessus. </div>
+
+
+  <li> Après la déclaration <code class="grey">int a = 15;</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("<span class="nocode"><code>%p</code></span> <span class="nocode"><code>%x</code></span>", &a, a);</code> 
+  </span> <br>
+  affiche par exemple <code class="displayDark">0x7fffc2bf84a4 f</code>. </li>
+  
+  <div class="nobullet"> Le premier nombre affiché <code class="displayDark">0x7fffc2bf84a4</code> est l'adresse de la variable déclarée <code class="prettyprint lang-c">a</code>, le second <code class="displayDark">f</code> est la valeur hexadécimale stockée à cette adresse (en effet, <code>15</code> s'écrit « <code>f</code> » ou « <code>F</code> » en base 16). </div>
+
+  <div class="nobullet"> Ici, il y a <strong>deux</strong> <strong class="specialDR">spécifications de conversion</strong> <code class="prettyprint lang-c">%p</code> et <code class="prettyprint lang-c">%x</code> associées respectivement aux <strong class="specialT">expressions</strong> <code class="prettyprint lang-c">&a</code> (adresse de <code>a</code>) et <code class="prettyprint lang-c">a</code> (valeur de <code>a</code>). </div>
+</ol>
+</div><!-- exemples -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> La fonction de saisie <code>scanf</code> </h2>
+
+
+<div class="complement">
+<p> Bien qu'elle opère en <strong class="warning">sens inverse</strong> dans l'interface homme‑machine, la fonction <code class="prettyprint lang-c">scanf</code> partage de <strong class="title">nombreux aspects syntaxiques communs</strong> avec la fonction <code class="prettyprint lang-c">printf</code>. </p> 
+
+<p> En revanche, la fonction <code class="prettyprint lang-c">scanf</code> présente une <strong class="defin">spécificité remarquable</strong> : son traitement déclenche la <strong>mise en <strong class="defin">pause</strong> de l'exécution</strong> des instructions du programme, dans l'attente d'une <strong>saisie</strong> de l'utilisateur suivi d'une <strong class="specialV">validation</strong> sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> »  </p>
+</div><!-- complement -->
+
+
+
+<h3> Syntaxe d'appel </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, une <strong class="title">saisie formatée</strong> depuis le <strong class="specialV">clavier principal</strong> de la machine se code par une <strong>expression d'appel</strong> de la fonction <code>scanf</code>, avec la suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">scanf(<span class="nocode"><strong class="specialO">chaîne de format</strong></span> <span class="nocode" style="color: darkgrey;">[</span>,
+    <span class="nocode"><strong class="specialT">adresse 1</strong></span>, 
+    <span class="nocode"><strong class="specialT">adresse 2</strong></span>, 
+    <span class="nocode">…</span>, 
+    <span class="nocode"><strong class="specialT">adresse n</strong></span><span class="nocode" style="color: darkgrey;"> ]</span>)
+  </code>
+</span> <br>
+sachant que <code>scanf</code> retourne une <strong>valeur</strong> de type <code class="prettyprint lang-c">int</code> (le nombre de caractères saisis – valeur qui peut être exploitée pour gérer des scénarios limites). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: block">
+<p> Dans cette syntaxe, on peut apporter les précisions suivantes : </p>
+
+<ul>
+  <li> La <strong class="specialO">chaîne de format</strong> est la <strong>chaîne de caractères</strong> codant un <strong class="defin">formulaire de saisie</strong>. Elle chaîne peut être : </li>
+  <ul>
+    <div class="expert">
+    <li> une <strong>expression</strong> dont la valeur est une <strong>chaîne de caractères</strong> – cette possibilité ne sera pas décrite dans ce chapitre (cf. chap. C5‑VI <a class="next" href="../C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html" target="_BLANK"></a>) ; </li>
+    </div><!-- expert -->
+
+    <li> une <strong>suite de caractères</strong> saisie entre guillemets doubles <code class="prettyprint lang-c">""</code> a priori composée de caractères <strong><em class="sigle">ASCII</em></strong> (cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK"></a>) voire <strong><em class="sigle">UTF‑8</em></strong> (cf. chap. C3‑IX <a class="next" href="../C3-Numeration/Cc3-9_typesCaracteresEtendus.html#formatUTF-8" target="_BLANK"></a>) selon l'implémentation ; </li>
+
+    <li> et optionnellement assortie de <strong>n</strong> <strong class="specialDR">spécifications de conversion</strong>, chacune préfixée par le <strong>symbole</strong> <code class="prettyprint lang-c">%</code> ; </li>
+  </ul>
+
+  <li> À chaque <strong class="specialDR">spécification de conversion</strong> doit correspondre <strong>une et une seule</strong> <strong class="specialT">adresse</strong> <strong>de variable</strong> dont le <strong class="specialG">type</strong> est <strong>compatible</strong> avec sa spécification correspondante. Le plus souvent, une telle adresse est codée de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">&<span class="nocode"><strong style="color: darkturquoise;">identificateur de variable</strong></span></code>
+  </span> <br>
+  mais elle peut aussi être codée par un <strong class="specialT">identificateur de pointeur</strong> sur une <strong>variable déclarée</strong> – c'est notamment le cas pour une <strong class="defin">chaîne de caractères</strong> – ou plus généralement une <strong>expression</strong> dont la valeur est l'adresse d'une variable déclarée (la notion de pointeur est étudiée à partir du chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>). </li>
+
+    <img class="top-left" src="../img/ESspecifConvScanf.jpg" style="max-width: 700px">
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="specifConvScanf"> Codage des spécifications de conversion </h4>
+
+
+<div class="important">
+<p> Dans un appel de la fonction <code class="prettyprint lang-c">scanf</code>, la <strong class="title">syntaxe de codage</strong> des <strong class="specialDR">spécifications de conversion</strong> obéit à des <strong class="pros">règles similaires</strong> à celles exposées supra pour la fonction <code class="prettyprint lang-c">printf</code> <a class="supra" href="Cc2-6_entreesSortiesStandards.html#specificationsConversion"></a>. </p>
+
+<p> Toutefois, une <strong class="title">différence importante</strong> est l'exigence de <strong class="defin">compatibilité de taille et de signe</strong> <strong class="warning">stricte</strong> entre la <strong class="specialDR">spécification</strong> et le <strong class="specialG">type</strong> de la variable affectée. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> En effet, alors qu'il est possible via <code class="prettyprint lang-c">printf</code> d'afficher avec la spécification <code class="cmd">%<span style="color: crimson;">d</span></code> des <strong class="defin">valeurs entières</strong> indifféremment de type <code class="prettyprint lang-c">char</code> ou <code class="prettyprint lang-c">short</code> ou <code class="prettyprint lang-c">int</code>, il n'est <strong class="cons">pas possible</strong> de procéder de même avec <code class="prettyprint lang-c">scanf</code> pour la saisie de valeurs de variables de ces types. Il faut respectivement coder la <strong class="specialDR">spécification de conversion</strong> : </p>
+<ul>
+  <li> <code class="cmd">%<span style="color: crimson;">hhd</span></code> pour une variable de type <code class="prettyprint lang-c">char</code> ;  </li>
+
+  <li> <code class="cmd">%<span style="color: crimson;">hd</span></code> pour une donnée de type <code class="prettyprint lang-c">short</code> ;  </li>
+
+  <li> <code class="cmd">%<span style="color: crimson;">d</span></code> pour une donnée de type <code class="prettyprint lang-c">int</code> ;  </li>
+</ul>
+<p> De même, si l'on veut coder la saisie d'une variable d'un <strong class="specialG">type entier</strong> <strong class="specialO">non signé</strong> – <code class="prettyprint lang-c">unsigned char</code>, etc. – il faut employer le même genre de spécification de conversion mais avec la <strong>lettre‑code</strong> <code class="cmd"><span style="color: crimson;">u</span></code>. </p>
+
+<p class="square"> Par ailleurs, les spécifications <code class="cmd">%<span style="color: crimson;">g</span></code>, <code class="cmd">%<span style="color: crimson;">f</span></code> et <code class="cmd">%<span style="color: crimson;">e</span></code> sont <strong class="cons">indifférentes</strong> pour la saisie de <strong class="defin">valeurs décimales</strong> mais il faut obligatoirement coder la <strong class="specialDR">spécification de conversion</strong> : </p>
+<ul>
+  <li> <code class="cmd">%<span style="color: crimson;">g</span></code> pour une variable de type <code class="prettyprint lang-c">float</code> ; </li>
+
+  <li> <code class="cmd">%<span style="color: crimson;">lg</span></code> pour une variable de type <code class="prettyprint lang-c">double</code> ; </li>
+
+  <li> <code class="cmd">%<span style="color: crimson;">Lg</span></code> pour une variable de type <code class="prettyprint lang-c">long double</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Comme avec la fonction <code>printf</code> (cf. supra <a class="supra" href="Cc2-6_entreesSortiesStandards.html#remPrintfWindows"></a>), on rencontre des <strong class="warning">difficultés</strong> sur un <strong class="title">PC Windows</strong> avec la chaîne de compilation <strong>Mingw‑w64</strong>) pour coder la saisie d'une valeur numérique pour une variable de <strong class="specialG">type</strong> <code class="prettyprint lang-c">char</code> (ou <code class="prettyprint lang-c">unsigned char</code>). En effet, les <strong class="specialDR">spécifications de conversion</strong> <code class="cmd">%<span style="color: crimson;">hhd</span></code> et <code class="cmd">%<span style="color: crimson;">hhu</span></code> ne sont <strong class="cons">pas prises en charge</strong>. </p>
+
+<p> Deux <strong class="pros">palliatifs</strong> sont alors envisageables : </p>
+<ul>
+  <li> On peut saisir la valeur dans une <strong class="defin">variable intermédiaire</strong> de type standard <code class="prettyprint lang-c">int</code> avec la spécification de conversion <code class="cmd">%<span style="color: crimson;">d</span></code> puis coder une <strong>affectation</strong> à la variable de type <code class="prettyprint lang-c">char</code> dont on cherche à saisir la valeur. Si la valeur saisie est comprise dans l'intervalle de ce type, la conversion implicite prévue par le compilateur n'engendrera aucune perte de donnée.   </li>
+
+  <li> On peut aussi recourir à un <strong class="specialG">type entier à largeur spécifiée</strong> comme <code class="prettyprint lang-c">int8_t</code> ou <code class="prettyprint lang-c">uint8_t</code> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#stdint" target="_BLANK"></a>) et une <strong class="specialDR">spécification de conversion</strong> <strong class="defin">appropriée</strong>, définie dans le fichier d'en‑tête <code class="filename">inttype.h</code> <a class="external" href="https://en.cppreference.com/w/c/types/integer" target="_BLANK">C</a>. </li>
+</ul>
+</div><!-- remarque -->
+
+
+<h4> Emploi des séquences d'échappement dans la chaîne de format </h4>
+
+
+<p> Comme pour la fonction <code>prinft</code>, l'emploi de <strong class="title">séquences d'échappement</strong> est <strong class="pros">possible</strong> dans la chaîne de format <a class="supra" href="Cc2-6_entreesSortiesStandards.html#caracteresSpeciaux"></a> d'un appel de la fonction <code class="prettyprint lang-c">scanf</code>. Toutefois, un tel usage est <strong class="defin">rarement nécessaire</strong> (cf. les exemples infra <a class="infra" href="Cc2-6_entreesSortiesStandards.html#exemplesScanf"></a>). </p>
+
+
+
+
+<h3> Exécution d'un appel </h3>
+
+
+
+<p> L'exécution d'un <strong class="title">appel</strong> de la fonction <code class="prettyprint lang-c">scanf</code> est <strong class="warning">particulièrement complexe</strong>. Il est ici seulement question d'en esquisser le principe. </p>
+
+<div class="important">
+<p> L'<strong class="title">exécution</strong> d'une <strong>instruction d'appel</strong> de la fonction <code class="prettyprint lang-c">scanf</code> se déroule  aussi longtemps que nécessaire, tant que n'a pas été saisi le <strong>dernier</strong> <strong class="specialV">caractère de validation</strong> (généré par appui sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> ») requis par la <strong class="specialO">chaîne de format</strong> codée dans l'appel (premier argument). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Durant cette exécution, une <strong class="defin">séquence des caractères</strong> <strong>tapée au clavier</strong> n'est <strong class="specialMg">validée</strong> qu'après appui sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> » du clavier. Avant cet appui, il est possible de modifier la saisie grâce aux touches de déplacement du curseur et la touche « effacer <span class="touche">←</span> ». En temps réel, la saisie est <strong class="title">retranscrite</strong> (affichée) dans la <strong class="specialV">console d'exécution</strong>. </p>
+
+<p> Une <strong class="specialMg">validation</strong> entraîne la copie des caractères saisis – y compris les caractères associés à la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> » (la séquence <em class="english">newline</em>) – dans un <strong>espace mémoire tampon</strong> appelé <strong class="defin">buffer d'entrée</strong>. </p>
+
+<p> La fonction <code class="prettyprint lang-c">scanf</code> opère alors une <strong class="title">analyse lexicographique</strong> du contenu du buffer d'entrée pour identifier les <strong>éléments attendus</strong> conformément à la <strong>chaîne de format</strong> et aux <strong class="specialDR">spécifications de conversions</strong>. Au fur et à mesure, les données saisies sont copiées aux adresses spécifiées et les caractères de formatage sont « ignorés ». </p>
+
+<p> Et tant que la dernière spécification de conversion n'a pas reçu de valeur, le processus d'exécution reste suspendu à une nouvelle saisie suivie d'une validation  – cf. notamment les exemples <em class="bold">2)</em> et <em class="bold">3)</em> ci‑après. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Quelle que soit la <strong class="specialO">chaîne de format</strong> codée, l'exécution d'un appel de <code class="prettyprint lang-c">scanf</code> n'affiche <strong class="warning">rien d'autre</strong> que les <strong>caractères saisis</strong> par l'utilisateur – et donc, <strong class="warning">aucun</strong> des caractères codés dans la chaîne de format. </p>
+
+<p> Si l'on souhaite afficher un <strong>message</strong> pour guider l'utilisateur du programme dans sa saisie au clavier, il faut coder préalablement l'affichage de message, notamment à l'aide de la fonction <code class="prettyprint lang-c">printf</code>. </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="exemplesScanf"> Exemples </h3>
+
+
+
+<div class="exemples">
+<ol class="numbered">
+  <li> L'instruction toute simple : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">scanf("_");</code>
+  </span> <br>
+  a juste pour effet de <strong class="title">suspendre une fois l'exécution</strong> du programme jusqu'à ce que l'utilisateur appuie sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> ».  </li>
+
+  <div class="nobullet"> Le <strong>caractère</strong> « <code>_</code> » n'est <strong class="warning">pas affiché</strong> ; à sa place, n'importe quel autre caractère (sauf un caractère « espace », un « saut de tabulation » ou un « saut de ligne ») aurait pu être codé dans la chaîne de format. </div>
+
+  <div class="nobullet"> Dans cet appel, il n'y a <strong>aucune</strong> <strong class="specialDR">spécification de conversion</strong>, donc aucune <strong class="specialT">adresse</strong> associée. </div>
+  
+  <div class="expert"> 
+  <div class="nobullet"> <em class="bold"><em class="remark">Remarque</em></em>. Une telle instruction ne peut <strong class="warning">pas</strong> être codée dans une <strong>boucle répétitive</strong> ; elle n'y produit <strong class="cons">pas le résultat attendu</strong> (cf. infra <a class="infra" href="Cc2-6_entreesSortiesStandards.html#pbNewlinePause"></a>.  </div>
+  </div><!-- expert -->
+  
+
+
+
+  <li> Après la déclaration <code class="grey">int a, b;</code> l'expression : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">scanf("<span class="nocode"><code>%d</code></span> <span class="nocode"><code>%d</code></span>", &a, &b)</code>
+  </span> <br>
+  <strong>suspend l'exécution</strong> du programme jusqu'à ce que l'utilisateur ait : </li>
+  <ul>
+    <li> saisi <strong class="title">deux valeurs entières éventuellement signées</strong> (conformément aux deux <strong class="specialDR">spécification de conversion</strong> <code class="cmd">%d</code>), séparées par <strong>n'importe quelle séquence de caractères d'espacements</strong> (« espaces », « sauts de tabulations » générés par la touche « <em class="sigle">TAB</em> <span class="touche">↹</span> » et même un « saut de ligne » généré par la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> »), </li>
+
+    <li> puis tapé sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> ». </li>
+  </ul>
+  <div class="nobullet"> Ainsi, l'utilisateur peut donc saisir <code class="displayDark">3</code> <span class="touche">↲</span> <code class="displayDark">5</code> <span class="touche">↲</span> mais aussi <code class="displayDark">3 5</code> <span class="touche">↲</span> pour achever l'évaluation de l'expression supra. Les deux valeurs entières 3 et 5 sont alors mémorisées dans l'ordre respectivement aux <strong class="specialT">adresses</strong> des variables déclarées <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code>. </div>
+
+  <li> Après la déclaration <code class="grey">unsigned day, month, year;</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">scanf("<span class="nocode"><code>%u</code></span>/<span class="nocode"><code>%u</code></span>/<span class="nocode"><code>%u</code></span>", &day, &month, &year);</code>
+  </span> <br>
+  <strong>suspend l'exécution</strong> du programme jusqu'à ce que l'utilisateur ait : </li>
+
+  <ul>
+    <li> saisi <strong class="title">trois valeurs entières non signées</strong> (conformément aux trois <strong class="specialDR">spécification de conversion</strong> <code class="cmd">%u</code>) obligatoirement séparées les unes des autres par des caractères « <code class="cmd">/</code> »,</li>
+
+    <li> puis tapé sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> ». </li>
+  </ul>
+
+  <div class="nobullet"> Ainsi, l'utilisateur doit donc saisir quelque chose comme par exemple <code class="displayDark">1/9/2019</code> <span class="touche">↲</span> pour achever l'évaluation de l'expression supra. Il ne peut insérer <strong class="warning">aucun espace</strong> ni aucun autre caractère symbolique dans cette saisie. </div>
+
+  <div class="nobullet"> Les trois valeurs sont ensuite mémorisées dans l'ordre respectivement aux <strong class="specialT">adresses</strong> des variables déclarées <code class="prettyprint lang-c">day</code>, <code class="prettyprint lang-c">month</code> et <code class="prettyprint lang-c">year</code>. </div>
+
+  <div class="expert"> 
+  <div class="nobullet"> <em class="bold"><em class="remark">Remarque</em></em>. Lorsque l'on souhaite comme ici coder par un seul appel de <code class="prettyprint lang-c">scanf</code> la saisie de <strong>plusieurs données</strong>, l'<strong class="title">ajout de caractères particuliers</strong> entre les spécifications de conversion dans une chaîne de format (ici, les séparateurs « <code>/</code> ») n'a guère d'intérêt. Cette pratique <strong class="cons">complique inutilement</strong> <strong>la saisie</strong>, aussi est‑il préférable de coder une <strong class="specialO">chaîne de format</strong> <strong class="pros">plus simple</strong>, comme <code class="prettyprint lang-c">"<span class="nocode"><code>%u %u %u</code></span>"</code> pour cet exemple. Quant à la vérification que les valeurs saisies sont conformes aux usages, elle nécessite dans tous les cas un algorithme spécifique (boucle avec tests conditionnels). </div>
+
+  <div class="nobullet"> En revanche, l'<strong class="title">ajout de caractères particuliers</strong> entre les spécifications de conversion trouve son <strong class="pros">utilité</strong> lors de la lecture de données dans un fichier formaté (par exemple, en <em class="sigle">CSV</em>), via une fonction comme <code class="prettyprint lang-c">fscanf</code> dont la syntaxe d'appel est similaire à celle de <code class="prettyprint lang-c">scanf</code> (cf. chap. C5‑VIII <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/C5-8_operationsFichiers.html" target="BLANK"></a>). Ces caractères de formatage sont ignorés lors de la lecture par la fonction <code class="prettyprint lang-c">scanf</code>. </div>
+  </div><!-- expert -->
+
+  <li>  Après la déclaration <code class="grey">float lowVoltage;</code> l'expression : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">scanf("<span class="nocode"><code>%f</code></span>", &lowVoltage)</code>
+  </span> <br>
+  <strong>suspend l'exécution</strong> du programme jusqu'à ce que l'utilisateur ait : </li>
+
+  <ul>
+    <li> saisi une <strong class="title">valeur numérique quelconque</strong>  (avec éventuellement un signe, un point décimal et un exposant entier précédé du caractère <code class="prettyprint lang-c">e</code> ou <code class="prettyprint lang-c">E</code>, conformément à la <strong class="specialDR">spécification de conversion</strong> <code class="cmd">%f</code>), </li>
+
+    <li> puis tapé sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> ». </li>
+  </ul>
+
+  <div class="nobullet"> Ainsi, l'utilisateur doit donc effectuer une saisie comme par exemple <code class="displayDark">12.3</code> <span class="touche">↲</span> pour achever l'évaluation de l'expression supra. Il peut éventuellement insérer des <strong>espaces avant</strong> la valeur mais aucun caractère qui ne serait pas conforme à la syntaxe de codage d'une valeur décimale. </div>
+
+  <div class="nobullet"> Après saisie, cette valeur est mémorisée à l'<strong class="specialT">adresse</strong> de la variable déclarée <code class="prettyprint lang-c">lowVoltage</code>. </div>
+
+  <div class="expert"> 
+  <div class="nobullet"> <em class="bold"><em class="remark">Remarque</em></em>. Si la variable <code class="prettyprint lang-c">lowVoltage</code> était déclarée de type <code class="prettyprint lang-c">double</code>, il serait nécessaire de coder la <strong class="specialDR">spécification de conversion</strong> <code class="cmd">%lf</code> (ou <code class="cmd">%lg</code> ou encore <code class="cmd">%le</code>) dans l'appel de la fonction <code class="prettyprint lang-c">scanf</code>. La <strong>lettre‑code</strong> <code class="cmd">l</code> est ici <strong class="warning">indispensable</strong>, c'est l'une des petites différences avec la syntaxe de la fonction <code class="prettyprint lang-c">printf</code>. </div>
+  </div><!-- expert -->
+
+  <li> Après la déclaration <code class="grey">char message[20];</code> l'expression : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">scanf("<span class="nocode"><code>%s</code></span>", message)</code>
+  </span> <br>
+  <strong>suspend l'exécution</strong> du programme jusqu'à ce que l'utilisateur ait saisi une <strong class="title">chaîne de caractères</strong>, mais <strong class="warning">sans caractères d'espacement</strong> autre qu'initiaux – lesquels sont ignorés. En effet, après un premier mot saisi, tout caractère d'espacement est interprété comme marquant la <strong>fin de la chaîne</strong>. De plus, il n'est <strong class="cons">pas possible</strong> de saisir des <strong>séquences d'échappement</strong>. </li>
+
+  <div class="nobullet"> Autrement dit, si l'utilisateur saisit par exemple <code class="displayDark">  Hello, world!</code> <span class="touche">↲</span>, la variable <code class="prettyprint lang-c">message</code> prend seulement la valeur <code class="prettyprint lang-c">"Hello,"</code>. Et s'il tente de saisir <code class="displayDark">Hello,\tworld!</code> <span class="touche">↲</span>, la variable <code class="prettyprint lang-c">message</code> prend alors la valeur <code class="cmd" style="color: darkorange;">"Hello,\tWorld!"</code> sans interpréter la séquence <code class="cmd">\t</code> comme un saut de tabulation. </div>
+  
+  <div class="expert"> 
+  <div class="nobullet"> <em class="remark">NB</em> : ci‑dessus, le <strong class="specialT">deuxième argument</strong> dans l'appel de <code class="prettyprint lang-c">scanf</code> ne comporte <strong class="warning">pas d'opérateur d'adresse</strong>, car la variable affectée est une <strong>chaîne de caractères</strong> déclarée sous la forme d'un <strong class="defin">tableau</strong>. Son identificateur est <strong>implicitement converti en un pointeur</strong> sur le premier caractère de la chaîne (cf. chap. C5‑III <a class="next" href="../C5-StructuresPointeurs/Cc5-3_tableauxDeclarations.html#decayArray" target="_BLANK"></a>), c'est donc déjà une adresse.  </div>
+
+  <div class="nobullet"> <em class="bold"><em class="remark">Remarque</em></em>. Pour saisir une <strong>chaîne de caractères</strong> <strong class="defin">contenant des caractères d'espacement</strong>, il faut recourir à une fonction comme <code class="cmd">gets</code> <a class="external" href="https://en.cppreference.com/w/c/io/gets" target="_BLANK">C</a>  dont l'étude est abordée au chap. C5‑VII <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/Cc5-7_flotsEntreesSorties.html" target="_BLANK"></a>. </div>
+  </div><!-- expert -->
+</ol><!-- numbered -->
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Les questions de <strong class="warning">débordement</strong> des <strong>valeurs saisies</strong> par rapport aux <strong class="defin">intervalles d'encodage</strong> des types de variables correspondantes se posent dans les <strong class="pros">mêmes termes</strong> que pour les <strong>fonctions d'interprétation numérique de chaînes de caractères</strong> (cf. chap. C5‑VI <a class="next" href="../C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html#interpretationNumerique" target="_BLANK"></a>).  </p>
+</div><!-- exemple -->
+
+
+
+<div class="expert">
+<h3 id="pbNewline"> Le problème des séquences de saut de ligne finales </h3> 
+
+
+
+<div class="important">
+<p> Lors de l'exécution d'un appel de la fonction <code class="prettyprint lang-c">scanf</code>, la <strong class="title">séquence de caractères « newline »</strong> – qui consiste en <strong><em class="sigle">LF</em></strong>, <strong><em class="sigle">CR</em></strong> ou <strong><em class="sigle">LF CR</em></strong> selon les systèmes d'exploitation, cf. chap. C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#separateursBlancs" target="_BLANK"></a> – générée par l'appui sur la <strong>touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> »</strong> validant la saisie n'est <strong class="defin">jamais incorporée à la donnée affectée</strong>, même si cette dernière est une chaîne de caractères. </p>
+
+<p> Ce ou ces caractères <strong class="warning">restent stockés</strong> en tête du <strong class="defin">buffer d'entrée</strong>. Et en cas d'appel ultérieur d'une fonction d'entrée comme <code class="prettyprint lang-c">scanf</code>, ils ne sont <strong class="warning">pas écrasés</strong> par les caractères saisis mais ils précèdent des derniers. En anglais, on parle de <strong class="title">trailing newline</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Un <strong class="title">trailing newline</strong> ne pose <strong class="pros">pas de problème</strong> si l'<strong>appel suivant</strong> de <code class="prettyprint lang-c">scanf</code> code la saisie d'une <strong class="defin">valeur numérique</strong> (spécifications <code class="cmd">%<span style="color: crimson;">d</span></code>, <code class="cmd">%<span style="color: crimson;">g</span></code>, etc.) ou même d'une <strong class="defin">chaîne de caractères</strong> (spécification <code class="cmd">%<span style="color: crimson;">s</span></code>). En effet, l'algorithme d'identification (<em class="english">parsing</em>) d'une telle valeur dans le buffer d'entrée met en œuvre l'élimination de tous les éventuels caractères d'espacement initiaux, y compris <strong><em class="sigle">LF</em></strong> et <strong><em class="sigle">CR</em></strong>. </p>
+
+<p> En revanche, un <strong class="warning">problème</strong> se pose si l'<strong>appel suivant</strong> de <code class="prettyprint lang-c">scanf</code> code la saisie d'un <strong class="defin">caractère</strong> (spécification <code class="cmd">%<span style="color: crimson;">c</span></code>) – le premier caractère du <strong>trailing newline</strong> est alors considéré comme celui saisi. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"> </p>
+<ol class="numbered">
+  <li> Considérons le programme académique ci‑dessous qui, en boucle, attend la <strong class="title">saisie d'une valeur entière</strong> de type <code class="prettyprint lang-c">char</code> (donc comprise entre <code>-128</code> et <code>+127</code>) et qui l'affiche, tant que cette valeur est différente de <code>0</code>. </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  char typed = 0;
+  do {
+    scanf("%hhd", &typed);
+    printf("> %d\n", typed);
+  }
+  while (typed != 0);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="nobullet"> Exécuté sur <strong class="OnlineGDB">OnlineGDB,</strong> on peut constater que les saisies <code class="displayDark">1</code> <span class="touche">↲</span> et <code class="displayDark">2</code> <span class="touche">↲</span> s'enchaînent sans problème :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+1
+> 1
+2
+> 2
+<span style="color: grey;">...</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> En revanche, si l'on code dans le programme ci‑dessus la saisie d'une <strong class="defin">valeur de caractère</strong>, c'est‑à‑dire si l'on remplace l'instruction de la ligne n° 6 par : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:6">
+    scanf("%c", &typed);
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  <div class="nobullet"> alors l'exécution n'est <strong class="cons">pas satisfaisante</strong>. En effet, juste après la première saisie <code class="displayDark">1</code> <span class="touche">↲</span>, on obtient en sortie standard d'un coup deux affichages consécutifs :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+1
+> 49
+> 10
+</pre>
+<!---------- ne pas indenter ---------->
+ 
+  <div class="nobullet"> où : </div>
+  <ul>
+    <li> <code class="displayDark">49</code> est le code <strong><em class="sigle">ASCII</em></strong> décimal du caractère « <code>1</code> » (cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#tableASCIIrestreint" target="_BLANK"></a>) – ce qui est <strong class="pros">normal</strong> puisque ce caractère a bien été saisi ;  </li>
+
+    <li> <code class="displayDark">10</code> est le code <strong><em class="sigle">ASCII</em></strong> décimal du caractère <strong><em class="sigle">LF</em></strong> – qui est un <strong>trailing newline</strong> <strong class="warning">indésirable</strong>. </li>
+  </ul>
+</ol><!-- numbered -->
+</div><!-- exemple -->
+
+
+<h4> Solution </h4>
+
+
+<div class="complement">
+<p> Dans la <strong class="specialO">chaîne de format</strong> d'un appel de la fonction <code class="prettyprint lang-c">scanf</code>, <strong class="warning">sauf</strong> si le programme doit permettre à l'utilisateur de saisir un <strong>caractère d'espacement</strong> (espace, saut de tabulation, saut de ligne) pour exprimer une <strong>réponse significative</strong>, il est recommandé de <strong class="defin">faire précéder</strong> toute occurrence d'une <strong class="specialDR">spécification de conversion</strong> <code class="cmd">%<span style="color: crimson;">c</span></code> par un caractère <strong class="title">espace</strong>, comme ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">scanf(" <span class="nocode"><code>%c</code></span>", <span class="nocode" style="color: darkgrey;">…</span> )</code>
+</span> <br>
+Comme on l'a vu supra <a class="supra" href="Cc2-6_entreesSortiesStandards.html#exemplesScanf"></a>, un tel <strong class="title">espace</strong> est interprété par le compilateur comme un <strong class="defin">caractère de formatage générique</strong> qui représente <strong>tout caractère d'espacement</strong>, y compris un « saut de tabulation » ou « saut de ligne ». Il permet donc d'<strong>ignorer</strong> un éventuel <strong class="warning">trailing newline</strong> en tête du buffer d'entrée. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Dans l'exemple <em class="bold">2)</em> précédent de saisie d'un caractère en boucle, il suffit donc de coder à la ligne n° 6 : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:6">
+    scanf(" %c", &typed);
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<div class="nobullet"> et alors l'exécution devient <strong class="pros">satisfaisante</strong>. Après les saisies successives <code class="displayDark">1</code> <span class="touche">↲</span> et <code class="displayDark">2</code> <span class="touche">↲</span>, on obtient bien en sortie standard l'affichage successif des codes <strong><em class="sigle">ASCII</em></strong> décimaux des caractères saisis :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+1
+> 49
+2
+> 50
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+<!-- expert -->
+<h4 id="pbNewlinePause"> Problème du <em>trailing newline</em> avec une instruction de « pause » </h4>
+
+
+<div class="complement">
+<p> Lorsqu'un appel de la fonction <code class="prettyprint lang-c">scanf</code> attend que l'utilisateur saisisse un <strong class="title">caractère d'espacement</strong> (espace, saut de tabulation) ou simplement pour fonction de réaliser une <strong class="title">pause d'exécution</strong> (<code class="prettyprint lang-c">scanf("_")</code>, cf. supra <a class="supra" href="Cc2-6_entreesSortiesStandards.html#exemplesScanf"></a>), la solution permettant de remédier au problème de <strong>trailing newline</strong> est <strong class="cons">inopérante</strong>.  </p>
+
+<p> Dans un tel cas, il n'y a pas d'autre  <strong class="defin">supprimer du buffer d'entrée</strong> tout <strong>trailing newline</strong>. Avec un système d'exploitation – <em class="mark">Linux</em> ou <em class="mark">Windows</em> – où un séquence <em>newline</em> se termine par le caractère <strong><em class="sigle">LF</em></strong>, une telle manipulation est possible en codant l'instruction :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c">while ((getchar()) != '\n');</code>
+</span> <br>
+Cette instruction lit tous les caractères du buffer d'entrée jusqu'à rencontrer un caractère <strong><em class="sigle">LF</em></strong>. Or tout caractère lu par la fonction <code class="prettyprint lang-c">getchar</code> est justement <strong class="pros">supprimé du buffer d'entrée</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Avec le programme ci‑dessous, on souhaite <strong class="title">afficher les nombres entiers de 1 à 10</strong> en marquant une <strong class="defin">pause</strong> pour chacun, validée par un appui sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> ».   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) { 
+  for (int i = 1; i <= 10; i++) {
+    printf("%d ", i);
+    scanf("_");
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Toutefois, lors de l'exécution, ce programme affiche bien en sortie standard le nombre <code>1</code> seul, mais juste après le premier appui sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> », il affiche <strong class="warning">tous les autres nombres d'un coup</strong>, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+1
+2 3 4 5 6 7 8 9 10
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Le problème est dû au <strong>trailing newline</strong> qui n'est jamais évacué. Et changer l'instruction de la ligne n° 6 par <code class="prettyprint lang-c">scanf(" _");</code> <strong class="cons">ne permet pas</strong> pour résoudre le problème.  </p>
+
+<p class="square"> Comme expliqué supra, une <strong class="title">solution</strong> <strong class="pros">portable</strong> mais <strong class="cons">peu lisible</strong> consiste à ajouter à la fin du bloc de la boucle <code class="prettyprint lang-c">for</code> l'instruction :    </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+    while ((getchar()) != '\n');
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On obtient le <strong class="pros">scénario d'exécution voulu</strong> avec la sortie ci‑dessous où les lignes sont affichées <strong>une par une</strong> après 10 appuis consécutifs sur la touche « <em class="sigle">ENTRÉE</em> <span class="touche">↲</span> ». </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+1 
+2 
+3 
+4 
+5 
+6 
+7 
+8 
+9 
+10 
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> Il existe également une <strong class="title">solution</strong> <strong class="pros">plus lisible</strong> mais <strong class="cons">moins portable</strong> consiste à utiliser une <strong class="defin">fonction spécialisée</strong> comme <code class="prettyprint lang-c">pause</code> qu'on trouve dans un module de bibliothèque spécifique à tel ou tel système d'exploitation. </p>
+<ul>
+  <li> Sous <strong class="specialLB">Linux</strong>, il faut inclure le <strong>fichier d'en‑tête</strong> <code class="filename">unistd.h</code> <a class="external" href="https://pubs.opengroup.org/onlinepubs/7908799/xsh/unistd.h.html" target="_BLANK">C</a> ;  </li>
+
+  <li> Sous <strong class="specialLB">Windows</strong>, il faut inclure le <strong>fichier d'en‑tête</strong> <code class="filename">windows.h</code> <a class="external" href="https://en.wikipedia.org/wiki/Windows.h" target="_BLANK">W</a>.  </li>
+</ul>
+
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

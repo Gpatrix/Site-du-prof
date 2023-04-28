@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="1"
+	data-pagenumber="I"
+	data-pageState="OK"
+	data-pageheadtitle="Notions fondamentales"
+	data-pagefulltitle="Les réseaux  –  Notions fondamentales"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+<img class="top-right" src="../img/reseauxIntro.jpg" width="500px" style="padding-top: 1em">
+<p class="square"> Depuis plusieurs décennies, les <strong class="title">réseaux informatiques</strong> et <strong class="title">téléphoniques</strong> sont devenus une <strong class="defin">composante fondamentale</strong> des <strong>pays développés</strong>, au point que presque partout dans le monde, il serait inconcevable d'imaginer les sociétés vivre sans. Trop d'<strong class="specialLB">aspects essentiels</strong> reposent désormais sur les <strong>échanges</strong> <strong class="pros">quasi instantanés</strong> de <strong>très grandes quantités d'information</strong> : </p>
+<ul>
+	<li> l'administration des <strong>collectivités</strong> et des <strong>services des états</strong> à tous niveaux et tous secteurs confondus (éducation, recherche, défense, justice, industrie, santé, agriculture…) ; </li>
+
+	<li> la gestion des <strong>entreprises</strong>, des <strong>marchés financiers</strong>, des <strong>organismes internationaux</strong>… ; </li>
+
+	<li> les <strong>médias</strong>, <strong>commerces</strong> en ligne, sites d'<strong>associations</strong>, <strong>réseaux sociaux</strong>, jeux, et même les activités criminelles… </li>
+</ul>
+<p> La liste exhaustive est inimaginable ! Et à part peut‑être quelques exceptions non représentatives, plus aucun <strong class="specialLB">logiciel</strong> grand public ou professionnel n'est proposé sans un <strong>site web</strong> associé, une <strong>version en ligne</strong>, des comptes personnalisés, des mises à jours téléchargeables…  </p>
+
+
+<p class="square"> Aujourd'hui, ces <strong class="title">réseaux</strong> sont presque tous <strong class="defin">interconnectés</strong> et forment des « <strong class="specialV">hyper‑systèmes</strong> » d'une <strong class="warning">extrême complexité</strong>, tant par la <strong>quantité de machines</strong> que par la <strong>variété des technologies</strong> mises en œuvre – technologies qui sont en perpétuelle évolution et néanmoins coexistantes. </p>
+
+<p> Cette complexité constitue une <strong class="cons">réelle difficulté</strong> pour les <strong class="title">personnels techniques</strong>, même expérimentés, dans le travail quotidien – et donc, a fortiori, pour les débutants ! Ces derniers doivent prendre conscience qu'ils ne peuvent pas espérer aborder tel ou tel aspect technique sans avoir un <strong class="pros">minimum de recul</strong> pour comprendre le rôle précis que chacun joue dans les réseaux.  </p>
+
+
+<p class="square">	L'<strong class="title">objectif principal</strong> de ce chapitre est donc de dresser un <strong>panorama des notions fondamentales</strong> à acquérir pour disposer de ce minimum de recul : </p>
+
+<ul>
+	<li> les <strong class="specialLB">différents réseaux</strong> existant à l'heure actuelle, en distinguant leurs <strong class="defin">principales caractéristiques</strong> ; </li>
+
+	<li> les principaux <strong class="specialLB">éléments matériels</strong> constituant un réseau (machines, liaisons…) ; </li>
+
+	<li> les principaux <strong class="specialLB">éléments logiciels</strong> permettant l'échange de données entre les machines connectées à un réseau, c'est‑à‑dire non seulement les <strong class="defin">protocoles</strong>, mais aussi tous les <strong class="defin">concepts</strong> sur lesquels ils reposent (notion de client‑serveur, d'adresses…) ;</li>
+
+	<li> les <strong class="specialLB">acteurs</strong> des réseaux, c'est‑à‑dire non seulement les <strong class="defin">opérateurs</strong> de <strong>câblage</strong> et de <strong>transport</strong>, mais aussi les <strong class="defin">institutions</strong> qui en assurent la <strong>gouvernance</strong>.  </li>
+</ul>
+
+<p> La plupart de ces notions seront par la suite approfondies dans les différentes parties et chapitres de ce module de formation. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les différents réseaux de communication </h2>
+
+
+
+<h3 id="reseauInformatique"> Notion de réseau informatique </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">réseau informatique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_informatique" target="_BLANK">W</a> (en anglais, <em class="english">data communication network</em>, abrégé <em class="sigle">DCN</em>) est un <strong class="defin">ensemble de machines</strong> (ou systèmes d'information) qui peuvent <strong>échanger des données</strong> via des <strong class="defin">liaisons</strong> prévues à cet effet. </p>
+
+<p> On dit des <strong class="defin">machines</strong> qu'elles sont les <strong class="title">hôtes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Hôte_(informatique)" target="_BLANK"></a> <strong>du réseau</strong>. </p>
+
+<p> Les grandes unités de <strong class="defin">données</strong> (fichiers, etc.) mises à disposition sont appelées des <strong class="title">ressources</strong> <strong>du réseau</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+	<img class="top-right" src="../img/reseauxVariete.png" width="400px">
+	<!-- refaire la figure en ajoutant les téléphones et en donnant l'idée d'une multitude de liaisons -->
+
+<p> Aujourd'hui encore, on observe qu'il existe une <strong class="title">très grande variété</strong> de réseaux de communication : </p>
+
+<ul>
+	<li> bien entendu, tous les <strong class="defin">ordinateurs</strong> et autres machines similaires (serveurs, routeurs…) connectées via l'<strong>Internet</strong> (ce sont les réseaux informatiques à proprement parler) ; </li>
+
+	<li> mais aussi les <strong class="defin">téléphones</strong>, avec plusieurs catégories : </li>
+
+  <ul>
+  	<li> ceux dits <strong>fixes</strong>, raccordés via le <strong>réseau téléphonique commuté</strong> (<strong><em class="sigle">RTC</em></strong>) <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_téléphonique_commuté" target="_BLANK">W</a> ; </li>
+
+    <li> ceux dits <strong>mobiles</strong>, qui communiquent entre eux via les normes <strong><em class="sigle">GSM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Global_System_for_Mobile_Communications" target="_BLANK">W</a> et suivantes (<strong><em class="sigle">4G</em></strong>, <strong><em class="sigle">5G</em></strong>…) ; </li>
+
+    <li> ceux dits <strong>(Vo)IP</strong> <a class="external" href="https://en.wikipedia.org/wiki/VoIP_phone" target="_BLANK"></a> (<em class="english">Voice over Internet protocol</em>), qui peuvent être <em>fixes</em> ou <em>mobiles</em> et qui communiquent via l'<strong>Internet</strong> ; </li>
+
+    <div class="expert">
+    <div class="nobullet"> (sachant qu'un même appareil peut être inclus dans plusieurs catégories – typiquement un smartphone qui peut communiquer aussi bien en <strong><em class="sigle">GSM</em></strong> qu'en <strong><em class="sigle">IP</em></strong> via une application comme <em class="mark">Whatsapp</em>) ;  </div>
+    </div><!-- expert -->	
+  </ul>
+
+  <li> ainsi que les <strong class="defin">télévisions</strong> avec, là encore, différentes catégories car <strong>différentes technologies</strong> de communication (réseau hertzien, câble, satellite, Internet <a class="external" href="https://fr.wikipedia.org/wiki/Télévision_IP" target="_BLANK">W</a>…) ;  </li>
+
+	<li> ou encore les <strong class="defin">caméras de surveillance</strong> d'un bâtiment ; </li>
+
+	<li> ou l'ensemble des <strong class="defin">capteurs</strong> et <strong class="defin">actionneurs</strong> d'un <strong>véhicule</strong> reliés par un <strong>bus <em class="sigle">CAN</em></strong> (<em class="english">controler area network</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Bus_de_données_CAN" target="_BLANK">W</a>…</li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> La liste ci‑dessus est très loin d'être exhaustive. Pour mieux cerner toute la variété des réseaux, <strong class="title">plusieurs aspects</strong> sont à dégager : </p>
+
+<ul>
+	<li> la <strong class="specialLB">taille</strong> – ou l'<strong class="specialLB">échelle</strong> – qui peut s'évaluer en <strong>nombre de machines</strong>, mais aussi par l'<strong>étendue géographique</strong> où les machines sont disposées ; </li>
+
+	<li> le <strong class="specialLB">type de données</strong> échangées (texte, image, voix, etc.) ; </li>
+
+	<li> la <strong class="specialLB">technologie employée</strong>, tant matérielle que logicielle (<em class="mark">Ethernet</em> <em class="sigle">TCP/IP</em>, <em class="sigle">X.25</em>, <em class="sigle">ATM</em>…).  </li>
+</ul>
+
+<p> Cependant, depuis plus d'une dizaine d'année, on observe une tendance à l'<strong class="pros">uniformisation</strong> technologique des réseaux, avec un recours privilégié aux protocoles des réseaux informatiques comme l'Internet (<em class="sigle">TCP/IP</em>). </p>
+</div><!-- expert -->
+
+
+
+<h3> Les réseaux locaux </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">réseau local</strong> <a class="external" href="https://fr.wikipedia.org/wiki/réseau_local" target="_BLANK">W</a> – en anglais, <strong>local area network</strong> – abrégé <strong><em class="sigle">LAN</em></strong> – est un <strong class="defin">réseau de machines</strong> : </p>
+<ul>
+	<li> dont l'<strong class="defin">étendue géographique</strong> est en général <strong>assez faible</strong>, ne dépassant pas une salle, voire un bâtiment ; </li>
+
+	<li> qui peuvent a priori <strong class="defin">communiquer</strong> entre elles <strong class="pros">sans passer par</strong> <strong>un autre réseau</strong> plus grand auquel le réseau local peut éventuellement être relié (typiquement, l'<strong>Internet</strong>). </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Indépendamment des autres réseaux auxquels il pourrait être relié, un <strong class="title">réseau local</strong> constitue vraiment un <strong>réseau à part entière</strong>, avec une technologie et des méthodes d'administration qui lui sont propres.  </p>
+</div><!-- complement -->
+
+<div style="display: inline-block">
+	<img class="top-right" src="../img/lan.jpg" width="500px">
+
+<p> Ce sont principalement des <strong class="title">réseaux locaux</strong> que les techniciens en informatique sont amenés à élaborer, administrer, maintenir et dépanner, notamment : </p>
+
+<ul>
+	<li> les <strong class="specialLB">réseaux d'entreprises</strong> (ordinateurs, serveurs, imprimantes, téléphones…) ; </li>
+
+	<li> les <strong class="specialLB">réseaux locaux industriels</strong> (machines‑outils, chaînes de production, systèmes embarqués…) </li>
+
+	<li> les <strong class="specialLB">réseaux domotiques</strong> (systèmes d'alarme, équipements pilotables à distances…). </li>
+</ul>
+</div><!-- display -->
+
+
+<h4 id="boucleLocale"> Notion de boucle locale et de point d'accès </h4>
+
+
+<div class="important">
+<p> On appelle <strong class="title">boucle locale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Boucle_locale" target="_BLANK">W</a> – en anglais, <strong>local loop</strong> – la <strong class="defin">liaison</strong> entre un <strong>réseau local</strong> et un <strong>réseau d'interconnexion</strong> plus large comme l'Internet ou un réseau téléphonique d'abonné. </p> 
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/boucleLocaleFibre.jpg" width="500px">
+
+<p> De façon générale, on parle de <strong class="title">point d'accès</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Point_d'accès" target="_BLANK">W</a> (en anglais, <em class="english">access point</em>) pour désigner le <strong class="defin">dispositif terminal</strong> (<em>modem</em>, <em>box</em>…) d'une <strong>boucle locale</strong> par lequel un usager est raccordé à un réseau local plus grand. </p>
+
+<div class="expert">
+<p> D'autres termes comme <em class="bold"><em class="sigle">NRA</em></em> (nœud de raccordement d'abonnés <a class="external" href="https://fr.wikipedia.org/wiki/Répartiteur_téléphonique" target="_BLANK">W</a> – en anglais, <em class="sigle">MDF</em> pour <em class="english">main distribution frame</em>), <em class="bold"><em class="sigle">NRO</em></em> (nœud de raccordement optique <a class="external" href="https://fr.wikipedia.org/wiki/Nœud_de_raccordement_optique" target="_BLANK">W</a> – en anglais, <em class="sigle">OAN</em> pour <em class="english">optical access node</em> ), etc. dépendent de la technologie mise en œuvre. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> Les technologies employées pour les boucles locales et les points d'accès sont l'objet d'<strong class="defin">enjeux importants</strong> : </p>
+
+<ul>
+	<li> déployées en grands nombres, ces technologies doivent être <strong>économiques</strong> ; </li>
+
+	<li> mais si elles doivent aussi être <strong>performantes</strong>, au risque sinon de constituer un maillon faible ayant un impact négatif majeur sur la qualité de service. </li>
+</ul>
+</div><!-- expert -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered"> 
+	<li> On emploie le terme de « <strong>boucle</strong> » car à l'origine, dans le réseau téléphonique, la liaison entre le répartiteur et les points de connexion des abonnés formait physiquement un circuit en boucle. </li>
+
+  <li> Le terme de <code class="prettyprint lang-c">point d'accès</code> prend un <strong class="warning">sens spécifique</strong> dans le domaine de la technologie <strong>Wi‑Fi</strong> <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html#accessPoint" target="_BLANK"></a>. </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="Internet"> L'Internet </h3>
+
+
+
+<div class="important">
+<p> L'<strong class="title">Internet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet" target="_BLANK ">W</a> – abréviation anglaise de <em class="english">internetworks</em> (au pluriel), que l'on peut aussi entendre comme un acronyme de <em class="english">interconnected computer networks</em> – est le <strong class="defin">réseau informatique</strong> <strong>« public » mondial</strong>, qui relie des millions de réseaux locaux. </p>
+
+<p> On appelle <strong class="title">internautes</strong> les <strong class="defin">utilisateurs</strong> de l'<strong>Internet</strong> (en anglais, on emploie des locutions comme <em class="english">Internet user</em>). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/internet.jpg" width="550px">
+
+<p> En réalité, l'<strong class="title">Internet</strong> ne constitue « <strong class="cons">un</strong> » réseau « <strong class="cons">public</strong> » qu'en apparence. Il est rendu mondialement opérationnel par des « <strong class="pros">coopérations</strong> » entre une multitude de <strong class="defin">sous‑réseaux de transport</strong> construits et gérés de façon <strong>autonome</strong> par des <strong>opérateurs privés</strong> (typiquement, des fourniseurs d'accès à l'Internet). </p>
+
+<p> Ces <strong class="title">systèmes autonomes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Autonomous_System" target="_BLANK">W</a> (<em class="english">autonomous systems</em>) sont constitués de <strong class="defin">machines dédiées</strong> exclusivement aux communications (routeurs, serveurs d'adresses, etc.) et de <strong class="defin">liaisons à très haut débit</strong>. Mais il faut faire une distinction d'échelle. </p> 
+
+<ul>
+	<li> On parle de <strong class="specialLB">réseaux longues distances</strong> ou <strong><em class="sigle">WAN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_étendu" target="_BLANK">W</a> (de l'anglais <em class="english">wide area network</em>) pour désigner des réseaux qui s'étendent sur <strong>plusieurs centaines voire milliers de kilomètres</strong>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Pour ces réseaux étendus, on emploie aussi le terme de <strong class="title">dorsale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dorsale_Internet" target="_BLANK">W</a> (en anglais, <em class="english">backbones</em>), sachant que ce terme est également employé pour désigner une ou plusieurs liaisons « centrales » dans un réseau local. </div>
+  </div><!-- expert -->
+
+	<li> On parle de <strong class="specialLB">réseaux métropolitains</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_métropolitain" target="_BLANK">W</a> ou <strong><em class="sigle">MAN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_étendu" target="_BLANK">W</a> pour désigner des réseaux couvrant de <strong>grandes agglomérations urbaines</strong>. La multitudes des boucles locales en font partie. </li>
+</ul>
+
+<div class="expert">
+<p> Cette classification sera <strong class="pros">revue en détail</strong> et complétée au chapitre suivant <a class="next" href="Rc1-2_architecture.html#echelleReseaux" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<!-- Autonomous systems <a class="external" href="https://fr.wikipedia.org/wiki/Autonomous_System" target="_BLANK">W</a> -->
+
+<p> Grace à aux <strong class="pros">coopérations</strong> entre ces sous‑réseaux autonomes de transport formant l'Internet, deux <strong>internautes</strong> situées aux antipodes l'un de l'autre peuvent <strong>échanger des données</strong> en n'ayant en principe qu'une seule formalité à accomplir : disposer d'un point accès au sein de leur réseau local respectif. </p>
+
+
+<div class="remarques"><p class="remarques"> </p>
+
+<ol class="littered">
+	<li> En ce qu'il désigne un <strong>« objet » unique</strong>, le <strong class="defin">terme anglais</strong> <strong class="title">« <em class="english">Internet</em> »</strong> s'écrit avec une majuscule initiale et est précédé de l'article « the ». En français, cet usage n'a jamais dominé et de plus en plus, le terme est considéré comme un <strong>nom commun</strong>, écrit sans majuscule. </li>
+
+	<li> L'Internet ne doit pas être confondu avec le <strong>World Wide</strong> <strong class="title">Web</strong> <a class="external" href="https://fr.wikipedia.org/wiki/World_Wide_Web" target="_BLANK">W</a>  – <em class="english">web</em> signifiant la « toile (d'araignée) » – qui constitue le réseau des milliards de <strong class="defin">pages d'hypertexte</strong> accessibles à l'aide d'un navigateur (<em class="mark">Firefox</em>, <em class="mark">Chrome</em>, etc.). Le Web ne représente qu'une petite part des données accessibles sur l'Internet. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<h3> D'autres grands réseaux </h3>
+
+
+<p> Avant et parallèlement à l'Internet, d'<strong class="title">autres réseaux de communication</strong> ont été développés à <strong class="defin">grande échelle</strong>, essentiellement dans  trois domaines : la <strong class="specialLB">téléphonie</strong>, la <strong  class="specialLB">télévision</strong> (par câble), et la <strong  class="specialLB">défense</strong>. </p>
+
+<div class="remarques">
+<p class="remarque"> On ne remontera pas jusqu'au <strong class="title">télégraphe</strong>, qui présente certes un intérêt historique, mais pas technologique. Supplanté par le téléphone au cours du <em class="sigle">XX</em><sup>e</sup> siècle (et en dépit de quelques « soubresauts technologiques » comme le <strong>Télex</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Télex" target="_BLANK">W</a>), le télégraphe est aujourd'hui <strong class="cons">totalement abandonné</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chronologie_du_télégraphe" target="_BLANK">W</a>. </p>
+</div><!-- remarque -->
+
+
+<h4 id="reseauRTC"> Le réseau téléphonique commuté (téléphonie fixe) </h4>
+
+
+<div class="important">
+<p > Le <strong class="title">réseau téléphonique commuté</strong> (<em class="bold"><em class="sigle">RTC</em></em>) <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_téléphonique_commuté" target="_BLANK">W</a> (en anglais, <em class="english">public switched telephone network</em> ou <em class="sigle">PSTN</em>) a constitué le <strong>premier</strong> <strong class="defin">réseau mondial</strong> de communication moderne, au sens il n'avait plus recours à des opérateurs humains pour l'établissement des liaisons entre les postes téléphoniques (fixes), grâce à des <strong>systèmes de commutations automatiques</strong>.   </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/centralTelephonique.jpg" width="200px">
+  <img class="top-right" src="../img/pairesTorsadees.jpg" width="200px">
+<p>	Avec un objectif initial limité – la transmission de la <strong>voix</strong> – et une <strong>technologie filaire analogique</strong> simple mais fiable, le <em class="bold"><em class="sigle">RTC</em></em> a été développé dans beaucoup de pays (notamment la France) par des <strong class="defin">compagnies nationales</strong>, avec des financements étatiques pour réaliser l'immense tâche de raccorder au réseau la quasi totalité des habitations. </p>
+
+<p> Les <strong class="defin">boucles locales</strong> du réseau <strong><em class="sigle">RTC</em></strong> ont été constituées de <strong>paires de fils de cuivre</strong> faiblement torsadées pour atténuer les phénomènes d'interférences spécifiques aux fréquences de modulation employées. </p>
+</div><!-- complement -->
+
+<div class="expert" >
+<div style="display: inline-block;">	
+<p class="square"> À partir des années 1980, le <strong><em class="sigle">RTC</em></strong> a commencé à servir de support à d'autres types de communication, notamment la <strong class="title">télécopie</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Télécopieur" target="_BLANK">W</a>. </p>
+
+  <img class="top-right" src="../img/minitel.jpg" width="200px">
+
+<p> Les <strong class="defin">boucles locales</strong> du réseau ont également joué un rôle primordial pour le développement de <strong>réseaux de communication numériques</strong> comme <em class="mark">Télétel</em> <a class="external" href="https://fr.wikipedia.org/wiki/Télétel" target="_BLANK"></a>, basé sur la norme <em class="mark">X.25</em> et les terminaux <em class="mark">Minitel</em> <a class="external" href="https://fr.wikipedia.org/wiki/Minitel" target="_BLANK">W</a> (cf. photo ci‑contre). Mais handicapée par des débits très limités, cette technologie française a commencé à péricliter dès le début des années 2000. Elle est désormais <strong class="cons">complètement abandonnée</strong>. </p>
+</div><!-- display -->
+
+<p class="square"> Aujourd'hui, les <strong class="title">boucles locales</strong> du réseau <strong><em class="sigle">RTC</em></strong> sont encore utilisées pour l'<strong class="defin">accès à l'Internet</strong> via les <strong>technologies x<em class="sigle">DSL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Digital_subscriber_line" target="_BLANK">W</a> (<em class="english">digital subscriber line</em>) qui offrent des débits acceptables, mais qui sont peu à peu remplacées par des liaisons à <strong>fibre optique</strong> dites <em class="bold"><em class="sigle">FTTH</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_FTTH" target="_BLANK">W</a> (<em class="english">Fiber to the Home</em>). En revanche, les particuliers utilisant encore la technologie commutée avec <strong>ligne fixe non dégroupée</strong> sont devenus <strong class="cons">très minoritaires</strong>. </p>
+
+<p>	Quant au réseaux de transport longues distances des communications téléphonique, il est <strong class="cons">en voie de disparition</strong> au profit des réseaux de l'Internet, avec la généralisation de la technologie <strong>VoIP</strong> (<em class="english">voice over the Internet protocol</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Voix_sur_IP" target="_BLANK">W</a>. Et cette technologie finira par complètement prendre le relais de la technologie <strong><em class="sigle">RTC</em></strong> de bout en bout. </p>
+
+<div class="remarques">
+<p class="remarque"> À titre de « curiosité », on peut aussi évoquer la technologie <strong class="title"><em class="sigle">RNIS</em></strong> (<em>réseau numérique à intégration de service</em> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_numérique_à_intégration_de_services" target="_BLANK">W</a>) qui constitue une tentative de développement d'un <strong>réseau téléphonique entièrement numérique</strong>, également conçu pour transmettre des données générales (fichiers, etc.). Lancée à la fin des années 1980, cette technologie n'a pas résisté à l'ascension fulgurante de l'Internet ; elle est aujourd'hui <strong class="cons">obsolète</strong>.  </p>
+</div><!-- remarque -->
+</div><!-- expert -->
+
+
+<h4> Les réseaux de téléphonie mobile </h4>
+
+
+<div class="important"> 
+<p>	Les <strong class="title">réseaux de téléphonie mobile</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_de_téléphonie_mobile" target="_BLANK">W</a> constituent également des <strong>réseaux de communication</strong> à <strong class="defin">grande échelle</strong>. Développés à partir du milieu des années 1990, ils ne cessent d'évoluer pour offrir des services de plus en plus performants.  </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/antennesRelais2.jpg" width="200px">
+
+<p> Ces réseaux présentent des <strong class="title">différences</strong> par rapport au <em class="sigle">RTC</em> sur de nombreux points. </p>
+
+<ul>
+	<li> Avec la libéralisation du marché des télécommunications, ils ne forment pas <em>un</em> réseau, historiquement public, mais <strong class="defin">plusieurs réseaux privés</strong>, chacun géré par une entreprise distincte qu'on appelle <strong>opérateur de téléphonie mobile</strong>. </li>
+
+	<li> Les <strong class="defin">boucles locales</strong> sont assurées non pas en technologie filaire mais par des <strong>antennes</strong> émettant et recevant des ondes radioélectriques <em class="sigle">UHF</em> (<em>ultra hautes fréquences</em>) pour assurer la mobilité des équipements terminaux (téléphones, et plus généralement tout système équipé d'une carte <em class="sigle">SIM</em>).  </li>
+
+	<li> D'abord focalisés sur la transmission de la <strong>voix</strong> et de <strong>messages textuels</strong> courts (<em class="english">short message service</em> ou <em class="sigle">SMS</em>), ils ont rapidement (en moins de 10 ans) autorisé la communication de <strong>contenus multimédias</strong> (images, vidéos, puis pages web) – ce qu'on appelle maintenant les « <strong class="defin">données mobiles</strong> ». </li>
+
+	<li> Depuis les normes dites « 3G » (<em class="english">3<sup>rd</sup> generation</em>), ces réseaux offrent aussi une bonne <strong class="pros">interconnexion</strong> avec l'<strong>Internet</strong>. </li>
+</ul>
+
+<p> Les réseaux de téléphonie mobile jouent donc aujourd'hui un <strong class="title">rôle significatif</strong> en termes de volumes de données transmises, comparativement avec l'Internet. On peut considérer cette coexistence comme une concurrence, mais aussi également sous l'angle de la <strong class="pros">complémentarité</strong>. Il est fréquent dans la vie courante d'en constater tout l'intérêt. </p>
+</div><!-- complement -->
+
+
+
+<div class="expert">
+<h4> Réseaux de télévision câblés </h4>
+
+
+<div class="complement">
+<p> À l'origine de leurs développement (dans le courant des années 1950), les <strong class="title">réseaux de télévision</strong> <a class="external" href="https://en.wikipedia.org/wiki/Television_network" target="_BLANK">W</a> étaient exclusivement des réseaux de <strong class="defin">diffusion</strong> (<em class="english">broadcast</em>), c'est‑à‑dire de <strong>communication unilatérale</strong> à large échelle d'un <strong>même contenu</strong>, principalement basés sur une technologie de transmission par ondes radioélectriques (de grosses antennes émettrices gérées par l'opérateur, et une antenne purement réceptrice chez chaque particulier). </p>
+</div><!-- complement -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/TVcableNetwork.jpg" width="400px">
+
+<p> Mais dans les grandes villes des États‑Unis, d'autres technologies ont commencé à être employées pour la <strong class="defin">boucle locale</strong>, en particulier le <strong>câble coaxial</strong>. Avec le développement de l'Internet, les opérateurs de ces réseaux n'ont pas tardé à exploiter les <strong class="pros">capacités bilatérales</strong> de ces liaisons (c'est‑à‑dire la possibilité pour les particuliers aussi d'émettre des données) pour offrir des points d'accès au réseau mondial. On a commencé à parler de <strong>câblo‑opérateurs</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Câblo-opérateur" target="_BLANK">W</a>. </p> 
+
+<p> Si ces alternatives au <em class="sigle">RTC</em> ont connu leur heure de gloire dans les années 2000 (le câble coaxial offrait alors de meilleurs débits que les paires de fils de cuivre du câble téléphonique), elles sont aussi en <strong class="cons">déclin</strong> par rapport du développement de la fibre optique (cf. supra <a class="supra" href="Rc1-1_notionsFondamentales.html#reseauRTC"></a>). Dans une phase transitoire avant le coûteux remplacement de tous les câbles coaxiaux, les boucles locales des réseaux câblés sont rénovées dans une technologie mixte dite <em class="sigle">HFC</em> <a class="external" href="https://fr.wikipedia.org/wiki/Hybride_fibre_coaxial" target="_BLANK">W</a>.  </p>
+</div>
+
+
+<h4> Réseaux militaires </h4>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/reseauMilitaire.jpg" width="400px" style="padding-top: 0.5em">
+
+<div class="complement">
+<p> Pour des besoins évidents de confidentialité, les organismes de défense des pays ont mis en place des <strong class="title">réseaux de communication</strong> <strong class="defin">indépendants</strong> des autres réseaux grand public. Ces réseaux sont basés sur des <strong>technologies spécifiques</strong>, tant matérielles que logicielles, dont les détails ne sont pas divulgués. Cela n'exclut pas qu'ils puissent également être connectés à l'Internet, mais pas forcément de façon permanente, et toujours via des protocoles très sécurisés. </p>
+</div><!-- complement -->
+
+<p> Pour plus d'information sur les réseaux militaires français, on pourra consulter comme point de départ cet article de Wikipedia <a class="external" href="https://fr.wikipedia.org/wiki/Transmissions_(Armée_française)" target="_BLANK">W</a>. </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Éléments généraux  –  Aspects matériels </h2>
+
+
+<div class="expert">
+<p> Les <strong class="title">aspects matériels</strong> des réseaux sont extrêmement <strong class="warning">complexes</strong>, tant dans le détail microscopique des <strong>composants</strong> mis en œuvre que par les <strong>structures macroscopiques</strong> qu'ils forment – ce qu'on appelle l'<strong class="defin">architecture des réseaux</strong>. </p>	
+
+<p> Dans ce chapitre d'introduction, il n'est question que de décrire les <strong class="title">éléments les plus généraux</strong> de cette technologie, en laissant volontairement de côté toutes les particularités et spécificités marginales qui ne manquent pas exister, mais qu'il serait pédagogiquement contre‑productif de décrire maintenant. Des approfondissements sur tel ou tel aspect seront apportés dans les chapitres suivants. </p>
+
+<p> De plus, par souci de simplicité, cette section et la suivante ne concernent que les <strong class="title">réseaux informatiques</strong>. Les particularités des <strong>réseaux de téléphonie mobile</strong> et des <strong>réseaux locaux industriels</strong> seront abordés dans divers chapitres des parties <span class="partie">R2</span> et <span class="partie">R3</span> du module. </p>
+</div><!-- expert -->
+
+
+
+<h3> Structure générale – architecture réseau</h3>
+
+
+
+<div class="complement">
+<p> On a vu supra que matériellement, un <strong class="title">réseau informatique</strong> est constitué de <strong class="specialLB">machine</strong> et de <strong class="specialLB">liaisons</strong> entre ces machines. Précisons déjà que : </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/maillageReseau.jpg" width="350px">
+<ul>
+	<li> le terme « <strong class="specialLB">machines</strong> » est ici employé au <strong class="defin">sens large</strong>, il réfère à tout <strong>dispositif informatique actif</strong>, y compris les appareils exclusivement dédiés aux communications, comme les commutateurs ; </li>
+
+	<li>  <strong class="defin">entre deux machines</strong>, il peut très bien y avoir <strong>plusieurs</strong> <strong class="specialLB">liaisons</strong> <strong>en parallèle</strong> ou même <strong>aucune</strong>. </li>
+</ul>
+
+<p> En revanche, il doit toujours exister <strong class="pros">au moins une</strong> <strong class="specialLB">route</strong>, c'est‑à‑dire une succession de <strong class="defin">plusieurs liaisons en série</strong> pour mettre en communication deux machines. Sinon, le réseau comporte deux parties disjointes, ce n'est plus un réseau à part entière. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<div class="important">
+<p> L'<strong class="title">architecture des réseaux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Architecture_de_réseau" target="_BLANK">W</a> est le domaine d'étude des <strong class="defin">structures macroscopiques</strong> formées par l'agencement des <strong>machines</strong> et des <strong>liaisons</strong> des réseaux de communication. </p>
+</div><!-- important -->	
+
+<div class="expert">
+<p> Le chapitre R1‑II <a class="next" href="Rc1-2_architecture.html" target="_BLANK"></a> est consacré à ce domaine. </p>
+</div><!-- expert -->
+
+
+
+<h3> Liaisons entre machines </h3>
+
+
+
+<div class="important">
+<p> De point de vue matériel, une <strong class="title">liaison informatique</strong> est un <strong class="defin">support physique</strong> – on parle aussi de <strong>médium</strong> – qui permet la <strong>transmission de l'information</strong> entre deux machines. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">principales technologies</strong> de liaisons sont : </p>
+
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/cableEthernet.jpg" width="200px">
+	<li> les <strong class="defin">câbles électriques</strong> – et en particulier les câbles à <strong class="specialN">paires torsadées</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Paire_torsadée" target="_BLANK">W</a> dits « <strong>Ethernet</strong> » – mais pas seulement ; on parle de liaisons filaires ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/cableFTTH.jpg" width="200px">
+	<li> les <strong class="defin">fibres optiques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fibre_optique" target="_BLANK">W</a>, qui sont employées pour le transport à haut débit et de plus en plus jusqu'à la boucle locale ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/radiofrequences.png" width="200px">
+	<li> les <strong class="defin">ondes radioélectriques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Onde_radio" target="_BLANK">W</a>, qui permettent de raccorder sans fil des appareils mobiles ; pour les réseaux informatiques, la technologie dominante est le <strong>Wi‑Fi</strong>.   </li>
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques" style="display: inline-block;">
+	
+<p class="remarque"> Chaque <strong class="title">technologie</strong> possède ses <strong class="pros">avantages</strong> et <strong class="cons">inconvénients</strong>. Lorsqu'au gré des évolutions une technologie ne présente plus aucun avantage par rapport à ses concurrentes, elle décline en général rapidement. </p>
+  <img class="top-right" src="../img/cableCoaxial.png" width="150px">
+<p> C'est par exemple le cas de l'usage du <strong class="title">câble coaxial</strong> (cf. photo ci‑contre) pour les <strong>liaisons</strong> de type <strong>Ethernet</strong>, qui a très <strong class="cons">fortement décliné</strong> au profit du câble à paires torsadées et de la fibre optique.  </p>
+</div><!-- remarque -->
+
+<!--
+<h4> Câbles Ethernet à paires torsadées </h4>
+
+
+<p> Types de câbles droit/croisé </p>
+
+<p> Catégories de câbles </p>
+-->
+
+
+<h3 id="carteReseau"> Machines et interfaces réseau </h3>
+
+
+
+<div class="important"> 
+<p> Dans un réseau de communication, tout <strong class="defin">raccordement</strong>  – on dit aussi <em>couplage</em> – d'une <strong>liaison</strong> à une <strong>machine</strong> nécessite que cette dernière soit équipée d'une <strong class="title">interface réseau</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Carte_réseau" target="_BLANK">W</a>, en anglais, <strong>network interface controller</strong>, abrégée <strong><em class="sigle">NIC</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">	
+<p> Dans un réseau informatique, une <strong class="title">interface réseau</strong> est typiquement une <strong class="defin">carte électronique</strong>, dite <strong class="title">« carte réseau »</strong>, qui est associée à la carte‑mère de la machine. Elle est constituée : </p> 
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/carteReseau.png" width="400px">
+<ul>
+	<li> d'au moins un <strong>dispositif de connexion</strong> – ou <strong>port matériel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Port_matériel" target="_BLANK">W</a> – approprié à la liaison (connecteur <strong><em class="sigle">RJ45</em></strong> pour un câble <em class="mark">Ethernet</em> usuel, antenne <em class="mark">Wi‑Fi</em> pour une liaison sans fil du même nom, etc.) ;  </li>
+
+	<li> et aussi de toute l'<strong>électronique de contrôle</strong>, typiquement implantée sur une carte à circuit imprimé, pour assurer toutes les fonctions de bas niveau du traitement des données émises et reçues par la liaison au réseau.  </li>
+</ul>
+</div><!-- display -->
+
+<div class="expert">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ArduinoEthernetShield2bd.png" width="300px">
+<p> Dans les <strong class="specialN">systèmes embarqués</strong> comme les cartes à microcontrôleur, l'<strong class="title">interface réseau</strong> se réduit parfois à un simple <strong class="defin">circuit intégré spécialisé</strong> qu'on appelle <strong><em class="sigle">ASIC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/ASIC" target="_BLANK">W</a> (<em class="mark">application‑specific integrated circuit</em>) et qui est monté sur la carte‑mère de la machine ou d'une extension. C'est notamment le cas du modèle <em class="mark">WIZnet W5500</em> en photo ci‑contre, embarqué sur le <strong class="Arduino">shield Ethernet 2</strong> qui est compatible avec la plupart des <strong class="Arduino">cartes Arduino</strong> (<em class="mark">Uno</em>, <em class="mark">Mega</em>, <em class="mark">Due</em>). </p>  
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RaspberryPi4_BroadcomBM2711bd.png" width="300px">
+<p> Dans les <strong class="specialN">architectures miniaturisées</strong>, l'<strong class="title">interface réseau</strong> est directement <strong>intégrée dans le processeur principal</strong> et on parle de <strong class="defin">SoC</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_sur_une_puce" target="_BLANK">W</a> (<em class="english">system‑on‑chip</em>). C'est notamment le cas de du nano‑ordinateur <strong class="Raspberry">Raspberry Pi4</strong> qui embarque un <em class="mark">Broadcom BCM2711</em> – cf. la photo ci‑contre. </p>
+</div><!-- display -->
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Une <strong>même machine</strong> (ordinateur, imprimante, etc.) peut avoir <strong class="title">plusieurs interfaces réseau</strong>. Par exemple : </li>
+	<ul>
+		<li> un <strong class="specialLB">ordinateur portable</strong> est très souvent doté d'une <strong class="defin">carte Ethernet</strong> et d'une <strong class="defin">carte Wi‑Fi</strong> (mais il n'est pas courant qu'elles soient utilisées simultanément) ; </li>
+
+		<li> un <strong class="specialLB">routeur</strong> dispose forcément d'<strong class="specialN">au moins</strong> <strong class="defin">deux interfaces réseau</strong>, sinon il ne pourrait pas assurer sa fonction principale qui consiste à relier deux sous‑réseaux ;  </li>
+
+		<li> un <strong  class="specialLB">serveur</strong> est souvent doté de <strong>deux interfaces réseaux</strong> pour assurer une <strong class="pros">redondance d'accès</strong> (surtout si les ressources qu'il met à disposition sont essentielles). </li>
+	</ul>
+
+  <div class="nobullet"> En revanche, un <strong  class="specialLB">commutateur</strong> (<em class="english">switch</em>) a toute une <strong>série de ports Ethernet</strong> (8, 16,  voire 32), mais il n'a en général qu'<strong class="cons">une seule interface réseau</strong> ; il gère ses ports par multiplexage temporel. </div>
+
+  <li> Dans un réseau informatique, ce ne sont <strong class="warning">pas</strong> <strong>les machines</strong> qui font principalement l'objet d'une <strong class="title">identification</strong> pour définir des adresses de communication, mais les <strong class="defin">interfaces réseaux</strong>. </li>
+
+  <div class="nobullet"> Toutefois, dans la pratique, on a souvent tendance à assimiler <strong>par extension</strong> un ordinateur à son interface réseau en cours d'utilisation. </div>
+</ol>
+</div><!-- remarques -->
+
+
+<div class="expert">
+<h4 id="categoriesMachines"> Catégories de machines </h4>
+
+
+<div class="complement"> 
+<p> Dans un réseau informatique, il est d'usage de distinguer <strong class="title">deux catégories de machines</strong> : </p>
+
+<ul>
+	<li> les <strong class="specialLB"><em class="sigle">DCE</em></strong> (<em class="english">data communication equipment</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Équipement_terminal_de_circuit_de_données" target="_BLANK">W</a> ;  </li>
+
+	<li> les <strong class="specialLB"><em class="sigle">DTE</em></strong> (<em class="english">data terminal equipment</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Équipement_terminal_de_traitement_de_données" target="_BLANK">W</a>.  </li>
+</ul>
+</div><!-- complement -->
+
+
+<p class="square"> Un <strong class="title"><em class="sigle">DCE</em></strong> est un équipement qui n'opère qu'à <strong>bas niveau</strong> et est exclusivement dédié à la <strong>communication des informations</strong> dans le réseau. Typiquement, il peut s'agir : </p>
+
+
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/repeteur.png" width="250px">
+  <li> d'un <strong class="defin">répéteur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Répéteur" target="_BLANK">W</a>, c'est‑à‑dire un appareil qui permet de <strong>régénérer la puissance du signal</strong> pour garantir son intégrité lors du transport sur une plus longue distance que celle autorisée par la technologie de câble employée ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/modem.png" width="250px">
+	<li> d'un <strong class="defin">modem</strong> (modulateur-démodulateur) <a class="external" href="https://fr.wikipedia.org/wiki/Modem" target="_BLANK">W</a>, c'est‑à‑dire un appareil qui modifie les caractéristiques du signal pour permettre son <strong>émission/réception via une liaison série</strong> (typiquement, sur la boucle locale) ; </li>
+  </div><!-- display -->
+  
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/switch.png" width="250px">
+	<li> d'un <strong class="defin">commutateur</strong> (en anglais, <em class="english">switch</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Commutateur_réseau" target="_BLANK">W</a>, c'est‑à‑dire un appareil qui permet de <strong>multiplexer un port de connexion</strong> en plusieurs pour pouvoir raccorder plus d'équipements sur le réseau (un peu comme une multiprise dans une installation électrique). </li>
+	</div><!-- display -->
+</ul>
+
+ 
+<p class="square"> Un <strong class="title"><em class="sigle">DTE</em></strong> est un équipement qui peut opérer à <strong>haut niveau</strong>, il <strong>fournit ou exploite des informations, des services</strong> ou encore, il apporte une <strong>intelligence</strong> pour améliorer la communication dans le réseau. Typiquement, il peut s'agir : </p>
+
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/ordinateur.png" width="250px">
+  <li> d'un <strong class="defin">ordinateur</strong> (fixe ou portable), d'un <strong class="defin">smartphone</strong>, d'une <strong class="defin">imprimante</strong> et plus généralement de toute machine dont la mise en réseau est l'objectif principal de la constitution du réseau ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/serveur.png" width="250px">
+	<li> d'un <strong class="defin">serveur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serveur_informatique" target="_BLANK">W</a>, dont le rôle est de <strong>stocker des informations</strong> afin qu'elles soient <strong>accessibles</strong> à d'autres machines ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/routeur.png" width="250px">
+	 <li> d'un <strong class="defin">routeur</strong>  <a class="external" href="https://fr.wikipedia.org/wiki/Routeur" target="_BLANK">W</a>, dont le rôle est de <strong>transmettre les données</strong> entre plusieurs réseaux distincts, avec des possibilités de filtrage de haut niveau (pas comme un simple commutateur). </li>
+  </div><!-- display -->
+</ul>
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Un <strong class="title"><em class="sigle">DTE</em></strong> n'est donc <strong class="warning">pas forcément</strong> situé à une <strong>extrémité d'un réseau</strong>. Le qualificatif « terminal » du sigle fait référence au fait que dans un protocole de communication, il peut jouer un rôle d'émetteur ou de destinataire et adopter un <strong>comportement intelligent</strong>, c'est‑à‑dire mettre en œuvre des logiciels participant aux décisions dans le protocole. </li>
+
+	<li> Certaines machines cumulent <strong class="title">plusieurs fonctions</strong> et appartiennent ainsi aux deux catégories <strong class="specialLB"><em class="sigle">DCE</em></strong> et <strong class="specialLB"><em class="sigle">DTE</em></strong> <strong>à la fois</strong>. Par exemple, une <strong class="defin">box Internet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Box_(Internet)" target="_BLANK">W</a> intègre un <strong>modem</strong>, un <strong>routeur</strong>, un <strong>commutateur</strong> et même un <strong>serveur</strong> (<em class="sigle">DHCP</em>).  </li>
+</ol>	
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Éléments fondamentaux  –  Aspects logiciels </h2>
+
+
+<div class="expert">
+<p> Comme presque toujours en informatique, les <strong class="title">aspects logiciels</strong> ne sont <strong class="warning">pas moins complexes</strong>, sinon plus, que les aspects matériels. Là encore, il n'est pas question de les aborder en détail, mais seulement d'en dégager les <strong class="title">éléments les plus généraux</strong> dans une perspective de découverte panoramique. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="adressage"> Identification numérique des interfaces réseau et des applications </h3>
+
+
+
+<div class="complement">
+<p> Dans tout réseau de communication, il est fondamental de pouvoir <strong class="title">identifier</strong> individuellement chaque <strong class="specialLB">entité communicante</strong>. Sinon, on on est obligé de faire communiquer les machines par <strong class="cons">diffusion générale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Broadcast_(informatique)" target="_BLANK">W</a> (<em class="english">broadcast</em>) avec tous les problèmes de saturation du réseau et de non confidentialité que cela pose. </p>
+
+<p> Or : </p>
+
+<ul>
+	<li> une étude sommaire des aspects matériels a déjà montré qu'une <strong>machine</strong> est raccordée au réseau par une ou plusieurs <strong class="defin">interfaces réseau</strong> ; ce sont donc ces éléments qui doivent être identifiés, et non pas la machine elle‑même ;   </li>
+
+	<li> en approfondissant, on apprend que ce sont les <strong class="defin">applications logicielles</strong> exécutées sur une machine (par exemple, un navigateur web, un client de messagerie) qui sont <strong>à l'origine et à destination des communications</strong> ; ces éléments doivent donc également être identifiés. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> En définitive, ce sont les <strong>protocoles de communication</strong> (cf. infra <a class="external" href="Rc1-1_notionsFondamentales.html#protocoles"></a>) qui imposent la <strong class="title">technologie logicielle d'identification</strong> des entités d'un réseau, c'est‑à‑dire l'<strong class="defin">attribution</strong> et le <strong class="defin">format</strong> des <strong>identifiants</strong> aux éléments du réseau. </p>
+
+<p> Ces identifiants sont le plus souvent des <strong>numéros</strong> plus ou moins longs. Lorsqu'il s'agit d'identifier une <strong class="defin">interface réseau</strong>, il est d'usage de parler d'<strong class="title">adresse</strong>. </p>
+</div><!-- important -->
+
+
+
+<h4 id="adresses"> Identification numérique d'une interface réseau </h4>
+
+
+<div class="important">
+<p> Dans un réseau de communication, une <strong class="defin">interface réseau</strong> de <strong>machine terminale</strong> est identifiée par au moins <strong class="title">deux adresses numériques</strong> :  </p>
+<ul>
+	<li> une <strong class="specialLB">adresse physique</strong> attribuée par le <strong>fabricant</strong> ; en principe <strong>unique</strong>, elle n'a pas vocation à être modifiée lors de l'utilisation de l'interface ; </li>
+
+  <li> une <strong class="specialLB">adresse logique</strong>, attribuée par le <strong>gestionnaire</strong> du réseau au gré de l'utilisation de l'interface ; en principe <strong>temporaire</strong>, elle permet de rationaliser la gestion des machines et de leurs communications.   </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans un réseau informatique : </p>	
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/adresseMac.png" width="300px" style="padding-top: 0.5em">
+	<li> L'<strong class="title">adresse physique</strong> est usuellement implémentée par l'<strong class="defin">adresse <em class="sigle">MAC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_MAC" target="_BLANK">W</a>, en référence à la « sous‑couche <strong><em class="sigle">MAC</em></strong> » (<em class="english">media access control</em>) du protocole de communication <strong>Ethernet</strong> ou <strong>Wi‑Fi</strong>. Encodée sur <strong>6 octets</strong> ou <strong>8 octets</strong>, elle est toujours exprimée au format hexadécimal. </li>
+
+	<div class="nobullet"> Sur certaines cartes, elle peut être indiquée par une <strong>inscription</strong> (typiquement, au dos de la carte comme sur la figure ci‑contre). Le plus souvent, elle est enregistrée dans une unité de <strong>mémoire morte</strong> (<em class="sigle">ROM</em>, c'est‑à‑dire <em class="mark">read‑only memory</em>) de l'interface.  </div>
+  </div><!-- display -->
+
+	<li> L'<strong class="title">adresse logique</strong> est usuellement implémentée par l'<strong class="defin">adresse <em class="sigle">IP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_MAC" target="_BLANK">W</a>, en référence au <strong>protocole <em class="sigle">IP</em></strong> (<em class="mark">Internet protocol</em>). Potentiellement variable, elle est enregistrée dans les paramètres du <strong>système d'exploitation</strong> ou du programme de contrôle de l'interface.   </li>
+
+
+	<div class="expert">
+	<div class="nobullet"> De plus, il existe deux <strong class="specialLB">deux formats normalisés</strong> d'adresses <strong><em class="sigle">IP</em></strong> : </div>
+  <ul>
+		<div style="display: inline-block;">
+	  	<img class="top-right" src="../img/IPv4exemple.png" width="300px" style="padding-top: 0.5em">
+		<li> <strong class="specialO">IPv4</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_IP" target="_BLANK">W</a> est le format d'origine (1981) encodé sur seulement <strong>4 octets</strong> (soit 32 bits), exprimé en <strong>notation décimale pointée</strong>. Le nombre potentiel d'adresses <em class="mark">IPv4</em> (environ 4 milliards) est <strong class="warning">insuffisant</strong> au regard de l'évolution de l'Internet.  </li>
+  	</div><!-- display -->
+
+  	<div style="display: inline-block;">
+	  	
+		<li> <strong class="specialO">IPv6</strong> <a class="external" href="https://fr.wikipedia.org/wiki/IPv6" target="_BLANK">W</a> est le format plus récent (2003) encodé sur <strong>16 octets</strong> (soit 128 bits), exprimé en <strong>notation hexadécimale double‑pointée</strong>. </li>
+
+			<img class="top-left" src="../img/IPv6exemple.png" style="max-width:800px;">
+    
+    <div class="nobullet"> Il remplace peu à peu le format <em class="mark">IPv4</em>, essentiellement pour pallier à l’insuffisance du nombre d'adresses disponibles pour l'Internet « public ».  </div>
+  	</div><!-- display -->
+	</ul>
+
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Tous ces aspects seront <strong class="pros">revus en détail</strong> dès le chapitre R1‑III <a class="next" href="Rc1-3_adressage.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<h4 id="portLogiciel"> Identification numérique d'une application </h4>
+
+
+<div class="important">
+<p> Dans un réseau informatique, l'<strong class="title">identification des applications</strong> à l'origine ou à destination d'une communication n'est pas seulement nécessaire pour les <strong>systèmes multitâches</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multitâche" target="_BLANK">W</a> : pour pouvoir utiliser les <strong class="pros">mêmes protocoles</strong> de communication, elle s'impose aussi aux <strong>systèmes monotâches</strong>, notamment les cartes à microcontrôleurs. </p>
+
+<p> Usuellement, une <strong class="title">application</strong> est <strong>identifiée</strong> par un voire plusieurs <strong class="defin">numéros</strong> dits de <strong class="defin">port logiciel</strong> </strong> <a class="external" href="https://fr.wikipedia.org/wiki/Port_(logiciel)" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong>protocoles de transport</strong> de données les plus courants – <strong><em class="sigle">TCP</em></strong> et <strong><em class="sigle">UDP</em></strong> (cf. infra <a class="infra" href="Rc1-1_notionsFondamentales.html#protocoles"></a>) – permettent de définir au total <strong class="title">65&#8239;536 numéros de ports</strong> différents, ce qui est a priori <strong class="pros">largement suffisant</strong>.  </p>
+
+<p>	Pour les <strong>applications courantes</strong> (navigation web, messagerie électronique, échanges de fichiers, etc.), l'<strong class="title">attribution</strong> de numéros de ports est <strong class="defin">officielle</strong> (et bien souvent définitive, sauf au gré de l'évolution des technologies). On parle de <strong class="specialLB">ports connus</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Liste_de_ports_logiciels#Ports_connus" target="_BLANK">W</a> (<em class="english">well known ports</em>) et leurs numéros respectifs sont tous <strong>compris entre 0 et 1023</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> La <strong class="title">navigation</strong> sur les pages web par le protocole <strong><em class="sigle">http</em></strong> utilise par défaut le <strong>port nº 80</strong>. </p>
+
+<div class="expert">
+<p> Quant à la version sécurisée <strong><em class="sigle">https</em></strong> de ce protocole, elle utilise le <strong>port nº 443</strong>. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+<div class="expert">
+<p> Les <strong class="specialLB">autres numéros de ports</strong> (environ 64&#8239;000) constituent une <strong class="pros">importante réserve</strong> pour : </p>
+<ul>
+	<li> le développement de <strong>nouvelles applications</strong> ; </li>
+
+	<li> diverses techniques de routage comme la <strong>translation d'adresse et de port</strong> (cf. chap. R1‑III <a class="next" href="Rc1-3_adressage.html#NAT" target="_BLANK"></a>). </li>
+</ul>
+<p> Ces numéros sont <strong class="pros">librement utilisables</strong> par les développeurs sans autorisation préalable, tant que l'application reste locale. Il faut simplement s'assurer qu'il n'y a pas de <strong class="warning">conflit</strong> avec une autre application qui utiliserait déjà tel ou tel port sur le réseau dans lequel on souhaite l'employer. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="DNS"> Identification littérale des ressources </h3>
+
+
+
+<div class="complement">
+<p> Pour <strong class="title">accéder aux ressources</strong> disponibles sur un réseau (pages web, fichiers de toutes sortes…), il est <strong class="cons">malcommode</strong> pour les utilisateurs de recourir à des <strong>identifiants numériques</strong> comme les adresses <em class="sigle">IP</em>, tant ces dernières sont difficiles à mémoriser. Il faudrait donc recourir à un annuaire, lequel devrait être mis à jour en permanence… </p>
+
+<p> Pour épargner aux internautes de telles démarches fastidieuses, tout un système d'identification littérale des ressources a été mis été mis en place : </p>
+
+<ul>
+	<li> une syntaxe d'<strong class="defin">identification littérale</strong> des <strong>ressources</strong>, appelée <strong class="title"><em class="sigle">URL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Uniform_Resource_Locator" target="_BLANK">W</a> (<em class="english">uniform ressource locator</em>), basé sur une organisation arborescente ; </li>
+
+	<li> un <strong class="defin">système réparti de correspondances</strong> entre les <strong><em class="sigle">URL</em></strong> et les <strong>adresses <em class="sigle">IP</em></strong> des machines qui hébergent les ressources, appelé <strong class="title"><em class="sigle">DNS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domain_Name_System" target="_BLANK">W</a> (<em class="english">domain name system</em>). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Ces aspects seront <strong class="pros">revus en détail</strong> au chapitre R2‑I <a class="next" href="../R2-Applications/Rc2-1_dns_url.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<h4> Notion de nom de domaine </h4>
+
+
+<div class="important">
+<p> Un <strong class="title">nom de domaine</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nom_de_domaine" target="_BLANK">W</a> est une <strong class="defin">chaîne de caractères</strong> qui identifie un <strong>domaine du réseau</strong>, c'est‑à‑dire : </p>
+<ul>
+	<li> un <strong>ensemble de machines</strong> (typiquement, des serveurs) du réseau ; </li>
+
+	<li> ou même un simple <strong>espace de stockage</strong> de données sur une machine. </li>
+</ul>
+
+<p> En principe, tout domaine peut lui‑même récursivement se décomposer en <strong class="title">sous‑domaines</strong>, chacun étant alors désigné par une chaîne de caractère plus longue. Le caractère <code class="filename">.</code> est utilisé comme <strong>séparateur d'identifiants</strong> de sous‑domaines dans un nom de domaine. </p>
+</div><!-- important -->
+
+
+
+
+<div class="exemples" style="display: inline-block;">
+	<img class="top-right" src="../img/wikipediaDomain.png" width="400px" style="padding-top: 0.5em">
+<p class="exemple"> Le <strong>nom de domaine</strong> <code class="filename">en.wikipedia.org</code> désigne un ensemble d'<strong>adresses <em class="sigle">IP</em></strong> de machines de la <em class="mark">fondation Wikimedia</em> <a class="external" href="https://fr.wikipedia.org/wiki/Wikimedia_Foundation" target="_BLANK">W</a> hébergées dans le <strong class="defin">domaine de premier niveau</strong> <code class="filename">.org</code> réservé aux organisations. Ces adresses donnent accès aux pages web en langue anglaise de l'encyclopédie <em class="mark">Wikipedia</em>. </p>
+
+<div class="expert">
+<p> Ces pages sont accessibles via des serveurs de cache <strong>frontend</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Frontal_(serveur)" target="_BLANK">W</a> (ceux qui traitent en premier lieux les requêtes des applications clientes), de type <strong>squid</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Squid_(logiciel)" target="_BLANK">W</a>. Ils sont répartis en trois lieux du globe (Amsterdam, San Francisco, Singapour) <a class="external" href="https://meta.wikimedia.org/wiki/Wikimedia_servers#Hosting" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+
+<h3 id="protocoles"> Protocoles de communication </h3>
+
+
+
+<div class="important">
+<p> Dans un réseau, aucun échange de données entre deux machines d'un réseau ne peut être mis en œuvre sans suivre un <strong class="title">protocole</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Protocole_de_communication" target="_BLANK">W</a>, c'est‑à‑dire un <strong class="defin">algorithme</strong> qui définit le <strong>rôle</strong> de chaque machine au cours de l'échange, et qui détermine également : </p>
+<ul>
+	<li> comment <strong class="defin">débute</strong> l'échange ; </li>
+
+	<li> sous quelle <strong class="defin">forme</strong> les informations sont échangées et à quel <strong class="defin">rythme</strong> ; </li>
+  
+  <li> quand et comment <strong class="defin">se termine</strong> l'échange. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il existe des <strong>milliers</strong> de <strong class="title">protocoles</strong> différents, mais évidemment, un petit nombre d'entre‑eux sont beaucoup plus importants que les autres en raison de leur <strong class="defin">usage quasi universel</strong>. À titre d'exemples représentatifs, on peut citer :  </p>
+
+<ul>
+	<li> <em class="bold"><em class="sigle">HTTP</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol" target="_BLANK">W</a> (<em class="english">hyper text transfer protocol</em>) pour la consultation de <strong>pages web</strong> ; </li>
+
+	<li> <em class="bold"><em class="sigle">IMAP</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Message_Access_Protocol" target="_BLANK">W</a> (<em class="english">Internet message access protocol</em>) pour la consultation de <strong>courriels</strong> ; </li>
+
+	<li> <em class="bold"><em class="sigle">TCP</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Transmission_Control_Protocol" target="_BLANK">W</a> (<em class="english">transmission control protocol</em>) pour la fragmentation/défragmentation en paquets des données à transmettre ; </li>
+
+	<li> <em class="bold"><em class="sigle">IP</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Protocol" target="_BLANK">W</a> (<em class="english">Internet protocol</em>) pour l'acheminement – ou <strong>routage</strong> – des paquets de données depuis une adresse <em class="sigle">IP</em> émettrice vers une adresse <em class="sigle">IP</em> destinataire ; </li>
+
+  <li> <em class="bold"><em class="sigle">DHCP</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" target="_BLANK">W</a> (<em class="english">dynamic host configuration protocol</em>) pour l'attribution automatique d'adresses <em class="sigle">IP</em> aux hôtes d'un réseau ; </li>
+
+	<li> etc. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert" id="RFC">
+<p> Ces protocoles incontournables font l'objet <strong class="defin">spécifications techniques</strong> très précises nommées <strong class="title"><em class="sigle">RFC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Request_for_comments" target="_BLANK">W</a> (<em class="english">request for comment</em>). </p>
+
+<p> Un panorama plus approfondi des protocoles est donné au chapitre R1‑IV <a class="next" href="Rc1-4_protocoles.html" target="_BLANK"></a>. Les plus importants seront ensuite étudiés en détail dans les parties <span class="partie">R2</span> et <span class="partie">R3</span> du module. </p>
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">protocoles</strong> sont le plus souvent <strong>codés</strong> dans des langages de programmation comme <strong class="defin">C</strong> ou <strong class="defin">C++</strong>, car ces langages disposent de concepts et de bibliothèques de fonctions bien adaptées aux <strong>opérations de bas niveau</strong>, en relations étroites avec les <strong>systèmes d'exploitation</strong> des machines. </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="modeleCouches"> Modèles en couches </h3>
+
+
+
+<div style="display : inline-block">
+	<img class="top-right" src="../img/modeleCouchesAllegorie.jpg" width="600px" style="padding-top: 0em;">
+<p> Les <strong>échanges de données entre applications</strong> sont <strong class="warning">trop complexes</strong> pour pouvoir être définis par un seul protocole. Dans la pratique, on a donc recours à une <strong class="title">pile de protocoles</strong> qui s'enchaînent aussi bien lors de l'émission que de la réception de données. </p>
+
+<p> On trouve dans la littérature toutes sortes d'<strong class="pros">analogies</strong> pour expliquer la nécessité d'avoir recours à une telle <strong>division des tâches de communication</strong> (cf. l'exemple des philosophes étrangers ci‑contre). </p>
+</div><!-- display -->
+
+<div class="important">
+<p> Plus formellement, on définit un <strong class="title">modèle en couche</strong> pour distinguer  <strong class="defin">différents niveaux d'abstraction</strong> dans une <strong>pile de protocoles</strong>, sachant que : </p>
+
+<ul>
+	<li> les protocoles implémentés par des <strong>composants matériels</strong> sont considérés comme constituant la <strong class="specialLB">couche basse</strong> ;  </li>
+
+	<li> les protocoles implémentés par des <strong>composants logiciels</strong> sont considérés comme constituant les <strong class="specialLB">couches hautes</strong>, et ce d'autant plus que ces protocoles sont proches de l'émission ou de la réception des données.  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement"> 
+<p> De plus, lorsque deux machines communiquent entre elles, un modèle en couches considère de façon transversale comme appartenant à une <strong class="title">même couche</strong> : </p> 
+<ul>
+	<li> le <strong>processus d'émission</strong> d'un protocole s'exécutant dans la machine émettrice (par exemple, celui qui fragmente un message en paquets numérotés) </li>
+
+	<li> et le <strong>processus de réception </strong> du même protocole dans la machine réceptrice (par exemple, reconstituer le message à partir des paquets). </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Le modèle TCP/IP </h4>
+
+
+<div class="complement" style="display : inline-block">
+	<img class="top-right" src="../img/modeleTCPIP.png" width="150px" style="padding-top: 0em;">
+<p> Dès la mise au point des premières communications, les pionniers de l'Internet ont développé dans les années 1970 une <strong class="defin">pile de protocoles</strong> pour régir les transmissions d'information entre ordinateurs distantes. Connu aujourd'hui par le sigle <strong class="title"><em class="sigle">TCP/IP</em></strong>, il s'est imposé depuis par rapport à toutes les autres solutions logicielles concurrentes, en raison de ses multiples qualités opérationnelles, au point d'être considéré comme un « <strong>modèle</strong> ».  </p>
+</div><!-- display -->
+
+<div class="important">
+<p> Le <strong class="title">modèle <em class="sigle">TCP/IP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Suite_des_protocoles_Internet" target="_BLANK">W</a> est un « modèle » de <strong>piles de protocoles</strong>  à <strong class="defin">4 couches</strong>, basé notamment sur les protocoles <em class="bold"><em class="sigle">TCP</em></em> (<em class="english">transmission control protocol</em>) et <em class="bold"><em class="sigle">IP</em></em> (<em class="english">Internet protocol</em>) qui constituent le « noyau » des échanges de données sur l'Internet. </p> 
+</div><!-- important -->
+
+
+<h4 id="modeleOSI"> Le modèle OSI </h4>
+
+
+<div class="complement" style="display : inline-block">
+	<img class="top-right" src="../img/modeleOSIsimple.png" width="150px" style="padding-top: 0em;">
+<p> Parallèlement, de nombreuses recherches ont été menées pour identifier un modèle plus générique et plus détaillé pour la conception informatique des protocoles réseaux. Elles ont abouti à la création d'une <strong>norme internationale</strong> appelée <strong class="title">modèle <em class="sigle">OSI</em></strong>. </p>
+</div><!-- display -->
+
+<div class="important">
+<p> Le <strong class="title">modèle <em class="sigle">OSI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modèle_OSI" target="_BLANK">W</a> (<em class="english">open systems interconnection</em>) est un modèle de <strong>piles de protocoles</strong> à <strong class="defin">7 couches</strong>. Il n'est basé sur aucune pile de protocoles en particulier et se veut donc <strong>générique</strong>. </p> 
+</div>
+
+<div class="expert" style="display : inline-block">
+	<img class="top-right" src="../img/correspondanceModeles.png" width="400px" style="padding-top: 0em;">
+<p> La figure ci‑contre illustre une <strong class="title">correspondance approximative</strong> qu'on peut établir entre les modèles <em class="bold"><em class="sigle">TCP/IP</em></em> et <em class="bold"><em class="sigle">OSI</em></em>. </p>
+
+<p> En termes d'usage, aucun modèle n'a complètement supplanté l'autre car dans la pratique, l'un comme l'autre restent <strong class="warning">peu satisfaisants</strong> pour diverses raison. En effet, la simple décomposition en couches ne suffit pas à décrire la complexité des protocoles, en particulier les aspects transversaux. De plus : </p>
+
+<ul>
+	<li> pour certaines applications, les <strong>couches hautes</strong> de <em>présentation</em> et de <strong>session</strong> du modèle <em class="bold"><em class="sigle">OSI</em></em>  sont <strong class="cons">faiblement exploitées</strong>, au point de sembler inutiles ; </li>
+
+	<li> la <strong>couche basse</strong> du modèle <em class="bold"><em class="sigle">TCP/IP</em></em> n'est <strong class="cons">pas assez détaillée</strong> clarifier la complexité des mécanismes mis en jeu. </li>
+</ul>
+<p> Néanmoins, les deux modèles restent <strong class="pros">utiles à la compréhension globale</strong>, en particulier pour les débutants. Il reste donc impératif de les connaître. </p>
+</div><!-- expert -->
+
+
+
+
+<h3 id="clientServeur"> Modèle client‑serveur </h3>
+
+
+<div class="important"> 
+<p> Dans un réseau informatique, beaucoup de <strong class="defin">protocoles de communication</strong> mettent en œuvre principalement <strong>deux machines</strong> distantes qui peuvent être vues selon un <strong>modèle</strong> <strong class="defin">client‑serveur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/client‑serveur" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	  <img class="top-right" src="../img/clientServeurWeb.png" width="500px">
+
+<p> Dans ce modèle, une application dite <strong class="title">client</strong>, sur une machine (typiquement, un ordinateur ou un smartphone), effectue une ou plusieurs <strong class="defin">requêtes</strong> à une autre application dite <strong class="title">serveur</strong>, le plus souvent sur un autre machine, accessible dans le réseau. En retour de ces requêtes, le serveur envoie des <strong class="defin">réponses</strong> au client. </p>
+
+<p> Un exemple particulièrement emblématique est celui de la <strong>consultation d'une page web</strong> sur un ordinateur équipé d'un navigateur, cette page étant stockée sur un serveur distant. </p>
+</div><!-- complement -->
+
+
+
+
+<div class="expert" style="display: inline-block;">
+	 <img class="top-right" src="../img/clientsServeur.jpg" width="200px">
+<p> Ce modèle ne présuppose rien du volume des requêtes ni de la nature des réponses, mais en règle générale, on emploie des  <strong class="title">machines dédiées</strong> pour exécuter des applications de type <strong>serveur</strong> dès lors que le réseau comporte de nombreuses machines susceptibles d'héberger des applications clientes pour un même serveur. Ce dernier doit alors avoir des <strong>capacités de stockage</strong> et de <strong>calcul</strong> suffisamment bien dimensionnées pour répondre dans des délais raisonnables aux requêtes des clients. </p>
+
+<div class="exemples"style="display: inline-block;">
+	  <img class="top-right" src="../img/clientServeurFichiers.png" width="500px">
+<p class="exemple"> Dans un lycée, pour que les élèves puissent avoir <strong>accès</strong> à leurs documents <strong class="pros">depuis n'importe quel poste de travail</strong>, ces documents sont usuellement stockés sur un <strong class="title">serveur de fichier</strong>, une machine raccordée au réseau, souvent située dans les locaux informatiques de l'établissement. Elle est équipée de <strong>nombreux disques durs</strong> et d'un <strong>logiciel serveur</strong> pour gérer les accès. </p>
+
+<p> Typiquement, lorsqu'un élève accède à son dossier principal sur un poste de travail via une application de type <strong>explorateur de fichiers</strong>, cette application devient un <strong class="title">client</strong> qui adresse une requête au serveur de fichier pour obtenir la liste du contenu du dossier principal. Le même principe opère pour accéder au contenu de tel ou tel fichier. </p>
+</div><!-- exemple -->
+
+
+
+<!-- expert -->
+<h3> Autres modèles de communication </h3>
+
+
+
+<div class="complement">
+<p> Hormis le concept client‑serveur, on trouve d'<strong class="title">autres modèles </strong> de communication dans les réseaux. En particulier, deux autres modèles sont importants à connaître : </p>
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/maitreEsclave.png" width="400px" style="margin-top: 0.5em">
+	<li> Le modèle <strong class="specialLB">maître‑esclave(s)</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Maître-esclave" target="_BLANK">W</a> (en anglais, <em class="english">master‑slave</em>), correspond à une situation ou une machine – dite <strong class="defin">maître</strong> – exerce un <strong>contrôle unilatéral</strong> de la communication (émission de données, requêtes, etc.) tandis que le ou les autres machines – dits <strong class="defin">esclaves</strong> – ne peuvent qu'obéir aux injonctions de la machine maître (les esclaves ne peuvent pas communiquer entre eux ni émettre des requêtes) ; </li>
+  </div><!-- display -->
+
+	<div class="nobullet"> Ce modèle est adopté notamment : </div>
+  <ul>
+  	<li> dans les <strong>réseaux locaux industriels</strong> comme <em class="sigle">CAN</em>, <em class="sigle">I2C</em>, <em class="mark">Modbus</em>… ou les machines dont des équipements communicants répartis dans un système comme un véhicule, unee machine‑outil, etc. </li>
+
+  	<li> dans les <strong>réseaux personnels</strong> avec la technologie <em class="mark">Bluetooth</em> et <strong>domotiques</strong> (technologies <em class="mark">ZigBee</em>, <em class="mark">Z‑Wave</em>, etc.). </li>
+  </ul>
+	  
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/pairApair.jpg" width="200px" style="margin-top: 0.5em">
+	<li> Le modèle <strong class="specialLB">pair‑à‑pair</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Pair-à-pair" target="_BLANK">W</a> (en anglais <em class="english">peer‑to‑peer</em>, abrégé <em class="sigle">p2p</em>) permet de décrire un fonctionnement du réseau où, selon les circonstances, chaque machine peut jouer le rôle de <strong class="defin">client</strong> comme de <strong class="defin">serveur</strong>. </li>
+
+  <div class="nobullet"> Très pertinents dans les systèmes plus ou moins légaux de <strong>partage de fichiers</strong> (musique, films…), il est également bien adapté pour décrire les systèmes de <strong>stockage</strong> ou de <strong>calcul distribué </strong> sur un ensemble de machine.   </div>
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Acteurs et institutions des réseaux </h2>
+
+
+<p class="square"> Au début de ce chapitre <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/Internet"></a>, on a vu que l'<strong class="title">Internet</strong> n'est un <strong>réseau « public »</strong> qu'en apparence. En réalité, il s'agit de l'interconnexion d'une multitude de réseaux dont chaque équipement, chaque liaison, est bel et bien la <strong>propriété privée</strong> (et donc placé sous la responsabilité directe) de telle entreprise ou tel organisme dits <strong class="title">acteurs</strong> de l'Internet. </p>
+
+<p> S'il n'existe dans l'absolu aucune autorité qui <strong>dirige</strong> ces acteurs, il y a néanmoins des <strong class="title">institutions</strong> et <strong class="title">organismes</strong> qui veillent à son bon fonctionnement et qui en régulent certains aspects, en particulier : </p>
+
+<ul>
+	<li> les <strong class="defin">protocoles fondamentaux</strong> et les <strong>normes</strong> qui les régissent ;  </li>
+
+	<li> l'<strong class="defin">attribution</strong> des <strong>adresses <em class="sigle">IP</em></strong></strong> et des <strong>noms de domaines</strong>. </li>
+</ul> 
+
+<div class="expert">
+<p class="square"> Plus généralement, même un <strong>réseau local</strong> peut faire intervenir <strong class="title">plusieurs acteurs</strong> qu'il ne faut pas confondre, même s'ils peuvent être parfois identiques. On doit notamment distinguer </p>
+
+<ul>
+	<li> l'acteur qui met en place l'<strong class="specialLB">infrastructure</strong> du réseau (le câblage et les machines) ; </li>
+
+	<li> l'acteur qui installe et paramètre les <strong class="specialLB">logiciels</strong> essentiels au fonctionnement du réseau ; </li>
+
+	<li> l'acteur qui assure l'<strong class="specialLB">administration</strong> du réseau et garantit son bon fonctionnement. </li>
+</ul> 
+</div><!-- expert -->
+
+
+
+<h3> Les opérateurs d'infrastructures </h3>
+
+
+
+<div class="important"> 
+<p> Un <strong class="title">opérateur d'infrastructures</strong> des réseaux est une <strong>entreprise</strong> qui <strong>possède</strong> et entretient des <strong class="defin">infrastructures de télécommunication</strong> à <strong>grande échelle</strong> (dorsales, réseaux d'antennes, flottes de satellites…). </p>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block">
+	<img class="top-right" src="../img/chantierFibre.jpg" width="400px">
+
+<p> Dans tous les <strong>pays développés</strong>, on trouve parmi ces opérateurs : </p>
+
+<ul>
+	<li> le ou les <strong class="specialLB">opérateurs historiques</strong> du <em class="bold"><em class="sigle">RTC</em></em> ; </li>
+
+	<li> les <strong class="specialLB">câblo‑opérateurs de télévision</strong> qui ont bâti un vaste réseau et qui n'ont cessé de l'améliorer ; </li>
+
+	<li> et aussi des <strong class="specialLB">entreprises</strong> ou des organismes qui possèdent des <strong class="specialLB">infrastructures de transport</strong> en général (compagnies de réseaux routiers, ferroviaires, fluviaux, électriques, gaziers, chauffage urbains, eaux usées…) sur la base desquelles il est économiquement pertinent d'installer un réseau de transport de données. </li>
+</ul> 
+</div><!-- complement -->
+
+<div class="expert">
+<p> La notion de « <strong class="title">grande échelle</strong> » commence avec celle d'une grande <strong>métropole</strong>, mais peut concerner une <strong>région</strong> ou plusieurs régions d'un pays, et aller jusqu'à l'échelle de la <strong>planète</strong> entière. </p>
+
+<ul>
+	<li> Pour une présentation des infrastructures <strong class="specialLB">en France</strong>, on peut consulter cet article <a class="external" href="https://fr.wikipedia.org/wiki/Maillage_de_l'infrastructure_Internet_en_France" target="_BLANK">W</a>. </li>
+
+	<li> Pour une présentation des infrastructures <strong class="specialLB">dans le monde</strong>, on peut consulter cet article <a class="external" href="https://en.wikipedia.org/wiki/Information_infrastructure" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- expert -->
+
+   
+
+<h3> Opérateurs de transport </h3>
+
+
+
+<div class="important"> 
+<p> Un <strong class="title">opérateur de transport</strong> de l'Internet est une <strong>entreprise</strong> qui <strong class="defin">exploite</strong> des <strong>infrastructures de télécommunication</strong> à <strong class="defin">grande échelle</strong>. </p>
+
+<p> Un opérateur de transport ne possède pas nécessairement ces infrastructures : pour exercer son activité, il peut <strong class="defin">louer</strong> à un opérateur d'infrastructures de la <strong>bande passante</strong> – on parle spécifiquement de <strong class="specialO">transit <em class="sigle">IP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transit_IP" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block">
+	<img class="top-right" src="../img/fibreOptique.jpg" width="200px">
+<p> Par rapport à un opérateur d'infrastructures, un <strong class="title">opérateur de transport</strong> peut notamment : </p>
+
+<ul>
+	<li> <strong class="defin">installer</strong> et mettre en œuvre des <strong>machines dédiées</strong> au transport de données (routeurs, serveurs <em class="sigle">DNS</em>, etc.) ; </li>
+
+	<li> <strong class="defin">ramifier le réseau</strong> à l'échelle locale (raccordement d'abonnés). </li>
+</ul> 
+</div><!-- complement -->
+
+<p> La plupart des <strong class="title">opérateurs de transport</strong> sont en fait des <strong class="defin">opérateurs de télécommunication</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Opérateur_de_télécommunications" target="_BLANK">W</a> qui développent le même genre d'activités également dans le domaine de la téléphonie <a class="external" href="https://fr.wikipedia.org/wiki/Opérateur_de_réseau_mobile" target="_BLANK">W</a>. Certains, en particulier les opérateurs de télécommunication historiques, sont également des <strong>opérateurs d'infrastructures</strong>. </p>
+
+<div class="expert">
+<h4> Notions de <em class="english">peering</em> </h4>
+
+<div class="complement">
+<p> Aucun opérateur de transport ne gère un réseau suffisamment grand pour atteindre la totalité des adresses <em class="sigle">IP</em> de l'Internet. Pour permettre la transmission de données entre n'importe quelles machines connectées, les opérateurs sont amenés à <strong class="defin">partager des routes</strong> avec leurs <strong>pairs</strong> – ce qu'on appelle le <strong class="title">peering</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Peering" target="_BLANK">W</a>. Sans ces échanges mutuels, qui font bien évidemment l'objets d'accords commerciaux, l'Internet ne pourrait pas exister à l'échelle mondiale. </p>
+</p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+
+<h3 id="FAI"> Fournisseurs d'accès </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">fournisseur d'accès à l'Internet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fournisseur_d'accès_à_Internet" target="_BLANK">W</a> (<em class="bold"><em class="sigle">FAI</em></em> – en anglais, <em class="sigle">ISP</em> pour <em class="english">Internet service provider</em>) est une <strong class="defin">personne morale</strong> (entreprise, association…) qui propose des <strong>contrats</strong> permettant aux souscripteurs (particuliers, entreprises, etc.) d'accéder à l'Internet. </p>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block">
+	<img class="top-right" src="../img/boxInternet.jpg" width="200px">
+<p> La <strong>quasi totalité</strong> des <strong class="title"><em class="sigle">FAI</em></strong> sont aujoud'hui des <strong class="defin">entreprises</strong> qui proposent à leurs <strong>client</strong>s (particuliers, autres entreprises, associations, organismes publics…) des <strong>contrats d'abonnements</strong> de longue durée. Ils mettent à leur disposition des équipements (box, postes téléphoniques…). </p>
+</div><!-- complement -->
+
+<p> Les <strong class="title">tarifs</strong> d'abonnement dépendent bien évidemment des prestations, non seulement en termes de <strong>débit</strong>, mais aussi de <strong>nombre de lignes</strong> souscrites et d' éventuelles <strong>garanties</strong> de continuité de service. </p>
+
+
+<div class="expert">
+<p> Les principaux <strong class="title"><em class="sigle">FAI</em></strong> sont aussi des <strong class="defin">opérateurs de transport</strong> sur le réseau. De plus, ils proposent souvent d'autres services comme l'<strong>hébergement de sites web</strong>, bien au delà de l'offre minimale faite aux particuliers. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="hebergeur"> Hébergeurs de données et de services </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">hébergeur Internet</strong> (en anglais, on parle d'<em class="english">Internet hosting service</em> <a class="external" href="https://en.wikipedia.org/wiki/Internet_hosting_service" target="_BLANK">W</a>) est une <strong class="defin">personne morale</strong> (entreprise, association, institution, université…) qui <strong class="defin">stocke</strong> une grande quantité de <strong>données</strong> informatisées ou de <strong>logiciels</strong> en ligne pour en fournir l'<strong>accès</strong> via l'Internet. </p>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block">
+	<img class="top-right" src="../img/dataCenter.jpg" width="400px">
+<p> Un <strong class="title">hébergeur internet</strong> dispose et met en œuvre de nombreux <strong class="defin">serveurs</strong> de <strong>données</strong>, mais aussi parfois d'<strong>applications</strong> pour effectuer des calculs qui ne peuvent être accomplis par de simples ordinateurs dans une entreprise. </p>
+
+<p> Le plus souvent regroupés en <strong class="title">centres de données</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Centre_de_données" target="_BLANK">W</a> (<em class="english">data center</em>), ces serveurs <strong class="defin">fonctionnent en permanence</strong> et occasionnent une <strong class="warning">consommation d'énergie</strong> considérable, tant pour l'alimentation électrique des machines que leur refroidissement. </p>
+
+<p> Une grande partie des services d'hébergement concerne les <strong>milliard de pages web</strong> qui forment la toile mondiale. On parle alors d'<strong class="title">hébergeur web</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Hébergeur_web" target="_BLANK">W</a> (<em class="english">web hosting service</em>). </p>
+</div><!-- complement -->
+
+
+
+<h3> Fabricants de matériel </h3>
+
+
+
+<div class="complement">
+<p> Dans l'univers des <strong class="title">fabricants de matériels</strong> pour les réseaux : </p>
+<ul>
+	<li> on trouve bien entendu certains grands <strong class="specialLB">constructeurs informatiques</strong> (<em class="mark">Dell</em>, <em class="mark">HP</em>…) qui proposent des gammes de <strong>serveurs</strong> ; </li>
+
+	<li> mais il y a aussi des <strong class="specialLB">entreprises spécialisées</strong> (<em class="mark">Cisco</em>, <em class="mark">Ericsson</em>, <em class="mark">D-Link</em>, <em class="mark">3com</em>…) dans des domaines comme les <strong>cartes réseaux</strong>, les <strong>commutateurs</strong>,  les <strong>routeurs</strong>. </li>
+</ul>
+
+<p> Leur spécialisation est rendue nécessaire par la complexité et la vitesse d'évolution des technologies employées. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Chaque constructeur dispose d'un <strong class="title">identifiant institutionnel</strong> qui forme la première partie de l'<strong>adresse physique</strong> unique – dite <em class="bold"><em class="sigle">MAC</em></em>, cf. supra <a class="supra" href="Rc1-1_notionsFondamentales.html#adresses"></a> – associée à chaque interface réseau produite. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="organismes"> Organismes scientifiques et techniques </h3>
+
+
+
+<p class="square"> On a vu que les échanges de données sur l'Internet – et plus généralement sur tout type de réseau – obéissent à des <strong>protocoles complexes</strong>. La genèse de ces protocoles est presque toujours le fruit d'une <strong>collaboration étroite</strong> entre divers <strong class="title">départements de recherche</strong> au sein : </p>
+
+<ul>
+	<li> des <strong class="specialLB">universités</strong> (<em class="sigle">MIT</em> <a class="external" href="https://fr.wikipedia.org/wiki/Massachusetts_Institute_of_Technology" target="_BLANK">W</a>, <em class="sigle">UCLA</em> <a class="external" href="https://fr.wikipedia.org/wiki/Université_de_Californie_à_Los_Angeles" target="_BLANK">W</a>, <em class="sigle">UCB</em> <a class="external" href="https://fr.wikipedia.org/wiki/Université_de_Californie_à_Berkeley" target="_BLANK">W</a>…) ; </li>
+
+	<li> des <strong class="specialLB">institutions</strong> <strong>nationales</strong> ou <strong>gouvernementales </strong> (<em class="sigle">DoD</em> <a class="external" href="https://fr.wikipedia.org/wiki/Département_de_la_Défense_des_États-Unis" target="_BLANK">W</a>, <em class="sigle">INRIA</em> <a class="external" href="https://fr.wikipedia.org/wiki/Département_de_la_Défense_des_États-Unis" target="_BLANK">W</a>…) ; </li>
+
+	<li> des <strong class="specialLB">grandes entreprises</strong> (<em class="sigle">AT&T</em> <a class="external" href="https://fr.wikipedia.org/wiki/AT&T" target="_BLANK">W</a>…).</li>
+</ul>
+
+<p class="square"> De plus, les travaux de recherche sont fédérés par des <strong class="title">institutions</strong> ou des <strong class="title">associations scientifiques et techniques</strong> qui mettent en place des <strong class="defin">groupes de travail</strong>, organisent des <strong>congrès</strong>, éditent des <strong>revues</strong>, des <strong>sites de vulgarisation</strong> ou développent des <strong>solutions technologiques</strong>. En particulier, on peut citer : </p>
+
+<ul>
+	<li> l'<strong class="defin"><em class="sigle">IEEE</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Institute_of_Electrical_and_Electronics_Engineers" target="_BLANK">W</a> (<em class="english">Institute of electrical and electronics engineers</em>) qui joue un rôle de premier plan dans la <strong>normalisation des protocoles</strong> des couches basses ; </li>
+  
+  <div class="expert">
+	<li> le <strong class="defin"><em class="sigle">W3C</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/World_Wide_Web_Consortium" target="_BLANK">W</a> (<em class="english">world wide web consortium</em>) qui est chargé de la <strong>normalisation des langages</strong> de codage des ressources du web (langages <em class="sigle">HTML</em>, <em class="sigle">CSS</em>, formats <em class="sigle">PNG</em>, <em class="sigle">SVG</em>, etc.) en vue de leur compatibilité ; ces aspects sont souvent intrinsèquement liés aux protocoles de communication ; </li>
+	</div><!-- expert -->
+
+	<li> l'<strong class="defin"><em class="sigle">ISC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Systems_Consortium" target="_BLANK">W</a> (<em class="english">Internet systems consortium</em>) qui développe des <strong>logiciels libres</strong> de services réseaux (<em class="sigle">DNS</em>, <em class="sigle">DHCP</em>…).  </li>
+</ul>
+
+
+
+<h3 id="institutionsAdmin"> Institutions administratives </h3>
+
+
+
+<p> L'<strong class="title">Internet</strong> étant un <strong class="defin">réseau mondial</strong>, il devrait être gouverné par des institutions internationales à l'instar de l'<em class="sigle">UIT</em> <a class="external" href="https://fr.wikipedia.org/wiki/Union_internationale_des_télécommunications" target="_BLANK">W</a> (<em>Union internationale des télécommunications)</em> pour les réseaux téléphoniques. </p>
+
+<p> Mais l'<strong>invention de l'Internet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Histoire_d'Internet" target="_BLANK">W</a> est presque exclusivement <strong>américaine</strong>, et aujourd'hui, ce sont encore des organismes placés sous diverses <strong class="warning">juridictions des États‑Unis</strong> qui en assurent la <strong class="title">gouvernance</strong>. </p>
+
+
+
+<h4> L'ISOC </h4>
+
+
+<div class="important" style="display: inline-block">
+	<img class="top-right" src="../img/isocLogo.png" width="200px" style="padding-top: 0.5em">
+<p> L'organisme qui « domine » la <strong>gouvernance de l'Internet</strong> est l'<strong class="title">Isoc</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Society" target="_BLANK">W</a> (pour <em class="english">Internet Society</em>). C'est une <strong class="defin">association à but non lucratif</strong> et à vocation internationale, de <strong>droit américain</strong> mais en principe indépendante du gouvernement des États‑Unis.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong>Isoc</strong> supervise notamment l'<strong class="title"><em class="sigle">IETF</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Engineering_Task_Force" target="_BLANK">W</a> (<em class="english">Internet engineering task force</em>). Il s'agit d'un ensemble de <strong class="defin">groupes de travail</strong> qui réunissent informellement des spécialistes du monde entier participant bénévolement à <strong>promouvoir</strong> et <strong>développer</strong> des standards performants pour l'Internet.</p>
+
+<div class="expert">
+<p> Les travaux de l'<em class="bold"><em class="sigle">IETF</em></em> sont publiés sous la forme de documents techniques appelés <strong class="title"><em class="sigle">RFC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Request_for_comments" target="_BLANK">W</a>(<em class="english">request for comments</em> – cf. supra <a class="supra" href="Rc1-1_notionsFondamentales.html#RFC"></a>). Certains finissent par être promus au rang de <strong>normes</strong>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<h4 id="ICANN"> L'ICANN </h4>
+
+
+<div class="important"  style="display: inline-block">
+	<img class="top-right" src="../img/icannLogo.png" width="150px" style="padding-top: 0em">
+<p> Un autre <strong>organisme de régulation</strong> très important est <strong class="title"><em class="sigle">ICANN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Corporation_for_Assigned_Names_and_Numbers" target="_BLANK">W</a> (<em class="english">Internet Corporation for Assigned Names and Numbers</em>). C'est une <strong class="defin">société à but non lucratif</strong> de <strong>droit californien</strong>, donc également indépendante du gouvernement des États‑Unis. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block">
+	<img class="top-right" src="../img/ianaLogo.png" width="150px" >
+<p> Depuis 1998, l'<strong><em class="sigle">ICANN</em></strong> exerce la <strong class="defin">tutelle</strong> de l'<strong class="title"><em class="sigle">IANA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority" target="_BLANK">W</a> (<em class="english">Internet assigned numbers authority</em>) qui a la maîtrise de :  </p>
+<ul>
+	<li> l'<strong class="defin">attribution</strong> à l'échelle mondiale des blocs d'<strong>adresses <em class="sigle">IP</em></strong> (cf.  supra <a class="supra" href="Rc1-1_notionsFondamentales.html#adressage"></a>) aux registres régionaux (<em class="sigle">RIR</em> <a class="external" href="https://fr.wikipedia.org/wiki/Registre_Internet_régional" target="_BLANK">W</a>) ; </li>
+
+	<li> la <strong class="defin">validation</strong> des <strong>noms de domaines</strong> de <strong class="specialO">1<sup>er</sup> niveau</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domaine_de_premier_niveau" target="_BLANK">W</a> (en anglais, <em class="english">top‑level domain</em>, abrégé <em class="sigle">TLD</em>), c'est‑à‑dire composant l'identifiant le plus à droite (dans le sens de lecture) des noms de domaines, comme par exemple <code class="filename">fr</code> ou <code class="filename">com</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> La mise de l'<strong><em class="sigle">IANA</em></strong> sous la <strong class="title"> tutelle</strong> de l'<strong><em class="sigle">ICANN</em></strong> a essentiellement eu pour but de donner à ce qui n'était historiquement qu'un département de l'<em class="sigle">USC</em> (<em class="english">University of Southern California</em>) un <strong>statut administratif</strong> à la hauteur des <strong class="warning">enjeux internationaux</strong> que sous‑tendent ses prérogatives. En effet, depuis que l'Internet est largement développé sur la planète, il est difficile pour les différents pays d'accepter que les noms de domaines de premier niveaux restent le monopole du gouvernement américain.  </p>
+</div><!-- expert -->
+
+<div class="remarques" id="AFNIC">
+<p class="remarque"> Quant aux <strong class="title">noms de domaines</strong> de <strong class="specialT">2<sup>e</sup> niveau</strong>, ils relèvent d'autres organismes appelés <strong class="defin"><em class="sigle">TLD</em> managers</strong>, dont beaucoup sont nationaux. </p>
+
+<div  style="display: inline-block;">
+	<img class="top-right" src="../img/afnicLogo.png" width="150px" style="margin-top:0.5em">
+<p> En <strong>France</strong>, c'est l'<strong class="defin"><em class="sigle">AFNIC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Association_française_pour_le_nommage_Internet_en_coopération" target="_BLANK">W</a> (<em>Association française pour le nommage Internet en coopération</em>) qui gère les <strong class="specialT">noms des domaines de 2<sup>e</sup> niveau</strong> inclus dans la majorité (mais pas la totalité) des <strong>domaines de 1<sup>er</sup> niveau</strong> qui sont du ressort de l'État français : <code class="filename">fr</code>, <code class="filename">re</code>, etc. </p>
+
+<p> Ces aspects sont détaillés au chapitre R2‑I <a class="next" href="../R2-Applications/Rc2-1_dns_url.html#enregistrement" target="_BLANK"></a>. </p>
+</div><!-- display -->
+</div><!-- remarque -->
+
+
+
+<h3> Organismes internationaux de normalisation </h3>
+
+
+
+<div class="expert">
+<p> Même si l'Internet est un univers assez peu régulé comparativement à d'autres réseaux de télécommunication (télephone, télévision), les <strong class="title">normes</strong> y jouent un <strong>rôle important</strong>. Elles constituent souvent les <strong class="defin">documents techniques de référence</strong> sur lesquels s'appuient : </p>
+
+<ul>
+	<li> les <strong>fabricants</strong> pour produire des matériels compatibles entre eux ; </li>
+
+	<li> les <strong>législateurs</strong> pour imposer des conditions de sécurité aux installations et à leurs usages. </li>
+</ul>
+</div><!-- expert -->
+
+<div class="complement">
+<p> L'Internet étant un <strong class="defin">réseau mondial</strong>, seuls sont en principe compétents les <strong class="title">organismes internationaux</strong> de <strong>normalisation</strong>, à savoir :  </p>
+<ul>
+	<div style="display : inline-block">
+    <img class="top-right" src="../img/ISO_logo.png" width="50px" style="padding-top: 0.5em">
+	<li> l'<strong class="defin"><em class="sigle">ISO</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Organisation_internationale_de_normalisation" target="_BLANK">W</a> (<em>Organisation internationale de normalisation</em>),</li>
+  </div><!-- display -->
+
+  <div style="display : inline-block">
+    <img class="top-right" src="../img/IEC_logo.png" width="50px" style="padding-top: 0.5em">
+	<li> la <strong class="defin"><em class="sigle">CEI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Commission_électrotechnique_internationale" target="_BLANK">W</a> (<em>Commission électrotechnique internationale</em>),  </li>
+  </div><!-- display -->
+</ul>
+<p> l'un de l'autre basés à Genève et qui agissent de façon complémentaires. </p>
+</div> <!-- complement -->
+
+<div class="expert">
+<p> Néanmoins, l'histoire du développement de l'Internet a grandement échappé à ces organismes. Jusqu'à présent, ils n'ont eu qu'une <strong class="cons">influence limitée</strong> sur les technologie, notamment sur les aspects logiciels. Les technologies des réseaux qui font l'objet de normes <em class="sigle">ISO</em> ou <em class="sigle">CEI</em> sont peu nombreuses. Quand c'est le cas, cela mérite d'être signalé.  </p>
+</div><!-- expert -->
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

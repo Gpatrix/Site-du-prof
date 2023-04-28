@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="1"
+  data-pagenumber="2"
+  data-pageState="OK"
+  data-pageheadtitle="Architecture"
+  data-pagefulltitle="Architecture des LAN"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont : </p>
+<ul>
+  <li> de comprendre les <strong class="specialLB">principes d'architecture</strong> des <strong>réseaux locaux</strong> – notamment par l'<strong class="specialLB">adressage statique IPv4</strong>  – en expérimentant la mise en place de <strong><em class="sigle">LAN</em></strong> très simples ; </li>
+
+  <li> de découvrir certaines <strong class="specialLB">caractéristiques des équipements réseau</strong> détaillées par le constructeur <strong class="Cisco">Cisco</strong> ; </li>
+
+  <li> de découvrir, à travers la simulation « ralentie », le <strong class="specialLB">déroulement des protocoles</strong> à l'œuvre dans les transmissions de données, notamment <strong><em class="sigle">ICMP</em></strong>, <strong><em class="sigle">ARP</em></strong>, <strong><em class="sigle">STP</em></strong>, <strong><em class="sigle">DTP</em></strong>… </li>
+</ul>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié les <strong>chapitres R1‑I</strong> à <strong class="warning">R1‑III</strong><strong> inclus</strong> du cours, et en particulier, d'avoir <strong>quelques bases</strong> sur l'<strong class="warning">adressage IPv4</strong> (notion d'<strong>adresse <em class="sigle">IP</em></strong>, de <strong>masque</strong>). Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Environnement </h3>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ciscoPacketTracerLogo.png" width="100px">
+<p>	Tous les exercices sont à traiter dans l'<strong class="title">environnement de simulation</strong> <strong class="Cisco">Cisco Packet Tracer</strong>. Ce logiciel <strong class="pros">gratuit</strong> doit être préalablement <strong>téléchargé</strong> et <strong>installé</strong> sur le poste travail (bien suivre la procédure indiquée au chap. R1‑II <a class="cours" href="Rc1-2_architecture.html#CPT" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+
+
+
+
+	
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer les manipulations sur ordinateur en veillant à <strong class="defin">enregistrer au fur et à mesure le travail</strong> dans <strong class="pros">un fichier distinct</strong> pour <strong>chaque exercice</strong>, voire pour chaque <strong>question</strong> en cas de modification importante du réseau d'une question à l'autre. Il est recommandé de nommer ces fichiers de la forme <code class="filename">R1tp2exo<span class="nocode"><strong class="title">nx</strong></span>.pkt</code> où <strong class="title">n</strong> est le numéro d'exercice et <strong class="title">x</strong> la lettre de la question. </p>
+
+<p> Répondre sur cahier ou fichier de texte aux questions qui attendent une réponse littérale. </p>
+</div><!-- important -->
+
+
+<ol class="exercice">
+
+
+<li id="exo1" style="margin-top: 2em;"> <em class="bold">Mise en réseau de deux ordinateurs</em> </li>
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/R1tp1exo1.png" width="300px" style="padding-top: 0.5em">
+	<ol class="questions">
+
+
+		<li> Dans la <strong>vue « logique »</strong> de l'espace de travail (bouton <span class="touche" style="border-radius: 1em">Logical</span> activé par défaut), constituer la <strong class="title">topologie matérielle</strong> de <strong class="specialLB">deux ordinateurs</strong> mis en réseau représentée en figure ci‑contre. </li>
+    <ul>
+      <li> Relever l'<strong>adresse <em class="sigle">MAC</em></strong>  de l'interface réseau <em class="mark">FastEthernet</em> de chaque ordinateur (cf. l'infobulle obtenue en passant le pointeur de la souris sur les icônes des machines). Identifier le <strong>constructeur</strong> de ces interfaces via un site spécialisé comme celui‑ci <a class="external" href="https://macvendors.com/" target="_BLANK"></a>. </li>
+
+      <li> Quel <strong>type de câble</strong> symbolise la ligne pointillée noire ? Pourquoi ce choix est‑il fait <a class="external" href="https://fr.wikipedia.org/wiki/RJ45#câblage_croisé_complet" target="_BLANK">W</a> ? </li>
+
+      <li> Que signifient les <strong>triangles</strong> <strong class="specialG">verts</strong> sur cette liaison ? </li>
+    </ul>
+
+		<li> Configurer l'interface réseau <em class="mark">FastEthernet</em> de chaque ordinateur <code>PC0</code> et <code>PC1</code> en leur attribuant respectivement les <strong class="title">adresses <strong><em class="sigle">IP</em></strong> statiques</strong> <code>192.168.0.10</code> et <code>192.168.0.11</code> (menu contextuel <code>Config</code>). </li>
+    <ul>
+      <li> <strong>Vérifier</strong> que ces adresses apparaissent dans l'infobulle des ordinateurs. </li>
+
+      <li> De quelle <strong>catégorie</strong> d'adresses, privées ou publiques,  s'agit‑il ? Pourquoi ce choix est‑il fait ? (cf. cours, chap. R1‑III <a class="cours" href="Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>) </li>
+
+      <li> Quel <strong>masque de sous‑réseau</strong> est‑il automatiquement attribué aux interfaces réseaux ? Comment ce masque est‑il défini en notation <strong><em class="sigle">CIDR</em></strong> ? (cf. cours, chap. R1‑III <a class="cours" href="Rc1-3_adressage.html#CIDR" target="_BLANK"></a>) </li>
+    </ul>
+
+		<li id="exo1qC"> Effectuer un <strong class="title">essai de communication</strong> depuis <code>PC0</code> vers <code>PC1</code> en utilisant un <strong><em class="sigle">PDU</em> simple</strong> (<em class="english">protocol data unit</em> – icône <img src="../img/ciscoPacketTracerAddSimplePDU.png" height="30px" style="vertical-align: middle">). </li>
+    <ul>
+      <li> En mode <strong>temps‑réel</strong> (bouton <span class="touche" style="border-radius: 1em">Realtime</span>), vérifier que le scénario est concluant (<em class="english">successful</em>). </li>
+
+      <li> En mode <strong>simulation</strong> (bouton <span class="touche" style="border-radius: 1em">Simulation</span>), cliquer sur le bouton <em>lecture</em> <span class="boutonGris">▶</span> pour visualiser le déroulement de ce scénario. Combien de temps le scénario dure‑t‑il ? </li>
+
+      <li> À quel <strong>protocole</strong> la transmission du <strong><em class="sigle">PDU</em></strong> fait‑elle appel ? Dans le panneau de simulation, cliquer sur la ligne du <strong><em class="sigle">PDU</em></strong> pour obtenir son <strong>analyse détaillée</strong> selon le modèle <strong><em class="sigle">OSI</em></strong> (afficher les informations pour chaque couche via le bouton <code>Next Layer</code>). </li>
+
+      <li> Par défaut, quels sont les protocoles affichés dans la liste des événements ? À l'aide des boutons <span class="boutonGris">Show All/None</span> et <span class="boutonGris">Edit Filters</span>, constater qu'on peut choisir les protocoles dont les <strong><em class="sigle">PDU</em></strong> sont simulés. </li>
+    </ul>
+
+		<li> Effectuer un test similaire en employant la <strong class="title">commande <code style="font-style: normal">ping</code></strong> sur une console de commande de l'ordinateur <code>PC0</code> (menu <code>Desktop/Command Promp</code>) en mode <strong>temps‑réel</strong> puis en mode <strong>simulation</strong>. </li>
+    <ul>
+      <li> Combien de <strong><em class="sigle">PDU</em></strong> ont été envoyés vers le destinataire ? </li>
+
+      <li> Comment l'émetteur est‑il informé que le destinataire est accessible à la communication dans le réseau ? </li>
+    </ul>
+
+
+    <li> Depuis l'ordinateur <code>PC0</code>, tester encore la <strong class="title">commande <code style="font-style: normal">ping</code></strong> avec successivement les <strong>4 adresses</strong> destinataires ci‑dessous, en expliquant pour chacune le résultat obtenu :  </li>
+    <ul>
+      <li> <code>192.168.0.10</code> </li>
+
+      <li> <code>127.0.0.1</code> </li>
+
+      <li> <code>192.168.0.12</code> </li>
+
+      <li> <code>192.168.1.10</code> </li>
+    </ul>
+	</ol><!-- questions (exo 1) -->
+	</div><!-- display -->
+
+
+
+
+
+
+<li id="exo2" > <em class="bold">Mise en réseau de six ordinateurs par un switch</em> </li>
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/R1tp1exo2.png" width="400px" style="padding-top: 0.5em">
+  <ol class="questions">
+    <li> Dans la vue « logique » de l'espace de travail, constituer la <strong class="title">topologie matérielle</strong> de réseau représentée en figure ci‑contre, avec <strong class="specialLB">six ordinateurs</strong> notés respectivement <code>PC0</code> à <code>PC5</code> et un <strong class="specialLB">switch</strong> <em class="mark">Cisco</em> réf. <code>2950‑24</code>. </li>
+    <ul>
+      <li> Combien de <strong>ports</strong> <em class="mark">FastEthernet</em> le switch compte‑t‑il ? </li>
+
+      <li> Observer patiemment l'<strong>évolution automatique des symboles</strong> sur les connecteurs ? Expliquer globalement le phénomène en exploitant des connaissances générales sur le fonctionnement d'un commutateur <a class="external" href="https://fr.wikipedia.org/wiki/Commutateur_réseau" target="_BLANK">W</a>. </li>
+
+      <li> À quel <strong>type de câble</strong> correspondent les lignes continues noires ? </li>
+
+      <li> En consultant les informations inscrites dans l'infobulle du switch, que peut‑on dire des <strong>adresses</strong> associées à ses <strong>ports </strong> <em class="mark">FastEthernet</em> ? Peut‑on leur attribuer une <strong>adresse <strong><em class="sigle">IP</em></strong></strong> ? </li>
+
+      <li> Avant toute attribution d'adresse <strong><em class="sigle">IP</em></strong> aux machines, passer en mode <strong>simulation</strong> et cliquer sur le bouton <em>lecture</em> <span class="boutonGris">▶</span>. Observer le scénario durant deux minutes de temps‑réel. Que se passe‑t‑il ? Quels <strong>protocoles</strong> sont mis en œuvre ? </li>
+
+      <li> Pour ne pas saturer le buffer d'événements par la suite, <strong class="warning">décocher les protocoles</strong> répétitifs observés à la question précédente (ils ne seront plus affichés dans la liste des événements). De plus, il faut <strong class="defin">cocher l'option</strong> :  <br>
+      <span class="inline">
+        ⎕ <code>Buffer Filtered Events Only</code> 
+      </span> <br>
+      dans l'<strong>onglet</strong> <code>Miscellaneous</code> de la fenêtre de paramétrage accessible via le <strong>menu</strong> <code>Options/Preferences…</code>. </li>
+    </ul>
+  
+    <li> Configurer l'interface réseau <em class="mark">FastEthernet</em> de chaque ordinateur en leur attribuant respectivement les <strong class="title">adresses <strong><em class="sigle">IP</em></strong> statiques</strong> <code class="cmd">192.168.0.10</code> à <code class="cmd">192.168.0.15</code> avec le <strong>masque de réseau</strong> <code class="cmd">/27</code> (notation <strong><em class="sigle">CIDR</em></strong>, cf. chap. R1‑III <a class="cours" href="Rc1-3_adressage.html#CIDR" target="_BLANK"></a>). </li>
+    <ul>
+      <li> <strong>Combien d'hôtes</strong> ce réseau peut‑il au plus comporter ? Quelle est son <strong>adresse de diffusion générale</strong> (<em class="english">broadcast</em>) ?  </li>
+
+      <li> En mode <strong>temps‑réel</strong>, vérifier par envois de <strong><em class="sigle">PDU</em> simples</strong> qu'il y a une bonne communication entre chaque ordinateur. </li>
+
+      <li> En mode <strong>simulation</strong>, observer le déroulement du scénario d'envoi d'un <strong><em class="sigle">PDU</em> simple</strong> de l'ordinateur <code>PC0</code> vers l'ordinateur <code>PC3</code>. Quels <strong>protocoles</strong> sont mis en œuvre – et dans quel ordre – pour effectuer cet envoi ? Quel est le protocole qui génère le plus de messages ? </li>
+    </ul>
+    
+    <li> <strong>Supprimer le protocole <em class="sigle">ARP</em></strong> de la liste d'affichage puis tester la communication avec un <strong class="title"><em class="sigle">PDU</em> complexe</strong> (icône <img src="../img/ciscoPacketTracerAddComplexPDU.png" height="30px" style="vertical-align: middle">) avec, pour émetteur, l'ordinateur <code>PC0</code> et, pour destinataire, l'adresse <code>192.168.0.31</code>. </li>
+    <ul>
+      <li> Observer le déroulement du scénario en mode <strong>temps‑réel</strong> puis en <strong>mode simulation</strong>. Combien de temps cet envoi dure‑t‑il en temps‑réel ? </li>
+
+      <li> Effectuer un test similaire via la commande <code>ping</code> depuis une console de commande de l'ordinateur <code>PC0</code> (menu <code>Desktop/Command Promp</code>) en <strong>temps‑réel</strong> uniquement. Combien de réponses l'ordinateur <code>PC0</code> collecte‑t‑il ? Expliquer ce nombre. </li>
+
+      <li> En mode <strong>simulation</strong>, envoyer un nouveau <strong><em class="sigle">PDU</em> simple</strong> depuis l'ordinateur <code>PC0</code> vers l'ordinateur <code>PC2</code> puis en sens inverse (du <code>PC2</code> vers le <code>PC0</code>). Que constate‑t‑on ? </li>
+
+      <li> Dans une console de commande de <code>PC0</code>, effacer la table de résolution du protocole <strong><em class="sigle">ARP</em></strong> via la commande <code>arp -d</code> (« <code>d</code> » pour <em class="english">delete</em>). Recommencer alors les envois de <strong><em class="sigle">PDU</em></strong> simples entre <code>PC0</code> et <code>PC2</code>. Que constate‑t‑on ?   </li>
+    </ul>
+
+    <li> <strong class="title">Segmenter le réseau</strong> en attribuant respectivement aux interfaces <em class="mark">FastEthernet</em> des ordinateurs <code>PC3</code> à <code>PC5</code> les <strong>adresses</strong> <code class="cmd">192.168.0.33</code> à <code class="cmd">192.168.0.35</code> avec le <strong>masque de réseau <em class="sigle">CIDR</em></strong> <code class="cmd">/29</code>. </li>
+    <ul>
+      <li> Déterminer l'<strong>adresse</strong> de ce nouveau segment du réseau ainsi que son <strong>adresse de broadcast</strong>. </li>
+
+      <li> De quoi le réseau est‑il maintenant constitué ? Dans l'espace de travail, <strong>délimiter les différentes segments</strong> par des rectangles  et en indiquant par une annotation leur adresse de réseau respective. </li>
+
+      <li> En mode <strong>temps‑réel</strong>, tester par envois de <strong><em class="sigle">PDU</em></strong> simples les possibilités de communication entre chaque ordinateur.  </li>
+
+      <li> En mode <strong>simulation</strong>, tester la <strong>diffusion broadcast</strong> sur les deux segments de réseaux par des envois de <strong><em class="sigle">PDU</em></strong> complexes. </li>
+
+      <li> Quelle peut être l'<strong>application concrète</strong> d'une telle architecture de réseau ? </li>
+    </ul>
+  </ol><!-- questions (exo 2) -->
+  </div><!-- display -->
+
+
+
+
+
+
+  <li id="exo3"> <em class="bold">Extension matérielle d'un <em class="sigle">LAN</em></em> </li>
+  
+  <div class="nobullet">
+  <p> Dans un premier temps, on souhaite <strong>étendre le <em class="sigle">LAN</em></strong> de l'<strong>exercice précédent</strong> pour pouvoir raccorder, au <strong class="title">même étage d'un bâtiment</strong> : </p>
+  <ul>
+    <li> dans le <strong>premier segment</strong>, jusqu'à <strong class="specialLB">15 ordinateurs</strong> et <strong class="specialLB">une imprimante</strong>, tous situé dans une même pièce ; </li>
+
+    <li> dans le <strong>deuxième segment</strong>, jusqu'à <strong class="specialLB">8 ordinateurs</strong> et <strong class="specialLB">un serveur</strong> situés dans une autre pièce, le serveur pouvant être placé dans une pièce distincte des ordinateurs. </li>
+  </ul>
+
+  <p> On part d'une copie du fichier <code class="filename">R1tp2exo2d.pkt</code> (répondant aux spécifications de la question <em class="bold">2.d.</em>) renommé <code class="filename">R1tp2exo3.pkt</code>, pour se placer dans une démarche d'extension d'un réseau existant. </p>
+  </div>
+
+  <ol class="questions">
+    <li> Le <strong class="title">plan d'adressage</strong> précédent peut‑il être conservé ? (Le nombre d'adresses initialement prévu est‑il suffisant ?) Pour répondre à cette question, suivre les indications ci‑dessous. </li>
+    <ul>
+      <li> Ajouter les <strong>équipements terminaux</strong> spécifiés qui n'étaient pas présents dans la configuration précédente. Pour les ordinateurs, on se contentera de mettre en place <strong class="warning">seulement les deux premiers</strong> et le dernier</strong> par ordre d'adressage dans chaque segment. </li>
+
+      <li> En plus des équipements terminaux, d'autres <strong>équipements</strong> (switch, routeur) doivent‑ils être ajoutés ? Dans l'affirmative, choisir des références adaptées parmi celles proposées par le logiciel. </li>
+
+      <li> Proposer un <strong>nouveau plan d'adressage</strong>, de préférence <strong class="pros">plus lisible</strong> que le précédent, en exploitant davantage la plage d'adresses privées <code class="cmd">192.168.0.0/16</code>. On veillera à : </li>
+      <ul style="list-style: circle">
+        <li> <strong class="pros">laisser des adresses vacantes</strong> pour satisfaire aux nombres de postes exigés et pour permettre d'éventuels ajouts ultérieurs ;  </li>
+
+        <li> à ne pas employer l'identifiant de machine (<em class="english">host id</em>) <code class="cmd">1</code> car ce numéro est usuellement attribué aux passerelles.</li>
+      </ul>
+
+      <div class="nobullet"> Sur la vue logique, étiqueter les équipements terminaux par leur nouvelle adresse <strong><strong><em class="sigle">IP</em></strong></strong>. </div>
+    </ul>
+
+
+    <li> Dans l'espace de travail en <strong>vue logique</strong>, procéder aux <strong class="title">modifications nécessaires</strong>. </li>
+    <ul>
+      <li> Effectuer ou modifier les <strong>raccordements</strong> pour qu'ils soient ordonnés sur les ports dans le même ordre que les adresses <strong><em class="sigle">IP</em></strong>. </li>
+
+      <li> Changer les <strong>adresses <strong><em class="sigle">IP</em></strong></strong> des interfaces réseaux <em class="mark">FastEthernet</em> pour qu'elles soient conformes au plan d'adressage. </li>
+    </ul>
+    
+    
+    <img class="top-right" src="../img/R1tp1exo3.png" width="300px" style="padding-top: 0.5em">
+    <li> Dans l'espace de travail en <strong>vue physique</strong> (cliquer sur le bouton <span class="touche" style="border-radius: 1em">Physical</span>), cliquer puis zoomer sur le bâtiment. <strong class="title">Arranger la disposition matérielle</strong> des équipements conformément aux spécifications ci‑dessus. </li>
+    <ul>
+      <li> Placer le <strong>rack</strong> dans une pièce technique séparant deux pièces voisines pour héberger les deux segments du réseau. </li>
+
+      <li> Répartir dans chaque pièce les <strong>ordinateurs</strong> et l'<strong>imprimante</strong>. </li>
+
+      <li> Où le <strong>serveur</strong> est‑il installé ? </li>
+    </ul>
+
+
+    <li> <strong class="title">Tester les communications</strong> au sein du <strong><em class="sigle">LAN</em></strong>. </li>
+    <ul>
+      <li> Par envois de <strong><em class="sigle">PDU</em></strong> simples et complexes, vérifier que la bonne <strong>communication</strong> sur chaque segment du réseau et l'<strong>étanchéité</strong> entre chacun. </li>
+
+      <li> Modifier (temporairement) l'adresse du serveur pour que ce dernier soit inclus dans le premier segment et non pas dans le second. Vérifier par des <strong><em class="sigle">PDU</em></strong> simples que cette modification est effective en termes de possibilités de communication. </li>
+
+      <div class="nobullet"> Pour finir, rétablir l'adresse initiale du serveur. </div>
+    </ul>
+  </ol><!-- questions (exo 3) -->
+  
+
+
+
+
+
+
+
+  <li id="exo4"> <em class="bold">Interconnexion par routeur</em> </li>
+
+  <div class="nobullet" style="display: inline-block;">
+    <img class="top-right" src="../img/routeurSymbole.png" width="80px" >
+  <p> On souhaite maintenant <strong class="title">interconnecter les deux segments</strong> du <strong><em class="sigle">LAN</em></strong> constitués à l'exercice précédent. On utilise pour cela un <strong>routeur</strong> (cf. ci‑contre le symbole générique de cet équipement). </p> 
+
+  <p> On part d'une copie du fichier <code class="cmd">R1tp2exo3.pkt</code> (répondant aux spécifications de l'exercice <em class="bold">3</em>) renommé <code class="filename">R1tp2exo4.pkt</code>. </p>
+  </div><!-- display -->
+
+  <ol class="questions">
+    <li> <strong class="title">Choix</strong> du routeur </li>
+    <ul>
+      <li> En faisant des recherches sur l'Internet, <strong>comparer</strong> quelques références de routeurs disponibles dans la gamme <strong class="Cisco">Cisco</strong> proposée par le logiciel <strong class="Cisco">Cisco Packet Tracer</strong>. </li>
+
+      <li> Dans l'espace de travail, en <strong>vue physique</strong>, placer dans le rack, au dessus des switchs, un <strong>routeur</strong> de réf. <code>1841</code>.  </li>
+
+      <li> <strong>Mettre hors tension</strong> le routeur puis <strong>protéger</strong> les deux emplacements des <strong><em class="sigle">WIC</em></strong> (<em class="sigle">WAN</em> <em class="english">interface card</em>) par des couvercles. Ces emplacements ne seront pas employés dans l'immédiat. </li>
+
+      <li> <strong>Mettre sous tension</strong> le routeur. </li>
+    </ul>
+
+    <li> <strong class="title">Raccordement et paramétrage</strong> du routeur </li>
+    <ul>
+      <li> Dans l'espace de travail, en <strong>vue logique</strong>, raccorder les switchs des deux segments du <strong><em class="sigle">LAN</em></strong> respectivement aux deux ports <em class="mark">FastEthernet</em> du routeur. Quel type de câble est requis, et pourquoi ? </li>
+
+      <div class="nobullet"> Ne pas oublier de <strong>mettre en service</strong> ces interfaces. Pour cela, il suffit de <strong>cocher la case</strong> □ <code>On</code> dans leur fenêtre de configuration respective. </div>
+
+      <li> Attribuer à chacun de ces deux ports l'adresse <strong><em class="sigle">IP</em></strong> avec l'identifiant d'hôte <code class="cmd">1</code> dans le segment respectif du <strong><em class="sigle">LAN</em></strong> raccordé. Ne pas oublier de mettre les ports <strong>en service</strong>. </li>
+
+      <li> Dans les deux segments, attribuer comme <strong>passerelle par défaut</strong> (<em class="english">default gateway</em>) à chaque équipement terminal l'adresse <strong><em class="sigle">IP</em></strong> donnée au port correspondant du routeur. </li>
+
+      <li> Vérifier que les symboles sur les liaisons <em>switch ‑ routeur</em> sont devenus <strong class="specialG">verts</strong>. </li>
+    </ul>
+
+    <li> <strong class="title">Tester les communications</strong> au sein du <strong><em class="sigle">LAN</em></strong>. </li>
+    <ul>
+      <li> Par envois de <strong><em class="sigle">PDU</em></strong> simples et complexes, vérifier en mode <strong>temps‑réel</strong> que tous les équipements terminaux du <strong><em class="sigle">LAN</em></strong> peuvent communiquer entre eux, indépendamment de la segmentation imposée par l'adressage. </li>
+
+      <li> En mode <strong>simulation</strong>, vérifier que le chemin parcouru par un <strong><em class="sigle">PDU</em></strong> simple d'un segment à l'autre passe bien par le routeur. </li>
+
+      <li> En interne, quelles liaisons le routeur met‑il en œuvre ?  </li>
+    </ul>
+  </ol><!-- questions (exo 4) -->
+
+
+
+
+
+
+
+  <li id="exo5"> <em class="bold">Extension géographique d'un <em class="sigle">LAN</em> via une dorsale </em> </li>
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/R1tp1exo5.png" width="300px" style="padding-top: 0.5em">
+  <p> On souhaite pouvoir <strong class="title">étendre géographiquement</strong> le <strong><em class="sigle">LAN</em></strong> dans un <strong class="specialLB">nouveau bâtiment</strong>, distant de plusieurs centaines de mètres. Plutôt que de prolonger une liaison <em class="mark">Ethernet</em> à l'aide de répéteurs, on préfère créer un deuxième <strong><em class="sigle">LAN</em></strong>, situé dans ce nouveau bâtiment, et d'interconnecter les deux <strong><em class="sigle">LAN</em></strong> par une <strong class="specialLB">liaison série longue distante</strong>, dite <strong class="title">dorsale</strong> (ou <em class="english">backbone</em>). </p> 
+
+  <p> On part d'une copie du fichier <code class="filename">R1tp1exo4.pkt</code> (répondant aux spécifications de l'exercice <em class="bold">4</em>) renommé <code class="filename">R1tp1exo5.pkt</code>. </p>
+  </div><!-- display -->
+
+  <ol class="questions">
+    <li> <strong class="title">Déploiement matériel d'un  <em class="sigle">LAN</em></strong> dans le nouveau bâtiment.  </li>
+    <ul>
+      <li> En <strong>vue physique</strong>, dans la même ville, créer un <strong>nouveau bâtiment</strong> à quelques rues du bâtiment des exercices précédents.   </li>
+
+      <li> Dans une pièce de ce nouveau bâtiment, installer un <strong>rack</strong> et l'équiper avec un <strong>routeur</strong> et un <strong>switch</strong>, en choisissant les mêmes références qu'aux exercices précédents. </li>
+
+      <li> Dans la même pièce, installer <strong>deux ordinateurs</strong>. </li>
+
+      <li> En <strong>vue logique</strong>, effectuer les raccordements pour mettre en place une topologie en étoile. </li>
+    </ul>
+
+    <li> <strong class="title">Adressage du <em class="sigle">LAN</em></strong> dans le nouveau bâtiment.  </li>
+    <ul>
+      <li> Comme à l'exercice, procéder à l'<strong>adressage des ordinateurs</strong> en leur attribuant une adresse <strong><em class="sigle">IP</em></strong> dans un nouveau segment et dans ce segment, en attribuant l'identifiant (<em class="english">host id</em>) <code class="cmd">1</code> pour la passerelle par défaut. </li>
+
+      <li> Attribuer l'adresse <strong><em class="sigle">IP</em></strong> avec l'identifiant <code>1</code> au port <em class="mark">FastEthernet</em> du <strong>routeur</strong> raccordé au switch. </li>
+    </ul>
+
+    <li> Configuration et <strong class="title">interconnexion des routeurs</strong>. </li>
+    <ul>
+      <li> Dans chacun des deux bâtiments, avant d'éteindre le routeur, <strong>enregistrer sa configuration</strong> en mémoire <strong><em class="sigle">NVRAM</em></strong> (<em class="english">non volatile</em>). </li>
+
+      <li> Équiper chaque routeur d'une <strong>interface de liaison série</strong> <em class="sigle">WIC-1T</em> (supprimer l'éventuel couvercle obturateur de l'emplacement). Remettre les routeurs sous tension.  </li>
+
+      <li> Attribuer au port série de cette interface une adresse <strong><em class="sigle">IP</em></strong> pour constituer la <strong>dorsale</strong>, un <strong>segment distinct</strong> des autres segments des <strong><em class="sigle">LAN</em></strong>. </li>
+
+      <li> En <strong>vue logique</strong>, raccorder les deux routeurs par liaison série. De quel type de liaison s'agit‑il ? </li>
+
+      <li id="routesStatiques"> Dans l'onglet de configuration du routeur, spécifier les <strong>routes statiques</strong> (cf. chap. R1‑II <a class="previous" href="Rc1-2_architecture.html#routage" target="_BLANK"></a>) permettant de raccorder les différents segments du <strong><em class="sigle">LAN</em></strong> ainsi constitué. On pourra s'inspirer de la figure ci‑dessous, sachant que les adresses qui y sont inscrites sont données <strong class="warning">à titre d'exemple</strong> (elles sont différentes de celles du présent exercice). </li>
+
+      <img class="top-left" src="../img/routesStatiquesCPT.png" style="max-width:800px">
+    </ul>
+
+    
+
+    <li> <strong class="title">Tester les communications</strong> entre les deux <strong><em class="sigle">LAN</em></strong>. </li>
+    <ul>
+      <li> Par envois de <strong><em class="sigle">PDU</em></strong> simples, vérifier en mode <strong>temps‑réel</strong> que tous les équipements terminaux peuvent communiquer entre les deux bâtiments. </li>
+
+      <li> Serait‑il possible de raccorder ainsi d'autres bâtiments pour former un <strong><em class="sigle">LAN</em></strong> plus vaste ? </li>
+    </ul> 
+  </ol><!-- questions (exo 5) -->
+  
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

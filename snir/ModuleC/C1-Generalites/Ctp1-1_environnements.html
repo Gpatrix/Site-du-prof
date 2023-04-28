@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="TP"
+	data-modulepartnumber="1"
+	data-pagenumber="1"
+	data-pageState="OK"
+	data-pageheadtitle="Environnements"
+	data-pagefulltitle="Les environnements de développement"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de cette feuille d'exercices sont : </p> 
+
+<ul>
+  <li> de <strong>découvrir</strong> divers <strong class="defin">environnements de programmation</strong> en langages <strong>C/C++</strong> – notamment dans le <strong>framework</strong> <strong class="Arduino">Arduino</strong> ; </li>
+
+  <li> d'<strong>apprendre à installer</strong> sur un poste de travail des <strong class="defin">outils‑logiciels de programmation</strong>, aussi bien sous <strong class="specialLB">Windows</strong> que <strong class="specialLB">Linux</strong>.  </li>
+</ul>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié <strong>tous les chapitres</strong> de la partie <span class="partie">C1</span>. Des renvois aux principaux éléments de cours requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<p> Les exercices consistent à mettre en œuvre différents <strong class="title">environnements de développement</strong> <strong>gratuits</strong> prenant en charge les <strong>langages</strong> <strong class="title">C</strong> et <strong class="title">C++</strong>, qui seront utilisés dans le cadre de ce module de formation, et en particulier pour le codage de programmes embarqués sur <strong>carte à microcontrôleur</strong>. </p>
+	
+<p> Chaque environnement présente des <strong class="pros">avantages</strong> et des <strong class="cons">inconvénients</strong> qui le rendent bien adapté à tel ou tel contexte ou stade d'apprentissage, mais pas à d'autres.  </p>
+
+
+<p> Même si tous les programmes pour <strong>carte</strong> <strong class="Arduino">Arduino</strong> demandés dans les sujets de travaux pratiques de ce module de formation sont réalisables avec l'environnement de simulation en ligne <strong class="Tinkercad">Tinkercad</strong>, il est utile d'avoir expérimenté, au moins une fois, comment fonctionne une <strong class="pros">vraie carte</strong> <strong class="Arduino">Arduino</strong>, notamment dans son interaction avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+<div class="important" style="margin-left: 0em;">
+<p> Même si les environnements de développement peuvent sembler indépendants les uns des autres, il est recommandé de traiter les <strong class="title">exercices</strong> de ce sujet de travaux pratiques <strong>dans l'ordre</strong>. </p>
+
+<p> Effectuer les manipulations sur <strong>ordinateur</strong> en enregistrant au fur et à mesure les fichiers dans un <strong>dossier</strong> nommé <code class="filename">TP_C1-1</code>, lui‑même placé dans un <strong>dossier</strong> nommé <code class="filename">Prog_C</code> et placé dans le dossier personnel. </p>
+
+
+<p> Répondre sur cahier ou fichier aux questions qui attendent une réponse littérale. </p>
+</div><!-- important -->
+
+
+<ol class="exercice">
+
+<li id="exo1" style="margin-top: 2em;"> <em class="bold">Le logiciel</em> <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> <a class="cours" href="Cc1-3_ArduinoTinkercad.html#ArduinoIDE" target="_BLANK"></a></li>
+
+<div class="nobullet"> Cet exercice est à effectuer sous <strong class="specialLB">Windows</strong> et sous <strong class="specialLB">Linux</strong>. </div>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoArduino.png" width="120px" style="margin-top: 1em">
+
+<ol class="questions">
+	<li> Sous <strong class="specialLB">Linux</strong>, vérifier que le logiciel est déjà installé avec la version précisée ci‑dessous, sinon procéder à son <strong>installation</strong> – <strong class="warning">pas</strong> une version 2.0 mais la dernière version de la série <strong>1.8.x</strong>. </li>
+
+	<div class="nobullet"> Sous <strong class="specialLB">Windows</strong>, idem car la version 2.0 ne semble pas opérationnelle. </div> 
+
+	<div class="nobullet"> Dans tous les cas, suivre la <strong class="defin">procédure recommandée</strong> dans le cours au chap. C1‑III <a class="cours" href="Cc1-3_ArduinoTinkercad.html#installationArduino" target="_BLANK"></a>.  </div>
+
+	<div class="nobullet"> Pour finir, si ce n'est déjà fait, ajouter un <strong class="defin">raccourci</strong> dans le tableau de bord (barre de tâche), puis exécuter le logiciel. </div>
+
+
+	<li> <strong>Raccorder la carte</strong> <strong class="Arduino">Arduino</strong> fournie à un port <strong><em class="sigle">USB</em></strong> de l'ordinateur. Dans le menu <code>Outils</code>, sélectionner le type de carte et le port <strong><em class="sigle">USB</em></strong> ouvert par le branchement de la carte.  </li>
+
+	<div class="nobullet"> <strong>Récupérer les informations</strong> de la carte pour vérifier que la liaison série fonctionne bien. </div>
+
+	<li> Dans le menu <code>Fichier/Exemples/01.Basics</code>, ouvrir le fichier <code class="filename">Blink.ino</code> qui fait <strong>clignoter la led intégrée</strong> avec une demi‑période de 1 seconde. Le compiler et le téléverser dans la carte. Vérifier qu'il s'exécute correctement. </li>
+
+	<li> Comment appelle‑t‑on le <strong>code source</strong> d'un programme dans le <strong>framework</strong> <strong class="Arduino">Arduino</strong>, en français et en anglais ? </li>
+</ol><!-- questions -->
+
+</div><!-- display -->
+
+
+
+<li id="exo2" style="margin-top: 2em;"> <em class="bold">L'environnement en ligne <strong class="Arduino">Arduino Web Editor</strong></em> </li>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoArduinoWebEditor.png" width="150px" style="margin-top: 1em">
+
+<ol class="questions">
+	<li> En ligne, <strong>créer un compte</strong> <strong class="Arduino">Arduino</strong> <a class="external" href="https://support.arduino.cc/hc/en-us/articles/360016724040-Create-an-Arduino-account" target="_BLANK">A</a> sur la base d'une <strong>adresse de courriel</strong> et d'un <strong>mot de passe</strong> (à recopier sur un mémo). </li>
+
+	<div class="nobullet"> Installer le <strong>plugin</strong> « <strong class="Arduino">Arduino create agent</strong> » en suivant la procédure indiquée au lien suivant <a class="external" href="https://support.arduino.cc/hc/en-us/articles/360014869820-Install-the-Arduino-Create-Agent" target="_BLANK">A</a>. Il s'agit d'un composant logiciel qui permet au navigateur de téléverser du code exécutable sur une <strong>carte Arduino</strong> raccordée au poste de travail. </div>
+
+ 	<li> Dans l'éditeur de code en ligne, <strong>créer un nouveau programme</strong> ; le renommer <code class="filename">Blink</code> et copier le code source de l'exercice précédent. </li>
+  
+  <div class="nobullet"> <strong>Modifier</strong> ce programme pour régler la durée d'allumage de la led à <strong>100 millisecondes</strong>. Téléverser le programme dans la carte et vérifier son bon fonctionnement. </div>
+ 		 
+
+	<li> <strong>Tester les paramètres réglables</strong> (<em class="english">preferences</em>) de l'éditeur. Quelles sont les différences (avantages/inconvénients) entre l'éditeur en ligne et celui intégré au logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> ? </li>
+
+ 	<li> Quelles sont les <strong>limites</strong> imposées à l'utilisation gratuite de cet environnement ? </li>
+</ol><!-- questions -->
+
+</div><!-- display -->
+
+
+
+
+
+
+<li id="exo3" style="margin-top: 2em;" id="Tinkercad"> <em class="bold">L'environnement en ligne <strong class="Tinkercad">Tinkercad</strong></em> <a class="cours" href="Cc1-3_ArduinoTinkercad.html#Tinkercad" target="_BLANK"></a> </li>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoTinkercad.png" width="120px" style="margin-top: 1em">
+
+<ol class="questions">
+	<li> Sur le site de l'application <a class="external" href="https://www.tinkercad.com/#/" target="_BLANK"></a>, <strong>créer un compte personnel</strong> <strong class="Tinkercad">Tinkercad</strong> sur la base d'une <strong>adresse de courriel</strong> et d'un <strong>mot de passe</strong> (à recopier sur un mémo). </li>
+
+	<div class="nobullet"> Dans le <strong>navigateur</strong>, mémoriser par un <strong class="defin">favori</strong> la page web de <strong>connexion au compte</strong> <strong class="Tinkercad">Tinkercad</strong>. </div>
+
+
+	<li> Une fois connecté, ouvrir la page <code class="cmd">Conceptions</code> puis dans la rubrique <code>Circuits</code>, créer un nouveau <strong class="specialR">circuit</strong> ; le renommer <code class="filename">Blink</code>. </li>
+
+	
+	<li> Sur l'espace de travail, <strong>placer une carte</strong> <strong class="Arduino">Arduino Uno</strong>. Via le menu déroulant sous le bouton <code class="cmd">Code</code>, sélectionner le choix <code>Texte</code> pour visualiser le programme dans sa <strong>version littérale</strong> (et non pas sous forme de blocs semi‑graphique type langage <em class="mark">scratch</em>). Vérifier qu'il s'agit bien d'un programme de type « <strong>blink</strong> ».  </li>
+
+	<li> <strong>Lancer la simulation</strong> et vérifier que le programme fonctionne bien. </li>
+
+	<li> Quelles sont les <strong>différences</strong> (avantages/inconvénients) entre l'éditeur en ligne de <strong class="Tinkercad">Tinkercad</strong> et l'éditeur de code du logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> ? </li>
+</ol><!-- questions -->
+
+</div><!-- display -->
+
+
+<li id="exo4" style="margin-top: 2em;"> <em class="bold">L'éditeur de code <strong class="Sublime">Sublime Text</strong> <a class="cours" href="Cc1-2_langagesCetCpp.html#SublimeText" target="_BLANK"></a> et la chaîne de compilation <strong class="title">GCC</strong> <a class="cours" href="Cc1-2_langagesCetCpp.html#GCC" target="_BLANK"></a></em> </li>
+
+<div class="nobullet"> Cet exercice est à effectuer sous <strong class="specialLB">Windows</strong> et sous <strong class="specialLB">Linux</strong>. </div>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoSublimeText.png" width="120px">
+
+<ol class="questions">
+	<li> Sur le poste de travail, vérifier que le logiciel est déjà installé sinon procéder à son <strong>installation</strong> via la <strong class="defin">procédure recommandée</strong> dans le cours au chap. C1‑II <a class="cours" href="Cc1-2_langagesCetCpp.html#installationSublime" target="_BLANK"></a>. </li>
+
+  <div class="nobullet"> Ajouter un <strong class="defin">raccourci</strong> dans le tableau de bord (barre de tâche), puis exécuter le logiciel. </div>
+
+  <li> Dans un <strong>nouveau fichier</strong>, copier‑coller le code source ci‑dessous :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  printf("Hello, World!\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> <strong>Enregistrer</strong> ce fichier sous le nom <code class="filename">helloWorld.c</code> dans un dossier nommé <code class="filename">Hello_World</code>, lui‑même placé dans le dossier <code class="filename">TP_C1-1</code>. Après cet enregistrement, comment le code source apparaît‑il ? </div>
+
+  <li> Sur le poste de travail, vérifier que la <strong>chaîne compilation</strong> <strong class="title">GCC</strong> ou <strong class="title">MinGW</strong> est installée, sinon procéder d'abord à cette installation en suivant la <strong class="defin">procédure recommandée</strong> au. chap. C1‑II <a class="cours" href="Cc1-2_langagesCetCpp.html#installationGCC" target="_BLANK"></a>. </li>
+
+  <li> Dans un <strong>terminal</strong> de commandes en lignes ouvert depuis le dossier <code class="filename">Hello_World</code>, saisir la <strong>commande</strong> : <br>
+  <span class="inline">
+  	<code class="displayDark">gcc helloWorld.c -o helloWorld && ./helloWorld</code>
+  </span>	</li>
+
+  <ul>
+  	<li> Que s'est‑il passé ? </lI>
+
+  	<li> Saisir la commande <code class="displayDark">ls -l</code>.	Que contient maintenant le répertoire <code class="filename">Hello_World</code> ? Quel est le type du fichier <code class="filename">helloWorld</code> ? Sa taille ?</li>
+
+  	<li> Que se passe‑t‑il si l'on saisit maintenant simplement la commande <code class="displayDark">./helloWorld</code> ? </li>
+
+  	<li> Saisir la commande <code class="displayDark">echo $?</code>. Quelle <strong>valeur de retour</strong> obtient‑on ? </li>
+  </ul>
+
+	<li> Dans le fichier source, à la ligne n° 5, coder <code class="prettyprint lang-c">return 1;</code> au lieu de <code class="prettyprint lang-c">0</code> puis recompiler et exécuter le programme. Quelle <strong>valeur de retour</strong> obtient‑on maintenant ? </li>
+
+  <li> Saisir maintenant la <strong>commande</strong> : </br>
+  <span class="inline">
+  	<code class="displayDark">g++ helloWorld.c -o helloWorld && ./helloWorld</code>
+  </span>	</li>
+
+  <div class="nobullet"> Que se passe‑t‑il ? Le fichier <code class="filename">helloWorld</code> a‑t‑il changé de taille ? La valeur de retour est‑elle différente ?</div>
+
+  <li id="helloWorldCpp"> Dans le même dossier, créer un <strong>nouveau fichier</strong> nommé <code class="filename">helloWorld.cpp</code> et y coder le programme ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+  cout << "Hello World!" << endl;
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <ul>
+  	<li> Quelles sont les principales <strong class="defin">différences</strong> que présence code avec la version précédente en langage <strong>C</strong> ? </li>
+
+  	<li> Essayer de compiler ce programme avec la commande <code class="displayDark">gcc</code> comme auparavant. Que se passe‑t‑il ? </li>
+
+  	<li> Recommencer avec la <strong>commande</strong> : </br>
+    <span class="inline">
+  	  <code class="displayDark">g++ helloWorld.cpp -o helloWorldCpp && ./helloWorldCpp</code>
+    </span><br>
+    Conclure.</li>
+  </ul>  
+</ol><!-- questions -->
+
+</div><!-- display -->
+
+
+<li id="exo5" style="margin-top: 2em;"> <em class="bold">L'environnement de programmation en ligne <strong class="OnlineGDB">OnlineGDB</strong></em> <a class="cours" href="Cc1-2_langagesCetCpp.html#Onlinegdb" target="_BLANK"></a> </li>
+
+<div class="nobullet"><em> Cet exercice propose approximativement les mêmes expérimentations que le précédent, mais dans un environnement en ligne. </em></div>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoOnLineGDB.png" width="120px" style="margin-top: 1em">
+
+<ol class="questions">
+	<li> Dans le <strong>navigateur</strong>, mémoriser par un <strong class="defin">favori</strong> la page d'accueil du site web <strong class="OnlineGDB">OnlineGDB</strong>. </li>
+
+	<div class="nobullet"> Sur cette page d'accueil, <strong>sélectionner le langage</strong> <strong class="title">C</strong> et <strong>exécuter le programme</strong> « Hello World » figurant par défaut dans le cadre d'édition de code. <strong>Vérifier la sortie</strong> obtenue dans le cadre inférieur, qui correspond à une console d'exécution. </div>
+
+	<li> <strong>Modifier</strong> le code source  en tapant  <code class="prettyprint lang-c">return 1;</code> au lieu de <code class="prettyprint lang-c">0</code> pour la valeur de retour de la fonction <code class="prettyprint lang-c">main</code>. La valeur <code class="prettyprint lang-c">1</code> s'affiche‑t‑elle dans le message  en fin d'exécution ? </li>
+
+	<li> <strong>Supprimer</strong> l'instruction <code class="prettyprint lang-c">return 1;</code>. Le code source est‑il encore compilable ? Que donne le résultat d'exécution ? </li>
+
+	<li> Avec le même programme, <strong>sélectionner le langage</strong> <strong class="title">C++</strong>, puis tenter l'exécution. Que se passe‑t‑il ? </li>
+
+	<li> Dans la fenêtre d'édition, copier‑coller la <strong>version en C++</strong> du programme « Hello World » donnée à l'exercice précédent. Vérifier qu'il s'exécute bien. </li>
+
+	<li> Avec ce programme en <strong class="title">C++</strong>, sélectionner à nouveau le langage <strong class="title">C</strong> puis tenter l'exécution. Que se passe‑t‑il ? </li>
+</ol><!-- questions -->
+
+</div><!-- display -->
+
+
+
+<li id="exo6" style="margin-top: 2em;"> <em class="bold">L'environnement intégré de développement <strong class="Codeblocks">Code::Blocks</strong> </em><a class="cours" href="Cc1-2_langagesCetCpp.html#CodeBlocks" target="_BLANK"></a></li>
+
+<div class="nobullet"> Cet exercice est à effectuer sous <strong class="specialLB">Windows</strong> et sous <strong class="specialLB">Linux</strong>. </div>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoCodeBlocks.png" width="120px" style="margin-top: 1em">
+
+<ol class="questions">
+	<li> Sur le poste de travail, désinstaller la version existante puis installer la <strong>dernière version du logiciel</strong> <strong class="Codeblocks">Code::Blocks</strong>. </li>
+  <ul>
+  	<li> Si la chaîne de compilation <strong>GCC</strong> ou <strong>MinGW</strong> est <strong class="pros">déjà installée</strong>, il faut bien entendu choisir un installateur (<em class="english">setup</em>) sans ce composant. </li>
+  
+  	<li> <strong class="cons">Sinon</strong>, il faut choisir un installateur qui inclut ce composant selon la <strong class="defin">procédure recommandée</strong> dans le cours au chap. C1‑II <a class="cours" href="Cc1-2_langagesCetCpp.html#installationCodeBlocks" target="_BLANK"></a>. </li>
+  </ul>
+  
+
+
+
+	 
+
+	<li> <strong>Ouvrir un nouveau projet</strong> (menu <code>File</code>), de catégorie <code>Console application</code> : <br>
+	<ul>
+		<li> en choisissant le langage <strong>C</strong>, </li>
+
+		<li> en lui attribuant le nom <code class="filename">helloWorld</code>, </li>
+
+		<li> et en incluant seulement la configuration <em class="english">Debug</em> (et pas <em class="english">Release</em>).</li>
+	</ul>
+	Bien repérer l'emplacement du dossier du projet dans l'arborescence des fichiers de l'ordinateur. </li>
+
+	<li> Dans le <code>Workspace</code> du panneau latéral, <strong>ouvrir le fichier source</strong> <code class="filename">main.c</code> et vérifier que le code source déjà présent par défaut est bien le programme « Hello World ». </li>
+
+	<li> Dans le cadre inférieur <code>Logs</code> (s'il n'est pas ouvert, il faut passer par le menu  <code>View</code>), sélectionner l'<strong>onglet</strong> <code class="cmd">Build log</code>. De quoi s'agit‑il ? </li>
+
+	<li> <strong>Lancer la compilation</strong> puis l'<strong>exécution</strong>. Que se passe‑t‑il ? </li>
+
+	<li> En navigant dans le dossier du projet, retrouver l'<strong>emplacement du fichier source</strong> <code class="filename">main.c</code> et vérifier son contenu. </li>
+
+	<li> Retrouver également l'emplacement du <strong>fichier exécutable</strong> <code class="filename">helloWorld.exe</code>. Faire un double‑clic dessus. Que se passe‑t‑il ? </li>
+
+	<li> <strong>Dans un terminal d'exécution</strong> du poste de travail, changer de dossier actif (commande <code>cd</code>) et essayer de lancer à nouveau l'exécution du fichier exécutable. Que se passe‑t‑il ? </li>
+
+	<li> * Dans le menu <code class="cmd">Settings/Editor…</code>, <strong>modifier les paramètres de l'éditeur de code</strong> pour obtenir un <strong>mode d'affichage sombre</strong> et une <strong>coloration syntaxique</strong> conforme aux recommandations du cours (chap. C2‑IX <a class="next" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#colorSynth" target="_BLANK"></a>). </li>
+</ol><!-- question -->
+</div><!-- display -->
+
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="Accueil"
+	data-modulepartnumber="1"
+	data-pagenumber="0"
+	data-pageState="OK"
+	data-pageheadtitle="Langage C"
+	data-pagefulltitle=""
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../js/operateData.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="exergue">
+<div class="important">
+<p>  Ce module de formation est consacré à la <strong class="specialLB">programmation impérative structurée</strong> en <strong class="title">langage C</strong> qui constitue l'un des cœurs du métier d'informaticien. Il comprend environ <strong>50 h</strong> de <strong class="defin">cours</strong> et <strong>100 h</strong> de <strong  class="defin">travaux pratiques</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En termes de contenu, ce module est orienté vers l'<strong class="defin">informatique industrielle</strong> et il introduit déjà des éléments de la syntaxe du <strong class="title">langage C++</strong> pour pouvoir coder des programmes de <strong>cartes à microcontrôleurs</strong>, notamment ceux des <strong>cartes</strong> <strong class="Arduino">Arduino</strong>. </p>
+
+<p>	En termes pédagogiques, ce module n'est pas seulement conçu pour des étudiants en <strong class="specialJ">première année</strong> de <em class="bold"><em class="sigle">STS SNIR</em></em> <a class="external" href="http://www.onisep.fr/Ressources/Univers-Formation/Formations/Post-bac/BTS-Systemes-numeriques-option-A-informatique-et-reseaux" target="_BLANK"></a>. Exigeant peu de prérequis, il peut aussi convenir à des faux débutants de divers horizons ayant le niveau d'un baccalauréat scientifique, technologique ou professionnel dans le domaine. </p>
+</div><!-- complement -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Structuration du module </h2>
+
+
+
+<h3 class="nocount"> Fiches de cours </h3>
+
+
+<div class="important">
+<p> Les <strong class="title">fiches de cours</strong> sont hiérarchisées et structurées en grandes <strong>parties</strong> <span class="partie">C1</span> à <span class="partie">C7</span>, conformément au <strong>sommaire ci‑contre</strong>. </p>
+
+<p> Seules les parties <span class="partie">C1</span> à <span class="partie">C5</span> sont abordées durant la <strong class="specialJ">première année</strong> de <em class="bold"><em class="sigle">STS SNIR</em></em>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Chaque fiche existe en <strong class="title">deux versions</strong>. On passe de l'une à l'autre en cliquant sur le <strong>bouton</strong> <span class="version" style="color: #CC050E">INITIÉ</span>/<span class="version" style="color: #95C71D">DÉBUTANT</span> en haut à droite de la page (dans le bandeau fixe supérieur) :  </p>
+<ul>
+	<li> la version pour <span class="version" style="color: #CC050E">INITIÉ</span> se veut <strong class="pros">aussi complète que possible</strong> ; elle doit servir de <strong>référence</strong> tout au long de la progression des étudiants (sur les deux années de formation), afin qu'ils soient capables : </li> 
+	<ul>
+		<li> de <strong>coder</strong> tous les programmes demandés dans le cadre des sujets de TP, des devoirs, des projets… ; </li>
+
+		<li> de <strong>comprendre</strong> n'importe quel programme qu'ils seraient amenés à lire sur une documentation, un forum ou un autre cours. </li>
+	</ul>
+
+	<div class="nobullet"> C'est la version d'affichage <strong>par défaut</strong> à l'ouverture de chaque page. </div>
+
+	<li> la version pour <span class="version" style="color: #95C71D">DÉBUTANT</span> est expurgée de certains détails (comme le paragraphe suivant) pour faciliter la <strong>première étude</strong> du cours ; elle peut aussi servir de base, mieux que la version complète, pour la <strong>recherche</strong> des <strong class="defin">éléments essentiels</strong> à retenir. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Bien évidemment, il n'est pas attendu des étudiants qu'ils maîtrisent ni même utilisent immédiatement tous les éléments présentés, même dans la version pour <span class="version" style="color: #95C71D">DÉBUTANT</span>. Comme dans toute discipline scientifique et technique, les connaissances et leur compréhension ne s'acquièrent qu'avec <strong>beaucoup de pratique</strong>. </p>
+</div><!-- expert -->
+
+
+
+<h3 class="nocount"> Pages d'exercices et de travaux pratiques </h3>
+
+
+
+<h4> Pages d'exercices </h4>
+
+
+<div class="important">
+<p> Dans chaque partie du module, la <strong class="title">page d'exercices</strong> s'efforce de <strong>mettre en application</strong> les <strong class="defin">éléments de cours </strong>présentés au fur et à mesure des chapitres. Toutefois, il n'y a pas de correspondance directe entre les numéros d'exercices et des chapitres. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Sauf indication spécifique, les programmes demandés en exercices peuvent être codés dans <strong class="pros">n'importe quel environnement de développement</strong> prenant en charge les langages <strong>C</strong> et <strong>C++</strong>. Néanmoins, il est recommandé d'utiliser la chaîne de compilation <strong>GCC</strong> ou son équivalent <strong>MinGW</strong>. Des consignes d'installation sont données au chapitre C1‑II. </p>
+
+<p> À défaut de disposer d'un logiciel ou d'une chaîne de compilation installée sur son ordinateur, on peut avoir recours à un  environnement de programmation en ligne, comme par exemple <strong class="OnlineGDB">OnlineGDB</strong> <a class="external" href="https://www.onlinegdb.com/" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+<h4> Sujets de travaux pratiques </h4>
+
+
+<div class="important" style="margin-top: 1em">
+<p> Comme les pages d'exercices, les sujets de <strong class="title">travaux pratiques</strong> sont associés chacun à une <strong>partie</strong> du module, et non pas à un chapitre en particulier. Lorsqu'il y a plusieurs sujets, il est recommandé de les traiter dans l'ordre de leur numéro. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block; vertical-align: text-top;">
+		<img class="top-right" src="img/logoTinkercad.png" width="70px">
+<p>	Jusqu'à la partie <span class="partie">C4</span> incluses, les sujets de <strong class="title">travaux pratiques</strong> demandent de créer des programmes de commande de <strong>cartes à microcontrôleur</strong> <strong class="Arduino">Arduino</strong> dans l’environnement de simulation en ligne <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK"></a>. À une exception près (sujet de TP de la partie <span class="partie">C1</span>), aucun matériel électronique n'est alors requis. </p>
+</div><!-- display -->
+
+<div class="expert">
+<p> Le choix de la simulation présente beaucoup d'<strong class="pros">intérêts pédagogiques</strong>. En particulier : </p>
+
+<ul>
+	<li> la <strong>mise en œuvre</strong> est <strong class="pors">facilitée</strong> (les composants sont disponibles à volonté et leur câblage est beaucoup plus rapide à effectuer en simulation qu'en réalité) ; </li>
+
+	<li> les <strong>risques de casse ou d'accident</strong> sont <strong class="pros">nuls</strong> (sachant que l'environnement simule quand même la destruction des circuits en cas d'erreur de branchement) ; </li>
+
+	<li> l'étudiant peut éventuellement effectuer ou prolonger son <strong class="pros">travail à domicile</strong> puisque l'environnement est gratuit d'utilisation. </li>
+</ul>
+
+<p> Mais il faut garder à l'esprit que, si pertinente soit elle, et malgré un bon niveau de réalisme, une telle simulation ne forme pas complètement à la pratique de l'électronique microprogrammée puisque certaines difficultés sont occultées. Les projets de deuxième année seront là pour combler cette lacune. </p>
+</div><!-- expert -->
+
+<!-- 
+<div style="display: inline-block; vertical-align: text-top;">
+		<img class="top-right" src="img/logoCodeBlocks.png" width="70px">
+<p>	Les <strong class="title">mini‑projets</strong> de <strong class="specialLB">programmes multi‑fichiers</strong> s'exécutant sur un <strong>console</strong> sont introduits juste après l'exposé des structures de données (partie <span class="partie">C5</span>). Ils peuvent être réalisés avec un environnement intégré de développement comme <strong class="Codeblocks">Code::Blocks</strong> <a class="external" href="http://www.codeblocks.org/" target="_BLANK"></a>. </p> 
+</div> 
+-->
+</div><!-- complement -->
+
+
+<h4> Prérequis et difficultés </h4>
+
+
+<div class="prerequis">
+<p> Systématiquement, les <strong class="warning">prérequis</strong> des sujets d'exercices et de TP sont indiqués en <strong>haut de page</strong> dans un encadré rouge comme ici. De plus, à chaque question un peu technique, des liens de <strong class="pros">renvois</strong> vers les chapitres de <strong>cours</strong> correspondants  ou des pages web d'information sont donnés pour faciliter le travail de recherche. </p>
+</div><!-- prerequis -->
+
+<div class="complement" style="border-color: #F0A0A0">
+<p> Les exercices ou questions dont le <strong>numéro</strong> est précédé par une <strong class="title">astérisque</strong> <em class="bold">*</em> présentent une <strong class="warning">difficulté</strong>. Il faut en avoir conscience pour ne pas se décourager et il ne faut pas hésiter à <strong class="pros">demander de l'aide</strong> pour traiter ce point dans un délai raisonnable. </p>
+</div><!-- complement -->
+
+
+<h4> Spécifications et consignes </h4>
+
+
+<div class="important"> 
+<p> Chaque sujet de travaux pratiques fait l'objet de <strong class="title">spécifications générales</strong> et, en plus, chaque exercice ou question fait l'objet de <strong class="title">spécifications particulières</strong> (comportement, sortie attendue, etc.). Elles forment ce qu'on appelle le <strong class="defin">cahier des charges</strong> dans un contexte professionnel, c'est‑à‑dire <strong>ce que demande le client</strong>. </p>
+
+<p> Le <strong class="pros">respect de toutes ces exigences</strong> est donc <strong class="warning">impératif</strong>. En effet, dans un contexte professionnel, en règle générale, aucun client n'accepte de payer pour une solution qu'il n'a pas négociée ! </p>
+</div><!-- important -->
+
+
+<div class="consignes">
+<p> Des <strong class="title">consignes</strong> supplémentaires sont également données (dans un encadré bleu comme ici), notamment pour le <strong>choix des identificateurs</strong>, et plus généralement pour inciter à l'adoption des <strong class="pros">bonnes pratiques</strong> de la programmation.  </p>
+
+<p> Il est <strong class="specialO">vivement recommandé</strong> de les suivre, d'autant plus qu'elles facilitent le travail de l'enseignant pour rechercher d'éventuelles erreurs. En effet, cette tâche est d'autant plus difficile que chaque étudiant nomme différemment les éléments (variables, fonctions, etc.) de son programme.</p>
+</div><!-- consignes -->
+
+
+
+<h3 class="nocount"> Recommandations de travail et d'équipement personnel </h3>
+
+
+
+<div class="important">
+<p> Pour espérer <strong class="specialLB">acquérir de réelles compétences</strong> en <strong>langage C</strong>, en plus des séances en classe, il est indispensable de consacrer un <strong class="title">temps personnel</strong> significatif – au moins <strong class="defin">4 heures hebdomadaires</strong> – au codage. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Même en l'absence de demandes explicites sur le cahier de texte, il est <strong class="warning">impératif</strong> de <strong>terminer chez soi les programmes non achevés</strong> en classe. Il faut savoir faire preuve d'<strong class="pros">obstination</strong> – en particulier, bien lire les éventuels messages d'erreur du compilateurs – et ne surtout pas renoncer à la première difficulté. </p>
+
+<p> En cas d'échec, il faut au moins être capable d'identifier de façon précise les problèmes et solliciter l'enseignant à la séance suivante.   </p>
+</div><!-- complement -->
+
+
+<h4 id="materielRecommande"> Matériel informatique demandé </h4>
+
+
+<div class="important">
+<p> Les exigences de travail personnel supposent bien évidemment que l'étudiant dispose à domicile <strong class="title">ordinateur personnel</strong> sur lequel peut s'exécuter un environnement de programmation (éditeur de code, chaîne de compilation). L'<strong>accès à l'Internet</strong> est également indispensable, ne serait‑ce que pour consulter très régulièrement ce site web. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Il n'est pas nécessaire que cet ordinateur personnel soit portable. En séances de travaux pratiques, le lycée met à la disposition de chaque étudiant un <strong class="title">poste de travail fixe</strong> (machine <em class="mark">x68‑64</em> de type tour) avec double système d'exploitation <strong class="specialLB">Windows</strong>/<strong class="specialLB">Linux</strong> et relié au réseau pédagogique. La procédure d'installation d'un système <em class="mark">Linux</em> à côté d'un système <em class="mark">Windows</em> effectuée en séance de travaux pratiques en début d'année est donnée dans le document suivant <a class="external" href="doc/SNIR1&#32;-&#32;installation&#32;Linux&#32;Mint.pdf" target="_BLANK"></a>. Il est possible de s'en inspirer pour obtenir un environnement de programmation comparable à domicile. </p> 
+
+
+<p> L'attribution du poste de travail est annuelle et l'étudiant dispose des <strong>droits d'administration</strong> nécessaires pour installer les logiciels de développement utilisés. Il peut aussi y stocker ses fichiers de programmes. </p>
+
+<p>  Il est simplement demandé de venir <strong>à chaque séance</strong> avec une <strong class="title">clef <em class="sigle">USB</em> personnelle</strong> pour sauvegarder les fichiers et pouvoir continuer le <strong class="pros">travail à domicile</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="expert" style="display: inline-block">
+	<img class="top-right" src="img/arduinoStarterKit.png" width="200px">
+<p> Pour renforcer ses compétences et <strong class="specialLB">se familiariser avec les aspects matériels</strong>, il est aussi recommandé de faire l'acquisition d'un <strong>kit de démarrage</strong> <strong class="Arduino">Arduino</strong> comme celui en photo ci‑contre, dont le prix plancher est d'environ 30 €. Avec ce matériel, il est alors possible d'<strong class="pros">expérimenter chez soi</strong> presque tous les sujets de travaux pratiques du module. Cela permet non seulement de consolider l'acquisition des compétences pratiques, mais aussi de combler les lacunes de la simulation à refléter la réalité dans toute sa complexité. </p>
+
+<p> Pour éviter les pertes et les détériorations rapides des composants, il est vivement conseillé de disposer de <strong>boîtes de rangement</strong>, qu'on trouve aisément dans le commerce. </p>
+</div><!-- expert -->
+
+
+<h4> Supports pour la prise de notes </h4>
+
+
+<div class="important">
+<p> Ce site web tient lieu de <strong class="title">documentation pédagogique</strong> et <strong>aucun tirage imprimé</strong> n'est fourni aux étudiants. Pour la <strong>prise de notes</strong> durant les cours ainsi que les <strong>recherches de solutions</strong> durant les travaux pratiques, il est <strong class="pros">vivement recommandé</strong> de se munir d'un <strong class="defin">simple cahier</strong>.  </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<ul>
+	<li> En ce qui concerne les <strong class="title">prises de notes</strong> en cours, il n'est pas pertinent d'écrire toutes les explications donnée par l'enseignant, mais simplement celles qui apportent un <strong class="defin">éclairage complémentaire</strong> sur telle ou telle notion. Pour retrouver facilement le contexte, il suffit de se référer à la <strong>numérotation</strong> adoptée sur la page web (par exemple, C2‑V 5.3 pour la syntaxe avancée de la boucle <code class="prettyprint lang-c">for</code> <a class="next" href="C2-ElementsLangage/Cc2-5_structuresControle.html#syntaxeAvanceeFor" target="_BLANK"></a>). </li>
+
+	<li> En ce qui concerne les <strong class="title">recherches de solutions</strong> en travaux pratiques, le but est de pouvoir dessiner très facilement des <strong class="defin">schémas explicatifs</strong>, tant sur les aspects matériels que logiciels (structure de la mémoires, éléments de la syntaxe, etc. Le fait de travailler sur un cahier plutôt que sur des feuilles volantes leur donne une meilleure pérennité. </li>
+
+	<div class="nobullet"> C'est la solution adoptée par de nombreux codeurs professionnels. </div>
+</ul>
+</div><!-- complement -->
+
+
+
+
+
+
+
+<h3 class="nocount" id="evaluations"> Évaluations </h3>
+
+
+<div class="important">
+<p> De façon dite « sommative », la progression des étudiants est évaluée par des <strong class="title"><em class="sigle">QCM</em></strong> implémentés avec le logiciel <strong class="specialG">ProNote</strong>. Il est donc impératif de disposer de ses <strong>identifiants</strong> via l'<strong><em class="sigle">ENT</em></strong> ou un client <em class="mark">ProNote</em> pour pouvoir y participer. </p>
+
+<p> Le <strong class="title">but</strong> de ces évaluations est avant tout de permettre aux étudiants de <strong class="defin">mesurer la qualité des connaissances</strong> qu'ils ont acquises. Il serait contre‑productif de ne pas en respecter les règles. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title"><em class="sigle">QCM</em></strong> sont <strong class="defin">planifiés</strong> <a class="cours" href="http://www.lycee-ferry-versailles.fr/snir/ModuleA/doc/SNIR1_prog&#32;-&#32;C&#32;20-21.pdf" target="_BLANK"></a> durant les séances de travaux pratiques. Ils se déroulent : </p>
+<ul>
+	<li> en <strong>temps limité</strong> (en général, une heure), mais <strong class="pros">largement suffisant</strong> pour répondre à toutes les questions sans se précipiter ; </li>
+
+	<li> avec des <strong>questions tirées au hasard</strong> et dans un <strong>ordre différent</strong> pour chaque étudiant, <strong class="warning">sans possibilité de revenir en arrière</strong> afin d'empêcher quiconque de copier sur son voisin.  </li>
+</ul>
+
+<p> Pour chacune des parties <span class="partie">C2</span> à <span class="partie">C4</span> du module, <strong class="title">trois <em class="sigle">QCM</em></strong> sont prévus. </p>
+<ul>
+	<li> <strong class="specialLB">Deux <em class="sigle">QCM</em> de connaissances</strong> portent exclusivement sur les <span style="background: #E0E0FF; padding-left: 0.2em; padding-right: 0.2em; ">encadrés sur fond bleu pâle (cf. infra <a class="infra" href="indexC.html#encadres"></a>)</span> d'une <strong>moitié des chapitres</strong> de la partie, et en version <span class="version" style="color: #95C71D">DÉBUTANT</span> <strong>seulement</strong>. </li>
+
+	<div class="nobullet">	Durant ces évaluations, <strong class="warning">aucun document ni page web</strong> ne doit être consulté. </div>
+
+	<li> <strong class="specialLB">Un <em class="sigle">QCM</em> de réflexion</strong> pose des questions techniques de programmation sur <strong>l'ensemble des chapitres</strong> de la partie. Ces questions nécessitent souvent de faire des calculs sur feuille de brouillon pour trouver la bonne réponse. </li> 
+
+  <div class="nobullet"> Durant cette évaluation, les <strong class="defin">pages web du module</strong> sont consultables. En revanche, il est <strong class="warning">interdit d'employer un environnement de programmation</strong> pour vérifier le bon fonctionnement des programmes dont l'analyse est demandée. </div>
+</ul>
+</div><!-- complement -->
+
+<p> Par ailleurs : </p>
+<ul>
+	<li> la partie <span class="partie">C1</span>, parce qu'elle est plus courte et beaucoup moins technique que les autres, fait l'objet d'un seul <strong><em class="sigle">QCM</em> de connaissances</strong> ; </li>
+
+	<li> la partie <span class="partie">C5</span> ne fait <strong class="cons">pas</strong> l'objet d'évaluation car elle serait concomitante avec l'épreuve E5‑1 du <em class="sigle">BTS</em> <a class="cours" href="../ModuleA/indexA.html#epreuveE5" target="_BLANK">A</a>. </li>
+</ul>
+
+
+
+
+<h2 class="nocount" id="liens"> Liens hypertextes des pages web </h2>
+
+
+<div class="important">
+<p> En alternative du sommaire, une <strong class="title">liste de liens</strong> est affichable dans le <strong class="defin">panneau latéral</strong> en cliquant sur le <strong>bouton</strong> <img class="icon" src="../img/iconLink.png"> en haut à gauche. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ils donnent un accès rapide à des <strong>tutoriels</strong>, des sites de <strong>références techniques</strong> – notamment les <strong>normes</strong> – ainsi que des <strong>environnements de programmation</strong>, certains permettant de tester en ligne des petits programmes. </p>
+</div><!-- complement -->
+
+
+<h4> Liens « au fil de l'eau » </h4>
+
+
+<div class="important">
+<p> Dans les fiches de cours et les sujets de TP, d'<strong class="title">autres liens</strong> sont donnés au fur et à mesure de la <strong class="defin">progression</strong> pour <strong>compléter</strong> ou <strong>rappeler</strong> certains aspects : </p>
+</div><!-- important -->
+
+<div class="complement">
+<ul>
+	<li> des renvois à un passage du <strong>chapitre courant</strong> : </li>
+	<ul style="list-style: none;">
+		<li> <span style="color: #0066FF;">[↑]</span> vers un <em>passage antérieur</em> (supra), </li>
+		<li> <span style="color: #0066FF;">[↓]</span>  vers un <em>passage ultérieur</em> (infra) ; </li>
+	</ul>
+	<li> des renvois à un <strong>autre chapitre</strong> : </li>
+	<ul style="list-style: none;">
+		<li> <span style="color: #0066FF;">[↰]</span> vers un <em>chapitre précédent</em>, </li>
+		<li> <span style="color: #0066FF;">[↳]</span> vers un <em>chapitre suivant</em> ; </li>
+	</ul>
+	<li> des renvois entre <strong>fiches de cours</strong> et <strong>sujets de TP</strong> : </li>
+	<ul style="list-style: none;">
+		<li> <span style="color: #0066FF;">[→]</span> vers un <em>sujet de travaux pratiques</em>, </li>
+		<li> <span style="color: #0066FF;">[←]</span> vers une <em>fiche de cours</em> ; </li>
+	</ul>
+	<li> des <strong>liens externes</strong> au module <span style="color: #0066FF;">[↗]</span>, en particulier : </li>
+	<ul style="list-style: none;">
+		<li> <span style="color: #0066FF;">[W↗]</span> vers l'encyclopédie libre <em class="mark">Wikipedia</em> ou une page du <em class="mark">Wiktionnaire</em> ; </li>
+
+		<li> <span style="color: #0066FF;">[Y↗]</span> vers la plateforme de vidéo <em class="mark">YouTube</em> ; </li>
+
+		<li> <span style="color: #0066FF;">[A↗]</span> vers le site d'<em class="mark">Arduino</em> ; </li>
+
+		<li> <span style="color: #0066FF;">[C↗]</span> / <span style="color: #0066FF;">[C++↗]</span> vers un site de référence des langages étudiés ; </li>
+
+		<li> <span style="color: #0066FF;">[G↗]</span> vers la plateforme de partage <em class="mark">GitHub</em> ; <br>
+		à propos de cette plateforme, cf. <a class="external" href="https://fr.wikipedia.org/wiki/GitHub">W</a> ; </li>
+
+		<li> <span style="color: #0066FF;">[F↗]</span> vers des forums spécialisés comme <em class="mark">Stack Overflow</em> ; <br>
+		à propos de ce forum, cf. <a class="external" href="https://fr.wikipedia.org/wiki/Stack_Overflow">W</a>. </li>
+	</ul>
+</ul>
+
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount" id="miseEnForme"> Mise en forme et mode d'emploi des pages web </h2>
+
+
+<h4 id="encadres"> Encadrés et mise en page </h4>
+
+
+<div class="important">
+<p> Dans toutes les pages de ce module de formation, les <strong class="title">passages sur fond bleu pâle</strong> comme celui‑ci doivent être considérés comme <strong>importants</strong>, donc <strong class="warning">indispensables à retenir</strong> <strong>très rapidement</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les passages délimités par une <strong class="title">bordure gauche bleue pâle</strong> comme celui‑ci constituent des <strong class="defin">compléments nécessaires</strong>, parfois très utiles, mais dont il n'est pas possible d'exiger l'assimilation immédiate. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p> Les <strong class="title">exemples</strong> sont délimités dans un <strong class="defin">cadre vert pâle</strong> comme celui‑ci pour être  : </p>
+<ul>
+	<li> repérés très vite, lorsque c'est précisément un exemple que l'on recherche ; </li>
+
+	<li> ou au contraire défilés très vite, lorsqu'on recherche un élément fondamental du cours. </li>
+</ul>
+</div>
+
+<div class="remarques">
+<p> Le même principe vaut pour les <strong class="title">remarques</strong>, qui sont délimitées dans un <strong class="specialM">cadre marron pâle</strong> comme celui‑ci. </p>
+
+<p> Les remarques sont réservées à la version <span class="version" style="color: #CC050E">INITIÉ</span> et elles peuvent être <strong class="defin">survolées lors d'une première lecture</strong>. Néanmoins, elles évoquent souvent des aspects indispensable au bon <strong>approfondissement</strong> du cours. Il faut donc savoir y revenir ultérieurement. </p>
+</div>
+
+
+<h4> Code des couleurs des éléments de texte </h4>
+
+
+<div class="important">
+<p> Dans toutes les pages de ce module de formation, des <strong class="title">couleurs</strong> mettent en relief des <strong>éléments de texte</strong> avec une <strong class="defin">convention</strong> assez précise. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> <em class="remark">En règle générale</em>, dans un <strong>passage délimité</strong> comme supra : </p>
+<ul>
+	<li> la <strong>couleur</strong> <strong class="title">bleue</strong> indique une portion de texte qui <strong class="title">désigne</strong> l'<strong>objet</strong> du paragraphe ; </li>
+
+	<li> la <strong>couleur</strong> <strong class="specialLB">bleue claire</strong> indique une portion de texte  qui <strong class="specialLB">désigne</strong> un <strong>objet secondaire</strong> du paragraphe ; </li>
+
+	<li> la <strong>couleur</strong> <strong class="defin">verte</strong> indique une portion de texte qui <strong class="defin">caractérise</strong> un <strong>objet</strong> désigné en couleur ;</li>
+
+	<li> la <strong>couleur</strong> <strong class="warning">rouge</strong> indique une portion de texte qui appelle à une <strong class="warning">vigilance particulière</strong> ; </li>
+
+	<li> la <strong>couleur</strong> <strong class="pros">rose</strong> indique une portion de texte qui exprime <strong class="pros">avantage</strong>, un aspect <strong>positif</strong> ; </li>
+
+	<li> la <strong>couleur</strong> <strong class="cons">grise</strong> indique une portion de texte qui exprime un <strong class="cons">inconvénient</strong>, un aspect <strong>négatif</strong> ; </li>
+
+	<li> les autres <strong>couleurs</strong> (<strong class="specialO">orange</strong>, <strong class="specialV">violet</strong>, <strong class="specialMg">magenta</strong>, <strong class="specialT">turquoise</strong>, etc.) identifient respectivement divers <strong>aspects spéciaux</strong> du contexte ; </li>
+
+	<li> tous les autres termes en <strong>noir italique gras</strong> sont d'une importance remarquable mais inférieure par rapport aux termes en couleur. </li>
+</ul>
+<p> Toutefois, insistons sur le fait qu'il ne s'agit que de règles générales, ne présentant <strong class="pros">aucune intangibilité</strong>. Le bon sens pédagogique peut conduire à des adaptations différentes au gré des thèmes abordés. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Considérons le début de la première section du chapitre C2‑I <a class="next" href="C2-ElementsLangage/Cc2-1_squeletteCode.html#squeletteC" target="_BLANK"></a>. </p>
+
+<div style="font-size: 85%">
+<div class="important">
+<p> L'<strong>exécution</strong> d'un programme en langage <strong class="title">C</strong> commence nécessairement par l'appel du <strong>code executable</strong> d'une <strong class="defin">fonction principale</strong> <code class="prettyprint lang-c">main</code>, laquelle constitue son <strong class="specialO">point d'entrée</strong>. C'est la seule fonction qui n'a <strong class="pros">pas besoin d'être appelée</strong> pour être exécutée. </p>
+
+<p> Le <strong>code source</strong> de cette fonction doit être inscrit dans un <strong class="title">fichier principal</strong> qu'il est d'usage de nommer <code class="filename">main.c</code> et d'enregistrer dans un <strong class="specialV">répertoire de projet</strong>.  </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Le fait de nommer <code class="filename">main.c</code> le fichier source contenant le code de la fonction <code class="prettyprint lang-c">main</code> permet à un <em class="sigle">IDE</em> comme <strong class="Codeblocks">Code::Blocks</strong> d'identifier par défaut le <strong class="specialO">point d'entrée</strong> du programme. En effet, le <strong class="specialV">répertoire de projet</strong> peut éventuellement contenir d'<strong class="title">autres fichiers sources</strong> d'extension <code class="filename">.c</code> et <code class="filename">.h</code> dans le cadre d'une <strong>programmation multi-fichiers</strong>. </p>
+
+<p> Si l'on nomme <strong class="cons">autrement</strong> ce fichier, alors il faut spécifier son nom dans le <strong>script de commande</strong> d'exécution de la <strong>chaîne de compilation</strong> qui permet de produire le code exécutable du programme. </p>
+</div><!-- complementExpert -->
+</div><!-- font-size -->
+
+<p>▶&ensp;L'encadré important est consacré au <strong class="title">fichier principal</strong> qui se caractérise principalement par une <strong class="defin">fonction principale</strong>, elle-même constituée d'<strong>instructions</strong> (deuxième niveau de décomposition). </p>
+
+<p>▶&ensp;Les notions de <strong class="specialO">point d'entrée</strong> et de <strong class="specialV">répertoire de projet</strong> sont des aspects spéciaux récurrents qui prendront respectivement les mêmes couleurs dans les encadrés suivants, afin d'être repérés au premier coup d'œil. </p>
+</div><!-- exemple -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

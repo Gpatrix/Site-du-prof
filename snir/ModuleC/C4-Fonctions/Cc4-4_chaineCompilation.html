@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="4"
+  data-pagenumber="IV"
+  data-pageState="chantier"
+  data-pageheadtitle="Compilation"
+  data-pagefulltitle="La chaîne de compilation"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+
+
+<div class="exergue">
+<p class="square"> Avec des langages compilés comme <strong>C</strong> et <strong>C++</strong>, la <strong class="title">compilation</strong> est certes la plus emblématique des phases de traitement d'un <strong class="specialG">code source</strong> pour le <strong class="specialR">traduire</strong> en <strong class="specialBG">code exécutable</strong> sur machine, mais ce n'est <strong>pas la seule</strong>. Notamment : </p>
+
+<ul>
+  <li> elle est précédée par la phase de <strong class="defin">prétraitements</strong>, laquelle est mise en œuvre par le <strong>préprocesseur</strong>, étudié au chap. C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html" target="_BLANK"></a> ; </li>
+
+  <li> elle est suivie par les phases d'<strong class="defin">assemblage</strong> puis  d'<strong class="defin">édition de lien</strong>, laquelle permet de réunir différents <strong class="specialT">fichiers objets</strong> issus de compilations séparées, le plus souvent pour former un <strong class="specialBG">fichier exécutable</strong>. </li>
+</ul>
+
+<p> Par ailleurs, la phase de <strong class="title">compilation</strong> elle‑même n'est pas un processus monolithique : elle se décompose en <strong>plusieurs étapes</strong> – <strong class="defin">analyse lexicale</strong>, <strong class="defin">analyse syntaxique</strong>, <strong class="defin">analyse sémantique</strong>… – chacune faisant appel à un algorithme et un composant logiciel spécifique. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/toolchain1.png" width="400px" style="padding-top: 1em">
+<p class="square"> On appelle <strong class="title">chaîne de compilation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chaîne_de_compilation" target="_BLANK">W</a> à la fois la succession de tous ces traitements et l'ensemble des <strong class="defin">outils logiciels</strong> qui les assurent – c'est pourquoi en anglais on emploie l'expression plus générale de <strong>tool chain</strong> <a class="external" href="https://en.wikipedia.org/wiki/Toolchain" target="_BLANK">W</a>. Que l'on procède en ligne de commande ou dans un environnement intégré de développement, il est toujours possible de choisir de <strong class="pros">nombreuses options</strong> pour chacune des grandes étapes de la production d'un code exécutable. Ces options peuvent sembler sans importance pour des petits programmes, mais elles deviennent <strong class="warning">de plus en plus cruciales</strong> :  </p>
+</div>
+<ul>
+	<li> à mesure que la <strong>taille des programmes</strong> augmente, et qu'il devient contre‑productif de recompiler l'ensemble du code source à la moindre modification ; </li>
+
+	<li> lorsque les programmes doivent s'exécuter sur <strong>différentes plateformes</strong> et qu'il faut tenir compte de la spécificité de chacune. </li>
+</ul> 
+
+<p>	Pour un technicien en informatique qui se forme à la programmation, avoir un <strong class="title">minimum de connaissances</strong> sur la chaîne de compilation est <strong class="warning">indispensable</strong>. C'est en particulier le cas pour bien comprendre les principes de la <strong class="specialLB">programmation modulaire</strong> et la production de son code exécutable par une <strong class="defin">compilation séparée</strong> d'objets répartis sur plusieurs fichiers, formant des <strong>bibliothèques</strong> de <strong>composants logiciels</strong> <strong class="pros">réutilisables</strong> (aspects qui seront traités dans les chapitres suivants). </p>
+
+<p class="square"> Ce sujet complexe est donc abordé dans le présent chapitre seulement dans une perspective de <strong class="defin">découverte</strong>, et non pas de détailler les différentes méthodes d'analyse lexicale ou syntaxique. Dans cet <strong class="title">objectif</strong>, on présente : </p>
+
+<ul>
+  <li> <strong class="specialLB">GCC</strong>, en ce qu'elle constituent des <strong>exemples représentatifs</strong> de chaîne de compilation, et ce d'autant plus qu'elles sont utilisées dans le cadre de ce module de formation ;  </li>
+
+	<li> la <strong class="specialLB">notion générale de compilateur</strong>, la <strong>variété</strong> de ceux qui existent pour les langages <strong>C</strong> et <strong>C++</strong> et les <strong>différents types de compilation</strong> qui peuvent être mis en œuvre ; </li>
+
+	<li> les différentes <strong class="specialLB">étapes de la compilation</strong>, que l'on décompose généralement en trois phases – <strong>front‑end</strong>, <strong>middle‑end</strong> et <strong>back‑end</strong> ;  </li>
+
+  <li> l'<strong class="specialLB">édition de lien</strong> et les notions de <strong>bibliothèques</strong> <strong class="defin">statiques</strong> et <strong class="defin">dynamiques</strong>. </li>
+
+</ul>
+
+<p> En <strong class="title">complément</strong> de ce cours, pour se faire une idée du fonctionnement de la chaîne de compilation et de ce que constitue le code exécutable correspondant à un code source, on pourra visionner les vidéos (en anglais) pointées par les liens ci‑dessous : </p>
+
+<ul>
+  <li> Philip O. Duncan  –  Frame of Essence  –  <em class="english">How do computers read code?</em> <a class="external" href="https://www.youtube.com/watch?v=QXjU9qTsYCc" target="_BLANK">Y</a> ; </li>
+
+  <li> Ben Eater  –  <em class="english">Comparing C to machine language</em> <a class="external" href="https://www.youtube.com/watch?v=yOyaJXpAYZQ" target="_BLANK">Y</a> ; </li>
+
+  <li> EmbeddedArmDev<a class="external" href="https://www.youtube.com/watch?v=YoyKDZlXCUM" target="_BLANK">Y</a> </li>
+</ul>
+
+<p> Et pour un <strong class="title">panorama plus technique</strong>, on pourra consulter les liens suivants <a class="external" href="https://c.developpez.com/cours/mode-emploi-gcc/" target="_BLANK"></a> <a class="external" href="https://www.tenouk.com/ModuleW.html" target="_BLANK"></a>. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les chaînes de compilation <em class="mark">GCC</em> </h2>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/GCClogo.png" width="100px">
+<p> Les chaînes de compilation <strong class="title">GCC</strong> – <strong>GNU compiler collection</strong> – ont été brièvement présentées au chapitre C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#GCC" target="_BLANK"></a>. Dans le cadre des exercices de ce module de formation au langage <strong>C</strong>, on en a proposé une <strong class="defin">utilisation rudimentaire</strong> typiquement via une <strong>commande système</strong> de la forme ci‑dessous :   <br>
+<span class="inline">
+  <code class="displayDark" style="padding-top: 0.1em; padding-bottom: 0.2em;"><span class="displayDarkGreen">gcc</span> <span class="nocode"><strong class="specialMG">fichier source</strong></span> <span class="displayDarkRed">-o</span> <strong class="specialBG">fichier exécutable</strong></span></code>
+</span> <br>
+et sans entrer dans les détails de son déroulement. </p>
+</div><!-- display --> 
+
+<p> Mais maintenant que les principaux éléments du langage <strong>C</strong> ont été abordés et que les programmes à coder se complexifient, il est pertinent de faire une <strong class="title">présentation détaillée</strong> de <strong>GCC</strong> en mettant en évidence ses <strong class="specialLB">différentes étapes</strong> dans le cadre d'une utilisation assez simple sur un poste de travail. </p>
+
+<p> Au delà d'une <strong class="pros">utilisation plus experte</strong> de la <strong>commande</strong> <code class="code">gcc</code>, cette présentation va permettre d'introduire et illustrer de façon pratique les différents <strong>concepts de la compilation</strong> au sens large. </p>
+
+
+
+<h3> Synoptique de la commande <code>gcc</code> </h3>
+
+
+
+<div class="expert">
+<p> Dans un souci de simplicité pédagogique, on ne présente ici la <strong>commande</strong> <code>gcc</code> que dans le cadre d'une <strong class="defin">compilation native</strong> d'un code source en langage <strong>C</strong> sur un poste de travail à système <strong class="specialLB">Linux</strong>. Au delà de quelques différences mineures sur les extensions des fichiers, on obtient un <strong class="pros">déroulement similaire</strong>, aussi bien : </p>
+<ul>
+  <li> pour un programme source codé en <strong>C++</strong> ; </li>
+
+  <li> ou si l'on travaille sur une machine à système <strong>Windows</strong>. </li>
+</ul>
+</div><!-- expert -->
+
+
+<h4> Une succession de liens symboliques </h4>
+
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/logo_C3.png" width="100px">
+<p> Sur un poste de travail à système <strong>Linux</strong>, la commande <strong class="title">commande</strong> <code class="cmd">gcc</code> (de compilation de code source composé en langage <strong>C</strong>) est structurée en une <strong class="defin">succession de liens symboliques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Lien_symbolique" target="_BLANK">W</a> qui, selon les <strong class="specialLB">paramétrages</strong> et les <strong class="specialLB">variantes d'invocation </strong> saisies par le codeur, aboutit à des <strong>fichiers exécutables spécifiques</strong> pour : </p>
+<ul>
+  <li> une <strong>version</strong> d'une chaîne de compilation <strong>GCC</strong> ; </li>
+
+  <li> une architecture de <strong>machine cible</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> <strong class="specialLB">Par défaut</strong> – c'est‑à‑dire sans paramétrage ni variante particulière – la <strong class="title">commande</strong> <code class="cmd">gcc</code> appelle : </p>
+<ul>
+  <li> la <strong class="pros">version la plus récente</strong> parmi celles installée sur le poste de travail ;  </li>
+
+  <li> la <strong class="specialN">chaîne de compilation native</strong>, c'est‑à‑dire pour une machine cible ayant le <strong class="defin">même système d'exploitation</strong> et <strong class="defin">même architecture</strong> que celle du <strong>poste de travail</strong> ; ainsi, le code machine éventuellement produit peut y être exécuté. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Sur une machine <em class="mark">Linux</em>, la commande <code class="displayDark"><span class="displayDarkGreen">which</span> gcc</code> retourne le chemin : <br>
+<span class="inline">
+  <code class="displayDark">/usr/bin/gcc</code>
+</span> <br>
+qui un <strong class="defin">lien symbolique</strong>. Avec un système récent (par exemple, <em class="mark">Linux Mint 21</em>), ce lien pointe vers le <strong>fichier</strong> <code class="filename">gcc-11</code>, placé dans le même répertoire que <code>gcc</code> (il suffit de saisir la commande <code class="displayDark"><span class="displayDarkGreen">ls</span> <span class="displayDarkRed">-l</span>/usr/bin/gcc</code> pour le constater). </p>
+
+<p> Et ce fichier est lui‑même un <strong class="defin">lien symbolique</strong> qui pointe typiquement sur le <strong>fichier</strong> <code class="filename">x86_64-linux-gnu-gcc-11</code>, toujours dans le même répertoire. </p>
+
+<p> Cette fois, il s'agit bien d'un <strong class="defin">exécutable</strong> (environ 860 ko) : c'est le programme qui pilote la <strong>version 11</strong> de <strong>GCC</strong> pour une machine cible à système <strong>GNU/Linux</strong> sur une architecture <strong>x86</strong> <a class="external" href="https://fr.wikipedia.org/wiki/X86" target="_BLANK">W</a> de largeur <strong>64 bits</strong>. </p>
+</div><!-- exemple -->
+
+<div class="expert">
+<p> Si l'on souhaite employer une <strong class="title">autre version</strong> et/ou produire du code exécutable pour une <strong class="title">autre architecture</strong> de machine cible, il faut saisir une <strong>commande</strong> de la forme : <br>
+<span class="inline">
+  <code class="cmd"><span class="nocode"><strong class="specialM">machine</strong></span>-gcc-<span class="nocode"><strong>nº de version</strong></span> </code>
+</span> <br>
+où <strong class="specialM">machine</strong> est une chaîne de caractères identifiant une architecture pour laquelle une chaîne de compilation est bien <strong class="defin">installée sur le poste de travail</strong>. </p>
+
+<!-- à développer avec un exemple -->
+
+</div><!-- expert -->
+
+
+<h4> Un programme pilote </h4>
+
+
+<div class="important">
+<p> Le <strong class="title">fichier exécutable</strong> d'une chaîne de compilation <strong>GCC</strong> ciblé par la <strong>commande</strong> <code class="cmd">gcc</code> est un <strong class="defin">programme pilote</strong> – en anglais, <strong>driver program</strong> <a class="external" href="https://en.wikipedia.org/wiki/Driver_(software)" target="_BLANK">W</a>. </p>
+
+<p> À partir d'un ensemble de <strong class="specialLB">spécifications par défaut</strong> codées dans un fichier et des <strong class="specialLB">options d'invocations </strong> saisies par le codeur, il lance successivement l'exécution des <strong class="defin">composants logiciels</strong> de la chaîne de compilation préalablement sélectionnée. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme le détaille la figure ci‑dessous qui décrit un cas générique de compilation native, les différents <strong class="title">composants logiciels</strong> d'une chaîne de compilation <strong>GCC</strong> sont les suivants.  </p>
+
+  <img class="top-left" src="../img/toolchain2.png">
+
+<ol class="numbered">
+  <li> <code class="cmd">cc1</code> est un <strong class="defin">gros exécutable</strong> (environ 26 Mo) qui réunit le <strong class="specialR">préprocesseur</strong> et le <strong class="specialR">compilateur</strong> du langage <strong>C</strong>. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Sur un poste de travail à système <strong class="Mint">Linux Mint 21</strong>, on le trouve dans le dossier : <br>
+  <span class="inline">
+    <code class="filename">/usr/lib/gcc/x86_64-linux-gnu/11/</code> (version 11 de <code>gcc</code>)
+  </span> </div>
+  </div><!-- expert -->
+  
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/gcc-fileI.png" width="60px">
+  <div class="nobullet"> Entre le préprocesseur et le compilateur, aucun fichier intermédiaire n'est généré par défaut : le <strong class="specialSG">flux de tokens pré‑traités</strong> par le préprocesseur (cf. chap. C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html#tokenisation" target="_BLANK"></a>) alimente directement le compilateur via une mémoire tampon. Cependant, diverses options permettent de générer un ou plusieurs <strong>fichiers intermédiaires</strong> de <strong class="specialSG">code source pré‑traité</strong> portant par défaut l'<strong>extension</strong> <code class="filename">.i</code>. </div> 
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/gcc-fileS.png" width="60px">
+  <div class="nobullet"> À partir du code source, <code class="cmd">cc1</code> génère un ou plusieurs <strong>fichiers intermédiaires</strong>, dits de <strong class="specialAM">code d'assemblage</strong> ou <strong class="specialAM">pseudo‑code objet</strong> et portant par défaut l'<strong>extension</strong> <code class="filename">.s</code>. Ces fichiers sont constitués d'instructions de bas niveau exprimées dans un <strong>langage d'assemblage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Assembleur" target="_BLANK">W</a>. Ils sont <strong class="pros">compréhensibles</strong> par un codeurs expérimentés, quoi que <strong class="cons">fastidieux</strong> à lire,  Ils contiennent déjà des <strong>instructions spécifiques</strong> à l'architecture de la machine cible. </div> 
+  </div><!-- display -->
+
+  <li> <code class="cmd">as</code> est en fait <strong class="defin">lien symbolique</strong> vers le composant logiciel <strong class="specialR">assembleur</strong> requis pour l'architecture sélectionnée. </li>
+  
+  <div class="expert">
+  <div class="nobullet">  Dans le cadre d'une compilation native sur un poste <em class="mark">Linux x86 64 bits</em>, il appelle l'exécutable <code class="cmd">x86_64-linux-gnu-as</code>, placé dans le dossier <code class="filename">/usr/bin</code>. C'est un petit fichier (moins de 500 ko).</div>
+  </div><!-- expert -->
+  
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/gcc-fileO.png" width="60px">
+  <div class="nobullet"> À partir du code d'assemblage produit par le compilateur, <code class="cmd">as</code> génère un ou plusieurs <strong>fichiers intermédiaires</strong>, dits de <strong class="specialTQ">code objet</strong> et portant par défaut l'<strong>extension</strong> <code class="filename">.o</code>. Ces fichiers sont constitués d'<strong>instructions machines</strong> qui ne peuvent être lues que par un processeur compatible avec l'architecture de la machine cible. Ils sont <strong class="cons">très difficiles à examiner</strong>, même pour un codeur inexpérimenté. </div>
+  </div><!-- display -->
+
+  <li> <code class="cmd">collect2</code> est un autre <strong class="defin">programme pilote</strong> qui, via le lien symbolique nommé <code class="cmd">ld</code>, lance l'<strong class="specialR">éditeur de liens</strong> requis pour l'architecture sélectionnée.  </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Sur un poste de travail à système <strong>Linux</strong>, on trouve usuellement <code class="cmd">collect2</code> (petit fichier de 300 ko) dans le dossier : <br>
+  <span class="inline">
+    <code class="filename">/usr/lib/gcc/x86_64-linux-gnu/11/</code> (version 11 de <code>gcc</code>)
+  </span> <br>
+  Dans le cadre d'une compilation native sur un poste <em class="mark">Linux x86 64 bits</em>, <code class="cmd">ld</code> pointe sur l'exécutable <code class="cmd">x86_64-linux-gnu-ld.bfd</code> (1,7 Mo) qui est placé dans le dossier <code class="filename">/usr/bin</code>. </div>
+  </div><!-- expert -->
+
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/gcc-fileEx.png" width="100px">
+  <div class="nobullet"> À partir du code objet produit par l'assembleur et d'<strong>autres fichiers objets</strong> issus de <strong class="specialT">bibliothèques</strong> de fonctions déjà compilées, <code class="cmd">ld</code> génère le <strong class="specialBG">fichier exécutable</strong> du programme. On verra qu'il peut procéder selon <strong>deux techniques</strong> d'édition de liens, l'une dite <strong class="specialBG">statique</strong>, l'autre dite <strong class="specialBG">dynamique</strong>. </div>
+  </div><!-- display -->
+</ol><!-- numbered -->
+</div><!-- complement -->
+
+
+
+<p class="square"> Par défaut, les <strong class="title">fichiers intermédiaires</strong> générés par la chaîne de compilation sont <strong>temporairement stockés</strong> dans le dossier <code class="filename">/tmp/</code> (sous <em class="mark">Linux</em>) et ils sont <strong class="defin">automatiquement supprimés</strong> à la fin. </p>
+
+<p> Toutefois, la <strong>commande</strong> <code class="cmd">gcc</code> offre diverses <strong class="title">alternatives d'exécution</strong> : </p>
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/gcc-save-temps.png" width="300px">
+  <li> On peut produire le fichier exécutable <strong class="pros">en conservant tous les fichiers intermédiaires</strong> à l'aide de l'<strong>option</strong> <code class="cmd">-save-temps</code>. En plus des fichiers de <strong class="specialAM">code d'assemblage</strong> et de <strong class="specialTQ">code objet</strong>, on obtient également les fichiers du <strong class="specialSG">code source pré‑traité</strong> par le préprocesseur. </li>
+  </div><!-- display -->
+
+  <li> On peut aussi <strong class="specialLB">interrompre la chaîne de compilation</strong> à ses différentes <strong class="defin">étapes intermédiaires</strong> respectivement via les <strong>options</strong> : </li>
+  <ul>
+    <li> <code class="cmd">-E</code> pour une interruption <strong class="specialN">avant</strong> <strong class="specialSG">compilation</strong> ; </li>
+  
+    <li> <code class="cmd">-s</code> pour une interruption <strong class="specialN">avant</strong> <strong class="specialAM">assemblage</strong> ; </li>
+
+    <li> <code class="cmd">-c</code> pour une interruption <strong class="specialN">avant</strong> <strong class="specialTQ">édition de liens</strong>. </li>
+  </ul>
+  <div class="nobullet"> Dans tous les cas, l'<strong>argument</strong> qui suit l'option <code class="cmd">-o</code> détermine le nom et le chemin du <strong class="defin">fichier de sortie interrompue</strong>. </div>   
+</ul>
+
+<div class="expert" style="display: inline-block;">
+  <img class="top-right" src="../img/gcc-pipe.png" width="300px">
+<p> A contrario, il est possible de faire opérer la commande <code class="cmd">gcc</code> <strong class="defin">sans fichiers intermédiaires</strong> grâce à l'<strong>option</strong> <code class="cmd">-pipe</code>. Les différents composants logiciels de la chaîne communiquent de l'un à l'autre via une <strong class="defin">mémoire tampon</strong>, ce qui <strong class="specialLB">améliore la vitesse de traitement</strong> mais <strong class="cons">augmente le coût mémoire</strong> du poste de travail.  </p>
+</div><!-- expert -->
+
+<p class="square"> Par ailleurs, on peut obtenir dans le terminal l'affichage du <strong class="title">compte rendu d'exécution</strong> de la commande <code class="filename">gcc</code> ci‑dessous grâce à l'<strong>option</strong> <code class="cmd">-v</code> (ou <code class="cmd">--verbose</code>). </p>
+
+<div class="expert">
+<p> Pour être <strong class="defin">analysé en détail</strong>, sous <em class="mark">Linux</em>, ce flux d'affichage peut être : </p>
+<ul>
+  <li> <strong>redirigé dans un fichier</strong> via un opérateur de redirection comme <code class="cmd">>&</code> ;  </li>
+
+  <li> <strong>filtré</strong> par une commande comme <code class="cmd">grep</code> via un opérateur de redirection comme <code class="cmd">|&</code>.  </li>
+</ul>
+</div><!-- expert -->
+
+<div class="exemples">
+<p class="exemple"> Considérons le <strong class="title">programme trivial</strong> <strong>« Hello, world »</strong> typiquement codé en langage <strong>C</strong> dans un fichier nommé <code class="filename">hello.c</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  printf("Hello, World!\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Dans un terminal de commandes en ligne sous <strong class="specialLB">Linux</strong>, la commande de compilation : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-v</span> hello.c <span class="displayDarkRed">-o</span> hello</span></code> 
+</span> <br>
+affiche en sortie le <strong class="defin">compte rendu d'exécution</strong> ci‑dessous : </p>
+
+
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Using built-in specs.
+COLLECT_GCC=gcc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper
+OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+OFFLOAD_TARGET_DEFAULT=1
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 11.3.0-1ubuntu1~22.04' --with-bugurl=file:///usr/share/doc/gcc-11/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++,m2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-11 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --enable-default-pie --with-system-zlib --enable-libphobos-checking=release --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --disable-werror --enable-cet --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none=/build/gcc-11-xKiWfi/gcc-11-11.3.0/debian/tmp-nvptx/usr,amdgcn-amdhsa=/build/gcc-11-xKiWfi/gcc-11-11.3.0/debian/tmp-gcn/usr --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --with-build-config=bootstrap-lto-lean --enable-link-serialization=2
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'hello' '-mtune=generic' '-march=x86-64'
+ <span class="displayDarkBlue">/usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu hello.c -quiet -dumpbase hello.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccqzwlpo.s</span>
+GNU C17 (Ubuntu 11.3.0-1ubuntu1~22.04) version 11.3.0 (x86_64-linux-gnu)
+  compiled by GNU C version 11.3.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/local/include/x86_64-linux-gnu"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/11/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc/x86_64-linux-gnu/11/include
+ /usr/local/include
+ /usr/include/x86_64-linux-gnu
+ /usr/include
+End of search list.
+GNU C17 (Ubuntu 11.3.0-1ubuntu1~22.04) version 11.3.0 (x86_64-linux-gnu)
+  compiled by GNU C version 11.3.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 3f6cb05d963ad324b8f9442822c95179
+COLLECT_GCC_OPTIONS='-v' '-o' 'hello' '-mtune=generic' '-march=x86-64'
+ <span class="displayDarkBlue">as -v --64 -o /tmp/ccFSPKwJ.o /tmp/ccqzwlpo.s</span>
+Version de l'assembleur GNU 2.38 (x86_64-linux-gnu) utilisant la version BFD (GNU Binutils for Ubuntu) 2.38
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'hello' '-mtune=generic' '-march=x86-64' '-dumpdir' 'hello.'
+ <span class="displayDarkBlue">/usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSNV518.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o hello /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. /tmp/ccFSPKwJ.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o</span>
+COLLECT_GCC_OPTIONS='-v' '-o' 'hello' '-mtune=generic' '-march=x86-64' '-dumpdir' 'hello.'
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Ce compte‑rendu étant <strong class="cons">complexe</strong> même pour un programme si simple, il ne serait pas pertinent d'en exposer ici tous les détails. Pour faciliter le repérage, les lignes d'<strong>invocation des trois composants logiciels</strong> – <code class="cmd">cc1</code>, <code class="cmd">as</code> et <code class="cmd">collect2</code> – ont été artificiellement mises en <strong class="specialLB">couleur bleu</strong>. On peut y retrouver les chemins des deux fichiers intermédiaires, dont les noms sont générés aléatoirement après le préfixe <code>cc</code> : </p>
+<ul>
+  <li> <code class="filename">/tmp/ccqzwlpo.s</code> (code en langage d'assemblage) ; </li>
+
+  <li> <code class="filename">/tmp/ccFSPKwJ.o</code> (code objet). </li>
+</ul>
+
+<p class="square"> Si l'on effectue la compilation via la commande : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-save-temps</span> <span class="displayDarkWhite">hello.c</span> <span class="displayDarkRed">-o</span> <span class="displayDarkWhite">hello</span></code>
+</span> <br> 
+puis on liste le contenu du répertoire de compilation via la commande <code class="displayDarkGreen">ls</code>, on observe que ce dernier comporte <strong class="defin">5 fichiers</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+hello  hello.c  hello.i  hello.o  hello.s
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> à savoir le fichier exécutable, le fichier source, et les <strong>3 fichiers intermédiaires</strong> <code class="filename">.i</code> (code source prétraité), <code class="filename">.s</code> (code d'assemblage) et <code class="filename">.o</code> (code objet). </p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li>  Sous <strong class="specialLB">Linux</strong>, on trouve dans le répertoire <code class="cmd">/usr/bin</code> les fichiers de diverses <strong class="title">commandes alternatives</strong> de la chaîne de compilation <strong>GCC</strong>, notamment les suivantes.  </li>  
+  <ul>
+    <li> <code class="cmd">cpp</code> invoque le <strong class="specialR">préprocesseur</strong> <strong class="specialN">seul</strong>. Elle est équivalente à <code class="cmd">gcc -E</code> (cf. supra). </li>
+
+    <li> <code class="cmd">cc</code> est par défaut <strong class="defin">équivalente</strong> à <code class="cmd">gcc</code>. En fait, il s'agit d'un <strong>lien symbolique</strong> vers <code class="filename">/etc/alternative/cc</code> qui, sauf s'il est modifié, est lui‑même un lien symbolique vers <code class="filename">/usr/bin/gcc</code>. Contre‑intuitivement, <code class="cmd">cc</code> n'invoque donc <strong class="warning">pas</strong> le <strong>compilateur seul</strong>. </li>
+
+    <div class="nobullet"> Pour invoquer le <strong class="specialR">compilateur</strong> <strong class="specialN">seul</strong>, il faut employer la commande <code class="cmd">gcc</code> avec l'<strong>option</strong> <code class="cmd">-fpreprocessed</code> qui précise que le fichier source est déjà prétraité ou n'a pas besoin de prétraitements, quelle que soit son extension. </div>
+  </ul> 
+
+  <li> Les <strong class="title">noms</strong> des exécutables <code class="cmd">cc1</code> et <code class="cmd">collect2</code>, qui pourraient sembler étranges, sont l'héritage des conventions de nommage adoptées dès les premières évolutions de <strong>GCC</strong>.     </li>
+
+  <ul>
+    <li> <code class="cmd">cc1</code> est l'abréviation de <em class="english">C compiler</em>, le numéro « <code>1</code> » se référent au fait qu'il s'agit du <strong>premier composant</strong> de la <em class="english">toolchain</em> ; </li>
+  
+    <li> <code class="cmd">collect2</code> a été nommé ainsi pour évoquer le fait que ce composant logiciel <strong>collecte</strong> les fichiers objets pour les lier en un exécutable (ou un fichier de bibliothèque partagée) ; son numéro « <code>2</code> » découle du fait qu'il intervient <strong>après</strong> <code class="cmd">cc1</code> (même si <code class="cmd">as</code> s'intercale entre les deux). </li>
+  </ul>
+
+  <li> Pour mettre en évidence que le <strong class="title">driver</strong> <code class="cmd">collect2</code> appelle bien l'<strong class="specialR">éditeur de liens</strong> <code class="cmd">ld</code>, il faut saisir la commande de compilation <code class="cmd">gcc</code> avec l'option <code class="cmd">-Wl,-v</code> qui applique l'option <code>-v</code> spécifiquement à l'éditeur de lien. Dans l'exemple supra, on obtient alors la sortie suivante : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+collect2 version 11.3.0
+<span class="displayDarkBlue">/usr/bin/ld</span> -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccXvcYsk.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o hello /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. -v /tmp/ccoKFtf6.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
+GNU ld (GNU Binutils for Ubuntu) 2.38
+</pre>
+<!---------- ne pas indenter ---------->
+  <div class="nobullet"> Quant à savoir pourquoi le <strong>driver</strong> <code class="cmd">gcc</code> n'invoque pas lui‑même directement <code class="cmd">ld</code> mais <code class="cmd">collect2</code>, il faut entrer dans des <strong class="defin">considérations historiques et pratiques</strong>. Dans les versions antérieures à <em class="mark">GCC 2.5.8</em>, toute la chaîne de compilation était intégrée monolithiquement dans le programme <code class="cmd">cc1</code>. Puis, avec la diversification des langages pris en charge (<em class="mark">Fortran</em>, <em class="mark">C++</em>, <em class="mark">Ada</em>, <em class="mark">Go</em>, etc.), il devenait rationnel de faire appel à un éditeur de liens externes, tout particulièrement <code class="cmd">ld</code> d'<em class="mark">Unix</em> (antérieur à <em class="mark">GCC</em> et qui peut être utilisé pour d'autres langages compilés que <em class="mark">C</em>). Le processus de choix de l'éditeur de lien a donc été implémenté dans un programme séparé nommé <code class="cmd">collect2</code>. </div>
+</ol>
+</div><!-- remarques -->
+
+
+<h4 id="casCPP"> Cas d'une compilation en <em class="mark">C++</em> </h4>
+
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/logoC++.png" width="100px">
+<p> Dans le cas d'un programme codé en <strong class="title">langage C++</strong>, la chaîne de compilation <strong>GCC</strong> opère selon les <strong class="pros">mêmes principes</strong> via la <strong>commande</strong> <code class="cmd">g++</code> qui invoque le <strong class="specialR">compilateur spécifique</strong> <code class="cmd">cc1plus</code> (avec préprocesseur intégré, comme <code>cc1</code>). </p>
+
+<p> Les <strong class="specialLB">autres composants logiciels</strong> de la chaîne de compilation sont <strong class="defin">les mêmes</strong> que ceux invoqués par la commande <code>gcc</code> : <code class="cmd">as</code> et <code class="cmd">collect2</code> (<code class="cmd">ld</code>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Par ailleurs, les <strong class="title">extensions des noms de fichiers</strong> reconnues ou employées <strong>par défaut</strong> sont différentes, à savoir : </p>
+<ul>
+  <li> <code class="filename">.cpp</code>, <code class="filename">.cp</code>, <code class="filename">.c++</code>, <code class="filename">.cp</code>, <code class="filename">.cxx</code> <code class="filename">.CPP</code> ou même <code class="filename">.C</code> pour les fichiers de <strong class="specialG">code source</strong> <strong class="specialG">d'implémentation</strong> ; </li>
+
+  <li> <code class="filename">.hh</code>, <code class="filename">.hp</code>, <code class="filename">.hpp</code>, <code class="filename">.h++</code>, <code class="filename">.HPP</code> ou même <code class="filename">.H</code> pour les fichiers de <strong class="specialG">code source</strong> <strong class="specialG">d'en‑tête</strong> « personnels », c'est‑à‑dire non standards ; </li>
+
+  <div class="expert">
+    <div class="nobullet"> (pour mémoire, les fichier d'en‑tête de la <em>bibliothèque standard du C++</em> n'ont <em>pas d'extension</em> – cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#cPlusPlus" target="_BLANK"></a>) </div>
+  </div><!-- expert -->
+
+  <li> <code class="filename">.ii</code> pour les <strong>fichiers intermédiaires</strong> de  <strong class="specialSG">code source pré‑traité</strong> par le préprocesseur. </li>
+</ul>
+</div><!-- complement -->
+
+
+<!-- ajouter éventuellement un exemple 'hello Word' en C++ compilé avec l'option -v -->
+
+
+
+<h4> Une multitude d'options </h4>
+
+
+<div class="important">
+<p> La <strong>commande</strong> <code class="cmd">gcc</code> dispose d'un <strong class="title">très grand nombre d'options</strong>, certaines étant <strong>générales</strong> et d'autres <strong>spécifiques</strong> à tel ou tel composant (préprocesseur, compilateur, etc.) ou aspect de la chaîne de compilation (avertissements, débogage, optimisation, etc.). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Sur un poste de travail <strong>Linux</strong>, on peut bien entendu consulter la page du <strong class="title">manuel</strong> via la commande <code class="displayDark"><span class="displayDarkGreen">man</span> gcc</code> puis afficher les détails sur une commande précise en couplant cette commande avec un filtre <code class="cmd">grep</code> <a class="external" href="https://fr.wikipedia.org/wiki/Grep" target="_BLANK">W</a>. </p>
+
+<p> Mais il est sans doute plus efficace de consulter le site de <em class="mark">GCC</em> qui propose un <strong class="pros">récapitulatif thématique</strong> des options de la commande <code class="cmd">gcc</code> sur cette page web <a class="external" href="https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html" target="_BLANK"></a>. On peut ensuite obtenir les détails de chacune des via les liens fournis pour chaque catégorie d'options. </p>
+</div><!-- complement -->
+
+<p> Par ailleurs, on peut énoncer les <strong class="title">considérations générales</strong> suivantes sur les <strong>options</strong> de la commande <code class="cmd">gcc</code> : </p>
+<ul>
+  <li> Une option commençant par le <strong class="specialLB">préfixe</strong> <code class="cmd">-f</code> détermine un <strong class="defin">choix binaire</strong> – la lettre‑code « <code>f</code> » faisant référence au mot <strong>flag</strong>, c'est‑à‑dire un <em>drapeau</em> (cf. chap. C3‑III <a class="previous" href="../C3-Numeration/Cc3-3_typesBooleens.html" target="_BLANK"></a>). En règle générale, il s'agit d'une option qui est <strong class="pros">indépendant de la machine‑cible</strong>.  </li>
+
+  <div class="ex"> L'<strong>option</strong> <code class="cmd">-fsigned-char</code> impose que le type <code class="prettyprint lang-c">char</code> soit systématiquement considéré comme <strong>signé</strong> (car ce n'est pas le cas par défaut pour toutes les implémentations – cf. chap. C3 II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#remarqueTypes" target="_BLANK"></a>). </div> 
+
+  <li> Une option commençant par le <strong class="specialLB">préfixe</strong> <code class="cmd">-W</code> peut appartenir à <strong>diverses catégories</strong> : </li>
+  <ul>
+    <li> Il peut s'agir d'une option relative à certains <strong class="defin">avertissements</strong> émis par la chaîne de compilation – la lettre‑code « <code>W</code> » faisant référence au mot <strong>waring</strong>.  </li>
+
+    <div class="ex"> L'<strong>option</strong> <code class="cmd">-Werror</code> convertit tout avertissement en erreur (avec, le cas échéant, un abandon du processus de compilation) – cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#gccEmploi" target="_BLANK"></a> ; </div>
+  
+    <li> Mais il peut aussi s'agir <strong class="defin">option spécifique</strong> adressée à l'un des 4 composants de la chaîne de compilation, lequel est indiqué par une <strong>lettre‑code</strong> – à savoir <code class="cmd">p</code> (préprocesseur), <code class="cmd">c</code> (compilateur), <code class="cmd">a</code> (assembleur), <code class="cmd">l</code> (éditeur de lien) – immédiatement suivi d'une virgule et du code de l'option.  </li>
+
+    <div class="ex"> L'<strong>option</strong> <code class="cmd">-Wa,-v</code> explicite la version de l'assembleur dans le terminal d'exécution de la commande <code class="cmd">gcc</code>. </div>
+  </ul>
+  
+  <li> Dans une option, le <strong class="specialLB">mot</strong> <code class="cmd">no</code> détermine le <strong class="defin">choix binaire opposé</strong> à celui exprimé par le reste du code de l'option. </li>
+
+   <div class="ex"> L'<strong>option</strong> <code class="cmd">-no-integrated-cpp</code> inhibe le préprocesseur intégré à <code class="cmd">cc1</code> ou <code class="cmd">cc1plus</code> dans la phase de compilation (ce qui peut être nécessaire lorsque l'on souhaite recourir à un autre préprocesseur, comme <em class="mark">GNU M4</em> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_M4" target="_BLANK">W</a>). </div>
+</ul>
+
+
+
+
+<h3 id="preprocessorCPP"> Les prétraitements avec <em class="mark">CPP</em> </h3>
+
+
+
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/preprocessing1.png" width="350px">
+<p> Rappelons (cf. chap. C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html" target="_BLANK"></a>) qu'à partir d'un <strong class="specialG">code source</strong> réparti sur différents fichiers, le <strong class="title">préprocesseur CPP</strong> effectue de <strong class="defin">nombreux prétraitements</strong>, à la fois <strong>implicites</strong> (suppression des commentaires, ajout des marques de lignes…) et <strong>explicites</strong> (inclusions de fichiers, expansions des macros…) – ces derniers étant codés par des <strong class="specialN">directives</strong>. </p>
+
+<p> <strong>Intégré</strong> dans les exécutables <code class="cmd">cc1</code> et <code class="cmd">cc1plus</code> (avec quelques spécificités), le préprocesseur <strong class="title">CPP</strong> produit un <strong class="specialSG">flux de tokens prétraités</strong> à destination du compilateur. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/preprocessing2.png" width="250px">
+<p> Le <strong class="title">préprocesseur CPP</strong>  peut être invoqué seul via l'<strong>option</strong> <code class="cmd">-E</code> de la commande <code class="cmd">gcc</code> – ou alternativement via la commande <code class="cmd">cpp</code> – pour effectuer seulement les <strong class="specialLB">prétraitements</strong> des <strong class="specialG">fichier source</strong> </strong>.  </p>
+</div><!-- display -->
+
+<div class="expert">
+<p> Si l'<strong>option</strong> <code class="cmd">-o</code> n'est <strong class="defin">pas utilisée</strong>, alors la commande <code class="cmd">cpp</code> (ou <code class="cmd">gcc -E</code>) génère par défaut pour chaque fichier source d'implémentation (<code class="filename">.c</code>) un <strong class="specialSG">fichier de sortie</strong> avec le <strong class="specialN">même nom</strong> que le fichier source, et avec l'<strong class="specialN">extension</strong> </strong> <code class="filename">.i</code>. Cette extension permet à la commande <code>gcc</code> d'identifier tout fichier dont les <strong>prétraitements</strong> sont <strong class="pros">déjà effectués</strong>. </p>
+
+<p> En principe, l'<strong class="specialN">extension</strong> </strong> <code class="filename">.i</code> donc être impérativement donnée au nom du fichier de sortie en cas d'utilisation de l'<strong>option</strong> <code class="cmd">-o</code> dans la perspective d'une compilation ultérieure de ce fichier. Néanmoins, quelle que son extension, il est possible d'indiquer au compilateur qu'un fichier a déjà été prétraité, en utilisant l'<strong>option</strong> <code class="cmd">-fpreprocessed</code>.  </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<p> Divers <strong class="title">exemples d'invocation</strong> de la commande <code class="cmd">cpp</code> sont donnés au chap. C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html#premierExemple" target="_BLANK"></a>.  </p>
+
+<div class="expert">
+<p> Toutefois, dans ce chapitre, on a étudié assez <strong class="cons">peu d'options</strong> de la commande <code class="cmd">cpp</code> : seulement celles pour opérer le <strong class="defin">transcodage des caractères</strong> du fichier source et du fichier de sortie dans un format spécifié <a class="previous" href="Cc4-3_directivesPreprocesseur.html#cppTrancoding" target="_BLANK"></a>. </p>
+
+<p> En fait, cette commande possède <strong class="title">beaucoup d'options</strong>, dont on peut trouver la liste détaillée au lien suivant <a class="external" href="https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation" target="_BLANK">C</a>. S'il n'est pas question ici de les présenter toutes, il est quand même utile d'en mentionner certaines. En particulier, lors de l'invocation de <code class="cmd">cpp</code> :   </p>
+<ul>
+  <li> Avec l'<strong>option</strong> <code class="cmd">-I</code> suivie d'un <strong class="defin">chemin absolu</strong>, on peut spécifier un <strong class="defin">répertoire</strong> dans lequel le préprocesseur est invité à rechercher d'éventuels fichier à inclure via une directive <code class="prettyprint lang-c">#include</code>. Cela permet notamment de déporter ces fichiers dans un <strong>répertoire différent</strong> de celui de compilation, sans avoir à modifier les directives d'inclusion dans le code source. </li>
+
+  <li> Avec l'<strong>option</strong> <code class="cmd">-include</code> suivie d'un <strong class="defin">chemin absolu</strong>, on peut <strong class="defin">inclure</strong> un autre <strong class="specialG">fichier source</strong>, c'est‑à‑dire d'ajouter « à la volée » une <strong class="specialLB">directive</strong> <code class="prettyprint lang-c">#include</code> (chap. C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html#include" target="_BLANK"></a>).   </li>
+
+  <li> Avec l'<strong>option</strong> <code class="cmd">-D</code> suivie d'une <strong class="defin">définition</strong> de la forme : <br>
+  <span class="inline">
+    <code class="cmd"><span class="nocode"><strong class="specialLG">expression d'identification</strong></span>=<span class="nocode"><strong class="specialN">fragment de code</strong></span></code>
+  </span> <br>
+  on peut <strong class="defin">créer une macro‑définition</strong>, c'est‑à‑dire d'ajouter « à la volée » une <strong class="specialLB">directive</strong> <code class="prettyprint lang-c">#define</code> (chap. C4‑III <a class="previous" href="Cc4-3_directivesPreprocesseur.html#define" target="_BLANK"></a>). </li>
+
+  <div class="nobullet"> <em class="remark">Attention</em> : si la macro‑définition comporte des <strong class="specialT">arguments</strong>, alors dans l'<strong class="specialLG">expression d'identification</strong> ou du <strong class="specialN">fragment de code</strong>, toute occurrence de <strong>parenthèse</strong> <code class="cmd">(</code> – ou <code class="cmd">)</code>, ou de caractères spéciaux comme <code class="cmd">"</code> <code class="cmd">\</code> etc. – doit être immédiatement précédée du <strong>symbole</strong> <code class="prettyprint lang-c">\</code>, formant ainsi une <strong class="defin">séquence d'échappement</strong> pour rendre la commande de compilation compatible avec le langage de script du terminal d'exécution (typiquement, <em class="mark">bash</em>). </div>
+
+  <!-- option -U pour inhiber une définition: ne fonctionne pas si la cette définition est codée dans le programme, seulement dans la commande de compilation (utilité ?) -->
+</ul>
+<p> Grâce à ces options, on peut lors de la compilation <strong class="title">changer ponctuellement certains prétraitements</strong> opérés sur un programme, <strong class="pros">sans avoir à modifier le fichier source</strong>.  </p>
+
+
+
+<div class="exemples">
+<p class="exemple"> Considérons le <strong class="title">programme académique</strong> constitué du <strong class="specialG">fichier d'implémentation</strong> <code class="filename">returnA.c</code> ci‑dessous :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include "defineA.h"
+
+int main(void) {
+  return A;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> et du <strong class="specialG">fichier d'en‑tête</strong> <code class="filename">defineA.h</code> ci‑dessous (placé dans le même dossier) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#define A 5
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p class="square"> <em class="remark">Artificiellement</em>, mettons en commentaire – autrement dit, invalidons – la directive d'inclusion (ligne nº 1) dans le fichier source <code class="filename">returnA.c</code> comme ci‑dessous :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+//#include "defineA.h"
+
+int main(void) {
+  return A;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Tel quel, ce code source ne peut alors pas être compilé puisque l'identificateur <code class="prettyprint lang-c">A</code> n'est <strong class="cons">plus défini</strong>. Néanmoins, on peut y remédier grâce aux <strong class="spe">options de CPP</strong> mentionnées supra. Par exemple, on peut saisir les commandes suivantes :  </p>
+
+<ul>
+  <li> <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-include</span> "defineA.h" returnA.c <span class="displayDarkRed">-o</span> returnA</code> <br> 
+  pour <strong>inclure « à la volée »</strong> le fichier d'en‑tête <code class="filename">defineA.h</code> dont on avait supprimé l'inclusion dans le code source ; </li>
+  
+  <li> <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-D</span> A=5 returnA.c <span class="displayDarkRed">-o</span> returnA</code> <br> 
+  pour <strong>définir « à la volée »</strong> l'identificateur <code class="prettyprint lang-c">A</code> manquant dans le code source en lui donnant la valeur <code class="prettyprint lang-c">5</code>. </li>
+</ul>
+
+<p> Comme souligné, cet exemple reste évidemment très « artificiel ». Pour comprendre l'utilité de ces options, il faut imaginer une situation réelle où l'on aurait à compiler un programme en opérant des modifications sans éditer le code source.  </p>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3 id="compilerGCC"> La compilation avec <em class="mark">GCC</em>  </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/compiling1.png" width="350px">
+<p> Comme déjà souligné, le <strong class="title">compilateur</strong> est le <strong class="defin">cœur de la chaîne de compilation</strong>. Via de <strong>nombreuses étapes</strong>, il traduit le <strong class="specialSG">flux de tokens prétraités</strong> par le préprocesseur en un ou plusieurs fichiers de <strong class="specialAM">pseudo‑code objet</strong> exprimé en <strong class="specialN">langage d'assemblage</strong> – c'est pourquoi on parle également de <strong class="specialAM">code d'assemblage</strong>. </p>
+
+<p> Ce pseudo‑code objet, déjà <strong>spécifique</strong> pour l'architecture de la machine cible, est destiné à être ensuite traduit en véritable code objet par l'assembleur. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/compiling2.png" width="300px">
+<p> Lancée avec l'<strong>option</strong> <code class="cmd">-S</code>, la <strong class="title">commande</strong> <code class="cmd">gcc</code> <strong class="defin">arrête ses traitements</strong> juste après la phase de <strong class="specialR">compilation</strong> ; autrement dit, elle n'invoque ni l'assembleur, ni l'éditeur de lien. </p>
+<ul>
+  <li> Elle accepte aussi bien des <strong class="specialG">fichiers sources</strong> <strong class="defin">non prétraités</strong> (<code class="filename">.c</code> et <code class="filename">.h</code>) que des fichiers <strong class="defin">déjà prétraités</strong> d'extension <code class="filename">.i</code> (pour lesquels seule la compilation proprement dite est alors effectuée). </li>
+
+  <li> Elle attribue <strong>par défaut</strong> à chaque fichier de sortie de <strong class="specialAM">code d'assemblage</strong> le <strong class="specialN">même nom</strong> que son fichier source d'implémentation correspondant et l'<strong class="specialN">extension</strong> <code class="filename">.s</code>. Néanmoins, il est possible spécifier tout autre nom et/ou extension via l'<strong>option</strong> <code class="cmd">-o</code>. </li>
+</ul>
+</div><!-- display -->
+
+<p> L'<strong class="title">intérêt</strong> de produire le pseudo‑code objet dans un <strong class="defin">fichier intermédiaire</strong> est de pouvoir y apporter des <strong class="pros">optimisations</strong> avant de le fournir à l'assembleur. C'est une pratique courante dans l'industrie logicielle. </p>
+</div><!-- complement -->
+
+
+<div class="exemples" id="exempleASM">
+<p class="exemple"> Reprenons l'<strong class="title">exemple académique</strong> précédent en le simplifiant pour le réduire à une <strong>forme minimale</strong> (sans recours à une pseudo‑constante ni aucun un fichier d'en‑tête) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int main(void) {
+  return 5;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Enregistré dans un <strong class="specialG">fichier source</strong> nommé <code class="filename">return5.c</code>, on peut juste le compiler via <strong>commande</strong> : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-S </span>return5.c</code>
+</span> <br>   
+On obtient alors dans le <strong class="specialT">fichier de sortie</strong> <code class="filename">return5.s</code> le <strong class="specialT">pseudo‑code objet</strong> ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-asm linenums:1">
+  .file "return5.c"
+  .text
+  .globl  main
+  .type main, @function
+main:
+.LFB0:
+  .cfi_startproc
+  endbr64
+  pushq %rbp
+  .cfi_def_cfa_offset 16
+  .cfi_offset 6, -16
+  movq  %rsp, %rbp
+  .cfi_def_cfa_register 6
+  movl  $5, %eax
+  popq  %rbp
+  .cfi_def_cfa 7, 8
+  ret
+  .cfi_endproc
+.LFE0:
+  .size main, .-main
+  .ident  "GCC: (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0"
+  .section  .note.GNU-stack,"",@progbits
+  .section  .note.gnu.property,"a"
+  .align 8
+  .long 1f - 0f
+  .long 4f - 1f
+  .long 5
+0:
+  .string "GNU"
+1:
+  .align 8
+  .long 0xc0000002
+  .long 3f - 2f
+2:
+  .long 0x3
+3:
+  .align 8
+4:
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Bien entendu, un tel programme est <strong class="cons">incompréhensible pour un non‑initié</strong> au langage d'assemblage. Il est compliqué par de nombreuses instructions conventionnelles d'identification et de débogage qu'il n'est pas question de le détailler ici. </p>
+
+<div class="expert">
+<p class="square"> Mais pour se faire une idée des <strong class="pros">optimisations</strong> que l'on peut apporter à un pseudo‑code objet, observons par exemple un <strong class="title">programme minimal</strong> pour effectuer une <strong>opération similaire</strong>, à savoir retourner la valeur <code class="prettyprint lang-c">7</code> (juste pour changer) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-asm linenums:1">
+  .text
+  .global _start
+_start:
+  movq     $60, %rax   # system call nb 60 = exit (accumulator register)
+  movq     $7,  %rdi   # return code 7            (destination index register)
+  syscall              # invoke operating system  (using %rax & %rdi as arguments)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Enregistré dans un fichier nommé <code class="filename">return7.s</code>, ce programme peut être testé via le <strong>script</strong> d'assemblage, d'édition de lien et d'exécution suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-bash linenums:1">
+#!/bin/bash
+as return7.s -o return7.o
+ld return7.o -o return7
+./return7
+echo $? 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Remarques</em>. </p>
+<ul>
+  <li> Dans le script ci‑dessus, si l'on souhaite utiliser la <strong class="title">commande</strong> <code class="cmd">gcc -c</code> à la place de <code class="cmd">as</code>, il faut remplacer la ligne nº 2 par celle ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-bash linenums:2">
+gcc -c -nostdlib -nostartfiles -nodefaultlibs return7.s
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <li> Avec la <strong class="title">commande</strong> <code class="cmd">gcc -S</code>, on peut faire en sorte que le <strong>compilateur</strong> génère un <strong class="specialAM">code d'assemblage</strong> <strong class="defin">sans les instructions de déboguage</strong> (notamment celles commençant par <code>.cfi</code> – cf. le programme donné en exemple supra <a class="supra" href="Cc4-4_chaineCompilation.html#exempleASM"></a>) grâce à l'<strong>option</strong> <code class="cmd">-fno-asynchronous-unwind-tables</code>. On obtient alors le résultat suivant qui ressemble davantage au programme minimal codé directement en langage d'assemblage : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-asm linenums:1">
+  .file "return5.c"
+  .text
+  .globl  main
+  .type main, @function
+main:
+  endbr64
+  pushq %rbp
+  movq  %rsp, %rbp
+  movl  $5, %eax
+  popq  %rbp
+  ret
+  .size main, .-main
+  # rest of the instructions as in the previous version
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  <div class="nobullet"> Toutefois, ce code comporte des instructions différentes de celles du programme minimal <code class="filename">return7.s</code> car il opère par <strong>appel d'une fonction</strong> (<code>main</code>) qui retourne une valeur, et non pas par un appel système de sortie (<code>exit</code>). </div> 
+</ul>
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Les options de compilation </h4>
+
+
+<div class="complement">
+<p> C'est bien entendu le <strong class="specialR">compilateur</strong> qui fait l'objet de la très grande majorité des <strong class="title">options</strong> de la <strong>commande</strong> <code class="cmd">gcc</code>. Même s'il n'est pas question de les détailler ni même de les énumérer toutes, il est <strong class="pros">utile</strong> d'en connaître <strong>quelques unes</strong> – au moins celles qui sont décrites ci‑après. </p>
+</div><!-- complement -->
+
+<p class="square"> Bien entendu, on a les <strong class="specialLB">options essentielles</strong> qui ont été présentées dès le chapitre C1‑II : </p>
+<ul>
+  <li> <code class="cmd">-std=<span class="nocode"><strong class="defin">version</strong></span></code> qui permet de sélectionner une version de la <strong class="defin">norme du langage </strong>C ou <strong>C++</strong> que le code source doit respecter <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#versionCompilateur" target="_BLANK"></a> ;  </li>
+
+  <li> <code class="cmd">-Wall</code> <code class="cmd">-Wextra</code> et <code class="cmd">-Werror</code> qui rendent le <strong class="defin">compilateur plus exigeant</strong> en matières d'<strong class="specialO">avertissements</strong> <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#gccEmploi" target="_BLANK"></a>. </li>
+</ul>
+
+<p class="square"> On peut aussi dores et déjà évoquer certains <strong class="specialLB">options pour l'optimisation</strong> du code exécutable : </p>
+<ul>
+  <li> <code class="cmd">-O<span class="nocode"><span class="option">[</span><strong class="defin">number</strong><span class="option">]</span></span></code> qui détermine le degré général d'optimisations que le compilateur est autorisé à mettre en œuvre (cf. cette page de référence pour plus de détails <a class="external" href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#Optimize-Options" target="_BLANK"></a>). </li>
+
+  <li> <code class="cmd">-march=<span class="nocode"><strong class="defin">nom</strong></span></code> et <code class="cmd">-cpu=<span class="nocode"><strong class="defin">nom</strong></span></code> pour indiquer précisément au compilateur l'<strong class="defin">architecture</strong> et le <strong class="defin">processeur</strong> de la machine‑cible (ces options sont complexes, cf. cette page de référence pour plus de détails <a class="external" href="https://gcc.gnu.org/onlinedocs/gcc/Submodel-Options.html#Submodel-Options" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3 id="assemblerAS"> L'assemblage avec <em class="mark">AS</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> L'<strong class="title">assembleur</strong> utilisé par défaut par la chaîne de compilation <strong>GCC</strong> est communément appelé <strong class="title">AS</strong> ou <strong class="title">GAS</strong> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_Assembler" target="_BLANK">W</a> (abréviation de <strong>GNU Assembler</strong>). C'est un programme de petite taille (inférieure à 500 ko) fourni dans le <strong>paquet</strong> <code class="filename">binutils</code> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_Binutils" target="_BLANK">W</a> des distributions <em class="mark">GNU/Linux</em>. </p>
+  <img class="top-right" src="../img/assembling1.png" width="350px">
+<p> À partir d'un fichier de <strong class="specialAM">code d'assemblage</strong> (de type <strong>texte</strong>), l'assembleur produit un fichier de <strong class="specialT">code objet</strong> (de type <strong>binaire</strong>) qui, entre autres, traduit chaque instruction du code d'assemblage en <strong>instructions machine</strong> spécifique pour l'architecture ciblée. </p>
+
+<p> De plus, un <strong class="specialT">fichier objet</strong> contient des <strong class="specialLB">éléments supplémentaires</strong> à celui du fichier d'assemblage dont il est issu : un <strong>en‑tête</strong>, une ou plusieurs <strong>tables des symboles</strong> ainsi que des informations de <strong>relocalisation</strong> et de <strong>débogage</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/assembling2.png" width="400px">
+<p> Lancée avec l'<strong>option</strong> <code class="cmd">-c</code>, la <strong class="title">commande</strong> <code class="cmd">gcc</code> <strong class="defin">arrête ses traitements</strong> juste après la phase de <strong class="specialR">assemblage</strong> ; autrement dit, elle n'invoque pas l'éditeur de lien. </p>
+<ul>
+  <li> Elle accepte aussi bien des <strong class="specialG">fichiers sources</strong> (prétraités ou non) que des fichiers de <strong class="specialAM">code d'assemblage</strong> d'extension <code class="filename">.s</code> (pour lesquels seul l'assemblage est alors effectué). </li>
+
+  <li> Elle attribue <strong>par défaut</strong> à chaque fichier de sortie de <strong class="specialT">code objet</strong> le <strong class="specialN">même nom</strong> que son fichier source ou d'assemblage correspondant et l'<strong class="specialN">extension</strong> <code class="filename">.o</code>. Néanmoins, il est possible de spécifier tout autre nom et/ou extension via l'<strong>option</strong> <code class="cmd">-o</code>. </li>
+</ul>
+<p> On peut également procéder avec la <strong class="title">commande</strong> <code class="cmd">as</code> mais uniquement si l'on part de fichiers de <strong class="specialAM">code d'assemblage</strong>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p> Par défaut, les <strong class="specialT">fichiers objets</strong> générés par l'assembleur <strong>AS</strong> sont au <strong class="title">format <em class="sigle">ELF</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Executable_and_Linkable_Format" target="_BLANK">W</a> – pour <strong>executable and linkable format</strong>. Plus précisément, il s'agit de <strong>fichiers <em class="sigle">ELF</em></strong> dits <strong class="defin">relocalisables</strong>, c'est‑à‑dire destinés à former du code exécutable par édition de liens. </p>
+
+<div class="exemples" id="fichierObjet">
+<p class="exemple"> Reprenons le cas du <strong class="title">programme académique</strong> constitué du <strong class="specialG">fichier source</strong> <code class="filename">return5.c</code> aussi minimal que possible : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int main(void) {
+  return 5;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> La commande de compilation <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="displayDarkRed">-c</span> return5.c</code> produit le <strong class="specialT">fichier objet</strong> <code class="filename">return.o</code> de 1,2 ko environ, dont on peut vérifier le type à l'aide de la commande <code class="cmd">file</code> <a class="external" href="https://en.wikipedia.org/wiki/File_(command)" target="_BLANK"></a> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">file</span> return5.o
+return5.o: ELF 64-bit LSB <span class="displayDarkYellow">relocatable</span>, x86-64, version 1 (SYSV), not stripped
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> Il s'agit donc bien d'un fichier au <strong>format <em class="mark">ELF</em></strong> <strong class="defin">relocalisable</strong>. Avec un éditeur de code comme <strong class="Sublime">Sublime text</strong>, il est tout à fait possible de consulter son contenu  (cf. ci‑dessous ses 512 premiers octets). </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="blue">7f45 4c46 0201 0100 0000 0000 0000 0000
+0100 3e00 0100 0000 0000 0000 0000 0000
+0000 0000 0000 0000 c801 0000 0000 0000
+0000 0000 4000 0000 0000 4000 0c00 0b00</span>
+<span class="red">f30f 1efa 5548 89e5 b805 0000 005d c300</span>
+4743 433a 2028 5562 756e 7475 2031 312e
+332e 302d 3175 6275 6e74 7531 7e32 322e
+3034 2920 3131 2e33 2e30 0000 0000 0000
+0400 0000 1000 0000 0500 0000 474e 5500
+0200 00c0 0400 0000 0300 0000 0000 0000
+1400 0000 0000 0000 017a 5200 0178 1001
+1b0c 0708 9001 0000 1c00 0000 1c00 0000
+0000 0000 0f00 0000 0045 0e10 8602 430d
+0646 0c07 0800 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0100 0000 0400 f1ff 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0300 0100
+0000 0000 0000 0000 0000 0000 0000 0000
+0b00 0000 1200 0100 0000 0000 0000 0000
+0f00 0000 0000 0000 0072 6574 7572 6e35
+2e63 006d 6169 6e00 2000 0000 0000 0000
+0200 0000 0200 0000 0000 0000 0000 0000
+002e 7379 6d74 6162 002e 7374 7274 6162
+002e 7368 7374 7274 6162 002e 7465 7874
+002e 6461 7461 002e 6273 7300 2e63 6f6d
+6d65 6e74 002e 6e6f 7465 2e47 4e55 2d73
+7461 636b 002e 6e6f 7465 2e67 6e75 2e70
+726f 7065 7274 7900 2e72 656c 612e 6568
+5f66 7261 6d65 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> Toutefois, il est très difficile de le comprendre. Sachant quelques bases sur le <strong>format <em class="sigle">ELF</em></strong> et à l'aide d'outil de rétro‑ingénierie, il ressort que : </p>
+<ul>
+  <li> les 64 premiers octets, <strong class="specialLB">en bleu</strong>, constituent l'<strong>en‑tête <em class="mark">ELF</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format#File_header" target="_BLANK">W</a> ; </li>
+
+  <li> les 16 octets suivants, <strong class="specialR">en rouge</strong>, constituent la <strong>section</strong> <code class="inv" style="background:crimson;">.text</code> du programme – ici réduite à la fonction <code class="cmd">main</code> ;  </li>
+
+  <li> les octets restants sont des données nécessaires pour toute <strong class="defin">édition de liens</strong> ultérieure : <strong>table des symboles</strong>, <strong>table des sections</strong>, méta‑informations de <strong>relocalisation</strong> et de <strong>débogage</strong>.</li>
+</ul>
+
+<div class="expert">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/CompilerExplorerLogo.png" width="200px" style="padding-top:1em">
+<p class="square"> Pour visualiser en détail la correspondance entre le <strong class="specialT">code objet</strong> de la section <code class="inv" style="background:crimson;">.text</code> et les instructions en langage d'assemblage qu'elles traduisent, on peut utiliser l'environnement d'analyse en ligne <strong class="specialLG">Compiler Explorer</strong> <a class="external" href="https://godbolt.org/" target="_BLANK"></a> développé par Matt Godbolt. Dans notre exemple, il faut : </p>
+</div><!-- display -->
+<ul>
+  <li> dans la colonne de gauche, sélectionner le langage <strong>C</strong> et coller le <strong>code source</strong> du programme ; </li>
+
+  <li> dans la colonne du milieu, sélectionner le <strong>compilateur</strong> (ici, <code>x86-64 gcc 11.3</code>) et cocher le paramètre (menu ⚙) : <br>
+  <span class="inline">
+    <code>☑ Compile to binary object</code>
+  </span> </li>
+</ul>
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/CompilerExplorerExample.png" width="250px">
+<p> On obtient alors le <strong class="specialAM">code d'assemblage</strong> de la <strong>fonction</strong> <code class="cmd">main</code> avec, au dessus de chaque ligne, les valeurs hexadécimales des octets correspondants dans le <strong class="specialT">code objet</strong> – ceux de la ligne en rouge dans le code supra : <br>
+  <span class="inline">
+    <code>5548 89e5 b805 0000 005d c3</code>
+  </span> <br>
+comme l'illustre la capture d'écran ci‑contre. </p>
+</div><!-- display -->
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Analyse et désassemblage d'un fichier objet</h4>
+
+
+<p> Un environnement comme <strong class="specialLG">Compiler Explorer</strong> ne permet pas d'analyser la totalité d'un <strong class="specialT">fichier objet</strong>, seulement sa section <code class="inv" style="background:crimson;">.text</code>. Toutefois, dans le cadre d'un <strong>débogage</strong> ou d'une <strong>rétro‑ingénierie</strong>, il est parfois nécessaire d'obtenir <strong class="pros">plus d'informations</strong> d'un tel fichier, en particulier d'en extraire les <strong class="defin">tables des symboles</strong>. </p>
+
+<p>  Or fichier binaire reste <strong class="cons">très difficile à lire</strong>, même pour un codeur expérimenté et avec l'aide d'un éditeur de code hexadécimal, comme par exemple le package <strong>HexViewer</strong> sous <strong class="Sublime">Sublime Text</strong>. </p>
+
+<div class="ex">
+<p class="ex"> Avec cette solution, le <strong class="title">fichier objet</strong> issu de l'exemple précédent apparaît comme sur la capture d'écran ci‑dessous (512 premiers octets seulement) : </p>
+
+  <img class="top-left" src="../img/objectFileExample.png" style="max-width: 600px">
+
+<p> La colonne de droite en <strong class="specialLGr">caractères gris</strong> affiche seulement l'interprétation en <strong>code <em class="sigle">ASCII</em></strong> des octets du fichier. Cela permet de repérer certains éléments (données de type chaîne de caractère, nom des sections…) mais n'apporte <strong class="cons">pas de visualisation des tables des symboles</strong>. </p>  
+</div><!-- ex -->
+
+
+<div class="important">
+<p> Heureusement, il existe des <strong>outils</strong> qui permettent de <strong class="title">désassembler</strong> un <strong class="specialT">fichier objet</strong> pour en reconstituer le contenu sous une forme intelligible : </p>
+<ul>
+  <li> certains sont des <strong class="defin">logiciels</strong> à part entière – par exemple, <em class="mark">IDA Pro</em> <a class="external" href="https://fr.wikipedia.org/wiki/IDA_Pro_(logiciel)" target="_BLANK">W</a>, <em class="mark">Ghidra</em> <a class="external" href="https://fr.wikipedia.org/wiki/Ghidra" target="_BLANK">W</a>, <em class="mark">Radare2</em> <a class="external" href="https://fr.wikipedia.org/wiki/Radare2" target="_BLANK">W</a>… </li>
+
+  <li> d'autres sont des <strong>composants</strong> qui peuvent s'intégrer sous forme de <strong class="defin">commandes en ligne</strong> ; sous <strong>Linux</strong>, on trouve notamment <code class="cmd">nm</code>, <code class="cmd">objdump</code> et <code class="cmd">readelf</code>, qui font tous partie du paquet <code class="filename">binutils</code> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_Binutils" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Une <strong>brève présentation</strong> de ces <strong class="title">trois commandes</strong> <strong>Linux</strong> se justifie par leur <strong class="pros">grande utilité</strong>. En effet, elles présentent l'avantage d'être <strong class="pros">disponibles</strong> dès lors que <strong>GCC</strong> est installée et <strong class="pros">faciles</strong> à mettre en œuvre (dans le cadre d'une utilisation peu experte). </p>
+<ul>
+  <li> <code class="cmd">nm</code> <a class="external" href="https://en.wikipedia.org/wiki/Nm_(Unix)" target="_BLANK">W</a> – pour <strong>name mangling</strong> – a déjà été présentée au chap. C4‑II <a class="previous" href="Cc4-2_porteeDonnees.html#nm" target="_BLANK"></a>. Elle permet essentiellement d'afficher la <strong class="defin">table des symboles</strong> d'un <strong class="specialT">fichier objet</strong> ou <strong class="specialBG">exécutable</strong>. Pour plus de détails sur ses différentes options, on pourra consulter sa page de manuel <a class="external" href="https://man7.org/linux/man-pages/man1/nm.1.html" target="_BLANK"></a>. </li>
+
+  <li> <code class="cmd">objdump</code> <a class="external" href="https://en.wikipedia.org/wiki/Objdump" target="_BLANK">W</a> – pour <strong>object dumping</strong> – est un <strong class="defin">outil de désassemblage</strong> applicable aux <strong class="specialT">fichiers objets</strong> ou <strong class="specialBG">exécutables</strong> compilés pour <strong class="pros">toutes sortes d'architectures</strong> de machine cible (<em class="mark">x86</em>, <em class="mark">ARM</em>, <em class="mark">MIPS</em>…). Elle possède un <strong>très grand nombre d'options</strong> dont on peut consulter les détails sur sa page de manuel <a class="external" href="https://man7.org/linux/man-pages/man1/objdump.1.html" target="_BLANK"></a>. </li>
+
+  <li> <code class="cmd">readelf</code> <a class="external" href="https://en.wikipedia.org/wiki/Readelf" target="_BLANK">W</a> est un autre <strong class="defin">outil de désassemblage</strong>, mais applicable seulement aux <strong class="specialT">fichiers objets</strong> ou <strong class="specialBG">exécutables</strong> compilés au <strong class="pros">format <em class="sigle">ELF</em></strong>, très bien adaptée pour les fichiers générés par <strong>GCC</strong>. Elle possède un <strong>grand nombre d'options</strong> dont on peut consulter les détails sur sa page de manuel <a class="external" href="https://man7.org/linux/man-pages/man1/readelf.1.html" target="_BLANK"></a>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<!-- 
+<div class="exemples">
+<p class="exemple"> Pour illustrer l'emploi des outils de désassemblage, il faut  </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+
+
+<h3 id="linkerLD"> L'édition de liens avec <em class="mark">LD</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> L'<strong class="title">éditeur de liens</strong> utilisé par défaut par la chaîne de compilation <strong>GCC</strong> est communément appelé <strong class="title">LD</strong> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_linker" target="_BLANK">W</a>. C'est un programme de taille moyenne (environ 1,7 Mo) fourni dans le <strong>paquet</strong> <code class="filename">binutils</code> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_Binutils" target="_BLANK">W</a> des distributions <em class="mark">GNU/Linux</em>. </p>
+  <img class="top-right" src="../img/linking1.png" width="400px">
+<p> À partir de fichiers de <strong class="specialT">code objet</strong> compilés spécialement par le codeur ou issus d'une <strong class="specialT">bibliothèque partagée</strong>, l'éditeur de liens produit <strong>un seul fichier</strong> de <strong class="specialBG">code exécutable</strong> pour la machine cible sélectionnée par la commande de compilation. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/linking2.png" width="450px">
+<p> <strong>Sans option restrictive</strong> comme <code>-E</code>, <code>-S</code> ou <code>-c</code>, la commande <code class="cmd">gcc</code> exécute la chaîne de compilation jusqu'à l'édition de lien :   </p>
+<ul>
+  <li> Elle accepte aussi bien des <strong class="specialG">fichiers sources</strong> (prétraités ou non) que des fichiers de <strong class="specialAM">code d'assemblage</strong> d'extension <code class="filename">.s</code> ou des fichiers de <strong class="specialT">code objet</strong> d'extension <code class="filename">.o</code>. </li>
+
+  <li> Elle donne <strong>par défaut</strong> au fichier de sortie de <strong class="specialBG">code exécutable</strong> le <strong>nom</strong> <code class="filename">a.out</code>. Néanmoins, il est possible et même <strong class="pros">recommandé</strong> de spécifier un <strong class="defin">autre nom et extension</strong> via l'<strong>option</strong> <code class="cmd">-o</code>. </li>
+</ul>
+<p> On peut également procéder avec la <strong class="title">commande</strong> <code class="cmd">ld</code> mais uniquement si l'on part de fichiers de <strong class="specialT">code objet</strong>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<h4> Les différents types d'édition de lien </h4>
+
+
+<div class="important">
+<p> Il existe <strong class="title">deux principaux types</strong> d'<strong class="specialR">éditions de lien</strong> : </p>
+<ul>
+  <li> celle dite <strong class="specialLB">statique</strong>, opérée par la <strong>chaîne de compilation</strong> ;  </li>
+
+  <li> celle dite <strong class="specialLB">dynamique</strong>, opérée par durant l'<strong>exécution du programme</strong> (<em class="english">runtime</em>) par un composant logiciel spécifique appelé en anglais <strong class="defin">dynamic linker</strong> <a class="external" href="https://en.wikipedia.org/wiki/Dynamic_linker" target="_BLANK">W</a>.  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement" style="display:inline-block;">
+  <!-- ajouter une figure
+  <img class="top-right" src="../img/?????.png" width="450px">
+   -->
+<p class="square" style="margin-top: 0em"> En <strong class="title">édition de liens statique</strong>, le <strong class="specialT">code objet</strong> de <strong>chacune des fonctions utilisées</strong> dans le programme, y compris celles des <strong class="defin">bibliothèques</strong>, est <strong>réuni</strong> dans le <strong class="specialBG">fichier exécutable</strong>.  </p>
+
+<p> Cela produit un <strong class="specialLBG">fichier exécutable</strong> <strong class="cons">très volumineux</strong> mais qui présente l'avantage d'être <strong class="pros">autonome</strong>, c'est‑à‑dire exécutable sur n'importe quelle machine cible d'architecture compatible, sans avoir à se soucier de l'installation des bibliothèques de fonctions utilisées sur cette machine. C'est un choix parfois opéré pour la production d'<strong class="defin">applications logicielles</strong>. </p>
+
+<p> Avec les <strong>commandes</strong> <code class="cmd">gcc</code> ou <code class="cmd">ld</code>, l'édition de liens statique n'est <strong class="defin">pas choisie par défaut</strong>, il faut employer l'<strong>option</strong> <code class="cmd">-static</code> pour la mettre en œuvre.  </p>
+</div><!-- complement -->
+
+<div class="exemples" id="staticLinking">
+<p class="exemple"> Faisons l'expérience avec le <strong class="title">programme trivial</strong> « <strong>Hello, world</strong> » dont le fichier source <code class="filename">hello.c</code> fait appel à la <strong>fonction</strong> <code class="prettyprint lang-c">printf</code> issue de la bibliothèque standard. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  printf("Hello, World!\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Sous <strong>Linux</strong>, la commande : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">gcc</span> hello.c <span class="displayDarkRed">-static</span> <span class="displayDarkRed">-o</span> hello-static</code>
+</span> <br>
+génère le <strong class="specialBG">fichier exécutable</strong> <code class="filename">hello-static</code> de <strong class="cons">900 ko</strong> ! Et la commande :   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">file</span> <span class="displayDarkWhite">hello-static</span>
+hello-static: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), <span class="displayDarkYellow">statically linked</span>, BuildID[sha1]=8e9a3b339abcb3ce39aea1734091f86da6fcc1cf, for GNU/Linux 3.2.0, not stripped
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> permet de vérifier qu'il s'agit bien d'un <strong class="specialY">fichier lié statiquement</strong>. Il peut donc être exécuté <strong class="specialLB">sur toute machine</strong> à architecture <strong>x86‑64</strong>, <em class="remark">même si</em> la bibliothèque standard du langage <strong>C</strong> n'y est <strong class="defin">pas installée</strong>. </p>
+
+<div class="expert">
+<p class="square"> En procédant au <strong class="title">désassemblage</strong> de ce <strong class="specialBG">fichier exécutable</strong> à l'aide de la commande : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">objdump</span> <span class="displayDarkRed">-D</span> hello-static <span class="displayDarkBlue">></span> hello-static.dump</code>
+</span> <br> 
+et en ouvrant le fichier de redirection <code class="filename">hello-static.dump</code> dans un éditeur de code, on peut relever des aspects essentiels. En particulier, en recherchant le <strong>symbole</strong> <code class="cmd">&lt;main&gt;</code>, on trouve le code de la fonction principale du programme (section <code>.text</code>) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkBlue">0000000000401745 &lt;main&gt;:</span>
+  401745: f3 0f 1e fa           endbr64 
+  401749: 55                    push   %rbp
+  40174a: 48 89 e5              mov    %rsp,%rbp
+  40174d: 48 8d 05 b0 68 09 00  lea    0x968b0(%rip),%rax        # 498004 &lt;_IO_stdin_used+0x4&gt;
+  401754: 48 89 c7              mov    %rax,%rdi
+  401757: b8 00 00 00 00        mov    $0x0,%eax
+  40175c: e8 2f 9e 00 00        <span class="red">call   40b590 &lt;_IO_printf&gt;</span>
+  401761: b8 00 00 00 00        mov    $0x0,%eax
+  401766: 5d                    pop    %rbp
+  401767: c3                    ret    
+  401768: 0f 1f 84 00 00 00 00  nopl   0x0(%rax,%rax,1)
+  40176f: 00 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Dans ce code, on trouve l'<strong class="defin">appel de la fonction</strong> <code class="cmd">printf</code> (symbole <code>_IO_printf</code>) référencé à l'<strong>adresse</strong> <code class="cmd">40b590</code>. Et en descendant à cette adresse, on trouve le code (partiel) de la fonction <code class="">_IO_printf</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkBlue">000000000040b590 &lt;_IO_printf&gt;:</span>
+  40b590: f3 0f 1e fa           endbr64 
+  40b594: 48 81 ec d8 00 00 00  sub    $0xd8,%rsp
+  40b59b: 49 89 fa              mov    %rdi,%r10
+  40b59e: 48 89 74 24 28        mov    %rsi,0x28(%rsp)
+  40b5a3: 48 89 54 24 30        mov    %rdx,0x30(%rsp)
+  40b5a8: 48 89 4c 24 38        mov    %rcx,0x38(%rsp)
+  40b5ad: 4c 89 44 24 40        mov    %r8,0x40(%rsp)
+  40b5b2: 4c 89 4c 24 48        mov    %r9,0x48(%rsp)
+  40b5b7: 84 c0                 test   %al,%al
+  40b5b9: 74 37                 je     40b5f2 &lt;_IO_printf+0x62&gt;
+  40b5bb: 0f 29 44 24 50        movaps %xmm0,0x50(%rsp)
+  40b5c0: 0f 29 4c 24 60        movaps %xmm1,0x60(%rsp)
+  40b5c5: 0f 29 54 24 70        movaps %xmm2,0x70(%rsp)
+  40b5ca: 0f 29 9c 24 80 00 00  movaps %xmm3,0x80(%rsp)
+  40b5d1: 00 
+  40b5d2: 0f 29 a4 24 90 00 00  movaps %xmm4,0x90(%rsp)
+  40b5d9: 00 
+  40b5da: 0f 29 ac 24 a0 00 00  movaps %xmm5,0xa0(%rsp)
+  40b5e1: 00 
+  40b5e2: 0f 29 b4 24 b0 00 00  movaps %xmm6,0xb0(%rsp)
+  40b5e9: 00 
+  40b5ea: 0f 29 bc 24 c0 00 00  movaps %xmm7,0xc0(%rsp)
+  40b5f1: 00 
+  40b5f2: 64 48 8b 04 25 28 00  mov    %fs:0x28,%rax
+  40b5f9: 00 00 
+  40b5fb: 48 89 44 24 18        mov    %rax,0x18(%rsp)
+  40b600: 31 c0                 xor    %eax,%eax
+  40b602: 48 8b 3d e7 a0 0b 00  mov    0xba0e7(%rip),%rdi        # 4c56f0 &lt;stdout&gt;
+  40b609: 48 89 e2              mov    %rsp,%rdx
+  40b60c: 31 c9                 xor    %ecx,%ecx
+  40b60e: 48 8d 84 24 e0 00 00  lea    0xe0(%rsp),%rax
+  40b615: 00 
+  40b616: 4c 89 d6              mov    %r10,%rsi
+  40b619: c7 04 24 08 00 00 00  movl   $0x8,(%rsp)
+  40b620: 48 89 44 24 08        mov    %rax,0x8(%rsp)
+  40b625: 48 8d 44 24 20        lea    0x20(%rsp),%rax
+  40b62a: c7 44 24 04 30 00 00  movl   $0x30,0x4(%rsp)
+  40b631: 00 
+  40b632: 48 89 44 24 10        mov    %rax,0x10(%rsp)
+  40b637: e8 74 30 00 00        call   40e6b0 &lt;__vfprintf_internal&gt;
+  40b63c: 48 8b 54 24 18        mov    0x18(%rsp),%rdx
+  40b641: 64 48 2b 14 25 28 00  sub    %fs:0x28,%rdx
+  40b648: 00 00 
+  40b64a: 75 08                 jne    40b654 &lt;_IO_printf+0xc4&gt;
+  40b64c: 48 81 c4 d8 00 00 00  add    $0xd8,%rsp
+  40b653: c3                    ret    
+  40b654: e8 27 67 04 00        call   451d80 &lt;__stack_chk_fail&gt;
+  40b659: 0f 1f 80 00 00 00 00  nopl   0x0(%rax)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> qui contient lui‑même d'<strong class="defin">autres instructions d'appel</strong> de sous‑programmes qui implémentent divers aspects de <code class="">printf</code>.  </p>
+
+<p> <em class="remark">Remarques.</em>  </p>
+<ol class="lower">
+  <li> L'incorporation en intégralité dans le <strong class="specialBG">fichier exécutable</strong> du code objet de la fonction <code class="prettyprint lang-c">printf</code>, même s'il est volumineux (car c'est une fonction complexe), ne suffit pas à expliquer pourquoi le fichier est si gros en comparaison du fichier source. En effet, l'<strong class="title">édition de liens statique</strong> d'un programme l'<strong>exemple minimal</strong> suivant, qui ne fait appel à <strong class="defin">aucune fonction de bibliothèque</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int main(void) {
+  return 5;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <div class="nobullet"> produit quand même un <strong class="specialBG">fichier exécutable</strong> d'environ <strong class="cons">900 ko</strong>. En effet, la chaîne de compilation fait appel à un grand nombre de <strong class="specialN">fonctions de bas niveau</strong> qui sont systématiquement utilisées dans le code exécutable du moindre programme. </div>
+
+
+  <li> Le <strong class="specialBG">fichier exécutable</strong> peut être un peu allégé en le débarrassant de ses <strong class="defin">symboles de débogage</strong> : </li>
+  <ul>
+    <li> soit lors de la compilation avec la commande <code class="cmd">gcc</code> en activant l'<strong>option</strong> <code class="cmd">-s</code> ; </li>
+  
+    <li> soit après la compilation, en lui appliquant la <strong>commande</strong><code class="cmd">strip</code> avec l'<strong>option</strong> <code class="cmd">-s</code>. </li>
+  </ul>
+  
+  <div class="nobullet"> Néanmoins, le <strong>gain</strong> sur la taille du fichier est <strong class="pros">seulement d'environ 10 % </strong>dans notre exemple. Autrement dit, on doit retenir que l'<strong class="title">édition de liens statique</strong> produit inévitablement des <strong class="cons">très gros fichiers exécutables</strong>, même pour des petits programmes source. </div>
+</ol>
+
+</div><!-- expert -->  
+</div><!-- exemple -->
+
+<div class="complement" style="margin-top: 1em; display:inline-block;">
+  <!-- ajouter une figure
+  <img class="top-right" src="../img/?????.png" width="450px">
+   -->
+<p class="square" style="margin-top: 0em"> En <strong class="title">édition de liens dynamique</strong>, le <strong class="specialT">code objet</strong> des <strong class="defin">fonctions de bibliothèque</strong> n'est <strong class="warning">pas incorporé</strong> dans le <strong class="specialBG">fichier exécutable</strong>. Pour chaque appel d'une telle fonction, l'éditeur de liens ne fait qu'indiquer une <strong class="specialN">référence externe temporaire</strong> qui sera exploitée lors de l'exécution.  </p>
+
+<p> Et c'est seulement durant l'<strong class="specialR">exécution</strong> du programme qu'un autre composant logiciel, l'<strong class="specialLB">éditeur de liens dynamique</strong> <a class="external" href="https://en.wikipedia.org/wiki/Dynamic_linker" target="_BLANK">W</a> (<strong>dynamic linker</strong>) intervient : </p>
+<ul>
+  <li> il résout les références externes en déterminant l'<strong class="defin">adresse</strong> en mémoire vive des <strong>fonctions de bibliothèque</strong> appelées ; </li>
+
+  <li> et si ce n'est pas encore fait, il charge en <strong class="specialO">mémoire partagée</strong> <a class="external" href="https://en.wikipedia.org/wiki/Shared_memory" target="_BLANK">W</a> (<strong>shared memory</strong>) le code objet des fonctions appelées (qui doivent avoir été compilées préalablement). </li>
+</ul>
+<p> Il en résulte un <strong class="specialBG">fichier exécutable</strong> <strong class="pros">beaucoup plus petit</strong> qu'avec l'édition de liens statique. C'est la raison principale pour laquelle c'est la technique adoptée <strong class="defin">par défaut</strong> avec la <strong>commande</strong> <code class="cmd">gcc</code>. </p>
+
+<div class="expert">
+<p> De plus, l'<strong>édition de liens dynamique</strong> d'autres <strong class="title">avantages significatifs</strong> : </p>
+<ul>
+  <li> l'<strong class="pros">optimisation</strong> de la <strong class="defin">mémoire vive utilisée</strong> sur la machine cible, puisque le code objet des fonctions de bibliothèque en mémoire partagés peut, sans  duplication, être <strong>utilisé par différents programmes</strong> s'exécutant en parallèle ;  </li>
+
+  <li> la <strong class="pros"> désynchronisation</strong> des <strong class="defin">mises à jour</strong> du programme et des bibliothèques qu'il l'utilise ; ainsi, un programme peut bénéficier de mises à jour des bibliothèques sans nécessiter lui‑même de recompilation. </li>
+</ul>
+</div><!-- expert --> 
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons le même <strong class="title">programme trivial</strong> « <strong>Hello, world</strong> » que supra et compilons le normalement avec <code class="prettyprint lang-c">gcc</code>, sans option particulière : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">gcc</span> hello.c <span class="displayDarkRed">-o</span> hello</code>
+</span> <br>
+génère le <strong class="specialBG">fichier exécutable</strong> <code class="filename">hello</code> de <strong class="pros">seulement</strong> <strong class="specialN">16 ko</strong> environ. Et la commande :   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">file</span> <span class="displayDarkWhite">hello</span>
+hello: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), <span class="displayDarkYellow">dynamically linked</span>, <span class="displayDarkRed">interpreter /lib64/ld-linux-x86-64.so.2</span>, BuildID[sha1]=7a679a407ced3b9a8a9ffa9eb6679be44d44094a, for GNU/Linux 3.2.0, not stripped
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> permet de vérifier qu'il s'agit bien d'un <strong class="specialY">fichier lié dynamiquement</strong>. Elle précise également que l'<strong class="specialR">éditeur de liens dynamique</strong> à utiliser (ou <strong>interpréteur</strong>) est <code class="filename">ld-linux-x86-64.so.2</code>. On verra infra <a class="infra" href="Cc4-4_chaineCompilation.html#objectFiles"></a> qu'il s'agit d'un fichier de <strong>bibliothèque partagée</strong> (<em class="mark">shared object</em>). </p>
+
+<p> Pour en savoir plus, on peut procéder à l'<strong>analyse de ce fichier <em class="sigle">ELF</em></strong> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">readelf</span> <span class="displayDarkRed">-d</span> <span class="displayDarkWhite">hello</span> <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">grep</span> NEEDED
+ 0x0000000000000001 (NEEDED)             Bibliothèque partagée : [libc.so.6]
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> ce qui permet d'exhiber la <strong class="defin">dépendance</strong> avec le fichier de <strong>bibliothèque partagée</strong> <code class="filename">libc.so.6</code>. </p>
+
+
+<div class="expert">
+<p class="square"> En procédant au <strong class="title">désassemblage</strong> du <strong class="specialBG">fichier exécutable</strong> à l'aide de la commande : <br>
+<span class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">objdump</span> <span class="displayDarkRed">-D</span> hello <span class="displayDarkBlue">></span> hello.dump</code>
+</span> <br> 
+et en ouvrant le fichier de redirection <code class="filename">hello.dump</code> dans un éditeur de code, on constante que la fonction <code class="cmd">main</code> a <strong class="defin">presque le même code</strong> que dans la version liée statiquement : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkBlue">0000000000001149 &lt;main&gt;:</span>
+    1149: f3 0f 1e fa           endbr64 
+    114d: 55                    push   %rbp
+    114e: 48 89 e5              mov    %rsp,%rbp
+    1151: 48 8d 05 ac 0e 00 00  lea    0xeac(%rip),%rax        # 2004 <_IO_stdin_used+0x4>
+    1158: 48 89 c7              mov    %rax,%rdi
+    115b: e8 f0 fe ff ff        <span class="red">call   1050  &lt;puts@plt&gt;</span>
+    1160: b8 00 00 00 00        mov    $0x0,%eax
+    1165: 5d                    pop    %rbp
+    1166: c3                    ret      
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> La <strong class="warning">différence majeure</strong> se trouve dans l'<strong class="defin">appel de la fonction</strong> <code class="prettyprint lang-c">puts</code> (<em class="english">put string</em>) qui : </p>
+<ul>
+  <li> vient <strong>en substitution de la fonction</strong> <code class="prettyprint lang-c">printf</code> (l'éditeur de liens a optimisé le code objet car, en l'absence de spécifications de conversion dans la chaîne de format, l'emploi de <code class="prettyprint lang-c">puts</code> revient au même) ; </li>
+
+  <li> se présente via le <strong>symbole</strong> <code class="cmd">&lt;puts@plt&gt;</code> qui indique que la référence est à chercher dans la <strong class="defin">procedure linkage table</strong> (<strong><em class="sigle">PLT</em></strong>). </li>
+</ul>
+
+<p> Et en remontant à l'adresse <code>1050</code>, on trouve non <strong class="warning">pas le code</strong> de la fonction <code class="prettyprint lang-c">puts</code> une instruction de saut sur l'adresse relative de son code dans la <strong class="defin">bibliothèque standard</strong> du langage <strong>C</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkBlue">0000000000001050 &lt;puts@plt&gt;:</span>
+    1050: f3 0f 1e fa           endbr64 
+    1054: f2 ff 25 75 2f 00 00  <span class="red">bnd jmp *0x2f75(%rip)        # 3fd0 &lt;puts@GLIBC_2.2.5&gt;</span>
+    105b: 0f 1f 44 00 00        nopl   0x0(%rax,%rax,1)  
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+<h4 id="objectFiles"> Les différents types de fichiers ELF sous <em class="mark">Linux</em> </h4>
+
+<div class="important">
+<p> Sous <strong>Linux</strong>, un <strong class="title">fichier objet au format <em class="sigle">ELF</em></strong> peut être de type : </p>
+<ul>
+  <li> <strong class="specialLB">relocalisable</strong> (<strong>relocatable</strong>) – c'est le cas s'il est directement issu de la phase <strong class="specialR">assemblage</strong> ; </li>
+ 
+  <div class="nobullet">  via la commande <code class="cmd">gcc</code>, il porte par défaut l'extension <code class="filename">.o</code> (cf. supra <a class="supra" href="Cc4-4_chaineCompilation.html#assemblerAS"></a>) ; </div>
+
+  <li> <strong class="specialLB">exécutable</strong>, lorsqu'il est produit par <strong class="specialR">édition de liens</strong> statique ou dynamique, sans option particulière (cf. supra <a class="supra" href="Cc4-4_chaineCompilation.html#linkerLD"></a>) ;   </li>
+
+  <li> <strong class="specialLB">bibliothèque partagée</strong> (<strong>shared object</strong>), lorsqu'il est produit par <strong class="specialR">édition de liens dynamique</strong> avec l'<strong>option</strong> <code>-shared</code>.   </li>
+</ul>
+</div><!-- important -->
+
+<h4> Les options de l'édition de liens </h4>
+
+
+<div class="expert">
+<p> <strong class="title">Pour approfondir</strong> les connaissances sur l'édition de liens, on pourra se reporter à la série de vidéos proposées par la chaîne <em class="mark">Embeddedarmdev</em> <a class="external" href="https://www.youtube.com/playlist?list=PLIz6U0slZNq2TS1zSUjZHgxBjAJL4nb92" target="_BLANK">Y</a>. </p>
+</div><!-- expert -->
+
+
+
+
+<!-- approfondissement : LTO (link-time optimization), activé par défaut dans GCC depuis la version 4.5
+  peut-être désactivé par l'option '-fno-lto'
+
+https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html#LTO-Overview
+
+https://www.youtube.com/watch?v=9nzT1AFprYM
+
+-->
+
+
+<!--
+<h3> Cas d'une compilation Arduino </h3> 
+
+<p> Analyse du log d'une compilation Arduino </p>
+
+
+
+<h2> Exécution d'un programme compilé </h2>
+
+<h3> Notion d'environnement d'exécution </h3>
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Environnement_d%27ex%C3%A9cution" target="_BLANK"></a> </p>
+
+<p> Bibliothèque d'exécution <a class="external" href="https://en.wikipedia.org/wiki/Runtime_library" target="_BLANK"></a> </p>
+
+<p> Bibliothèque CRT0  <a class="external" href="https://en.wikipedia.org/wiki/Crt0" target="_BLANK"></a> </p>
+
+
+<h3> Le chargeur de programme </h3>
+
+
+-->
+
+
+<h2> La compilation </h2>
+
+
+<img class="top-right" style="margin-right: 0.5em; margin-top: 0.5em;" src="../../img/enTravaux.png" width="120px">
+
+<h3 id="compilateur"> Notions générales de compilateur et d'implémentation </h3>
+
+
+<div class="important">
+<p> En informatique, un <strong class="title">compilateur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Compilateur" target="_BLANK">W</a> (en anglais, <em class="english">compiler</em>) est un <strong class="defin">logiciel</strong> qui, à partir d'un <strong class="specialG">code source</strong>, exprimé dans un langage de haut niveau, dit <strong>langage source</strong>, produit un <strong class="specialMg">code objet</strong> dans un langage de bas niveau, dit <strong>langage cible</strong>, spécifique pour une machine donnée dite <strong>machine cible</strong> . </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En langages <strong>C</strong> et <strong>C++</strong> : </p>
+
+<ul>
+	<li> le code dit « <strong class="specialG">source</strong> » n'est pas exactement celui saisi par le ou les programmeurs, il a déjà subi les traitements opérés par le <strong>préprocesseur</strong> ; en particulier, les fichiers sources primaires (typiquement, les fichiers d'en‑tête de module de bibliothèque – d'extension <code class="filename">.h</code> en <strong>C</strong>) ont été incorporés dans les fichiers sources principaux (typiquement <code class="filename">.c</code> ou <code class="filename">.cpp</code>), via des directives <code class="prettyprint lang-c">#include</code> ; </li>
+
+	<div class="nobullet"> on parle d'<strong class="defin">unité de compilation</strong> (en anglais, <em class="english">translation unit</em> <a class="external" href="https://en.wikipedia.org/wiki/Translation_unit_(programming)" target="_BLANK">W</a>) pour désigner le fichier résultat de chaque fichier source primaire traité par un préprocesseur <em class="sigle">CPP</em> ; </div>
+
+	<li> le code dit « <strong class="specialT">objet</strong> » est composé en langage binaire, dit « machine » (et non pas en langage d'assemblage) ; toutefois, il ne constitue <strong>pas encore un code exécutable</strong> : il reste à assembler tous les objets compilés, étape qu'on appelle l'<strong class="defin">édition de lien</strong>, pour former le <strong class="specialLB">fichier exécutable</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> On emploie souvent  – y compris dans ce chapitre – le terme de « <strong>compilateur</strong> » pour désigner la <em>chaîne de compilation</em> dans son ensemble, c'est-à-dire en incluant l'éditeur de liens. Cela vient du fait que le compilateur est considéré comme le composant principal de cet ensemble logiciel. </p>
+</div><!-- remarques -->
+
+
+<h4> Notion d'implémentation </h4>
+
+
+<p> Cette notion a déjà été abordée au chapitre C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#implementation" target="_BLANK"></a>.</p>
+
+<div class="important">
+<p> On appelle <strong class="title">implémentation</strong> <strong>d'un programme</strong> l'association d'une <strong class="defin">chaîne de compilation</strong> (avec une version précise de chacun de ses composants logiciels) et d'une <strong class="defin">machine‑cible</strong> pour laquelle est engendré le code exécutable de ce programme. </p>
+
+<p> En matière de compilation, c'est essentiellement le <strong>microprocesseur</strong> ou le <strong>microcontrôleur</strong> – avec son <strong class="defin">jeu d'instructions</strong> – qui fait la spécificité d'une machine cible.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> À la <strong class="warning">variété</strong> des <strong>compilateurs</strong> s'ajoute celle, potentiellement assez vaste, des <strong>machines cibles</strong> qui peuvent exécuter un programme donné, avec toutes les combinaisons imaginables. Il en faut avoir conscience  pour comprendre qu'il est difficile d'énoncer des « vérités absolues » en matière de production de code exécutable. </p>
+</div><!-- complement -->
+
+
+<!--
+<h3> Les compilateurs des langages <em class="mark">C</em> et <em class="mark">C++</em> </h3>
+
+
+
+<div class="important">
+<p> La programmation en <strong>C</strong> et <strong>C++</strong> étant très employée pour mettre en œuvre les architectures matérielles des équipements numériques, des <strong class="title">compilateurs</strong> de ces langages sont <strong class="pros">presque toujours développés</strong> pour <strong class="defin">chaque nouveau microprocesseur</strong> ou <strong class="defin">microcontrôleur</strong> mis sur le marché. </p>
+
+<p> On peut se faire une idée de la diversité de cette offre logicielle en consultant cette liste <a class="external" href="//https://en.wikipedia.org/wiki/List_of_compilers#C_compilers" target="_BLANK">W</a>.  </p>
+</div>
+
+<div class="complement">
+<p> En principe, tout compilateur doit <strong class="defin">respecter la norme</strong> du langage sur lequel il opère. Néanmoins, ce n'est pas toujours le cas, en particulier pour les dernières versions des normes. </p>
+</div>
+
+
+<h4 id="compiloLibres"> Les compilateurs <em class="mark">C</em> et <em class="mark">C++</em> du logiciel libre </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/GCClogo.png" width="100px">
+<p> Dans le domaine du logiciel libre, le <strong>projet <em class="sigle">GNU</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Projet_GNU" target="_BLANK">W</a> fournit une <strong>« collection » de</strong> <strong class="title">compilateurs</strong> dit <strong class="title"><em class="sigle">GCC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_Compiler_Collection" target="_BLANK">W</a> (sigle récursif qui signifiait originellement <em class="sigle">GNU</em> <em class="mark">C</em> <em class="english">compiler</em>, aujourd'hui <strong><em class="sigle">GNU</em> <em class="english">compiler collection</em></strong> parce qu'ils sont multi-langages). </p>
+</div>
+
+<div class="complement">
+<p> Dans cette collection, on désigne par <strong class="defin"><em class="sigle">GCC</em></strong> et <strong class="defin"><em class="sigle">G++</em></strong> respectivement tout compilateur des langages <strong>C</strong> et <strong>C++</strong>. Mais attention à <strong class="warning">ne pas confondre</strong> ces sigles avec les identificateurs <code class="displayDark">gcc</code> et <code class="displayDark">g++</code> des commandes en ligne des <strong>chaînes de compilation</strong> utilisant ces compilateurs. On parle de <em class="english">wraper</em>.  </p>
+</div>
+
+<p class="square"> La technologie <strong class="Arduino">Arduino</strong> s'inscrivant dans une démarche de logiciel libre, elle emploie pour ses cartes des compilateurs basés sur <strong class="defin"><em class="sigle">GCC</em></strong> et <strong class="defin"><em class="sigle">G++</em></strong>. En particulier, pour les cartes à microcontrôleur à cœur <strong><em class="sigle">AVR</em></strong> (<strong class="Arduino">Uno</strong>, <strong class="Arduino">Mega</strong>, <strong class="Arduino">Nano</strong>…), il s'agit principalement du compilateur « <em class="sigle">AVR‑GCC</em> » et surtout « <em class="sigle">AVR‑G++</em> », lequel est conforme à la <strong>norme C++11</strong>. </p>
+
+<p class="square"> Pour les ordinateurs de type <strong class="title">PC Windows</strong>, on dispose du compilateur <strong class="defin">MinGW</strong> (sigle qui signifie <em class="english">minimalist <em class="sigle">GNU</em> for Windows</em> <a class="external" href="https://en.wikipedia.org/wiki/MinGW" target="_BLANK">W</a>) : </p>
+
+<ul>
+	<li> c'est une <strong>adaptation « légère »</strong> de <strong><em class="sigle">GCC</em></strong> qui prend en charge la plupart des langages compilables par <em class="sigle">gcc</em>, bien évidemment <em class="mark">C</em> et <em class="mark">C++</em>, mais aussi <em class="mark">Fortran</em> et <em class="mark">Ada</em> ; </li>
+
+	<li> il est <strong class="pros">gratuit</strong> et <strong class="pros">open-source</strong>, conformément à l'esprit du projet <em class="sigle">GNU</em> ; de plus, il fournit les fichiers d'en‑tête de bibliothèques de fonctions <strong><em class="mark">Windows</em> <em class="sigle">API</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Windows_API" target="_BLANK">W</a> (<em class="english">Windows application programming interfaces</em>) pour la créations d'applications interagissant avec les systèmes d'exploitation <em class="mark">Windows</em> ; </li>
+  
+  <div class="expert">
+	<li> néanmoins, il n'impose pas que les programmes produits avec ses compilateurs soient distribués sous licence publique générale <em class="sigle">GNU</em> <a class="external" href="https://fr.wikipedia.org/wiki/Licence_publique_générale_GNU" target="_BLANK">W</a>, donc les programmeurs ne sont pas tenus de distribuer leur code source avec leurs programmes ; ce compilateur peut donc être utilisé dans le cadre d'<strong class="pros">activités commerciales</strong> ; </li>
+
+	<li> il est <strong class="pros">multi-plateforme</strong>, au sens où il peut être utilisé aussi bien sur PC <em class="mark">Windows</em> pour y développer des applications <em>natives</em>, ou sur d'autres machines, en particulier des PC <em class="mark">Linux</em>, pour développer des applications pour PC <em class="mark">Windows</em> (par compilation dite <em>croisée</em> – cf. infra <a class="infra" href="#compilCroisee" target=""></a>). </li>
+  </div>
+</ul>
+
+<p> Pour toutes ces raisons, c'est cette famille de compilateurs qui est la plus souvent téléchargée avec l'<strong><em class="sigle">IED</em></strong> gratuit <strong class="Codeblocks">Code::Blocks</strong> sur machines <em class="mark">Windows</em>. </p> 
+-->
+
+<!-- CLANG -->
+
+
+<!-- chaînes de compilation propriétaires -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les différents types de compilation </h2>
+
+
+
+<div class="expert">
+<p> Avant d'étudier les différentes étapes de la compilation, il faut avoir conscience que ce qui pourrait sembler un simple aspect technique de la programmation constitue en réalité, à lui tout seul, un <strong class="warning">vaste domaine</strong> dont l'histoire, bien que relativement récente en comparaison avec d'autres domaines techniques, est <strong>extrêmement riche</strong>. Le foisonnement des langages de programmation et des recherches et développements menés pour dominer la complexité grandissante des logiciels à produire en est le reflet. En termes de puissance et de complexité, un abîme sépare les premiers ordinateurs de la fin des années 1950 et les machines que nous utilisons quotidiennement (téléphones portables, etc.) </p>
+
+<p> Il n'est donc pas possible de détailler ici toutes les techniques de la compilation, ni évoquer des développements essentiels comme les compilateurs de compilateurs. On se contentera de simplement de relever <strong class="specialLB">quelques aspects transversaux</strong>. </p>
+</div><!-- expert -->
+
+
+<h3 id="compilNativeCroisee"> Compilation native <em>versus</em> croisée</h3>
+
+
+<div class="important">
+<p> Une <strong class="title">compilation</strong> d'un programme ne peut être effectuée que sur une machine capable d'exécuter un compilateur du langage employé. Typiquement, on emploie un <strong class="defin">ordinateur</strong>. </p>
+<ul>
+  <li> Lorsque cet ordinateur est <strong>identique à la machine cible</strong>, on parle de <strong>compilation</strong> <strong class="title">native</strong> (en anglais, <em class="english">native compilation</em>). </li>
+
+  <div class="expert">
+  <div class="nobullet"> Il ne s'agit pas nécessairement d'une seule et même machine, mais de toutes les machines ayant une <strong class="pros">architecture matérielle similaire</strong> et des systèmes d'exploitation suffisamment compatibles entre eux pour que le programme. </div>
+  </div><!-- expert -->
+
+  <li> A contrario, si l'ordinateur sur laquelle s'effectue la compilation présente des <strong>différences</strong> significatives avec la machine cible, on parle de <strong>compilation</strong> <strong class="title">croisée</strong> <a class="external" href="https://en.wikipedia.org/wiki/Cross_compiler" target="_BLANK">W</a> (en anglais, <em class="english">cross compilation</em>) . </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les situations de <strong class="title">compilation croisée</strong> ne sont pas aussi rares que pourrait le penser un débutant en programmation : </p>
+
+<ul>
+	<li> c'est toujours le cas lorsqu'on programme une <strong class="defin">carte à microcontrôleur</strong> ; typiquement, on utilise un ordinateur comme terminale de programmation, équipé du logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>, qui lui-même intègre les compilateurs <em class="sigle">AVR‑GCC</em> et <em class="sigle">AVR‑G++</em> (cf. supra <a class="supra" href="Cc4-4_chaineCompilation.html#compiloLibres"></a>) ; </li>
+
+  <div class="expert">
+  <div class="nobullet"> d'ailleurs, si l'on souhaite programmer une carte <strong class="specialV">carte exogène</strong> à la marque <em class="mark">Arduino</em> (par exemple, une carte <em class="mark">Espressif</em>, <em class="mark">Teensy</em> ou <em class="mark">Wemos</em>…) avec <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>, il faut préalablement télécharger et intégrer le compilateur spécifique pour le microcontrôleur embarqué sur une telle carte ; </div>
+  </div><!-- expert -->
+
+	<li> c'est aussi le cas lorsqu'on développe une application pour <strong class="defin">smartphone</strong> ; en effet, même s'il possède une architecture matérielle puissance et un système d'exploitation multi-tâches, un smartphone ne dispose pas d'une interface utilisateur appropriée pour coder (l'écran est trop petit, d'autant plus qu'il est partagé avec le clavier…). </li>
+</ul>
+</div><!-- complement -->
+
+<p> Pour la programmation des <strong class="title">cartes à microcontrôleurs</strong>, une chaîne de compilation <strong><em class="sigle">GCC</em></strong> est <strong class="pros">commode</strong> car elle prend en charge plusieurs langages et une grande variété de compilateurs, pour toutes sortes de machines et systèmes d'exploitation. </p>
+
+
+
+<h3> Compilation simple passe <em>versus</em> multi‑passes </h3>
+
+
+<div class="complement">
+<p> Historiquement, la compilation d'un programme était une tâche lourde pour les ordinateurs, dont les ressources en calculs et en mémoire étaient très limitées. On a donc créé des langages comme <strong>Pascal</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Pascal_(langage)" target="_BLANK">W</a>, qui est contraignant dans sa forme (tous les types et toutes les variables globales doivent être déclarées au début du programme) pour <strong class="pros">simplifier la compilation</strong>, et en particulier d'effectuer de nombreuses tâches d'analyse en intégralité avec une  <strong class="title">une seule passe</strong>, c'est-à-dire <strong class="defin">une seule</strong> <strong>lecture du fichier source</strong>. </p>
+
+<p> Mais avec les progrès vertigineux accomplis en micro-électronique (la fameuse <em>loi de Moore</em> <a class="external" href="https://fr.wikipedia.org/wiki/Loi_de_Moore" target="_BLANK">W</a>), on a commencé à s'affranchir de ces contraintes. Ainsi un langage comme <strong>C</strong> permet de <strong class="specialO">déclarer une variable n'importe où</strong> dans le code source et de répartir ce dernier sur plusieurs fichiers. En contrepartie, la compilation nécessite <strong class="title">plusieurs passes</strong> pour pouvoir déterminer toutes les adresses des données et fonctions, restées inconnues lors de la première passe. </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Étapes de la compilation </h2>
+
+
+<p> La <strong class="title">compilation</strong> est un <strong class="warning">processus très complexe</strong> qui nécessite une succession de traitements, chacun faisant appel à un algorithme spécifique. </p>
+
+<p> Dans les compilateurs récents des langages généralistes comme <strong>C</strong> et <strong>C++</strong>, on distingue <strong class="title">trois grandes parties</strong>, respectivement dites <strong class="specialLB">frontale</strong> (<em class="english">front‑end</em>), <strong class="specialLB">centrale</strong> (<em class="english">middle‑end</em>) et <strong class="specialLB">arrière</strong> (<em class="english">back‑end</em>). </p>
+
+
+<h3> Partie frontale  (<em class="english">front‑end</em>) </h3>
+
+
+<p> La <strong class="defin">partie frontale</strong> (dite encore <em>souche</em>) de la compilation est, en principe, indépendante de la machine cible. Elle consiste en une analyse lexicale, syntaxique et sémantique du langage pour aboutir à la production d'un <strong>code intermédiaire</strong>. </p>
+
+<ol>
+	<li> <p> L'<strong>analyse lexicale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Analyse_lexicale" target="_BLANK">W</a>, en anglais <em class="english">lexing</em>, supprime les commentaires et les séparateurs blancs surnuméraires (si cela n'a pas déjà été fait par le préprocesseur), puis décompose le code en une séquence de <strong class="defin">jetons</strong> (en anglais, <em class="english">token</em>, d'où l'expression « tokénisation » du code), chaque jeton étant identifié par une catégorie précise (identificateur, mot-clé, séparateur, etc.). Tous les identificateurs sont listés dans un tableau appelé <strong class="defin">table des symboles</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Table_des_symboles" target="_BLANK">W</a>. </p>
+
+	<p> L'analyse lexicale permet déjà de détecter certaines erreurs de codage : identificateurs mal formés, symbole non autorisé, etc. </p> </li>
+
+
+	<li> <p> L'<strong>analyse syntaxique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Analyse_syntaxique" target="_BLANK">W</a>, en anglais <em class="english">parsing</em>, transforme la séquence de jetons issue de l'analyse lexicale en un <strong class="defin">arbre syntaxique</strong>. Ce dernier représente les aspects structurels du code par des nœuds hiérachisés et des liaisons entre nœuds : par exemple, pour une bifurcation <code>if</code>, on a un nœud racine en liaison directe avec trois nœuds : 1) l'expression de la condition, 2) le bloc d'instructions ddans l'affirmative (si la condition est évaluée vraie, 3) le bloc d'instructions dans la négative (si la construction est évaluée fausse) <a class="external" href="https://en.wikipedia.org/wiki/Compiler#Front_end" target="_BLANK">W</a>. </p>
+
+	<p> L'analyse syntaxique permet de détecter des erreurs comme l'absence d'une expression attendue (par exemple, à cause d'un oubli des parenthèses), la malformation d'un bloc, etc. </p> </li>
+
+
+	<li> <p> L'<strong>analyse sémantique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Analyse_sémantique#Informatique" target="_BLANK">W</a>, en anglais <em class="english"></em>, complète l'arbre issu de l'analyse syntaxique et la table des symboles générés lors de l'analyse lexicale. En particulier : </p>
+
+  <ul>
+    <li> elle fait correspondre à chaque identificateur sa déclaration ou une définition via une <strong class="defin">étiquette</strong> (en anglais, <em class="english">label</em>), c'est-à-dire un symbole élémentaire qui deviendra par la suite une adresse ; </li>
+
+    <li> avec un langage à typage statique comme <em class="mark">C</em> ou <em class="mark">C++</em>, elle vérifie la <strong>bonne concordance des types</strong> des opérations d'affectation et procède à l'initialisation des variables ;</li>
+  </ul>
+
+	<p> L'analyse syntaxique permet notamment de détecter les absences et les conflits de déclarations, les erreurs de typage. </p> </li>
+
+
+	<li> En l'absence d'erreurs détectées précédemment, la <strong>génération de code intermédiaire</strong> composé dans un <strong>langage intermédiaire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_intermédiaire" target="_BLANK">W</a> – de bas niveau mais indépendant de la machine cible – produit, pour chaque unité de compilation, un fichier destiné à la partie centrale de la compilation. </li>
+</ol>
+
+
+<h4 id="codeIntermediaire"> Composition du code intermédiaire </h4>
+
+
+<p> La composition du <strong class="defin">code intermédiaire</strong> généré par la compilation frontale diffère déjà considérablement du code source. En particulier : </p>
+
+<ul>
+  <li> les <strong>déclarations des types</strong> ne sont plus présentes, mais elles ont été prises en compte dans la déclarations des variables pour calculer l'espace mémoire nécessaire à chacune ; </li>
+
+  <li> les <strong>déclarations des variables</strong> globales ont été traitées par des allocations mémoire ; celles des variables locales par des instructions d'allocation mémoire ; de la sorte, l'accession à la valeur d'une variable pour des opérations de lecture et d'écriture s'effectue soit par son <strong>adresse</strong>, soit encore par une <strong>étiquette</strong> s'il s'agit d'une variable externe à l'unité de compilation ; </li>
+
+  <li> de même, les <strong>fonctions</strong> sont des parties de code identifiées par l'adresse de leur première instruction ou une étiquette s'il s'agit d'une fonction externe à l'unité de compilation (par exemple, définie dans une bibliothèque) ; </li>
+
+  <li> les <strong>instructions structurées</strong> (boucles, etc.) sont décomposées en instructions élémentaires de tests et de sauts à des adresses ou des étiquettes. </li>
+</ul>
+
+
+
+
+<h3 id="middleEnd"> Partie centrale (<em class="english">middle‑end</em>) </h3>
+
+
+<p> La <strong class="defin">partie centrale</strong> de la compilation est d'abord consacrée à d'autres tâches d'analyse et de vérification : </p>
+
+<ul>
+	<li> analyse des <strong>contraintes d'antériorité</strong> entre les instructions pour pouvoir éventuellement les exécuter de façon parallèle (sur un processeur multi-cœurs) <a class="external" href="https://en.wikipedia.org/wiki/Dependence_analysis" target="_BLANK">W</a> ;  </li>
+
+	<li> analyse des <strong>alias</strong> associés aux allocations mémoire (liste des pointeurs ciblant une même adresse) <a class="external" href="https://en.wikipedia.org/wiki/Alias_analysis" target="_BLANK">W</a>, etc.  </li>
+</ul>
+
+<p> Mais en plus, la partie centrale procède à l'<strong>optimisation du code intermédiaire</strong> sans pour autant faire intervenir les spécificités de la machine cible. Notamment : </p>
+
+<ul>
+	<li> elle calcule les <strong>expressions constantes</strong> et propage leur valeur dans le code ; ainsi, toute occurrence de constante déclarée est remplacée par sa valeur, comme le fait le préprocesseur avec les pseudo-constantes ; </li>
+
+	<li> elle identifie et élimine les <strong>branches mortes du code</strong>, c'est-à-dire les instructions qui ne seront jamais exécutées, par exemple parce qu'elles sont conditionnées par une expression toujours fausse ;  </li>
+
+	<li> elle délocalise hors des boucles des <strong>instructions invariantes</strong> qui n'ont pas besoin d'être répétées (par exemple, la déclaration d'une variable locale, mais pas son affectation) ; </li>
+</ul>
+
+<p> La partie centrale fournit à la partie arrière, pour chaque unité de compilation, un fichier de <strong>code intermédiaire optimisé</strong> qui, en principe, ne dépend ni du langage source, ni de la machine cible. </p>
+
+
+<h3> Partie arrière (<em class="english">back‑end</em>)</h3>
+
+
+<p> Enfin, la <strong class="defin">partie arrière</strong> de la compilation est celle qui  traduit le code intermédiaire optimisé en un <strong>code objet</strong> composé avec le <strong>jeu d'instruction de la machine cible</strong>. Elle procède également à un certain nombre d'optimisations spécifiques à son architecture. En particulier : </p> 
+
+<ul>
+	<li> elle attribut respectivement aux variables statiques les plus sollicitées dans le programme (et en langages <em class="mark">C/C++</em>, celles déclarées de la classe <code>register</code> <a class="previous" href="Cc4-2_porteeDonnees.html#register" target="_BLANK"></a>) des registres du microprocesseur, et ce dans la limite des registres disponibles ; les autres variables statiques n'obtiennent qu'un espace mémoire dans le segment <code>.data</code> ; </li>
+
+	<li> elle réorganise certaines séquences d'instruction pour améliorer les performances de vitesse : par exemple, plutôt que de multiplier ou diviser une valeur entière par 2<sup><var>n</var></sup>, elle décale son mot mémoire de <var>n</var> rangs, respectivement vers la gauche ou la droite (ce qui est plus rapide que le traitement d'une opérateur binaire, puisque le processeur ne travaille que sur un seul registre) ; en anglais, on parle de <em class="english">peephole optimization</em> <a class="external" href="https://en.wikipedia.org/wiki/Peephole_optimization" target="_BLANK">W</a>.  </li>
+</ul>
+
+
+
+
+
+<h2> L'assemblage  –  le langage machine </h2>
+
+
+
+
+
+
+
+
+<h2> L'édition de liens </h2>
+
+
+<h3> Notion d'éditeur de lien </h3>
+
+
+<p> Schématiquement, un <strong class="defin">éditeur de liens</strong> (en anglais, <em class="english">linker</em>) est un logiciel qui <strong>assemble</strong> les différents <strong>fichiers objets</strong> issus : </p>
+
+<ul>
+	<li> de la compilation des fichiers sources d'un programme (les unités de compilation), </li>
+
+	<li> de bibliothèques déjà compilées, </li>
+</ul>
+
+<p> pour former : </p>
+
+<ul>
+	<li> soit un <strong>fichier exécutable</strong> sur la machine cible, </li>
+
+	<li> soit un nouveau <strong>fichier objet</strong> de bibliothèque, </li>
+</ul>
+
+<p> C'est une tâche beaucoup moins complexe que la compilation. C'est pourquoi un éditeur de lien est rarement un logiciel isolé : il est le plus souvent associé à un compilateur et, s'il est indépendant du ou des langages sources dont sont issus les fichiers objets, il procède en fonction de la machine cible (même s'il y a moins de spécificités que pour la compilation). Bien évidemment, la collection <em class="mark">GCC</em> inclut un éditeur de lien, désigné <code>ld</code>. Très polyvalent, il admet de nombreuses options et s'adapte à la plupart des plate-formes. </p> 
+
+
+<h3> Déroulement de l'édition de lien </h3>
+
+
+<p> Chaque <strong class="defin">fichier objet</strong> est notamment constitué : </p>
+
+<ul>
+	<li> d'un <strong>segment</strong> <code>.data</code> qui stocke des <strong>valeurs</strong> à des adresses mémoires ordonnées ; </li>
+
+	<li> d'un <strong>segment</strong> <code>.text</code> qui stocke des <strong>instructions</strong> à des adresses mémoires ordonnées ; </li>
+
+	<li> d'une <strong>table des symboles</strong> qui met en relation les étiquettes et des adresses mémoires ;  </li>
+
+	<li> des <strong>informations de relocalisation</strong> des données dans les instructions, avec le recensement des dépendances lorsqu'un symbole qui y figure est externe ;  </li>
+
+	<li> d'un <strong>en‑tête</strong> dont la premier champ est le nom du fichier et qui récapitule la longueur du segment <code>.data</code> et du segment <code>.text</code>. </li>
+</ul>
+	 
+
+<p> Dans le futur fichier exécutable, l'édition de lien consiste à : </p> 
+
+<ul>
+	<li> concaténer les segments <code>.data</code> de tous les fichiers objet et inscrire la somme des longueurs de ces segments dans l'en‑tête du fichier exécutable ; </li>
+
+	<li> concaténer les segments <code>.text</code> de tous les fichiers objet et inscrire la somme des longueurs de ces segments dans l'en‑tête du fichier exécutable ; </li>
+</ul>
+
+<p> et ce faisant, d'effectuer un nouvel adressage absolu des données et des instructions tout en complétant les adresses manquantes dans les instructions (sauts, etc.) pour satisfaire aux dépendances dans les informations de relocalisation. </p> 
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

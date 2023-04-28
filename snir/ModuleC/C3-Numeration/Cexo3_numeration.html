@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Exercices"
+  data-modulepartnumber="3"
+  data-pagenumber="0"
+  data-pageState="OK"
+  data-pageheadtitle="Numération"
+  data-pagefulltitle="Typage élémentaire et numération"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script> 
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les principaux objectifs de cette <strong class="title">feuille d'exercices</strong> sont : </p>
+
+<ul>
+  <li> de <strong class="defin">diversifier</strong> la gamme des types utilisés (en particulier les types entiers à largeur spécifiée du langage <strong>C</strong>) ;  </li>
+
+  <li> de découvrir les <strong class="defin">opérateurs de calcul</strong> sur les <strong>mots binaires</strong> (opérateurs logiques bits à bits, opérateurs de décalage de bits) ; </li>
+
+  <li> d'approfondir l'usage des fonctions d'<strong class="defin">entrées-sorties standards</strong>. </li>
+</ul>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié le cours jusqu'au <strong>chapitre</strong> <strong class="warning">C3‑IX</strong> <strong>inclus</strong> (à l'exception du chap. C3‑IV). Néanmoins, certains exercices ne font appel qu'à un nombre ciblé de connaissances et des renvois aux principaux éléments de cours requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Les <strong class="title">exercices</strong> sont presque tous <strong class="defin">indépendants</strong> les uns des autres, mais ordonnés par niveaux croissants de difficultés et de connaissances requises. Certaines questions peuvent être traitées sur <strong>cahier</strong>, mais la plupart nécessitent l'emploi d'un <strong>ordinateur</strong>. </p>
+
+<p> Pour coder les programmes, il est recommandé d'utiliser un éditeur de code comme <strong class="Sublime">Sublime Text</strong> (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#SublimeText" target="_BLANK"></a>).  </p>
+
+<ul>
+  <li> Enregistrer chaque <strong>fichier source principal</strong> en le nommant conformément à la numérotation des exercices, c'est‑à‑dire par exemple pour l'exercice <em class="bold">2</em>, question <em class="bold">a</em> :  <br>
+  <span class="inline">
+    <code class="filename">C3exo2_a.c</code>
+  </span> </li>
+
+  <li> L'ensemble des fichiers sources doivent être regroupés dans un <strong class="specialT">répertoire d'exercices</strong> nommé par exemple <code class="filename">C3_EXOS</code>. </li>
+
+  <li> La <strong>compilation</strong> des programmes peuvent être effectués : </li>
+  
+  <ul>
+    <li> soit avec la commande <code>gcc</code> directement dans un terminal exécuté depuis le répertoire d'exercices (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#gccEmploi" target="_BLANK"></a>) ;  </li>
+
+    <li> soit, sauf pour l'exercice nº 4, en copiant/collant chaque code source dans un environnement de programmation en ligne comme <strong class="OnlineGDB">OnlineGDB</strong> <a class="external" href="https://www.onlinegdb.com/" target="_BLANK"></a>.</li>
+  </ul>
+</ul>
+
+<p> L'exercice <em class="bold">nº 5</em> est en relation avec le sujet de <em class="bold">TP nº C3‑1</em>. </p>
+</div><!-- important -->
+
+
+
+
+
+
+
+
+
+
+
+<ol class="exercice">
+
+
+  <li id="exo1"> <em class="bold">Limites d'encodage des types entiers et décimaux standards</em></li>
+
+  <div class="nobullet"> 
+  <p> Coder un programme qui affiche les <strong class="title">limites d'encodage</strong> des <strong class="defin">types entiers standards</strong>, en utilisant non <strong class="warning">pas des valeurs numériques</strong> mais les <strong class="specialN">pseudo‑constantes</strong> définies dans le fichier d'en‑tête <code class="filename">limits.h</code> de la bibliothèque standard du langage <strong>C</strong> (cf. chap. C3‑II <a class="cours" href="Cc3-2_typesEntiers.html#limits" target="_BLANK"></a>). On doit obtenir une exécution produisant en sortie standard l'affichage ci‑dessous. </p> 
+
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+    TYPE DESCRIPTOR |           MIN. VALUE |           MAX. VALUE 
+               char |                 -128 |                  127 
+      unsigned char |                    0 |                  255 
+              short |               -32768 |                32767 
+     unsigned short |                    0 |                65535 
+                int |          -2147483648 |           2147483647 
+       unsigned int |                    0 |           4294967295 
+               long | -9223372036854775808 |  9223372036854775807 
+      unsigned long |                    0 | 18446744073709551615 
+          long long | -9223372036854775808 |  9223372036854775807 
+ unsigned long long |                    0 | 18446744073709551615 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> Pour la <strong>première ligne</strong> du tableau, on pourra coder l'instruction (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#controleEspacement" target="_BLANK"></a>) : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c" style="font-size: 80%">printf(" %18s | %20s | %20s \n", "TYPE DESCRIPTOR", "MIN. VALUE", "MAX. VALUE");</code>
+  </span> <br>
+  et pour les <strong>lignes suivantes</strong>, on pourra reprendre la <strong class="pros">même chaîne de format</strong> en adaptant les <strong class="specialDR">spécifications de conversions</strong> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#specificationsConversion" target="_BLANK"></a>) en fonction des <strong class="specialG">types</strong> des arguments à afficher. </p>
+  </div><!-- nobullet -->
+
+  <ol class="questions">
+    <li> Tester d'abord ce programme dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong> puis avec <strong class="specialN">GCC</strong> sous <strong class="specialLB">Linux</strong>. </li>
+
+    <li> Moyennant <strong>quelques modifications</strong> sur les spécifications de conversion, tester ce programme sous <strong class="specialLB">Windows</strong> avec la chaîne de compilation <strong class="specialN">MinGW</strong>. Que constate‑t‑on ? </li>
+
+    <li> * Dans le même esprit, avec la chaîne de compilation <strong>GCC</strong> sous <strong class="specialLB">Linux</strong> (et non pas sous <em class="mark">OnlineGDB</em>), coder un programme qui affiche les limites d'encodage des <strong class="defin">types décimaux standards</strong> (<code class="prettyprint lang-c">float</code>, <code class="prettyprint lang-c">double</code>, <code class="prettyprint lang-c">long double</code>), en utilisant les <strong>pseudo‑constantes</strong> définies dans le fichier d'en‑tête <code class="filename">float.h</code>  de la bibliothèque standard du langage <strong>C</strong> (cf. chap. C3‑V <a class="cours" href="Cc3-5_typesFlottants.html#caracteristiques" target="_BLANK"></a>). Avec les <strong class="specialDR">spécifications de conversion</strong> adaptées aux types flottants (cf. chap. C3‑V <a class="cours" href="Cc3-5_typesFlottants.html#specificationsConversion" target="_BLANK"></a>), on doit obtenir une exécution produisant en sortie standard l'affichage ci‑dessous. </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+  TYPE DESCRIPTOR |   DENORM. MIN. VALUE |   NORM. MIN. VALUE |   MAX. VALUE 
+            float |              1.4e-45 |            1.2e-38 |      3.4e+38 
+           double |             4.9e-324 |           2.2e-308 |     1.8e+308 
+      long double |            3.6e-4951 |          3.4e-4932 |    1.2e+4932 
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> Tenter de compiler dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong> et sous <strong class="specialLB">Windows</strong>. Que se passe‑t‑il ? </div>
+
+  </ol><!-- questions -->
+
+
+  <li id="exo2"> <em class="bold">Génération de nombres aléatoires et statistiques</em> </li>
+
+  <div class="nobullet" style="display: inline-block;"> 
+    <img class="top-right" src="../img/de6faces.png" width="150px">
+  <p> On souhaite tester la <strong class="pros">qualité</strong> du <strong class="title">générateur de nombres pseudo‑aléatoires</strong> employé par un ordinateur. Pour cela, on simule un grand nombre de lancers d'un <strong class="specialO">dé à 6 faces</strong> (<em class="english">six‑sided dice</em> – ou <em class="english">die</em>) et on compare les <strong class="defin">paramètres statistiques</strong> de l'ensemble des résultats obtenus avec les valeurs des grandeurs correspondantes dans la <strong class="defin">théorie des probabilité</strong>, sachant qu'un dé supposé parfait suit une <strong class="specialO">loi uniforme discrète</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Loi_uniforme_discrète" target="_BLANK">W</a>. </p> 
+  </div><!-- nobullet -->
+
+  <div class="consignes" style="margin-left: 0.5em;"> 
+  <p class="consigne"> On déclarera une <strong class="title">constante</strong> <code class="cmd">nbOfRolls</code> pour coder le <strong>nombre de lancers</strong> du dé et on lui donnera successivement les valeurs <code class="prettyprint lang-c">10</code>, <code class="prettyprint lang-c">1000</code> et <code class="prettyprint lang-c">1000000</code> pour tester le programme. </p>
+  </div><!-- consignes -->
+
+	<ol class="questions">
+    <li> Coder un programme qui <strong>simule</strong> <code class="cmd">nbOfRolls</code> lancers du dé (à l'aide de la fonction <code class="prettyprint lang-c">rand</code> – cf. chap. C3‑II <a class="cours" href="Cc3-2_typesEntiers.html#fonctionRand" target="_BLANK"></a>), qui <strong>calcule</strong> la <strong class="defin">moyenne statistique</strong> des résultats obtenus et qui <strong>compare</strong> (calcule la différence) avec l'<strong class="defin">espérance mathématique</strong> pour une telle expérience – cf. les propriétés de la loi uniforme discrète données par le lien supra. </li>
+
+    <div class="nobullet"> Ce programme devrait fournir une <strong>sortie standard</strong> de la forme :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+>>>>> Random number generation test program <<<<<
+Number of rolls:  1000
+--------------------------------------
+Statistical mean: 3.496
+Math expectation: 3.5
+Gap:              -0.004
+</pre>
+<!---------- ne pas indenter ---------->
+
+  	<li> Au programme précédent, ajouter le calcul de l'<strong class="defin">écart‑type</strong> <a class="external" href="https://fr.wikipedia.org/wiki/écart_type" target="_BLANK">W</a> des résultats obtenus par rapport à la moyenne théorique (espérance mathématique). Calculer la différence avec la <strong class="defin">racine carrée de la variance</strong>.  </li>
+
+    <div class="nobullet"> Ce calcul devrait fournir une <strong>sortie standard</strong> supplémentaire de la forme :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+--------------------------------------
+Standard deviation:   1.76182
+Variance square root: 1.70783
+Gap:                  0.0539921
+</pre>
+<!---------- ne pas indenter ---------->    
+
+  	<li> Au programme précédent, ajouter un calcul du <strong class="warning">déséquilibre</strong> de la population des lancers par rapport à la valeur théorique de la <strong class="defin">médiane</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Médiane_(statistiques)" target="_BLANK">W</a>, c'est‑à‑dire la différence entre le nombre de valeurs inférieures et le nombre de valeurs supérieures à la valeur théorique de la médiane, rapportée au nombre de lancers. </li>
+
+    <div class="nobullet"> Ce calcul devrait fournir une <strong>sortie standard</strong> supplémentaire de la forme :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+--------------------------------------
+Median unbalance: -0.8 % (expected 0 %)
+</pre>
+<!---------- ne pas indenter ---------->    
+
+	</ol><!-- questions -->
+
+
+<li id="exo3"> <em class="bold"> Calculateur d'adresses <em class="sigle">IP</em>v4 </em> </li>
+
+<div class="nobullet" style="display: inline-block;"> 
+  <img class="top-right" src="../img/calculateurAdressesIP.png" width="450px">
+<p> On souhaite coder un <strong class="title">calculateur d'adresses <em class="sigle">IP</em>v4</strong> à l'instar de ceux que l'on peut trouver sur l'Internet <a class="external" href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/CalculMasque/" target="_BLANK"></a> (cf. la capture d'écran ci‑contre). À partir d'une <strong>adresse saisie</strong> par l'utilisateur en <strong class="defin">notation décimale pointée <em class="sigle">CIDR</em></strong> (cf. chap. R1‑III <a class="previous" href="../../moduleR/R1-Generalites/Rc1-3_adressage.html#CIDR" target="_BLANK">R</a>), c'est‑à‑dire de la forme : <br>
+<span class="inline">
+  <code class="displayDark">▯▯▯.▯▯▯.▯▯▯.▯▯▯/▯▯</code>
+</span> <br>
+le programme doit déterminer la <strong>valeur entière</strong> de cette adresse <strong><em class="sigle">IP</em></strong> puis calculer toutes les adresses nécessaires en <strong>notation décimale pointée</strong> : </p>
+<ul>
+  <li> le masque du réseau,  </li>
+
+  <li> l'adresse du réseau, </li>
+
+  <li> la première adresse de machine, </li>
+
+  <li> la dernière adresse de machine, </li>
+
+  <li> l'adresse de diffusion générale (<em class="english">broadcast</em>), </li>
+
+  <li> et le nombre total d'adresses de machines qu'on peut attribuer sur ce réseau. </li>
+</ul>
+<p> Pour tout rappel sur ces notions, on peut se reporter au chapitre R1‑III <a class="cours" href="../../moduleR/R1-Generalites/Rc1-3_adressage.html#IPv4" target="_BLANK">R</a>. </p> 
+
+<p> On peut tester le <strong class="pros">bon fonctionnement</strong> du programme avec des adresses diverses en comparant les résultats avec ceux obtenus par un <strong>calculateur en ligne</strong> comme celui dont le lien est donné supra.  </p>
+</div><!-- nobullet -->
+
+<div class="consignes" style="margin-left: 0.5em;"><p class="consignes"></p>
+  <ul>
+    <li> Les cinq <strong class="title">composantes</strong> de l'adresse saisie par l'utilisateur seront récupérées via la fonction <code class="prettyprint lang-c">scanf</code> sous forme d'octets, c'est‑à‑dire de variables de type <code class="prettyprint lang-c">uint8_t</code> déclarées respectivement <code class="prettyprint lang-c">ipByte3</code>, <code class="prettyprint lang-c">ipByte2</code>, <code class="prettyprint lang-c">ipByte1</code>, <code class="prettyprint lang-c">ipByte0</code> par ordre de poids décroissants et <code class="prettyprint lang-c">ipMask</code> pour la valeur <strong><em class="sigle">CIDR</em></strong> du masque. Il faut employer les <strong class="specialDR">spécifications de conversion</strong> appropriées (cf. chap. C2-VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#specifConvScanf" target="_BLANK"></a>). </li>
+
+    <li> À partir des octets de l'adresse saisie, les six <strong class="title">adresses</strong> à déterminer seront calculées dans des variables de type <code class="prettyprint lang-c">uint32_t</code> respectivement déclarées <code class="prettyprint lang-c">hostIPaddress</code>, <code class="prettyprint lang-c">netIPmask</code>, <code class="prettyprint lang-c">netIPaddress</code>, <code class="prettyprint lang-c">firstIPaddress</code>, <code class="prettyprint lang-c">lastIPaddress</code> et <code class="prettyprint lang-c">broadcastIPaddress</code>. </li>
+
+    <div class="nobullet"> Les <strong class="title">calculs d'adresses</strong> peuvent être codés « facilement » à l'aide des opérateurs logiques <strong>bits à bits</strong> (cf. chap. C3‑III <a class="cours" href="Cc3-3_typesBooleens.html#bitwizeOperators" target="_BLANK"></a>) et des opérateurs de <strong>décalage de bits</strong> (cf. chap. C3‑III <a class="cours" href="Cc3-3_typesBooleens.html#bitShiftOperators" target="_BLANK"></a>). </div>
+  </ul>
+
+</div><!-- consignes -->
+
+
+<li id="exo4"> <em class="bold"> Encodage de caractères <em class="mark">Unicode</em> en <em class="sigle">UTF‑8</em> </em> </li>
+
+<div class="nobullet" style="display: inline-block;"> 
+  <img class="top-right" src="../img/martine-ecrit-en-utf-8.jpg" width="250px">
+
+<p> On souhaite coder un programme qui, <strong>en boucle</strong>, détermine l'<strong class="title">encodage <em class="sigle">UTF‑8</em></strong> (cf. chap. C3‑IX <a class="cours" href="Cc3-9_typesCaracteresEtendus.html#formatUTF-8" target="_BLANK"></a>) d'un caractère à partir de son numéro – ou <strong>point de code hexadécimal</strong> – dans le catalogue <strong class="defin">Unicode</strong> (cf. chap. C3‑IX <a class="cours" href="Cc3-9_typesCaracteresEtendus.html#UCS" target="_BLANK"></a>), saisi par l'utilisateur. On demande <strong class="specialLB">deux formats d'affichage</strong> des octets du code <strong><em class="sigle">UTF‑8</em></strong> :  </p>
+
+<ul>
+  <li> en <strong>notation hexadécimale</strong> ;  </li>
+
+  <li> sous forme de <strong>caractères <em class="sigle">ASCII</em> étendus</strong> dans la page de code 1252 (cf. chap. C3‑VIII <a class="cours" href="Cc3-8_typesCaracteres.html#windowsCP" target="_BLANK"></a>), comme sur l'affiche parodique ci‑contre où le caractère attendu « <em class="bold">é</em> » apparaît sous forme de la séquence d'octets <code class="filename">Ã©</code> comme cela peut se produire lors d'un transcodage inverse mal choisi.</li>
+</ul>
+
+<p> <em class="remark">Attention</em> : le programme est à compiler sur un PC <em class="mark">Windows</em> avec la chaîne de compilation <strong>MinGW</strong>, soit dans un terminal avec la commande <code>gcc</code>, soit dans un <em class="sigle">IDE</em> comme <strong class="Codeblocks">Code::Blocks</strong>, mais <strong class="warning">pas</strong> dans un environnement de programmation en ligne. </p>
+
+<p> Les <strong class="pros">tests de bon fonctionnement</strong> seront effectués successivement pour les caractères listés dans le tableau ci‑dessous. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th style="text-align: right"> Glyphe </th> 
+    <th> A </th>
+    <th> é </th>
+    <th> ₿ </th>
+    <th> 😈 </th>
+  </tr>
+  <tr> 
+    <th style="text-align: right"> Point de code (<code>0x</code>) </th>
+    <td style="text-align: center"> U+41 </td>
+    <td style="text-align: center"> U+E9 </td>
+    <td style="text-align: center"> U+20BF </td>
+    <td style="text-align: center"> U+1F608 </td>
+  </tr>
+  <tr>
+    <th style="text-align: right"> Code <em class="sigle">UTF-8</em> (<code>0x</code>) </th>
+    <td style="text-align: center"> <code class="cmd">41</code> </td>
+    <td style="text-align: center"> <code class="cmd">C3 A9</code> </td>
+    <td style="text-align: center"> <code class="cmd">E2 82 BF</code> </td>
+    <td style="text-align: center"> <code class="cmd">F0 9F 98 88</code> </td>
+  </tr>
+  <tr>
+    <th style="text-align: right"> Code <em class="sigle">UTF-8</em> (<em class="sigle">ASCII CP1252</em> ) </th>
+    <td style="text-align: center"> <code class="filename"> A</code> </td>
+    <td style="text-align: center"> <code class="filename"> Ã  ©</code> </td>
+    <td style="text-align: center"> <code class="filename"> â  ‚  ¿</code> </td>
+    <td style="text-align: center"> <code class="filename"> ð  Ÿ  ˜   ˆ</code> </td>
+  </tr>
+</table>
+</div><!-- overflow -->  
+</div><!-- nobullet -->
+
+<div class="consignes" style="margin-left: 0.5em;"><p class="consignes"></p>
+  <ul>
+    <li> Le <strong>point de code</strong> <strong class="title">Unicode</strong> saisi par l'utilisateur sera enregistré dans une variable déclarée <code class="prettyprint lang-c">unicodePoint</code> de type <code class="prettyprint lang-c">uint32_t</code>. </li>
+
+    <li> Le ou les octets du <strong>code</strong> <strong class="title"><em class="sigle">UTF‑8</em></strong> à déterminer seront respectivement mémorisés dans des variables de type <code class="prettyprint lang-c">uint8_t</code> déclarées <code class="prettyprint lang-c">utf8byte0</code>, <code class="prettyprint lang-c">utf8byte1</code>, <code class="prettyprint lang-c">utf8byte2</code> et <code class="prettyprint lang-c">utf8byte3</code>, respectivement dans l'ordre de leur poids dans le code. </li>
+
+    <li> Pour faciliter le codage des <strong class="title">opérations sur les bits</strong> de ces octets, on pourra copier‑coller en début de programme le code source des <strong>macro-commandes</strong> <code class="prettyprint lang-c">bitRead</code>, <code class="prettyprint lang-c">bitSet</code>, <code class="prettyprint lang-c">bitClear</code> et <code class="prettyprint lang-c">bitWrite</code> issu du fichier d'en‑tête de bibliothèque <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a>. </li>
+  </ul>
+</div><!-- consignes -->
+
+
+<li id="exo5"> <em class="bold"> Simulation de la fonction de transfert du <em class="sigle">CAN</em> d'une carte <strong class="Arduino">Arduino Uno</strong> </em> </li>
+
+<div class="nobullet" style="display: inline-block;"> 
+  <img class="top-right" src="../img/CANcourbeExoC3.png" width="450px">
+<p> En théorie, le <strong class="title">convertisseur analogique numérique</strong> (<strong><em class="sigle">CAN</em></strong>) du microcontrôleur embarqué sur une carte <strong class="Arduino">Arduino Uno</strong> opère une conversion <strong>linéaire centrée</strong> unipolaire. À pleine échelle, sa <strong class="defin">fonction de transfert</strong> admet donc une courbe représentative dite « <strong>en escalier</strong> », avec des marches de longueur constante sauf la première et la dernière (cf. la figure ci‑contre et le chap. C3‑VII <a class="cours" href="Cc3-7_entreesSortiesAnalogiques.html#fonctionTransfert" target="_BLANK"></a> pour plus de détails). </p>
+
+<p>  On souhaite coder un programme de <strong class="title">simulation</strong> de cette fonction de transfert pour pouvoir ensuite <strong class="title">tester</strong> diverses <strong class="defin">fonctions de mise à l'échelle</strong> (par exemple, celle utilisée pour un bargraphe). </p>
+</div><!-- nobullet -->
+
+
+<div class="consignes" style="margin-left: 0.5em;">
+<p class="consigne"> On déclarera au début de la fonction <code class="prettyprint lang-c">main</code> des <strong>constantes</strong> mémorisant les <strong class="defin">principales caractéristiques</strong> du <strong><em class="sigle">CAN</em></strong> : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">maxVoltage</code> pour la valeur maximale sur l'échelle de la tension entrée (5 V) ;  </li>
+
+  <li> <code class="prettyprint lang-c">maxNumber</code> pour la valeur maximale de l'excursion du nombre en sortie (1023) ;  </li>
+
+  <li> <code class="prettyprint lang-c">quantum</code> pour le quantum de conversion, défini en fonction des deux constantes précédentes (cf. cours). </li>
+</ul>
+</div><!-- consignes -->
+
+<ol class="questions">
+  <li id="exo5qa"> Coder un programme qui, <strong>en boucle</strong>, calcule la valeur du nombre en sortie <strong class="specialDB">N<sub>s</sub></strong> théoriquement rendu par la <strong class="title">fonction de transfert</strong> du <em class="sigle">CAN</em> pour une valeur de la tension d'entrée <strong class="specialR">v<sub>e</sub></strong> saisie par l'utilisateur. On prendra la valeur <code>0</code> comme condition de <strong>fin d'itération</strong> de la boucle. </li>
+
+  <div class="nobullet">Tester le <strong class="pros">bon fonctionnement</strong> de ce programme en saisissant les valeurs de <strong class="specialR">v<sub>e</sub></strong> dans le tableau ci‑dessous</strong> :  </div>
+  
+  <div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th style="text-align: center"> <strong class="specialR">v<sub>e</sub></strong> </th> 
+    <td style="text-align: center"> <code>5</code> </td>
+    <td style="text-align: center"> <code>4.990</code> </td>
+    <td style="text-align: center"> <code>2.5</code> </td>
+    <td style="text-align: center"> <code>1</code> </td> 
+    <td style="text-align: center"> <code>0.0025</code> </td> 
+    <td style="text-align: center"> <code>0.0024</code> </td>
+    <td style="text-align: center"> <code>0</code> </td> 
+  </tr>
+  <tr> 
+    <th style="text-align: center"> <strong class="specialDB">N<sub>s</sub></strong></strong> </th> 
+    <td style="text-align: center"> <code>1023</code> </td>
+    <td style="text-align: center"> <code>1022</code> </td>
+    <td style="text-align: center"> <code>512</code> </td>
+    <td style="text-align: center"> <code>205</code> </td>
+    <td style="text-align: center"> <code>1</code> </td>
+    <td style="text-align: center"> <code>0</code> </td>
+    <td style="text-align: center"> <code>0</code> </td>
+  </tr>
+  </table>
+  </div><!-- overflow -->
+  
+  <li id="exo5qb"> Coder un programme qui détermine les valeurs de la tension d'entrée aux <strong>seuils des marches</strong> et la <strong>longueur des marches</strong> de la <strong class="title">courbe en escalier</strong> du <em class="sigle">CAN</em>. Pour cela : <br>
+  <ul>
+    <li> coder une boucle <code class="prettyprint lang-c">for</code> dont la variable d'incrémentation simule une tension d'entrée <strong class="specialR">v<sub>e</sub></strong> croissante par <strong>pas</strong> de <em class="bold">0,0001 V</em> sur l'intervalle <em class="bold">0 – 5 V</em> ; </li>
+
+    <li> dans cette boucle, calculer le <strong>nombre en sortie</strong> <strong class="specialDB">N<sub>s</sub></strong> et le comparer avec sa <strong>valeur précédente</strong> ; en cas de différence (détection d'un seuil), calculer le nombre de <strong>quanta</strong> que représente la tension d'entrée (ce nombre permet très facilement de déduire la longueur de la marche précédent le seuil). </li>
+  </ul> </li>
+
+  <div class="nobullet"> Pour alléger l'<strong>affichage</strong>, on ne retiendra que les 3 premières et les 3 dernières marches, conformément à la capture d'écran ci‑dessous : </div>
+   
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+>>>>> Arduino Uno ADC transfer function simulation <<<<<
+  Number  |   Voltage   |   Quanta  
+      1   |   0.0025    |      0.5 
+      2   |   0.0074    |      1.5 
+      3   |   0.0123    |      2.5 
+   1021   |   4.9830    |   1020.5 
+   1022   |   4.9878    |   1021.5 
+   1023   |   4.9927    |   1022.5 
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <img class="top-right" src="../img/potentiometreGradue.png" width="300px">
+  <li id="exo5qc"> Dans le contexte d'implémentation d'un <strong class="title">bargraphe</strong> (cf. TP C3‑2 <a class="next" href="Ctp3-1_bargraphe.html" target="_BLANK"></a>), on souhaite que les <strong class="defin">seuils d'allumage</strong> des led successives sont conformes aux valeurs numériques du nombre en sortie <strong class="specialDB">N<sub>s</sub></strong> inscrites en noir sur la figure ci‑contre. </li>
+
+  <div class="nobullet"> En reprenant une partie du programme précédent, dans la boucle <code class="prettyprint lang-c">for</code> d'incrémentation de la tension d'entrée <strong class="specialR">v<sub>e</sub></strong> :  <br>
+  <ul>
+    <li> calculer à partir de <strong class="specialDB">N<sub>s</sub></strong> le <strong>nombre courant de led à allumer</strong> et mémoriser sa valeur dans une variable déclarée <code class="prettyprint lang-c">currentLitLEDnumber</code> ; </li>
+
+    <div class="nobullet"> on pourra commencer par utiliser la fonction <code class="prettyprint lang-c">map</code> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMathArduino" target="_BLANK"></a>) en récupérant son code source dans le fichier <code class="filename">WMath.cpp</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/WMath.cpp" target="_BLANK">G</a> ;  </div>
+
+    <div class="nobullet"> si le résultat n'est pas conforme aux spécifications ci‑desssus, on recherchera une <strong>autre solution</strong> en s'inspirant de la fonction de transfert du <em class="sigle">CAN</em> de la carte <em class="mark">Arduino</em> ; </div>
+
+    <li> comparer la valeur de <code class="prettyprint lang-c">currentLitLEDnumber</code> avec sa valeur précédente (en utilisant une variable déclarée  <code class="prettyprint lang-c">previousLitLEDnumber</code>) pour détecter les <strong>seuils d'allumage</strong> des led du bargraphe. </li>
+  </ul> 
+  </div><!-- nobullet -->
+
+  <div class="nobullet"> On produira une <strong>sortie standard</strong> conforme à la capture d'écran ci‑dessous : </div>
+   
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+>>>>> Bargraph transfer function simulation <<<<<
+  ADC Number  |   LED  
+       64     |    1 
+      192     |    2 
+      320     |    3 
+      448     |    4 
+      576     |    5 
+      704     |    6 
+      832     |    7 
+      960     |    8 
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  </ol><!-- questions -->
+
+</ol><!-- exercices -->
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

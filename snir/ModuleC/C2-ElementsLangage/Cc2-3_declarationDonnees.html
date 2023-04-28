@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="III"
+  data-pageState="OK"
+  data-pageheadtitle="Déclaration données"
+  data-pagefulltitle="La déclaration des données"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/declarationDonneesIntro.png" width="300px" style="padding-top: 1.2em">
+<p class="square"> On appelle <strong class="title">donnée</strong> toute <strong class="defin">information mémorisée</strong> dans un <strong>espace de stockage</strong> (mémoire) qui lui est alloué. En programmation, la faculté de mémoriser une information suppose l'aptitude à y <strong class="specialLB">accéder</strong>, c'est‑à‑dire <strong>consulter</strong> et éventuellement <strong>modifier</strong> sa <strong class="defin">valeur</strong>. Pour cela, il faut nécessairement être capable d'<strong class="specialLB">identifier</strong> <strong>la donnée</strong>. Le plus souvent, on lui donne un <strong>nom</strong> qu'on appelle <strong class="defin">identificateur</strong>. Ce procédé s'appelle une <strong class="title">déclaration</strong>. </p>
+</div><!-- display -->
+
+
+<p style="margin-top: 0.5em">Généralement, on parle <a class="external " href="https://fr.wikipedia.org/wiki/Variable_(informatique)" target="_BLANK">W</a> : </p>
+
+<ul>
+  <li> de donnée <strong class="title">variable</strong> lorsque sa <strong>valeur</strong> est <strong class="specialT">mutable</strong>, c'est‑à‑dire <strong>susceptible de changer</strong> au cours de l'<strong>exécution</strong> d'un programme, </li>
+
+  <li> et de donnée <strong class="title">constante</strong> lorsque sa <strong>valeur</strong> est <strong class="specialT">immuable</strong> (en anglais <em class="english">immutable</em>). </li>
+</ul>
+
+
+<p class="square"> En langages <strong>C</strong> et <strong>C++</strong>, tous ces aspects recèlent de <strong class="warning">nombreuses particularités</strong> qui requièrent, dès les premiers programmes, une grande vigilance. Ce chapitre est donc consacré à : </p>
+
+<ul>
+  <li> passer en revue tous les <strong class="specialLB">généralités</strong> relatives à la déclaration des données, qu'il est indispensable d'avoir à l'esprit pour comprendre ensuite toutes les particularités ;  </li>
+
+	<li> détailler les bases de la syntaxe des instructions de <strong class="specialLB">déclaration</strong> des <strong>variables</strong> et des <strong>constantes</strong> ;  </li>
+
+	<li> préciser le codage des expressions d'<strong class="specialLB">initialisation</strong> que ces instructions peuvent comporter ; </li>
+</ul>
+
+<p> sachant que d'<strong>autres éléments de langages</strong> relatifs à la déclaration des données seront apportés dans les chapitres suivants, au fur et à mesure de l'étude des types de données élémentaires (partie <span class="partie">C3</span>) et structurées (partie <span class="partie">C5</span>). </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Généralités  </h2>
+
+
+<h3 id="notionDonnee"> Notions de donnée, de valeur et de type </h3>
+
+
+<p> Les notions de <strong class="title">donnée</strong>, de <strong class="specialLB">valeur</strong> et de <strong class="specialG">type</strong> sont trois <strong class="defin">notions fondamentales</strong> <strong class="warning">indissociables</strong> en programmation. Elles font appel aux notions subalternes d'<strong>encodage</strong> en mémoire et d'<strong>interprétation</strong>. </p>
+
+
+<div class="important" style="display: inline-block;">
+<p> En programmation, on appelle <strong class="title">donnée</strong> une <strong class="defin">information stockée en mémoire</strong> – c'est‑à‑dire matériellement <strong>encodée</strong> durant l'<strong>exécution</strong> d'un programme par un <strong>ensemble de</strong> <strong class="specialLGr">bits</strong> (c'est une représentation dite de bas niveau). </p>
+
+<p> De plus, une donnée prend toujours une <strong class="specialLB">valeur</strong> (constante ou variable) conformément à un <strong class="specialG">type</strong> :  </p>
+  <img class="top-right" src="../img/declarationDonnee.png" width="300px" style="padding-top: 0.5em">
+<ul>
+  <li> la <strong class="specialLB">valeur</strong> est l'<strong class="defin">interprétation</strong> de haut niveau que confère le programme aux <strong class="specialLGr">bits</strong> de la donnée, de sorte qu'on puisse donner lui un <em>sens</em> : tel nombre, telle chaîne de caractères, etc. </li>
+
+  <div class="nobullet"> c'est l'<strong>information logicielle</strong> (ou <em>abstraite</em>) que contient la donnée ; </div>
+
+  <li> le <strong class="specialG">type</strong> d'une donnée est une <strong class="defin">appellation catégorielle</strong> qui <strong>détermine la valeur</strong> de la donnée à partir de son encodage en mémoire : <em>entier</em>, <em>décimal</em>, <em>caractère</em>, etc.  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, une <strong class="title">donnée</strong> peut figurer dans le <strong>code source</strong> d'un programme : </p>
+
+<ul>
+  <li> soit de façon <strong class="specialLB">anonyme</strong>, sous forme d'une <strong class="defin">constante littérale</strong>, c'est‑à‑dire d'une <strong>valeur codée</strong> dans un format qui détermine son <strong class="specialG">type implicite</strong> ;  </li>
+
+  <li> soit de façon <strong class="specialLB">nommée</strong> : </li>
+  
+  <ul> 
+    <li> sous la forme d'un <strong class="defin">identificateur déclaré</strong> choisi par le codeur et associé à un <strong class="specialG">type explicite</strong> ; </li>
+    
+    <div class="expert">
+    <div class="nobullet"> lors de l'exécution du programme, la donnée est alors repérée par une <strong class="specialM">adresse</strong> choisie par le compilateur ; </div>
+    </div><!-- expert -->
+
+    <li> ou encore sous la forme d'une <strong class="defin">pseudo‑constante</strong> définie via la directive <code class="prettyprint lang-c">#define</code> avec un <strong>identificateur</strong>, mais alors avec un <strong class="specialG">type implicite</strong> comme pour une constante littérale (cf. chap. C4‑III <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/Cc4-3_directivesPreprocesseur.html#pseudoConstantes" target="_BLANK"></a>). </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Par l'instruction ci‑dessous, on déclare une <strong class="title">donnée variable</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+int myFirstVariable = 13;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<ul>
+  <li> <strong>explicitement</strong> de <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code> (entier standard) ; </li>
+
+  <li> nommée <code class="prettyprint lang-c">myFirstVariable</code> – c'est son <strong class="defin">identificateur</strong> ; </li>
+
+  <li> de <strong class="defin">valeur initiale</strong> spécifiée par la <strong>constante littérale</strong> codée <code class="prettyprint lang-c">13</code>, implicitement interprétée par le compilateur comme étant de type <code class="prettyprint lang-c">int</code>. </li>
+</ul>
+
+<p> Sur un PC récent à architecture 32 ou 64 bits, quel que soit le système d'exploitation, la valeur d'une donnée de type <code class="prettyprint lang-c">int</code> est <strong>encodée en mémoire</strong> sur 4 octets, soit 4 × 8 = <strong class="specialLGr">32 bits</strong>. Dans le cas présent, ces 32 bits représentant la valeur <code class="prettyprint lang-c">13</code> vaudraient : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+00000000 00000000 00000000 00001101
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p style="margin-top: 1em;"> <em class="remark">Remarque</em>. Si on avait déclaré <code class="prettyprint lang-c">myFirstVariable</code> de type <code class="prettyprint lang-c">float</code> (décimal à virgule flottante simple précision), alors durant l'exécution du programme, les <strong>mêmes</strong> <strong class="specialLGr">32 bits</strong> seraient interprétés par la machine comme une <strong class="warning">valeur complètement différente</strong> (environ 1,82 × 10<sup>−44</sup>). On peut le vérifier en exécutant dans un environnement de programmation en ligne comme <strong class="OnlineGDB">OnlineGDB</strong> le programme ci‑dessous  :   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  int myFirstVariable = 13;
+  float * p = (float*) &myFirstVariable;
+  printf("%g\n", *p);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où la ligne nº 5 déclare un <strong>pointeur</strong> <code class="prettyprint lang-c">p</code> (cf. chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>) qui permet d'interpréter la valeur de <code class="prettyprint lang-c">myFirstVariable</code> dans le type <code class="prettyprint lang-c">float</code>. </p>
+
+</div><!-- expert -->
+</div><!-- exemple -->
+
+<div class="remarques" id="remarquesNormesDonnees">
+<p class="remarque"> Les <strong class=" title">normes</strong> des langages <strong>C</strong> et <strong>C++</strong> : </p>
+<ul>  
+  <li> distinguent fondamentalement la notion de <strong>donnée</strong> de celle de <strong class="specialLB">fonction</strong> ; en effet, dans un programme, une <em>fonction</em> possède bien un identificateur, un type et même une adresse mais elle n'a <strong class="cons">pas de valeur</strong> à proprement parler ;  </li>
+
+  <li> emploient le terme d'« <strong class="specialLB">objet</strong> » plutôt que de <strong>donnée</strong> ; toutefois, il est pédagogiquement préférable de réserver le terme d'<em>objet</em> pour désigner spécifiquement l'instance d'une classe dans le cadre de la <em>programmation orientée objet</em>. </li>
+
+  <li> emploient le terme de « <strong class="specialLB">représentation des types</strong> » plutôt que d'<strong>encodage des données</strong> ; toutefois, le terme <em>représentation</em>  appartient au vocabulaire général, il est préférable de pouvoir l'employer sans risque de confusion avec un sens technique particulier ; de plus, le  mot <em>encodage</em> <a class="external" href="https://fr.wiktionary.org/wiki/encodage" target="_BLANK">W</a> est plus évocateur de ce que forment les bits d'une donnée, à savoir le résultat produit par un algorithme de numérisation. </li>
+</ul>
+</div><!-- remarque -->
+
+
+
+<h3 id="pourquoi"> Pourquoi déclarer ? </h3>
+
+
+
+<div class="important">
+<p> En règle générale, dans un langage compilé (et c'est le cas en <em class="mark">C</em> et <em class="mark">C++</em>), une <strong>instruction</strong> de <strong class="title">déclaration</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Déclaration_(informatique)" target="_BLANK">W</a> est un <strong>préalable</strong> <strong class="warning">obligatoire</strong> pour pouvoir <strong class="specialLB">« employer » une donnée nommée</strong> (constante ou variable) dans un fichier source du programme.  </p>
+
+<p> En programmation, « <strong class="specialLB">employer</strong> » une donnée signifie <strong>lire ou modifier sa valeur</strong> et nécessite pour cela de l'<strong class="defin">appeler par son nom</strong> – on dit aussi l'<strong class="defin">invoquer</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> En effet, c'est par une telle déclaration que le compilateur est capable de bien <strong>gérer l'espace mémoire</strong> requis par toutes les données que le programme utilise. </p>
+
+<p> C'est également un aspect décisif pour la <strong class="pros">bonne lisibilité</strong> <strong>du code source</strong>. Pour toute donnée nommée, on peut se référer à des spécifications précises sur les caractéristiques de la donnée (variable ou constante, type de valeurs, classe d'allocation, etc.). </p>
+</div><!-- complementExpert -->
+
+<div class="remarques">
+<p class="remarque"> Considérer une <strong class="title">déclaration</strong> comme une <strong>instruction</strong> peut être contesté au regard de la <strong class="specialLB">norme</strong> du langage <strong class="specialLB">C</strong> (cf. <a class="external" href="http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1570.pdf" target="_BLANK">C</a> où les sections <em class="english">6.7 Declarations</em> et <em class="english">6.8 Statements and blocs</em> sont distinctes). </p>
+
+<p> En effet, la <strong class="title">déclaration d'une donnée globale</strong> est traitée par le compilateur par la réservation d'un espace mémoire dans le code exécutable du programme ; elle ne déclenche <strong class="warning">pas d'action</strong> lors de l'<strong>exécution</strong>. Toutefois : </p>
+<ul>
+  <li> si la déclaration est codée <strong>dans un bloc</strong> avec une classe d'allocation automatique (cf. infra <a class="infra" href="Cc2-3_declarationDonnees.html#comment"></a>), alors elle déclenche bien une <strong class="defin">action</strong> lors de l'<strong>exécution</strong> (la réservation d'un espace mémoire dans la pile – cf. chap. C4‑II <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/Cc4-2_porteesDonnees.html#allocationMemoire" target="_BLANK"></a>), même si cette action opère en arrière-plan ; </li>
+
+  <li> une déclaration obéit au <strong class="defin">même schéma syntaxique </strong> que celui d'une instruction simple, avec le codade du délimiteur de fin <code class="prettyprint lang-c">;</code>. </li>
+</ul>
+<p> D'ailleurs, la <strong class="specialLB">norme</strong> du langage <strong class="specialLB">C++</strong> considère les <strong class="title">déclarations locales</strong> comme des instructions (cf. <a class="external" href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2017/n4659.pdf" target="_BLANK">C++</a> à la section <em class="english">9.6 Declaration statement</em>). </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="visibilite"> Où déclarer ? </h3>
+
+
+
+<div class="important">
+<p> Dans les programmes écrits en <strong>C/C++</strong>, contrairement à d'autres langages, il n'y a <strong class="pros">pas de zone spécifique</strong> pour les <strong class="title">déclarations de données</strong>. Ces dernières peuvent être <strong>réparties partout</strong> dans les fichiers du code source. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Mais la <strong>zone de déclaration</strong> d'une donnée n'est <strong class="warning">pas indifférente</strong>. Elle impacte notamment la <strong class="title">visibilité</strong> de la donnée, c'est‑à‑dire le fait qu'on puisse ou non l'utiliser : </p>
+<ul>
+  <li> si la déclaration s'insère <strong class="specialLB">dans un bloc</strong> <code class="prettyprint lang-c">{ }</code>, on dit que la donnée est <strong class="defin">locale</strong> au sens où elle est <strong>visible</strong> <strong class="warning">seulement</strong> : </li>
+  
+  <ul>
+  	<li> <strong class="specialG">dans son bloc</strong>, </li>
+
+  	<li> et pour les instructions <strong class="specialG">qui lui succèdent</strong> ; </li>
+  </ul>
+
+  <li> a contrario, si une donnée est déclarée <strong class="specialLB">hors de tout bloc</strong>, on dit qu'elle est <strong class="defin">globale</strong> ; elle est alors <strong>visible</strong> <strong class="specialG">dans tous les blocs successifs</strong> à sa déclaration (dans le fichier). </li>
+</ul>
+<p> La zone de déclaration d'une donnée impacte également sa <strong class="specialO">classe d'allocation</strong>, aspect qui est introduit infra <a class="infra" href="Cc2-3_declarationDonnees.html#classeAllocation"></a>. </p>
+</div><!-- complementExpert -->
+
+
+<h4> Bonnes pratiques </h4>
+
+
+<div class="important">
+<p> Même si les déclarations peuvent être codées n'importe où dans le code source, il est recommandé, pour une <strong class="pros">bonne lisibilité</strong> du code, d'adopter les <strong class="title">bonnes pratiques</strong> suivantes : </p>
+<ul>
+	<li> <strong class="defin">regrouper</strong> les <strong>lignes de déclaration</strong>, </li>
+
+	<li> privilégier les <strong class="defin">premières lignes</strong> des <strong>fichiers</strong> et des <strong>blocs</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> En principe, cette bonne pratique permet à tout <strong>lecteur</strong> du code source de <strong class="pros">faciliter la recherche</strong> de la déclaration des données employées dans un programme, notamment pour connaître leur type. </p>
+
+<p> Toutefois, il ne s'agit que d'une recommandation car la plupart des <strong>éditeurs de code</strong> offrent des fonctions de <strong class="defin">recherche automatique</strong> de déclaration, via des commandes accessibles par menu contextuel (typiquement, par clic-droit sur toute occurrence d'un identificateur de donnée). Ces fonctionnalités se révèlent particulièrement efficace dans le cadre d'une programmation multi‑fichiers.  </p>
+</div><!-- complementExpert -->
+
+
+<div class="expert">
+<h3 id="comment"> Comment déclarer ? </h3>
+
+
+
+<p> Le mode opératoire de déclaration d'une donnée présenté ci‑après est <strong>général</strong> et <strong>simplifié</strong>. Des formes plus complexes seront détaillées dans les parties <span class="partie">C3</span>, <span class="partie">C4</span>  et <span class="partie">C5</span> du cours. </p>
+
+<div class="important">
+<p> D'une manière générale, dans un programme, la <strong class="title">création d'une donnée nommée</strong> recèle <strong class="specialLB">deux aspects</strong> : </p>
+<ul>
+  <li> la <strong class="specialLB">déclaration</strong> d'un <strong class="defin">identificateur</strong> pour appeler la donnée, et lui attribuer un <strong class="defin">type</strong> de valeurs possibles (entières, décimales, etc.) ; </li>
+
+  <div class="nobullet"> elle est <strong>explicitement codée</strong> dans le programme et elle peut éventuellement être assortie d'une <strong class="specialLB">initialisation</strong> de la donnée, c'est‑à‑dire de l'<strong>attribution d'une valeur</strong> dite <strong class="defin">initiale</strong> ; </div>
+
+  <li> la <strong class="specialLB">définition </strong> d'un <strong class="defin">espace mémoire adressable</strong> qui <em class="remark">sera</em> <strong>alloué</strong> pour le stockage de la valeur de la donnée. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement" id="classeAllocation">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, la distinction de ces deux aspects est importante. En effet, l'<strong class="title">allocation mémoire</strong> peut invervenir : </p>
+
+<ul>
+  <li> soit lors de la <strong>compilation</strong> du programme – et on parle alors de données de <strong class="specialO">classe statique</strong> ; </li>
+
+  <li> soit lors de l'<strong>exécution</strong> du programme – avec deux cas de figure : </li>
+
+  <ul>
+  	<li> celui des données dites de <strong class="specialO">classe automatique</strong> si l'espace mémoire qui leur est alloué est de <strong>taille fixe</strong> ; </li>
+
+  	<li> celui des données dites <strong class="specialV">dynamiques</strong> si l'espace mémoire qui leur est alloué est de <strong>taille variable</strong> ; </li>
+  </ul>
+</ul>
+
+<p> sachant que : </p>
+
+<ul>
+  <li> une <strong class="specialG">variable globale</strong> est toujours de <strong class="specialO">classe statique</strong> ; </li>
+
+  <li> une <strong class="specialG">variable locale</strong> est par défaut de <strong class="specialO">classe automatique</strong>. </li>
+</ul>
+
+</div><!-- complement -->
+
+
+<p> Les notions de <strong class="specialO">classes d'allocation</strong> <strong>statique</strong> et <strong>automatique</strong> seront approfondies au chapitre C4‑II <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C4-Fonctions/Cc4-2_porteesDonnees.html" target="_BLANK"></a>. </p>
+
+<p> La notion de <strong class="specialV">variable dynamique</strong> est abordée seulement dans la partie <span class="partie">C6</span> du cours. C'est dans ce dernier cas qu'intervient la distinction entre déclaration et définition. </p>
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Syntaxes de déclaration </h2>
+
+
+
+<h3 id="declarationVar"> Déclaration d'une variable </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, une instruction de <strong class="title">déclaration</strong> d'une <strong class="title">variable</strong> obéit au <strong class="defin">schéma syntaxique</strong> suivant : </p>
+<div class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode">
+      <strong class="specialG">descripteur de type</strong> 
+      <strong class="specialN">identificateur</strong> 
+      <span style="color: darkgrey; font-style: normal;"> [ </span>
+    </span>
+     = <span class="nocode"><strong class="specialLG">expression d'initialisation</strong>
+      <span style="color: darkgrey; font-style: normal;"> ] </span>
+    </span>;</code>
+</div> 
+<p> <span style="font-size: 90%"> <em class="remark">Attention</em> : ci‑dessus, les <strong class="specialGr">crochets gris</strong> <span style="color: darkgrey; font-style: normal; font-weight: bold">[ ]</span> ne sont <strong class="warning">pas des éléments du code</strong>, ils délimitent une <strong class="specialMg">partie optionnelle</strong> de l'instruction. On dit qu'il font partie du <strong class="specialLB">métalangage</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Métalangage" target="_BLANK">W</a></span>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Dans ce schéma syntaxique : </p>
+<ul>
+  <li> le <strong class="specialG">descripteur de type</strong> est une suite de <strong class="defin">mots‑clefs</strong> ou d'<strong>identificateurs de types</strong> qui spécifient la <strong>catégorie de valeurs</strong> que la variable peut prendre ; </li> 
+
+  <div class="nobullet">plus précisément, ce descripteur peut être : </div>
+  <ul>
+    <li> <strong>omis</strong> si la variable est de <strong class="specialO">classe statique</strong>, et alors la variable est implicitement de type <code class="prettyprint lang-c">int</code> (cf. ci‑dessous), mais cette option est <strong class="warning">vivement déconseillée</strong> pour des raisons évidentes de bonne lisibilité ; </li>
+
+    <li> <strong>standard</strong> dans le langage, notamment : </li>
+    <ul>
+      <li> <code class="prettyprint lang-c">bool</code> pour <em class="english">boolean</em>, qui autorise seulement deux valeurs possibles, <code>false</code> ou <code>true</code> ; </li>
+
+      <li> <code class="prettyprint lang-c">int</code> pour <em class="english">integer</em>, c'est‑à‑dire à valeurs <strong>entières positives</strong> (<code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>…) ou <strong>négatives</strong> (<code>-1</code>, <code>-2</code>…) – on parle de <strong class="specialG">type signé</strong> parce que ses valeurs peuvent porter un signe ; </li>
+
+      <li> <code class="prettyprint lang-c">float</code> pour <em class="english">floating point decimal</em>, c'est‑à‑dire à valeurs <strong>décimales</strong> comme <code>3.14</code>…  </li>
+    </ul>
+    <div class="nobullet"> et faire éventuellement l'objet de <strong>spécifications supplémentaires</strong> par des mot‑clefs modificateurs comme <code class="prettyprint lang-c">unsigned</code>, <code  class="prettyprint lang-c">long</code>, etc. ; </div>
+
+    <li> <strong>défini par le codeur</strong>, avec un <em>identificateur de type</em> déclaré à l'aide d'une instruction commençant par <code class="prettyprint lang-c">typedef</code> ; </li>
+  </ul>
+
+  <li> l'<strong class="specialN">identificateur</strong> est le <strong class="defin">nom de la variable</strong> choisi par le codeur pour la désigner dans le code source – cf. les règles de choix au chap. C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#identificateurs" target="_BLANK"></a> ; </li>
+
+  <li> <code class="prettyprint lang-c"> = <span class="nocode"> <strong class="specialLG">expression d'initialisation</strong></span></code> est l'<strong>affectation optionnelle</strong> d'une <strong class="title">valeur initiale</strong> (en anglais, <em class="english">initializer</em>) qui doit être codée par : </li>
+  <ul>
+    <li> une <strong class="defin">expression constante</strong> (c'est‑à‑dire composée <strong class="cons">sans identificateurs de variables</strong>, par exemple <code>5 + 1.0/3</code> – cf. chap. C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#expressionConstante" target="_BLANK"></a>) si la variable est de <strong>classe</strong> <strong class="specialO">statique</strong> (cf. supra <a class="supra" href="Cc2-3_declarationDonnees.html#comment"></a>) et que l'on code en langage <strong>C</strong> ; </li>
+
+    <li> une <strong class="defin">expression évaluable</strong> au moment de l'exécution de l'instruction de déclaration (donc, pouvant comporter des <strong class="pros">identificateurs de variables</strong>) dans tout autre cas, c'est‑à‑dire en <strong>C++</strong> ou si la variable est <strong>classe</strong> <strong class="specialO">automatique</strong>. </li>
+  </ul>
+</ul>
+</div><!-- complementExpert -->
+
+<div class="remarques">
+<p class="remarque"> En langage <strong>C</strong>, il faut une directive <code class="prettyprint lang-c">#include &lt;stdbool.h&gt;</code> pour utiliser le <strong>type</strong> <code class="prettyprint lang-c">bool</code>. </p>
+
+<p> En <strong>C++</strong>, aucune directive n'est nécessaire car le <strong>type</strong> <code class="prettyprint lang-c">bool</code> est <strong class="pros">intégré au noyau</strong> du langage. </p>
+</div><!-- remarque -->
+
+<div class="exemples">
+<p class="exemple"> Le code ci‑dessous contient <strong class="title">quatre déclarations</strong> (lignes nº 11, 12, 16 et 17). Toutes les variables déclarées sont <strong>initialisées</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+// global variables (static)
+bool isUserRegistred = true;
+unsigned int pointAccount = 10 + 50; // init + bonus
+
+int main(void) {
+  // local variables (automatic)
+  float inflationRate = 0.07; 
+  int nextPointAccount = pointAccount * (1 + inflationRate);
+  // ...
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+<div class="expert">
+<p> L'étude des <strong class="specialG">types</strong> sera approfondie dans toute la partie <span class="partie">C3</span> du module. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="declarationConst"> Déclaration d'une constante </h3>
+
+
+
+<div class="complement">
+<p> On rappelle qu'une <strong class="title">constante</strong> est une donnée dont, en principe, le compilateur <strong class="warning">interdit</strong> <strong>tout changement de valeur</strong> par les instructions du programme et lors de son exécution. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Pour <strong class="title">déclarer</strong> une <strong class="title">constante</strong>, on emploie le <strong class="defin">schéma syntaxique</strong> suivant : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">const<span class="nocode"> 
+    <strong class="specialG">descripteur de type</strong> 
+    <strong class="specialN">identificateur</strong> 
+    </span>
+     = <span class="nocode"><strong class="specialLG">expression d'initialisation</strong>
+    </span>;</code>
+</span> <br>
+avec les mêmes précisions que pour la déclaration d'une variable (cf. supra <a class="supra" href="Cc2-3_declarationDonnees.html#declarationVar"></a>), <strong>sauf que</strong> : </p>
+<ul>
+	<li> l'affectation <code class="prettyprint lang-c">= <span class="nocode"><strong class="specialLG">expression d'initialisation</strong></span></code> n'est <em>pas optionnelle</em> mais <strong class="warning">requise</strong>, </li>
+
+	<li> la <strong class="defin">valeur</strong> résultant de l'évaluation de cette expression et <strong>affectée à la constante déclarée</strong> n'est <em>pas seulement initiale</em>, mais aussi <strong class="warning">définitive</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> L'élément de code déterminant ici est le <strong class="title">mot‑clef qualificateur</strong> <code class="prettyprint lang-c">const</code>. Syntaxiquement, il fait partie du <strong class="specialG">descripteur de type</strong> et peut prendre <strong>plusieurs positions</strong> (dans certaines déclarations complexes, il peut même présenter plusieurs occurrences). </p>
+
+<p> Par ailleurs, le traitement des instructions de <strong class="title">déclaration des constantes</strong> fait très souvent l'objet par les compilateurs de <strong>mécanismes d'optimisation</strong>. Ils seront évoqués aux chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#coutMemoirePseudoConst" target="_BLANK"></a> et C4‑IV <a class="next" href="../C4-Fonctions/Cc4-4_chaineCompilation.html#middleEnd" target="_BLANK"></a>. </p>
+</div><!-- complementExpert -->
+
+<div class="remarques">
+<p class="remarque"> En langage <strong>C</strong>, le compilateur autorise quand même – et sans avertissement – à <strong class="title">déclarer une constante</strong> <strong class="warning">sans lui affecter une valeur</strong>. En effet, s'il est interdit par la suite de coder <em>directement</em> une affectation sur cette une constante, il reste la possibilité  de lui affecter une valeur via un pointeur (cf. chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>) au moment de l'exécution du programme. </p>
+
+<p> Une telle pratique est néanmoins <strong class="pros">vivement déconseillée</strong> à un codeur peu expérimenté. D'ailleurs, elle est <strong class="warning">interdite</strong> en <strong>C++</strong>. </p>  
+</div><!-- remarque -->
+
+<div class="exemples">
+<p class="exemple"> Avec des montages électroniques incluant une <strong>carte à microcontrôleur</strong>, il est d'usage de déclarer des constantes pour <strong class="title">nommer les broches</strong> de la carte en fonction de leur utilisation, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin = 7;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Par la suite, ce nommage rend <strong class="pros">explicite</strong> des instructions comme (cf. chap. C2‑VII <a class="next" href="../C2-Elementslangage/Cc2-7_entreesSortiesBooleennes.html#digitalWrite" target="_BLANK"></a>) : <br> 
+<span class="inline">
+	<code class="prettyprint lang-c">digitalWrite(ledPin, HIGH);</code>
+</span> <br>	
+au sens où le codeur n'a pas besoin de se souvenir de l'usage des broches par numéros, ce qui aurait été le cas si on avait codé :<br> 
+<span class="inline">
+	<code class="prettyprint lang-c">digitalWrite(7, HIGH);</code>
+</span> </p>	
+<p> De plus, le fait d'employer une <strong class="title">constante</strong> apporte une <strong class="pros">sécurité</strong> : le compilateur refusera dans la suite du code toute éventuelle réaffectation à l'identificateur <code class="prettyprint lang-c">ledPin</code>, ce qui est conforme à la pratique (un câblage n'a pas vocation à être modifié en cours d'utilisation). </p>
+
+<p style="margin-top: 1em"> <em class="remark">Remarque</em>. La déclaration ci‑dessus aurait aussi pu être codée : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int const ledPin = 7;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> mais conformément à l'usage  – et donc pour une <strong class="pros">bonne lisibilité</strong> – il est préférable de <strong class="defin">privilégier la forme précédente</strong>. </p>
+
+<p> De plus, on verra que la <strong class="title">position du mot‑clef</strong> <code class="prettyprint lang-c">const</code> peut être significative dans le cadre de déclarations plus complexes (cf. chap. C5‑I <a class="previous" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html#constantVSlectureSeule" target="_BLANK">). </a></p>
+</div><!-- exemple -->
+
+
+<h4 id="bonnePratiqueConstantes"> Bonne pratique </h4>
+
+
+<div class="important">
+<p> Pour une meilleure <strong class="pros">lisibilité du code</strong> et aussi une <strong class="pros">robustesse aux erreurs</strong> <strong>de codage</strong>, il est recommandé de remplacer autant que possible les <strong class="title">constantes littérales numériques</strong> (c'est‑à‑dire les <strong>valeurs</strong> codées directement sous forme de <strong>nombres</strong>) par des <strong class="defin">constantes déclarées</strong> (ou des <strong>pseudo-constantes</strong> – cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#pseudoConstantes" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p class="square" style="margin-top: 0em"> Cette recommandation devient une <strong class="warning">règle absolue</strong> dès lors qu'une <strong class="title">constante littérale</strong> est <strong>employée</strong> <strong class="title">à plusieurs reprises</strong> dans un programme pour exprimer la valeur d'<strong>un seul et même paramètre</strong>.  </p>
+
+<p> Faute d'appliquer cette règle, si la valeur venait à faire l'objet de <strong class="specialLB">modifications</strong> au cours de l'élaboration ou de la maintenance du programme, il y aurait un risque d'<strong class="warning">oublier certaines occurrences</strong> de la constante littérale dans le programme, avec les conséquences que cette mégarde pourrait avoir en termes de dysfonctionnements immédiats ou ultérieurs. </p>
+
+<p> Déclarer une <strong class="title">constante nommée</strong> pour représenter une <strong>valeur numérique</strong> permet de ne saisir cette valeur qu'<strong class="pros">une seule fois</strong> dans le code, lors de la déclaration. Toute <strong class="specialLB">modification</strong> de cette dernière se répercute alors automatiquement lors de la compilation <strong class="defin">à chaque occurrence</strong> de l'identificateur de la constante dans le code. </p> 
+
+<p class="square"> De plus, déclarer une <strong class="title">constante nommée</strong> permet de l'identifier comme un <strong class="defin">paramètre du programme</strong> que l'on peut placer au tout <strong>début d'un fichier source</strong> pour <strong class="pros">maximiser sa lisibilité</strong>. Le codeur peut alors très facilement la trouver pour la modifier sans avoir à chercher les lignes de code où elle est employée. Cette règle vaut même si la constante n'est employée qu'une seule fois. </p>
+</div><!-- complementExpert -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons un exemple du chapitre C2‑II <a class="previous" href="../C2-Elementslangage/Cc2-2_syntaxeFondamentale.html#exempleInstructionStructuree" target="_BLANK"></a> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (userAge >= 18) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Même si la constante littérale <code class="prettyprint lang-c">18</code> n'apparaît qu'<strong>une seule fois dans le programme</strong>, il est quand même <strong class="pros">préférable</strong> de coder préalablement <strong class="pros">en début de fichier</strong> la déclaration : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:3">
+const int majorityAge = 18;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> pour pouvoir <strong>recoder mieux</strong> la ligne n° 10 supra comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (userAge >= majorityAge) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, ce <strong>paramètre</strong> d'âge <strong class="warning">peut changer</strong> selon l'époque, le pays ou même le contexte. En le définissant comme une <strong class="title">constante déclarée</strong>, il sera plus commode par la suite de <strong>modifier sa valeur</strong> via une fonction ou une variable d'environnement. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="declarationSequentielle"> Déclaration séquentielle de données </h3>
+
+
+
+<div class="complement">
+<p> La syntaxe des langages <strong>C</strong> et <strong>C++</strong> autorise, par le <strong class="specialG">même descripteur de type</strong>, à coder <strong class="title">plusieurs déclarations</strong> (et initialisations éventuellement associées) dans une <strong>même instruction</strong>. </p>
+
+<p> Pour cela, il suffit simplement d'employer le <strong class="title">symbole</strong> <code class="prettyprint lang-c">,</code> pour séparer deux déclarations successives. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans la ligne de code académique ci‑dessous, <strong>trois variables</strong> <code class="prettyprint lang-c">a</code>, <code class="prettyprint lang-c">b</code> <code class="prettyprint lang-c">c</code> de type <code class="prettyprint lang-c">int</code> sont déclarées : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+int a, b = 3, c = 10;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On peut remarquer que <code class="prettyprint lang-c">a</code> ne fait pas l'objet d'une initialisation, ce qui est autorisé par la syntaxe, même si ce n'est en général pas une bonne pratique. </p>
+</div><!-- exemple -->
+
+
+<h4> Bonne pratique </h4>
+
+
+<div class="complementExpert">
+<p> Une <strong class="title">déclaration séquentielle</strong> n'apporte un <strong>gain</strong> <strong class="cons">éventuel</strong> <strong>en lisibilité</strong> : </p>
+
+<ul>
+	<li> qu'avec des <strong class="defin">données semblables</strong> (dans ce qu'elles représentent), </li>
+
+	<li> et si on leur attribue des <strong class="defin">identificateurs courts</strong>. </li>
+</ul>
+
+<p> <strong class="warning">Sinon</strong>, la ligne de code devient vite <strong class="cons">trop longue</strong> et la déclaration de chaque donnée peut y être difficile à repérer. De plus, regrouper dans une même ligne la déclaration de plusieurs données qui n'ont <strong class="cons">rien de commun</strong> hormis leur type peut prêter à confusion : un lecteur du code pourrait se mettre à penser que les deux données sont liées… </p>
+</div>
+
+<div class="important">
+<p> Sauf cas particuliers, il est donc <strong>recommandé</strong> de respecter la <strong class="title">principe</strong> : <br>
+<span class="inline">
+	« <strong>une</strong> <strong class="pros">donnée</strong>, <strong>une</strong> <strong class="pros">instruction de déclaration</strong> (sur une <strong>ligne distincte</strong>). »
+</span> </p>
+</div><!-- important -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="initialisation"> Détails sur l'initialisation des données </h2>
+
+
+
+<h3 id="varNonInit"> Cas des variables non initialisées </h3>
+
+
+<div class="complementExpert">
+<p> Dans le cas d'une <strong class="title">variable non initialisée</strong> dans sa déclaration, quelle <strong class="defin">valeur par défaut</strong> lui est‑elle attribuée par le compilateur ?   </p>
+<ul>
+	<li> si la variable est de <strong>classe</strong> <strong class="specialO">statique</strong> (donc en particulier, si elle est <em>globale</em>), elle prend la valeur <strong class="defin">nulle</strong> ; </li>
+
+	<li> si la variable est de <strong>classe</strong> <strong class="specialO">automatique</strong> (a priori si elle est <em>locale</em>), elle prend une valeur <strong class="warning">indéterminée</strong> (en fait, déterminée par les anciennes valeurs des bits de l'espace mémoire qui lui est alloué). </li>
+</ul>
+</div>
+
+<div class="important">
+<p> Autant que possible, il est <strong>préférable</strong> d'<strong class="title">initialiser</strong> <strong class="defin">toute variable</strong> <strong class="pros">dès sa déclaration</strong>, même si la valeur attribuée peut sembler n'avoir aucun sens. </p>
+
+<p> Cela permet ensuite de <strong>tester cette variable</strong> <strong class="pros">en toutes circonstances</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples"></p>
+<p class="exemple"> On peut être amené à <strong class="title">déclarer une variable</strong> <strong class="cons">sans lui affecter une valeur initiale</strong>, lorsque cette variable est destinée à recevoir des <strong class="specialY">valeurs non prévisibles</strong> lors du codage du programme, typiquement si elle sera <strong>saisie par un utilisateur</strong> durant l'exécution : </p>	
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  int patientAge;  // uninitialized variable
+  printf("How old the patient is? ");
+  scanf("%d", &patientAge);
+  // ...
+}	
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Pourtant, il est <strong class="pros">préférable</strong> de coder la déclaration : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+  int patientAge = -1; 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> La <strong class="title">valeur a priori « absurde »</strong> <code class="prettyprint lang-c">-1</code> permet de coder ensuite dans le programme des tests pour <strong class="defin">savoir si</strong> <strong>la saisie n'a pas encore eu lieu</strong> (ou si elle a éventuellement échoué). </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="initC++"> Initialisation des données en langage <em class="mark">C++</em> </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">syntaxe de la déclaration</strong> des données du langage <strong>C</strong> reste <strong class="defin">valable en langage C++</strong>. </p>
+
+<p> De surcroît, en <strong>C++</strong>, l'<strong class="specialLG">expression d'initialisation</strong> dans la déclaration d'une <strong>donnée</strong> n'est <strong class="pros">jamais soumise</strong> à la contrainte d'être une <strong>expression constante</strong>. Partout dans un programme, il est possible de recourir à des <strong class="defin">identificateurs de variables</strong> déjà déclarées</strong> pour coder cette expression d'initialisation. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Plus précisément, la possibilité évoquée ci‑dessus est <strong class="pros">valable</strong> quelle que soit la <strong>classe d'allocation</strong> <strong class="specialO">statique</strong> ou <strong class="specialO">automatique</strong> de la donnée que l'on déclare (et non pas, comme en langage <strong>C</strong>, seulement pour la classe automatique – cf. supra <a class="supra" href="Cc2-3_declarationDonnees.html#comment"></a>). </p>
+</div><!-- complementExpert -->
+
+<div class="exemples">
+<p class="exemple"> Le code des <strong>deux déclarations</strong> de variables globales ci‑dessous est <strong class="pros">compilable</strong> en langage <strong class="title">C++</strong> :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+float nominalVoltage  = 12.0;
+float startingVoltage = nominalVoltage/2.0;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En langage <strong>C</strong>, la ligne n° 6 serait refusée lors de la compilation car l'<strong class="specialLG">expression d'initialisation</strong> <code class="prettyprint lang-c">nominalVoltage/2.0</code> n'est <strong class="warning">pas une expression constante</strong> : elle utilise l'identificateur de <strong>variable</strong> <code class="prettyprint lang-c">nominalVoltage</code>. </p>
+
+
+<div class="expert">
+<p> <em class="remark">Remarque</em> : <strong>si l'on permutait l'ordre</strong> de ces deux déclaration, ce code ne serait <strong class="warning">plus compilable</strong> même en <strong>C++</strong>, car l'identificateur <code class="prettyprint lang-c">nominalVoltage</code> ne serait pas défini au moment de l'évaluation de l'<strong class="specialLG">expression d'initialisation</strong> de la variable <code class="prettyprint lang-c">startingVoltage</code>. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Syntaxes alternatives d'initialisation en <em class="mark">C++</em> </h4>
+
+
+<div class="complement">
+<p> Pour l'<strong>initialisation des données</strong> (variables ou constantes), il existe des <strong class="title">syntaxes alternatives</strong> propres au langage <strong class="title">C++</strong>. Dans la forme syntaxique : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"> = <span class="nocode"> <strong class="specialLG">expression d'initialisation</strong></span></code>
+</span> <br>
+l'opérateur d'affectation <code class="prettyprint lang-c">=</code> devient <strong class="pros">facultatif</strong> si l'<strong class="specialLG">expression d'initialisation</strong> est encapsulée dans des <strong>parenthèses</strong> <code class="prettyprint lang-c">()</code> ou des <strong>accolades</strong> <code class="prettyprint lang-c">{}</code> (les accolades sont indispensables dans le cas des variables structurées – cf. partie <span class="partie">C5</span> du cours). </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exempleSyntaxeAlter">
+<p class="exemple"> Les <strong>deux déclarations avec initialisation</strong> codées ci‑dessous <strong class="title">sans l'opérateur d'affectation</strong> sont <strong class="pros">compilables</strong> en langage <strong class="title">C++</strong> alors qu'elles ne le sont pas <strong class="warning">pas en langage C</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+float nominalVoltage {12.0};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+float nominalVoltage (12.0);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p class="square"> En revanche, les deux déclarations ci‑dessous, <strong>avec l'opérateur d'affectation</strong> sont <strong class="defin">compilables</strong> en <strong>C</strong> comme en <strong>C++</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+float nominalVoltage = {12.0};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+float nominalVoltage = (12.0);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Les <strong>accolades</strong> ou les <strong>parenthèses</strong> y sont facultatives et leur usage ici <strong class="cons">n'apporte rien</strong>. </p>
+</div><!-- exemple -->
+
+<div class="important">
+<p> En langage <strong class="title">C++</strong>, La <strong class="title">syntaxe alternative</strong> <strong>sans l'opérateur d'affectation</strong> mais avec les <strong>accolades</strong> <code class="prettyprint lang-c">{}</code> est <strong class="pros">recommandée</strong>. </p> 
+</div><!-- important --> 
+
+<div class="complement">
+<p> En effet, les <strong class="title">différentes syntaxes</strong> d'initialisation des données du <strong>C++</strong> ne sont <strong class="warning">pas équivalentes</strong>. Si on ne code <strong>pas d'opérateur d'affectation</strong> <code class="prettyprint lang-c">=</code> dans l'instruction, alors : </p>
+<ul>
+  <li> au moment de l'initialisation de la donnée, le compilateur ne peut pas effectuer de <strong>conversion implicite</strong> par ajustement ou dégradation de type qui causerait une <strong class="cons">perte d'information</strong> (chap. C3‑VI <a class="next" href="../C3-Numeration/Cc3-6_conversionsTypes.html#conversionsImplicites" target="_BLANK"></a>) ; </li>
+
+  <li> le cas échéant, l'échec de la compilation permettrait de <strong class="pros">détecter l'erreur de codage</strong> dont résulterait la nécessité de recourir à une conversion implicite, qui sinon serait passée inaperçue. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> La <strong>déclaration</strong> codée ci‑dessous <strong>sans l'opérateur d'affectation</strong>, et qui comporte volontairement une <strong class="warning">incohérence de typage</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int nominalVoltage {12.0}; // Error of types! Build not possible.
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> n'est <strong class="pros">pas compilable</strong> en <strong class="title">C++</strong> – et c'est heureux ! </p>
+
+<p> En effet, le compilateur refuse d'ajuster une <strong>valeur</strong> <code class="prettyprint lang-c">12.0</code> de <strong class="specialG">type décimal</strong> dans une <strong>donnée</strong> déclarée de <strong class="specialG">type entier</strong> (même si, dans le cas présent, il y aurait priori une perte d'information puisque la partie décimale de la valeur <code class="prettyprint lang-c">12.0</code> à affecter est nulle). </p>
+
+<p class="square"> A contrario, la même <strong>déclaration</strong> ci‑dessous, mais codée avec l'opérateur d'affectation, et encore plus incohérente que la précédente: </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int nominalVoltage = 12.5; // Error of types, but build is possible!!
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> est malheureusement <strong class="cons">compilable</strong> en <strong>C++</strong>, tout comme en <strong>C</strong> – et ce <strong>sans le moindre avertissement</strong>, même avec les options de compilation <code>-Wall -Wextra</code> – alors qu'elle engendre une <strong class="warning">perte d'information</strong> (la variable nominalVoltage est initialisée avec la valeur <code>12</code> ! </p>
+
+<p> On voit donc tout l'<strong class="pros">intérêt</strong> de la <strong class="title">syntaxe alternative</strong> d'initialisation <strong>sans recours à l'opérateur d'affectation</strong>.  </p>
+</div><!-- exemple -->
+
+
+<h4 id="typageAutomatique"> Typage automatiques des données initialisées </h4>
+
+
+<div class="complement">
+<p> En langage <strong class="title">C++</strong> norme <strong>C++11</strong>, il est possible de laisser le compilateur procéder à l'<strong class="title">attribution automatique</strong> d'un <strong class="specialG">type élémentaire</strong> à une <strong>donnée</strong> lors de sa déclaration, si cette donnée est <strong class="specialLG">initialisée</strong>. </p>
+
+<p> Il suffit pour cela d'employer dans la déclaration le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">auto</code> <strong>à la place du</strong> <strong class="specialG">descripteur de type</strong> souhaité. C'est alors le type d'évaluation de l'<strong class="specialLG">expression d'initialisation</strong>, conformément aux règles usuelles (cf. chap. C3‑I <a class="next" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typeExpression" target="_BLANK"></a>) qui détermine l'attribution du <strong class="specialG">type</strong> à la donnée. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Sans se soucier des questions de taille des types, on peut coder comme ci‑dessous en langage <strong>C++</strong> les <strong class="title">déclaration à typage automatique</strong> suivantes : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+auto voltage   {230.0};
+auto userAge   {50};
+auto typedChar {'\0'};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Respectivement, ces données seront compilées <strong>implicitement</strong> dans les types <code class="prettyprint lang-c">double</code>,  <code class="prettyprint lang-c">int</code>, et <code class="prettyprint lang-c">char</code>. </p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Commode, l'emploi du <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">auto</code> n'est <strong class="cons">pas forcément judicieux</strong> lorsque la machine cible dispose d'une <strong>mémoire limitée</strong>, notamment s'il s'agit d'une carte à microcontrôleur <strong class="Arduino">Arduino Uno</strong> ou <strong class="Arduino">Nano</strong>. En effet, les choix par défaut du compilateur (<code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">double</code>…) sont souvent <strong class="cons">surdimensionnés</strong> au regard de l'étendue des valeurs effectivement prises par les données au cours de l'exécution du programme. </li>
+
+  <li> <em class="remark">Attention</em> ! Le <strong class="title">mot‑clef</strong> <code class="prettyprint lang-c">auto</code> a une <strong class="warning">toute autre interprétation</strong> en langage <strong>C</strong>, ainsi qu'en <strong>C++</strong> <em class="remark">avant</em> la norme <strong>C++11</strong> : il sert à spécifier la <strong>classe d'allocation automatique</strong> pour une donnée (cf. chap C4‑II <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C4-Fonctions/Cc4-2_porteesDonnees.html#classeAllocation" target="_BLANK"></a>.) </li>
+</ol>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

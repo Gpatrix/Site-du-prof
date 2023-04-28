@@ -1,0 +1,161 @@
+section h1 {
+	text-align: left;
+  
+  margin:0em;
+	margin-top: 1em;
+	padding: 0.2em;
+	padding-top: 0.3em;
+	background: none;
+	border-top: 2px solid #A0A0AF;
+  
+  font-family: "magneto";
+	font-size: 150%;
+  font-weight: normal;
+	word-spacing: 0.5rem;
+	letter-spacing: 0.05rem;
+}
+
+h1.playlist {
+	background : white;
+	border-top: none;
+}
+
+h1 > a {
+	margin: 0em;
+	margin-left : 0.5em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	border-radius: 0.3em;
+  background : white;
+
+	text-decoration: none;
+	color: #002377;
+}
+
+
+img.channel {
+	height: 2.5em; 
+	display: inline; 
+	vertical-align: middle;
+}
+
+section h2 {
+	text-align: left;
+  position: relative;
+
+	margin-top: 1em;
+	margin-bottom : 1em;
+	margin-left: 1.8em;
+	background: none;
+  
+  font-family: "open sans bold";
+	font-size: 120%;
+  font-weight: normal;
+  color: black;
+}
+
+section h2:before{
+	position: absolute;
+  left: -1.6em;
+  color: #C1121F;
+  text-shadow: 0.06em 0.06em black;
+	content: "◼";
+}
+
+section h3 {
+	text-align: left;
+  position: relative;
+
+	margin-top: 2em;
+	margin-bottom : 0.5em;
+	margin-left: 1.8em;
+	background: none;
+  
+  font-family: open sans semi-bold;
+	font-size: 100%;
+  font-weight: 700;
+  color: black;
+}
+
+section h3:before{
+	position: absolute;
+  left: -1.6em;
+
+  color: #C1121F;
+  text-shadow: 0.06em 0.06em black;
+	content: "▶";
+}
+
+div.video {
+  display: inline-flex;
+}
+
+iframe.medium {
+	margin-left: 2.3em;
+	margin-right: 0.8em;
+  height: 7em;
+  width: auto;
+}
+
+
+a.file {
+	padding: 0.1em;
+	text-decoration: none;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 110%;
+  color: #C1121F;
+}
+
+a.file:after {
+	content: "📄";
+}
+
+a.external {
+	padding: 0.1em;
+	text-decoration: none;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 110%;
+	font-family: OpenSymbol;
+  color: #C1121F;
+}
+
+a.external:after {
+	content: "[↗]";
+}
+
+a:hover{
+	text-shadow: 0.05em 0.05em dimgray;
+}
+
+ul.doc{
+  margin-top: 0.2em;
+}
+
+ul.doc > li {
+	margin-bottom: 0.2em;
+
+	font-family: cambria, Times New Roman;
+	font-weight: 600;
+	font-size: 100%;
+	font-style: italic;
+	color: #002377;
+}
+
+ul.doc > li:not(:first-child) {
+	margin-top: 0.2em;
+}
+
+ul.doc > li:first-child {
+	margin-top: 0.1em;
+}
+
+p {
+	font-size:;
+	margin-left: 2em;
+	font-family: cambria;
+}
+

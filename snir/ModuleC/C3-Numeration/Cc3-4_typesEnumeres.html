@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="IV"
+  data-pageState="OK"
+  data-pageheadtitle="Types énumérés"
+  data-pagefulltitle="Les types énumérés"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+
+<!-- relecture en nov. 2022, peu de corrections -->
+
+
+<div class="exergue">
+
+<p class="square"> Dans la plupart des langages de programmation généralistes, on trouve la notion de <strong class="title">type énuméré</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Type_énuméré" target="_BLANK">W</a> pour permettre au codeur de <strong>grouper des constantes</strong> dans une <strong class="defin">liste</strong> pour former un <strong>ensemble de valeurs</strong> à <strong class="defin">effectif réduit</strong>, par exemple : </p>
+
+<div style="display: inline-block;">
+   <img class="top-right" src="../img/exEnumeres.png" width="250px">
+<ul>
+  <li> les <strong class="specialLB">jours</strong> de la semaines (<em>lundi</em>, <em>mardi</em>…), </li>
+
+  <li> les <strong class="specialLB">mois</strong> de l'année (<em>janvier</em>, <em>février</em>…), </li>
+
+  <li> les enseignes des <strong class="specialLB">cartes à jouer</strong> (<em>carreau</em>, <em>pique</em>…), </li>
+
+  <li> les <strong class="specialLB">points cardinaux</strong> géographiques (<em>nord</em>, <em>est</em>…), </li>
+
+  <li> les <strong class="specialLB">modes de fonctionnement</strong> d'un système (<em>arrêt</em>, <em>marche avant</em>, <em>marche arrière</em>…), etc. </li>
+</ul>
+</div><!-- display -->
+
+<div class="expert">
+<p> Dans un programme source, on pourrait <strong class="title">coder ces valeurs comme de simples nombres</strong>. Par exemple, dans le cas des jours de la semaine, on se baserait sur la convention : <br>
+<span class="inline">
+  <code class="cmd">1</code> pour <strong>lundi</strong>, <code class="cmd">2</code> pour <strong>mardi</strong>, etc.
+</span> <br> 
+Mais cette pratique serait <strong class="cons">difficilement lisible</strong>, même si elle était documentée par un commentaire au début du programme. En effet, il faudrait avoir en permanence en tête la correspondance entre chaque jour et le nombre qui le code pour comprendre la manipulation des données de type <em>jour</em>. </p>
+</div><!-- expert -->
+
+<p> Pour bien faire, on pourrait déjà définir <strong>chaque nom de valeur</strong> comme l'<strong class="specialT">identificateur d'une constante déclarée</strong>, par exemple : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">const int LUNDI = 1, MARDI = 2, // etc.</code>
+</span> <br> 
+ce qui permettrait par la suite de déclarer et initialiser de façon une variable entière pour coder le nom du jour d'une date, par exemple : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">int nomDuJour = LUNDI;</code>
+</span> <br> 
+En employant directement ces identificateurs de constantes dans les expressions, on gagnerait en <strong class="pros">lisibilité</strong> ; on n'aurait pas besoin de mémoriser de correspondance entre des noms et des valeurs numériques de codage. </p>
+
+<p> En programmation, le <strong>concept</strong> de <strong class="title">type énuméré</strong> apporte justement une <strong>syntaxe spécifique</strong> pour faciliter cette approche. Il permet de <strong class="pros">regrouper en une seule déclaration</strong> le codage de <strong class="defin">toutes les valeurs constantes</strong> qu'une variable peut prendre. Il évite d'avoir recours à une suite de déclarations individuelles de constantes comme ci‑dessus. </p>
+
+
+<p class="square"> En langages <strong>C</strong> et <strong>C++</strong>, les <strong class="title">types énumérés</strong> sont des <strong class="defin">types dérivés</strong> de <strong class="specialG">types entiers</strong>. D'un point de vue pédagogique, il est donc pertinent de les étudier <strong>avec les types élémentaires</strong>, à la suite des types entiers. </p>
+
+<div class="expert">
+<p> Néanmoins, il faut avoir conscience dès le départ que, dans ces deux langages, l'<strong class="title">emploi des types énumérés</strong> recèle <strong class="warning">quelques difficultés</strong> : </p>
+
+<ul>
+  <li> D'abord, il existe <strong class="specialLB">deux possibilités de déclaration</strong> des <strong class="specialN">données</strong> de <strong class="specialG">types énumérés</strong> : </li>
+  <ul>
+    <li> soit via un <strong class="defin">type anonyme</strong>, ce qui est commode lorsqu'une seule variable est requise ; </li>
+
+    <li> soit via un <strong class="defin">type nommé</strong>, cette pratique étant <strong class="pros">recommandée</strong> dans le cas général. </li>
+  </ul>
+
+  <div class="nobullet"> Et à ces deux possibilités se combinent celles offertes <strong class="specialLB">pour toute déclaration de donnée(s)</strong> : </div>
+  <ul>
+    <li> déclarer <strong>une ou plusieurs données</strong> dans la même instruction ; </li>
+
+    <li> <strong>initialiser ou non</strong> les variables déclarées, etc. </li>
+  </ul>
+
+  <li> Par ailleurs – et surtout – on va voir que l'<strong class="specialLB">affectation</strong> des <strong class="specialN">données</strong> déclarées de <strong class="specialG">types énumérés</strong> est traitée de <strong class="warning">manières différentes</strong> <strong>selon le langage employé</strong>. </li>
+  <ul>
+    <li> En <strong>C</strong>, la valeur affectée peut être de <strong class="defin">n'importe quel type élémentaire</strong>, le compilateur effectuant une <strong class="specialMg">conversion implicite</strong> pour rendre l'affectation possible ; </li>
+
+    <li> En <strong>C++</strong>, la valeur affectée ne peut être du <strong class="defin">même type énuméré que celui la donnée</strong> ; sinon, il faut procéder à une  <strong class="specialV">conversion explicite</strong> pour rendre l'affectation possible. </li>
+  </ul>
+</ul>
+</div><!-- expert -->
+
+<p class="square"> Incontournables en programmation, mais loin d'être simples d'emploi, les types énumérés méritent un chapitre qui leur soit exclusivement consacré. Dans cet <strong class="title">objectif</strong>, on abordera les deux thèmes essentiels : </p>
+<ul>
+  <li> la <strong class="specialLB">déclaration</strong> des <strong class="specialG">types énumérés</strong> et de leur <strong>données</strong>, avec les <strong class="warning">différentes syntaxes</strong> possibles selon le langage adopté, <strong>C</strong> ou <strong>C++</strong> ;  </li>
+
+  <li> la <strong class="specialLB">manipulation</strong> des <strong>données</strong> de types énumérés avec : </li>
+  <ul>
+    <li> en préliminaire, la question de la <strong class="defin">compatibilité ou non</strong> avec les <strong>types entiers</strong> ; </li>
+
+    <li> ensuite, les <strong class="defin">opérations</strong> les plus usuelles (affectation, calculs arithmétiques, comparaison) ; </li>
+  </ul>
+
+  <div class="nobullet"> et pour chacun de ces aspects, là encore, de <strong class="warning">nombreuses différences</strong> selon le langage adopté, <strong>C</strong> ou <strong>C++</strong>. </div>
+</ul>
+
+<div class="expert">
+<p> Toutes ces <strong class="title">subtilités</strong> peuvent sembler <strong class="cons">pénibles</strong> dans un premier temps, mais elles se justifient par l'évolution que représente le langage <strong>C++</strong> en termes de <strong class="cons">sécurité des programmes</strong> par rapport au langage <strong>C</strong>. Et quoi qu'il en soit, elles doivent être maîtrisées pour pouvoir bien employer les types énumérés. </p>
+</div><!-- expert -->
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="declarationEnumAnon"> Déclaration des types énumérés et de leurs données  </h2>
+
+
+<div class="expert">
+<p> Dans cette section, par souci de <strong class="pros">simplification</strong> : </p>
+
+<ul>
+  <li> la <strong class="title">syntaxe</strong> est toujours présentée pour la <strong class="defin">déclaration</strong> d'<strong>une seule variable</strong> ; il est facile d'extrapoler à une syntaxe séquentielle en appliquant les principes généraux de la déclaration des données en langages <em class="mark">C</em> et <em class="mark">C++</em> (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationSequentielle" target="_BLANK"></a>) ;  </li>
+
+  <li> les <strong class="specialO">contraintes</strong> auxquelles doivent répondre les <strong>expressions d'initialisation</strong> des données sont passées sous silence. Elles sont décrites à la section suivante.</li>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3 id="syntaxeAnonyme"> Syntaxe déclarative avec un type anonyme </h3>
+
+
+
+<div class="important"> En langages <strong>C</strong> et <strong>C++</strong>, on peut déclarer une <strong class="title">variable</strong> de <strong class="specialG">type énuméré</strong> <strong class="defin">anonyme</strong> par une <strong>instruction</strong> de la forme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre style="background: white; margin-left: 2em;">
+<code class="prettyprint lang-c">enum {</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 0</strong></span>, // 1ᵉ constante ( = 0)</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 1</strong></span>, // 2ᵉ constante ( = 1)</code>
+  <code class="prettyprint lang-c"><span class="nocode"> ⋮</span></code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante n</strong></span>  // (n+1)ᵉ constante ( = n)</code>
+<code class="prettyprint lang-c">} <span class="nocode"><strong class="specialN">nom de la variable</strong>  <span style="color: darkgrey; font-style: normal;">[</span></span>= <span class="nocode"><strong class="specialLG">valeur initiale</strong><span style="color: darkgrey; font-style: normal;"> ]</span></span>;</code>
+</pre> 
+<!---------- ne pas indenter ---------->
+
+<p> où la <strong class="specialLG">valeur initiale</strong> optionnelle est une <strong>expression à valeur entière</strong>.  </p>
+
+</div><!-- important -->
+
+
+
+<div class="complement" id="constantesEnumerees">
+<p> Dans la syntaxe ci‑dessus, les <strong class="specialT">noms de constantes</strong> listés entre accolades sont également des <strong class="specialLB">identificateurs déclarés</strong> dans l'espace de visibilité de la déclaration (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#visibilite" target="_BLANK"></a>). Ces constantes : </p>
+
+<ul>
+  <li> prennent implicitement les <strong class="defin">valeurs entières</strong> <strong>par défaut</strong> <code class="cmd">0</code>, <code class="cmd">1</code>, <code class="cmd">2</code>… respectivement dans l'ordre de la liste ; </li>
+
+  <li> ont leurs valeurs implicitement encodées <strong>par défaut</strong> dans le <strong class="specialO">type sous‑jacent</strong> <code class="prettyprint lang-c">int</code> (en anglais, <em class="english">underlying type</em>) ; ces valeurs constituent <strong>a priori</strong> l'<strong class="defin">ensemble restrictif</strong> des <strong>valeurs</strong> que la variable de type énuméré est censée prendre ; </li>
+
+  <li> ont chacune, dans le reste du code, le statut d'<strong class="pros">expression constante entière</strong> (contrairement à des constantes déclarées individuellement – cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstanteEntiere" target="_BLANK"></a>). </li>
+</ul>
+
+<p> En règle générale de <strong class="pros">bonne pratiques</strong>, on code ces <strong class="specialT">noms de constantes</strong> en <strong class="defin">majuscules</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples" id="exEnumAnon">
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+  <p class="exemple"> Pour un programme de gestion d'un <strong>feux de circulation</strong>, on peut coder l'instruction : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum {GREEN, YELLOW, RED} trafficLightColor = GREEN;
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> qui déclare : </p>
+  <ul>
+    <li> les trois <strong class="specialT">constantes entières</strong> <code class="prettyprint lang-c">GREEN</code>, <code class="prettyprint lang-c">YELLOW</code> et <code class="prettyprint lang-c">RED</code> valant respectivement <code class="cmd">0</code>, <code class="cmd">1</code> et <code class="cmd">2</code>, sachant qu'elles sont encodées dans le <strong class="specialO">type sous‑jacent</strong> <code class="prettyprint lang-c">int</code> ; </li>
+
+    <li> la <strong class="title">variable énumérée</strong> <code class="prettyprint lang-c">trafficLightColor</code>, initialisée à la valeur <code class="prettyprint lang-c">GREEN</code> (donc, <code class="cmd">0</code>).</li>
+  </ul>
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/feuTricolore.png" width="60px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+
+<p> À la suite de cette déclaration, et dans tout son espace de visibilité, on peut alors <strong class="pros">affecter directement</strong> à <code class="prettyprint lang-c">trafficLightColor</code> l'une des <strong>trois constantes</strong> listées <code class="prettyprint lang-c">GREEN</code>, <code class="prettyprint lang-c">YELLOW</code> et <code class="prettyprint lang-c">RED</code> dont les valeurs sont les seules que la variable est censée prendre (si le programme est correctement codé). </p>
+</div><!-- exemple -->
+
+<div class="remarques" id="remDeclarationAnon">
+<p class="remarque"> Lorsque les identificateurs des <strong class="specialT">constantes entières</strong> sont courts et peu nombreux, il est possible de <strong class="title">formater</strong> <strong>l'instruction de déclaration</strong> d'une variable de type énuméré sur <strong class="defin">une seule ligne</strong> comme dans l'exemple ci‑dessus. </p>
+
+<p> Sinon, il est préférable de procéder sur <strong class="defin">plusieurs lignes</strong> comme dans la syntaxe générique proposée supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/syntaxeAnonyme"></a> ou dans la variante ci‑dessous : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum {GREEN, 
+      YELLOW, 
+      RED
+} trafficLightColor = GREEN;
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4> Notion de type anonyme </h4>
+
+
+<div class="important">
+<p> Dans la forme de déclaration supra <a class="supra" href="Cc3-4_typesEnumeres.html#syntaxeAnonyme"></a>, le <strong class="title">type énuméré</strong> de la variable déclarée est dit <strong class="defin">anonyme</strong> car il n'a <strong>pas d'identificateur déclaré</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le recours à un <strong class="title">type anonyme</strong> présente : </p>
+
+<ul>
+  <li> l'avantage de <strong class="pros">simplifier</strong> <strong>la déclaration</strong> d'une (voir plusieurs) variable(s) énumérée(s) dans la même instruction ; </li>
+
+  <li> l'inconvénient de <strong class="cons">limiter</strong> à <strong>une seule instruction</strong> la déclaration de données de ce type ; en effet, toute nouvelle instruction dans le même espace de visibilité entraînerait un conflit sur les identificateurs des constantes avec la première instruction. </li>
+</ul>
+</div><!-- complement -->
+
+<p> En règle générale de <strong class="pros">bonnes pratiques</strong>, il est préférable d'employer de préférence un <strong class="defin">type nommé</strong>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="typeNomme"> Syntaxes déclaratives avec un type nommé </h3>
+
+
+
+<h4> Déclaration usuelle d'un type énuméré </h4>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, pour déclarer une variable de <strong class="title">type énuméré</strong> <strong class="defin">nommé</strong>, il faut préalablement déclarer son <strong class="title">type</strong>. Usuellement, on procède dans une <strong>instruction séparée</strong> de la forme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre style="background: white; margin-left: 2em;">
+<code class="prettyprint lang-c">enum <span class="nocode"><strong class="specialG">nom du type</strong></span> {</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 0</strong></span>, // 1ᵉ constante ( = 0)</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 1</strong></span>, // 2ᵉ constante ( = 1)</code>
+  <code class="prettyprint lang-c"><span class="nocode"> ⋮</span></code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante n</strong></span>  // (n+1)ᵉ constante ( = n)</code>
+<code class="prettyprint lang-c">};</code>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Le <strong class="specialG">nom du type</strong> déclaré peut ensuite être employé comme <strong>élément</strong> d'un <strong class="defin">descripteur de type</strong>, notamment pour déclarer des données de ce type énuméré. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Remarquons que dans cette syntaxe, le <strong class="specialG">nom du type</strong> est codé non <strong class="warning">pas après</strong> la liste des constantes, mais <strong class="defin">avant</strong> – et juste après le mot‑clef <code class="prettyprint lang-c">enum</code>. </p> 
+
+<p> Par ailleurs, comme dans la déclaration d'une variable de type énuméré anonyme, la <strong class="title">déclaration d'un type énuméré</strong> seul déclare aussi les <strong class="specialT">constantes entières</strong> listées entre accolades, avec les <strong>mêmes règles implicites</strong> (cf. supra <a class="supra" href="Cc3-4_typesEnumeres.html#constantesEnumerees"></a>). </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exEnumNomme">
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+<p class="exemple"> En reprenant l'exemple du programme de gestion de <strong>feux de circulation</strong>, on peut préalablement déclarer un <strong class="title">type énuméré</strong> <code class="prettyprint lang-c">Color</code> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Color {GREEN, YELLOW, RED};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Grâce à cette déclaration, l'identificateur <code class="prettyprint lang-c">Color</code> peut ensuite servir pour déclarer une ou plusieurs <strong>données</strong> de ce type (cf. infra <a class="infra" href="Cc3-4_typesEnumeres.html#exempleDeclarVarTypeEnum"></a>). </p>
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/feuTricolore.png" width="60px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4 id="typedef"> Syntaxe alternative en langage <em class="mark">C</em> </h4>
+
+
+<p> En langage <strong>C</strong>, il existe une <strong class="title">syntaxe alternative</strong> pour la <strong>déclaration</strong> d'un <strong class="specialG">type énuméré</strong>, via le mot‑clef <code class="prettyprint lang-c">typedef</code> (cf. chap C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#typedef" target="_BLANK"></a>) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre style="background: white; margin-left: 2em;">
+<code class="prettyprint lang-c">typedef enum {</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 0</strong></span>, // 1ᵉ constante ( = 0)</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 1</strong></span>, // 2ᵉ constante ( = 1)</code>
+  <code class="prettyprint lang-c"><span class="nocode"> ⋮</span></code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante n</strong></span>  // (n+1)ᵉ constante ( = n)</code>
+<code class="prettyprint lang-c">} <span class="nocode"><strong class="specialG">nom du type</strong></span>;</code>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Remarquons que dans cette syntaxe, le <strong class="specialG">nom du type</strong> est codé <strong class="defin">après</strong> la <strong>liste des constantes</strong> et non <strong class="warning">pas avant</strong> (et il ne faut pas confondre avec la déclaration d'une variable d'un type anonyme). </p>
+
+<p> L'<strong class="pros">avantage</strong> de recourir au mot‑clef <code class="prettyprint lang-c">typedef</code> est qu'une telle déclaration définit le <strong class="specialG">nom du type</strong> comme un <strong class="specialG">descripteur de type</strong> <strong class="pros">complet</strong>. Cela permet d'omettre le rappel du mot‑clef <code class="prettyprint lang-c">enum</code> dans toute déclaration ultérieure de données de ce type (cf. ci‑après). </p>
+</div><!-- expert -->
+
+
+<h4 id="declarationDonnee"> Déclaration de données d'un type énuméré nommé </h4>
+
+
+<div class="important">
+<p class="square" style="margin-top: 0em"> On déclare une <strong class="title">variable</strong> d'un <strong>type énuméré</strong> préalablement déclaré par une instruction de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">enum
+    <span class="nocode"><strong class="specialG">nom du type</strong></span>
+    <span class="nocode"><strong class="title">nom de la variable</strong></span> 
+    <span class="nocode" style="color : gray; font-style: normal;">[</span>=
+    <span class="nocode"><strong class="specialLG">valeur initiale</strong></span><span class="nocode" style="color : gray; font-style: normal;">]</span>;</code>
+</span> <br>
+où la <strong class="specialLG">valeur initiale</strong> optionnelle est une <strong>expression</strong> à valeur entière.  </p>
+
+<p class="square"> On déclare une <strong class="title">constante</strong> de ce même type en faisant précéder l'instruction ci‑dessus par le <strong>mot‑clef</strong> <code class="prettyprint lang-c">const</code>. </p>
+
+<p> Le codage de la <strong class="specialLG">valeur initiale</strong> est alors en principe <strong class="warning">obligatoire</strong>, l'affectation étant <strong class="warning">définitive</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Dans la <strong class="title">déclaration d'une donnée</strong> d'un <strong class="specialG">type énuméré</strong> <strong class="defin">nommé</strong>, le <strong>mot‑clef</strong> <code class="prettyprint lang-c">enum</code> est : </p>
+
+<ul>
+  <li> <strong class="pros">facultatif</strong> si le programme est compilé en <strong>C++</strong> ; </li>
+
+  <li> <strong class="warning">omis</strong> si le type énuméré a été déclaré avec le mot‑clef <code class="prettyprint lang-c">typedef</code>.</li>
+</ul>
+</div><!-- complementExpert -->
+
+<div class="exemples" id="exempleDeclarVarTypeEnum">
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+<p class="exemple"> Toujours dans le contexte d'un programme de gestion de <strong>feux de circulation</strong>, suite à la déclaration supra du type énuméré <code class="prettyprint lang-c">Color</code>, les instructions ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+enum Color mainTrafficLightColor = GREEN;
+enum Color secondTrafficLightColor = RED;
+const enum Color defaultLightColor = YELLOW;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> déclarent respectivement <strong class="title">deux variables</strong> et <strong class="title">une constante</strong> du même type <code class="prettyprint lang-c">Color</code>. </p>
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/feuTricolore.png" width="60px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+
+<div class="expert">
+<p> <em class="remark">Remarque</em>. Ici, les déclarations sont codées dans le même bloc, mais elles pourraient très bien l'être chacune dans des <strong class="defin">blocs différents</strong>, tant que ces blocs restent dans l'<strong>espace de visibilité</strong> de la déclaration du type <code class="prettyprint lang-c">Color</code>. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<h4 id="conventionIdentificateurs"> Convention pour les identificateurs de types </h4>
+
+
+<div class="complement">
+<p> Lorsqu'un programme ne requiert qu'<strong>une seule variable</strong> d'un <strong class="specialG">type énuméré</strong>, il est d'usage d'employer <strong class="warning">presque</strong> le <strong class="title">même identificateur</strong> pour les deux – leur seule différence portant sur la <strong class="specialLB">lettre initiale</strong> : </p>
+
+<ul>
+	<li> <strong class="specialG">majuscule</strong> pour le <strong class="specialG">nom du type</strong>, </li>
+
+	<li> <strong class="specialN">minuscule</strong>  pour le <strong class="specialN">nom de la variable</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples" id="exempleCalendrier">
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+<p class="exemple"> Pour un programme simple de <strong>calendrier</strong>, on peut coder les deux instructions ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum DayOfWeek {
+  MONDAY, TUESDAY, WEDNESDAY,
+  THURSDAY, FRIDAY, SATURDAY, SUNDAY
+};
+enum DayOfWeek dayOfWeek = TUESDAY;
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/ephemeride.png" width="150px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+
+<p> où la <strong class="title">variable</strong> <code class="prettyprint lang-c">dayOfWeek</code>  (avec <strong>minuscule initiale</strong>) est la seule définie du <strong class="specialG">type</strong> <code class="prettyprint lang-c">DayOfWeek</code> (avec <strong class="specialG">majuscule initiale</strong>). </p>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Attention aux conflits d'identificateurs </h4>
+
+
+<p> <em class="remark">Attention</em>, lorsqu'on emploie des types énumérés, qu'ils soient anonymes ou nommé, tout <strong class="title">identificateur</strong> de <strong class="specialT">constante entière</strong> figurant dans la liste d'un type énuméré n'est <strong class="warning">pas utilisable</strong> dans tout <strong>autre déclaration</strong> dans son espace de visibilité. Il s'agit d'un <strong class="title">conflit  d'identificateur</strong> que le compilateur détecte immanquablement.  </p>
+
+<div class="exemples">
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+<p class="exemple">  En prolongement de l'exemple pour le programme de <strong>calendrier</strong>, <strong class="warning">on ne peut pas coder</strong> : </p>
+  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum DayOfWeek {
+  MONDAY, TUESDAY, WEDNESDAY,
+  THURSDAY, FRIDAY, SATURDAY, SUNDAY
+};
+enum WeekEnd {SATURDAY, SUNDAY}; 
+// Error: identifiers already declared!
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/ephemeride.png" width="150px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+
+<p> au motif que les identificateurs <code class="prettyprint lang-c">SATURDAY</code> et <code class="prettyprint lang-c">SUNDAY</code> sont déjà utilisés pour déclarer le type <code class="prettyprint lang-c">DayOfWeek</code>. </p> 
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3 id="valeursExplicites"> Déclaration explicite des valeurs de constantes énumérées </h3>
+
+
+
+<div class="important">
+<p> Dans la déclaration d'un <strong class="specialG">type énuméré</strong> (anonyme ou nommé), on peut coder, pour <strong>chaque</strong> <strong class="specialT">constante entière</strong> listée, une <strong class="title">valeur explicite</strong> qui soit <strong>différente</strong> de celle attribuée implicitement par défaut. </p>
+
+<p> Il suffit de procéder comme pour les initialisations dans une <strong>déclaration séquentielle</strong> de données (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationSequentielle" target="_BLANK"></a>), en codant une <strong class="defin">affectation</strong> de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode" style="color:grey">…</span> ,
+    <span class="nocode"><strong class="specialT">nom constante k</strong></span> = <span class="nocode"><strong class="specialM">valeur explicite</strong> </span>, <span class="nocode" style="color:gray">…</span></code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Attention, dans cette forme syntaxique, toute <strong class="specialM">valeur explicite</strong> doit être :  </p>
+<ul>
+  <li> en langage <strong>C</strong>, une <strong class="defin">expression constante entière</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstanteEntiere" target="_BLANK"></a>) ; </li>
+
+  <li> en langage <strong>C++</strong>, une <strong class="defin">expression constante</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstante" target="_BLANK"></a>) de <strong class="defin">type entier</strong>. </li>
+</ul>
+  
+<div class="expert">
+<p> Et à ce sujet, cf. la remarque faite au chap. C2‑V <a class="previous" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#remarqueExpressionConstante" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+<p> Par ailleurs, toute <strong class="specialT">constante entière</strong> <strong class="cons">non explicitement affectée</strong> prend alors la <strong>valeur incrémentée</strong> de <code>1</code> de la <strong>constante précédente</strong> dans la liste. </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exempleAtout">
+<p class="exemple"> Pour un programme de <strong>jeu de Belote</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Belote" target="_BLANK">W</a>, les valeurs des cartes à l'atout peuvent être codées par le <strong class="specialG">type énuméré</strong> <code class="prettyprint lang-c">Atout</code> codé ci‑dessous avec des <strong class="specialM">valeurs explicites</strong> pour la plupart des <strong class="specialT">constantes entières</strong> listées : </p>
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 1em">  
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Atout {
+  SEPT = 0, HUIT = 0, 
+  DAME = 3, ROI, 
+  DIX = 10, AS, 
+  NEUF = 14, 
+  VALET = 20
+};
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/jeuBelote.png" width="200px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+
+<p> <strong>Implicitement</strong> : </p>
+
+<ul>
+  <li> la constante <code class="prettyprint lang-c">ROI</code> prend la valeur <code class="cmd">4</code> (la valeur de la constante précédente <code class="prettyprint lang-c">DAME</code> incrémentée de <code>1</code>) ; </li>
+
+  <li> la constante <code class="prettyprint lang-c">AS</code> prend la valeur <code class="cmd">11</code> (la valeur de la constante précédente <code class="prettyprint lang-c">DIX</code> incrémentée de <code>1</code>). </li>
+</ul>
+
+<p> Toutefois, pour une meilleure <strong class="pros">lisibilité</strong>, il est préférable de coder une <strong class="specialM">valeur explicite</strong> exhaustivement pour <strong>chaque constante</strong>, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Atout {
+  SEPT = 0, HUIT = 0, 
+  DAME = 3, ROI = 4, 
+  DIX = 10, AS = 11, 
+  NEUF = 14, 
+  VALET = 20
+};
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> <em class="remark">Remarque</em>. À travers cet exemple, on voit qu'il est tout à fait <strong class="pros">possible</strong>, dans la déclaration d'un type énuméré ou d'une donnée de ce type, d'affecter la <strong class="specialM">même valeur explicite</strong> à <strong class="specialT">plusieurs constantes</strong> (c'est le cas des constantes <code class="prettyprint lang-c">SEPT</code> et <code class="prettyprint lang-c">HUIT</code> qui ont toutes les deux la valeur <code class="cmd">0</code>).  </p>
+</div><!-- exemple -->
+
+
+
+
+<div class="expert">
+<h3> Type d'encodage des constantes énumérées </h3>
+
+
+<div class="complement">
+<p> On a vu supra <a class="supra" href="Cc3-4_typesEnumeres.html#constantesEnumerees"></a> que les valeurs des <strong class="specialT">constantes entières</strong> listées dans la déclaration d'un type énuméré sont encodées <strong>par défaut</strong> dans le <strong class="specialO">type sous‑jacent</strong> <strong>standard</strong> <code class="prettyprint lang-c">int</code>. </p>
+
+<p> Toutefois, le type sous‑jacent est <strong class="title">automatiquement ajusté</strong> lorsque certaines de ces constantes sont affectées explicitement de valeurs <strong>hors de l'étendue</strong> du type <code class="prettyprint lang-c">int</code>. Cet ajustement n'est pas normalisé, il est laissé à la liberté de l'implémentation. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Pour un programme de <strong>calcul scientifique</strong>, on peut coder un <strong class="specialG">type énuméré</strong> avec des constantes définissant des <strong class="specialT">préfixes de puissances de dix</strong> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Prefix {
+  KILO = 1000, 
+  MEGA = 1000000, 
+  GIGA = 1000000000, 
+  TERA = 1000000000000
+};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ici, la <strong class="specialM">valeur explicite</strong> pour la constante <code class="prettyprint lang-c">TERA</code> est tellement grande qu'elle forcément supérieure à <code class="prettyprint lang-c">INT_MAX</code> (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#limits" target="_BLANK"></a>), et ce quelle que soit l'implémentation du programme . </p>
+
+<p> En conséquence, les valeurs : </p>
+<ul>
+  <li> de toutes les <strong class="specialT">constantes entières</strong> listées dans le type <code class="prettyprint lang-c">Prefix</code>, </li>
+
+  <li> ainsi que de <strong class="specialN">toutes les variables</strong> déclarées ultérieurement de type <code class="prettyprint lang-c">Prefix</code>, </li>
+</ul>
+<p> seront encodées dans un <strong class="specialO">type sous‑jacent</strong> dont l'étendue inclut la valeur de <code class="prettyprint lang-c">TERA</code>, à savoir a priori le type <code class="prettyprint lang-c">long long</code>. </p>
+</div><!-- exemple -->
+
+<!-- expert -->
+<h4> Spécification d'un type sous‑jacent (en <em class="mark">C++</em>) </h4>
+
+
+<div class="complement">
+<p> En langage <strong>C++</strong>, le <strong class="specialO">type sous‑jacent</strong> d'encodage des valeurs des <strong class="specialT">constantes entières</strong> listées et des <strong class="specialN">données</strong> d'un <strong class="specialG">type énuméré</strong> peut être spécifié par <strong>champ optionnel</strong> de <strong class="specialO">descripteur de type</strong> délimité entre le séparateur <code class="prettyprint lang-c">:</code> et l'accolade ouvrante <code class="prettyprint lang-c">{</code> de la liste des constantes. </p> 
+
+<ul>
+  <li> Dans le cas d'un <strong class="specialG">type énuméré</strong> <strong class="specialLB">anonyme</strong>, la syntaxe de déclaration est de la forme : </li>
+
+<!---------- ne pas indenter ---------->
+<pre style="background: white; margin-left: 2em;">
+<code class="prettyprint lang-c">enum : <span class="nocode"><strong class="specialO">descripteur de type</strong></span> {</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 0</strong></span>, <span class="nocode"><strong>…</strong></span></code>
+</pre> 
+<!---------- ne pas indenter ---------->
+
+  <li> Dans le cas d'un <strong class="specialG">type énuméré</strong> <strong class="specialLB">nommé</strong>, la syntaxe de déclaration est de la forme : </li>
+
+<!---------- ne pas indenter ---------->
+<pre style="background: white; margin-left: 2em;">
+<code class="prettyprint lang-c">enum <span class="nocode"><strong class="specialG">nom du type</strong></span> : <span class="nocode"><strong class="specialO">descripteur de type</strong></span> {</code>
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">nom de constante 0</strong></span>, <span class="nocode"><strong>…</strong></span></code>
+</pre> 
+<!---------- ne pas indenter ---------->
+
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+<p class="exemple"> En reprenant l'exemple du programme de gestion de <strong>feux de circulation</strong>, si la machine cible est une <strong class="title">carte à microcontrôleur</strong> disposant de <strong class="cons">peu de mémoire</strong>, il peut être judicieux de coder la déclaration du <strong class="specialG">type énuméré</strong> <strong class="specialLB">nommé</strong> <code class="prettyprint lang-c">Color</code> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+enum Color : uint8_t {GREEN, YELLOW, RED};
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> c'est‑à‑dire en imposant <code class="prettyprint lang-c">uint8_t</code> comme <strong class="specialO">type sous‑jacent</strong> car il est <strong class="pros">le plus petit</strong> possible – et ici largement suffisant puisqu'on n'a que 3 valeurs. </p>
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/feuTricolore.png" width="60px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="manipEnumere"> Manipulation des données de types énumérés </h2>
+
+
+<div class="expert">
+<p> Pour savoir commenter manipuler des <strong class="specialN">données</strong> de <strong class="specialG">types énumérés</strong> et des <strong class="specialT">constantes entières</strong> listées dans la déclaration d'un tel type, il est essentiel d'aborder préalablement la question de la <strong class="title">compatibilité</strong> de ces constantes et données avec celles des autres données de <strong>types élémentaires</strong>.  </p>
+</div><!-- expert -->
+
+
+<h3> Compatibilité avec les autres types de données </h3>
+
+
+<div class="complement">
+<p> On rappelle que les <strong class="title">valeurs</strong> des <strong class="specialT">constantes entières</strong> listées et des <strong class="specialN">données</strong> déclarées d'un <strong class="specialG">type énuméré</strong> sont <strong>encodées</strong> dans un <strong>type entier</strong> <strong class="specialO">sous‑jacent</strong> (<em class="english">underlying type</em>). </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Ce <strong class="specialO">type sous‑jacent</strong> <strong class="warning">ne doit pas être confondu</strong> avec le <strong class="specialG">type énuméré</strong> <strong>lui‑même</strong>. En effet, ce dernier n'est <strong class="warning">pas</strong> pas un <strong>type élémentaire</strong> en langage <strong>C++</strong> ; c'est un <strong class="defin">type dérivé</strong> du type sous‑jacent. </p>
+</div><!-- important -->
+
+
+<h4> Formation d'expressions en général (sauf affectation)</h4>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on peut a priori former des <strong class="title">expressions</strong> avec des <strong class="specialN">données</strong> de <strong class="specialG">types énumérés</strong>, les <strong class="specialT">constantes entières</strong> listées dans leurs déclaration, ainsi que des <strong class="defin">données d'autres types élémentaires</strong> (constantes littérales, données déclarées), et en utilisant tous les <strong>opérateurs</strong> du langages, des <strong>appels de fonctions</strong>, etc. </p>
+
+<p> Toutefois, on verra infra que le langage <strong>C++</strong> impose des <strong class="warning">limitations</strong> lorsque l'expression compose une <strong class="defin">affectation</strong> <a class="infra" href="Cc3-4_typesEnumeres.html#affectation"></a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Lors de l'<strong class="title">évaluation</strong> d'une telle expression, les valeurs des <strong class="specialN">données</strong> de types énumérés et des <strong class="specialT">constantes entières</strong> sont <strong class="specialMg">implicitement converties</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#evaluationAffectation" target="_BLANK"></a> et C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#conversionsImplicites" target="_BLANK"></a>) dans leur <strong class="specialO">type sous‑jacent</strong>. </p>
+
+<p> Et comme pour toute expression, le <strong class="title">type final</strong> de l'expression dépend de la composition de l'expression et de l'application des <strong class="defin">règles usuelles de typage</strong> (cf. chap. C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#reglesTypageOperation" target="_BLANK"></a>). Mais dans tout les cas, on peut être certain du fait qu'il ne s'agit <strong class="warning">jamais d'un type énuméré</strong>, du fait des <strong class="specialMg">conversions implicites</strong> que l'on vient de mentionner. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+<p class="square"> Pour le programme du <strong>jeu de Belote</strong>, suite à la déclaration du type énuméré <code class="prettyprint lang-c">Atout</code> (cf. supra <a class="supra" href="Cc3-4_typesEnumeres.html#exempleAtout" target="_BLANK"></a>), on peut déclarer une <strong>constante</strong> nommée <code class="prettyprint lang-c">totalAtout</code> qui totalise la somme des points de <strong>toutes les cartes à l'atout</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+const int totalAtout = SEPT  + HUIT +
+                       NEUF  + DIX  + 
+                       VALET + DAME + 
+                       ROI   + AS;
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/jeuBelote.png" width="200px" style="margin-top: 1em">
+</div><!-- column 2 -->
+</div><!-- flex -->
+
+<p> En <strong>C</strong> comme en <strong>C++</strong>, l'<strong class="title">expression d'initialisation</strong> dans cette déclaration est <strong class="defin">compilable</strong>, même <strong class="pros">sans recours à une conversion explicite</strong>. </p> 
+
+<div style="display:inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="150px" style="margin-top: 1em">
+<p class="square"> Après la déclaration supra <a class="supra" href="Cc3-4_typesEnumeres.html#exempleCalendrier"></a> de la variable <code class="prettyprint lang-c">dayOfWeek</code> pour le programme de <strong>calendrier</strong>, et si <code class="prettyprint lang-c">n</code> est une <strong>variable déclarée</strong> de type entier, alors l'<strong class="title">expression</strong> ci‑dessous est <strong class="defin">compilable</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">1 + (dayOfWeek + n) % (SUNDAY + 1)</code>
+</span> <br>
+Elle donne la valeur numérique du nom du <strong>n‑ième jour</strong> après celui mémorisé dans <code class="prettyprint lang-c">dayOfWeek</code>, avec la convention <em class="english">Monday = 1</em>, <em class="english">Tuesday = 2</em>, etc. (Pour mémoire, le type <code class="prettyprint lang-c">DayOfWeek</code> est déclaré avec une <strong>numérotation implicite</strong> de ses constantes entières, donc <code class="prettyprint lang-c">MONDAY</code> vaut <code class="cmd">0</code>, <code class="prettyprint lang-c">TUESDAY</code> vaut <code class="cmd">1</code>, etc.) </p>
+
+<div class="expert">
+<p> On peut vérifier le caractère cyclique des valeurs prises par cette expression via le programme de test ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+#include &lt;stdio.h&gt;
+
+enum DayOfWeek {
+  MONDAY, TUESDAY, WEDNESDAY,
+  THURSDAY, FRIDAY, SATURDAY, SUNDAY
+};
+enum DayOfWeek dayOfWeek = TUESDAY;
+
+int main(void) {
+  for (int n = 1; n <= 14; n++) {
+    printf("%d ", 1 + (dayOfWeek + n) % (SUNDAY + 1));
+  }
+  printf("\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- expert -->
+</div><!-- display -->  
+</div><!-- exemple -->
+
+
+<h4> Formations d'expressions constantes entières (en langage <em class="mark">C</em>)</h4>
+
+
+<div class="important">
+<p> Parce qu'elle en ont elles‑même le statut, les <strong class="specialT">constantes entières</strong> listées dans la déclaration d'un <strong class="specialG">type énuméré</strong> peuvent être composées avec tous les <strong>opérateurs</strong> du langage <strong>C</strong> et des <strong>constantes littérales</strong> pour former des <strong class="title">expressions constantes entières</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstanteEntiere" target="_BLANK"></a>).  </p>
+</div><!-- important -->
+
+<div class="complement"> 
+<p> Ces <strong class="specialT">constantes entières</strong> peuvent donc être employées pour coder notamment : </p>
+<ul>
+  <li> les <strong>étiquettes de cas</strong> d'une bifurcation multiple <code class="prettyprint lang-c">switch</code> (cf. chap. C2‑V <a class="previous" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#switchCases" target="_BLANK"></a>) ; </li>
+
+  <li> le <strong>nombre d'éléments</strong> d'un <strong class="specialLB">tableau</strong>, aussi bien dans une déclaration de type que de donnée (cf. chap. C5‑III <a class="previous" href="../C5-StructuresPointeurs/Cc5-3_tableauxDeclarations.html#declarationTab" target="_BLANK"></a>) ; </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em">  
+<p class="exemple"> Pour le programme de <strong>calendrier</strong> évoqué supra <a class="supra" href="Cc3-4_typesEnumeres.html#exempleCalendrier"></a>, on peut afficher le <strong>nom du jour</strong> dans n'importe quelle langue, en testant chaque valeur possible de la variable <code class="prettyprint lang-c">dayOfWeek</code> via la bifurcation multiple codée ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  switch (dayOfWeek) {
+    case MONDAY : 
+      printf("lundi");
+    break; 
+    case TUESDAY : 
+      printf("mardi");
+    break; 
+    case WEDNESDAY : 
+      // ...
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/ephemeride.png" width="150px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> Dans l'exemple ci‑dessus, on peut légitimement trouver que la solution  est « lourde ». Toutefois, il faut savoir qu'il n'existe <strong class="cons">aucun moyen direct</strong> pour afficher à l'écran ou plus généralement <strong class="title">récupérer dans une chaîne de caractères</strong> les <strong>identificateurs</strong> des <strong class="specialT">constantes</strong> listées dans la déclaration d'un <strong class="specialG">type énuméré</strong>. </p>
+
+<p> En effet, comme tous les identificateurs, ce sont des <strong class="defin">éléments de langage de haut niveau</strong> qui sont numérisés sous forme d'<strong>adresses dans le code exécutable</strong>. D'une manière ou d'une autre, il est incontournable d'associer une chaîne de caractère à chaque identificateur (ce qui ouvre d'ailleurs un éventail de possibilités). </p>
+
+<p> Néanmoins, cette association peut se coder d'une <strong class="pros">manière plus efficace</strong> que par le biais d'une structure de contrôle comme ci‑dessus : on peut aussi employer un <strong class="defin">tableau</strong> de <strong>chaînes de caractères</strong> dont chaque élément est indexé par la même valeur numérique qu'une constante du type énuméré. Mais ces aspects ne seront étudiés que dans la partie <span class="partie">C5</span> du module… </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="affectationEnum"> Affectation d'une valeur à une donnée de type énuméré </h3>
+
+
+
+<p> Les considérations qui suivent sont <strong class="defin">valables</strong> : </p>
+<ul>
+  <li> aussi bien pour l'<strong class="specialLB">initialisation</strong> d'une <strong>donnée</strong> dans le cadre d'une déclaration (cf. chap C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>) ; </li>
+
+  <li> que pour une opération d'<strong class="specialLB">affectation</strong> d'une <strong>variable déjà déclarée</strong> (cf. chap C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#syntaxeAffectation" target="_BLANK"></a>).</li>
+</ul>
+<p> Pour ne pas alourdir inutilement le cours, on ne parlera donc que d'<strong class="title">affectation</strong>. </p>
+
+
+<h4> En langage <em class="mark">C</em> </h4>
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, on <strong class="specialLB">peut</strong> coder une <strong class="title">affectation</strong> <code class="prettyprint lang-c">=</code> (cf. chap C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#syntaxeAffectation" target="_BLANK"></a>) sur une donnée déclarée d'un <strong class="specialG">type énuméré</strong> en codant la <strong class="specialMg">r‑value</strong> dans n'importe quel type élémentaire, grâce aux <strong class="specialMg">conversions implicites</strong> opérées par le compilateur. </p>
+
+<p> De même, les <strong class="title">opérateurs à affectation composée</strong> (<code class="prettyprint lang-c">++</code> <code class="prettyprint lang-c">--</code> etc. – cf. chap C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#compoundOperators" target="_BLANK"></a>) sont <strong class="defin">applicables sans restriction</strong> aux variables de type énumérées. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En langage <strong>C</strong>, on peut donc affecter à une <strong class="specialN">donnée</strong> de type énuméré <strong class="warning">n'importe quelle valeur entière</strong> de son <strong class="specialO">type sous‑jacent</strong>, même si elle n'est égale à <strong class="cons">aucune</strong> des <strong class="specialT">constantes entières</strong> listées dans la déclaration de son type (et avec tous les risques d'erreurs d'exécution que cette possibilité comporte). </p>
+
+<p> Bien évidemment, il n'est pas question de céder à cette facilité. En <strong>règle absolue</strong> de <strong class="pros">bonne pratique</strong>, toute affectation d'une valeur constante à une donnée énumérée doit être codée <strong>exclusivement</strong> avec une <strong class="specialT">constante entière</strong> listée dans la déclaration de son type. </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exAffectationC"><p class="exemple"></p>
+<div style="display:inline-flex; width: 100%;">  
+<div style="width: auto; margin-right: 0.1em"> 
+<p> Pour le programme de gestion de <strong>feux de circulation</strong> présenté supra <a class="supra" href="Cc3-4_typesEnumeres.html#exempleDeclarVarTypeEnum"></a>, pour <strong class="title">imposer une couleur particulière</strong> au feu principal, on pourrait <strong class="cons">maladroitement</strong> coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = 2; // Not easy to read!
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors que la <strong class="pros">seule solution propre</strong> est : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = RED; // cristal clear!
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- column 1-->
+<div style="width: auto; margin-right: 0.1em">
+  <img class="top-right" src="../img/feuTricolore.png" width="60px">
+</div><!-- column 2 -->
+</div><!-- flex -->
+
+<p> Ce dont il faut avoir conscience, c'est qu'une instruction <strong class="warning">absurde</strong> comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = -10; // nonsense!!
+</pre>
+
+<p> est malheureusement <strong class="cons">parfaitement compilable</strong> en langage <strong>C</strong>. </p>
+
+<p class="square"> Toujours pour le programme de gestion de <strong>feux de circulation</strong>, pour faire évoluer le feu principal à la <strong class="title">couleur suivante</strong> en codant l'instruction : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = (mainTrafficLightColor + 1) % (RED + 1);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> <em class="remark">Remarque</em>. L'opérateur <code class="prettyprint lang-c">%</code> permettant le retour à la valeur <code class="prettyprint lang-c">0</code> (c'est‑à‑dire <code class="prettyprint lang-c">GREEN</code>) dès que la variable <code class="prettyprint lang-c">mainTrafficLightColor</code> dépasse la valeur <code class="prettyprint lang-c">RED</code>. </p>
+
+<p id="exNextColor2instructions"> La longue instruction ci‑dessus aurait pu aussi être codée en deux instructions plus courtes : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor++;          // next color
+  mainTrafficLightColor %= RED + 1; // after RED, back to GREEN
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<h4> En langage <em class="mark">C++</em> </h4>
+
+
+<div class="important">
+<p> En langage <strong>C++</strong>, l'opérateur d'<strong class="title">affectation</strong> <code class="prettyprint lang-c">=</code>  s'applique aux données déclarées d'un <strong>type énuméré</strong> <strong class="warning">seulement</strong> si la <strong class="specialMg">r‑value</strong> est du <strong class="defin">même type énuméré</strong> que celui de la <strong>r‑value</strong> – le compilateur n'effectuant <strong class="warning">aucune</strong> <strong class="specialMg">conversion implicite</strong> si le type est différent. </p>
+
+<p> Quant aux <strong class="title">opérateurs à affectation composée</strong> (<code class="prettyprint lang-c">++</code> <code class="prettyprint lang-c">--</code> etc. – cf. chap C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#compoundOperators" target="_BLANK"></a>), ils ne sont <strong class="warning">pas applicables</strong> aux variables de type énumérées, puisqu'ils mettent en œuvre des opérations hétérogènes en termes de typage. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Cette <strong class="title">contrainte de typage homogène</strong>, qui est conforme à la règle de bonne pratique énoncée supra pour le langage <strong>C</strong>, peut néanmoins être <strong class="pros">contournée</strong> que via une <strong class="specialV">conversion explicite</strong>, en employant l'<strong>identificateur</strong> du <strong class="specialG">type énuméré</strong> comme un opérateur unaire (cf. chap C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#cast" target="_BLANK"></a>). </p>
+
+<p> En requérant ainsi une <strong>opération « inhabituelle »</strong> de la part du codeur, le compilateur lui permet de <strong class="pros">prendre conscience</strong> qu'il code une instruction non conforme aux usages et qu'il faut faire preuve de <strong class="warning">vigilance</strong>.   </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exAffectationCpp"><p class="exemples"></p> 
+<p class="square"> Toujours pour le programme de gestion de <strong>feux de circulation</strong>, l'<strong class="cons">instruction malpropre</strong> ci‑dessous pour <strong class="title">imposer une couleur particulière</strong> au feu principal : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = 2; // not OK in C++
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> provoque heureusement une <strong class="warning">erreur de compilation</strong> avec un message du genre : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+  main.cpp:15:29: error: invalid conversion from ‘int’ to ‘main()::Color’ [-fpermissive]
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En revanche, avec une <strong class="specialV">conversion explicite</strong> comme : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = Color(2); // OK, even if not good!
+</pre>
+
+<p> l'instruction devient <strong class="defin">compilable</strong> – sachant qu'ici, elle n'est <strong class="warning">pas satisfaisante</strong> en termes de <strong>lisibilité</strong> (encore une fois, pourquoi utiliser des <strong class="cons">valeurs numériques</strong> alors qu'on dispose des identificateurs des <strong class="specialT">constantes entières</strong> ?) Mais l'<strong class="pros">intérêt</strong> de cette possibilité d'affectation via une conversion explicite devient manifeste lorsque la valeur à affecter est celle prise par une <strong>expression variable</strong> (cf. ci‑après). </p>
+
+<p> Plus généralement, ce codage d'affectation fonctionne avec <strong>n'importe quelle valeur entière</strong> de son <strong class="specialO">type sous‑jacent</strong> prise par l'opérande de l'opérateur de conversion <code class="prettyprint lang-c">Color</code>, y compris pour celles qui ne correspondent à <strong class="warning">aucune des constantes listées</strong> dans la déclaration du type <code class="prettyprint lang-c">Color</code>. Ainsi, une instruction <strong class="warning">absurde</strong> comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = Color(-10); // nonsense!!
+</pre>
+
+<p> reste malheureusement <strong class="cons">compilable</strong> en langage <strong>C++</strong>.</p>
+
+<p class="square"> L'instruction pour faire passer le feu principal à la <strong class="title">couleur suivante</strong> proposée supra <a class="supra" href="Cc3-4_typesEnumeres.html#exOperationC"></a> n'est pas compilable telle quelle en <strong>C++</strong>. Pour y remédier, il faut coder une <strong class="specialV">conversions explicites</strong> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  mainTrafficLightColor = Color((mainTrafficLightColor + 1) % (RED + 1));
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<p> La <strong class="title">contrainte de typage homogène</strong> des données de <strong class="specialG">types énumérés</strong> ne doit donc pas être perçue comme un motif pour éviter leur emploi, puisque <em>in fine</em>, toutes les opérations sont codables, moyennant des conversions explicites. Le fait d'imposer au codeur une vigilance particulière au regard de l'hétérogénéité des expressions ne peut que renforcer la <strong class="pros">sécurité</strong> des programmes. </p>
+
+<p>  C'est d'ailleurs pourquoi il est <strong class="pros">recommandé</strong> d'appliquer les <strong>mêmes précautions de codage</strong> avec les types énumérés en langage <strong>C</strong>.</p>  
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

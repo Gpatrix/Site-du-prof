@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="VI"
+  data-pageState="OK"
+  data-pageheadtitle="Conversions"
+  data-pagefulltitle="Les conversions de types"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+ 
+
+<!-- ajouter l'idée que même si une conversion implicite semble intervenir seulement lors de l'exécution, elle est prévue dès la compilation par l'ajout d'instructions dans le code machine
+donner un exemple (version INITIÉ) serait pertinent -->
+
+
+<div class="exergue">
+
+<p class="square" id="exemplesIntro"> Pour simplifier l'écriture et la lecture des <strong>expressions  algébriques</strong>, comme il est d'usage en mathématiques avec les formules, les langages <strong>C</strong> et <strong>C++</strong> <strong class="defin">autorisent</strong> autant que possible les <strong class="title">hétérogénéités</strong> de <strong>types élémentaires</strong>.  Par exemple : </p>
+<ul>
+  <li> une expression telle que <code class="prettyprint lang-c">1 + 2.3</code> est <strong class="defin">compilable</strong> sans avertissement, alors qu'elle code une opération sur deux constantes littérales de <strong>types différents</strong> (<code class="prettyprint lang-c">1</code> est <em>entière</em>, <code class="prettyprint lang-c">2.3</code> est <em>décimale</em>) ; </li>
+
+  <div class="nobullet"> ici, il n'est donc <strong class="pros">pas indispensable</strong> de coder <code class="prettyprint lang-c" style="background: lemonchiffon;">1.0 + 2.3</code> ; </div>
+
+  <li> une affectation telle que <code class="prettyprint lang-c">float a = 1;</code> est <strong class="defin">compilable</strong> alors que la valeur initiale (entière) n'est <strong>pas du même type</strong> que la variable affectée (décimale) ;  </li>
+
+  <div class="nobullet"> ici, il n'est <strong class="pros">pas indispensable</strong> de coder <code class="prettyprint lang-c" style="background: lemonchiffon;">float a = 1.0;</code>. </div>
+</ul>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ALUoper.png" width="500px" style="padding-top: 0.0em">
+<p> Pourtant, il faut savoir que si les <strong>formats d'encodage</strong> des opérandes d'une opération sont <strong class="cons">pas identiques</strong>, alors son <strong class="title">algorithme de calcul</strong> dans le processeur n'est <strong class="warning">pas applicable</strong>. En effet, son unité arithmétique et logique – <em class="english">arithmetic and logic unit</em>, <strong><em class="sigle">ALU</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Arithmetic_logic_unit" target="_BLANK">W</a> – ne dispose pas des circuits électroniques pour faire des <strong>opérations algébriques hétérogènes</strong>, comme par exemple additionner un entier et un décimal. </p>
+
+<p> Pour résoudre ce problème, le <strong class="defin">compilateur</strong> prend donc l'initiative d'implémenter dans le code machine la <strong class="pros">conversion de l'une des valeurs</strong> dans le type de l'autre valeur – et ceci conformément à des règles précises.  On dit qu'il opère une <strong class="title">conversion implicite</strong> puisque cette conversion n'est pas explicitement codée dans le programme source.  </p>
+</div><!-- display -->
+
+<p class="square"> De plus, les langages <strong>C</strong> et <strong>C++</strong> permettent aussi au codeur d'imposer à une expression un <strong class="specialG">type spécifique</strong>, par exemple pour rendre entière la valeur d'une variable décimale, ou réciproquement. On parle alors de <strong class="title">conversion explicite</strong>, ou encore de <strong class="title">transtypage</strong>. En anglais, on emploie le terme <strong class="defin">cast</strong> ou encore de <strong class="defin">type casting</strong> <a class="external" href="https://en.wikipedia.org/wiki/Type_conversion" target="_BLANK">W</a> – le verbe « <em class="english">to cast</em> » signifiant en langage technique « mouler » (qu'on peut interpréter au sens de « mouler la valeur » dans le type spécifié).  </p>
+
+<div class="expert">
+<p> Parfois indispensables, les <strong class="title">opérations de transtypage</strong> sont <strong class="warning">très techniques</strong>. Elles exigent à la fois de posséder une <strong class="defin">bonne maîtrise des types</strong> – en particulier de leurs <strong>limites d'étendue</strong> – mais aussi de connaître certains <strong class="defin">aspects fondamentaux</strong> de l'encodage en mémoire et des techniques de calcul du processeur. </p>
+
+<p> En particulier, on doit savoir si une <strong class="warning">perte d'information</strong> peut intervenir ou non  au cours de la conversion, en considérant <strong>toutes les combinaisons possibles</strong> entre son type « de départ » et son type « d'arrivée ». Or ces combinaisons étant nombreuses, donc on s'efforce de les regrouper en catégories. Essentiellement, on distingue : </p>
+<ul>
+  <li> les <strong class="defin">promotions</strong> et les <strong class="defin">dégradations</strong>, lorsque les deux types sont <strong>de même format</strong> mais de <strong>tailles différentes</strong> ; </li>
+
+  <li> et les <strong class="defin">ajustements de type</strong>, lorsque les types sont de <strong>formats différents</strong>. </li>
+</ul>
+</div><!-- expert -->
+
+<p class="square"> Pour aborder sereinement ce thème général des <strong>conversions de type</strong>, qui est <strong class="warning">difficile</strong>, le présent chapitre adopte une <strong class="title">pédagogie déductive</strong> très classique : </p>
+<ul>
+  <li> en commençant par expliquer les <strong class="specialLB">aspects fondamentaux</strong> des <strong>conversions</strong> ; </li>
+
+  <li> puis détaillant les différentes <strong class="specialLB">conversions implicites</strong> que l'on peut imaginer même si, bien entendu, certaines d'entre‑elles sont à éviter (d'où la nécessité d'en connaître l'existence et les conséquences) ; </li>
+
+  <li> et enfin, en indiquant la syntaxe de codage des <strong class="specialLB">conversions explicites</strong> qui font partie de l'arsenal indispensable du codeur pour coder des expressions dont l'évaluation est fiable. </li>
+</ul>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2>  Aspects fondamentaux des conversions de type </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<p> Pour faciliter la compréhension, on peut considérer toute <strong class="title">conversion de type</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Conversion_de_type" target="_BLANK">W</a> comme une <strong class="defin">opération</strong> qui s'applique à une <strong>valeur encodée</strong>. Au cours de cette opération, on peut distinguer : </p>	
+<ul>
+	<li> le <strong class="specialO">type de départ</strong>, qui est celui de la valeur <strong>avant</strong> conversion ; </li>
+
+	<li> le <strong class="specialT">type d'arrivée</strong>, qui est celui de la valeur <strong>après</strong> conversion. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Toute opération de conversion procède par un <strong class="defin">changement d'encodage des bits</strong> de la <strong>valeur</strong> pour qu'elle soit <strong class="pros">la moins changée possible</strong> dans l'interprétation de son <strong class="specialT">type d'arrivée</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Bien évidemment, le résultat d'une conversion <strong class="warning">dépend très souvent de l'implémentation</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#implementation" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+
+
+
+<div class="exemples">
+<p class="exemple"> Au cours de l'évaluation des expressions données supra en <strong class="title">exemple introductif</strong> <a class="supra" href="Cc3-6_conversionsTypes.html#exempleIntro"></a>, la conversion de la valeur entière <code class="prettyprint lang-c">1</code>, implicitement encodée dans le <strong class="specialO">type de départ</strong> <code class="prettyprint lang-c">int</code>, vers le <strong class="specialT">type d'arrivée</strong> <code class="prettyprint lang-c">float</code>, s'effectue ici <strong class="pros">sans perte d'information</strong> (mathématiquement, on a bien <em class="bold">1 = 1,0</em>). </p>
+
+<p> Mais ce n'est <strong class="title">pas forcément toujours le cas</strong> pour une telle conversion, qu'on appelle un <strong class="defin">ajustement de type</strong> parce que le <strong>format d'encodage</strong> est <strong class="warning">différent</strong> entre le <strong class="specialO">type de départ</strong> et le <strong class="specialT">type d'arrivée</strong>. On peut d'ailleurs constater sur la figure ci‑dessous que l'<strong>encodage en mémoire</strong> est <strong class="warning">complètement différent</strong> entre ces deux types. </p>
+  <img class="top-left" src="../img/conversionExemple.png">
+</div><!-- exemple -->
+
+
+<h4> Notion de rang de conversion </h4>
+
+
+<div class="important">
+<p> Tout compilateur des langages <strong>C</strong> et <strong>C++</strong> attribut à <strong class="specialG">chaque type</strong> un <strong class="title">rang de conversion</strong> qui permet d'établir une <strong class="defin">relation d'ordre total</strong> entre les types d'une même famille. </p>
+
+<p>  En règle générale, le rang de conversion est d'<strong>autant plus grand</strong> que le type est « <strong>précis</strong> ». Cette <strong class="title">hiérarchie</strong> permet au compilateur de faire les meilleurs <strong class="defin">choix de conversion</strong> dans une <strong>expression</strong> pour garantir autant que possible sa <strong class="pros">bonne évaluation</strong>. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> Contrairement aux rangs de priorité bien établis des opérateurs (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>), dans les normes des langages <strong>C</strong> et <strong>C++</strong>, il n'existe <strong class="cons">pas de tableau déterminant le rang</strong> de chaque type, du fait que ces derniers peuvent <strong class="warning">varier selon l'implémentation</strong>. </p>
+
+<p> Néanmoins, on peut intuitivement retenir les <strong class="title">hiérarchies</strong> suivantes par <strong>rangs croissants</strong> de conversion : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">char</code> →
+       <code class="prettyprint lang-c">short</code> →
+       <code class="prettyprint lang-c">int</code> →
+       <code class="prettyprint lang-c">long</code> →
+       <code class="prettyprint lang-c">long long</code> pour les <strong>entiers</strong>, respectivement <strong>dans chaque sous-famille</strong>
+       <code class="prettyprint lang-c">signed</code> et
+       <code class="prettyprint lang-c">unsigned</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">float</code> →
+       <code class="prettyprint lang-c">double</code> →
+       <code class="prettyprint lang-c">long double</code> pour les <strong>décimaux</strong>. </li>
+</ul>
+
+<p> De plus, les normes stipulent <strong class="title">quelques règles générales</strong>, en particulier que le type <code class="prettyprint lang-c">bool</code> a <strong class="defin">le plus petit</strong> rang de conversion. </p>
+
+<!-- et qu'à taille égale, le rang d'un type standard est toujours supérieur à celui d'un type étendu (int8_t < signed char) ?? </p> -->
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Remarque préliminaire sur les exemples </h4>  
+
+
+<p class="square"> Pour presque tous les <strong class="title">exemples</strong> de conversions donnés dans ce chapitre, les <strong class="defin">résultats</strong> sont obtenus par codage <strong>dans la fonction</strong> <code class="prettyprint lang-c">main</code> – donc, en utilisant des variables localesn – simplement avec le squelette de code ci‑dessous  : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) 
+{
+  // conversion examples to be coded here
+  //
+  //
+  //
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> avec l'environnement de programmation en ligne <strong class="OnlineGDB">OnlineGDB</strong>, autrement dit sur une machine à architecture <strong>64 bits</strong> et la chaîne de compilation <strong>GCC</strong> (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#Onlinegdb" target="_BLANK"></a>). </p>
+
+<p> Les <strong class="title">rares exceptions</strong> sont des exemples de codes pour des cartes <strong class="Arduino">Arduino</strong>. Ils peuvent être testés dans l'environnement <strong class="Tinkercad">Tinkercad</strong> en ajoutant les instructions de sorties appropriées sur le moniteur série (<code class="prettyprint lang-c">Serial.print</code>). </p>
+
+<p class="square"> Dans toutes les explications apportées aux <strong class="title">problèmes de conversion</strong> constatés au fur et à mesure des exemples, on ne fera donc <strong class="warning">pas de distinction</strong> sur le fait que les calculs et autres traitements sont réalisés lors de la <strong>compilation</strong> ou durant l'<strong>exécution</strong> du programme. </p>
+
+
+<p> Par ailleurs, il faut savoir qu'au regard des <strong class="title">normes</strong> des langages <em class="mark">C/C++</em>, certaines conversions ont un résultat considéré comme <strong class="cons">non défini</strong>. Autrement dit, même en sachant comment tel ou tel type est encodé avec une implémentation donnée, il est difficile de prévoir le résultat d'une telle conversion à la seule lecture de la norme en vigueur. A minima, il faudrait expérimenter sur différentes implémentations pour en tirer une conclusion un tant soit peu générale – ce qui n'est pas le cas ici…</p>
+</div><!-- expert -->
+
+
+
+<h3>  Promotion de taille </h3>
+
+
+
+<div class="important">
+<p> On parle de <strong class="title">promotion de taille</strong> lorsque le <strong class="specialT">type d'arrivée</strong> d'une conversion est de <strong class="defin">même format</strong> (donc forcément de même famille) et de <strong class="pros">taille supérieure</strong> à celui du <strong class="specialO">type de départ</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Une <strong class="title">promotion de taille</strong> opère : </p>
+
+<ul>
+  <li> par <strong>recopie intégrale des bits</strong> encodés dans le type de départ dans les mêmes bits pour le type d'arrivée ; </li>
+
+  <li> et par <strong>comblement des bits vacants</strong> dans le type d'arrivée avec des <code class="prettyprint lang-c">0</code> ou des <code class="prettyprint lang-c">1</code> (cas des valeurs entières négatives par exemple – cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#entiersSignes" target="_BLANK"></a>) afin d'obtenir une <strong class="defin">valeur d'interprétation identique</strong> dans les types de départ et d'arrivée. </li>
+</ul>
+<p> Une promotion n'occasionne <strong class="pros">aucune perte d'information</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> On examine <strong>deux cas</strong> de <strong class="title">promotion</strong> du <strong class="specialO">type de départ</strong></strong> <code class="prettyprint lang-c">signed char</code> vers le <strong class="specialT">type d'arrivée</strong></strong> <strong class="defin">plus grand</strong> <code class="prettyprint lang-c">short</code>, qui est implicitement <code class="prettyprint lang-c">signed</code>. Donc ces deux types utilisent bien le <strong class="defin">même format</strong> dit du <strong>complément à 2</strong>. </p>
+
+<ol class="numbered">
+  <li> Promotion avec des <strong>valeurs entières</strong> <strong class="title">positives</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  signed char a = 127;     // a = 0b          01111111
+  short b = a;             // b = 0b 00000000 01111111 = 127
+  printf("%d | %d", a, b); // -> 127 | 127 (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> L'octet supplémentaire octroyé par le type <code class="prettyprint lang-c">short</code> est rempli de <code class="prettyprint lang-c">0</code>. </div>
+
+  <li> Promotion avec des <strong>valeurs entières</strong> <strong class="title">négatives</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  signed char a = -128;    // a = 0b          10000000
+  short b = a;             // b = 0b 11111111 10000000 
+  printf("%d | %d", a, b); // -> -128 | -128 (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> L'octet supplémentaire octroyé par le type <code class="prettyprint lang-c">short</code> est rempli de <code class="prettyprint lang-c">1</code>. </div>
+</ol>
+</div><!-- exemples -->
+
+
+<h3 id="degradationTaille">  Dégradation de taille </h3>
+
+
+
+<div class="important">
+<p> Réciproquement, on peut parler de <strong class="title">dégradation de taille</strong> (en anglais, <em class="english">size decay</em>) lorsque le <strong class="specialT">type d'arrivée</strong> d'une conversion est de <strong>même format</strong> mais de <strong class="warning">taille inférieure</strong> à celui du <strong class="specialO">type de départ</strong>. </p>
+
+<p> La <strong class="title">conversion</strong> consiste alors à essayer d'<strong class="cons">encoder au mieux</strong> dans le <strong class="specialT">type d'arrivée</strong> la valeur stockée dans le <strong class="specialO">type de départ</strong> avec à la clef souvent une <strong class="warning">perte d'information</strong> potentiellement déterminante. </p>
+</div><!-- important -->
+
+
+<h4> Cas des entiers </h4>
+
+
+<div class="complementExpert">
+<p> Dans le cas de <strong class="title">types entiers</strong>, tout dépend de la <strong>valeur à convertir</strong> par rapport à l'<strong>étendue</strong> du <strong class="specialT">type d'arrivée</strong> : </p>
+<ul>
+  <li> si elle <strong class="cons">déborde</strong> de l'étendue, la conversion engendre une <strong class="warning">perte d'information totale</strong> car le débordement est traité tout simplement par <strong>troncature des octets de poids fort</strong>, ce qui revient à un  <strong>rebouclage cyclique</strong> (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#debordements" target="_BLANK"></a>). On obtient alors donc une valeur qui n'a rien à voir avec celle de départ ; </li>
+
+  <li> mais si elle <strong class="pros">ne déborde pas</strong>, alors la conversion s'effectue <strong class="defin">sans perte d'information</strong>. </li>
+</ul>
+</div><!-- complement --> 
+
+<div class="exemples"><p class="exemples"></p>
+<p> On examine <strong>deux cas</strong> de <strong class="title">dégradation</strong> du <strong class="specialO">type de départ</strong> <code class="prettyprint lang-c">short</code> vers le <strong class="specialT">type d'arrivée</strong> <strong class="warning">plus petit</strong> <code class="prettyprint lang-c">signed char</code>. </p>
+
+<p> On rappelle que le type <code class="prettyprint lang-c">signed char</code> a une étendue allant de <code class="prettyprint lang-c">-128</code>  (<code>CHAR_MIN</code>) à <code class="prettyprint lang-c">+127</code>  (<code>CHAR_MAX</code>) – cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>.  </p>
+
+
+<ol class="numbered">
+  <li> Dégradation avec <strong class="warning">perte d'information totale</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  short a = 138;           // a = 0b 00000000 10001010
+  signed char b = a;       // b = 0b          10001010 = -118 !
+  printf("%d | %d", a, b); // -> 138 | -128 (OVERFLOW: 138 > CHAR_MAX)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> On peut aussi déterminer la valeur de <code class="prettyprint lang-c">b</code> par <strong>rebouclage cyclique</strong> : <br>
+    <span class="inline"> <code>b = -128 + (138 - 128) = -128 + 10 = -118</code> </span> </div>
+
+  <li> Dégradation <strong class="defin">sans perte d'information</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  short a = 32;            // a = 0b 00000000 00100000
+  signed char b = a;       // b = 0b          00100000 = 32
+  printf("%d | %d", a, b); // -> 32 | 32 (OK: CHAR_MIN ≤ 32 ≤ CHAR_MAX)
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol>
+</div><!-- exemples -->
+
+
+<h4> Cas des décimaux </h4>
+
+
+<div class="complementExpert">
+<p> Dans le cas de <strong class="title">types décimaux</strong>, pour qu'il n'y ait <strong class="defin">aucune perte d'information</strong> : </p>
+  <ul>
+    <li> non seulement <strong>il faut</strong> que la valeur codée dans le <strong class="specialO">type de départ</strong> soit <strong class="pros">incluse dans l'étendue</strong>  du <strong class="specialT">type d'arrivée</strong>, <strong>sinon</strong> il se produit un <strong class="warning">débordement</strong> qui est traité par absorption (cf. chap.C3‑II <a class="previous" href="Cc3-5_typesFlottants.html#debordements" target="_BLANK"></a>) ; </li>
+
+    <li> mais <strong>il faut</strong> aussi que les <strong>chiffres significatifs</strong> de la valeur codée dans le <strong class="specialO">type de départ</strong> n’excèdent pas la capacité d'encodage du <strong>significande</strong> du <strong class="specialT">type d'arrivée</strong> ; <strong>sinon</strong>, il y a <strong class="warning">perte de chiffres significatifs</strong> par <strong>troncature de décimales</strong>.  </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p>  On examine <strong>trois cas</strong> de <strong class="title">dégradation</strong> du <strong class="specialO">type de départ</strong> <code class="prettyprint lang-c">double</code> vers le <strong class="specialT">type d'arrivée</strong> <strong class="warning">plus petit</strong> <code class="prettyprint lang-c">float</code>. </p>
+
+<p> On rappelle que le type <code class="prettyprint lang-c">float</code> a (cf. chap. C3‑V <a class="previous" href="Cc3-5_typesFlottants.html#classificationFloat" target="_BLANK"></a>) : </p>
+<ul>
+  <li> une limite d'étendue maximale (<code>FLT_MAX</code>) d'environ <code class="cmd">3.4e38</code> ;   </li>
+
+  <li> et une précision de <strong>7 à 9 chiffres significatifs</strong>. </li>
+</ul>
+
+
+<ol class="numbered">
+  <li> Dégradation avec <strong class="warning">perte d'information majeure</strong> (débordement traité par absorption comme pour tous les types décimaux) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  double a = 1e40;  
+  float b = a;             // 1e40 > FLT_MAX so b = +inf !!
+  printf("%g | %g", a, b); // -> 1e+40 | inf (FLOATING POINT OVERFLOW)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Dégradation avec <strong class="cons">perte d'information mineure</strong> (troncature de décimales) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  double a = 1.2345678910e-10; 
+  float b = a;                   // b has not 10 significant digits 
+  printf("%.10e | %.10e", a, b); // -> 1.2345678910e-10 | 1.2345678646e-10 (PRECISION PROBLEM)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Conversion <strong class="defin">sans perte d'information</strong> (cas rare) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  double a = 0.5;           // 0.5 = 2^-1
+  float b = a;              // 0.5 is exactly encoded in float format
+  printf("%g | %g", a, b);  // 0.5 | 0.5 (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol>
+</div><!-- exemple -->
+
+
+
+<h3>  Ajustement de types </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">ajustement de type</strong> est une <strong>conversion</strong> entre deux types de <strong class="defin">formats différents</strong>. Une telle conversion met en œuvre une procédure spécifique de <strong>transposition des bits</strong> du <strong class="specialO">format de départ</strong> dans le <strong class="specialT">format d'arrivée</strong> – d'où le terme d'« ajustement » – avec <strong>potentiellement</strong> une <strong class="warning">perte d'information</strong>, mais pas systématiquement. </p>
+</div><!-- important -->
+
+
+<p> On distingue <strong>trois catégories de cas</strong>, en fonction des <strong>types</strong> de <strong class="specialO">départ</strong> et d'<strong class="specialT">arrivée</strong> :  </p>
+<ol class="littered">
+  <li> Lorsque l'un des types est <strong class="title">booléen</strong> ;  </li>
+
+  <li> Lorsque l'un des types est <strong class="title">entier</strong> et l'autre <strong class="title">décimal</strong> ; </li>
+
+  <li> Lorsque les deux types sont <strong class="title">entiers</strong>, l'un <strong class="specialLB">signé</strong>, l'autre <strong class="specialLB">non‑signé</strong>. </li>
+</ol>
+
+
+
+<h4> A) Conversions lorsque l'un des types est booléen  </h4>
+
+
+<div class="complement">
+<ul>
+  <li> Si c'est le <strong class="specialO">type de départ</strong> qui est <strong class="title">booléen</strong> alors, quel que soit le <strong class="specialT">type d'arrivée</strong> (entier ou décimal), la conversion s'effectue <strong class="defin">sans perte d'information</strong>, car il n'y a que les deux valeurs <code class="cmd">0</code> et <code class="cmd">1</code> à coder, ce qui est possible dans n'importe quel type numérique. </li>
+
+  <li> Si c'est le <strong class="specialT">type d'arrivée</strong> qui est <strong class="title">booléen</strong>, alors la conversion opère une <strong class="warning">perte d'information majeure</strong> (à l'exception des valeurs <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code>, bien entendu).</li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p>  On examine brièvement ces <strong>deux cas</strong> qui ne présentent <strong class="pros">pas de difficultés</strong> de compréhension. </p>
+
+
+<ol class="numbered">
+  <li> Ajustement <strong class="defin">sans perte d'information</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  bool a = true;            // a = 1
+  int b = a;                // b = 1
+  printf("%d | %d", a, b);  // -> 1 | 1 (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Ajustement avec <strong class="warning">perte d'information majeure</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  int a = 123;    
+  bool b = a;               // b = 1 
+  printf("%d | %d", a, b);  // -> 123 | 1 (logical value only)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> <em class="remark">Rappel</em> : en langage <strong>C</strong>, il faut ajouter au programme une directive <code class="prettyprint lang-c">#include &lt;stdbool.h&gt;</code> pour utiliser le type <code class="prettyprint lang-c">bool</code> (cf. chap. C3‑III <a class="previous" href="Cc3-3_typesBooleens.html" target="_BLANK"></a>). </div>
+</ol>
+</div><!-- exemples -->
+
+
+
+<div class="expert">
+<p>  Dans le second cas, la <strong class="warning">perte d'information</strong> n'est néanmoins <strong>pas totale</strong> conformément au principe de base des langages <em class="mark">C/C++</em> selon lequel <strong>toute valeur</strong> peut être considérée comme <strong class="specialG">booléenne</strong> – en étant interprétée comme <strong>faux</strong> si elle satisfait le critère d'égalité à zéro, sinon comme <strong>vrai</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#typesOperandes" target="_BLANK"></a>). </p>
+
+<p> Une telle <strong class="title">conversion</strong> caractérise donc l'<strong class="defin">aspect logique</strong> d'une expression. Si c'est là l'intention du codeur, cela ne pose aucun problème. </p>
+</div><!-- expert -->
+
+
+<h4 id="entierDecimal"> B) Conversions entre un type entier et un type décimal </h4>
+
+
+<div class="complementExpert">
+<p class="square" style="margin-top: 0em;"> Si c'est le <strong class="specialO">type de départ</strong> qui est <strong class="title">entier</strong> alors, comme le format décimal du <strong class="specialT">type d'arrivée</strong> ne permet d'encoder les chiffres d'une valeur entière qu'avec le <strong>nombre limité de décimales</strong> de son significande, la conversion s'effectue avec une <strong>possible</strong> <strong class="cons">perte mineure d'information</strong>. (Mais attention, même une perte mineure d'information peut causer un dysfonctionnement majeur.)  </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p>  On examine <strong>deux cas</strong> d'<strong class="title">ajustement de type</strong> avec le <strong class="specialO">type de départ</strong> <code class="prettyprint lang-c">int</code> vers le <strong class="specialT">type d'arrivée</strong> <code class="prettyprint lang-c">float</code>. On rappelle que le type <code class="prettyprint lang-c">float</code> a une précision de <strong>7 à 9 chiffres significatifs</strong> seulement (cf. chap. C3‑V <a class="previous" href="Cc3-5_typesFlottants.html#classificationFloat" target="_BLANK"></a>). </p>
+
+
+<ol class="numbered">
+  <li> Ajustement <strong class="defin">sans perte d'information</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  int a = 12345;            // a has only 5 digits
+  float b = a;              // b = 1.2345000e4 = 12345 (OK)
+  printf("%d | %g", a, b);  // -> 12345 | 12345 (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Ajustement avec <strong class="cons">perte d'information mineure</strong> (troncature) : </li>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  int a = 2123456789;    // a has 10 digits
+  float b = a;           // b = 2.123456768e9 (the two last digits are wrong) 
+  printf("%d | %10.0f", a, b);  // -> 2123456789 | 2123456768 (PRECISION PROBLEM)
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol>
+</div><!-- exemples -->
+
+<div class="complement" style="margin-top: 1em">
+<p class="square" style="margin-top: 0em;"> Si le <strong class="specialO">type de départ</strong> est <strong class="title">décimal</strong>, la conversion s'effectue avec une <strong class="warning">possible perte d'information</strong> <strong>mineure ou majeure</strong> – voire totale – car le format entier du <strong class="specialO">type d'arrivée</strong> ne permet d'encoder <em>en valeurs absolues</em> ni les parties décimales (donc aucun des nombres plus petits que 1), ni les nombres plus grands que son maximum (environ 10<sup>9</sup> avec le type <code class="prettyprint lang-c">int</code> et 10<sup>18</sup> avec le type <code class="prettyprint lang-c">long</code> ou <code class="prettyprint lang-c">long long</code> – cf. chap. C2‑II<a class="previous" href="Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>). </p>
+
+<p> En cas de <strong class="warning">débordement</strong>, la conversion n'opère <strong class="warning">pas</strong> par <strong>cyclicité</strong> car le nombre à convertir n'a pas toujours d'« image » entière précise (il peut déborder de l'intervalle du plus grand type entier gérable par la machine). Par convention, la valeur attribuée est souvent la <strong class="specialV">borne inférieure</strong> de l'étendue du <strong class="specialT">type d'arrivée</strong>. Ce choix a pour but d'attirer l'attention pour identifier a posteriori l'existence d'un problème.  </p>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<p>  On examine <strong>trois cas</strong> d'<strong class="title">ajustement</strong> du type de <strong>départ</strong> <code class="prettyprint lang-c">float</code> vers le <strong class="specialT">type d'arrivée</strong> <code class="prettyprint lang-c">int</code>. On rappelle que : </p>
+
+<ul>
+  <li> le type <code class="prettyprint lang-c">float</code> a seulement une précision de <strong>7 à 9 chiffres significatifs</strong> (cf. chap. C3‑V <a class="previous" href="Cc3-5_typesFlottants.html#classificationFloat" target="_BLANK"></a>) ; </li>
+
+  <li> le type <code class="prettyprint lang-c">int</code>  a usuellement une étendue allant de <code class="cmd">-2147483648</code>  (<code>INT_MIN</code>) à <code class="cmd">+2147483647</code>  (<code>INT_MAX</code>) – cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>.</li>
+</ul>
+
+<ol class="numbered">
+  <li> Ajustement <strong class="defin">sans perte d'information</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  float a = 1.234567e6; 
+  int b = a;                   // 1234567 < INT_MAX so b = 1234567 
+  printf("%7.0f | %d", a, b);  // -> 1234567 | 1234567 (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Ajustement avec <strong class="cons">perte d'information mineure</strong> (troncature des décimales) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  float a = 1.234567e2;     // a = 123,4567 (non integer value)
+  int b = a;                // b = 123  (decimals truncated)
+  printf("%g | %d", a, b);  // -> 123,4567 | 123 (PRECISION PROBLEM)
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+  <li> Ajustement avec <strong class="warning">perte d'information totale</strong> (débordement aboutissant à une valeur conventionnelle) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  float a = 1.234567e10;      // a = 12 345 670 000 
+  int b = a;                  // a > 2 147 483 647 (INT_MAX) => OVERFLOW!
+  printf("%11f | %d", a, b);  // -> 12345670000 | -2147483648 (= INT_MIN)
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol>
+</div><!-- exemple -->
+
+
+<div class="important">
+<p> En règle générale, on retiendra donc que pour <strong class="title">obtenir la partie entière</strong> d'une <strong class="defin">valeur décimale</strong>, et a fortiori pour <strong class="title">arrondir</strong> cette dernière, il est vivement conseillé de ne <strong class="warning">pas</strong> procéder par <strong class="cons">conversion</strong>. </p>
+
+<p> La <strong class="pros">bonne pratique</strong> consiste à employer l'une des trois <strong>fonctions</strong> d'arrondi <code class="cmd">round</code>, <code class="cmd">floor</code> ou <code class="cmd">ceil</code> conçues à cet effet et déclarées dans le fichier <code class="filename">math.h</code> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+
+<h4> C) Ajustements entre un type entier signé et un type entier non signé </h4>
+
+
+<div class="complementExpert">
+<p> On rappelle que les <strong class="title">formats d'encodage</strong> des <strong class="specialLB">types non signés</strong> – le binaire naturel – et <strong class="specialLB">signés</strong> – le complément à 2 – sont <strong class="warning">différents</strong>, mais présentent toujours une <strong class="pros">plage de valeurs positives compatibles</strong> (cf. chap. C3‑II, §3.2, remarque B <a class="previous" href="Cc3-2_typesEntiers.html#complementA2" target="_BLANK"></a>). </p>
+
+<p> Tant que la <strong>valeur à convertir</strong> est <strong>dans cette plage</strong> – l'intersection des ensembles de valeurs encodables dans le type de départ et d'arrivée – la conversion n'occasionne <strong class="defin">aucune perte d'information</strong>. Dans le cas contraire, la <strong class="warning">perte d'information</strong> est <strong>totale</strong>. </p>
+
+<p> Dans tous les cas, le <strong>compilateur</strong> <strong class="specialV">recopie sans changement de format</strong> les <strong>octets de poids faibles</strong> du <strong class="specialO">type de départ</strong> dans le <strong class="specialT">type d'arrivée</strong> puis : </p>
+<ul>
+  <li> si le <strong class="specialT">type d'arrivée</strong> est <strong>plus petit</strong> que le <strong class="specialO">type de départ</strong>, le compilateur <strong class="warning">tronque</strong> les <strong>octets de poids forts</strong> qui débordent, comme dans le cas d'une <strong class="warning">dégradation</strong> ; </li>
+
+  <li> si le <strong class="specialT">type d'arrivée</strong> est <strong>plus grand</strong> que le <strong class="specialO">type de départ</strong>, le compialteur <strong class="cons">remplit</strong> les <strong>octets de poids forts</strong> avec des <code class="cmd">0</code> ou des <code class="cmd">1</code> sselon que la valeur à convertir est respectivement positive ou négative, comme dans le cas d'une <strong class="cons">promotion</strong> (mais le résultat n'est pas forcément satisfaisant). </li>
+</ul>
+
+<p> Il en résulte qu'en cas de <strong class="warning">débordement</strong>, la valeur d'arrivée découle de la valeur de départ conformément aux lois de l'arithmétique cyclique.  </p>
+</div><!-- complementExpert -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<p class="square"> On examine d'abord <strong>deux cas</strong> d'<strong class="title">ajustement</strong> du <strong class="specialO">type de départ</strong> <code class="prettyprint lang-c">unsigned char</code> vers le <strong class="specialT">type d'arrivée</strong> <code class="prettyprint lang-c">signed char</code>, donc de <strong>même taille</strong> mais de <strong class="warning">formats différents</strong>. </p>
+
+<p> On rappelle que le type <code class="prettyprint lang-c">signed char</code> a une étendue allant de <code class="cmd">-128</code>  (<code>CHAR_MIN</code>) à <code class="cmd">+127</code>  (<code>CHAR_MAX</code>) – cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>. </p>
+
+<ol class="numbered">
+  <li> Ajustement avec <strong class="warning">perte d'information totale</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  unsigned char a = 138;    // a = 0b 10001010 (no sign bit)
+  signed char b = a;        // b = 0b 10001010 = -118 (sign bit = 1)
+  printf("%u | %d", a, b);  // -> 138 | -118 (OVERFLOW: 138 > CHAR_MAX)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Ajustement <strong class="defin">sans perte d'information</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  unsigned char a = 100;    // a = 0b 01100100
+  signed char b = a;        // b = 0b 01100100 = 100  
+  printf("%u | %d", a, b);  // -> 100 | 100 (OK: CHAR_MIN ≤ 100 ≤ CHAR_MAX)
+</pre>
+<!---------- ne pas indenter ---------->
+</ol>
+
+<p class="square"> On examine maintenant <strong>deux cas</strong> d'<strong class="title">ajustement</strong> avec <strong class="warning">perte d'information totale</strong> entre des types <strong>tailles et  formats</strong> <strong class="warning">différents</strong>, typiquement pour convertir une <em>valeur négative</em> dans un <em>type non signé</em>.  </p>
+
+
+<ol class="numbered">
+  <li> Le <strong class="specialT">type d'arrivée</strong> est <strong>plus grand</strong> que le <strong class="specialO">type de départ</strong>, les octets de poids forts surnuméraires sont <strong class="warning">remplis</strong> avec des <code class="cmd">1</code> (bit de signe de la valeur de départ) : </li>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  signed char a = -118;     // a = 0b           10001010
+  unsigned short b = a;     // b = 0b 11111111 10001010 = 65418  
+  printf("%d | %u", a, b);  // -> -118 | 65418 (OVERFLOW: -118 ≤ USHORT_MIN)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Le <strong class="specialT">type d'arrivée</strong> est <strong>plus petit</strong> que le <strong class="specialO">type de départ</strong>, les octets de poids forts surnuméraires sont <strong class="warning">tronqués</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  signed short a = -260;   // a = 0b 11111110 11111100
+  unsigned char b = a;     // b = 0b          11111100
+  printf("%d | %u", a, b); // -> -260 | 252 (OVERFLOW: -118 ≤ USHORT_MIN)
+</pre>
+<!---------- ne pas indenter ---------->
+</ol>
+</div><!-- exemples -->
+
+<div class="important">
+<p> Il apparaît donc clairement que pour extraire la <strong class="title">valeur absolue</strong> d'une <strong class="defin">valeur signée</strong>, il ne faut <strong class="warning">surtout pas</strong> recourir à une <strong class="cons">conversion</strong>. </p>
+
+<p> La <strong class="pros">bonne pratique</strong> consiste bien évidemment d'employer la <strong>fonction</strong> <code class="prettyprint lang-c">abs</code> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a>), qui est précisément conçue pour cet usage. </p>
+</div><!-- important -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="conversionsImplicites"> Conversions implicites </h2> 
+
+
+<div class="important">
+<p> Les langages <strong>C</strong> et <strong>C++</strong> permettent de coder des <strong>opérations</strong> où interviennent des données de <strong class="warning">types hétérogènes</strong>, alors qu'il n'existe pas d'algorithmes de calcul direct pour évaluer le résultat de telles opérations. Cette possibilité rend les <strong class="defin">expressions calculatoires</strong> <strong class="pros">faciles à saisir et lire</strong> dans le code source, comme s'il s'agissait de formules mathématiques. Cependant, elle suppose que le compilateur procède lui-même à des <strong class="title">conversions implicites</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Pour un codeur, il est indispensable de connaître ces conversions implicites. En effet, le compilateur <strong>procède « au mieux »</strong> dans le but d'<strong class="pros">optimiser la précision des résultats numériques</strong>, mais il ne peut pas faire des miracles (éviter les pertes d'informations), ni deviner les intentions du codeur. C'est donc seulement en commaissant l'existence des <strong class="title">conversions implicites</strong> et en sachant leurs <strong class="warning">limites</strong>  que le codeur peut, si nécessaire, « reprendre la main » et imposer des <strong>conversions explicites</strong> pour obtenir un résultat attendu. </p>
+</div><!-- complement -->
+
+
+<h3> Conversions d'affectation </h3>
+
+
+<div class="important">
+<p> Dans toute <strong class="title">expression d'affectation</strong> de la forme <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">l‑value</strong></span> = <span class="nocode"><strong class="specialMg">r-value</strong></span></code> (cf. chap C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#syntaxeAffectation)" target="_BLANK"></a>), le compilateur évalue l'expression <strong class="specialMg">r-value</strong> puis opère la <strong class="defin">conversion implicite</strong> de sa valeur dans le <strong class="specialT">type d'arrivée</strong> déclaré de la <strong class="specialM">l‑value</strong>. </p>
+
+<p> Une telle <strong class="title">conversion</strong> peut être aussi bien une <strong>promotion</strong> qu'une <strong>dégradation</strong> ou encore un <strong>ajustement</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Le codeur doit avoir conscience que, même si une telle <strong class="title">conversion</strong> occasionne un <strong class="warning">débordement</strong>, le compilateur produit quand même un <strong>code exécutable</strong> et n'émet que <strong class="cons">rarement un avertissement</strong> (par défaut, seulement dans certains cas d'initialisation d'une variable entière par une valeur numérique débordant de l'étendue du type).  </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p> Tous les exemples qui ont été proposés dans la section 1 sont des <strong class="title">conversions d'affectation</strong>. </p>
+</div><!-- exemples -->
+
+
+
+<h3 id="promotionsSystematiques"> Promotions systématiques dans les types de calcul par défaut </h3>
+
+
+
+<div class="important">
+<p> Dans une expression, le compilateur opère <strong>pour chaque atome</strong>, une <strong class="title">conversion implicite</strong> de <strong class="defin">promotion de taille systématique</strong> au <strong class="specialG">type de calcul par défaut</strong> de sa famille, si l'atome est encodé dans un <strong class="cons">type de rang inférieur</strong>, à savoir : </p>
+
+<ul>
+	<li> le <strong>type</strong> <code class="prettyprint lang-c">int</code> pour toutes les valeurs de types <strong>entiers signés</strong> de rang inférieur : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c" style="background: lightgrey">signed char</code>, <code class="prettyprint lang-c" style="background: lightgrey">short</code>…
+  </span> </li>
+
+	<li> dans le <strong>type</strong> <code class="prettyprint lang-c">unsigned int</code> pour toutes les valeurs de types <strong>entiers non signés</strong> de rang inférieur : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c" style="background: lightgrey">unsigned char</code>, <code class="prettyprint lang-c" style="background: lightgrey">unsigned short</code>…
+  </span> </li>
+
+	<li> dans le <strong>type</strong> <code class="prettyprint lang-c">double</code> pour toutes les valeurs de types <code class="prettyprint lang-c" style="background: lightgrey">float</code>. </li>
+</ul>
+
+<p> Cette stratégie permet déjà d'<strong class="pros">éviter de nombreux débordements</strong> dans les valeurs intermédiaires de l'évaluation d'une expression. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Dans le code ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  signed char a = 10, b = 30 ; 
+  signed char c = (a * b) / 5;  // a * b = 300 > CHAR_MAX (127)
+  printf("%d", c);              // 60 (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> le compilateur évalue l'expression <code class="prettyprint lang-c">(a * b) / 5</code> en effectuant implicitement la <strong class="title">promotion systématique</strong> de tous les atomes dans le type <code class="prettyprint lang-c">int</code>. </p>
+
+<p> Cette initiative est tout à fait <strong class="pros">opportune</strong> car si les valeur de <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> étaient évaluées dans le type <code class="prettyprint lang-c" style="background: lightgrey">unsigned char</code>, la valeur du produit <code class="prettyprint lang-c">a * b</code> <strong class="warning">déborderait</strong>.  </p>
+</div><!-- exemple -->
+
+
+<h4 id="exempleDebordement"> Applications </h4>
+
+
+<div class="complement">
+<p> On rappelle que sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> à cœur <strong><em class="sigle">AVR</em> 8 bits</strong> (cartes <em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>, etc. – cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>), le <strong class="title">type</strong> <code class="prettyprint lang-c">int</code> – employé par défaut par le compilateur pour évaluer les expressions à valeurs entières – n'est encodé que sur <strong class="cons">2 octets</strong> (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>). Son <strong>étendue</strong> est donc <strong class="cons">limitée</strong> à l'intervalle allant de <code class="cmd">-32768</code> à <code class="cmd">+32737</code>. </p>
+
+<p> En l'absence de précaution, un <strong class="warning">débordement</strong> est vite arrivé, comme nous allons le voir… </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Pour coder le programme <strong class="Arduino">Arduino</strong> demandé à l'<strong class="title">exercice n°&#8239;2</strong> du sujet de <strong class="title">TP C2‑1</strong> – une <strong class="specialDR">led</strong> clignotant avec une <strong>période</strong> de <em class="bold">1 s</em>, et un <strong>rapport cyclique</strong> de <em class="bold">25 %</em> – on peut traduire directement ces spécifications par la déclaration de <strong>deux constantes entières</strong> <code class="prettyprint lang-c">period</code> et <code class="prettyprint lang-c">dutyCyclePercent</code>, comme dans le code ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  const int period = 1000; // = 1s
+  const int dutyCyclePercent = 25;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Les <strong>valeurs</strong> de ces constantes ne posent <strong class="pros">a priori aucun problème</strong> puisqu'elle sont largement comprises dans l'étendue du <strong>type</strong> <code class="prettyprint lang-c">int</code>. </p>
+
+<p> Ensuite, pour pouvoir coder le <strong class="title">signal de clignotement</strong> à l'aide de la fonction <code class="prettyprint lang-c">delay</code>, il faut calculer les valeurs de son <strong>temps haut</strong> et de son <strong>temps bas</strong>, ce que l'on peut tenter en déclarant les respectivement <strong>deux constantes</strong> <code class="prettyprint lang-c">highDuration</code> et <code class="prettyprint lang-c">lowDuration</code>, comme dans le code ci‑dessous : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  const int highDuration = (period * dutyCyclePercent) / 100;
+  const int lowDuration  = (period * (100 - dutyCyclePercent)) / 100;
+  // BAD TYPES CHOICE ON AVR board: lowDuration = 94 (OVERFLOW! It should be 750)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Mais comme indiqué en commentaire à la ligne nº 9, si le programme est compilé pour une carte à <strong>cœur <em class="sigle">AVR</em> 8 bits</strong>, ce code occasionne un <strong class="warning">débordement</strong> lors du calcul de la constante <code class="prettyprint lang-c">lowDuration</code> : en effet, 1000 × (100 − 25) = <em class="bold">75000</em>, valeur qui est supérieure à la limite 32&#8239;767 ! </p>
+
+<div class="expert">
+<p class="square"> On pourrait croire <strong class="cons">naïvement</strong> qu'il suffirait de déclarer les constantes <code class="prettyprint lang-c">lowDuration</code> dans le type <code class="prettyprint lang-c">unsigned long</code> (dont la limite supérieure d'étendue est <code class="cmd">+2147483647</code>) – lequel est justement celui qu'attend la fonction <code class="prettyprint lang-c">delay</code> pour son argument. Et pourtant, cette « solution » conduit à un <strong class="warning">échec</strong> car c'est lors de l'évaluation de la sous‑expression : <br>
+<span class="inline">
+	 <code class="prettyprint lang-c">period * (100 - dutyCyclePercent)</code>
+</span> <br>
+que le <strong class="warning">débordement</strong> se produit, et non pas lors de l'affectation de la constante <code class="prettyprint lang-c">lowDuration</code>. </p>
+
+<p> En revanche, il existe une (première) <strong class="title">solution simple</strong>, même si elle n'est <strong class="cons">pas très intuitive</strong> : il  suffit par exemple de déclarer <strong>au moins l'une des deux</strong> constantes <code class="prettyprint lang-c">period</code> et <code class="prettyprint lang-c">dutyCyclePercent</code> de type <code class="prettyprint lang-c">long</code> ou <code class="prettyprint lang-c">unsigned long</code>. Alors, pour évaluer la sous‑expression ci‑dessus, le compilateur procèdera à une <strong class="defin">promotion de taille</strong> de tous les atomes dans ce type – dont l'étendue est beaucoup plus grande que celle de <code class="prettyprint lang-c">int</code> – et il n'y a <strong class="pros">plus aucun débordement</strong>.  </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Il aurait été possible d'implémenter le <strong class="title">rapport cyclique</strong> dans une <strong>constante décimale</strong> de <strong>type</strong> <code class="prettyprint lang-c">float</code> comme dans le code ci‑dessous.   </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  const int period = 1000; // = 1s
+  const float dutyCycle = 0.25;
+  const int highDuration = round(period * dutyCycle);
+  const int lowDuration  = round(period * (1.0 - dutyCycle));
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<div class="nobullet"> Dans ce cas, il n'y aurait <strong class="pros">plus de problèmes de débordement</strong> pour le calcul des constantes <code class="prettyprint lang-c">highDuration</code> et <code class="prettyprint lang-c">lowDuration</code>, dont les expressions d'initialisation seraient évaluées dans le type <code class="prettyprint lang-c">double</code> par <strong>promotion</strong>. En revanche, il faudrait employer une <strong class="warning">fonction d'arrondi</strong> pour passer proprement du type <code class="prettyprint lang-c">double</code> au type <code class="prettyprint lang-c">int</code> d'affectation.</div>
+
+	<li> On verra infra <a class="infra" href="Cc3-6_conversionsTypes.html#applications" target="_BLANK"></a> que si l'on maintient le choix initial de coder le rapport cyclique comme un <strong>pourcentage entier</strong>, on peut <strong class="pros">résoudre le problème</strong> de débordement évoqué en imposant une <strong class="title">conversion explicite</strong> dans la sous‑expression qui déborde – solution qui évite de changer le type des constantes et qui fait gagner (un peu) de place en mémoire. </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3> Promotions au type de plus grande taille </h3>
+
+
+
+<div class="important">
+<p> Dans toute opération dont les opérandes sont de même famille de type mais de <strong class="defin">tailles différentes</strong>, le compilateur procède à la <strong class="title">conversion implicite</strong> de la valeur de l'opérande du <strong>type le plus petit</strong> dans le <strong class="pros">type le plus grand</strong>. </p>
+</div><!-- important -->
+
+
+<div class="exemples">
+<p class="exemple">  Dans le code ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  long double a = 1e400L; // postfix L requiered for long double litterals
+  double b = a / 1e100;   // DBL_MAX ≃ 1.7e308
+  printf("%lg", b);       // b = 1e300 as expected
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> <strong>Avant</strong> l'affectation de la variable <code class="prettyprint lang-c">b</code>, l'expression <code class="prettyprint lang-c">a / 1e100</code> n'est <strong>pas évaluée</strong> dans le type <code>double</code> par défaut. D'abord, le compilateur convertit implicitement la constante <code class="prettyprint lang-c">1e100</code> dans le type plus grand <code class="prettyprint lang-c">long double</code> imposé par la variable <code class="prettyprint lang-c">a</code>. Ensuite, il évalue la division dans ce type.</p>
+
+<p> Cette <strong class="title">promotion</strong> préalable au calcul est indispensable, car même si le résultat doit ensuite être reconverti dans le type <code>double</code>, l'opération n'aurait pas pu être effectuée dans ce type, puisque la valeur <code>1e400</code> en déborde. </p>
+</div><!-- exemple -->
+
+
+
+<!--
+<div class="remarques">
+<p class="remarque"> Sur une architecture 8 bits, il est contre-productif de déclarer des variables entières de type plus petit que <code>int</code> pour espérer gagner du temps de calcul. Cela ne ferait que ralentir l'exécution en imposant des conversions supplémentaires. </p>
+</div>
+-->
+
+
+<h3> Ajustements à la famille de type la plus précise </h3>
+
+
+
+<div class="important">
+<p> Si, dans une expression, une <strong>opération</strong> est codée avec opérandes de <strong>familles de types</strong> <strong class="defin">différentes</strong>, le compilateur procède à la <strong class="title">conversion implicite</strong> de valeur de l'opérande dont la famille de types est <strong>la moins précise</strong> vers la famille de types <strong class="pros">la plus précise</strong> conformément à l'ordre croissant de précision ci‑dessous : </p>
+<div class="inline">
+  <strong class="specialG">booléen</strong> → <strong class="specialG">entier</strong> → <strong class="specialG">décimal</strong>
+</div>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Dans le code ci‑dessous :   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  int a = 1 + 2 + 3.5 + 4.6;   // a = 11 (truncation of 11.1)  
+  printf("%d", a);       
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> avant l'affectation de la variable <code class="prettyprint lang-c">a</code>, la sous‑expression <code class="prettyprint lang-c">1 + 2 + 3.5 + 4.6</code> est évaluée : </p>
+<ul>
+  <li> d'abord par l'exécution de  l'addition <code>1 + 2</code> dans le type <code class="prettyprint lang-c">int</code> par défaut, ce qui donne <code>3</code> ; </li>
+
+  <li> puis, pour effectuer <code>3 + 3.5</code>, préalableblement par la <strong class="title">conversion implicite</strong> de <code>3</code> dans le type <code class="prettyprint lang-c">double</code> ; cela donne <code>6.5</code> ;   </li>
+
+  <li> puis, par l'éxécution de l'addition <code>6.5 + 4.6</code> dans le type <code class="prettyprint lang-c">double</code>, ce qui donne <code>11.1</code>. </li>
+</ul>
+
+<p class="remarque"> Même si le type d'arrivée final de l'affectation est <code class="prettyprint lang-c">int</code>, il aurait été moins précis de compiler le calcul dans ce type, car les valeurs <code class="prettyprint lang-c">3.5</code> et <code class="prettyprint lang-c">4.6</code> auraient alors été respectivement converties en <code class="prettyprint lang-c" style="background: lightgrey">3</code> et <code  class="prettyprint lang-c" style="background: lightgrey">4</code> pour aboutir à une somme valant seulement <code  class="prettyprint lang-c" style="background: lightgrey">7</code>. En définitive, la somme aurait pris la valeur <code class="prettyprint lang-c" style="background: lightgrey">10</code>, <strong class="warning">non satisfaisante</strong> ! </p>
+</div><!-- exemple -->
+
+
+
+<h3> Ajustements de formats signés/non signés </h3>
+
+
+
+<div class="complement">
+<p> Le <strong class="warning">cas le plus compliqué</strong> est celui d'une opération arithmétique dont les opérandes sont tous les deux <strong>entiers</strong> mais de <strong class="title">format hétérogène</strong> – l'un <strong>signé</strong>, l'autre <strong>non signé</strong>. Il nécessite de distinguer <strong class="warning">plusieurs sous-cas</strong> pour déterminer lequel des deux types sera choisi comme <strong class="specialT">type d'arrivée</strong> pour évaluer l'opération. </p>
+
+<ul>
+  <li> si le <strong>type non signé</strong> a un <strong class="defin">rang supérieur ou égal</strong> de conversion  à celui du type signé, alors la valeur de l'opérande de ce type est implicitement convertie dans le <strong class="specialT">type non signé</strong> ; </li>
+
+  <li> sinon : </li>
+  <ul> 
+    <li> si le <strong>type signé</strong> <strong class="pros">peut encoder toutes les valeurs</strong> du type non signé, alors la valeur de l'opérande de type dernière est implicitement convertie dans le <strong class="specialT">type signé</strong> ; </li>
+
+    <li> sinon, <strong>les valeurs des</strong> <strong class="warning">deux</strong> <strong>opérandes</strong> sont implicitement converties dans le <strong class="specialT">type non signé</strong> <strong class="defin">de même taille que le type signé</strong>. </li>
+  </ul>
+</ul>
+<p> Dans tous les cas, la conversion implicite consiste à <strong>recopier tel quel</strong>, et autant que possible, dans le <strong class="specialT">type d'arrivée</strong> le mot binaire de la valeur du <strong class="specialO">type de départ</strong>. </p>
+</div><!-- complement -->
+
+
+
+<div class="exemples"><p class="exemples"></p>
+
+<p> On considère deux exemples académiques pour illustrer les principaux cas détaillés ci‑dessus. </p>
+
+<ol class="numbered">
+  <li> Le <strong>type non signé</strong> est de <strong class="defin">rang supérieur ou égal</strong> – ici, <strong class="defin">égal</strong> – à celui du type signé. </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  unsigned int a = 4000000000;  // NB: a > INT_MAX (2147483647)
+  int b = -1;                   // NB: b < UINT_MIN (0)
+  printf("%u", a + b);          // 3999999999 as expected (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Pour évaluer l'expression <code class="prettyprint lang-c">a + b</code> on pourrait a priori penser qu'il n'y a aucune conversion implicite satisfaisante puisque : <br>
+  <ul>
+    <li> la valeur de l'opérande <code class="prettyprint lang-c">a</code> est trop grande pour être encodable dans le type <code  class="prettyprint lang-c">int</code> ; </li>
+
+    <li> la valeur de l'opérande <code class="prettyprint lang-c">b</code> étant négative, elle n'est pas encodable dans le type <code  class="prettyprint lang-c">unsigned int</code>.</li>
+  </ul>
+  Mais conformément aux règles énoncées supra, la valeur <code class="prettyprint lang-c">-1</code> de <code class="prettyprint lang-c">b</code> est implicitement convertie dans le <strong class="specialT">type d'arrivée</strong> <code  class="prettyprint lang-c">unsigned int</code> par recopie de son mot binaire tel quel : <br>
+  <span class="inline">
+    <code>11111111 11111111 11111111 11111111</code> 
+  </span> <br>
+  qui vaut alors <code class="cmd">4294967295</code>. Ensuite, l'opération <code class="prettyprint lang-c">a + b</code> est effectuée dans le type d'arrivée <code  class="prettyprint lang-c">unsigned int</code> : <br>
+  <span class="inline">
+     4&#8239;000&#8239;000&#8239;000 + 4&#8239;294&#8239;967&#8239;295 = 8&#8239;294&#8239;967&#8239;295
+  </span> <br>
+  et son résultat provoque un <strong class="warning">débordement</strong> qui, par <strong class="defin">rebouclage cyclique</strong>, aboutit à la <strong class="pros">valeur attendue</strong> <code class="cmd">3999999999</code>. </div>
+
+
+  <li> Le <strong>type non signé</strong> est de <strong class="cons">rang inférieur</strong> à celui du type signé, mais ce dernier peut encoder toutes les valeurs du type non signé. </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  unsigned int a = 2000000000; // NB: a < INT_MAX (2147483647)
+  long b = -8000000000;
+  printf("%ld", a + b);        // -6000000000 as expected (OK)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Ici, il n'y a évidemment aucune alternative à chercher. Dans l'expression <code class="prettyprint lang-c">a + b</code> la valeur de l'opérande <code class="prettyprint lang-c">a</code> est <strong class="title">implicitement convertie</strong> dans le type <code class="prettyprint lang-c">long</code> (ou <code class="prettyprint lang-c">long long</code>) par recopie directe de son mot binaire, sans <strong class="pros">aucune perte d'information</strong> puisque ce type peut encoder toutes les valeurs du type <code class="prettyprint lang-c">unsigned int</code>. </div> 
+ </ol>
+</div><!-- exemples -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="cast"> Conversions explicites </h2>
+
+
+<div class="important">
+<p> Les langages <strong>C</strong> et <strong>C++</strong> fournissent au codeur la possibilité d'imposer à la valeur d'une <strong>expression</strong> une <strong>conversion</strong> <strong class="defin">explicite</strong> dans un <strong class="specialG">type d'arrivée</strong>  spécifié, qui doit impérativement être <strong>scalaire</strong> (cf. chap. C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#typeScalaire" target="_BLANK"></a>). On parle de <strong class="title">transtypage</strong> ou encore de <strong class="title">coercition</strong>, voire de <strong class="title">cast</strong> ou type casting par anglicisme. </p>
+
+<p> Techniquement, cette possibilité est offert sous la forme d'un <strong class="defin">opérateur</strong> dont la <strong>syntaxe</strong> est un peu <strong class="warning">différente</strong> selon le langage <strong>C</strong> ou <strong>C++</strong> employé. </p>
+</div><!-- important -->
+
+
+<h3> En langage <em class="mark">C</em> </h3>
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, l'<strong class="title">opérateur de transtypage</strong> (<strong>cast operator</strong>) obéit à la <strong class="defin">syntaxe opérationnelle</strong> suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    (<span class="nocode"><strong class="specialG">descripteur de type</strong></span>)
+     <span class="nocode"><strong class="specialN">opérande</strong></span>
+  </code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette syntaxe : </p>  
+<ul>
+  <li> le <strong class="specialG">descripteur de type</strong> spécifie le <strong>type d'arrivée</strong> de la conversion et doit <strong class="warning">obligatoirement</strong> être encapsulé dans des <strong>parenthèses</strong> <code class="prettyprint lang-c">()</code> ; </li>
+
+  <li> l'<strong class="specialN">opérande</strong> est la <strong class="warning">première</strong> <strong>expression</strong> qui suit la parenthèse fermante <code class="prettyprint lang-c">)</code> ; si l'on souhaite convertir la valeur d'une expression composée, il est indispensable de l'encapsuler dans des parenthèses, comme ci‑dessous : <br>
+  <span class="inline">
+  <code class="prettyprint lang-c">
+    (<span class="nocode"><strong class="specialG">descripteur de type</strong></span>) (<span class="nocode"><strong class="specialN">opérande</strong></span>)
+  </code>
+  </span> <br> 
+  En effet, l'opérateur de transtypage dispose du <strong>rang de priorité n° 2</strong> (cf. chap. C2‑III <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C2-ElementsLangage/Cc2-3_manipulationDonnees.html#priorites"></a>). </li>
+</ul>
+</div><!-- complement -->
+
+<p> Pour plus de détails sur l'opérateur de conversion, on peut consulter cette page de référence <a class="external" href="https://en.cppreference.com/w/c/language/cast" target="_BLANK">C</a>. </p>
+
+<div class="exemples">
+<p class="exemple"> On rappelle que le <strong class="specialG">type par défaut</strong> d'évaluation d'une <strong>expression entière</strong> est <code class="prettyprint lang-c">int</code> dont l'étendue usuelle sur un PC va de <code class="cmd">-2147483648</code>  (<code>INT_MIN</code>) à <code class="cmd">+2147483647</code>  (<code>INT_MAX</code>) – cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>). Même si cette étendue peut sembler large, un <strong class="warning">débordement</strong> est vite arrivé, comme dans le calcul de la variable <code class="prettyprint lang-c">y</code> ci‑dessous :    </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  int a = 100000;        
+  long b = a * a;           // b = 1 410 065 408 (ERROR BY OVERFLOW)
+  long c = (long) a * a;    // c = 10 000 000 000 (expected result)
+  printf("%ld %ld", b, c);  // 1410065408 | 10000000000 (see the difference!)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, même si la variable <code>b</code> est déclarée de type <code class="prettyprint lang-c">long long</code>, l'expression <code class="prettyprint lang-c">a * a</code> est évaluée dans le type <code class="prettyprint lang-c">int</code> <strong class="warning">avant</strong> <strong>l'affectation</strong> et la valeur <code>10000 * 10000</code> déborde de son étendue. Un <strong class="defin">transtypage</strong> vers le type <code class="prettyprint lang-c">long</code> (ou <code class="prettyprint lang-c">long long</code>) de l'un des atomes de l'expression est donc indispensable. </p>
+
+<div class="expert">
+<p class="remarque"> Pour régler le problème ci‑dessus, coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  long c = (long)(a * a);  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> en encapsulant toute l'expression  <code class="prettyprint lang-c">a * a</code> dans des parenthèses n'est <strong class="warning">pas satisfaisant</strong>, car cette expression reste évaluée dans le type <code class="prettyprint lang-c">int</code> <strong class="warning">avant</strong> <strong>le transtypage</strong>. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3> En langage <em class="mark">C++</em> </h3>
+
+
+<div class="important">
+<p> En langage <strong>C++</strong>, les possibilités de codage d'un <strong class="title">transtypage</strong> sont plus nombreuses : </p>
+<ol class="numbered">
+	<li> la <strong class="defin">syntaxe opérationnelle</strong> du langage <strong>C</strong> reste <strong class="pros">valable</strong> (cf. supra), mais avec le <strong>rang de priorité n° 3</strong> ; </li>
+
+	<li> il existe aussi la <strong class="defin">syntaxe fonctionnelle</strong> suivante : <br>
+	<span class="inline">
+	  <code class="prettyprint lang-c">
+	    <span class="nocode"><strong class="specialG">identificateur de type</strong></span> (<span class="nocode"><strong class="specialN">expression</strong></span>)
+	  </code>
+	</span> <br>
+  qui possède le <strong>rang de priorité n° 2</strong>. </li>
+</ol>
+</div><!-- important -->
+
+<div class="complement">
+<p> <em class="remark">Attention</em>, dans la <strong>syntaxe</strong> dite <strong class="title">fonctionnelle</strong> (appelée ainsi parce quelle suit les mêmes règles que celle d'un appel de fonction) : </p>
+<ul>
+	<li> les <strong>parenthèses</strong> <code class="prettyprint lang-c">()</code> encapsulant l'<strong class="specialN">expression</strong> dont la valeur est à convertir sont <strong class="warning">obligatoires</strong> ; </li>
+
+	<li> l'<strong class="specialG">identificateur de type</strong> ne peut être être composé que d'<strong>un et</strong> <strong class="warning">un seul identificateur</strong> (soit un <strong>mot‑clef</strong>, soit une <strong>identificateur déclaré</strong> par <code class="prettyprint lang-c">typedef</code>, synonyme d'un type scalaire). </li>
+
+  <div class="nobullet" style="margin-top: 1em;"> <em class="remark">Exemple</em>. L'<strong>expression de transtypage</strong> <code class="prettyprint lang-c" style="background: lightgrey">unsigned char (a)</code> n'est <strong class="warning">pas compilable</strong> (ni en <strong>C++</strong>, ni a fortiori en <strong>C</strong>). Il faut employer à la place la <strong class="defin">syntaxe opérationnelle</strong> <code class="prettyprint lang-c">(unsigned char) (a)</code>. </div>
+</ul>
+</div><!-- complement -->
+
+<p> Il existe également d'<strong class="title">autres syntaxes de transtypage</strong> faisant appel à des <strong class="warning">notions plus complexes</strong> (variables statiques, etc.) qui seront abordées ultérieurement (partie <span class="partie">C4</span> du module). Pour plus de détails, on peut se reporter à cette page de référence <a class="external" href="https://en.cppreference.com/w/cpp/language/explicit_cast" target="_BLANK">C++</a>. </p>
+
+
+
+<h3 id="applications"> Applications</h3>
+
+
+
+<div class="exemples">
+<p class="exemple"> Reprenons la problématique de l'<strong>exercice n°&#8239;2</strong> du sujet de <strong>TP C2‑1</strong> exposée supra <a class="supra" href="Cc3-6_conversionsTypes.html#exempleDebordement"></a> (clignotement d'une led). Pour <strong class="pros">prévenir tout débordement</strong> lors de l'évaluation des <strong>constantes</strong> <code class="prettyprint lang-c">highDuration</code> et <code class="prettyprint lang-c">lowDuration</code>, il suffit de coder une <strong class="title">conversion explicite</strong> dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">long</code> de l'un des atomes de l'expression qui code chacune de ces valeurs, par exemple l'atome <code class="prettyprint lang-c">period</code>, comme ci‑dessous :</p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+const int highDuration = ((long) period * dutyCyclePercent) / 100;
+const int lowDuration  = ((long) period * (100 - dutyCyclePercent)) / 100;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> L'<strong class="pros">avantage</strong> de cette solution par rapport à celles proposées auparavant est qu'elle ne requiert <strong>pas plus d'espace mémoire</strong> pour les constantes, mais seulement un peu plus de temps de calcul lors de la compilation, ce qui est de toute façon inévitable. </p>
+</div><!-- exemple -->
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

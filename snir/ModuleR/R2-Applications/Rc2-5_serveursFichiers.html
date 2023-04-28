@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="2"
+	data-pagenumber="V"
+	data-pageState="OK"
+	data-pageheadtitle="Serveur fichiers"
+	data-pagefulltitle="Serveur de fichiers"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/reseauPostesTravail.jpg" width="300px" style="padding-top: 1em">
+<p class="square"> Dans un <strong>réseau local</strong> équipé de <strong>postes de travail</strong> multi‑utilisateurs, il est devenu très <strong class="warning">rare</strong> d'y <strong class="title">stocker les fichiers</strong> d'applications (documents bureautiques, programmes sources, images, maquettes numériques, bases de données, etc.). En effet, une telle solution obligerait chaque utilisateur à <strong class="cons">travailler toujours sur la même machine</strong>, et cette contrainte est incompatible avec les modes de fonctionnement de nombreux contextes professionnels (établissements éducatifs, grandes entreprises, pépinières…). </p>
+</div><!-- display -->
+
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/fileServerLogo.png" width="150px" style="padding-top: 0.5em">
+	<li> Depuis longtemps, une pratique usuelle consiste à placer les fichiers sur un <strong class="title">espace de stockage dédié</strong> – typiquement, un serveur de fichier – au sein du <strong>réseau local</strong>, voire sur un <strong>site distant</strong> lorsque l'organisation est réparties sur plusieurs lieux mais fait appel à des données communes. Et même pour une petite entreprise, rien n'interdit que ses fichiers soient <strong class="pros">accessibles hors du réseau local</strong>, à condition de mettre en place ce qu'on appelle une <strong class="defin">zone délimilarisée</strong> (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#DMZ" target="_BLANK"></a>), avec bien entendu un <strong class="defin">contrôle d'accès</strong>. </li>
+	</div><!-- display -->
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/cloudFileStorage.png" width="200px" style="padding-top: 0.5em">
+	<li> Une autre solution consiste plus à <strong class="defin">externaliser le stockage des fichiers</strong>, c'est‑à‑dire à faire sous‑traiter ce service par un <strong>hébergeur de données</strong>, via l'Internet. On parle alors de <strong class="title">stockage dans le cloud</strong> et cette solution, largement adoptée par de nombreuses entreprises, est aussi plébicitée par les particuliers, en ce qu'elle donne accès aux documents depuis n'importe quelle connexion à l'Internet et n'importe quel appareil : ordinateur, smartphone, etc.  </li>
+	</div><!-- display -->
+</ul>
+
+
+<p class="square"> Dans tous les cas se posent les questions techniques de choix de l'<strong class="title">architecture matérielle et logicielle</strong> pour assurer le service de stockage et d'accès aux fichiers. Comme toujours, il existe une <strong class="specialLB">grande diversité de solutions</strong>, chacune ayant ses avantages et inconvénients. Les principales technologies existantes sont désignées par les sigles suivants : </p>
+
+<ul>
+	<li> le <strong class="specialLB"><em class="sigle">DAS</em></strong> ou <strong>direct attached storage</strong>, c'est‑à‑dire le stockage sur un ou plusieurs <strong class="defin">disques intégrés</strong> (directement reliés) à un serveur qui peut éventuellement être utilisé pour d'autres services (web, proxy, etc.) ;  </li>
+
+	<li> le <strong class="specialLB"><em class="sigle">NAS</em></strong> ou <strong>network attached storage</strong>, c'est‑à‑dire <strong class="defin">une machine dédiée au stockage</strong> comprenant un certain nombre de disques (selon la capacité requise) et qui peut être reliée à divers serveurs pour assurer l'accès aux fichiers dans un réseau local ;  </li>
+
+	<li> le <strong class="specialLB"><em class="sigle">SAN</em></strong> ou <strong>storage area network</strong>, c'est‑à‑dire un <strong class="defin">sous‑réseau</strong> de machines exclusivement dédié au stockage de données au sein d'un réseau local ; ce sous‑réseau utilise des <strong>composants</strong> (machines, liaisons) et des <strong>protocoles spécifiques</strong>. </li>
+</ul>
+
+<p class="square"> Comme dans les chapitres précédents, le thème abordé est beaucoup plus <strong class="warning">complexe et technique</strong> qu'on pourrait le penser au premier abord. Ce chapitre n'en constitue qu'une introduction ayant vocation à donner des <strong class="title">éléments de connaissances générales</strong> à un futur technicien en réseaux. Il aborde : </p>
+<ul>
+	<li> d'abord les <strong class="specialLB">aspects matériels des serveurs de fichiers</strong>, rappelant les bases de la <strong>technologie des disques</strong>, puis en détaillant les trois grandes solutions de stockage de fichiers évoquées supra – <strong><em class="sigle">DAS</em></strong>, <strong><em class="sigle">NAS</em></strong>, <strong><em class="sigle">SAN</em></strong> ;  </li>
+
+	<li> puis sur les <strong class="specialLB">aspects logiciels des serveurs de fichiers</strong>, en citant les protocoles composants permettant le <strong class="defin">partage de fichiers</strong> au sein d'un réseau – <strong><em class="sigle">NFS</em></strong>, <strong><em class="sigle">SMB</em></strong>, <strong><em class="sigle">FTP</em></strong>, etc. ; </li>
+
+	<li> et enfin, et en abordant la <strong class="specialLB">technologie du stockage des données</strong>, en détaillant notamment les différents dispositifs de redondance <strong><em class="sigle">RAID</em></strong> entre les volumes de données, ainsi que les technologies spécifiques de <strong>liaisons dans les <em class="sigle">SAN</em></strong>. </li>
+</ul>
+
+<div class="expert">
+<p> <strong class="title">Pour approfondir</strong> tous ces aspects, on pourra se reporter au <strong>site Internet</strong> suivant <a class="external" href="http://igm.univ-mlv.fr/~dr/XPOSE2007/jdastugNAS_SAN/index.html" target="_BLANK"></a> et à <strong>diverses vidéos</strong> sur la problèmatique du stockage de masse en général <a class="external" href="https://www.youtube.com/watch?v=37Qhsz6qojs" target="_BLANK">Y</a> et ses aspects particuliers : <strong><em class="sigle">SAN</em></strong> <a class="external" href="https://www.youtube.com/watch?v=m-_RPOcU19c" target="_BLANK">Y</a>, <strong><em class="sigle">RAID</em></strong> <a class="external" href="https://www.youtube.com/watch?v=WqGeTOt6A0Q" target="_BLANK">Y</a>, etc. </p>
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+<h2> Technologie matérielle des serveurs de fichiers </h2>
+
+
+
+<h3> Technologie des unités de stockage </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/diskLogo.png" width="100px" style="padding-top: 0.2em">
+<p> On appelle <strong class="title">unité de stockage de masse</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Mémoire_de_masse" target="_BLANK">W</a> (en anglais, <em class="english">mass storage unit</em>) un dispositif qui permet de <strong class="defin">stocker et restituer</strong> une <strong>grande quantité</strong> – au minimum plusieurs centaines de Go – de <strong class="defin">données non volatiles</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Actuellement, trois <strong class="title">technologies de stockage de masse</strong> sont utilisées dans les réseaux informatiques, dont les deux plus connues sont les suivantes. </p>
+
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/HDD.png" width="300px" style="padding-top: 0.5em">
+	<li> Le <strong class="specialLB">disque dur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Disque_dur" target="_BLANK">W</a>  – en anglais, <strong><em class="sigle">HDD</em></strong> pour <strong>hard disk drive</strong> – est une technologie basée sur une série de <strong class="defin">plateaux magnétiques tournants</strong> et de têtes de lecture montées sur un bras pivotant. </li>
+
+  <div class="nobullet"> Ses principaux atouts sont la <strong class="pros">grande durabilité</strong> et le <strong class="pros">faible coût</strong> par unité de mémoire (environ 0,03 €/Go en 2019). </div>
+
+  <div class="expert"> 
+  <div class="nobullet"> Les <strong class="defin">performances en durabilité</strong> peuvent surprendre pour <strong>dispositif mécanique</strong>. Mais en pratique, on constate une <strong class="pros">usure très faible</strong> dans le cadre d'une <strong>installation statique</strong> dans un réseau, du fait de l'<strong>absence de chocs</strong> et de la qualité du système rotatif. Et surtout, la technologie du stockage magnétique assure un <strong class="pros">nombre illimité de cycles de lecture ou d'écriture</strong>.  </div>
+	</div><!-- expert -->
+  </div><!-- display --> 
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/SSD.png" width="300px" style="padding-top: 0.5em">
+	<li> Le <strong class="specialLB">disque <em class="sigle">SSD</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/SSD" target="_BLANK">W</a> – pour <strong>solid‑state drive</strong> – est une technologie basée sur des circuits intégrés de <strong class="defin">mémoires flash <em class="sigle">NAND</em></strong>. </li>
+
+  <div class="nobullet"> Ses principaux atouts sont la <strong class="pros">rapidité</strong> et la <strong class="pros">sobriété énergétique</strong>, cet aspect devenant significatif en termes de coût d'utilisation à grande échelle (pour les <em class="english">data centers</em>). À souligner également le <strong class="pros">silence</strong> de fonctionnement, qui présente un intérêt lorsque les disques sont installés dans un environnement de travail. </div>
+  </div><!-- display -->
+</ul> 
+
+<div class="expert"> 
+<p> Les <strong class="title">performances en rapidité</strong> sont conditionnées par deux facteurs :  </p>
+<ul>
+	<li> le <strong class="defin">temps d'accès aléatoire</strong> à une unité de mémoire ; dans le cas d'un <strong><em class="sigle">SSD</em></strong>, il est <strong class="pros">constant</strong> quelle que soit la position de la zone lue (ce n'est pas le cas avec un <strong><em class="sigle">HDD</em></strong>) et environ <strong class="pros">100 fois plus bref</strong> qu'avec un <strong><em class="sigle">HDD</em></strong> ;  </li>
+
+	<li> la <strong class="defin">vitesse de lecture et d'écriture</strong>, qui est environ <strong class="pros">10 fois plus grande</strong> avec un <strong><em class="sigle">SDD</em></strong> qu'avec un <strong><em class="sigle">HDD</em></strong>. </li>
+</ul>
+<p> À noter également le <strong class="pros">maintien des performances</strong> en rapidité d'un <strong><em class="sigle">SSD</em></strong> quelle que soit la <strong>fragmentation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fragmentation_(informatique)#La_fragmentation_d'un_disque_dur" target="_BLANK">W</a> des données, ce qui n'est pas le cas avec la technologie <strong><em class="sigle">HDD</em></strong>. </p>
+</div><!-- expert -->
+
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> La question du <strong class="title">coût d'achat d'un <em class="sigle">SSD</em></strong> doit donc être relativisée, puisqu'il faut aussi tenir compte du <strong>coût d'utilisation</strong> sur le long terme (le coût de l'électricité augmente chaque année). De plus, les prix du marché des <strong><em class="sigle">SSD</em></strong> sont orientés à la baisse. Mais on peut quand même retenir l'<strong class="specialLB">ordre de grandeur</strong> de <em class="bold">0,1 €/Go</em> en technologie <strong><em class="sigle">SSD</em></strong> en 2019, soit environ <strong class="cons">3 fois plus</strong> qu'en technologie <strong><em class="sigle">HDD</em></strong>. </p> 
+
+<p> Quant à l'autre inconvénient notable des <strong><em class="sigle">SSD</em></strong>, à savoir le <strong class="title">nombre limité de cycles d'écriture</strong> des cellules mémoires, il est <strong>géré</strong> par le pilote embarqué du disque, qui s'interdit lui‑même l'emploi des cellules usagées. Le disque ne devient donc pas brutallement défaillant parce que l'une de ses cellules est endommagée : c'est seulement sa capacité qui diminue peu à peu au cours de son utilisation. </p>
+</div><!-- expert -->
+
+<p> Par la suite, on parle de <strong class="title">disque</strong> pour désigner <strong>indifféremment</strong> ces deux types d'unité de stockage de masse, même si le terme « disque » est technologiquement inapproprié pour un <strong><em class="sigle">SSD</em></strong>. </p>
+
+
+<div id="#archivage" style="display: inline-block;">
+	<img class="top-right" src="../img/bandesMagnetiques.png" width="300px" style="padding-top: 1em">
+<p class="square"> On recourt également à la technologie des <strong class="title">bandes magnétiques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bande_magnétique" target="_BLANK">W</a> mais uniquement pour l'<strong class="defin">archivage</strong>, c'est‑à‑dire la <strong>sauvegarde à long terme de données</strong> qui sont destinées à être lues qu'exceptionnellement. Par rapport à la technologie des <strong><em class="sigle">SSD</em></strong>, des <strong><em class="sigle">HDD</em></strong> ou des disques optiques, celle des <strong>bandes magnétiques</strong> :  </p>
+<ul>
+	<li> procure une <strong class="pros">capacité supérieure</strong> de stockage (jusqu'à 300 To dans une cartouche !) et un <strong class="pros">coût inférieur</strong> (environ 0,005 €/Go) ;  </li>
+
+	<li> mais n'offre qu'un <strong class="cons">accès exclusivement séquentiel</strong> (et non pas aléatoire) aux données. </li>
+</ul>
+</div><!-- display -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> La <strong>technologie hybride</strong> <strong class="title"><em class="sigle">SSHD</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Disque_dur_hybride" target="_BLANK">W</a> (<em class="english">solid state hybrid drive</em>), peu développée en général, n'est <strong class="cons">quasiment pas employée</strong> pour le stockage de masse en réseau.</li>
+
+	<li> La <strong>technologie</strong> des <strong class="title">disques optiques</strong> (<strong><em class="sigle">CD</em></strong>, <strong><em class="sigle">DVD</em></strong>) n'est <strong class="cons">pas du tout employée</strong> pour le stockage de masse en réseau. Extrêmement limitée en cycles d'écriture, elle ne pourrait convenir qu'en archivage, mais souffrant d'une capacité très faible (au mieux seulement 50 Go environ en <em class="mark">blu‑ray</em> <a class="external" href="https://fr.wikipedia.org/wiki/Disque_Blu-ray" target="_BLANK">W</a>, contre 6 To pour une cartouche de bande magnétique usuelle), elle supposerait trop de manipulations physiques des supports.  </li>
+</ol>
+</div><!-- remarques -->
+
+
+<h4> Liaison du disque au système hôte </h4>
+
+
+<div class="important">
+<p> La <strong class="title">liaison de données</strong> entre l'<strong>unité de stockage</strong> et la <strong>machine hôte</strong> dans laquelle l'unité est hébergée a un <strong class="warning">impact décisif</strong> sur les <strong class="defin">performances en vitesse</strong> de lecture et d'écriture. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/busSAS.png" width="300px">
+<p> Aujourd'hui, dans le contexte des serveurs et autres machines de stockage, <strong class="title">une technologie domine</strong> pour les liaisons aux unités de stockage de masse <strong class="defin">domine</strong>  : <strong class="defin"><em class="sigle">SAS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serial_Attached_SCSI" target="_BLANK">W</a> ou <strong class="defin">serial attached <em class="sigle">SCSI</em></strong>. Elle résulte d'une implémentation par <strong>liaison série</strong> de la technologie de <em>bus parallèle</em> <strong><em class="sigle">SCSI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Small_Computer_System_Interface" target="_BLANK">W</a> (<em class="english">small computer system interface</em>). </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Par rapport à la technologie <strong class="specialLB"><em class="sigle">SATA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serial_ATA" target="_BLANK">W</a> (<em class="english">serial advanced technology attachment</em>) usuellement employée pour les postes de travail, la technologie <strong class="title"><em class="sigle">SAS</em></strong> présente de <strong class="pros">nombreux avantages</strong> : </p>
+<ul>
+	<li> en premier lieux, d'être <strong>compatible</strong> avec la technologie <em class="sigle">SATA</em> (même type de connecteurs) ; </li>
+
+	<li> d'opérer en <strong>full duplex</strong> ; </li>
+
+	<li> de <strong>garantir le débit nominal</strong> pour chaque disque connecté (pas de division de la bande passante) ;  </li>
+
+	<li> d'identifier <strong>jusqu'à 128 disques</strong> par connexion. </li>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3 id="DAS"> Stockage sur disques intégrés à un serveur (DAS) </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/DAS.png" height="80px">
+<p> Un <strong class="title"><em class="sigle">DAS</em></strong> ou <strong class="title">direct attached storage</strong> <a class="external" href="https://en.wikipedia.org/wiki/Direct-attached_storage" target="_BLANK">W</a> est un système constitué d'<strong class="defin">un ou plusieurs disques</strong> intercheangeables et réunis dans un <strong>boitier</strong>, lequel destiné à être <strong class="defin">relié directement</strong> à un <strong>poste de travail</strong>, un <strong>serveur</strong> ou même un <strong><em class="sigle">NAS</em></strong>. </p>
+
+<p> Un <strong class="title"><em class="sigle">DAS</em></strong> ne dispose <strong class="cons">pas d'interface réseau</strong>, il ne peut <strong class="warning">pas</strong> être raccordé à un <strong>switch</strong> ou un <strong>routeur</strong>. </p> 
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/DAStour.png" height="120px">
+<p> Un <strong><em class="sigle">DAS</em></strong> se présente typiquement dans un boîtier de type <strong class="specialLB">tour</strong>, bien adapté dans un <strong class="defin">bureau</strong> ou une <strong class="defin">installation domestique</strong>. Muni d'un connecteur <strong><em class="sigle">USB</em></strong> ou <strong>Thunderbolt</strong> haute vitesse, il peut jouer le rôle d'un « <strong>super disque dur</strong> » ou encore d'<strong class="title">extension</strong> de capacité de stockage pour un <strong><em class="sigle">NAS</em></strong>. </p>
+
+<p> Le <strong class="title">boîtier</strong> peut souvent être acquis <strong class="title">sans disque</strong>, ce qui apporte une certaine souplesse pour dimensionner une solution. Dans tous les cas, il embarque une <strong>carte électronique</strong> pour mettre en œuvre des technologies logicielles de type <strong class="defin"><em class="sigle">RAID</em></strong> (cf. infra <a class="infra" href="Rc2-5_serveursFichiers.html#RAID"></a>). C'est pourquoi on parle aussi de <strong>boîtier <em class="sigle">RAID</em></strong>. </p>
+</div><!-- complement -->
+
+
+<div class="remarques" style="display: inline-block;">
+	<img class="top-right" src="../img/DASrack.png" height="150px">
+<p class="remarque"> Certains <strong class="title">boîtiers de type rack</strong> réunissant de nombreux disques sont parfois appelés <strong><em class="sigle">DAS</em></strong>. Pour un technicien débutant, cela peut créer une <strong class="warning">confusion</strong>, car en réalité, ce sont des <strong class="defin">baies de stockages</strong> pour des <strong><em class="sigle">SAN</em></strong> (cf. infra <a class="infra" href="Rc2-5_serveursFichiers.html#composantsSAN"></a>). </p>
+</div><!-- exemple -->
+
+
+<h4> Comparaison avec les autres technologies de stockage </h4>
+
+
+<div class="complement">
+<p> Comparé aux autres technologies de stockage, en règle générale, le <strong class="title"><em class="sigle">DAS</em></strong> présente <strong class="pros">deux avantages</strong> significatifs : </p>
+<ul>
+	<li> être <strong class="pros">économique</strong> puisqu'il n'est essentiellement constitué que de <strong>disques</strong> ;   </li>
+
+	<li> être <strong class="pros">performante en termes de vitesse</strong> puisque relier directement des disques à un poste de travail ou un serveur minimise les distances de liaison et les protocoles d'accès aux données. </li>
+</ul>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/DASdrawback.png" width="100px">
+<p> En contre‑partie, le <strong><em class="sigle">DAS</em></strong> souffre d'un <strong class="warning">inconvénient majeur</strong> : l'<strong>accès direct aux disques</strong> est unique, il <strong class="cons">ne peut pas être partagé</strong> avec une autre machine que celle avec laquelle le <strong><em class="sigle">DAS</em></strong> est relié. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/DASnoRAID.png" width="200px">
+<p>	Autrement dit, si l'on veut un mettre en place un <strong class="title">accès par deux serveurs</strong>, que ce soit parce que la charge en requêtes est importante, ou pour garantir par redondance la continuité du service d'accès, on est obligé d'employer <strong>deux <em class="sigle">DAS</em></strong>, et donc de <strong class="cons">dupliquer les données</strong> indépendamment de toute motivation de redondance, sachant que par la suite cela pose des <strong class="warning">gros problèmes de synchronisation</strong> : en effet, il n'est <strong class="cons">pas possible</strong> de mettre en place un <strong><em class="sigle">RAID</em></strong> – cf. infra <a class="infra" href="Rc2-5_serveursFichiers.html#RAID"></a> – à cheval sur <strong>deux <em class="sigle">DAS</em></strong>. </p>
+</div><!-- expert -->
+
+<p class="square"> En résumé, employé seul, un <strong class="title"><em class="sigle">DAS</em></strong> constitue une solution de sockage qui n'est envisageable que pour un <strong>petit service de partage de fichiers</strong> sur un réseau. </p>
+
+
+
+<h3 id="NAS"> Serveur de stockage en réseau (NAS) </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/NAS.png" width="250px">
+<p> Un <strong class="title"><em class="sigle">NAS</em></strong> ou <strong class="title">network attached storage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serveur_de_stockage_en_réseau" target="_BLANK">W</a> est un <strong class="defin">machine de type serveur</strong> comprenant <strong>plusieurs disques</strong> intercheangables formant ce qu'on appelle une <strong class="defin">baie de stockage</strong> intégrée. </p>
+
+<p> Doté d'une <strong class="defin">interface réseau</strong>, un <strong class="title"><em class="sigle">NAS</em></strong> peut être accédée par les autres machines hôtes du réseau local dans lequel il est hébergée (notamment les postes de travail), comme n'importe quel serveur.  </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/NAStour.png" width="120px">
+	<img class="top-right" src="../img/NASrack.png" width="300px" style="padding-top: 0.5em">
+
+<p> Les  <strong><em class="sigle">NAS</em></strong> se présentent aussi sous forme de <strong class="specialLB">tour</strong> ou de <strong class="specialLB">rack</strong>, avec les mêmes <strong class="pros">avantages</strong> et <strong class="cons">inconvénients</strong> respectifs que pour les machines serveurs (cf. chap. R2‑IV <a class="previous" href="Rc2-4_webServeur.html#technoServeurs" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<p> <em class="remark">Remarque</em> : malgré une <strong>forte ressemblance</strong>, il faut <strong class="warning">ne pas confondre</strong> un <strong><em class="sigle">NAS</em></strong> de type tour avec un <strong><em class="sigle">DAS</em></strong> (cf. la photo supra). </p>
+
+
+
+<h4> Comparaison avec les autres technologies de stockage </h4>
+
+
+<div class="complement">
+<p> Par rapport aux autres technologies de stockage, le <strong class="title"><em class="sigle">NAS</em></strong> offre un <strong class="pros">excellent compromis</strong> en termes de <strong>polyvalence</strong> et de <strong>simplicité de mise en œuvre</strong>. </p>
+</div><!-- complement -->
+
+<p class="square"> En comparaison avec un <strong><em class="sigle">DAS</em></strong>, un <strong class="title"><em class="sigle">NAS</em></strong> est certes <strong class="cons">plus onéreux</strong> à l'acquisition, mais dans la perspective d'un accès en réseau, il peut constituer finalement une solution <strong class="pros">plus compétitive</strong> si l'on considère l'achat du serveur associé au <strong><em class="sigle">DAS</em></strong>. </p>
+
+<div class="expert">
+<p> De plus, en assurant la <strong class="defin">séparation des fonctions</strong> de <strong>stockage</strong> et de <strong>service d'accès</strong>, un <strong class="title"><em class="sigle">NAS</em></strong> apporte une grande <strong class="pros">souplesse d'utilisation</strong>. Si les requêtes vers les données augmentent, il est possible d'ajouter au réseau des serveurs d'accès augmenter la capacité de traitement, sans avoir à dupliquer les données (cf. la figure ci‑dessous à titre d'exemple). </p>
+	<img class="top-left" src="../img/NASexample.png" style="max-width: 700px">
+</div><!-- expert -->
+
+<p class="square"> En comparaison avec un <strong><em class="sigle">SAN</em></strong>, un <strong class="title"><em class="sigle">NAS</em></strong> présente l'avantage d'être <strong class="pros">facile à mettre en œuvre</strong>. C'est un composant réseau autonome qui, avec un système logiciel dédié, qui peut être acquis presque « <strong>clef en main</strong> ». Il est donc apprécié par les particuliers et les petites entreprises qui n'ont pas de gros besoins informatiques et qui cherchent à minimiser les compétences requises pour la mise en service, l'utilisation et la maintenance. </p>
+
+<div class="expert">
+<p> De plus, s'il est suffisamment dimensionné, ou moyennant une extension de ses capacités de stockage par l'adjonction d'un <strong><em class="sigle">DAS</em></strong>, il peut aussi assurer avantageusement les <strong>fonctions</strong> de <strong class="title">sauvegarde</strong> et d'<strong class="title">archivage</strong>. </p>
+</div><!-- expert -->
+
+<p class="square"> Néanmoins, le <strong><em class="sigle">NAS</em></strong> présente quand même un <strong class="title">point faible</strong> : en cas de <strong class="cons">panne du système</strong>  ou de <strong class="cons">défaillance de la liaison</strong> au réseau, <strong class="warning">plus aucun accès aux données</strong> n'est possible. Ce n'est donc pas une solution satisfaisante pour des données fortement sollicitées et requérant une <strong class="defin">continuité de service</strong> robuste aux aléas informatiques usuels. </p>
+
+<p> C'est pouquoi les grandes entreprises, les administrations sensibles (secteurs de la défense, police, justice, santé…) et, bien entendu, pour leurs services « premium », les hébergeurs web ont recours à des <strong>technologies plus complexes</strong> que constituent les <strong class="title"><em class="sigle">SAN</em></strong>. </p>
+
+
+
+<h3 id="SAN"> Réseau de stockage (SAN) </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title"><em class="sigle">SAN</em></strong> ou <strong class="title">storage area network</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_de_stockage_SAN" target="_BLANK">W</a> est un <strong class="defin">réseau de machines</strong> exclusivement <strong class="defin">dédié au stockage</strong> de données. </p>
+
+<p> Selon la <strong>technologie de liaisons</strong> qu'il emploie, il peut constituer un <strong class="defin">réseau local</strong> à part entière, accessible via une ou plusieurs passerelles, ou un simplement un <strong class="defin">sous‑réseau</strong> du réseau local dans lequel il s'intègre. </p>
+</div><!-- important -->
+
+
+<div class="complement" id="composantsSAN">
+<p> Un <strong class="title"><em class="sigle">SAN</em></strong> est donc constitué d'une <strong class="defin">variété d'équipements</strong>, tous de type <strong>rack</strong> pour pouvoir être intégrés avec un minimum d'encombrement. </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/SANbay.png" width="300px" style="padding-top: 0.5em">
+	<li> On y trouve une ou plusieurs <strong class="specialLB">baies de stockage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Baie_de_stockage" target="_BLANK">W</a> (en anglais, <em class="english">disk arrays</em>), chaque baie étant elle‑même constituée d'un <strong>grand nombre de disques</strong> interchangeables, comme un <em class="sigle">DAS</em>, mais avec une <strong>connectique réseau spéciale</strong>. </li>
+
+	<div class="nobullet"> Le réseau peut également intégrer des <strong class="specialLB">équipements spécifiques d'archivage</strong> (cf. supra <a class="supra" href="Rc2-5_serveursFichiers.html#archivage"></a>). </div>
+  </div><!-- display -->
+  
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/SANcable.png" width="150px" style="padding-top: 0.5em">
+		<img class="top-right" src="../img/SANswitchFC.png" width="300px" style="padding-top: 0.5em">
+  <li> On y emploie des <strong class="specialLB">switchs fiber channel</strong>, qui sont des commutateurs dotés d'une <strong>technologie de liaison spécifique</strong> pour faire circuler les données non pas sous forme de fichiers mais de <strong class="defin">blocs</strong> (cf. infra <a class="infra" href="Rc2-5_serveursFichiers.html#bloc"></a>) et ce via le <strong>protocole <em class="sigle">SCSI</em></strong> (comme entre la carte mère d'un ordinateur et un disque dur). </li>
+	</div><!-- display -->
+  
+  <div class="expert" style="display:  inline-block;">
+  	<img class="top-right" src="../img/switchLayer3.png" width="120px" style="padding-top: 0.1em">
+	<div class="nobullet"> Ces commutateurs, administrables comme des routeurs (cf. symbole ci‑contre), forment un <strong>réseau</strong> <strong class="pros">redondant</strong> d'accès aux disques, la <strong>redondance</strong> est assurée par autant de chemins que nécessaire vers les baies. On parle alors de topologie de type <strong class="defin">fabric</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fabric_(topologie)#Fabric_dans_le_domaine_du_Fibre_channel" target="_BLANK">W</a>. </div>
+	</div><!-- expert -->
+
+	<div style="display: inline-block;">
+  	<img class="top-right" src="../img/SANserver.png" width="300px" style="padding-top: 0.5em">
+	<li> Enfin, on recourt à <strong class="specialLB">plusieurs serveurs</strong> pour assurer en <strong>parallèle</strong> et/ou <strong>redondance</strong> le traitement des requêtes d'accès aux données stockées dans les baies. Chaque serveur voit la zone de stockage des baies auxquelles il a accès comme s'il s'agissait de ses propres disques. </li>
+	</div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<p> L'<strong class="title">architecture</strong> d'un <strong><em class="sigle">SAN</em></strong> peut être <strong>très différente d'un contexte à un autre</strong>. La figure de principe proposée ci‑dessous n'en donne qu'une représentation académique. </p>
+	<img class="top-left" src="../img/SANexample.png" style="max-width: 700px">
+
+<p> La <strong class="title">mise en place</strong> et l'<strong class="title">administration</strong> d'un <strong class="title"><em class="sigle">SAN</em></strong> représentent des <strong class="cons">coûts importants</strong>. Un tel choix  ne se justifie donc que pour des entreprises ou des organisations de grande taille, ou éventuellement des <em class="sigle">PME</em>, mais spécialisées dans le domaine du stockage de données. </p>
+
+<p> En résumé, retenons que, outre la prise en charge d'un <strong>très grand nombre de requêtes</strong> et de <strong>débits importants</strong>, un <strong class="title"><em class="sigle">SAN</em></strong> doit permettre de garantir la <strong class="pros">continuité de service</strong> même en cas de panne d'équipements ou de liaisons. </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Technologie logicielle des serveurs de fichiers </h2>
+
+
+<p> Comme toujours en informatique, les <strong class="title">aspects logiciels</strong> sont <strong class="defin">déterminants</strong> pour comprendre le fonctionnement d'une architecture matérielle. Cette règle est particulièrement pertinente dans le cas des serveurs de fichiers et de la problématique générale du stockage. </p>
+
+
+
+<h3> Logiciels serveurs de fichiers </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/HTTPserverSoftware.png" width="150px" style="padding-top: 0.0em;">
+<p> Un logiciel <strong class="title">serveur de fichiers</strong> est une <strong class="defin">application</strong> s'exécutant en tâche de fond sur une <strong>machine</strong>. Dans un réseau local, elle a vocation à <strong class="defin">donner l'accès</strong> à d'autres machines du réseau à toute une <strong>arborescence de fichiers</strong> stockés dans des baies de disques.  </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/networkDisk.png" width="100px" style="padding-top: 0.0em;">
+<p> Sur les <strong>postes de travail</strong> qui bénéficient de cet accès, l'arborescence des fichiers apparaît comme si les dossiers et fichiers étaient placés sur un disque du poste lui‑même. On parle alors de <strong class="defin">disque réseau</strong>. </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Sans surprise, un logiciel <strong class="title">serveur de fichiers</strong> opère sur des <strong>réseaux informatiques</strong>  employant une pile de protocoles <strong><em class="sigle">TCP/IP</em></strong> et conformément à un <strong class="defin">modèle client‑serveur</strong>.  </p>
+<ul>
+	<li> La partie <strong class="specialLB">client</strong> est prise en charge par le <strong class="defin">système d'exploitation</strong> du poste de travail qui souhaite accéder aux fichiers ; dans leurs versions récentes, tous les systèmes d'exploitation  (<em class="mark">Linux</em>, <em class="mark">Windows</em>, <em class="mark">MacOS…</em>) intègrent cette fonctionnalité.  </li>
+
+	<li> La partie <strong class="specialLB">serveur</strong> est prise en charge par un <strong class="defin">composant logiciel</strong> qui existe ou vient se greffer au système d'exploitation de la machine serveur en charge de traiter les requêtes des clients. </li>
+</ul>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="180px" style="padding-top: 0.2em;">
+<p> Les <strong class="defin">échanges de données</strong> entre le client et le serveur sont implémentés conformément à un <strong>protocole de communication</strong> <strong class="specialG">applicatif</strong> (couche nº 7 du modèle <strong><em class="sigle">OSI</em></strong>) et il en existe plusieurs possible. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p id="fileServers"> Dans le cadre de ce chapitre, il n'est pas question d'étudier en détails tous ces protocoles, mais simplement d'en mentionner certains – surtout s'ils sont faciles à mettre en œuvre dans le cadre d'un sujet de travaux pratiques ou d'un futur projet. </p>
+
+<ul>
+	<li> <strong class="title"><em class="sigle">SMB</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Server_Message_Block" target="_BLANK">W</a> ou <strong  class="specialLB">server message block</strong> (anciennement, <em class="sigle">CIFS</em> ou <em class="english">common internet file system</em>) est le protocole qui a été initialement développé en 1983 par <strong><em class="mark">IBM</em></strong>. Il a été rapidement adapté par <em class="mark">Microsoft</em> pour les machines à systèmes d'exploitation <strong class="specialLB">Windows</strong>. </li>
+
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/logoSamba.png" width="200px" style="padding-top: 0.2em;">
+	<div class="nobullet"> Pour assurer son <strong class="pros">interopérabilité</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Interopérabilité_en_informatique" target="_BLANK">W</a> avec les machines à systèmes d'exploitation <strong>Linux</strong> ou <strong>Unix</strong>, <strong class="title"><em class="sigle">SMB</em></strong> est également disponible dans une implémentation <strong>open source</strong> et <strong>libre de droits</strong> nommée <strong class="defin">Samba</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Samba_(informatique)" target="_BLANK">W</a>. </div>
+
+	<div class="nobullet"> Conformément à l'usage courant sur <em class="mark">Linux</em>, c'est un logiciel <strong class="cons">sans interface graphique utilisateur</strong> (en anglais, <em class="sigle">GUI</em> pour <em class="english">graphical user interface</em> <a class="external" href="https://en.wikipedia.org/wiki/Graphical_user_interface" target="_BLANK">W</a>). Le paramétrage du serveur s'effectue via des <strong>fichiers de configuration</strong> (cf. le sujet de TP R2‑2 <a class="tp" href="Rtp2-3_serveurFichiers.html#serveurSamba" target="_BLANK"></a>). </div>
+	</div><!-- display -->
+
+  <div class="expert">
+	<div class="nobullet"> <em class="remark">Remarque</em>. Avec les <strong class="specialLB">versions récentes</strong> de <strong>Windows</strong>, le partage de fichiers en réseau est basé sur les services <strong class="title">Active Directory</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Active_Directory" target="_BLANK">W</a>, lesquels sont mis en œuvre grâce au protocole d'annuaires <strong class="title"><em class="sigle">LDAP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol" target="_BLANK">W</a> (<em class="english">lightweight directory access protocol</em>). </div>
+	</div><!-- expert -->
+  
+	<li> <strong class="title"><em class="sigle">NFS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Network_File_System" target="_BLANK">W</a> ou <strong  class="specialLB">network file system</strong> est un protocole développé en 1984 par <em class="mark">Sun Microsystems</em> pour machines à système d'exploitation <strong class="specialLB"><em class="sigle">GNU</em>/Linux</strong> ou <strong class="specialLB">Unix</strong>. Normalisé en 1989 par la <strong><em class="sigle">RFC 1094</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc1094" target="_BLANK"></a>, il a été entièrement repensé en 2010 dans sa <strong>version 4</strong> pour garantir la sécurité des échanges de données qu'il met en œuvre. Sa version la plus récente (4.2) est spécifiée par la <strong><em class="sigle">RFC 8178</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc7862" target="_BLANK"></a>. </li> 
+
+	<div class="nobullet"> Là encore, il n'y a <strong class="cons">pas d'interface graphique</strong>, mais des <strong>fichiers de configuration</strong>.   </div>
+
+	<div class="nobullet"> Ce protocole dispose également de variantes pour systèmes <em class="mark">Microsoft Windows</em> ou <em class="mark">Apple Macintosh</em> afin d'assurer son <strong class="pros">interopérabilité</strong> dans un réseau hétérogène. </div>
+</ul>
+
+
+
+<h3 id="ftp"> Protocoles de transfert de fichiers </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="180px" style="padding-top: 0.2em;">	
+<p> Le <strong>protocole de communication</strong> <strong class="title"><em class="sigle">FTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/File_Transfer_Protocol" target="_BLANK">W</a> ou <strong class="title">file transfer protocol</strong> est un autre protocole de <strong class="defin">partage de fichiers</strong> opérant sur un <strong>modèle client‑serveur</strong>, mais via une <strong class="defin">connexion temporaire</strong>. Il a été introduit dès 1971 par la <strong><em class="sigle">RFC 114</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc114" target="_BLANK"></a>, maintenant obsolète et remplacée depuis 1985 par la <strong><em class="sigle">RFC 959</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc959" target="_BLANK"></a>.  </p>
+
+<p> Ce protocole permet la <strong class="defin">gestion des fichiers</strong> sur le serveur, opérée à distance depuis un poste client : ajout par transfert en <strong>upload</strong>, récupération par transfert en <strong>download</strong> ou encore <strong>suppression</strong> ou <strong>déplacement</strong> d'un fichier dans l'arborescence sur le serveur. En revanche, il ne permet pas la manipulation à distance du contenu de ces fichiers. </p>
+</div><!-- important -->
+</div><!-- display -->
+
+<div class="complement">
+<p> Le protocole <strong class="title"><em class="sigle">FTP</em></strong> est typiquement utilisé pour <strong class="defin">ajouter ou supprimer des fichiers</strong> stockés chez un hébergeur de données (notamment des fichiers de pages web). </p>
+<ul>
+	<li> Le plus souvent, il est mis en œuvre avec une <strong class="specialO">authentification</strong> par <strong>login</strong> et <strong>mot de passe</strong>.</li>
+
+	<li> Mais on peut également l'utiliser en autorisant les <strong class="specialO">connexions anonymes</strong> sans mots de passe, pour donner un <strong>accès public</strong> à des fichiers. </li>
+</ul>
+
+<p> Le protocole <strong class="title"><em class="sigle">FTP</em></strong> est un <strong class="specialG">protocole applicatif</strong> (couche nº 7 du modèle <strong><em class="sigle">OSI</em></strong>) qui s'appuie sur la pile de protocole <strong><em class="sigle">TCP/IP</em></strong>. Il utilise les <strong>ports</strong> : </p>
+<ul>
+	<li> <strong>nº 20</strong> (écoute) et <strong>nº 21</strong> (données) dans sa <strong class="specialLB">version simple</strong> ;   </li>
+
+	<li> <strong>nº 989</strong> (écoute) et <strong>nº 990</strong> (données) dans sa <strong class="specialLB">version sécurisée implicite</strong> par le protocole <strong><em class="sigle">TLS</em></strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#TLS" target="_BLANK"></a>) – et on le désigne alors par le sigle <strong class="specialLB"><em class="sigle">FTPS</em></strong>. </li>
+</ul>
+<p> En effet, même en mettant en place un contrôle d'accès, le protocole <strong class="title"><em class="sigle">FTP</em></strong> n'est <strong class="warning">pas sécurisé</strong>, puisque les échanges client‑serveur ne sont pas chiffrés. Donc, en particulier, le <strong>mot de passe</strong> transmis au début de la connexion peut être <strong class="cons">lu sur une machine tierce</strong> connectée au réseau, avec n'importe quel logiciel de scan de trames (<em class="mark">Wireshark</em> ou autre).
+</div><!-- complement -->
+
+<p> Par ailleurs, une condition importante à l'<strong class="title">interopérabilité</strong> du protocole <strong><em class="sigle">FTP</em></strong> est l'<strong class="defin">encodage des noms de fichiers</strong> qui, idéalement, doit être compatible avec tous les systèmes d'exploitation. En principe, cela devrait être permis par l'emploi du format <strong class="pros"><em class="sigle">UTF‑8</em></strong>, mais ce n'est pas le format par défaut sur tous les systèmes d'exploitation. En particulier, le système de partition <strong><em class="sigle">NTFS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/NTFS_(Microsoft)" target="_BLANK">W</a> (<em class="english">new technology file system</em>) de <strong class="specialLB">Windows</strong> emploie le format <strong class="cons"><em class="sigle">UTF‑16</em></strong>. Des <strong>routines de transcodage</strong> doivent alors prendre en charge les adaptations nécessaires. </p>
+
+
+<h4> Le protocole SFTP </h4>
+
+
+<div class="important">
+<p> Le protocole <strong class="title"><em class="sigle">SFTP</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol" target="_BLANK"></a> – pour <strong>secure file transfert protocol</strong> – est un protocole de <strong class="defin">transfert</strong> et de <strong>gestion de fichiers</strong> qui opère sur une <strong class="defin">connexion <em class="sigle">SSH</em></strong> (secure shell <a class="external" href="https://en.wikipedia.org/wiki/Secure_Shell" target="_BLANK">W</a>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il s'agit d'un protocole <strong class="defin">distinct de <em class="sigle">FTP</em></strong> à part entière, à <strong class="warning">ne pas confondre</strong> avec <strong><em class="sigle">FTPS</em></strong>. Sa dernière version (v6) est spécifiée par un <em class="mark">Internet Draft</em> de l'<strong><em class="sigle">IETF</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-13" target="_BLANK"></a>. Il utilise le <strong>même port nº 22</strong> que <strong><em class="sigle">SSH</em></strong>. </p>
+</div><!-- complement -->
+
+
+<h4> Logiciels client FTP(S) et SFTP </h4>
+
+
+<div class="important">
+<p> Les systèmes d'exploitation <strong class="specialLB">Linux</strong> permettent la mise en œuvre du <strong class="defin">protocole <em class="sigle">FTP</em> du côté du client</strong> <strong class="title">en ligne de commande</strong> ou via un <strong class="title">script</strong>. Il suffit pour cela d'employer les très anciennes <strong>commandes</strong> <code class="cmd">ftp</code> <a class="external" href="https://linuxize.com/post/how-to-use-linux-ftp-command-to-transfer-files/" target="_BLANK"></a> et <code class="cmd">sftp</code> <a class="external" href="https://linuxize.com/post/how-to-use-linux-sftp-command-to-transfer-files/" target="_BLANK"></a>. Elles sont encore <strong class="pros">pré‑installées</strong> sur toutes les distributions. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/logoFileZilla.png" width="80px">
+<p> Mais pour effectuer des <strong class="title">transferts de fichiers occasionnels</strong> entre un poste de travail et un serveur, il est plus commode d'employer un <strong class="defin">logiciel dédié</strong>. L'un des plus connu est <strong class="specialDR">FileZilla</strong> <a class="external" href="https://fr.wikipedia.org/wiki/FileZilla" target="_BLANK">W</a> parce qu'il a été le premier développé et qu'il est resté <strong class="pros">gratuit</strong>, <strong class="pros">open source</strong> et <strong class="pros">multi‑plateforme</strong>. </p>
+
+<p> Il existe aussi des <strong class="specialLB">logiciels concurrents</strong>, que l'on peut découvrir en consultant par exemple cette page web <a class="external" href="https://alternativeto.net/software/filezilla/" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Quel que soit le système d'exploitation du poste de travail, l'<strong class="title">installation</strong> de <strong class="specialDR">FileZilla</strong> ne pose <strong class="pros">aucune difficulté</strong> dans la mesure où il s'agit d'un logiciel d'usage courant (même s'il n'est pas aussi « grand public » qu'un navigateur). </p>
+<ul>
+	<li> Avec un système <strong class="specialLB">Windows</strong>, il suffit de télécharger l'installateur fourni sur la page web du site du logiciel <a class="external" href="https://filezilla-project.org/download.php?platform=win64" target="_BLANK"></a> puis de l'exécuter, comme il est d'usage. </li>
+  
+  
+	<li> Avec un système <strong class="specialLB">Linux</strong>, on peut procéder de même <a class="external" href="https://filezilla-project.org/download.php?platform=linux64" target="_BLANK"></a>, ou même en ligne de commande, via l'outil d'installation <code>apt</code>. </li>
+
+  <div  class="nobullet" style="display: inline-block;">
+  	<img class="top-right" src="../img/MintLogitechMiniIcon.png" width="40px">
+	Avec <strong class="Mint">Linux Mint</strong>, on peut aussi tout simplement passer par la <strong>logithèque</strong>. </div><!-- display -->	
+</ul>
+
+
+<p> La <strong class="title">prise en main</strong> de <strong class="specialDR">FileZilla</strong> est relativement simple. </p>
+
+<img class="top-left" src="../img/FilezillaInterface.jpg">
+
+<ul>
+	<li> Dans le menu <code>Fichier</code>, via la commande <code>Gestionnaire de site…</code>, on commence par cliquer sur le <strong>bouton</strong> <code class="cmd">Nouveau site</code>. Après lui avoir donné un <strong class="defin">nom</strong> (un simple mnémonique suffit), on paramètre la connexion au serveur en renseignant le <strong>protocole</strong> mis en œuvre – <strong><em class="sigle">FTP(S)</em></strong> ou <strong><em class="sigle">SFTP</em></strong> – puis l'<strong>adresse <em class="sigle">IP</em></strong> du serveur, les <strong>identifiants</strong> de connexion et le type de <strong>chiffrement</strong>. </li>
+
+  <div class="nobullet"> Une fois enregistré, le <strong class="defin">nom</strong> du site apparaît dans le <strong>menu déroulant</strong> sous le menu <code>Fichier</code>. Il suffit de le sélectionner pour que la <strong>connexion</strong> avec le serveur s'établisse automatiquement (via l'authentification spécifiée). </div>
+
+	<li> On peut très facilement effectuer des <strong class="defin">transferts de fichiers</strong> entre le poste de travail et le serveur, dont les arborescences de fichiers figurent respectivement dans les fenêtres de gauche et de droite de l'interface. Il suffit de procéder par <strong>glisser‑déposer</strong>, comme avec un explorateur de fichiers usuel. </li>
+</ul>
+</div><!-- expert -->
+
+
+<h4 id="FTPserver"> Logiciels serveurs FTP(S) et SFTP </h4>
+
+
+<div class="complement" style="display: inline-block;">
+<p> La mise en œuvre du <strong>protocole <em class="sigle">FTP</em></strong> <strong class="title">du côté du serveur</strong> procède bien évidemment avec des <strong class="defin">usages différents</strong> de ceux du côté du client. Ici, aucun utilisateur ne doit être requis pour répondre aux requêtes des clients : comme pour les serveurs en général, tout doit être <strong class="pros">automatisé</strong>. </p>
+
+<p> Comme pour les serveurs de fichiers, les <strong class="title">logiciels serveurs <em class="sigle">FTP</em></strong>, <strong class="title"><em class="sigle">FTPS</em></strong> et <strong class="title"><em class="sigle">SFTP</em></strong> pour les systèmes <strong class="specialLB">Linux</strong> n'ont <strong class="cons">pas d'interface graphique</strong>. Ils sont paramétrés via des <strong>fichiers de configuration</strong>. </p>
+
+<p> Un des plus usuels se nomme <strong class="title">VsFTPD</strong> <a class="external" href="https://en.wikipedia.org/wiki/Vsftpd" target="_BLANK"></a> – pour <strong>very secure <em class="sigle">FTP</em> daemon</strong>. Réputé très sûr (il n'a connu aucune faille majeure depuis sa création), facile à mettre en œuvre  (cf. le sujet de TP R2‑2 <a class="tp" href="Rtp2-3_serveurFichiers.html#serveurFTP" target="_BLANK"></a>), il présente néanmoins le défaut de <strong class="cons">pas</strong> prendre en charge le protocole <strong><em class="sigle">SFTP</em></strong>. </p>
+</div><!-- complement -->
+
+
+<div class="expert">
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/logoFileZilla.png" width="80px">
+<p> Sur un serveur à système <strong class="specialLB">Windows</strong>, on peut aussi se tourner vers un logiciel comme <strong class="specialDR">FileZilla Server</strong> <a class="external" href="https://fr.wikipedia.org/wiki/FileZilla_Server" target="_BLANK">W</a>, qui dispose d'une <strong class="pros">interface graphique</strong> comme dans la version client. </p>
+
+<p> Plus généralement, on trouve sur cette page web <a class="external" href="https://en.wikipedia.org/wiki/Comparison_of_FTP_server_software_packages" target="_BLANK">W</a> un <strong>panorama</strong> des différents logiciels de <strong>serveur <em class="sigle">FTP</em></strong>. </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Technologie du stockage des données </h2>
+
+
+<!-- petite intro -->
+
+
+<h3> Taille de l'unité de lecture/écriture  –  notion de bloc </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/blocNotion.png" width="400px">
+<p> On appelle <strong class="title">bloc</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bloc_de_système_de_fichiers" target="_BLANK">W</a> le <strong class="defin">plus petit volume mémoire</strong> qu'il est jugé <strong>opportun de lire</strong> lors d'une opération de lecture sur un disque. </p>
+
+<p> Cette notion émerge de la technologie des <strong><em class="sigle">HDD</em></strong> pour lesquels, lorsqu'un accès disque est demandé, il existe un <strong class="cons">temps de latence</strong> avant que le secteur concerné passe sous la tête de lecture (cf. la fig. ci‑contre). </p>
+
+<p> Plus le bloc est petit, plus le temps de latence est potentiellement long, donc on a intérêt à ne pas choisir une taille de bloc trop petite. L'octet est une unité beaucoup trop petite, la <strong class="title">taille des blocs</strong> est <strong>au minimum</strong> de <strong class="defin">512 octets</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Quelle que soit la technologie de disque – <strong><em class="sigle">HDD</em></strong> ou <strong><em class="sigle">SSD</em></strong> – La <strong class="title">partition des disques</strong> en <strong class="title">blocs</strong> présente de <strong class="pros">nombreux avantages</strong>. Elle permet notamment de : </p>
+<ul>
+	<li> <strong class="defin">récupérer efficacement les espaces vacants</strong> laissés par les suppressions de fichiers, sans avoir à réarranger toutes les données ; </li>
+
+	<li> <strong class="defin">s'affranchir de la notion de fichier</strong> pour stocker les informations, ce qui est très utile pour les <strong>bases de données</strong> ; </li>
+
+	<li> implémenter les technologies de <strong class="defin">redondance</strong> (<strong><em class="sigle">RAID</em></strong> – cf. infra) avec une <strong>fine granularité</strong>. </li>
+</ul></p>
+</div><!-- complement -->
+
+<!-- évoquer la défragmentation et le trim - cf. vidéo de Linuxtricks 
+https://www.youtube.com/watch?v=Gi3le409NHY
+-->
+
+<h3 id="RAID"> Dispositifs de redondance  –  niveaux de RAID </h3>
+
+
+
+<div class="important">
+<p> Le sigle <strong class="title"><em class="sigle">RAID</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/RAID_(informatique)" target="_BLANK">W</a> ou <strong class="title">redundant array of independent disks</strong> fait référence à diverses <strong>techniques logicielles</strong> de <strong class="defin">répartition de données</strong> dans un <strong>ensemble de disques</strong>. </p>
+
+<p> C'est un élément clef de la <strong class="pros">continuité de services</strong> et aussi des <strong class="pros">performances de vitesse</strong> des solutions de stockage de masse (<strong><em class="sigle">DAS</em></strong>, <strong><em class="sigle">NAS</em></strong>, <strong><em class="sigle">SAN</em></strong>). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> On parle de <strong class="title">niveau de <em class="sigle">RAID</em></strong></strong> <strong class="specialLB">x</strong> où <strong class="specialLB">x</strong> est un <strong>numéro</strong> qui distingue la <strong class="defin">technique logicielle</strong> employée, sachant : </p>
+<ul>
+	<li> qu'il existe <strong class="specialLB">7 niveaux standards</strong> <a class="external" href="https://en.wikipedia.org/wiki/Standard_RAID_levels" target="_BLANK">W</a>, numérotés de <em class="bold">0</em> à <em class="bold">6</em> ; </li>
+
+	<li> que certains niveaux peuvent se <strong>combiner</strong> entre eux ; on parle alors de <strong class="specialLB"><em class="sigle">RAID</em> hybride</strong> <a class="external" href="https://en.wikipedia.org/wiki/Nested_RAID_levels" target="_BLANK">W</a>. </li>
+</ul>
+<p> Comme toujours, aucune technique n'est idéale, chacune présentant des <strong class="pros">avantages</strong> et des <strong class="cons">inconvénients</strong> – et c'est soucis d'optimisation que les combinaisons sont envisagées. Le <strong class="title">choix</strong> d'un <strong>niveau de <em class="sigle">RAID</em></strong> dépend bien entendu des moyens financiers, du volume de données à stocker, de la charge en requêtes et du contexte : base de données, fichiers volumineux (vidéo), etc. </p>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> Il existe aussi divers niveaux de <strong class="title"><em class="sigle">RAID</em> non standards</strong> : <strong><em class="sigle">RAID RE</em></strong>, <strong><em class="sigle">RAID TP</em></strong>… <a class="external" href="https://en.wikipedia.org/wiki/Non-standard_RAID_levels" target="_BLANK">W</a>. </p>
+</div><!-- exemple -->
+
+<div class="expert">
+<p> L'<strong class="title">implémentation</strong> des <strong>niveaux de <em class="sigle">RAID</em></strong> peut être : </p> 
+<ul>
+	<li> rapportée sous la forme d'une <strong class="defin">couche logicielle</strong> au <strong>système d'exploitation</strong> de la machine qui gère l'ensemble des disques ;  </li>
+
+	<li> embarquée comme un <strong class="defin">système microprogrammé</strong> sur une carte électronique spécifique intégrée à une baie de disques ; on parle alors de <strong class="title">contrôleur <em class="sigle">RAID</em></strong>. </li>
+</ul>
+<p> Là encore, chaque solution a ses <strong class="pros">avantages</strong> et <strong class="cons">inconvénients</strong>. Les technologies microprogrammées offrent de meilleures performances (car elles opèrent en parallèle du système d'exploitation) mais sont plus complexes à mettre à jour. En cas de défaillance, il y a un risque de perdre les données si l'on ne trouve pas exactement le même contrôleur, avec le même firmware. </p>
+</div><!-- expert -->
+
+
+
+<h4> Niveaux de RAID standards les plus usuels </h4>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RAID_0.png" width="300px" style="padding-top: 1em">
+<p class="square" style="margin-top: 0em;"> Le <strong>niveau</strong> <strong class="title"><em class="sigle">RAID 0</em></strong> désigne une <strong class="defin">technique d'entrelacement</strong> (en anglais, <em class="english">striping</em>, le terme <em class="english">stripe</em> signifiant « bande ») qui permet d'<strong class="pros">augmenter la vitesse de lecture et d'écriture</strong>. Il nécessite <strong>au moins deux disques</strong> physiques. </p>
+
+<p> Le principe consite à répartir équitablement les blocs d'un fichier sur <strong>k disques</strong>, de sorte que lorsqu'on lit ou écrit le fichier, l'opération se répartit simultanément en parallèle. Approximativement, on <strong class="cos">divise le temps d'exécution</strong> par <strong>k</strong>. De plus, cette technique permet de consacrer <strong class="pros">la totalité de l'espace</strong> de stockage aux données. </p>
+
+<p> Mais le niveau <strong class="title"><em class="sigle">RAID 0</em></strong> est <strong class="defin">rarement employé seul</strong> parce qu'il n'assure <strong class="cons">aucune redondance</strong> des données. Au contraire, la <strong>défaillance d'un seul disque</strong> constitue un <strong class="warning">problème critique</strong> pour l'accès à l'ensemble des données ! </p>
+</div><!-- display -->
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RAID_1.png" width="300px" style="padding-top: 1em">
+<p class="square"> Le <strong>niveau</strong> <strong class="title"><em class="sigle">RAID 1</em></strong> consiste en une <strong class="defin">duplication à l'identique</strong> (en anglais, <em class="english">mirroring</em>) des données sur <strong>au moins deux disques différents</strong>, de sorte que la défaillance de l'un deux ne soit pas critique pour l'accès aux données. </p>
+
+<p> C'est l'application la plus simple du principe de <strong class="defin">redondance</strong> qui garantit la <strong class="pros">continuité de service</strong> dès lors que les disques sont manipulables à chaud. De plus, les <strong>opérations de lectures</strong> de blocs sont <strong class="defin">parallélisables</strong>. En revanche, les opérations d'écriture ne bénéficie d'<strong class="cons">aucun gain en vitesse</strong>. Et le principal inconvénient se situe en termes de capacité mémoire : le <strong class="warning">coût</strong> est multiplié par le nombre de dupplication (par exemple, sur deux disques, la moitié de l'espace disque est consommé par la redondance).   </p>
+
+<p> Le niveau <strong class="title"><em class="sigle">RAID 1</em></strong> est souvent employé comme <strong class="defin">solution initiale</strong> pour le stockage de masse, car il autorise facilement les évolutions vers des niveaux plus complexes. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RAID_5.png" width="400px" style="padding-top: 1em">
+<p class="square"> Le <strong>niveau</strong> <strong class="title"><em class="sigle">RAID 5</em></strong> met en œuvre une technique de <strong class="defin">redondance répartie</strong> basée sur un <strong>calcul de parité</strong> qui permet de <strong class="pros">reconstituer un disque perdu</strong> à l'aide de l'ensemble des disques restant. Il nécessite <strong>au moins 2 + 1 disques</strong> physiques. Le principe est le suivant : </p>
+
+<ul>
+  <li> dans le fichier, les blocs sont répertoriés par <strong>bandes de <strong>k</strong> blocs</strong> consécutifs s'il y a <strong><var>k</var> + 1 disques</strong> ;  </li>
+
+  <li> pour chaque bande, un <strong>bloc de parité</strong> supplémentaire est généré ; on a alors autant de blocs que de disques ; </li>
+
+	<li> dans les disques, les blocs sont agrégés en <strong class="defin">bandes</strong> comme en RAID 0 ; mais les blocs de parité sont <strong>répartis équitablement</strong> sur les disques, et non pas toujours dans le même disque. </li>
+</ul>
+
+<p> Le niveau <strong><em class="sigle">RAID 5</em></strong> est présente l'avantage d'un <strong class="pros">moindre coût mémoire</strong> puisque, globalement sur trois disques, le volume d'un seul est consacré à la redondance (contre au minimum un sur deux en <em class="sigle">RAID 1</em>). En revanche, il n'apporte qu'un faible gain en vitesse de lecture et même une <strong class="cons">perte en vitesse d'écriture</strong> puisqu'il faut calculer les blocs de parité avant de les écrire.  </p>
+</div><!-- display -->
+
+
+<div class="expert">
+<h4> Niveaux de RAID hybrides </h4>	
+
+
+<div class="complement">
+<p> Un <strong>niveau de</strong> <strong class="title"><em class="sigle">RAID</em> hybride</strong> est la <strong class="defin">composition de deux niveaux</strong> de <strong><em class="sigle">RAID</em> standards</strong> <strong class="specialLB">x</strong> et <strong class="specialLB">y</strong>. On note la combinaison <strong class="specialLB">xy</strong> ou encore <strong class="specialLB">x</strong><em class="bold">+</em><strong class="specialLB">y</strong>. </p>
+
+<p> Comme toute composition, elle n'est <strong class="warning">pas commutative</strong> : un niveau de <strong class="specialLB"><em class="sigle">RAID</em> xy</strong> n'est pas équivalent à un niveau de <strong class="specialLB"><em class="sigle">RAID</em> yx</strong>.  </p>
+
+<p> Dans un <strong>niveau de <em class="sigle">RAID</em> hybride</strong>, l'<strong class="title">ordre de composition</strong> doit compris comme procédant <strong class="defin">des disques vers le fichier</strong>. Mais pour en comprendre le principe, il est plus intuitif de considérer l'ordre inverse, du fichier vers les disques. </p>
+</div><!-- complement -->
+
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RAID_10.png" width="500px" style="padding-top: 1em">
+<p> Ainsi, le <strong>niveau</strong> <strong class="title"><em class="sigle">RAID 10</em></strong> (ou <strong class="title"><em class="sigle">1+0</em></strong>) consiste en une <strong class="defin">composition</strong> de niveaux de <strong class="specialLB"><em class="sigle">RAID 1</em></strong> et de <strong class="specialLB"><em class="sigle">RAID 0</em></strong> (cf. la figure ci‑contre) : </p>
+
+<ul>
+	<li> on applique d'abord au fichier un niveau de <strong class="specialLB"><em class="sigle">RAID 0</em></strong> qui le divise en <strong>k volumes virtuels</strong> (non représentés sur la figure) avec une <strong>répartition par bandes</strong> (striping) ;   </li>
+
+	<li> puis on applique à chacun de ces volumes virtuels un niveau de <strong class="specialLB"><em class="sigle">RAID 1</em></strong>, autrement dit on les <strong>duplique en miroirs</strong>. </li>
+</ul>
+
+<p> Au total, ce niveau hybride emploie donc <strong>2<var>k</var> disques</strong>. </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+
+<h3> Technologies de liaisons dans un SAN  </h3>
+
+
+
+<div class="important">
+<p> Dans un <strong><em class="sigle">SAN</em></strong>, les <strong class="title">liaisons entre machines</strong> sont implémentées selon une <strong class="defin">technologie spécifique</strong>  pour permettre le <strong>transfert de données</strong> à <strong class="pros">très haut débit</strong> sous forme de <strong class="specialLB">blocs</strong> (et non pas de fichiers) comme dans un <strong>bus</strong> reliant entre un disque dur et une carte mère. </p>
+
+<p> On entend ici le terme de <strong class="title">liaison</strong> au sens large, c'est‑à‑dire autant d'un point de vue <strong>matériel</strong> que <strong>logiciel</strong>. </p>
+</div><!-- important -->
+
+
+<h4 id="fibreChannel"> La technologie <em class="mark">Fibre Channel</em> </h4>
+
+
+<div class="complement">
+<p> La technologie <strong class="defin">Fibre Channel</strong> <a class="external" href="https://en.wikipedia.org/wiki/Fibre_Channel" target="_BLANK">W</a> (ou <strong>Fiber</strong> à l'américaine) – en abrégé, <strong class="title"><em class="sigle">FC</em></strong>) est <strong class="warning">très différente</strong> de celle employée sur les réseaux informatiques « classiques ». 
+</div><!-- complement -->
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/HBA_FC.jpg" width="300px" style="padding-top: 1em">
+<p class="square"> Une <strong>« carte réseau »</strong> est désignée <strong class="title"><em class="sigle">HBA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Contrôleur_hôte_de_bus" target="_BLANK">W</a> pour <strong class="title">host bus adapter</strong> puisque la liaison est de type <strong>bus</strong>. Cet équipement dispose préférentiellement d'une prise de connexion pour <strong class="defin">fibre optique</strong>, mais la technologie existe aussi pour d'autres types de support (paire torsadée, câble coaxial). </p>
+
+<p> Tout <strong><em class="sigle">HBA</em></strong> possède un <strong>identifiant</strong> unique nommé <strong class="title">world wide name</strong> <a class="external" href="https://fr.wikipedia.org/wiki/World_wide_name" target="_BLANK">W</a> abrégé <strong><em class="sigle">WWN</em></strong>. Comme une adresse <em class="sigle">MAC</em>, il est composé de <strong>deux parties</strong> : </p>
+<ul>
+	<li> la première (3 octets) est l'identifiant attribué au constructeur par l'<em class="sigle">IEEE</em> ;  </li>
+
+	<li> la deuxième (5 octets) est un numéro fixé par le constructeur ;  </li>
+</ul>
+<p> Il est écrit sous <strong>forme hexadécimale</strong>, chaque octet étant séparé par le caractère <code class="cmd">:</code>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/switchFC.jpg" width="300px">
+<p> Pour un <strong>commutateur</strong>, on parle de <strong class="title">switch <em class="sigle">FC</em></strong> car l'électronique et les programmes embarqués sont différents de ceux d'un switch usuel. Il en va bien évidemment de même pour les prises de connexion. </p>
+</div><!-- display -->
+
+
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

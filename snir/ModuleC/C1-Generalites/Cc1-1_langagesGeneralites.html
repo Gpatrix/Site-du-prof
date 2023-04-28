@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="1"
+	data-pagenumber="I"
+	data-pageState="OK"
+	data-pageheadtitle="Langages program."
+	data-pagefulltitle="Les Langages de programmation"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+
+<p class="square"> De nos jours, le domaine du <strong class="defin">développement</strong> des <strong class="title">logiciels</strong> est <strong class="warning">extrêmement varié</strong>. Il existe : </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/langages.png" width="500px">
+<ul>
+	<li> <strong>plusieurs centaines</strong> de <strong class="specialLB">langages</strong> de programmation <a class="external" href="https://fr.wikipedia.org/wiki/Liste_de_langages_de_programmation" target="_BLANK">W</a> ; mais dans cette diversité, <strong class="defin">une dizaine</strong> de langages seulement représentent près de <strong>90 % des applications</strong> ;  </li>
+
+	<li> divers <strong class="specialLB">paradigmes</strong> (ou style) de programmation <a class="external" href="https://fr.wikipedia.org/wiki/Paradigme_(programmation)" target="_BLANK">W</a> qu'il est possible d'adopter dans certains langages ; </li>
+
+	<li> dans les langages les plus employés, une grande variété de <strong class="specialLB">frameworks</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Framework" target="_BLANK">W</a>, c'est‑à‑dire des <strong class="defin">ensembles de bibliothèques de fonctions</strong> permettant de développer rapidement des programmes complexes ; </li>
+
+	<li> un grand choix d'<strong class="specialLB">environnements</strong> (ou logiciel) de développement <a class="external" href="https://fr.wikipedia.org/wiki/Environnement_de_développement" target="_BLANK">W</a> pour créer des programmes. </li>
+</ul>
+</div><!-- display -->
+
+<p class="square"> Face à cette <strong>multitude</strong>, avant de commencer l'étude d'un langage particulier, il est utile d'avoir <strong class="pros">quelques repères</strong>, et c'est précisément l'<strong class="title">objectif</strong> de ce chapitre. Les thèmes listés ci‑dessus sont présentés dans cet ordre, à l’exception de la notion de <strong class="cons">framework</strong>, qui est difficile dans un premier temps. </p>
+
+<p> En revanche, après cette présentation, on peut déjà prendre conscience des <strong class="warning">efforts</strong> à fournir pour être à la hauteur des <strong class="specialLB">enjeux du génie logiciel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Génie_logiciel" target="_BLANK">W</a>. Ils sont esquissés en fin de chapitre. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="categoriesLangages"> Catégories de langages </h2>
+
+
+
+<h3> Notions de code source et de code machine </h3>
+
+
+
+<div class="important">
+<p> On rappelle que <strong>tout programme</strong> informatique : </p>
+
+<ul>
+	<li> s’écrit sous forme d’<strong class="defin">instructions</strong> codées dans un <strong class="pros">langage rigoureusement défini</strong> ; ces instructions sont stockées dans <strong>un ou plusieurs fichiers</strong> et constituent le <strong class="title">code source</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Code_source" target="_BLANK">W</a> du programme ; </li>
+
+	<li> doit donc d'abord être <strong class="warning">traduit</strong> en <strong class="title">code machine</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_machine" target="_BLANK">W</a> (binaire) spécifique aux composants matériels employés (processeur, mémoire…) pour pouvoir s'<strong>exécuter</strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> La <strong>distinction</strong> entre <strong class="title">code source</strong> et <strong class="title">code exécutable</strong> est essentielle car :  </p>
+<ul>
+	<li> le <strong class="title">code source</strong> est <strong class="pros">compréhensible par les codeurs</strong>, mais <strong class="cons">non exécutable</strong> tel quel par une machine ; </li>
+
+	<li> le <strong class="title">code machine</strong> est <strong class="cons">incompréhensible par les codeurs</strong> mais il est <strong class="pros">exécutable</strong> par les machines pour lesquelles il a été produit. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> La figure ci‑dessous illustre cette distinction dans le cas du très classique programme de démonstration « <strong class="title">Hello World</strong> » codé en langage <strong>C</strong> : </p>
+	<img class="top-left" src="../img/codesSource_Machine.png">
+
+<div class="expert">	
+<p> Le contenu du <strong class="title">fichier exécutable</strong> peut être visualisé au <strong>format hexadécimal</strong> avec un <strong>éditeur de code</strong> mais il est <strong class="cons">indéchiffrable</strong> – sauf éventuellement pour un spécialiste du compilateur employé pour traduire le code source, mais au prix d'un grand effort… </p>	
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+
+<h3> Langages généralistes <em class="latin">versus</em> dédiés </h3>
+
+
+
+<div class="important">
+<ul>
+	<li> On parle de <strong class="title">langage généraliste</strong> si ce dernier permet de développer <strong class="defin">toutes sortes de programmes</strong> : applications bureautiques, logiciels de simulation, programmes de contrôle‑commande, jeux, etc. </li>
+
+	<li> Par opposition, on parle de <strong class="title">langage dédié</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_dédié" target="_BLANK">W</a> pour caractérisé un langage conçu pour développer des applications ou formater des données dans un <strong class="defin">domaine bien particulier</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> <strong class="title">Langages généralistes</strong> : <strong>C</strong>,	<strong>C++</strong>, <strong>C#</strong> (<em class="mark">C</em> <em class="english">sharp</em>), <strong>Java</strong>, <strong>Python</strong>… </li>
+
+	<li> <strong class="title">Langages dédiés</strong> : <strong>HTML/CSS/Javascript</strong>, <strong>php</strong>  (pages web), <strong>XML</strong> (fichiers bureautiques), <strong>(La)TeX</strong> (fichiers de textes), <strong>SQL</strong> (bases de données), <strong>Matlab</strong> (calcul scientifique),	<strong>R</strong> (statistiques), etc. </li>
+</ul>
+</div><!-- exemples -->
+
+<div class="remarques"><p class="remarques"></p>
+
+<ol class="remarques">
+	<li> Certains <strong class="title">langages dédiés</strong> peuvent devenir plus <strong class="defin">généralistes</strong> moyennant un composant logiciel créant un environnement d'exécution approprié. <br> 
+	<em class="remark">Exemple</em> : <strong>JavaScript</strong>, avec <strong>Node.js</strong>. </li>
+
+	<li> Un langage peut être qualifié de <strong class="title">métalangage</strong> s'il constitue une <strong class="defin">base syntaxique</strong> pour engendrer toute une <strong>famille de langages</strong>. <br>
+	<em class="remark">Exemple</em> : <strong>XML</strong> dont sont issus <em class="mark">XHTML</em>, <em class="mark">SVG</em>, <em class="mark">RSS</em>…</li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3> Langages littéraux <em class="latin">versus</em> graphiques </h3>
+
+
+
+<div class="important">
+<ul>
+	<li> On parle de  <strong class="title">langage littéral</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Littéral" target="_BLANK">W</a> si les <strong>instructions</strong> du code source sont composées exclusivement sous forme de <strong class="defin">texte</strong>. </li>
+
+	<li> On parle de <strong class="title">langage graphique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_graphique" target="_BLANK">W</a> si les <strong>instructions</strong> du code source sont présentées et saisies sous forme de <strong class="defin">schémas</strong> (boîtes, flèches, etc.) pour faciliter leur lecture et leur compréhension. </li>
+</ul>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> <strong class="title">Langages littéraux</strong> : la <strong>presque totalité</strong> des langages actuels (tous ceux cités supra). </li>
+
+	<div style="display: inline-flex; margin-left: 0.5em">
+	<div style="width: 80%; margin-right: 1em">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// "Hello World" in C++
+#include &lt;iostream&gt;
+
+int main(void) {
+  std::cout &lt;&lt; "Hello World!";
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+	</div><!-- pre -->
+
+	<div style="width: 80%; margin-right: 0.5em">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-python linenums:1">
+#"Hello World" in Python
+print("Hello, World!")
+</pre>
+<!---------- ne pas indenter ---------->
+
+	</div><!-- pre -->
+	</div><!-- display -->
+
+	<li> <strong class="title">Langages graphiques</strong> : <strong>Scratch</strong> (langage d'apprentissage par blocs), <strong>Simulink/Simscape</strong> (interfaces de modélisation multi‑physique du langage <strong>Matlab</strong>), <strong>Node‑RED</strong> (outil de développement web pour l'<em class="mark">IoT</em>), <strong>LD</strong>,
+	<strong>FBD</strong>,	<strong>SFC</strong> (langages pour automates programmables industriels)… </li>
+  
+  <img class="top-left" src="../img/codeSimscape_Nodered.png">
+</ul>
+</div><!-- exemples -->
+
+
+
+<h3 id="compileInterprete"> Langages interprétés <em class="latin">versus</em> compilés </h3>
+
+
+
+<div class="important">
+<p> <strong class="defin">Selon le langage</strong> de codage utilisé, la <strong class="title">traduction</strong> du code source en code machine nécessite un <strong>logiciel spécifique</strong> qui peut être : </p>
+<ul>
+	<li> soit un <strong class="specialLB">interpréteur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Interprète_(informatique)" target="_BLANK">W</a> – on dit aussi un <strong class="specialLB">moteur d'interprétation</strong> ; on parle alors de <strong class="defin">langage interprété</strong> ou encore de <strong class="defin">langage de script</strong> ; </li>
+
+	<li> soit un <strong class="specialLB">compilateur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Compilateur" target="_BLANK">W</a> – plus exactement une <strong class="specialLB">chaîne de compilation</strong> car il s'agit d'un ensemble de composants logiciels qui se succèdent pour produire le code machine ; on parle alors de <strong class="defin">langage compilé</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces deux types de logiciels traducteurs adoptent chacun un <strong class="title">mode opératoire très différent</strong>, ils présentent l'un par rapport à l'autre des <strong class="pros">avantages</strong> et des <strong class="cons">inconvénients</strong>.  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/interpreteur.png" height="200px" style="padding-top: 0.5em">
+	<li> un <strong class="specialLB">interpréteur</strong> traduit <strong class="defin">une par une</strong> les instructions du programmes  et les exécute à la volée <strong class="specialN">directement exécutées</strong>. Il n'y a <strong class="warning">pas d'étape intermédiaire</strong> de production d'un fichier de code machine. Le fichier source est donc forcément stocké sur la machine d'exécution. </li>
+  </div><!-- display -->
+
+	<div class="nobullet"> <em class="remark">Avantages</em> :  <strong class="pros">souplesse</strong> de programmation (on peut modifier le type des variables au fur et à mesure du code source), <strong class="pros">simplicité</strong> d'emploi, début du programme quasi immédiat… </div>
+  
+
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/compilateur.png" height="180px" style="padding-top: 0.5em">
+	<li> un <strong class="specialLB">compilateur</strong> traduit <strong class="defin">toutes</strong> les instructions d'un programme sont en code machine <strong class="warning">avant l'exécution</strong>, formant un <strong class="specialBG">fichier exécutable</strong>, indépendant du code source. C'est seulement ensuite que l'exécution du programme peut commencer. </li>
+  </div><!-- display -->
+
+	<div class="nobullet"> <em class="remark">Avantages</em> :  <strong class="pros">rapidité</strong> d’exécution (la traduction est déjà faite), <strong class="pros">fiabilité</strong> (signalement de branches mortes lors de la compilation), <strong class="pros">confidentialité</strong> du code source (on peut ne fournir que le code exécutable)… </div>
+	
+</ul>
+
+<!-- 
+<p> Pour plus de détails, on pourra consulter cette page web <a class="external" href="http://www.france-ioi.org/algo/course.php?idChapter=561&idCourse=2368" target="_BLANK"></a>. </p> -->
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> <strong class="title">Langages interprétés</strong> : <strong>Shell</strong> (<em class="mark">Windows</em>, <em class="mark">Linux</em>…), <strong>Python</strong>, <strong>Matlab</strong>,	<strong>Perl</strong>, <strong>Ruby</strong>, <strong>HTML/CSS</strong>, <strong>JavaScript</strong>, <strong>Lua</strong> … </li>
+
+	<li> <strong class="title">Langages compilés</strong> : <strong>C/C++</strong>, <strong>Ada</strong>, <strong>Fortran</strong>, <strong>Delphi</strong>,	<strong>(La)TeX</strong>… </li>
+</ul>
+</div><!-- exemples -->
+
+			
+			
+<div class="remarques" id="remarquesCompilation"><p class="remarques"></p>
+
+<ol class="remarques">
+	<li> Certes emblématique, la <strong class="specialLB">compilation</strong> n'est qu'<strong>une étape</strong> d'un <strong class="warning">processus complexe</strong>, appelée <strong class="title">chaîne de compilation</strong> (en anglais, <em class="english">tool chain</em>) faisant intervenir de <strong class="defin">nombreux composants logiciels</strong> : <strong>préprocesseur</strong>, <strong>compilateur</strong>, <strong>éditeur de liens</strong>… Son étude sera abordée dans partie <span class="partie">C4</span> du module.</li>
+
+	<li> De nombreux <strong>interpréteurs</strong> procèdent par en fait par <strong class="title">compilation à la volée</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Compilation_à_la_volée" target="_BLANK">W</a> de blocs d'instructions dans un langage intermédiaire appelé <strong>bytecode</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bytecode" target="_BLANK">W</a>, qui est ensuite interprété pour exécuter le programme. C'est souvent le cas pour les langages <em class="mark">Python</em>, <em class="mark">JavaScript</em>, <em class="mark">Ruby</em>… </li>
+
+	<li> Certains langages (<em class="mark">Java</em>, <em class="mark">C♯</em>…) sont <strong>compilés à la volée</strong> avant d'être interprétés sur une <strong class="title">machine virtuelle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Machine_virtuelle" target="_BLANK">W</a> pour l'exécution proprement dite. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<div class="expert">
+<h4> Vocabulaire technique </h4>
+
+
+<p> Pour un codeur, la connaissance de quelques <strong class="title">termes anglais</strong> permet de mieux se familiariser avec l'univers de la programmation.  </p>
+
+<ul>
+	<li> Le <strong class="specialLB">résultat de la compilation</strong> d'un code source est appelé <strong class="defin">build</strong> ; ainsi : </li>
+	<ul>
+		<li> on trouve souvent un <strong>bouton </strong>ou <strong>menu</strong> « <code>Build</code> » dans l'interface des logiciels de développement ; </li>
+
+		<li> on parle de <strong>nightly build</strong> pour désigner une toute nouvelle version d'un logiciel, peu ou pas encore testée. </li>
+	</ul>
+
+	<li> La <strong class="specialLB">phase d'exécution</strong> d'un programme est appelée <strong class="defin">run time</strong> (souvent orthographié « <em class="english">runtime</em> »). </li>
+</ul>
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="paradigmes"> Paradigmes (ou styles) de programmation </h2>
+
+
+
+<div class="important">
+<p> En programmation informatique, on parle de <strong class="title">paradigme</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Paradigme_(programmation)" target="_BLANK">W</a> pour désigner telle ou telle <strong class="defin">méthode générale de codage</strong> des instructions qui constitue un <strong>style conceptuel</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Au cours des trois dernières décennies et avec l'essor des technologies numériques, les <strong class="specialLB">pratiques de la programmation</strong> ont <strong class="warning">beaucoup évolué</strong>. </p>
+
+<p> Le <strong class="title">choix</strong> d'un <strong>langage</strong> n'impose pas forcément un paradigme de programmation particulier. Toutefois, le codage est <strong class="pros">grandement facilité</strong> si le langage a été conçu pour le paradigme adopté. </p>
+
+<p> Partant de ce constat, la plupart des <strong class="specialLB">langages récents</strong> sont <strong class="pros">multi‑paradigmes</strong> pour s'adapter à toutes sortes de contextes de développement. </p>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> Le mot « <strong>paradigme</strong> » est issu du domaine de la grammaire. Dans son <strong class="title">sens original</strong>, il désigne un <strong class="defin">modèle</strong> pour une <strong>conjugaison</strong> ou une <strong>déclinaison</strong>. Par exemple, « aimer » est souvent utilisé comme paradigme de la conjugaison des verbes du 1<sup>er</sup> groupe. </p>
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h3 id="progImperative"> Programmation impérative <em class="latin">versus</em> déclarative </h3>
+
+
+
+<div class="important">
+<ul>
+	<li> On parle de <strong class="title">programmation impérative</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Programmation_impérative" target="_BLANK">W</a> lorsqu'on peut <strong class="defin">affecter directement des valeurs aux variables</strong>. Les architectures matérielles usuelles des machines (processeur et mémoire en liaison directe par un bus) sont conçues pour ce paradigme qui est de loin <strong class="pros">le plus couramment adopté</strong>. </li>
+
+	<li> Dans le cas contraire, si l'opération d'<strong class="defin">affectation directe</strong> n'est <strong class="warning">pas employée</strong>, on parle de <strong class="title">programmation déclarative</strong>, et pour certains langages, de programmation <strong class="title">fonctionnelle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Programmation_fonctionnelle" target="_BLANK">W</a>, dans la mesure où un programme est alors constitué d'un ensemble de déclarations et d'appels de fonctions. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> La <strong class="title">programmation impérative</strong> est très intuitive mais elle présente un <strong class="cons">inconvénient</strong> : elle rend <strong class="warning">impossible</strong> toute <strong>vérification mathématique du bon fonctionnement</strong> d'un programme. En effet, l'affectation d'une valeur à une variable écrase irréversiblement sa valeur précédente et empêche ainsi de mener un raisonnement rétrospectif pour déterminer l'état précédent avant une affectation. </p>	
+
+
+<p> A contrario, La <strong class="title">programmation</strong> <strong class="title">fonctionnelle</strong> est réputée <strong class="pros">très fiable</strong>  mais elle est <strong class="cons">intellectuellement complexe</strong>, et pour le moment <strong class="warning">beaucoup moins employée</strong> que la programmation impérative, sauf dans certains contextes spécifiques (recherche mathématique et informatique…) </p>
+</div><!-- complementExpert -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> <strong class="title">Langages impératifs</strong> : la <strong class="pros">très grande majorité</strong> des langages (<strong>C</strong>, <strong>C++</strong>, <strong>Python</strong>, etc.). </li>
+
+	<li> <strong class="title">Langages déclaratifs</strong> : <strong>Lisp</strong>, <strong>CaML</strong>, <strong>FBD</strong> (langages dits <em>fonctionnels</em>), <strong>Prolog</strong> (programmation logique)… </li>
+</ul>
+</div><!-- exemples -->
+</div><!-- expert -->
+
+
+<h3> Programmation séquentielle, structurée et procédurale </h3>
+
+
+
+<h4 id="prgSequentielle"> Programmation séquentielle </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/progSequentielle.png" width="150px">
+<p> On parle de <strong class="title">programmation séquentielle</strong> lorsque les instructions sont codées l'une après l'autre dans leur <strong class="defin">ordre d'exécution linéaire</strong>, du début à la fin du programme. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il est très rare qu'un programme soit purement séquentiel. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Dans l'extrait de programme codé en <strong>C++</strong> pour <strong class="Arduino">cartes Arduino</strong> ci‑dessous, on configure séquentiellement<strong> 4 broches en sortie</strong> (n° 2 à 5) pour piloter des <strong>leds</strong> (cf. chap. C2‑VII <a class="next" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#configurationBroche" target="_BLANK"></a>). Cette solution <strong class="cons">lourdement répétitive</strong> est évidemment déconseillée. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+void setup() {
+  pinMode(2, OUTPUT);
+  digitalWrite(2, LOW);
+  pinMode(3, OUTPUT);
+  digitalWrite(3, LOW);
+  pinMode(4, OUTPUT);
+  digitalWrite(4, LOW);
+  pinMode(5, OUTPUT);
+  digitalWrite(5, LOW);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<h4 id="prgStructuree"> Programmation structurée </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/progStructuree.png" width="150px">
+<p> On parle de <strong class="title">programmation structurée</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Programmation_structurée" target="_BLANK">W</a> lorsque les instructions sont codées avec des structures de contrôle d'<strong class="defin">embranchements</strong> et des <strong class="defin">répétitions</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ce style de programmation permet de <strong class="defin">factoriser le code source</strong>, c'est‑à‑dire fusionner plusieurs instructions similaires en une seule, plus générique. C'est une première étape décisive dans la recherche de <strong class="pros">modularité</strong> (cf. infra <a class="infra" href="Cc1-1_langagesGeneralites.html#modularite"></a>). </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Dans le code ci‑dessous, les instructions de configuration des broches du <strong>programme précédent</strong> sont <strong class="defin">factorisées</strong> à l'aide d'une structure de contrôle <code class="prettyprint lang-c">for</code> (cf. chap. C2‑VII <a class="next" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>). Cette solution est déjà bien <strong class="pros">plus satisfaisante</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+void setup() {
+  for (int ledPin = 2; ledPin <= 5; ledPin++) {
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, LOW);
+  }
+}
+
+void loop() {
+//...
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<h4 id="prgProcedurale"> Programmation procédurale </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/progProcedurale.png" width="300px">
+<p> La <strong class="title">programmation procédurale</strong>  <a class="external" href="https://fr.wikipedia.org/wiki/Programmation_procédurale" target="_BLANK">W</a> consiste à <strong class="defin">décomposer</strong> le code en <strong>procédures</strong> aussi <strong class="pros">élémentaires que possible</strong> qui sont appelées par le <strong class="specialLB">programme principal</strong> et définies séparément de ce dernier. </p>
+
+<p> Plutôt que de <strong>« procédure »</strong>, on parle aussi de <strong class="specialLB">fonction</strong> (notamment en langages <strong>C</strong> et <strong>C++</strong>) ou encore de <strong class="specialLB">routine</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Routine_(informatique)" target="_BLANK">W</a> (en anglais <em class="english">routine</em>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>	La <strong class="title">programmation procédurale</strong> est un paradigme décisif dans la recherche de <strong class="defin">modularité</strong> qui consiste à produire du <strong class="pros">code réutilisable</strong> dans toutes sortes de programmes. En effet, en termes de coûts de développement, il est évidemment bien plus efficace de constituer des <strong class="specialLB">modules de bibliothèque</strong> regroupant les routines élémentaires d'usage général (fonctions mathématiques, fonctions d'entrées‑sorties, etc.) plutôt que de devoir les recoder dans chaque programme (cf. infra <a class="infra" href="Cc1-1_langagesGeneralites.html#modularite"></a>). </p>
+
+<p> <strong class="title">Tous les langages</strong> permettent la programmation procédurale – et particulièrement <strong class="specialLB">C</strong> et <strong class="specialLB">C++</strong> qui ont été conçus dans ce but, avec un <strong>noyau très réduit</strong> autour duquel peuvent s'agréger, selon les besoins, de <strong class="pros">vastes bibliothèques</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans le code ci‑dessous, les instructions de configuration des broches du <strong>programme précédent</strong> sont <strong class="defin">déportées dans une fonction</strong> séparée, spécifiquement codée plus loin dans le code. 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+void setup() {
+  configLedPins();
+}
+
+void loop() {
+//...
+}
+
+void configLedPins() {
+  for (int ledPin = 2; ledPin <= 5; ledPin++) {
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, LOW);
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> L'<strong class="pros">intérêt</strong> de cette solution procédurale devient manifeste lorsque la fonction <code class="prettyprint lang-c">setup</code> doit mettre en œuvre un <strong>grand nombre de tâches</strong>. Seuls les appels de fonctions de ces tâches sont alors codés dans <code class="prettyprint lang-c">setup</code>, ce qui rend cette fonction plus facile à comprendre (un peu comme une table des matières dans un livre).  </p>
+
+<p class="square"> Sur la base de cet exemple, on peut également illustrer ce que serait une <strong class="title">approche modulaire</strong>. En effet, dans la fonction <code class="prettyprint lang-c">configLedPins</code> ci‑dessous, les <strong>numéros des broches</strong> à configurer sont codés <strong class="cons">dans le corps de la fonction</strong>. Cela n'est pas idéal dans la mesure où pour chaque programme, les broches utilisées sont différentes.  </p>
+
+<p> Pour y remédier, il suffit de doter cette fonction de <strong class="defin">deux arguments</strong> pour coder les numéros de la <strong>première</strong> et de la <strong>dernière broche</strong> à configurer, comme ci‑dessous :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+void setup() {
+  configLedPins(2, 5);
+}
+
+void loop() {
+//...
+}
+
+void configLedPins(int firstLedPin, int lastLedPin) {
+  for (int ledPin = firstLedPin; ledPin <= lastLedPin; ledPin++) {
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, LOW);
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Dans cet exemple, les <strong>numéros des broches</strong> <code class="prettyprint lang-c">2</code> et <code class="prettyprint lang-c">5</code> sont passés comme valeur des arguments dans l'<strong class="specialO">appel de la fonction</strong> <code class="prettyprint lang-c">configLedPins</code> et non plus dans son corps, qui devient <strong class="pros">polyvalent</strong>, donc susceptible d'être déporté dans un <strong class="title">module de bibliothèque</strong>.  </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3 id="POO"> Programmation orientée objet </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/progOrienteeObjet.png" width="300px">
+<p> La <strong>programmation</strong> <strong class="title">orientée objet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Programmation_orientée_objet" target="_BLANK">W</a> – en abrégé <strong><em class="sigle">POO</em></strong> – consiste à <strong class="defin">intégrer dans les déclarations de types</strong> de variables les <strong>fonctions</strong> qui permettent d'opérer sur elles : </p>
+<ul>
+	<li> plutôt que de <strong>types</strong>, on parle alors de <strong class="specialLB">classes</strong> ; </li>
+
+	<li> plutôt que de <strong>fonctions</strong>, on parle alors de <strong class="specialLB">méthodes</strong>.</li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p>	L'avènement de la <strong class="title">programmation orientée objet</strong>, au début des années 1990, était motivée par la recherche d'une <strong class="defin">plus grande modularité</strong> que celle apportée par la programmation procédurale, en réponse à la <strong>complexité</strong> grandissante des programmes. Elle a constitué une véritable <strong class="pros">révolution</strong> (au sens positif du terme) dans le monde de l'informatique, avec le développement de nombreux <strong>nouveaux langages</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+	<ul>
+		<li> Les langages <strong>C++</strong>, <strong>C♯</strong>, <strong>Java</strong>, <strong>JavaScript</strong>, <strong>Python</strong>… sont <strong class="pros">nativement conçus</strong> pour la <strong class="title"><em class="sigle">POO</em></strong>.</li>
+
+		<li> Le <strong>framework</strong> <strong class="Arduino">Arduino</strong>, codé en <strong class="defin">C++</strong>, utilise la <strong class="title"><em class="sigle">POO</em></strong> dans une large mesure. </li>
+	</ul>
+</div><!-- exemples -->
+
+<!-- exemple de code C++ Arduino pour les led -->
+
+
+<div class="expert">
+<h3> Programmation récursive </h3>
+
+
+
+<div class="important">
+<p> Un <strong>programme</strong> est dit <strong class="title">récursif</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Algorithme_récursif" target="_BLANK">W</a> s’il emploie des <strong>fonctions</strong> qui <strong class="defin">s’appellent elles‑mêmes</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">récursivité</strong> est un <strong>aspect essentiel</strong> de la <strong class="defin">programmation fonctionnelle</strong>, mais elle ne se limite pas à cette catégorie de langages. La plupart des langages – notamment <strong class="specialLB">C</strong> et <strong class="specialLB">C++</strong> – <strong class="pros">autorisent la récursivité</strong>. </p>
+
+<p> Cette pratique s'avère particulièrement adaptée aux <strong>calculs scientifiques</strong> et aux <strong>opérations répétitives</strong> car elle peut simplifier grandement l'écriture du code source. Cependant, elle reste modérément employée dans les applications industrielles en raison de sa <strong class="cons">difficulté conceptuelle</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Une <strong>illustration classique</strong> de la récursivité réside dans le codage de la <strong class="title">fonction factorielle</strong> <strong>n!</strong> = 1 × 2 × … × <var>n</var>. </p>
+<ul>
+	<li> Le code <strong>à gauche</strong> est une solution <strong>non récursif</strong> où le produit final est déterminé par une boucle <code class="prettyprint lang-c">for</code> comme la définition ci‑dessus ; </li>
+
+	<li> Le code <strong>à droite</strong> est <strong class="title">récursif</strong> puisque la fonction <code class="prettyprint lang-c">factorial</code> s'appelle elle‑même. </li>
+</ul>
+
+<div style="display: inline-flex; margin-left: 0.5em">
+<div style="width: 80%; margin-right: 1em;"> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+// Non recursive code
+int factorial(int n) {
+   int factor = 1;
+   for (int i = 1; i <= n; i++)
+      factor *= i;
+   return factor;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- pre -->
+
+<div style="width: 80%; margin-right: 0.5em;">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+// Recursive code
+int factorial(int n) {
+  if (n == 1) 
+    return 1;
+  else 
+    return n * factorial(n - 1);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- pre -->
+</div><!-- display -->
+</div><!-- exemple -->
+
+
+<!-- expert -->
+<h3> Programmation parallèle </h3>
+
+
+<div class="important">
+<p> On parle de <strong class="title">programmation parallèle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Parallélisme_(informatique)" target="_BLANK">W</a> lorsque les instructions sont codées dans l'objectif d'<strong class="defin">exécutions simultanées</strong>. </p>
+
+<p> Par anglicisme, on parle aussi de <strong>programmation</strong> <strong class="title">concurrente</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Programmation_concurrente" target="_BLANK">W</a>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>	Sans entrer dans les détails matériels, selon que la machine employée est mono ou multiprocesseur et la façon dont le système d'exploitation gère ses ressources (<em class="sigle">ALU</em>, mémoire…) pour exécuter un programme, la programmation parallèle sous‑tend des <strong class="cons">concepts complexes</strong> de <strong>processus</strong> (<em class="english">thread</em>), de <strong>synchronisation</strong>, de <strong>partage de ressources</strong>, etc. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemples"> <strong class="title">Certains langages</strong> sont <strong class="pros">particulièrement adaptés</strong> pour mettre en œuvre des programmes parallèles : <strong>Java</strong>, <strong>Ada</strong>, <strong>SFC</strong>… </p>
+</div><!-- exemples -->
+
+
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="outilsLogiciels"> Outils logiciels de développement </h2>
+
+
+<h3 id="codeEditor"> Éditeurs de code </h3>
+
+<div class="important">
+<p> En principe, tout <strong>programme source</strong> peut être créé avec un <strong class="specialLB">éditeur de texte</strong> <a class="external" href="https://fr.wikipedia.org/wiki/éditeur_de_texte" target="_BLANK">W</a> qui est <strong class="defin">adapté à la programmation</strong>. On parle alors d'<strong class="title">éditeur de code</strong>. </p>
+
+<p> C'est un logiciel dont les fonctions principales sont la <strong>saisie</strong> du code et son <strong>enregistrement</strong> dans des fichiers. Il peut éventuellement être complété par des outils extensifs de développement – on dit <strong class="specialLB">plugin</strong> – pour tel ou tel langage. </p>
+</div><!-- important -->
+
+	
+<div class="complement">
+<p> Un <strong class="title">éditeur de code</strong> est bien adapté :</p>
+<ul>
+	<li> au développement de <strong>programmes interprétés</strong>, comme par exemple :	</li>		
+		<ul>
+			<li> les <strong>pages web</strong>, à exécuter directement dans un navigateur ; </li>
+
+			<li> les <strong>scripts de commande</strong>, à exécuter directement en ligne (<em class="mark">shell</em>)… </li>
+		</ul>
+
+	<li> au développement de <strong>« petits » programmes compilés</strong>, typiquement ceux que l'on réalise au début d'un cursus d'apprentissage. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> <em class="mark">Sublime Text</em>, <em class="mark">Komodo</em>, <em class="mark">Atom</em>, <em class="mark">NotePad++</em>, <em class="mark">Vim</em>, <em class="mark">Emacs</em>, <em class="mark">TextWrangler</em>…  </p>
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Un <strong class="title">éditeur de code</strong> peut également servir d'<strong class="defin">éditeur alternatif</strong> à celui d'un <strong>autre environnement</strong>, soit en procédant par copier/coller de l'un à l'autre, soit en activant une option idoine autorisant l'emploi d'un <strong>éditeur externe</strong>. </p>
+
+<p> Un tel choix est motivé par : </p>
+
+<ul>
+	<li> une <strong class="pros">meilleure ergonomie</strong> apportée par diverses fonctionnalités pour faciliter la saisie et la mise au point du programme : mode sombre, coloration syntaxique, auto‑indentation, auto‑complétion, etc. </li>
+
+	<li> mais il peut aussi en résulter une <strong class="cons">lourdeur</strong> et une <strong class="cons">complexité</strong> accentuées, qui impactent l'espace disque occupé, le temps de démarrage, la disponibilité des ressources du système, les difficultés de prise en main… </li>
+</ul>
+</div><!-- remarques -->
+
+
+<h4> Tests des programmes en ligne de commande </h4>
+
+
+<div class="complement">
+<p> Lorsque l'on conçoit des programmes avec un <strong>simple éditeur de code</strong>, les indispensables <strong class="title">tests de bon fonctionnement</strong> doivent être menés avec des <strong class="defin">moyens externes</strong> à l'<strong>éditeur de code</strong> : </p>
+
+<ul>
+	<li> soit dans une <strong>console d'exécution</strong>, c'est‑à‑dire une fenêtre émulant dans l'environnement d'exploitation de l'ordinateur un <em>terminal en ligne de commande</em>, et à condition d'avoir installé préalablement une <strong class="specialLB">chaîne de compilation</strong> ou un <strong class="specialLB">moteur d'interprétation</strong> ; </li>
+
+	<li> soit en copiant‑collant le code source dans un <strong>environnement de programmation en ligne</strong> (cf. infra <a class="infra" href="Cc1-1_langagesGeneralites.html#envOnLine"></a>). </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> Dans le cas d'un programme source de <strong class="defin">page web</strong> (<strong>HTML/CSS/JS</strong> ou <strong>php</strong>), les <strong class="title">tests</strong> peuvent être effectués directement dans un <strong>navigateur</strong> pour le côté client et éventuellement via un <strong>serveur virtuel</strong> (comme par exemple, <em class="mark"><em class="sigle">WAMP</em> server</em>) pour simuler le côté serveur. </p>
+</p>
+</div><!-- remarque -->
+
+
+
+<h3 id="ide"> Environnements intégrés de développement </h3>
+
+
+
+<div class="important">
+<p> Pour développer des <strong>programmes complexes</strong>, un <strong class="title">environnement intégré de développement</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Environnement_de_développement" target="_BLANK">W</a> (<strong><em class="sigle">EDI</em></strong>, en anglais <strong><em class="sigle">IDE</em></strong> pour <em class="english">integrated development environment</em>) est <strong class="warning">indispensable</strong>. </p>
+
+<p> C’est un <strong class="defin">logiciel</strong> qui intègre ou synchronise : </p>
+
+<ul>
+	<li> un <strong>éditeur de code</strong>, avec des fonctionnalités souvent très avancées ; </li>
+
+	<li> tous les logiciels des <strong>chaînes de production du code exécutable</strong> – compilateurs, éditeurs de lien, débogueurs, etc. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement"> <p> Les <strong class="title"><em class="sigle">IDE</em></strong> sont des logiciels souvent <strong class="warning">complexes</strong> à <strong>installer</strong>, <strong>paramétrer</strong> et <strong>utiliser</strong>. Leur prise en main nécessite un temps d'investissement conséquent. </p>
+
+<p>	Comme pour les éditeurs de code, chaque <strong class="title"><em class="sigle">IDE</em></strong> a ses <strong class="pros">avantages</strong> et ses <strong class="cons">inconvénients</strong>. Leur perception varie au fur et mesure de l'expérience qu'on acquiert et dépend du contexte d'utilisation, professionnel ou occasionnel. </p>
+
+<p> Certains <strong><em class="sigle">IDE</em></strong> sont généralistes, d'autres spécialisés. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Pour les langages <strong class="specialLB">C</strong> et <strong class="specialLB">C++</strong>, on peut employer des <strong class="title"><em class="sigle">IDE</em></strong> comme <strong >Code::Blocks</strong> (cf. chap. C1‑II <a class="next" href="Cc1-2_langagesCetCpp.html#CodeBlocks" target="_BLANK"></a>), <strong>Eclipse</strong>, <strong>Qt</strong>, <strong>VisualStudio</strong> (<em class="mark">Microsoft</em>). Certains sont <strong class="pros">polyvalents</strong>, ils peuvent convenir pour d'autres langages (<em class="mark">Ada</em>, <em class="mark">Fortran</em>…) et/ou pour des <strong class="defin">applications spécifiques</strong> comme la programmation des cartes à microcontrôleurs. </p>
+
+<p> Le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> (cf. chap. C1‑III <a class="next" href="Cc1-3_ArduinoTinkercad.html#ArduinoIDE" target="_BLANK"></a>) est quant à lui exclusivement <strong class="defin">spécifique</strong> pour la programmation des <strong class="specialLB">cartes à microcontrôleurs</strong> compatibles avec le <strong>framework Arduino</strong>. </p>
+</div><!-- exemples -->
+
+
+
+<h3 id="envOnLine"> Environnements de programmation en ligne </h3>
+
+
+
+<div class="important">
+<p> Pour réaliser et tester des <strong>petits programmes</strong>, on peut aussi recourir à une <strong class="title">application en ligne</strong> s'exécutant dans une <strong class="defin">page web</strong> comprenant typiquement : </p>
+<ul>
+	<li> un cadre émulant un <strong>éditeur de code</strong> ; </li>
+
+	<li> un cadre émulant une <strong>console d'exécution</strong> pour compiler (ou interpréter) et exécuter sur un <strong>serveur</strong> distant le code source saisi dans le cadre d'édition. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Certaines <strong class="title">applications en ligne</strong> sont de <strong class="defin">petits utilitaires</strong> de test, d'autres constituent un <strong class="pros">véritable environnement</strong> avec un <strong>espace de stockage</strong> réservé à l'utilisateur (<em class="english">cloud</em>), la possibilité de gérer des <strong>bibliothèques</strong>, etc. </p>
+
+<p> Par rapport à un éditeur de code ou un environnement intégré, une <strong class="title">application en ligne</strong> présente évidemment des avantages en termes de <strong class="pros">facilité d'emploi</strong> (pas d'installation) et de légèreté, au prix de <strong class="cons">performances bien moindres</strong> en ergonomie, puissance de traitement, vitesse, disponibilité, etc. </p>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> Pour la <strong class="specialLB">programmation généraliste</strong> dans divers langages, on peut employer notamment un <strong class="title">environnement en ligne</strong> comme <strong>Jdoodle</strong> <a class="external" href="https://www.jdoodle.com/" target="_BLANK"></a> ou <strong>OnLineGDB</strong> (cf. chap. C1‑II <a class="next" href="Cc1-2_langagesCetCpp.html#Onlinegdb" target="_BLANK"></a>). </p>
+
+<p> Pour la programmation des <strong class="specialLB">cartes à microcontrôleurs</strong> compatibles avec le <strong>framework Arduino</strong>, on peut employer <strong class="Arduino">Arduino Web Editor</strong>. Il existe également <strong class="Tinkercad">Tinkercad</strong> (cf. chap. C1‑III <a class="next" href="Cc1-3_ArduinoTinkercad.html#Tinkercad" target="_BLANK"></a>) qui est un <strong>simulateur</strong> de circuits électroniques prototypés, dans lesquels on peut notamment placer des cartes <em class="mark">Arduino Uno</em>.  </p>
+</div><!-- exemples -->
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="enjeux"> Enjeux du génie logiciel </h2>
+
+
+<div class="complement">
+<p> Le <strong class="title">foisonnement</strong> des <strong>langages</strong> et des <strong>paradigmes</strong> de programmation n'est pas le fruit du hasard. Il répond à : </p>
+<ul>
+	<li> la <strong class="warning">complexité grandissante</strong> des programmes qu'exigent les besoins techniques de nos sociétés ; </li>
+
+	<li> l'extrême <strong class="warning">difficulté</strong> qu'il y a à garantir le <strong>bon fonctionnement</strong> de ces programmes complexes. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> Le terme <strong class="title">génie logiciel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Génie_logiciel" target="_BLANK">W</a>  désigne la <strong class="defin">science des méthodes de développement des logiciels</strong>. </p>
+
+<p> Ses <strong class="title">enjeux</strong> – c'est‑à‑dire les grandes <strong>thématiques</strong> qui font l'objet de débats, de compétitions, d'évolutions – sont <strong class="warning">nombreux</strong>. Pour commencer, on peut considérer les trois suivants : <strong class="specialLB">lisibilité</strong>, <strong class="specialLB">modularité</strong>, <strong class="specialLB">portabilité</strong> . </p>
+</div><!-- important -->
+
+
+
+<h3 id="lisibilite"> Lisibilité </h3>
+
+
+<div class="important">
+<p> Un programme est toujours <strong class="defin">beaucoup plus <strong class="title">lu</strong> qu'il n'est</strong> <strong class="cons">écrit</strong> : </p>
+
+<ul>
+	<li> même en <strong>phase de conception</strong>, le <strong class="specialLB">codeur</strong> lui-même passe énormément de temps à <strong class="specialLB">relire ses propres instructions</strong> ; </li>
+
+	<li> s'ajoute à cela le temps de lecture des <strong class="title">collaborateurs</strong> sur toute la <strong>durée de vie du logiciel</strong>, dont la <strong>maintenance</strong>.</li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">bonne lisibilité</strong> d'un programme est donc un <strong class="warning">enjeu majeur</strong>. Elle est impactée par : </p>
+
+<ul>
+	<li> les <strong>détails du code</strong> (choix des noms des variables, commentaires), auxquels le lecteur est confronté dès qu'il commence à lire ; </li>
+
+	<li> mais aussi par la <strong>structure du programme</strong> (algorithme, méthode formelle sous-jacente), sur laquelle le lecteur va nécessairement tenter de prendre du recul pour comprendre.  </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Au delà des enjeux spécifiques de rapidité ou d'économie de mémoire, la bonne lisibilité est à privilégier sur les solutions astucieuses et originales car la complexité de ces dernières peut <strong class="cons">impacter</strong> <strong class="defin">la fiabilité</strong> de l'exécution. Souvent, c'est par <strong class="warning">difficultés de compréhension</strong> que les codeurs échouent à détecter des <strong>erreurs insidieuses</strong>.  </p>
+
+
+<p> Les <strong class="pros">règles de bonne pratiques</strong>, notamment en matière de lisibilité, sont exposées au chapitre C2‑IX <a class="next" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="modularite"> Modularité  </h3>
+
+
+
+<div class="complement">
+<p> Le plus souvent, une <strong class="title">application commercialisée</strong> compte au bas mot <strong>plusieurs milliers de lignes de code</strong>, nombre qui peut aller jusqu'aux <strong class="warning">millions</strong> (voire même le milliard pour les plus gros logiciels ! <a class="external" href="https://www.1min30.com/developpement-web/combien-de-lignes-de-code-par-application-infographie-7627" target="_BLANK"></a>) Aucun programmeur ne peut maîtriser à lui seul un tel contenu. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> La « réponse » au gigantisme des programmes est la <strong class="title">modularité</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Programmation_modulaire" target="_BLANK">W</a> qui, pour aboutir à des <strong class="defin">composants logiciels réutilisables</strong>,  commence avec la <strong class="specialLB">programmation procédurale</strong> et s'affine grâce à la <strong class="specialLB">programmation orientée objet</strong> (cf. supra <a class="supra" href="Cc1-1_langagesGeneralites.html#POO"></a>) </p>
+
+<p> La recherche de modularité ne repose pas seulement sur la constitution de <strong class="defin">bibliothèques de fonctions</strong>, mais aussi sur une <strong class="pros">bonne documentation</strong> (détail des en‑tête de fonctions, exemples d'emploi, etc.) qui facilite grandement l'exploitation des composants modulaires. </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Les <strong class="title">notions clefs</strong> de la modularité (fonctions, classes, fichiers d'en‑tête, etc.) et les <strong class="title">techniques de programmation</strong> qu'ils exigent sont étudiées dans la partie <span class="partie">C4</span> du module. Mais dès le début de l'apprentissage, il faut mettre en place les <strong class="pros">bonnes habitudes</strong> de <strong>factorisation du code</strong> par un emploi pertinent des structures de contrôles, exposées dès le chapitre C2‑V <a class="next" href="../C2-ElementsLangage/Cc2-5_structuresControle.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="portabilite"> Portabilité  </h3>
+
+
+
+<div class="important">
+<p> Tout programme s'exécute nécessairement dans un <strong>environnement informatique</strong> donné (machine, système d'exploitation, navigateur…). La <strong class="title">portabilité</strong> est l'aptitude d'un programme à <strong>bien fonctionner</strong> <strong class="defin">quel que soit l'environnement</strong> matériel et logiciel où dans lequel il est exécuté <a class="external" href="https://fr.wikipedia.org/wiki/Portabilité_(informatique)" target="_BLANK">W</a>. </p>
+
+<p> Et on parle de <strong class="title">portage</strong> pour désigner les modifications entreprises pour faire fonctionner un programme existant dans un <strong>nouvel environnement</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> La <strong>mondialisation</strong> des technologies numériques et l'essor des <strong>systèmes mobiles</strong> ou « intelligents » font de la <strong class="title">portabilité</strong> un <strong class="warning">enjeu majeur</strong>, auquel l'évolution des langages s'efforce de répondre (normes, bibliothèques standards, machines virtuelles, etc.). </p>
+</div><!-- complement -->
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

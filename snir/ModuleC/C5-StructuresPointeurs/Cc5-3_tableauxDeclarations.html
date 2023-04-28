@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="5"
+  data-pagenumber="III"
+  data-pageState="OK"
+  data-pageheadtitle="Tableaux déclaration"
+  data-pagefulltitle="Les tableaux  –  déclaration et identification"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<!-- ajouter une figure avec du code bool led1_state = HIGH; etc. barré -->
+
+<div class="exergue">
+<p class="square"> Lorsque se présentent des <strong class="title">données en série</strong>, il est <strong class="cons">fastidieux</strong> de les <strong>déclarer individuellement</strong>. De plus, si l'on emploie une <strong class="specialLB">numérotation dans les identificateurs</strong> de ces données, cette numérotation reste <strong class="cons">inexploitable</strong> dans le code. Par exemple, pour mémoriser les valeurs d'état d'un <strong>ensemble de led</strong> reliées à un port d'entrée‑sortie d'une carte à microcontrôleur, il serait <strong class="cons">inefficace</strong> de les déclarer <code>led_1_state</code>, <code>led_2_state</code>, etc. On ne pourrait pas utiliser les numéros de ces identificateurs comme indice dans une boucle de répétition. </p>
+
+<div style="display: inline-block;"> 
+  <img class="top-right" src="../img/bargraphe.png" width="200px" style="margin-top: 0.2em">
+<p> Dans le sujet de TP nº C3‑1 <a class="previous" href="../C3-Numeration/Ctp3-1_bargraphe.html" target="_BLANK"></a>, on a vu qu'il était possible d'utiliser un <strong class="specialLB">mot binaire</strong> (implémenté en <em class="mark">Arduino</em> par le type <code>byte</code> ou <code>word</code>) pour constituer une <strong>série de bits</strong> associés dans une même variable (chaque bit représentant l'état d'une led). Toutefois, cette technique de codage souffre de <strong class="cons">deux limites</strong> : d'une part les données doivent être forcément binaires, d'autres part leur nombre doit rester très limité (8 avec un mot de type <code>byte</code>, 16 avec un mot de type <code>word</code>…). </p>
+</div><!-- display -->
+
+
+  
+<p class="square"> La notion de <strong class="title">tableau</strong> permet justement de <strong class="pros">pallier ces limites</strong> en associant à un <strong class="specialN">identificateur</strong> un <strong class="defin">indice</strong>, c'est‑à‑dire un nombre qui code un <strong>numéro d'ordre</strong> de donnée. </p>
+
+<div style="display: inline-block;"> 
+  <img class="top-right" src="../img/exTableauLed.png" width="300px" style="margin-top: 0.2em">
+<p> Ainsi, pour mémoriser l'état d'une <strong>série de led</strong>, on peut déclarer : <br>
+<span class="inline"> 
+  <code class="prettyprint lang-c">bool ledState[8] = {LOW};</code>
+</span> <br>
+et ainsi les expressions <code class="prettyprint lang-c">ledState[0]</code>, <code class="prettyprint lang-c">ledState[1]</code>, etc. permettent de coder respectivement l'état des <strong>led nº 0</strong>, <strong>nº 1</strong>, etc. </p>
+
+<p> Avec une telle structure de données, il devient <strong class="pros">possible</strong> de coder une <strong>boucle répétitive</strong> pour lire ou écrire les valeurs dans ce tableau, en utilisant une expression générique de la forme <code class="prettyprint lang-c">ledState[<span class="nocode"><strong class="defin">i</strong></span>]</code>. </p>
+</div><!-- display -->
+
+<p class="square"> Plus généralement, un <strong class="title">tableau</strong> est donc une donnée d'un <strong class="specialG">type structuré</strong> qui permet d'<strong>organiser en série(s)</strong> des <strong class="defin">données homogènes</strong> – c'est‑à‑dire de <strong class="specialG">même type</strong> – sachant que : </p>
+
+<ul>
+  <li> a priori, on peut stocker dans un tableau une <strong class="pros">quantité quasi‑illimitée</strong> de données, mais bien entendu compatible avec la taille mémoire de la machine cible ; </li>
+
+  <li> l'organisation en série(s) peut être éventuellement structurée sur <strong class="pros">plusieurs dimensions</strong>  – d'où l'emploi du terme « série(s) » potentiellement au pluriel ; </li>
+
+  <li> les données stockées peuvent être de <strong class="pros">n'importe quel type</strong> (entier, décimal, pointeur, et même structuré…) ; </li>
+</ul>
+
+<p> Les <strong class="title">tableaux</strong> constituent des structures de données <strong class="defin">très employées</strong> en programmation. La maîtrise de leur <strong>déclaration</strong> et de leur <strong>identification</strong>, ainsi que l'<strong>accès</strong> en lecture et écriture à leurs éléments, est <strong class="warning">indispensable à tout codeur</strong>, fût-il débutant. </p>
+
+<p class="square">En langages <strong>C</strong> et <strong>C++</strong>, la notion de <strong class="title">tableau</strong> est intimement liée à celle de <strong class="defin">pointeur</strong> avec des <strong class="warning">subtilités</strong> qui peuvent sembler déroutantes au premier abord. Pour rester accessible au débutant, ce chapitre : </p>
+
+<ul>
+  <li> se limite à présenter seulement la <strong class="specialLB">déclaration</strong> d'un tableau, son <strong class="specialLB">identification</strong> dans les expressions ainsi que celle de ses <strong>éléments</strong> ; </li>
+
+  <li> et commence par considérer le cas des <strong>tableaux</strong> <strong class="specialLB">unidimensionnels</strong> avant d'aborder celui plus général des tableaux <strong class="specialLB">multidimensionnels</strong>. </li>
+</ul>
+
+<p> Quant aux diverses techniques de manipulation des tableaux, elles seront abordées dans le chapitre suivant (C5‑IV). </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Tableaux unidimensionnels </h2>
+
+
+<div class="expert">
+<p> Dans divers langages de programmation (<em class="mark">Pascal</em>, <em class="mark">Delphi</em>, <em class="mark">Ada</em>…), on déclare un <strong>tableau</strong> à l'aide du mot‑clef <code>array</code>. Les langages <strong>C</strong> et <strong>C++</strong> sont plus <strong>symboliques</strong> : il n'y a <strong class="defin">pas de mot‑clef spécifique</strong> pour déclarer un tableau ; seuls les délimiteurs – une paire de <strong>crochets</strong> <code class="prettyprint lang-c">[]</code> – codent le fait qu'un nouvel identificateur désigne une <strong class="title">donnée de type tableau</strong> et non pas une donnée scalaire (de même qu'une paire de parenthèses distingue un identificateur de fonction par rapport aux autres formes d'identificateurs – cf. chap. C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+
+
+<h3 id="declarationTab"> Déclaration d'un tableau unidimensionnel </h3>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, la <strong class="title">syntaxe déclarative</strong> usuelle d'une donnée de type <strong class="defin">tableau unidimensionnel</strong> est la suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialG">descripteur de type</strong>  <strong class="specialN">identificateur du tableau</strong> </span>[<span class="nocode"><strong class="specialLB">nombre d'éléments</strong>]</span> <span class="nocode" style="color : gray; font-style: normal;">[</span>= {<span class="nocode"><strong class="specialLG">liste d'expressions</strong></span>}<span class="nocode" style="color : gray; font-style: normal;">]</span>;
+  </code>
+</span> </p>
+<p> Cette syntaxe reprend la forme générale de la déclaration d'une donnée scalaire (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>) avec en plus le codage entre <strong>crochets</strong> <code class="prettyprint lang-c">[]</code> (éventuellement vides) du <strong class="specialLB">nombre d'éléments</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complementExpert">
+<p> Sur cette forme syntaxique, on peut apporter les précisions suivantes : </p>
+<ul>
+  <li> L'expression <strong class="specialLB">nombre d'éléments</strong> code <strong class="warning">définitivement</strong> le nombre d'éléments que le tableau peut contenir au maximum. C'est donc une <strong>valeur cardinale</strong> qui est fixée pour <strong>toute la durée de vie</strong> de la donnée déclarée. </li>
+
+  <div class="nobullet"> Il s'agit d'une <strong>expression</strong> qui doit bien évidemment être de <strong class="specialG">type entier</strong> et à <strong>valeur positive</strong>. De plus, elle doit être : 
+  <ul>
+    <li> en langage <strong>C</strong>, une <strong class="defin">expression constante entière</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstanteEntiere" target="_BLANK"></a>) – et ce quelle que soit la classe d'allocation, statique ou automatique, du tableau ; </li>
+
+    <li> en langage <strong>C++</strong> : </li>
+    <ul>
+      <li> une <strong class="defin">expression constante</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstante" target="_BLANK"></a>) si le tableau est déclaré de <strong class="specialO">classe statique</strong> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeStatique" target="_BLANK"></a>) ; </li>
+
+      <li> une <strong class="defin">expression évaluable</strong> – donc éventuellement <strong class="pros">variable </strong> – si le tableau est déclaré de <strong class="specialO">classe automatique</strong> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeAutomatique" target="_BLANK"></a>). </li>
+    </ul>
+  </ul>
+  
+  <div class="expert">
+  <div class="nobullet"> (Et à ce sujet, cf. la remarque faite au chap. C2‑V <a class="previous" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#remarqueExpressionConstante" target="_BLANK"></a>.) </div>
+  </div><!-- expert -->
+
+  <div class="nobullet"> Par ailleurs, l'expression <strong class="specialLB">nombre d'éléments</strong> peut être <strong>omise</strong> (cf. ci‑après), mais <strong class="warning">pas les crochets</strong>. </div>
+  
+
+  <li> La <strong class="specialLG">liste d'expressions</strong> entre accolades – séparées les unes des autres par le symbole <code class="prettyprint lang-c">,</code> – code l'<strong>affectation séquentielle</strong> de <strong class="defin">valeurs initiales</strong> aux différents éléments du tableau, <strong>dans l'ordre</strong> de leur indice respectif. </li>
+
+  <div class="nobullet"> En langage <strong>C</strong> et si le tableau est déclaré de <strong class="specialO">classe statique</strong>, comme pour une donnée scalaire, les expressions d'initialisation doivent être des <strong class="defin">expressions constantes</strong> (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>). </div>
+  
+  <div class="nobullet"> De plus, l'initialisation est <strong>optionnelle</strong>, <strong class="warning">sauf</strong> si : </div>
+  <ul>
+    <li> le tableau est déclaré <strong>constant</strong>, autrement dit si le mot‑clef <code class="prettyprint lang-c">const</code> figure dans son <strong class="specialG">descripteur de type</strong> (comme pour une donnée scalaire) ;  </li>
+
+    <li> l'expression <strong class="specialLB">nombre d'éléments</strong> du tableau n'est <strong>pas codée</strong> entre les crochets ; dans ce cas, c'est le <strong class="defin">nombre d'expressions de la liste</strong> qui détermine implicitement le nombre d'éléments du tableau. </li>
+  </ul>
+
+  <div class="nobullet"> Par ailleurs, en langage <strong>C</strong>, depuis la norme <em class="mark">C99</em> (et attention, <strong class="cons">pas en C++</strong>), la <strong class="specialLG">liste d'initialisation</strong> peut être codée : </div>
+  <ul>
+    <li> de façon ciblée, par <strong class="defin">indexation directe</strong> de la forme <code class="prettyprint lang-c">[<span class="nocode"><strong class="specialLB">nº d'élément</strong></span>] = <span class="nocode"><strong class="specialN">valeur</strong></span></code> ;  </li>
+  
+    <li> et même ainsi de façon <strong class="defin">groupée</strong> via la forme <code class="prettyprint lang-c">[<span class="nocode"><strong class="specialLB">nº d'élément 1</strong></span> ... <span class="nocode"><strong class="specialLB">nº d'élément 2</strong></span>] = <span class="nocode"><strong class="specialN">valeur</strong></span></code> ;  </li>
+  </ul>
+
+  <div class="nobullet"> avec les <strong>mêmes contraintes</strong> que précédemment pour les expressions codant les numéros d'éléments et les valeurs d'initialisation, qui doivent être respectivement des <strong class="defin">expressions constantes entières</strong> et des <strong class="defin">expressions constantes</strong>.  </div>
+
+  <div class="nobullet"> Avec une telle syntaxe, on parle d'<strong>initialiseurs désignés</strong> – en anglais, <em class="english">designated initializers</em> <a class="external" href="https://gcc.gnu.org/onlinedocs/gcc/Designated-Inits.html" target="_BLANK">C</a>. </div>
+</ul>
+</div><!-- complementExpert -->
+
+
+<div class="exemples" id="exempleUnidim"><p class="exemples"></p>
+<ul>
+  <li> Le code : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">const uint8_t buttonPin[4] = {2, 5, 7, 13};</code>
+  </span> <br>
+  déclare une constante de type <strong class="title">tableau de 4 entiers</strong> non signés codés sur 8 bits chacun, valant respectivement <code class="prettyprint lang-c">2</code>, <code class="prettyprint lang-c">5</code>, <code class="prettyprint lang-c">7</code> et <code class="prettyprint lang-c">13</code>. </li>
+
+  <div class="nobullet"> Un tel tableau permet typiquement de <strong class="pros">regrouper des numéros</strong> de broches d'entrée d'une carte à microcontrôleur pour pouvoir facilement les <strong>configurer</strong> dans une boucle <code class="prettyprint lang-c">for</code>, même si ces numéros ne sont pas consécutifs. </div>
+   
+ 
+  <li> Le code : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">short duration[3] = {60, 5, 90};</code>
+  </span> </li>
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/feuTricolore.png" width="40px" style="margin-top: 0.0em">
+  <div  class="nobullet"> déclare une variable de type <strong class="title">tableau de 3 entiers courts</strong>  valant respectivement <code class="prettyprint lang-c">60</code>, <code class="prettyprint lang-c">5</code> et <code class="prettyprint lang-c">90</code> par initialisation. Cette déclaration aurait pu aussi être codée <code class="prettyprint lang-c">short duration[] = {60, 5, 90};</code>. </div>
+
+  <div class="nobullet"> Un tel tableau permet par exemple de <strong class="pros">centraliser</strong> dans une même donnée les durées d'allumage des trois couleurs d'un <strong>feu de circulation</strong>. </div>
+  </div><!-- display -->
+
+  <li> Le code : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">float temperature[24] = {0.0};</code>
+  </span> <br> 
+  déclare une variable de type <strong class="title">tableau de 24 décimaux</strong> (flottants simple précision), tous initialisés à la valeur <code class="prettyprint lang-c">0.0</code>. </li>
+
+<div class="nobullet"> Un tel tableau permet par exemple de réserver l'emplacement mémoire pour une série de mesure de <strong>températures horaires</strong>. </div>
+
+  <div class="expert">
+  <li> <em class="remark">En langage <strong>C</strong> seulement</em>, le code : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">double pressure[5] = {[0] = 10.0, [1] = 20.0, [2 ... 4] = 30.0};</code>
+  </span> <br>
+  déclare une variable de type <strong class="title">tableau de 5 décimaux</strong> (flottants double précision) initialisés aux valeurs <code class="prettyprint lang-c">10.0</code>, <code  class="prettyprint lang-c">20.0</code> respectivement pour les deux premiers et <code  class="prettyprint lang-c">30.0</code> pour les trois derniers. </li>
+  </div><!-- expert -->
+</ul>
+</div><!-- exemples -->
+
+<div class="remarques" id="remarquesDeclaration">
+<p class="remarques"> La <strong class="title">déclaration d'un tableau</strong> présente bien des <strong class="defin">points communs</strong> avec celle d'une <strong>donnée scalaire</strong>. Ceux évoqués ci‑après ne sont pas les seuls mais ils méritent une attention particulière. </p>
+
+<ol class="littered">
+  <li> On peut préalablement déclarer un <strong class="specialG">type synonyme</strong> de tableau avec le mot‑clef <code class="prettyprint lang-c">typedef</code> (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typedef" target="_BLANK"></a>). </li>
+
+  <li> Si un tableau est déclaré de <strong class="specialO">classe statique</strong> (autrement dit s'il est soit global, soit local mais déclaré avec le mot‑clef <code class="prettyprint lang-c">static</code> – cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeAllocation" target="_BLANK"></a>), son <strong class="specialG">descripteur de type</strong> peut être <strong class="cons">omis</strong> et c'est alors le type <code class="prettyprint lang-c">int</code> qui est attribué par défaut à ses éléments. Toutefois, cette pratique de codage est vivement <strong class="warning">déconseillée</strong>. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<h4 id="initialisationTableau"> Initialisation d'un tableau </h4>
+
+
+<div class="important">
+<p> L'<strong class="title">initialisation séquentielle</strong> ainsi <strong class="pros">groupée</strong> des éléments d'un tableau n'est commode que si le <strong class="specialLB">nombre d'éléments</strong> est <strong>restreint</strong>. Mais il faut savoir profiter de cette opportunité car elle existe <strong class="defin">uniquemement dans le cadre de sa déclaration</strong>, et <strong class="warning">pas ultérieurement</strong>. En effet, en langages <strong>C</strong> et <strong>C++</strong>, on ne peut pas coder une affectation globale sur un tableau. </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Le codage du <strong class="specialLB">nombre d'éléments</strong> dans la déclaration d'une donnée de type tableau et l'<strong class="title">initialisation</strong> de leurs valeurs présentent diverses <strong class="warning">subtilités</strong> .  </p>
+<ul>
+  <li> Hors de tout bloc, on peut déclarer une <strong>donnée globale</strong> de type tableau sans coder ni son nombre d'éléments, ni d'initialisation, par exemple ainsi : <br> 
+  <span class="inline">
+    <code class="prettyprint lang-c">int tab[];</code>
+  </span> <br>
+  Mais alors, ce tableau aura par défaut <strong class="cons">un seul élément</strong>, ce qui ne présente a priori aucun intérêt – il va donc de soi que cette pratique est <strong class="warning">vivement déconseillée</strong> (le compilateur émet en général un avertissement de la forme <code class="displayDark">array assumed to have one element</code>).  </li>
+
+  <li> A priori, le nombre d'éléments d'un tableau n'a <strong class="pros">pas de limite</strong> autre que celle imposée par la mémoire allouée au programme sur la machine cible. Mais comme ce nombre est reconnu par le compilateur dans le type <code class="prettyprint lang-c">size_t</code>, il est forcément inférieur ou égal à <code class="prettyprint lang-c">SIZE_MAX</code> (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#size_t" target="_BLANK"></a>). </li>
+
+  <li> Le <strong>nombre d'expressions initiales</strong> ne peut évidemment pas être supérieur au nombre d'éléments codé, sinon le compilateur signalera une <strong class="warning">erreur</strong> avec un message de la forme <code class="displayDark">too many initializers…</code> »). En revanche, ce nombre d'expressions initiales peut être inférieur au nombre d'éléments codé et alors, les <strong>éléments non initialisés</strong> prennent implicitement la <strong class="defin">valeur 0</strong> <strong>par défaut</strong> <strong class="warning">si au moins un des éléments est initialisé</strong>. </li>
+
+  <div class="nobullent"> Mais si aucune liste d'expressions initiales n'est codé, les éléments du tableau prennent alors chacun une <strong>valeur par défaut</strong> en fonction de la <strong>classe d'allocation</strong> du tableau (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeAllocation" target="_BLANK"></a>) : </div>
+  <ul>
+    <li> la valeur <strong>nulle</strong> pour la <strong class="specialO">classe statique</strong>, </li>
+
+    <li> une valeur <strong>indéterminée</strong> (a priori différente pour chaque élément) pour la <strong class="specialO">classe automatique</strong>. </li>
+  </ul>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3 id="identificationTab"> Identification des éléments d'un tableau unidimensionnel par indexation directe </h3>
+
+
+<div class="important">
+<p> <em class="remark">Après la déclaration</em> d'une donnée de type tableau, chaque <strong class="title">élément</strong> de ce dernier est <strong class="title">identifiable</strong> dans le code source par une expression de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialN">identificateur du tableau</strong> </span>[<span class="nocode"><strong class="specialLB">indice de l'élément</strong></span>]
+  </code>
+</span> <br>
+<strong class="warning">en partant de </strong> <code class="prettyprint lang-c">0</code> pour l'indice du <strong class="specialLB">premier élément</strong> du tableau (en anglais, on parle de <strong>zero‑based indexing</strong> <a class="external" href="https://en.wikipedia.org/wiki/Zero-based_numbering" target="_BLANK">W</a>). </p>
+
+<p> Une telle expression est une <strong class="specialM">l‑value</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>	En fait, <em class="remark">sauf dans le cadre d'une déclaration</em>, la paire de <strong>crochets</strong> <code class="prettyprint lang-c">[]</code> symbolise l'<strong class="title">opérateur d'indexation</strong>, qui admet <strong class="defin">deux arguments</strong> : </p>
+
+<ul>
+	<li> à gauche, un <strong class="specialN">identificateur de tableau</strong> déjà déclaré ; </li>
+
+	<li> dans les crochets, l'<strong class="specialLB">indice de l'élément</strong>, codé par une expression évaluée dans le type <code class="prettyprint lang-c">size_t</code>, qui exprime ici une <strong>valeur ordinale</strong> – le <strong>numéro d'ordre</strong> de l'élément dans le tableau. </li>
+</ul>
+
+<p> Dans le tableau de classification des opérateurs du langage <strong>C</strong>, l'<strong class="title">opérateur</strong> <code class="prettyprint lang-c">[]</code> a le <strong>rang 1</strong> de priorité et un sens d'associativité de <strong>gauche à droite</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>). Ces aspects sont essentiels pour bien comprendre par la suite le traitement des expressions de tableaux multidimensionnels. </p>
+</div><!-- complement -->
+
+
+<h4 id="bornesIndexationUnidim"> Bornes d'indexation d'un tableau </h4>
+
+
+<div class="important">
+<p> En <strong>C</strong> et <strong>C++</strong> (contrairement à d'autres langages), dans la déclaration d'une donnée de type tableau, il n'existe <strong class="warning">pas de syntaxe directe</strong> pour coder explicitement les <strong class="title">bornes initiales</strong> et <strong class="title">finales</strong> de l'indexation d'un tableau : seul son <strong>nombre</strong> <strong class="specialLB">N</strong> d'éléments est codé. </p>
+
+<p>En conséquence, dans tout tableau déclaré : </p>
+
+<ul>
+	<li> le <strong class="specialLB">premier élément</strong> est <strong>toujours</strong> d'indice <code class="cmd">0</code>, </li>
+
+	<li> le <strong class="specialLB">dernier élément</strong> est d'indice <code class="prettyprint lang-c"><span class="nocode"><em class="bold"><var>N</var> − 1</em></span></code>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> <em class="remark">Attention</em> ! <strong>Après la déclaration</strong> d'un tableau – par exemple, nommé <code class="prettyprint lang-c">tab</code> – de <strong>N éléments</strong>, l'expression <code class="prettyprint lang-c">tab[<span class="nocode"></span><strong>N</strong>]</code> <strong class="warning">n'identifie pas le tableau</strong> ! C'est une <strong class="specialM">l‑value</strong> qui identifie la valeur de l'espace mémoire de même taille qu'un élément du tableau mais situé juste <em class="remark">après</em> le dernier élément (qui, lui, est identifié <code class="prettyprint lang-c">tab[<span class="nocode"><em class="bold"><var>N</var> − 1</em></span>]</code>). </p>
+
+<p> De même, on peut coder un <strong class="warning">indice plus grand que</strong> <strong>N</strong>, où même un <strong class="warning">indice négatif</strong>, mais les expressions ainsi formées prennent alors des valeurs qui n'ont rien à voir avec celle du tableau déclaré : ces valeurs sont celles que contient l'espace mémoire autour de celui alloué au tableau. </p>
+
+<p> Contrairement à d'autres langages (<em class="mark">Pascal</em>, <em class="mark">Delphi</em>…), les langages <strong>C</strong> et <strong>C++</strong> autorisent de tels « <strong>débordements</strong> » (cf. chap. C5‑IV pour approfondissement <a class="next" href="Cc5-4_tableauxManipulations.html#debordements" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Suite à la déclaration (deuxième exemple supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#exempleUnidim"></a>) du tableau de 3 éléments : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">short duration[3] = {60, 5, 90}; </code>
+</span> </p>
+<ul>
+  <li> son <strong>1<sup>er</sup> élément</strong> est identifié par <code class="prettyprint lang-c">duration[0]</code> (valeur initiale <code>60</code>) ; </li>
+
+  <li> son <strong>2<sup>e</sup> élément</strong> est identifié par <code class="prettyprint lang-c">duration[1]</code> (valeur initiale <code>5</code>) ; </li>
+
+  <li> son <strong>3<sup>e</sup> élément</strong> est identifié par <code class="prettyprint lang-c">duration[2]</code> (valeur initiale <code>90</code>). </li>
+</ul>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Il existe cependant des <strong>techniques de codage</strong> plus ou moins satisfaisantes pour implémenter un <strong class="title">indice initial</strong> <strong class="defin">différent de 0</strong>. L'une d'elles est présentée infra <a class="infra" href="Cc5-3_tableauxDeclarations.html#indexationDecalee"></a>. </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="typeTab"> Type, taille en mémoire et stockage d'un tableau unidimensionnel </h3>
+
+
+
+<div class="important">
+<p> Un <strong>tableau unidimensionnel</strong> déclaré est un <strong class="defin">objet</strong> d'un <strong class="title">type dérivé</strong> <strong class="specialLB">spécifique</strong> déterminé par le <strong class="specialG">descripteur de type</strong> et le <strong>nombre</strong> <strong class="specialLB">N</strong> de ses éléments. </p>
+
+<p> Ce <strong class="title">type dérivé</strong> est formalisé par le descripteur <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>[<span class="nocode"><strong class="specialLB">N</strong></span>]</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">taille</strong> <strong>en mémoire</strong> d'un tableau est le <strong class="defin">produit</strong> de son <strong>nombre d'éléments</strong> et de la taille du <strong class="specialG">descripteur de type</strong> de ses éléments. Formellement, l'expression <code class="prettyprint lang-c">sizeof(<span class="nocode"><strong class="specialG">descripteur de type</strong></span>[<span class="nocode"><strong class="specialLB">N</strong></span>])</code> prend la valeur <strong class="specialLB">N</strong> × <code>sizeof(<span class="nocode"><strong class="specialG">descripteur de type</strong></span>)</code>. </p>
+
+
+<p> Virtuellement, les <strong>éléments</strong> d'un tableau sont toujours <strong class="title">stockés</strong> <strong class="defin">les uns à la suite des autres</strong> avec des <strong>adresses croissantes</strong> dans l'ordre naturel des éléments, et ce dans le segment mémoire approprié selon la <strong class="specialO">classe d'allocation</strong> de la variable déclarée – à savoir le segment <code class="inv" style="background:mediumseagreen;">.data</code> ou <code class="inv" style="background:springgreen;">.rodata</code> pour la classe statique, la <strong>pile</strong> pour la classe automatique – cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeAllocation" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<div class="exemples" style="display: inline-block">
+  <img class="top-right" src="../img/tableauDuration.png" width="180px">
+<p class="exemple"> Le tableau de 3 éléments déclaré supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#exempleUnidim"></a> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">short duration[3] = {60, 5, 90}; </code>
+</span> <br>
+est de <strong class="title">type</strong> <code class="prettyprint lang-c">short[3]</code>. </p>
+
+<p> Le type <code class="prettyprint lang-c">short</code> étant stocké sur <strong>2 octets</strong> (cf. chap C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>), la <strong class="title">taille</strong> en mémoire du tableau <code class="prettyprint lang-c">duration</code> – autrement dit l'expression <code class="prettyprint lang-c">sizeof(duration)</code> – vaut 3 × 2 = <strong>6 octets</strong>. </p>
+
+<p> Virtuellement, et sans en expliciter les adresses, son <strong class="title">stockage</strong> en mémoire peut être conceptualisé par la figure ci‑contre. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="adresseTabUni"> Adresse d'un tableau unidimensionnel </h3>
+
+
+
+<div class="important">
+<p> On rappelle (cf. chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#notionAdresse" target="_BLANK"></a>) que toute <strong>donnée déclarée</strong> n'est pas seulement identifiable par son identificateur, mais aussi par son <strong class="title">adresse</strong> en mémoire. </p>
+
+<p> Dans le cas d'une donnée de type <strong>tableau</strong>, son <strong class="title">adresse</strong> <strong class="specialO">coïncide</strong> avec celle de son <strong class="defin">1<sup>e</sup> élément</strong>.  Mais <em class="remark">attention</em>, la <strong class="specialO">coïncidence</strong> des adresses ne signifie <strong class="warning">pas</strong> pour autant que les éléments pointés soient <strong>identiques</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En effet, de façon générique, si on déclare un tableau nommé par exemple <code class="prettyprint lang-c">tab</code> de type <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>[<span class="nocode"><strong class="specialLB">N</strong></span>]</code> : </p>
+
+<ul>
+	<li> l'<strong class="title">adresse</strong> de son <strong>1<sup>er</sup> élément</strong> pris isolément – c'est‑à‑dire la valeur de l'expression <code class="prettyprint lang-c">&(tab[0])</code> – est de type <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>*</code>, autrement dit de type « pointeur sur <strong class="specialG">descripteur de type</strong> » ; </li>
+
+	<li> l'<strong class="title">adresse</strong> du <strong>tableau</strong> (complet) – c'est‑à‑dire la valeur de l'expression <code class="prettyprint lang-c">&tab</code> – est un pointeur de type <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>(*)[<span class="nocode"><strong class="specialLB">N</strong></span>]</code>, donc de type « pointeur sur tableau unidimensionnel de <strong class="specialLB">N</strong> éléments de type <strong class="specialG">descripteur de type</strong>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> <em class="remark">NB</em> : dans le descripteur <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>(*)[<span class="nocode"><strong>N</strong></span>]</code>, l'encapsulation entre <strong class="title">parenthèses</strong> du symbole de pointeur <code class="prettyprint lang-c">(*)</code> code la <strong class="defin">distinction syntaxique</strong> avec le type <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span></span></span> * [<span class="nocode"><strong>N</strong></span>]</code> qui est un descripteur de type « tableau unidimensionnel de <strong>N</strong> pointeurs de données de type <strong class="specialG">descripteur de type</strong></span> ». </div>
+  </div><!-- expert -->
+</ul>
+
+<p> On a donc deux valeurs d'<strong class="title">adresses</strong> <strong class="defin">identiques</strong> mais de <strong class="warning">types différents</strong>, au même titre que deux variables peuvent avoir la même valeur tout en étant encodées dans deux types différents. Cette distinction apparaît explicitement lorsqu'on incrémente ces deux pointeurs : on n'obtient pas les mêmes valeurs d'adresses. </p>
+</div><!-- complement -->
+
+
+<div class="exemples" style="display: inline-block">
+  
+<p class="exemple"> Après déclaration du tableau de 3 éléments déclaré supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#exempleUnidim"></a> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">short duration[3] = {60, 5, 90}; </code>
+</span> </p>
+
+<img class="top-right" src="../img/tableauDurationAdresses.png" width="500px">
+
+<ul>
+  <li> l'<strong class="title">adresse</strong> <code class="prettyprint lang-c">&duration[0]</code> de son <strong>premier élément</strong> est de type <code class="prettyprint lang-c">short*</code> ;  </li>
+
+  <li> l'<strong class="title">adresse</strong> <code class="prettyprint lang-c">&duration</code> du <strong>tableau</strong> lui‑même est de type <code class="prettyprint lang-c">short(*)[3]</code>.  </li>
+</ul>
+
+<p> Ces deux adresses ont la <strong class="defin">même valeur</strong>, mais sont de <strong class="warning">types différents</strong> en terme de taille. Donc leur <strong>incrémentation unitaire</strong> ne donne pas le même résultat. </p>
+
+<div class="expert">
+<p> On peut visualiser cette différence en exécutant le programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    short duration[3] = {60, 5, 90};
+    printf("%p %p\n", &duration[0], &duration[0] + 1);
+    printf("%p %p\n", &duration,    &duration + 1);
+    return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient une sortie comme par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x7fff2b72f29a 0x7fff2b72f29c
+0x7fff2b72f29a 0x7fff2b72f2a0
+</pre>
+<!---------- ne pas indenter ---------->
+
+<ul>
+  <li> L'incrémentation de <code class="prettyprint lang-c">&duration[0]</code> augmente l'adresse de <strong>2 octets</strong> – on passe de <code>0x9a</code> à <code>0x9c</code>, soit la taille d'une donnée de type <code class="prettyprint lang-c">short</code> ; </li>
+
+  <li> alors que l'incrémentation de <code class="prettyprint lang-c">&duration</code> augmente l'adresse de <strong>6 octets</strong> – on passe de <code>0x9a</code> à <code>0xa0</code>, soit la taille d'une donnée de type <code class="prettyprint lang-c">short[3]</code>. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+<div class="expert">
+<p> <em class="remark">Attention</em> ! La connaissance de l'expression des <strong class="specialG">descripteurs de types</strong> de <strong class="specialLB">pointeurs de tableaux</strong> est <strong class="warning">indispensable</strong> pour mettre en œuvre des <strong class="title">conversions explicites</strong> sur des identificateurs de tableaux. Cet aspect sera abordé au chapitre C5‑IV <a class="next" href="Cc5-4_tableauxManipulations.html#castTableaux" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="identificationTab"> Identification d'un tableau unidimensionnel et de ses éléments par pointeurs </h3>
+
+
+<div class="expert">
+<p> On vient de voir supra comment identifier un tableau déclaré par son adresse. Il est évidemment possible de l'identifier directement par son <strong class="title">identificateur</strong> mais cette approche est plus subtile qu'il n'y paraît parce que, après la déclaration du tableau, le compilateur procède à la <strong class="warning">conversion implicite</strong> de son identificateur en un <strong>pointeur sur son premier élément</strong> dans presque toutes les expressions codées dans un programme. Pour ne pas coder des programmes erronés, cet aspect doit être maîtrisé dans ses moindres détails – précisément là où le Diable a la mauvaise habitude de se cacher ! </p>
+</div><!-- expert -->
+
+
+<h4 id="decayArray"> Conversion implicite  d'un identificateur de tableau en pointeur </h4>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, <strong class="warning">sauf exceptions</strong> détaillées ci‑après, lors de l'évaluation d'une <strong>expression</strong>, toute occurrence de l'<strong class="title">identificateur</strong> d'une donnée de type tableau est <strong class="defin">implicitement convertie</strong> en un <strong class="specialLB">pointeur</strong> : </p>
+<ul>
+  <li> dont le <strong class="specialG">type</strong> est celui des <strong>éléments</strong> du tableau (et non pas du tableau lui‑même) ; </li>
+
+  <li> dont la <strong class="specialN">valeur</strong> est l'<strong>adresse de son premier élément</strong>.</li>
+</ul>
+
+<p> Cette conversion implicite peut être considérée comme une <strong class="warning">dégradation</strong> (cf. chap. C3‑VI <a class="previous" href="../C3-Numeration/Cc3-6_conversionsTypes.html#degradationTaille" target="_BLANK"></a>) car elle perd l'information du nombre d'éléments du tableau. Par <strong class="defin">déréférencement</strong> de ce pointeur, on n'obtient que la <strong>valeur du 1<sup>er</sup> élément</strong> du tableau, et non pas celle du tableau tout entier. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> À cette règle générale, il y a <strong class="warning">trois exceptions</strong> – à savoir lorsque l'occurrence de l'<strong class="title">identificateur</strong> du tableau est :  </p>
+<ul>
+	<li> l'<strong>objet</strong> de sa <strong class="specialO">propre déclaration</strong> (mais donc, pas s'il est utilisé dans une expression d'initialisation d'une autre donnée) ;  </li>
+
+	<li> appliqué à l'<strong>opérateur</strong> <code class="prettyprint lang-c">sizeof</code> (opérateur de taille) ; </li>
+
+  <li> appliqué à l'<strong>opérateur</strong> <code class="prettyprint lang-c">&</code> (opérateur d'adresse). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> <em class="remark">Attention</em> ! Comme toute <strong class="title">conversion</strong>, celle d'un identificateur de tableau en pointeur ne forme <strong>pas un nouvel objet</strong>. De plus, comme une expression de la forme <code class="prettyprint lang-c">&a</code> avec une variable déclarée <code class="prettyprint lang-c">a</code>, le pointeur issu de la conversion implicite d'un identificateur de tableau n'a <strong>pas d'espace mémoire alloué</strong> – il prend simplement comme valeur l'<strong>adresse du premier élément</strong> du tableau et obéit à l'arithmétique des pointeurs avec le type de l'élément pointé. </p>
+
+<p> En conséquence, une fois converti, l'<strong class="title">identificateur</strong> d'une donnée de type tableau ne constitue <strong class="warning">pas une l‑value</strong>, donc il ne peut faire l'objet ni d'une affectation, ni d'une opération à affectation combinée comme (<code class="prettyprint lang-c">++</code>), etc. C'est pourquoi certains auteurs considèrent qu'il s'agit d'un <strong>« pointeur constant »</strong>. </p>
+</div><!-- expert -->
+
+
+<h4 id="operIndex"> Définition de l'opérateur d'indexation <code class="prettyprint lang-c">[]</code> </h4>
+
+
+<div class="important">
+<p> De façon surprenante, l'<strong class="title">opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code> introduit supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#identificationTab"></a> est défini <strong class="warning">pas seulement</strong> pour les identificateurs de données de type tableau. Il est aussi <strong class="defin">applicable</strong> à toutes les <strong>expressions de type</strong> <strong class="specialLB">pointeur</strong>. </p>
+
+<p> En fait, si l'<strong class="title">opérateur d'indexation</strong> peut s'appliquer aux identificateurs de tableaux, c'est tout simplement parce que ces derniers sont implicitement convertis en pointeurs. Formellement : </p>
+
+<ul>
+	<li> quelle que soit une <strong>donnée</strong> <code class="prettyprint lang-c">p</code> déclarée de type <strong class="specialLB">pointeur</strong></em>, </li>
+
+	<li> et quelle soit une expression <strong>i</strong> à <strong class="defin">valeur entière</strong>, <strong>positive ou négative</strong>,</li>
+</ul>
+
+<p>	<strong>l'expression</strong> <code class="prettyprint lang-c">p[<span class="nocode"><strong>i</strong></span>]</code> est définie comme <code class="prettyprint lang-c">*(p + <span class="nocode"><strong>i</strong></span>)</code> <em class="remark">sauf dans le cadre d'une déclaration</em>. </p>  
+</div><!-- important -->
+
+
+<div class="remarques">
+<p class="remarque"> L'<strong class="title">opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code> étant défini comme le déréférencement d'une addition, laquelle est une <strong>opération commutative</strong>, l'expression <code class="prettyprint lang-c">p[<span class="nocode"><strong>i</strong></span>]</code> est équivalente à <code class="prettyprint lang-c"><span class="nocode"><strong>i</strong></span>[p]</code>. Bien que valide, cette deuxième forme ne doit <strong class="warning">surtout pas</strong> être employée car elle n'est <strong class="cons">pas lisible</strong> (elle a tout pour semer la confusion). </p>
+</div><!-- remarque -->
+
+
+
+<h4 id="exempleUnidimPointeurs"> Exemple </h4>
+
+
+
+<div class="exemples">
+<p> Après la déclaration du tableau <code class="prettyprint lang-c">duration</code> déclaré supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#exempleUnidim"></a>, hormis les exceptions citées, l'identificateur <code class="  prettyprint lang-c">duration</code> est dégradé en pointeur de type <code class="prettyprint lang-c">short*</code> et, par conséquent, comme illustré en figure ci‑dessous : </p>
+
+<div style="display: inline-auto">
+  <img class="top-right" src="../img/tableauDurationPointeurs.png" width="600px" style="padding-top: 0.5em">
+
+<ul>
+  <li> pour le <strong>1<sup>er</sup> élément</strong> : </li>
+  <ul>
+    <li> l'expression <code class="prettyprint lang-c">duration</code> prend la même valeur que <code class="prettyprint lang-c">&duration[0]</code> (adresse attribuée par le compilateur au 1<sup>er</sup> élément du tableau) ; </li>
+
+    <li> l'expression <code class="prettyprint lang-c">*duration</code> prend donc la même valeur que <code class="prettyprint lang-c">duration[0]</code> (valeur <code>60</code>) ; </li>
+  </ul>
+
+  <li> pour le <strong>2<sup>e</sup> élément</strong> : </li>
+  <ul>
+    <li>  l'expression <code class="prettyprint lang-c">duration + 1</code>  prend la même valeur que <code class="prettyprint lang-c">&duration[1]</code> (adresse attribuée par le compilateur au 2<sup>e</sup> élément du tableau) ; </li>
+
+    <li> l'expression <code class="prettyprint lang-c">*(duration + 1)</code> prend donc la même valeur que <code class="prettyprint lang-c">duration[1]</code> (valeur <code>5</code>) ; </li>
+  </ul>
+
+  <li> pour le <strong>3<sup>e</sup> élément</strong> : </li>
+  <ul>
+    <li>  l'expression <code class="prettyprint lang-c">duration + 2</code>  prend la même valeur que <code class="prettyprint lang-c">&duration[2]</code> (adresse attribuée par le compilateur au 3<sup>e</sup> élément du tableau) ; </li>
+
+    <li> l'expression <code class="prettyprint lang-c">*(duration + 2)</code> prend donc la même valeur que <code class="prettyprint lang-c">duration[2]</code> (valeur <code>90</code>) ; </li>
+  </ul>
+</ul>
+</div><!-- display -->
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Il n'est pas aisé de comprendre pourquoi les expressions <code class="prettyprint lang-c">duration</code>, <code class="prettyprint lang-c">&duration</code> et <code class="prettyprint lang-c">&duration[0]</code> prennent la même valeur :  </p>
+
+<ul>
+  <li> comme il ne s'agit pas d'une déclaration, dans l'expression <code class="prettyprint lang-c">duration</code>, l'identificateur est <strong>implicitement dégradé</strong> en un pointeur sur le premier élément du tableau ; sa valeur est donc l'<strong>adresse</strong> de ce <strong>1<sup>er</sup> élément</strong> ; </li>
+
+  <li> mais dans l'expression <code class="prettyprint lang-c">&duration</code>, ce même identificateur n'est <strong class="warning">pas dégradé</strong> en pointeur (ce cas fait partie des exceptions à la règle), donc l'expression prend la valeur de l'<strong>adresse</strong> du tableau, qui coïncide avec celle de son <strong>1<sup>er</sup> élément</strong> ; </li>
+
+  <li> et dans l'expression <code class="prettyprint lang-c">&duration[0]</code>, l'opérateur d'indexation <code class="prettyprint lang-c">[]</code> (rang 1 de priorité) s'applique avant sur l'opérateur d'adresse <code class="prettyprint lang-c">&</code> (rang 2 de priorité) ; or la sous‑expression <code class="prettyprint lang-c">duration[0]</code> est définie comme <code class="prettyprint lang-c">*(duration + 0)</code>, donc comme <code class="prettyprint lang-c">*duration</code> ; on obtient ainsi <code class="prettyprint lang-c">&*duration</code>, c'est‑à‑dire finalement <code class="prettyprint lang-c">duration</code>.</li>
+</ul>
+
+<p> Pour autant, il faut souligner encore une fois qu'il existe une <strong class="warning">différence de type</strong> entre ces expressions : </p>
+
+<ul>
+  <li> les expressions <code class="prettyprint lang-c">duration</code> et <code class="prettyprint lang-c">&duration[0]</code> sont de type <code class="prettyprint lang-c">short*</code> ; autrement dit, en lui opérant une incrémentation unitaire, c'est‑à‑dire en formant les expressions <code class="prettyprint lang-c">duration + 1</code> et <code class="prettyprint lang-c">&duration[1]</code>, on obtient l'adresse de l'<strong>élément suivant</strong> dans le tableau ; </li>
+
+  <li> l'expression <code class="prettyprint lang-c">&duration</code> est de type <code class="prettyprint lang-c">short(*)[3]</code>, donc après incrémentation unitaire, c'est‑à‑dire en formant l'expression <code class="prettyprint lang-c">&duration + 1</code>, on obtient l'adresse du premier octet virtuellement <strong>consécutif au tableau tout entier</strong> (adresse qui peut être éventuellement décalée par une contrainte d'alignement – cf. chap. 5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#contraintesAlign" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- remarque -->
+
+
+
+
+<div class="expert">
+<h4 id="indexationDecalee"> Indexation décalée des éléments d'un tableau </h4>
+
+
+<div class="complement"> 
+<p> La définition de l'<strong class="title">opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code> comme une composition des opérateurs de déréférencement et d'addition explique pourquoi il  peut s'appliquer sans restriction à <strong class="defin">n'importe quel indice</strong> <strong>N</strong> d'élément d'un tableau, <strong>aussi grand que l'on veut</strong> (dans les limites d'encodage de l'implémentation, bien‑sûr) et même <strong>négatif</strong> ! </p>
+
+<p> Si ces possibilités présentent clairement des <strong class="warning">risques de dysfonctionnement</strong> de programmes qui seront évoqués au chapitre C5‑IV <a class="next" href="Cc5-4_tableauxManipulations.html#dysfonctionnement" target="_BLANK"></a>, elles offrent aussi des possibilités intéressantes, en particulier pour <strong class="title">décaler l'indexation</strong> des éléments d'un tableau.  </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Après la déclaration <code class="prettyprint lang-c">short duration[3] = {60, 5, 90};</code> rien n'interdit de déclarer également : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">short * durationBis = duration - 1;</code>
+</span> <br> 
+et alors l'expression <code class="prettyprint lang-c">durationBis[1]</code> vaut <code class="prettyprint lang-c">duration[0]</code>, donc le pointeur <code class="prettyprint lang-c">durationBis</code> permet une <strong class="title">indexation des éléments</strong> du tableau <code class="prettyprint lang-c">duration</code> à partir de <code class="prettyprint lang-c">1</code> et non pas de <code>0</code>. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Cette méthode présente néanmoins <strong class="cons">plusieurs inconvénients</strong> : </p>
+
+<ul>
+  <li> Même si l'espace mémoire supplémentaire requis est négligeable (il suffit juste d'un pointeur), il faut surtout s'encombrer d'un <strong class="cons">deuxième identificateur</strong>, avec tous les <strong class="warning">risques de confusion</strong> que cela peut induire  (mais on verra qu'il y a une solution pour s'en passer avec les techniques d'allocation dynamique de mémoire). </li>
+
+  <li> de plus, cette technique <strong class="cons">travestit la base des langages</strong> <strong>C</strong> et <strong>C++</strong>, avec lesquels il est connu que les tableaux sont indexés à partir de <code class="prettyprint lang-c">0</code>. Dans un code volumineux, un contributeur qui ne penserait pas à examiner en détail toutes les déclarations pourrait passer à côté de cet aspect et commettre des erreurs. Ce n'est donc pas forcément une technique très « lisible » dans le cadre d'un travail en équipe. </li>
+</ul>
+
+<p> Par conséquent, cette méthode d'indexation ne pas être employée systématiquement mais seulement <strong class="warning">réservée à des cas particuliers</strong>. </p>
+</div><!-- remarque -->
+</div><!-- expert -->
+
+
+
+
+<h3 id="regleValeurs"> Règle générale sur les valeurs de type tableau </h3>
+
+
+<p> Compte tenu des éléments de langages présentés supra, et en particulier du principe de <strong>dégradation implicite</strong> de tout identificateur de tableau en pointeur sur son premier élément, on doit retenir la règle générale suivante. </p>
+
+<div class="important">  
+<p> En langages <strong>C</strong> et <strong>C++</strong>, hormis dans le cadre d'une déclaration ou comme argument des opérateurs <code class="prettyprint lang-c">&</code> et <code class="prettyprint lang-c">sizeof</code>, il n'est <strong class="warning">pas possible</strong> de former une <strong class="title">expression</strong> dont la <strong class="defin">valeur</strong> est un <strong>tableau</strong>. </p>
+</div><!-- important -->
+
+
+
+
+<h2> Tableaux multidimensionnels </h2>
+
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, un <strong class="title">tableau multidimensionnel</strong> est tableau dont les <strong>éléments</strong> sont <strong class="defin">structurés</strong>, non pas simplement  les uns à la suite des autres, mais comme une <strong class="specialLB">imbrication sous-tableaux</strong>, ces derniers étant des éventuellement des tableaux de sous-tableaux, et ce à chaque dimension ajoutée. </p>
+
+<p> Concrètement, on peut se représenter un tableau comme une <strong>structure</strong> en « <strong>lignes</strong> », « <strong>colonnes</strong> », « <strong>couches</strong> »… mais au delà de trois dimensions, toute visualisation géométrique (spatiale) est vaine. Au niveau « le plus bas », on peut parler d'<strong class="specialLB">éléments cellulaires</strong> du tableau. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p>  Pour comprendre le principe de la <strong>structuration des données</strong> sur <strong class="title">plusieurs dimensions</strong>, il est d'usage de se référer à la notion mathématique de <strong class="defin">matrices</strong> qui sont des tableaux à deux dimensions, présentés en lignes et colonnes <a class="external" href="https://fr.wikipedia.org/wiki/Matrice_(mathématiques)" target="_BLANK">W</a>. Mais cette analogie doit cependant être considérée avec circonspection. En particulier, il faut <strong class="warning">ne pas confondre</strong> : </p>
+
+<ul>
+  <li> en mathématiques, le <strong>nombre de dimensions</strong> d'un <strong class="specialV">espace vectoriel</strong> pour lequel une matrice définit une application linéaire (dans un espace de dimension 3, les matrices sont des tableaux de 3 lignes et 3 colonnes). </p> </li>
+
+  <li> en programmation, le <strong>nombre des dimensions</strong> d'un <strong class="title">tableau</strong>, qui est indépendant du nombre d'éléments par dimension (lequel peut être différent d'une dimension à l'autre). </li>
+</ul>
+
+<p> Il est <strong class="warning">malcommode</strong> de proposer une <strong class="specialV">représentation géométrique spatiale</strong> générale à la structuration des éléments d'un tableau ayant en plus de trois dimensions. Mais d'un point de vue strictement algébrique, et en termes de codage, ajouter une dimension relève toujours du même principe itératif d'extension, quel que soit le nombre de dimensions déjà définies – autrement dit, qu'on passe de une à deux dimensions, de deux à trois, etc. </p>
+</div><!-- complementExpert -->
+
+
+
+<h3 id="declarationTabMulti"> Déclaration d'un tableau multidimensionnel </h3>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, la <strong>déclaration</strong> d'un <strong class="title">tableau multidimensionnel </strong>obéit à une <strong>syntaxe très similaire</strong> à celle d'un tableau unidimensionnel, avec seulement <strong class="defin">quelques particularités</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces <strong class="title">particularités</strong> sont les suivantes : </p>  
+<ol class="numbered">
+  <li> Au lieu de coder simplement le nombre total d'éléments du tableau, on précise le <strong class="specialLB">nombre d'éléments</strong> de <strong>chaque dimension</strong>, en codant <code class="prettyprint lang-c">[<span class="nocode"><strong class="specialLB">nombre d'éléments</strong></span>]</code> à la suite du codage du nombre d'éléments de la dimension précédente. </li>
+
+  <div class="exemples">
+  <p class="exemple"> L'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">int8_t heat[2][3];</code>
+  </span> <br> 
+  déclare un tableau à <strong class="title">deux dimensions</strong>, respectivement de <strong>2 lignes</strong> et <strong>3 colonnes</strong>, c'est‑à‑dire 3 éléments par ligne. C'est donc un tableau ayant au total 2 × 3 = 6 éléments.</p>
+  </div><!-- exemple -->
+
+  <li> L'<strong class="specialLB">affectation des valeurs initiales</strong> se fait de préférence par une <strong class="defin">liste structurée</strong> en autant de <strong>niveaux de sous-listes </strong>  qu'il y a de dimensions supplémentaires. </li>
+
+
+  <div class="exemples">
+  <p class="exemple"> L'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} }; </code>
+  </span> <br> 
+  déclare aussi un tableau de <strong>2 lignes</strong> et <strong>3 colonnes</strong>, en spécifiant par les <strong>2 sous‑listes</strong> ci‑dessus les valeurs initiales des éléments, ligne après ligne, et dans chaque ligne (dans sa sous‑liste respective), colonne après colonne. </p>
+
+  <p> On peut aussi initialiser les <strong>éléments cellulaires</strong> en une simple liste <code>{22, 17, 10, 19, 15, 5}</code>, mais ce choix est <strong class="cons">moins bon</strong> en termes de lisibilité du code. </p>
+  </div><!-- exemple -->
+
+  <li> Seul le <strong class="specialLB">nombre d'éléments</strong> de la <strong>première dimension</strong> dans l'ordre du codage <strong class="defin">peut ne pas être codé</strong> entre crochets. </li>
+
+  <div class="exemples">
+  <p class="exemple"> La déclaration de l'exemple ci‑dessus peut se coder  : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">int8_t heat[][3] = { {22, 17, 10}, {19, 15, 5} }; </code>
+  </span> </p> 
+  <p> En revanche, une déclaration de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c" style="background: lightgrey">int8_t heat[][] = <span class="nocode">…</span>; // error! </code>
+  </span> <br>
+  provoque toujours une <strong class="warning">erreur de compilation</strong>, même si tous les éléments du tableau font l'objet d'une affectation de valeur initiale. </p>
+  </div><!-- exemple -->
+</ol><!-- numbered -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> La norme du langage <strong>C</strong> spécifie que le <strong>nombre de dimensions</strong> doit pouvoir aller jusqu'à <strong class="pros">au moins 256</strong> – ce qui est déjà largement suffisant – sans préciser une quelconque limite maximale. Tout dépend donc de l'implémentation, et bien entendu de la mémoire disponible lors de l'exécution sur la machine cible. </p>
+</div><!-- expert -->
+
+
+
+<h3> Identification des éléments d'un tableau multidimensionnel par indexation directe </h3>
+
+
+<div class="important">
+<p> Un tableau multidimensionnel étant <strong>structuré</strong> comme un <strong class="defin">tableau de sous-tableaux</strong>, le principe d'<strong class="title">identification des éléments</strong> reprend celui pour un tableau unidimensionnel (cf. supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#identificationTab"></a>) mais opère par <strong>compositions successives</strong> d'application de l'<strong>opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code>. </p>
+
+<p> Pour identifier un élément, on code ses <strong class="specialLB">indices</strong> <strong>i</strong>, <strong>j</strong>, <strong>k</strong>… dans les <strong>dimensions</strong> respectives du tableau dans l'<strong class="defin">ordre croissant</strong>, c'est‑à‑dire par la forme <code class="prettyprint lang-c">[<span class="nocode"><strong>i</strong></span>][<span class="nocode"><strong>j</strong></span>][<span class="nocode"><strong>k</strong></span>]<span class="nocode">…</span></code>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> <em class="remark">Attention</em> :  comme pour un tableau unidimensionnel (cf. supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#bornesIndexationUnidim"></a>), toute valeur d'indice codée <strong class="warning">en dehors de la plage de sa dimension</strong> est acceptée à la compilation et pointe en dehors de l'espace mémoire alloué au tableau. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Suite à la déclaration supra du <strong>tableau bidimensionnel</strong> : <br>
+<span class="inline">
+    <code class="prettyprint lang-c">int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} }; </code>
+</span> </p>
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">heat[0]</code> identifie le sous-tableau formant la <strong class="specialLB">1<sup>re</sup> ligne</strong> du tableau <code class="prettyprint lang-c">heat</code> ; </li>
+
+  <li> l'expression <code class="prettyprint lang-c">heat[1]</code> identifie le sous-tableau formant la <strong class="specialLB">2<sup>e</sup> ligne</strong> du tableau <code class="prettyprint lang-c">heat</code>.</li>
+</ul>
+<p> Ces deux expressions constituent des <strong class="defin">identificateurs de tableaux unidimensionnels</strong> qui, rappelons‑le, sont dégradés en pointeurs, sauf exceptions. </p>
+
+<p> Quant aux <strong class="title">éléments cellulaires</strong> de ces sous-tableaux, ils sont identifiés par : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">heat[0][0]</code> en 1<sup>re</sup> ligne et 1<sup>re</sup> colonne (valeur initiale <code>22</code>) ; </li>
+
+	<li> <code class="prettyprint lang-c">heat[0][1]</code> en 1<sup>re</sup> ligne et 2<sup>e</sup> colonne (valeur initiale <code>17</code>) ; </li>
+
+	<li> <code class="prettyprint lang-c">heat[0][2]</code> en 1<sup>re</sup> ligne et 3<sup>e</sup> colonne (valeur initiale <code>10</code>) ; </li>
+
+	<li> <code class="prettyprint lang-c">heat[1][0]</code> en 2<sup>e</sup> ligne et 1<sup>re</sup> colonne (valeur initiale <code>19</code>) ; </li>
+
+	<li> etc.</li>
+</ul>
+
+<p> En particulier, l'expression <code class="prettyprint lang-c">heat[0][1]</code> est en fait une <strong>composition</strong> de l'<strong>opérateur d'indexation</strong> appliqué à <code class="prettyprint lang-c">heat[0]</code> avec l'indice <code class="prettyprint lang-c">1</code>. Sachant que le <strong>sens d'associativité</strong> de cet opérateur est <strong>de gauche à droite</strong> (→), on peut l'analyser comme étant de la forme <code class="prettyprint lang-c">(heat[0])[1]</code>. </p>
+</div><!-- exemple -->
+
+
+
+<h3> Type, taille en mémoire et stockage d'un tableau multidimensionnel </h3>
+
+
+
+<div class="important">
+<p> Selon le <strong>même principe</strong> que pour un tableau unidimensionnel (cf. supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#typeTab"></a>), un <strong>tableau multidimensionnel</strong> est d'un <strong class="title">type dérivé</strong> <strong class="specialLB">spécifique</strong> déterminé par le <strong class="specialG">descripteur de type</strong> de ses éléments ainsi que ses <strong>dimensions</strong> et leurs <strong>nombres d'éléments</strong> respectifs <strong class="specialLB">N</strong>, <strong class="specialLB">M</strong>, <strong class="specialLB">R</strong>… </p>
+
+<p> Son descripteur se code par une expression de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>[<span class="nocode"><strong class="specialLB">N</strong></span>][<span class="nocode"><strong class="specialLB">M</strong></span>][<span class="nocode"><strong class="specialLB">R</strong></span>]<span class="nocode">…</span></code>
+</span> </p>
+</div><!-- important -->
+  
+
+<div class="exemples">
+<p class="exemple"> Le <strong>tableau bidimensionnel</strong> déclaré supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#declarationTabMulti"></a> : <br>
+<span class="inline">
+    <code class="prettyprint lang-c">int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} }; </code>
+</span> <br>
+
+  <img class="top-right" src="../img/tableauHeatIndex.png" width="500px">
+
+est de <strong class="title">type</strong> <code class="prettyprint lang-c">int8_t[2][3]</code>. </p>
+
+<p>  Sachant que le type <code class="prettyprint lang-c">int8_t</code> est encodé sur <strong>1 octet</strong>, la <strong class="title">taille</strong> en mémoire du tableau <code class="prettyprint lang-c">heat</code> – autrement dit l'expression <code class="prettyprint lang-c">sizeof(heat)</code> – vaut 2 × 3 × 1 = 6 octets. </p>
+
+<p> Virtuellement, son <strong class="title">stockage</strong> est figuré ci‑contre, avec dans l'ordre des adresses croissantes les 3 éléments de la 1<sup>re</sup> ligne puis les 3 éléments de la 2<sup>e</sup> ligne. </p>
+</div><!-- exemples -->
+
+
+
+<h3 id="adresseTabMulti"> Adresse d'un tableau multidimensionnel </h3>
+
+
+
+<div class="important">
+<p> Comme pour un tableau unidimensionnel <a class="supra" href="Cc5-3_tableauxDeclarations.html#adresseTabUni"></a>, l'<strong class="title">adresse</strong> d'un <strong>tableau multidimensionnel</strong> <strong class="defin">coïncide</strong> avec celle de son <strong>premier élément</strong>, mais n'en partage <strong class="warning">pas le type</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Ainsi, en déclarant un tableau <code class="prettyprint lang-c">tab</code> bidimensionnel de type <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>[<span class="nocode"><strong class="specialLB">N</strong></span>][<span class="nocode"><strong class="specialLB">M</strong></span>]</code> : </p></p>
+<ul>
+  <li> l'<strong class="specialLB">adresse</strong> de son <strong>1<sup>er</sup> élément</strong> pris isolément – c'est‑à‑dire la valeur de l'expression <code class="prettyprint lang-c">&(tab[0][0])</code> – est de type <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>*</code>, donc de type « pointeur sur <strong class="specialG">descripteur de type</strong> » ; </li>
+
+  <li> l'<strong class="specialLB">adresse</strong> du <strong>tableau complet</strong> – c'est‑à‑dire la valeur de l'expression <code class="prettyprint lang-c">&tab</code> – est de type <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span>(*)[<span class="nocode"><strong class="specialLB">N</strong></span>][<span class="nocode"><strong class="specialLB">M</strong></span>]</code>, donc de type « pointeur sur tableau bidimensionnel de <strong class="specialLB">N</strong> × <strong class="specialLB">M</strong> éléments de type <strong class="specialG">descripteur de type</strong>. </li>
+</ul>
+
+<p> Là encore, ces deux expressions prennent la même valeur, mais sans être de même type, et la différence apparaît lors d'une incrémentation. </p>
+</div><!-- complement -->
+
+
+<div class="exemples" style="display: inline-block">
+  
+<p class="exemple"> Après déclaration du tableau de 2×3 éléments déclaré supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#declarationTabMulti"></a> : <br>
+<span class="inline">
+    <code class="prettyprint lang-c">int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} }; </code>
+</span> </p>
+
+<img class="top-right" src="../img/tableauHeatAdresses.png" width="500px">
+
+<ul>
+  <li> l'adresse <code class="prettyprint lang-c">&heat[0][0]</code> de son <strong>premier élément</strong> est de type <code class="prettyprint lang-c">int8_t*</code> ;  </li>
+
+  <li> l'adresse <code class="prettyprint lang-c">&heat</code> du <strong>tableau</strong> lui‑même est de type <code class="prettyprint lang-c">int8_t(*)[2][3]</code>.  </li>
+</ul>
+
+<p> Ces deux adresses ont la <strong class="defin">même valeur</strong>, mais <strong class="warning">pas</strong> mais pas leur <strong>incrémentation unitaire</strong>.
+
+<div class="expert">
+<p> On peut visualiser cette différence en exécutant le programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+int main(void) {
+    int8_t heat[2][3] = { {22, 17, 10}, {19, 15, 5} };
+    printf("%p %p\n", &heat[0][0], &heat[0][0] + 1);
+    printf("%p %p\n", &heat,       &heat + 1);
+    return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient la sortie comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x7ffd44b631ba 0x7ffd44b631bb
+0x7ffd44b631ba 0x7ffd44b631c0
+</pre>
+<!---------- ne pas indenter ---------->
+
+<ul>
+  <li> L'incrémentation de <code class="prettyprint lang-c">&heat[0][0]</code> augmente l'adresse de <strong>1 octet</strong> – on passe de <code>0xba</code> à <code>0xbb</code>, soit la taille d'une donnée de type <code class="prettyprint lang-c">int8_t</code> ; </li>
+
+  <li> alors que l'incrémentation de <code class="prettyprint lang-c">&heat</code> augmente l'adresse de <strong>6 octets</strong> – on passe de <code>0xba</code> à <code>0xc0</code>, soit la taille d'une donnée de type <code class="prettyprint lang-c">int8_t[2][3]</code>. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+
+
+<h3> Identification d'un tableau multidimensionnel et de ses éléments par pointeurs </h3>
+
+
+<div class="complement">
+<p> La <strong class="defin">structure</strong> d'un <strong>tableau multidimensionnel</strong> est décisive pour l'<strong class="title">identification des éléments</strong> <strong class="specialLB">par pointeurs</strong>. </p>
+
+<p> On part du principe que, comme pour un tableau unidimensionnel, et sauf les exceptions mentionnées supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#identificationTab"></a>, lors de l'évaluation d'une expression, l'<strong class="title">identificateur</strong> du tableau est <strong class="warning">dégradé</strong> en un <strong class="specialLB">pointeur</strong> sur son <strong>1<sup>er</sup> élément</strong> (sauf pour les opérateurs <code class="prettyprint lang-c">sizeof</code> et <code class="prettyprint lang-c">&</code>). Mais un tableau multidimensionnel est un tableau de tableaux, donc son 1<sup>er</sup> élément est lui‑même un tableau : </p>
+
+<ul>
+	<li> l'identificateur de ce 1<sup>er</sup> élément est aussi dégradé en un pointeur ; l'identificateur du tableau est donc converti en un <strong class="specialLB">pointeur de pointeur</strong>, et ce autant de fois que le tableau compte de dimensions supplémentaires ;  </li>
+
+	<li> lorsqu'on applique à l'identificateur du tableau une incrémentation unitaire <code class="prettyprint lang-c">(+ 1)</code>, on obtient l'adresse du <strong>sous-tableau suivant</strong> !</li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples" style="display: inline-block">
+  
+
+<p class="exemple"> Reprenons le cas du <strong>tableau bidimensionnel</strong> <code class="prettyprint lang-c">heat</code> déclaré supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#declarationTabMulti"></a>. </p>
+
+<p>  Il est structuré en <strong class="specialLB">2 sous‑tableaux</strong> (éléments de type « ligne »), identifiés respectivement par les expressions <code class="prettyprint lang-c">heat[0]</code> et <code class="prettyprint lang-c">heat[1]</code>, chacun formé de 3 éléments, donc de taille 3 × 1 = 3 octets. On peut le vérifier en évaluant par exemple l'expression <code class="prettyprint lang-c">sizeof(heat[0])</code> : on obtient la valeur <code>3</code>. </p>
+
+<img class="top-left" src="../img/tableauHeatPointeurs.png">
+
+<p class="square"> Analysons l'identification de la <strong><strong>1<sup>re</sup> ligne</strong></strong> : </p>
+
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">heat</code> est un identificateur de tableau, donc implicitement dégradé en un pointeur sur son <strong>1<sup>er</sup> élément</strong>, donc elle prend la même valeur que <code class="prettyprint lang-c">&heat[0]</code> ; </li>
+
+  <div class="nobullet"> de même, dans l'expression <code class="prettyprint lang-c">heat[0]</code>, l'identificateur <code class="prettyprint lang-c">heat</code> est implicitement dégradé en <code class="prettyprint lang-c">&heat[0]</code>, donc  elle prend la même valeur que <code class="prettyprint lang-c">&heat[0][0]</code> ;  </div>
+
+  <li> les expressions de déréférencement(s) <code class="prettyprint lang-c">**heat</code> et <code class="prettyprint lang-c">*heat[0]</code> prennent donc l'une et l'autre la valeur de <code class="prettyprint lang-c">heat[0][0]</code> (valeur initiale <code>22</code> du premier élément cellulaire du tableau). </li>
+</ul>
+
+<p> De plus, dans cette 1<sup>re</sup> ligne : </p>
+
+<ul>
+	<li> par conversion implicite, l'expression <code class="prettyprint lang-c">heat[0] + 1</code> prend la même valeur que <code class="prettyprint lang-c">&heat[0][0] + 1</code>, autrement dit que <code class="prettyprint lang-c">&heat[0][1]</code> (adresse du 2<sup>e</sup> élément de , qui est également le 2<sup>e</sup> élément cellulaire du tableau) ; </li>
+
+	<li> l'expression de déréférencement <code class="prettyprint lang-c">*(heat[0] + 1)</code> prend donc la valeur <code class="prettyprint lang-c">heat[0][1]</code> (valeur initiale <code>17</code>) ; </li>
+
+	<li> idem pour l'élément suivant auquel on accède par le pointeur <code class="prettyprint lang-c">heat[0] + 2</code>… </li>
+</ul>
+
+<p class="square"> Le principe est le exactement même pour la <strong>2<sup>e</sup> ligne</strong> à laquelle on accède par le pointeur <code class="prettyprint lang-c">heat + 1</code>. En effet, par l'arithmétique des pointeurs, l'opération <code class="prettyprint lang-c">+ 1</code> représente un saut d'adresse de la taille du type d'éléments du tableau <code class="prettyprint lang-c">heat</code>, c'est‑à‑dire d'une ligne entière (on a vu supra que <code class="prettyprint lang-c">sizeof(heat[0])</code> vaut <code class="prettyprint lang-c">3</code> octets). </p>
+
+<p> Enfin, comme pour un tableau unidimensionnel (cf. supra <a class="supra" href="Cc5-3_tableauxDeclarations.html#exempleUnidimPointeurs"></a>, l'expression <code class="prettyprint lang-c">&heat + 1</code> pointe sur l'adresse consécutive à l'espace alloué au dernier élément du tableau (et éventuellement décalée par une contrainte d'alignement spécifique à l'implémentation – cf. chap. 5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#contraintesAlign"></a>). </p>
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> Plus généralement, pour un <strong class="title">tableau bidimensionnel</strong> <code class="prettyprint lang-c">tab</code>, quelles que soient les valeurs entières <strong>i</strong> et <strong>j</strong> prises comme indices, les expressions ci‑dessous prennent la <strong>même valeur</strong> : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">tab[<span class="nocode"><strong>i</strong></span>][<span class="nocode"><strong>j</strong></span>]</code>     
+    <code class="prettyprint lang-c">(*(tab + <span class="nocode"><strong>i</strong></span>))[<span class="nocode"><strong>j</strong></span>]</code>     
+    <code class="prettyprint lang-c">*(*(tab + <span class="nocode"><strong>i</strong></span>) + <span class="nocode"><strong>j</strong></span>)</code>
+  </span> </p>
+</div><!-- remarque -->
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

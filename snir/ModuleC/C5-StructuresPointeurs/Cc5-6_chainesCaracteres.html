@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="5"
+  data-pagenumber="VI"
+  data-pageState="travaux"
+  data-pageheadtitle="Chaînes caractères"
+  data-pagefulltitle="Les chaînes de caractères"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<!-- relecture partielle 2023 -->
+
+
+<div class="exergue">
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/stringGCC.png" width="200px" style="margin-top: 1.5em">
+<p class="square"> La notion de <strong class="title">chaîne de caractères</strong> a été <strong class="cons">superficiellement présentée</strong> au chapitre C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#chaineCaracteres" target="_BLANK"></a>. En effet, bien que <strong class="warning">complexe</strong>, cet élément de langage est <strong class="defin">indispensable</strong> pour mettre en œuvre des interactions avec un utilisateur – notamment <strong>afficher un message</strong> – dans un programme s'exécutant dans un terminal de commandes en ligne. </p>
+</div><!-- display -->
+
+<p> Maintenant que les notions de <strong class="specialLB">pointeur</strong> et de <strong class="specialLB">tableau</strong> ont été abordées, il est possible d'entamer une <strong class="pros">étude approfondie</strong> des <strong class="title">chaînes de caractères</strong>. </p>
+
+<p class="square"> Pour bien commencer cette étude, il importe de prendre conscience de ce qui fait la <strong class="title">complexité</strong> de la <strong>notion de chaîne de caractères</strong>. En effet, dans un programme, une variable de ce type doit en principe pouvoir mémoriser un <strong class="defin">nombre de caractères</strong> potentiellement <strong class="warning">très grand</strong>, mais aussi éventuellement <strong class="warning">très petit</strong>. Il est donc <strong class="cons">impossible</strong> de déterminer une <strong class="cons">taille fixe par défaut</strong> qui serait satisfaisante dans tous les cas de figure.  </p>
+
+<p> C'est pourquoi, en matière de gestion des chaînes de caractères, la plupart des langages de programmation ont recours à des mécanismes d'<strong class="defin">allocation dynamique de mémoire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Allocation_de_mémoire#Allocation_sur_le_tas" target="_BLANK">W</a> (aspect qui sera abordé seulement dans la partie <span class="partie">C6</span> de ce module). Une telle solution <strong class="pros">existe</strong> dans la bibliothèque standard du <strong>langage C++</strong> avec la <strong>classe</strong> <code class="type">string</code>, mais <strong class="warning">pas en langage C</strong>.  </p>
+
+<p> En effet, la « philosophie » du langage <strong>C</strong> privilégie le recours aux <strong class="pros">objets les plus simples possibles</strong>. Dans le noyau du langage, il n'y a pas de notion de chaîne de caractères de taille dynamique. À la place, on recourt à celle de <strong class="defin">tableau de caractères</strong> et à l'usage du <strong>caractère</strong> <strong class="specialDR"><em class="sigle">NUL</em></strong> comme <strong class="specialDR">marque de fin de chaîne</strong>. On parle de <strong class="title">chaîne de style C</strong> – en anglais, <strong>C‑style string</strong> ou <strong>null‑terminated string</strong>. </p>
+
+<p class="square"> Même si la notion de <strong class="title">chaîne de style C</strong> pourraient sembler constituer un concept aujourd'hui trop « rudimentaire » voire « archaïque », elle reste un élément de langage <strong class="pros">incontournable</strong>, et encore pour longtemps massivement utilisé pour la programmation des <strong>entrées‑sorties textuelles</strong> et des <strong>systèmes à mémoire limitée</strong>. </p>
+
+<p> C'est donc l'<strong class="title">objectif principal</strong> de ce présent chapitre qui déroule l'étude des chaînes de caractères via les points suivants : </p>
+<ul>
+  <li> les <strong class="specialLB">constantes littérales</strong> de « type » <strong class="defin">chaîne de style C</strong> ; outre leur <strong>syntaxe de codage</strong>, on aborde la question de leur <strong>type</strong> et de leur <strong>représentation en mémoire</strong> ;   </li>
+
+  <li> les <strong class="specialLB">données déclarées</strong> de « type » <strong class="defin">chaîne de style C</strong>, comme un <strong>tableau</strong> de caractères ou comme un <strong>pointeur</strong> sur une constante littérale ; on y aborde la syntaxe de <strong>déclaration</strong> et les <strong>manipulations élémentaires</strong> (affectation, passage d'argument d'une fonction) ;  </li>
+
+  <li> les <strong class="specialLB">fonctions</strong> de la <strong>bibliothèque standard</strong> sur les <strong class="defin">chaînes de style C</strong>, qui permettent de coder toutes sortes d'analyses et de manipulations complexes sur les chaîne ; </li>
+
+  <li> et enfin une <strong class="pros">initiation</strong> aux <strong class="specialLB">chaînes de caractères dynamiques</strong> en langage <strong>C++</strong> ; on y présente la <strong>classe</strong> <code class="type">string</code> de la bibliothèque standard et son implémentation <code class="prettyprint lang-c">String</code> dans le framework <strong class="Arduino">Arduino</strong>. </li>
+</ul>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les constantes littérales chaîne de caractères </h2>
+
+
+<!-- 
+<div class="expert">  
+<h4> Notion mathématique de chaîne de symboles </h4>
+
+  <p> Alphabet </p>
+
+  <p> Opération de concaténation </p>
+  
+  <p> Monoïde libre élément neutre chaîne vide </p>
+
+  <p> Longueur d'une chaîne = nombre de symboles</p>
+
+  <p> Ordre lexicographique </p>
+</div>  
+-->
+
+
+
+<h3> Notion de chaîne de caractères en programmation </h3>
+
+
+<div class="important">
+<p> En programmation, une <strong class="title">chaîne de caractères</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chaîne_de_caractères" target="_BLANK">W</a> – en anglais, <strong>character string</strong> – est un objet d'usage très fréquent, qui est constitué d'une <strong class="defin">suite finie de caractères</strong>. </p>
+
+<p> Un tel objet possède <strong class="specialLB">deux caractéristiques</strong> remarquables : </p>
+<ul>
+  <li> son <strong>nombre de caractères</strong> — c'est‑à‑dire sa <strong>longueur</strong> au <em class="remark">sens mathématique</em> du terme (car on verra infra <a class="infra" href="Cc5-6_chainesCaracteres.html#longueurChaine"></a> qu'en termes d'encodage en mémoire, cette notion est différente) ;  </li>
+
+  <li> le <strong>format d'encodage</strong> de ses caractères – lesquels sont nécessairement pris dans un <strong>jeu de caractères</strong> donné (<em class="english">character set</em>).  </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Dans tous les langages de programmation, il est possible de coder des <strong class="title">constantes littérales</strong> de type <strong>chaîne de caractères</strong> – typiquement en utilisant les <strong class="defin">guillemets</strong> simples ou doubles comme <strong>délimiteurs</strong> pour ne pas les confondre avec les constantes littérales des autres types de données. Par exemple : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">"123"</code> code une constante littérale de type <strong>chaîne de caractère</strong>, </li>
+
+  <li> alors que <code class="prettyprint lang-c">123</code> code une constante littérale de type <strong>entier</strong>. </li>
+</ul>
+
+<p> Toutefois, la <strong class="title">taille en mémoire</strong> d'une <strong>chaîne de caractères</strong> peut être <strong class="specialLB">grande</strong>, voire très grande – quand il s'agit de manipuler un fichier de texte dans sa totalité. Presque toujours, la taille d'une chaîne de caractère <strong class="cons">dépasse les capacités</strong> de stockage des <strong>registres</strong> de la machine sur laquelle s'exécute le programme. C'est pourquoi il n'est a priori <strong class="cons">pas possible</strong> de manipuler informatiquement une chaîne de caractères <strong>comme une donnée élémentaire</strong>.  </p>
+</div><!-- complement -->
+
+
+
+<h3 id="stringLiteral"> Syntaxe de codage d'une constante littérale chaîne de caractères en langage <em>C</em> </h3>
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, une <strong class="title">constante littérale</strong> de « type » <strong class="title">chaîne de caractères</strong> <a class="external" href="https://en.wikipedia.org/wiki/String_literal" target="_BLANK">W</a> – en anglais, <strong>string literal</strong> – se code via la forme syntaxique ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><span style="color: darkgrey; font-style: normal;">[</span><strong class="defin">préfixe d'encodage</strong><span style="color: darkgrey; font-style: normal;">]</span>
+    </span> "<span class="nocode"><strong class="specialO">suite de val. de car. et de séq. d'échapp.</strong></span>"</code>
+</span> </p>
+<div class="expert">
+<p> Le <strong class="specialG">type</strong> d'un tel objet sera détaillé plus loin <a class="infra" href="Cc5-6_chainesCaracteres.html#typeStringLiteral"></a>. </p>  
+</div><!-- expert -->  
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette syntaxe <a class="external" href="https://en.cppreference.com/w/c/language/string_literal" target="_BLANK">C</a>, on peut apporter les précisions suivantes.  </p>
+<ul>
+  <li> Le <strong class="defin">préfixe d'encodage</strong> est <strong>optionnel</strong> et reprend la <strong class="pros">même syntaxe</strong> que celle des valeurs de caractères étendus (cf. chap. C3‑IX <a class="previous" href="../C3-Numeration/Cc3-9_typesCaracteresEtendus.html#valCarEtendus" target="_BLANK"></a>). Il peut donc prendre les <strong>codes</strong> : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">u8</code>, <code class="prettyprint lang-c">u</code> ou <code class="prettyprint lang-c">U</code>
+  </span> <br>
+  pour spécifier que les caractères de la chaînes sont respectivement encodées dans le <strong>format</strong> : <br>
+  <span class="inline">
+    <strong><em class="sigle">UTF‑8</em></strong>, <strong><em class="sigle">UTF‑16</em></strong> ou <strong><em class="sigle">UTF‑32</em></strong>.
+  </span> </li>
+
+  <div class="nobullet"> En l'<strong>absence de préfixe</strong>, l'encodage des caractères de la chaîne dépend de l'implémentation.  <strong class="defin">Par défaut</strong>, on a :  </div>
+  <ul>
+    <li> <strong class="defin"><em class="sigle">UTF‑8</em></strong> avec la chaîne de compilation <strong>GCC</strong> sous <strong>Linux</strong> ;  </li>
+  
+    <li> <strong class="defin"><em class="sigle">ASCII</em></strong> restreint avec la chaîne de compilation <strong>Mingw‑w64</strong> sous <strong>Windows</strong>. </li>
+  </ul>
+
+  <div class="expert"> 
+  <div class="nobullet"> Il existe aussi le <strong class="defin">préfixe d'encodage</strong> <code class="prettyprint lang-c">L</code> pour imposer aux caractères de la chaîne le <strong class="cons">type obsolète</strong> <code class="prettyprint lang-c">wchar_t</code>. Son usage n'est <strong class="warning">pas recommandé</strong>. </div> 
+  </div><!-- expert -->
+  
+  <li> La <strong class="specialO">suite de valeurs de caractères et de séquences d'échappement</strong> codée entre <strong>guillemets doubles</strong> <code class="prettyprint lang-c">""</code> doit respecter principalement <strong class="pros">deux limitations</strong> : </li>
+  <ul>
+    <li> être codée sur <strong class="warning">une seule ligne</strong> du <strong>fichier source</strong> ; </li>
+    
+    <div class="expert">
+    <div class="nobullet"> (On a vu au chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#contreOblique" target="_BLANK"></a> que l'on peut s'affranchir de cette contrainte en codant des <strong>sauts de lignes fictifs</strong> avec le caractère de contrôle <code>\</code> en fin de ligne. On verra infra <a class="external" href="Cc5-6_chainesCaracteres.html#arrayStringDeclaration"></a> que dans l'initialisation d'une déclaration, on peut aussi saisir plusieurs chaînes les unes à la suite des autres, séparées selon les règles du format libre ; elles sont concaténées par le compilateur.) </div>  
+    </div><!-- expert --> 
+  
+    <li> <strong class="warning">ne pas contenir</strong> le <strong>caractère</strong> <code class="prettyprint lang-c">"</code>, puisque ce dernier marquerait la <strong class="defin">fin du codage</strong> de la chaîne (mais il suffirait d'employer la séquence d'échappement <code class="cmd" style="color: darkorange;">\"</code> pour y remédier).  </li>
+  </ul>
+  <div class="expert">
+  <div class="nobullet"> De plus :  </div>
+  <ul>
+    <li> les <strong class="specialO">valeurs de caractères</strong> peuvent être <strong class="pros">directement saisies</strong> dans le code source tant que la <strong>syntaxe automorphe</strong> est possible (cf. chap. C3‑IX <a class="previous" href="../C3-Numeration/Cc3-9_typesCaracteresEtendus.html#syntaxeAutomorphe" target="_BLANK"></a>) ;   </li>
+
+    <li> les <strong class="specialO">séquences d'échappement</strong> doivent être codées conformément à leur <strong>syntaxe spécifique</strong> avec le symbole <code class="cmd">\</code> comme préfixe (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#caracteresSpeciaux" target="_BLANK"></a>) ; les plus courantes sont : </li>
+    <ul style="list-style: circle;">
+      <li> <code class="cmd" style="color: darkorange;">\n</code>, <code class="cmd" style="color: darkorange;">\t</code>, <code class="cmd" style="color: darkorange;">\b</code> ou <code class="cmd" style="color: darkorange;">\a</code> pour intégrer respectivement un <strong>saut de ligne</strong> (<em class="sigle">LF</em>), un <strong>saut de tabulation</strong> horizontale (<em class="sigle">HT</em>), un <strong>saut arrière</strong> (<em class="sigle">BS</em>) du curseur ou l'émission d'<strong>avertissement sonore</strong> (<em class="sigle">BEL</em>) ; </li>
+
+      <li> <code class="cmd" style="color: darkorange;">\\</code>, <code class="cmd" style="color: darkorange;">\"</code> ou <code class="cmd" style="color: darkorange;">\'</code> pour intégrer respectivement les <strong>symboles</strong> « <code>\</code> », « <code>"</code> » ou « <code>'</code> » sans qu'ils soient interprétés comme des caractères de contrôle ; </li>
+
+      <li> <code class="cmd" style="color: darkorange;">\x<span class="nocode"><strong>xx</strong></span></code>, <code class="cmd" style="color: darkorange;">\u<span class="nocode"><strong>xxxx</strong></span></code> ou <code class="cmd" style="color: darkorange;">\U<span class="nocode"><strong>xxxxxxxx</strong></span></code> pour intégrer un caractère par son <strong class="specialO">point de code</strong> si ce dernier comporte respectivement <strong>2</strong>, <strong>4</strong> ou <strong>8 digits hexadécimaux</strong>, sachant que <em class="remark">tous les digits</em> du point de code doivent être saisis, <strong class="warning">y compris</strong> les <strong>zéros initiaux</strong>. </li>
+    </ul> 
+  </ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="exemples" id="eyeBlink">
+<p class="exemple"> Le bon affichage de la <strong class="title">constante littérale</strong> <strong>chaîne de caractères</strong> saisie dans le code source comme ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c" style="font-size:80%">"Le \"visage clin d'œil\" \U0001F609 se code :\t\\U0001F609."</code>
+</span> <br>
+peut être testé directement avec la fonction <code class="prettyprint lang-c">printf</code> dans l'environnement <strong class="OnlineGDB">OnLineGDB</strong>, dont la chaîne de compilation est <strong>GCC</strong> (laquelle opère par défaut en <strong><em class="sigle">UTF‑8</em></strong>). On obtient normalement en sortie standard : <br>
+<span class="inline">
+  <code class="displayDark">Le "visage clin d'œil" 😉 se code :    \U0001F609.</code>
+</span> </p>
+
+<div class="expert">
+<p> Dans cet exemple, on peut remarquer : </p>
+<ul>
+  <li> le <strong>caractère non <em class="sigle">ASCII</em></strong> <code class="cmd">œ</code> directement saisi (syntaxe automorphe) ;  </li>
+
+  <li> les <strong>séquences d'échappement</strong> <code class="prettyprint lang-c">\"</code>, <code class="prettyprint lang-c">\t</code> et <code class="prettyprint lang-c">\\</code> ;  </li>
+
+  <li> la <strong>séquence d'échappement</strong> <code class="cmd">\U0001F609</code> – sachant qu'elle aurait pu être remplacée par sa valeur de caractère 😉 saisie en <strong>syntaxe automorphe</strong> (cf. chap. C3‑VIII <a class="previous" href="../C3-Numeration/Cc3-8_typesCaracteres.html#valeurCarImprimable" target="_BLANK"></a>) par copier‑coller depuis la table des caractères du système d'exploitation ou d'une page web comme celle‑ci <a class="external" href="https://unicode-table.com/fr/1F609/" target="_BLANK"></a>.  </li>
+</ul>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4 id="rawString"> La notion de chaîne de caractères « brute » </h4>
+
+
+<div class="important">
+<p> Pour <strong class="pros">s'affranchir de toute contrainte de saisie</strong>, le langage <strong>C++</strong> (depuis la norme <em class="mark">C++11</em>) et une extension du langage <strong>C</strong> – portée notamment par la chaîne de compilation <strong>GCC</strong> – introduisent la notion de <strong class="title">chaîne de caractères brute</strong> – en anglais, <strong>raw string literal</strong> <a class="external" href="https://en.cppreference.com/w/cpp/language/string_literal" target="_BLANK">C++ §(6)</a>. Sa syntaxe de codage est la suivante :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><span style="color: darkgrey; font-style: normal;">[</span><strong class="defin">préfixe d'encodage</strong><span style="color: darkgrey; font-style: normal;">]</span></span>R"<span class="nocode"><strong class="specialT">motif</strong></span>(<span class="nocode"><strong class="specialO">chaîne brute</strong></span>)<span class="nocode"><strong class="specialT">motif</strong>&#8239;</span>"</code>
+</span> <br>
+Le <strong class="specialT">motif</strong> joue le rôle de <strong class="specialT">délimiteur</strong>, il peut être codé par n'importe quelle séquence (éventuellement vide) de <strong>caractères imprimables <em class="sigle">ASCII</em></strong> à l'exception des caractères <strong><em class="sigle">SP</em></strong> (espace), « <code>\</code> », « <code>(</code> » et « <code>)</code> ». </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans une <strong class="title">chaîne de caractères brute</strong>, le compilateur ne traite <strong class="warning">aucune séquence d'échappement</strong>. Seules sont recherchées les séquences <code class="cmd">"<span class="nocode"><strong class="specialT">motif</strong></span>(</code> et <code class="cmd">)<span class="nocode"><strong class="specialT">motif</strong></span>"</code> pour délimiter le début et la fin de la chaîne. Le choix du <strong class="specialT">motif</strong> délimiteur dépend du contenu de la chaîne, le codeur devant s'assurer qu'il n'y ait <strong class="pros">aucun conflit</strong> possible avec une éventuelle occurrence de cette séquence dans le contenu de la chaîne. Typiquement, on prend une répétition de symboles symétriques comme par exemple <code class="cmd">======</code>. </p>
+
+<p> <strong class="specialO">Tous les caractères</strong> saisis dans une <strong class="title">chaîne brute</strong> sont inclus donc tels quels, y compris les <strong>sauts de lignes</strong> générés par la touche « entrée » du clavier. Cette propriété est particulièrement bienvenue dans un programme pour <strong class="pros">incorporer des lignes de code source d'un autre langage</strong>, qui peuvent être indentées conformément aux règles de bonnes pratiques. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+  <li> Le <strong class="title">programme académique</strong> ci‑dessous comporte une <strong>chaîne de caractères brute</strong> codée sur <strong>deux lignes</strong> (n° 4 & 5) comme premier argument de la fonction <code class="prettyprint lang-c">printf</code>. Arbitrairement, le <strong class="specialT">motif</strong> délimiteur choisi est <code class="cmd">!!!</code>, mais tout autre aurait pu convenir. </li>
+
+  <div class="nobullet"> Ce programme est compilable en <strong>C</strong> ou en <strong>C++</strong> sur <strong class="OnlineGDB">OnLineGDB</strong>. </div> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  printf(R"!!!(foo
+       bar)!!!");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Comme attendu, il produit en sortie standard l'<strong>affichage sur deux lignes</strong> ci‑dessous : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+foo
+       bar
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li id="exRawString"> Au chapitre R2‑IV <a class="previous" href="../../ModuleR/R2-Applications/Rc2-4_webServeur.html#CandCpp" target="_BLANK"></a>, on a montré comment <strong>embarquer un serveur web</strong> sur une <strong class="Arduino">carte Arduino</strong> équipée d'un <strong>shield Ethernet</strong> – donc, programmée en <strong>C++</strong>. Dans l'extrait ci‑dessous, le code <strong><em class="sigle">HTML/CSS</em></strong> de la page d'accueil du serveur est incorporé en plusieurs parties sous la forme des <strong class="title">chaînes de caractère brutes</strong> <code>pageHead</code> (lignes nº 10 à 17) et <code>pageTail</code> (lignes nº 19 à 26) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+const char pageHead[] = R"=====(
+&lt;!DOCTYPE html&gt;
+  &lt;html lang='fr'&gt;
+  &lt;head&gt;
+    &lt;meta charset='utf-8'&gt;
+    &lt;title&gt;Dynamic page Arduino&lt;/title&gt;
+  &lt;/head&gt;
+)=====";
+
+const char pageTail[] = R"=====(
+&lt;h1&gt; Dynamic page example embedded on Arduino board &lt;/h1&gt;
+&lt;p&gt;&lt;a href='./?bgcolor=white'&gt;White&lt;/a&gt;
+     &lt;!-- 2 non‑break spaces here as inter-margin --&gt;
+   &lt;a href='./?bgcolor=yellow'&gt;Yellow&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+)=====";
+
+// ...
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol><!-- numbered -->
+
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Avec certains éditeurs de code, la <strong class="title">coloration syntaxique</strong> des <strong>chaînes de caractères brutes</strong> est <strong class="cons">défectueuse</strong>. C'est notamment le cas du script <em class="mark">Google Prettify</em> <a class="external" href="https://code.google.com/archive/p/google-code-prettify/" target="_BLANK"></a> utilisé pour la mise en forme du présent site. </p>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="typeStringLiteral"> Type d'une constante littérale chaîne de caractères </h3>
+
+
+
+<div class="important">
+<p> Comme toute constante littérale, une <strong>constante littérale chaîne de caractère</strong> possède un <strong class="title">type implicitement déterminé</strong>. Dans tous les cas, il s'agit d'un <strong class="specialO">tableau</strong> dont : </p>
+<ul>
+  <li> le <strong class="specialG">type d'élément</strong> est directement lié au <strong>format d'encodage</strong> des caractères ;  </li>
+
+  <li> le <strong class="specialLB">nombre d'élément</strong> dépend du <strong>nombre d'unités d'encodage</strong> nécessaires pour représenter tous les caractères de la chaîne (variable d'un caractère à l'autre pour certains formats).  </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Plus précisément, si l'on note <strong class="specialLB">N</strong> le <strong>nombre d'unités d'encodage</strong> pour représenter tous les caractères d'une chaîne codée dans le programme comme une constante littérale, cette dernière est <strong class="title">implicitement de type</strong> :  </p>
+<ul>
+  <li> <code class="prettyprint lang-c">const char[<span class="nocode"><strong class="specialLB">N + 1</strong></span>]</code> en l'<strong>absence de préfixe d'encodage</strong> ou avec le <strong>préfixe</strong> <code class="cmd">u8</code> en langage <strong>C</strong> ;  </li>
+
+  <div class="nobullet"> (<code class="prettyprint lang-c">char8_t[<span class="nocode"><strong class="specialLB">N + 1</strong></span>]</code> avec le <strong>préfixe</strong> <code class="cmd">u8</code> en  langage <strong>C++</strong> depuis la norme <em class="mark">C++20</em>) </div>
+
+  <li> <code class="prettyprint lang-c">const char16_t[<span class="nocode"><strong class="specialLB">N + 1</strong></span>]</code> avec le <strong>préfixe</strong> <code class="cmd">u</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">const char32_t[<span class="nocode"><strong class="specialLB">N + 1</strong></span>]</code> avec le <strong>préfixe</strong> <code class="cmd">U</code>. </li>
+</ul>
+<p> sachant qu'une <strong class="specialLB">unité supplémentaire</strong> (d'où le <strong class="specialLB">+ 1</strong> dans les expressions ci‑dessus) est toujours requise pour encoder le <strong class="specialDR">caractère de fin de chaîne</strong> <strong  class="specialN"><em class="sigle">NUL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Caractère_nul" target="_BLANK">W</a> – codé <code class="cmd">0x0</code> dans tous les formats (et également, par la séquence d'échappement octale <code class="prettyprint lang-c">'\0'</code> – cf. chap. C3‑VIII <a class="previous" href="../C3-Numeration/Cc3-8_typesCaracteres.html#sequenceOctale" target="_BLANK"></a>). Ce caractère n'a pas besoin d'être saisi par le codeur, il est <strong>automatiquement ajouté</strong> par le compilateur (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#CstyleString" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<div class="expert">
+<div class="exemples" id="exScanStringLiteral">
+<p class="exemples"> Le <strong class="title">type implicite</strong> de chaque <strong>chaîne de caractère</strong> donnée ci‑dessous est valable pour une compilation en langage <strong>C</strong> sur une machine <strong>Linux</strong>. </p>
+
+<p> Dans tous les cas, le <strong class="defin">programme de scan mémoire</strong> proposé ci‑après pour vérifier ce type peut être exécuté sur <code class="prettyprint lang-c">OnLineGDB</code>. </p>
+
+<ol class="numbered">
+  <li> La chaîne <code class="prettyprint lang-c">"Good bye."</code> (9 caractères) est du <strong class="title">type implicite</strong> <code class="prettyprint lang-c">const char[10]</code> (9 + 1 éléments) car elle est composée exclusivement dans le <strong>jeu <em class="sigle">ASCII</em> restreint</strong> (chaque caractère ne nécessite qu'une seule unité d'encodage). </li>
+
+  <div class="nobullet"> Le <strong class="defin">programme de scan mémoire</strong> ci‑dessous utilise (très classiquement) un <strong>pointeur d'octet</strong> <code class="prettyprint lang-c">p</code> initialisé sur le premier caractère d'une constante littérale chaîne de caractères (cf. la ligne n° 7). </div>
+  <ul>
+    <li> Il parcourt l'espace mémoire jusqu'à atteindre le <strong>caractère de fin de chaîne</strong> <code class="cmd">0x0</code> (cf. la ligne n° 14).  </li>
+
+    <li> À chaque nouveau caractère, il affiche son <strong>adresse</strong> puis : </li>
+    <ul style="list-style: circle;">
+      <li> soit sa <strong>valeur de caractère</strong> si elle est imprimable ; </li>
+    
+      <li> soit son <strong>code hexadécimal</strong> dans le cas contraire.  </li>
+    </ul>
+  </ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;uchar.h&gt; // only for further examples
+
+int main(void) {
+  char * str = "Good bye.";
+  char * p = str;  // mem-scan pointer
+  do {
+    if (isprint(*p)) 
+      printf("%p %c\n", p, *p);
+    else // non printable character
+      printf("%p 0x%X\n", p, *p);
+  }
+  while (*p++ != 0x0);
+
+  return 0;
+}  
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Il produit en sortie standard l'affichage suivant :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x56430e6ec004 G
+0x56430e6ec005 o
+0x56430e6ec006 o
+0x56430e6ec007 d
+0x56430e6ec008 
+0x56430e6ec009 b
+0x56430e6ec00a y
+0x56430e6ec00b e
+0x56430e6ec00c .
+0x56430e6ec00d 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  <div class="nobullet"> où l'on voit que les <strong>adresses</strong> de tous les caractères de la chaîne s'échelonnent <strong>de 1 en 1</strong> (ils sont donc bien d'un type de taille 1 octet). </div> 
+  
+  <li> La chaîne <code class="prettyprint lang-c">"À bientôt"</code> (9 caractères également) est du <strong class="title">type implicite</strong> <code class="prettyprint lang-c">const char[12]</code> (11 + 1 éléments) car elle comporte deux caractères (« À » et « ô ») qui sont hors <strong>jeu <em class="sigle">ASCII</em> restreint</strong>, donc non reconnus comme caractères imprimables par la fonction <code class="prettyprint lang-c">isprint</code>. L'un et l'autre nécessitent <strong>deux octets</strong> d'encodage en <strong><em class="sigle">UTF‑8</em></strong> (format par défaut des chaînes de caractères avec <em class="mark">GCC</em>), ce que l'on peut observer sur la sortie standard obtenue avec le même programme qu'à l'exemple précédent :   </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x55c165977004 0xC3
+0x55c165977005 0x80
+0x55c165977006  
+0x55c165977007 b
+0x55c165977008 i
+0x55c165977009 e
+0x55c16597700a n
+0x55c16597700b t
+0x55c16597700c 0xC3
+0x55c16597700d 0xB4
+0x55c16597700e t
+0x55c16597700f 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  <li> La chaîne <code class="prettyprint lang-c">u"Good bye."</code> (toujours 9 caractères) est du <strong class="title">type implicite</strong> <code class="prettyprint lang-c">const char16_t[10]</code> (9 + 1 éléments) car le <strong>préfixe</strong> <code class="cmd">u</code> impose le type <code class="prettyprint lang-c">char16_t</code> – de taille <strong>2 octets</strong> – comme unité d'encodage de ses caractères. Et ici, chaque caractère ne nécessite qu'une seule unité d'encodage.  </li>
+
+  <div class="nobullet"> Dans le <strong>programme de scan mémoire</strong> précédent, il suffit de remplacer les lignes n° 6 & 7 par celles‑ci dessous : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:6">
+  char16_t * str = u"Good bye.";
+  char16_t * p = str;
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> pour obtenir en sortie standard l'affichage suivant :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x56351c230004 G
+0x56351c230006 o
+0x56351c230008 o
+0x56351c23000a d
+0x56351c23000c  
+0x56351c23000e b
+0x56351c230010 y
+0x56351c230012 e
+0x56351c230014 .
+0x56351c230016 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  <div class="nobullet"> où l'on voit que les adresses de tous les caractères de la chaîne s'échelonnent de 2 en 2 (ces caractères sont donc bien d'un type de taille 2 octets).  </div>  
+
+  <li> On peut faire une <strong>expérience similaire</strong> avec la chaîne <code class="prettyprint lang-c">U"Good bye."</code> et vérifier qu'elle est du <strong class="specialG">type</strong> <code class="prettyprint lang-c">const char32_t[10]</code>.  </li>
+
+</ol><!-- numbered -->
+  
+</div><!-- exemples -->
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Le <strong class="title">caractère <em class="sigle">NUL</em></strong> est parfois désigné <strong class="cons"><em class="sigle">NULL</em></strong> mais il faut surtout <strong class="warning">ne pas le confondre</strong> avec le <strong class="defin">pointeur nul</strong> (cf. chap. C5‑II <a class="previous" href="Cc5-2_pointeursApplications.html#nullPtr" target="_BLANK"></a>) dont le code en langages <strong>C/C++</strong> est <code class="prettyprint lang-c">NULL</code>. </p>
+</div><!-- remarque -->
+
+
+<h3>  Représentation en mémoire d'une constante littérale chaîne de caractères </h3>
+
+
+
+<div class="important">
+<p> <strong class="warning">Sauf</strong> lorsqu'elle constitue la valeur d'initialisation dans la <strong>déclaration d'une donnée de type</strong> <strong class="defin">tableau</strong> (cf. infra <a class="infra" href="Cc5-6_chainesCaracteres.html#arrayStringDeclaration"></a>), toute <strong class="title">constante littérale chaîne de caractères</strong> codée dans un programme est <strong>stockée</strong> dans le <strong>segment</strong> <code class="inv" style="background:springgreen;">.rodata</code> (« <code>ro</code> » pour <em class="english">read‑only</em>) de la zone mémoire statique allouée au programme lors de son exécution  — autrement dit, le segment réservé pour les <strong class="specialSG">constantes statiques</strong> (cf. chap. C4‑2 <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#machineX86" target="_BLANK"></a>). </p>
+
+<div class="expert">
+<p> En effet : </p>
+<ul>
+  <li> du fait de sa potentielle <strong>grande taille</strong>, il ne serait <strong class="cons">pas commode</strong> de stocker un tel objet dans le segment <code>.text</code> du programme ; </li>
+
+  <li> un tel objet étant de <strong>type</strong> <code class="prettyprint lang-c">const</code>, il ne peut pas être stocké dans le segment <code>.data</code>. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Précisons de plus que lorsque le programme comporte <strong class="title">plusieurs occurrences</strong> de la <strong>même constante littérale chaîne de caractères</strong>, le compilateur est en général capable d'optimiser le code exécutable avec <strong class="pros">un seul stockage</strong> de cet objet. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Toutefois, le codage d'un <strong class="specialO">saut de ligne final</strong> par une séquence d'échappement <code class="cmd">\n</code> dans une chaîne de caractères peut engendrer des <strong class="warning">traitements différents</strong> du compilateur selon qu'elle figure comme argument dans un appel de la fonction <code class="prettyprint lang-c">printf</code> ou comme valeur d'initialisation d'une déclaration de donnée chaîne de caractères. </p>
+
+<div class="exemples" id="exScanRodata">
+<p class="exemple"> Pour révéler le <strong class="title">stockage en mémoire</strong> d'une <strong>constante littérale chaînes de caractères</strong>, on propose le programme ci‑dessous dans lequel :   </p>
+<ul>
+  <li> on déclare tout d'abord une constante globale nommée <code class="prettyprint lang-c">rodataStart</code> initialisée par la valeur arbitraire <code class="prettyprint lang-c">'#'</code> simplement pour repérer l'adresse du <strong>début du segment</strong> <code class="inv" style="background:springgreen;">.rodata</code> ; </li>
+
+  <li> on code <strong class="defin">deux occurrences</strong> de la même constante littérale <code class="prettyprint lang-c">"Hello\n"</code> (avec la séquence d'échappement <code class="prettyprint lang-c">\n</code> – <em>newline</em>) :  </li>
+  <ul>
+    <li> l'une constituant le premier argument effectif (donc, la chaîne de format) d'un <strong>appel de la fonction</strong> <code class="prettyprint lang-c">printf</code> (cf. la ligne n° 7) ;  </li>
+  
+    <li> l'autre constituant la valeur d'initialisation d'un pointeur de caractères (cf. la ligne n° 8) ;  </li>
+  </ul>
+
+  <li> comme dans les exemples précédents (cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#exScanStringLiteral"></a>), on scanne la mémoire avec un <strong>pointeur d'octet</strong>, ici initialisé au début du segment <code class="inv" style="background:springgreen;">.rodata</code> et qui parcourt 20 caractères en recherchant les occurrences de <code class="prettyprint lang-c">'H'</code> (début des constantes littérales <code class="prettyprint lang-c">"Hello\n"</code>). </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+const char rodataStart = '#';
+
+int main(void) {
+  printf("Hello\n");
+  char * str = "Hello\n";
+  printf("%s", str);
+  
+  printf("%p %c .rodata\n", &rodataStart, rodataStart);
+  
+  const char * p = &rodataStart;
+  do {
+    if (*p != 'H') p++;
+    else do {
+      if (isprint(*p)) 
+        printf("%p %c\n", p, *p);
+      else // non printable character
+        printf("%p 0x%X\n", p, *p);
+    }
+    while (*p++ != 0x0);
+  }
+  while (p <= &rodataStart + 20);
+
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, ce programme produit en sortie standard l'affichage suivant :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Hello
+Hello
+0x561f50746004 # .rodata
+0x561f50746005 H
+0x561f50746006 e
+0x561f50746007 l
+0x561f50746008 l
+0x561f50746009 o
+0x561f5074600a 0x0
+0x561f5074600b H
+0x561f5074600c e
+0x561f5074600d l
+0x561f5074600e l
+0x561f5074600f o
+0x561f50746010 0xA
+0x561f50746011 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  <p> où l'on voit que le segment <code class="inv" style="background:springgreen;">.rodata</code> contient <strong class="defin">deux occurrences</strong> de la séquence de caractères <code>Hello</code>, l'une <strong>avec</strong> et l'autre <strong>sans</strong> le caractère <strong><em class="sigle">LF</em></strong> (<em>line feed</em>, code <code>0xA</code>) normalement généré par la séquence d'échappement <code class="prettyprint lang-c">\n</code>. </p>
+
+  <p> Ici, le compilateur a implémenté dans le segment <code>.text</code> (non scanné) le saut de ligne final codé dans la chaîne de format dans l'appel de la fonction <code class="prettyprint lang-c">printf</code>.  </p>
+  
+  <p> <em class="remark">Remarque</em> : en supprimant la séquence d'échappement <code class="cmd">\n</code> dans les deux constantes littérales (lignes n° 7 & 8), on peut constater que le compilateur <strong class="pros">optimise</strong> le segment <code class="inv" style="background:springgreen;">.rodata</code> en ne stockant qu'<strong>une seule séquence</strong> <code>Hello</code>. </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Le cas de l'<strong>initialisation</strong> d'une donnée de type <strong class="defin">tableau</strong> par une <strong class="title">constante littérale chaîne de caractères</strong> est traité infra <a class="infra" href="Cc5-6_chainesCaracteres.html#stringArrayDeclaration"></a>. </p>
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4> Particularité pour le framework <em class="mark">Arduino</em> </h4>
+
+
+
+<p>  Dans le cadre de la programmation des <strong class="title">cartes à microcontrôleur</strong>, le stockage des <strong>constantes littérales chaînes de caractères</strong> dans le segment <code class="inv" style="background:springgreen;">.rodata</code> peut conduire à un  <strong class="warning">encombrement significatif</strong> de l'espace mémoire réservé aux données (<strong><em class="sigle">RAM</em></strong>). En effet : </p>
+<ul>
+  <li> cet espace est souvent <strong class="cons">très limité</strong> – par exemple, seulement <strong class="cons">2 ko</strong> de <strong><em class="sigle">RAM</em></strong> sur dans le microcontrôleur <strong>Atmel ATmega328P</strong> qui équipe les <strong class="Arduino">cartes Arduino</strong> <strong>Uno</strong> et <strong>Nano</strong> (cf. chap. C1‑3 <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>) ; </li>
+
+  <li> tout <strong>message textuel</strong> généré par le programme, qu'il soit envoyé sur le moniteur série ou un autre périphérique de sortie (écran <em class="sigle">LCD</em>…) nécessite a priori le codage d'une <strong>constante littérale chaîne de caractères</strong> spécifique. </li>
+</ul>
+<p> Même sans saturation de la <strong><em class="sigle">RAM</em></strong> lors de la compilation, il est <strong class="warning">indispensable</strong> qu'il y reste <strong class="defin">suffisamment d'octets libres</strong> pour la <strong>pile</strong> et le <strong>tas</strong> lors de l'exécution du programme (cf. chap. C4‑2 <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#remarqueCollision" target="_BLANK"></a>). </p>
+
+
+<div class="important">
+<p> Pour <strong class="pros">remédier</strong> aux problèmes potentiels d'<strong class="cons">encombrement de la <em class="sigle">RAM</em></strong>, il existe diverses <strong class="title">macro‑définitions spéciales</strong>, notamment celles mentionnées ci‑dessous <a class="external" href="https://www.arduino.cc/reference/en/language/variables/utilities/progmem/" target="_BLANK">A</a>. Elles permettent de <strong class="defin">localiser des données dans la mémoire flash</strong> du microcontrôleur.  </p>
+<ul>
+  <li> La <strong class="specialLB">macro‑définition</strong> <code class="prettyprint lang-c">PROGMEM</code> (pour <em class="english">program memory</em>) est utilisable comme un <strong class="specialLB">mot‑clef modificateur</strong> dans le <strong class="specialG">descripteur de type</strong> de la déclaration d'une <strong class="specialO">donnée statique constante</strong>, typiquement un tableau de caractères.   </li>
+
+  <div class="nobullet"> Dans la suite du code, une telle donnée nécessite une <strong class="warning">conversion spéciale</strong> ou l'usage d'une <strong class="warning">pseudo‑fonction spécifique</strong> pour pouvoir être lue. </div>
+
+  <li> La <strong class="specialLB">pseudo‑fonction</strong> <code class="prettyprint lang-c">F</code> (pour <em class="english">flash</em>) peut s'appliquer à toute occurrence d'une <strong>constante littérale chaîne de caractères</strong> codée dans un argument effectif d'<strong>appel de fonction</strong>. </li>
+</ul>
+<p> Pour les microcontrôleurs <strong>Atmel</strong> à cœur <strong><em class="sigle">AVR</em></strong>, ces éléments de langages sont définis dans le fichier d'en‑tête <code class="filename">avr/pgmspace.h</code> <a class="external" href="https://github.com/avrdudes/avr-libc/blob/main/include/avr/pgmspace.h" target="_BLANK">G</a>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Rappelons qu'en plus de sa <strong><em class="sigle">RAM</em></strong>, tout microcontrôleur est doté d'un volume de <strong class="title">mémoire flash</strong> (non volatile) notamment dédié au stockage du <strong>code exécutable</strong> du programme utilisateur – le segment <code class="inv" style="background:crimson;">.text</code>. Étant <strong class="pros">beaucoup plus grand</strong> que la <strong><em class="sigle">RAM</em></strong> – par exemple, <strong>32 ko</strong> dans le microcontrôleur <strong>Atmel ATmega328P</strong> – ce volume peut aussi être exploité pour y <strong class="defin">stocker des données</strong>. </p>
+
+<p> Toutefois, cette possibilité est <strong class="defin">limitée aux constantes statiques</strong>, car lors de l'exécution du programme, toute la <strong class="title">mémoire flash</strong> est opérée en <strong>lecture seule</strong>. </p>
+
+<p> De plus, outre le fait qu'elle <strong class="cons">complique le codage</strong>, l'exploitation de la mémoire flash pour les données présente un inconvénient : elle <strong class="cons">ralentit les opérations de lecture des données</strong>, puisque le temps d'accès à une <strong class="title">mémoire flash</strong> est toujours très supérieur à celui d'une <strong><em class="sigle">RAM</em></strong>.  Elle ne doit donc être employée que lorsqu'elle est vraiment nécessaire, c'est‑à‑dire lorsque les données du programme sont volumineuses au point de saturer la <strong><em class="sigle">RAM</em></strong> du microcontrôleur. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons le programme déjà mentionné supra <a class="supra" href="Cc5-6_chainesCaracteres.html#exRawString" target="_BLANK"></a> de démonstration d'un <strong class="title">serveur web embarqué</strong> sur une <strong class="Arduino">carte Arduino</strong> équipée d'un <strong>shield Ethernet</strong>. Tel qu'il est donné au chap. R2‑IV <a class="previous" href="../../ModuleR/R2-Applications/Rc2-4_webServeur.html#CandCpp" target="_BLANK"></a>, c'est‑à‑dire sans précautions particulières, le <strong>bilan de la compilation</strong> par le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> sur un modèle de carte <strong class="Arduino">Uno</strong> est le suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Le croquis utilise 16274 octets (50%) de l'espace de stockage de programmes. Le maximum est de 32256 octets.
+Les variables globales utilisent 961 octets (46%) de mémoire dynamique, ce qui laisse 1087 octets pour les variables locales. Le maximum est de 2048 octets.
+</pre>
+<!---------- ne pas indenter ---------->    
+
+<p> Certes, lors de l'exécution, on n'observe <strong class="pros">aucun dysfonctionnement</strong>, parce que l'espace restant pour la pile et le tas (les variables locales) est suffisant au peu de données que les fonctions appelées manipulent. Mais on peut néanmoins observer qu'avec <strong>une page web de taille extrêmement réduite</strong>, ce programme mobilise déjà <strong class="warning">46 % de la <em class="sigle">RAM</em></strong>. Il suffirait donc que le code de la page web soit un peu plus long pour causer une saturation… </p>
+
+<p class="square"> Pour l'expérience, localisons dans la <strong class="defin">mémoire flash</strong> les principales chaînes de caractères employées dans le programme. </p>
+
+<ol class="numbered">
+  <li> On invoque la <strong class="specialLB">macro‑définition</strong> <code class="prettyprint lang-c">PROGMEN</code> dans le descripteur de type de chacune des chaînes <code class="prettyprint lang-c">pageHead</code> et <code class="prettyprint lang-c">pageTail</code> – cf. les lignes n° 10 & 19 dans le code ci‑après.  </li>
+
+  <div class="nobullet"> Lors de la lecture de ces données, on doit alors prendre soin de leur appliquer une <strong class="warning">conversion spéciale</strong> (<code class="prettyprint lang-c">reinterpret_cast</code> <a class="external" href="https://en.cppreference.com/w/cpp/language/reinterpret_cast" target="_BLANK">C++</a>)  – cf. les lignes n° 50 & 57 dans le code ci‑après. </div>
+
+  <li> On applique la <strong class="specialLB">pseudo‑fonction</strong> <code class="prettyprint lang-c">F</code> aux constantes littérales chaînes de caractères constituant l'argument effectif des appels de fonctions <code class="prettyprint lang-c">client.print</code> ou <code class="prettyprint lang-c">client.println</code> – cf. les lignes n° 47, 48, 52 & 55 dans le code ci‑après.  </li>
+</ol>
+   
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;SPI.h&gt;
+#include &lt;Ethernet.h&gt;
+
+const int spiEthernetPin = 10; // pin number on board
+
+byte mac[] = {0x90, 0xA2, 0xDA, 0x0D, 0x15, 0x43};
+
+EthernetServer server(80);
+
+const char pageHead[] PROGMEM = R"=====(
+&lt;!DOCTYPE html&gt;
+  &lt;html lang='fr'&gt;
+  &lt;head&gt;
+    &lt;meta charset='utf-8'&gt;
+    &lt;title&gt;Dynamic page Arduino&lt;/title&gt;
+  &lt;/head&gt;
+)=====";
+
+const char pageTail[] PROGMEM = R"=====(
+&lt;h1&gt; Dynamic page example embedded on Arduino board &lt;/h1&gt;
+&lt;p&gt;&lt;a href='./?bgcolor=white'&gt;White&lt;/a&gt;
+     &lt;!-- 2 non‑break spaces here as inter-margin --&gt;
+   &lt;a href='./?bgcolor=yellow'&gt;Yellow&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+)=====";
+
+void setup() {
+  Ethernet.init(spiEthernetPin);
+  Ethernet.begin(mac);
+  // Serial.begin(115200); // only for debug
+}
+
+void loop() {
+  EthernetClient client = server.available();
+  if (client) {
+    String clientRequest = "";
+    bool currentLineIsBlank = true;
+    while (client.connected()) {
+      if (client.available()) {
+        char c = client.read();
+        if (clientRequest.length() < 25) {
+          clientRequest += c;
+          // Serial.write(c); // only for debug
+        }
+        if (c == '\n' && currentLineIsBlank) {
+          client.println(F("HTTP/1.1 200 OK"));
+          client.println(F("Content-Type: text/html"));
+          client.println(); // blank line, start of response body
+          client.println(reinterpret_cast &lt;const __FlashStringHelper*&gt; (pageHead));
+          if (clientRequest.indexOf("bgcolor=yellow") > 0) {
+            client.print(F("&lt;body style='background: yellow'&gt;"));
+          }
+          else {
+            client.print(F("&lt;body style='background: white'&gt;"));
+          }
+          client.println(reinterpret_cast &lt;const __FlashStringHelper*&gt; (pageTail));
+          break;
+        }
+        if (c == '\n') {
+          currentLineIsBlank = true;
+        } 
+        else if (c != '\r') {
+          currentLineIsBlank = false;
+        }
+      }
+    }
+    delay(1); // give the web browser time to receive the data
+    client.stop();
+  }
+}
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> Le <strong>bilan de la compilation</strong> par le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> est alors le suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Le croquis utilise 16332 octets (50%) de l'espace de stockage de programmes. Le maximum est de 32256 octets.
+Les variables globales utilisent 561 octets (27%) de mémoire dynamique, ce qui laisse 1487 octets pour les variables locales. Le maximum est de 2048 octets.
+</pre>
+<!---------- ne pas indenter ---------->    
+
+<p> On voit donc que la <strong><em class="sigle">RAM</em></strong> n'est maintenant occupée qu'à <strong class="pros">seulement 27 %</strong>, et ce sans que la mémoire flash ait été significativement impactée. </p>
+</div><!-- exemple -->
+
+
+<ul>
+  <li> Pour <strong class="pros">approfondir les bases</strong> sur <code class="prettyprint lang-c">PROGMEM</code> et <code class="prettyprint lang-c">F</code>, on pourra consulter cet <strong>article</strong> <a class="external" href="https://www.e-tinkers.com/2020/05/do-you-know-arduino-progmem-demystified/" target="_BLANK"></a>. </li>
+
+  <li> Et pour se documenter en détail sur les <strong class="title">autres macro‑définitions</strong> codées dans le fichier <code class="filename">avr/pgmspace.h</code>, on s'orientera sur cette <strong>page d'index</strong> <a class="external" href="https://www.nongnu.org/avr-libc/user-manual/group__avr__pgmspace.html" target="_BLANK"></a>. </li>
+</ul>
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="donneesC-String"> Les données de type <em>chaîne de caractères</em> en langage <em>C</em> </h2>
+
+
+<div class="complement">
+<p> Comme cela a été brièvement expliqué au chapitre C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#C-style_string" target="_BLANK"></a> et rappelé en introduction du présent chapitre, en langage <strong>C</strong>, il n'existe <strong class="cons">pas</strong> de <strong class="specialG">type</strong> de donnée <strong class="title">chaîne de caractères</strong> à proprement parler, c'est‑à‑dire qui permettrait de stocker en mémoire une séquence de caractères pouvant librement <strong class="defin">varier en longueur</strong> durant l'exécution du programme. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Dans un programme codé <strong>C</strong>, pour déclarer une <strong class="title">donnée</strong> de type « <strong class="title">chaîne de caractères</strong> », on est donc contraint d'employer : </p>
+<ul>
+  <li> soit un <strong class="specialLB">tableau de caractères</strong> qui peut être <strong>initialisé de façon globale</strong> avec une syntaxe similaire à celle d'une constante littérale chaîne de caractères (mais qui n'en ait pas une) ; c'est le <strong class="pros">type recommandé</strong> pour une <strong class="defin">variable</strong> ;  </li>
+
+  <li> soit un <strong class="specialLB">pointeur sur caractères</strong>, dont la valeur est l'<strong>adresse</strong> ciblant une <strong>constante littérale chaîne de caractères</strong> ; c'est une alternative acceptable lorsque l'on veut déclarer une <strong class="defin">constante</strong> ; </li>
+</ul>
+<p> Dans tous les cas, on parle de <strong class="title">chaîne de « style C »</strong> – <strong>C‑style string</strong> en anglais <a class="external" href="https://en.wiktionary.org/wiki/C-style_string" target="_BLANK">W</a>.</p>
+</div><!-- important -->
+
+<p> En langage <strong>C++</strong>, même s'il existe d'autres solutions plus évoluées, il est <strong class="pros">possible</strong> d'employer des <strong class="title">chaînes de style C</strong>.</p>
+
+
+
+<h3 id="arrayStringDeclaration"> Déclaration d'une donnée de type tableau de caractères </h3>
+
+
+
+<div class="important">
+<p> Dans un programme en langage <strong>C</strong> ou <strong>C++</strong>, la déclaration d'une <strong class="title">variable</strong> de type <strong class="title">chaîne de style C</strong> se code préférentiellement via la <strong class="specialLB">même syntaxe que pour un tableau unidimensionnel</strong> (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#declarationTab" target="_BLANK"></a>), avec les particularités suivantes : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">type de caractère</strong> <strong class="specialN">identificateur</strong></span>[<span class="nocode"><strong class="specialLB">N</strong></span>] <span class="nocode"><span style="color: darkgrey; font-style: normal;">[</span></span> = <span class="nocode"><strong class="specialO">chaîne 1</strong>   <strong class="specialO">chaîne 2</strong> <span style="color: darkgrey; font-style: normal;"> … <strong class="specialO">chaîne i</strong> ]</span></span>; </code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette syntaxe particulière, on peut apporter les précisions suivantes. </p>
+<ul>
+  <li> Comme dans toute déclaration, on peut intégrer des <strong class="defin">mots‑clefs modificateurs</strong> comme <code class="prettyprint lang-c">const</code> (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationConst" target="_BLANK"></a>) et/ou <code class="prettyprint lang-c">static</code> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeStatique" target="_BLANK"></a> et C4‑VI <a class="previous" href="../C4-Fonctions/Cc4-6_programmationModulaire.html#fichiersImplementation" target="_BLANK"></a>). En revanche, le codage du mot‑clef <code class="prettyprint lang-c">register</code> n'a <strong class="cons">aucun effet</strong>, puisqu'une chaîne est potentiellement un objet trop gros pour être stockée en registre. </li>
+
+
+  <li> Le <strong class="specialG">type de caractère</strong> codé peut éventuellement nécessiter le codage préalable d'une directive d'inclusion de <strong>fichier d'en‑tête</strong> de bibliothèque – par exemple, <code class="filename">uchar.h</code> pour les types <code class="prettyprint lang-c">char16_t</code> et <code class="prettyprint lang-c">char32_t</code>.  </li>
+
+  <li> L'<strong class="specialN">identificateur</strong> est le <strong>nom de la donnée</strong>. Comme pour tout identificateur de tableau, une occurrence ultérieure dans le code est, sauf exceptions, dégradée en un <strong class="defin">pointeur</strong> (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#decayArray" target="_BLANK"></a>) et on peut donc lui appliquer l'<strong class="defin">opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code> pour cibler les éléments du tableau. </li>
+  
+  <li> Comme pour toute déclaration de tableau, le <strong>nombre d'éléments</strong> <strong class="specialLB">N</strong> est une <strong class="defin">expression optionnelle</strong> si l'initialisation est codée. Il doit s'agir une <strong>expression constante entière</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstanteEntiere" target="_BLANK"></a>) – en <strong>C++</strong>, simplement une expression constante ou une expression évaluable, selon la classe d'allocation. </li>
+
+  <div class="nobullet">  La valeur de <strong class="specialLB">N</strong> code le <strong class="defin">nombre maximal d'unité d'encodage</strong> que la chaîne de caractères déclarée peut contenir – <strong>caractère de fin de chaîne</strong> <strong  class="specialDR"><em class="sigle">NUL</em></strong> <strong class="defin">inclus</strong>. </div>
+  
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/chaineTableau.png" width="430px" style="margin-top:0.5em">
+  <li> Les expressions optionnelles d'initialisation <strong class="specialO">chaîne 1</strong>, <strong class="specialO">chaîne 2</strong>… <strong class="specialO">chaîne i</strong> doivent être codées conformément à la syntaxe des <strong>constantes littérales chaînes de caractères</strong> décrite supra <a class="supra" href="Cc5-6_chainesCaracteres.html#stringLiteral"></a>, sachant que : </li>
+  <ul>
+    <li> leur éventuel <strong>préfixe d'encodage</strong> doit être <strong>compatible</strong> avec le <strong class="specialG">type de caractère</strong> déclaré ;  </li>
+  
+    <li> ces chaînes sont assemblées l'un après l'autre par <strong>concaténation</strong> pour constituer une <strong  class="specialO">liste unique de caractères</strong> formant les valeurs initiales des éléments ordonnés du tableau déclaré. Au total, le nombre <strong class="specialO">K</strong> d'unités d'encodage nécessaires pour tous ces caractères doit être <strong>inférieur ou égal</strong> à la valeur de <strong class="specialLB">N − 1</strong> si le nombre d'éléments du tableau <strong class="specialLB">N</strong> est codé. En son absence, la taille du tableau est automatiquement fixée à la valeur <strong class="specialO">K + 1</strong> pour inclure automatiquement le <strong>caractère de fin de chaîne</strong> <strong  class="specialDR"><em class="sigle">NUL</em></strong>.  </li>
+  </ul>
+  <div class="nobullet"> Ces chaînes de caractères ne sont donc <strong class="warning">pas stockées</strong> comme des constantes littérales dans le segment <code class="inv" style="background:springgreen;">.rodata</code> de la mémoire allouée au programme. </div>
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<div class="expert"> 
+<p> Le fait de pouvoir coder la <strong class="title">valeur initiale</strong> de la variable de caractères en <strong>plusieurs parties</strong> <strong class="specialO">chaîne 1</strong>, <strong class="specialO">chaîne 2</strong>… est <strong class="pros">utile</strong> pour coder une <strong>longue chaîne</strong> sur <strong>plusieurs lignes</strong> dans le fichier source. En effet, cela n'est pas possible avec une seule chaîne – cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#stringLiteral"></a> – sauf si on code une chaîne brute ou si l'on code à la fin de chaque ligne un <strong>saut de ligne fictif</strong> via le caractère de contrôle <code>\</code>). </p>
+
+<p> Il est également possible, comme pour tout tableau, de coder l'<strong class="title">initialisation de la chaîne</strong> sous la forme d'une <strong class="defin">liste d'éléments</strong>, chacun constituant un caractère de la chaîne, comme ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">  <span class="nocode"><span style="color: darkgrey; font-style: normal;">…</span></span> = {<span class="nocode"><strong class="specialO">c<sub>0</sub></strong></span>, <span class="nocode"><strong class="specialO">c<sub>1</sub></strong></span>, <span class="nocode"><strong class="specialO">c<sub>2</sub></strong></span>, <span class="nocode"><span style="color: darkgrey; font-style: normal;">…</span></span> };  </code>
+</span> <br>
+Dans ce cas, il faut <strong class="warning">ne pas oublier</strong> de coder en dernier le <strong>caractère de fin de chaîne</strong> <strong class="specialDR"><em class="sigle">NUL</em></strong> (<code class="prettyprint lang-c">0x0</code>) car via cette syntaxe, il n'est <strong class="defin">pas automatiquement ajouté</strong> par le compilateur. </p>
+</div><!-- expert -->
+
+<div class="exemples">
+<p class="exemple"> La déclaration académique ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">static char s[] = "Foo" "Bar";</code>
+</span> <br>
+crée dans le segment <code class="inv" style="background:mediumseagreen;">.data</code> de la mémoire allouée au programme une <strong class="title">variable</strong> de type <strong>tableau de 7 caractères</strong> <strong><em class="sigle">ASCII</em></strong> ou <strong><em class="sigle">UTF‑8</em></strong> (selon l'implémentation) initialisés respectivement dans leur ordre d'indexation avec les valeurs de la liste ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">{'F', 'o', 'o', 'B', 'a', 'r', 0x0}  </code>
+</span> </p>
+
+<p> En employant une méthode de <strong>scan mémoire</strong> similaire à celle des exemples supra <a class="supra" href="Cc5-6_chainesCaracteres.html#exScanRodata"></a>, le résultat de cette déclaration peut être observé à l'aide du programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+char dataStart = '$';
+
+int main(void) {
+  static char str[] = "Foo" "Bar";
+
+  printf("%s \t %zu bytes\n", str, sizeof(str));
+  printf("%p %c .data\n", &dataStart,   dataStart);
+  char * p = str;
+  do {
+    if (isprint(*p)) 
+      printf("%p %c\n", p, *p);
+    else // non printable character
+      printf("%p 0x%X\n", p, *p);
+  }
+  while (*p++ != 0x0);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, ce programme produit en sortie standard l'affichage suivant :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+FooBar   7 bytes
+0x55ce33cef010 $ .data
+0x55ce33cef011 F
+0x55ce33cef012 o
+0x55ce33cef013 o
+0x55ce33cef014 B
+0x55ce33cef015 a
+0x55ce33cef016 r
+0x55ce33cef017 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+
+<p class="square"> Si, dans le programme précédent, on remplace la ligne n° 7 par la déclaration ci‑dessous où le <strong class="specialLB">nombre d'éléments</strong> de <code class="prettyprint lang-c">str</code> est codé : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  static char str[10] = "Foo" "Bar";
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors on obtient presque la même sortie standard : </p> 
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+FooBar   10 bytes
+0x564142413010 $ .data
+0x564142413018 F
+0x564142413019 o
+0x56414241301a o
+0x56414241301b B
+0x56414241301c a
+0x56414241301d r
+0x56414241301e 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+
+<p> La première ligne change puisque la <strong>taille</strong> de <code class="prettyprint lang-c">str</code> est de <strong>10 octets</strong>. La variable dispose de 3 octets supplémentaires pour d'éventuelles modifications ultérieures. </p>
+
+<div class="expert">
+<p> De plus, l'<strong>adresse</strong> de <code class="prettyprint lang-c">str</code> (celle de son premier élément) n'est pas immédiatement consécutive à celle de <code class="prettyprint lang-c">dataStart</code> car le compilateur a respecté une <strong>contrainte d'alignement</strong>. </p>
+
+<p class="square"> Mais si code un <strong class="specialLB">nombre d'éléments</strong> <strong class="cons">insuffisant</strong> dans la déclaration de <code class="prettyprint lang-c">str</code> comme par exemple ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">static char str[5] = "Foo" "Bar";</code>
+</span> <br>
+on obtient un <strong class="specialY">avertissement du compilateur</strong> et une chaîne dont le contenu est tronqué par rapport à la valeur initiale codée : </p> 
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span style="color: yellow;">main.c:7:24: warning: initializer-string for array of chars is too long
+    7 |   static char str[5] = "Foo" "Bar";
+      |                        ^~~~~</span>
+FooBa    5 bytes
+0x55d6f4016010 $ .data
+0x55d6f4016011 F
+0x55d6f4016012 o
+0x55d6f4016013 o
+0x55d6f4016014 B
+0x55d6f4016015 a
+0x55d6f4016016 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3 id="pointerStringDeclaration"> Déclaration d'une donnée de type pointeur de caractères </h3>
+
+
+
+<div class="important">
+<p> Dans un programme en langage <strong>C</strong> ou <strong>C++</strong>, on  peut aussi déclarer une <strong class="title">donnée</strong> de type <strong class="title">chaîne de style C</strong> comme un <strong class="specialLB">pointeur de caractère</strong> (cf. chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#declarationPointeur" target="_BLANK"></a>), avec les particularités suivantes : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">type de caractère</strong> </span> * <span class="nocode"><strong class="specialN">identificateur</strong></span> = <span class="nocode"><strong class="specialO">chaîne 1</strong> <span class="nocode"><span style="color: darkgrey; font-style: normal;">[</span></span> <strong class="specialO">chaîne 2</strong> <span style="color: darkgrey; font-style: normal;"> … <strong class="specialO">chaîne i</strong> ]</span></span>; </code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En ce qui concerne : </p>
+<ul>
+  <li> le <strong class="specialG">type de caractère</strong> ; </li>
+
+  <li> les expressions <strong class="specialO">chaîne 1</strong>, <strong class="specialO">chaîne 2</strong> … <strong class="specialO">chaîne i</strong> ; </li>
+
+  <li> et même l'<strong class="specialN">identificateur</strong> – puisqu'il s'agit d'un pointeur on peut donc aussi lui appliquer l'<strong class="defin">opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code> (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#operIndex" target="_BLANK"></a>) ;  </li>
+</ul>
+<p> on peut apporter les <strong class="title">mêmes précisions</strong> que pour la déclaration d'une chaîne de caractères de <strong>type tableau</strong> (cf. supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/arrayStringDeclaration"></a>). </p>
+
+
+<p> En revanche, on doit prendre conscience des <strong class="warning">différences cruciales</strong> suivantes. </p>
+<div style="display: inline-block;">
+    <img class="top-right" src="../img/chainePointeur.png" width="330px" style="margin-top:0.5em">
+<ul>
+  <li> La variable ainsi déclarée n'est <strong class="cons">pas véritablement</strong> une <strong>chaîne de caractères</strong> mais un <strong class="specialPB">pointeur sur une constante littérale</strong> chaîne de caractères. Donc :  </li>
+  <ul>
+    <li> sa <strong>taille</strong> est invariablement celle d'un pointeur – typiquement, 8 octets sur une machine à architecture <em class="mark">x86‑64 bits</em> ;  </li>
+
+    <div class="expert">
+    <div class="nobullet"> (et il n'y a aucun moyen de déterminer la taille de la chaîne pointée à l'aide de l'opérateur <code class="prettyprint lang-c">sizeof</code>) </div>  
+    </div><!-- expert -->
+  
+    <li> rien n'interdit d'affecter à cette variable pointeur une <strong>autre adresse</strong> de donnée d'un type compatible (éventuellement via une conversion explicite), en particulier une autre constante littérale chaîne de caractères.  </li>
+  </ul>
+  
+  <li> La <strong>position</strong> d'un éventuel <strong>mot‑clef</strong> <code class="prettyprint lang-c">const</code> ajouté dans le descripteur de type n'est <strong class="warning">pas indifférente</strong> – cf. la distinction exposée au chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#constantVSlectureSeule" target="_BLANK"></a> entre : </li>
+  <ul>
+    <li> un <strong>pointeur constant</strong>, dont la déclaration commence par  <code class="prettyprint lang-c">char * const</code>, et qui ne peut pas faire l'objet d'une affectation après son initialisation ;   </li>
+  
+    <li> et un <strong>pointeur en « lecture seule »</strong>, dont la déclaration commence par <code class="prettyprint lang-c">const char *</code>, et qui interdit la modification de la donnée pointée (qui est déjà impossible puisqu'il s'agit d'une constante littérale de type chaîne de caractères).  </li>
+  </ul>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> La déclaration académique ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">static char * str = "Foo" "Bar";</code>
+</span> <br>
+crée dans le segment <code class="inv" style="background:mediumseagreen;">.data</code> de la mémoire allouée au programme une <strong class="title">variable</strong> nommée <code class="prettyprint lang-c">str</code> de type <strong>pointeur de caractère</strong> <strong><em class="sigle">ASCII</em></strong> ou <strong><em class="sigle">UTF‑8</em></strong> (selon l'implémentation). La valeur de ce pointeur est l'adresse de la <strong>constante littérale</strong> <code class="prettyprint lang-c">"FooBar"</code> stockée dans le segment <code class="inv" style="background:springgreen;">.rodata</code>. </p>
+
+<p> En employant une méthode de <strong>scan mémoire</strong> similaire à celle des exemples supra <a class="supra" href="Cc5-6_chainesCaracteres.html#exScanRodata"></a>, le résultat de cette déclaration peut être observé à l'aide du programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+const char rodataStart = '#';
+char       dataStart   = '$';
+
+
+int main(void) {
+  static char * str = "Foo" "Bar";
+  printf("%s \t %zu bytes\n", str, sizeof(str));
+
+  printf("%p %c .data\n", &dataStart, dataStart);
+  printf("%p %p\n", &str, str);
+
+  printf("%p %c .rodata\n", &rodataStart, rodataStart);
+  char * p = str;
+  do {
+    if (isprint(*p)) 
+      printf("%p %c\n", p, *p);
+    else // non printable character
+      printf("%p 0x%X\n", p, *p);
+  }
+  while (*p++ != 0x0);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, ce programme produit en sortie standard l'affichage suivant :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+FooBar   8 bytes
+0x565536182010 $ .data
+0x565536182018 0x56553618002b
+0x565536180004 # .rodata
+0x56553618002b F
+0x56553618002c o
+0x56553618002d o
+0x56553618002e B
+0x56553618002f a
+0x565536180030 r
+0x565536180031 0x0
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  <p> On peut vérifier notamment que la <strong class="title">variable</strong> <code class="prettyprint lang-c">str</code> : </p>
+  <ul>
+    <li> a une <strong>taille</strong> de <strong>8 octets</strong>, ce qui est bien celle d'un pointeur (ce n'est pas du tout la taille de la chaîne qu'elle pointe) ;  </li>
+  
+    <li> est stockée dans le <strong>segment</strong> <code class="inv" style="background:mediumseagreen;">.data</code> ;  </li>
+
+    <li> prend pour valeur l'<strong>adresse</strong> <code>0x56553618002b</code> qui est celle du premier octet de la constante littérale <code class="prettyprint lang-c">"FooBar"</code> – laquelle est dans le <strong>segment</strong> <code class="inv" style="background:springgreen;">.rodata</code>.   </li>
+  </ul>
+  
+</div><!-- exemple -->
+
+
+
+<h3> Lecture et écriture des chaînes de caractères de style C </h3>
+
+
+<h4> Cas d'une chaîne de caractères déclarée comme un tableau </h4>
+
+
+<div class="important">
+<p> Dans son espace de visibilité, une variable <strong class="title">chaîne de caractères</strong> déclarée comme un <strong class="title">tableau</strong> (cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#arrayStringDeclaration"></a> et le chap. C5‑IV <a class="previous" href="Cc5-4_tableauxManipulations.html#manipulation" target="_BLANK"></a>) : </p>
+<ul>
+  <li> est accessible en <strong class="defin">lecture</strong> et en <strong class="defin">écriture</strong>, <strong>élément par élément</strong>, par exemple via une expression de la forme : <br>
+ <span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialN">identificateur</strong></span>[<span class="nocode"><strong class="specialLB">i</strong></span>] = <span class="nocode"><strong>expression</strong></span> </code> 
+ </span> </li>
+
+  <li> mais ne peut <strong class="warning">pas</strong> faire l'objet d'une <strong class="warning">affectation globale</strong> par exemple via une expression de la forme : <br>
+ <span class="inline">
+  <code class="prettyprint lang-c" style="background: lightgrey;"><span class="nocode"><strong class="specialN">identificateur</strong></span> = <span class="nocode"><strong class="specialO">autre chaîne</strong></span> // build error </code> 
+ </span> </li>
+</ul>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Dans le programme académique ci‑dessous, après avoir déclaré une <strong class="title">chaîne de caractère de type tableau</strong>, on peut coder une <strong class="defin">modification de sa valeur élément par élément</strong> (cf. la ligne n° 7) :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  char str[] = "Foo";
+  printf("%s \t (%p)\n", str, str);
+  
+  str[0] = 'B', str[1] = 'a', str[2] = 'r';
+  printf("%s \t (%p)\n", str, str);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient un affichage <strong class="pros">conforme</strong> à celui attendu :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo    (0x7ffd20f17b94)
+Bar    (0x7ffd20f17b94)
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> et l'on peut constater que l'adresse de <code class="prettyprint lang-c">str</code> ne change pas. </p>
+
+<p class="square"> En revanche, si l'on tente de coder une <strong class="defin">affectation globale</strong>, par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  str = "Bar"; // won't work here…
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors, comme prévu, le compilateur signale une <strong class="warning">erreur</strong> : </p>
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span style="color: orangered">main.c:7:7: error: assignment to expression with array type</span>
+    7 |   str = "Bar"; // won't work here…
+      |       ^
+</pre>
+<!---------- ne pas indenter ----------> 
+
+</div><!-- exemple -->
+
+
+<h4> Cas d'une chaîne de caractères déclarée comme un pointeur </h4>
+
+
+<div class="important">
+<p> Dans son espace de visibilité, une variable <strong class="title">chaîne de caractères</strong> déclarée comme un <strong class="title">pointeur</strong> (cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#pointerStringDeclaration"></a> et le chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#lesPointeurs" target="_BLANK"></a>) : </p>
+<ul>
+  <li> permet d'accéder <strong>élément par élément</strong> à la constante littérale qu'elle pointe en <strong class="defin">lecture</strong>, mais <strong class="warning">pas en écriture</strong> via une expression de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c" style="background: lightgrey;"><span class="nocode"><strong class="specialN">identificateur</strong></span>[<span class="nocode"><strong class="specialLB">i</strong></span>] = <span class="nocode"><strong>expression</strong></span> // segment fault</code> 
+  </span> <br>
+  puisqu'il s'agit d'une constante ;  </li>
+
+  <li> mais peut faire l'objet d'une « <strong class="defin">affectation globale</strong> » pour pointer sur une <strong class="specialO">autre constante littérale</strong>, par exemple via une expression de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c"><span class="nocode"><strong class="specialN">identificateur</strong></span> = <span class="nocode"><strong class="specialO">autre chaîne</strong></span> </code> 
+  </span> <br>
+  <strong class="warning">sauf</strong> bien entendu si la donnée a été déclarée comme un <strong>pointeur constant</strong> (cf. chap. C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#pointeurConstant" target="_BLANK"></a>).  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ici, il est essentiel comprendre que toute « <strong class="title">affectation « globale »</strong> sur une <strong>chaîne de caractères déclarée comme un pointeur</strong> ne <strong class="warning">modifie pas</strong> la constante littérale pointée. En effet : </p>
+<ul>
+  <li> cette dernière reste stockée telle quelle dans le segment <code class="inv" style="background:springgreen;">.rodata</code> ;  </li>
+
+  <li> simplement la valeur du pointeur <strong class="defin">change d'adresse</strong> pour pointer sur la constante littérale <strong class="specialO">autre chaîne</strong> qui constitue la <strong class="specialMg">r‑value</strong> de l'affectation, et qui est stockée ailleurs dans le segment <code class="inv" style="background:springgreen;">.rodata</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Précisons également que la syntaxe d'<strong class="title">affectation globale</strong> sur pointeur de caractère n'autorise pour le codage de la <strong class="specialMg">r‑value</strong> qu'<strong>une seule expression</strong> <strong class="specialLB">chaîne</strong>, et non pas plusieurs, comme pour l'initialisation dans une déclaration. Autrement dit, une expression comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c" style="background: lightgrey;"><span class="nocode"><strong class="specialN">identificateur</strong></span> = <span class="nocode"><strong class="specialO">chaîne 1</strong>  <strong class="specialO">chaîne 2</strong> </span> // build error </code> 
+</span> <br>
+provoque une <strong class="warning">erreur de compilation</strong>. </p>
+</div><!-- expert -->
+
+<div class="exemples">
+<p class="exemple"> Dans le programme académique ci‑dessous, après avoir déclaré une <strong class="title">chaîne de caractère de type pointeur</strong>, on peut coder une <strong class="defin">affectation « globale »</strong> (cf. la ligne n° 7) :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  char * str = "Foo";
+  printf("%s \t (%p)\n", str, str);
+  
+  str = "Bar";
+  printf("%s \t (%p)\n", str, str);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient un affichage <strong class="pros">conforme</strong> à celui attendu :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo    (0x5631624e2004)
+Bar    (0x5631624e2013)
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> sachant que ce n'est pas la constante littérale <code class="prettyprint lang-c">Foo</code> qui a été modifiée, mais simplement la valeur de <code class="prettyprint lang-c">str</code> qui pointe sur une autre constante littérale – <code class="prettyprint lang-c">Bar</code>. </p>
+
+<p class="square"> En revanche, si l'on tente de coder une <strong class="defin">affectation sur un des éléments</strong> de la constante littérale sur laquelle <code class="prettyprint lang-c">str</code> pointe, par exemple  : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  str[0] = 'f'; // won't work here…
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors le programme semble s'exécuter, mais avec un <strong class="cons">affichage non conforme</strong> à ce qui est attendu (pas de 2<sup>e</sup> ligne) :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo    (0x562c9bde9004)
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> En fait, si on effectue la même expérience avec <strong>GCC</strong> sur un <em class="mark">PC Linux</em>, on constate une <strong class="warning">erreur d'exécution</strong> avec le message : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span style="color: orangered">Erreur de segmentation (core dumped)</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+
+<h3> Transmission d'une chaîne de caractères de style <em>C</em> comme argument de fonction </h3>
+
+
+
+<p class="square" style="margin-top:0em"> Rappelons qu'en langage <strong>C</strong> (cf. chap. C5‑IV <a class="previous" href="Cc5-4_tableauxManipulations.html#transmissionTableau" target="_BLANK"></a>), la <strong class="title">transmission d'un tableau</strong> comme argument de fonction peut être codée <strong class="defin">seulement par adresse</strong> – ou éventuellement aussi par <strong class="defin">référence</strong> en <strong>C++</strong>. </p>
+
+<p> Lorsqu'on procède par adresse, dans l'<strong class="title">en‑tête de la fonction</strong>, un tel <strong class="specialT">argument formel</strong> est donc un <strong class="defin">pointeur</strong>. L'usage fait qu'il est le plus souvent codé comme tel, c'est‑à‑dire via la syntaxe : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span> * <span class="nocode"><strong class="specialN">identificateur</strong></span> </code> 
+</span> <br>
+surtout si l'argument est manipulé comme un pointeur dans le corps de définition de la fonction. </p>
+
+<div class="expert">
+<p> Bien entendu, il est toujours possible d'employer la <strong class="specialLB">syntaxe alternative équivalente</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type</strong></span> <span class="nocode"><strong class="specialN">identificateur</strong></span>[]</code> 
+</span> <br> 
+ce qui est plus <strong class="pros">plus lisible</strong>, surtout si l'argument est manipulé via l'opérateur d'indexation. </p>
+
+<p> Cette <strong class="title">équivalence des deux syntaxes</strong> possible pour coder un <strong class="specialT">argument formel</strong> dans l'en‑tête d'une fonction est sans doute une <strong class="warning">grande source de confusion</strong> pour un codeur débutant à qui l'on vient d'expliquer qu'il ne faut surtout pas les confondre pour la <strong class="defin">déclaration d'une donnée</strong> de type chaîne de caractères (cf. supra <a class="previous" href="Cc5-6_chainesCaracteres.html#donneesC-String"></a>). </p>
+</div><!-- expert -->
+
+
+<p class="square"> Rappelons (cf. chap. C5‑IV <a class="previous" href="Cc5-4_tableauxManipulations.html#codageTransmissionTableau" target="_BLANK"></a>) également que la <strong class="title">transmission d'un tableau</strong> sous la forme d'un <strong class="specialT">argument formel</strong> de type pointeur présente <strong class="warning">deux difficultés</strong>. </p>
+<ul>
+  <li> On subit la <strong class="cons">perte d'information</strong> du <strong class="specialLB">nombre d'éléments</strong> du tableau. </li>
+
+  <div class="nobullet"> Donc, si cette information est nécessaire à l'algorithme de la fonction, elle doit être passée comme un argument supplémentaire. </div> 
+
+  <li> On a la <strong class="cons">possibilité inhérente de modification</strong> de l'<strong class="specialO">argument effectif</strong>. </li>
+
+  <div class="nobullet"> La règle est donc de coder le <strong>mot‑clef</strong> <code class="prettyprint lang-c">const</code> avant le descripteur de type de l'<strong class="specialT">argument formel</strong> lorsqu'on souhaite s'assurer que la fonction ne puisse opérer <strong>aucune modification</strong> sur l'<strong class="specialO">argument effectif</strong>. </div>
+</ul>
+
+
+<div class="important">
+<p> Au regard de ces considérations, dans le cas particulier des <strong class="title">arguments de fonction</strong> de type <strong>chaîne de caractères de style C</strong>, on peut retenir donc le principe suivant : </p>
+<ul>
+    <li> si une fonction <strong>modifie</strong> un <strong class="specialT">argument formel</strong>, alors dans toute expression d'appel, l'<strong class="specialO">argument effectif</strong> correspondant doit <strong class="warning">obligatoirement</strong> être une <strong>variable</strong> <strong class="defin">déclarée comme un tableau</strong> ;  </li>
+  
+    <li> si une fonction <strong>ne modifie pas</strong> un <strong class="specialT">argument formel</strong>, alors dans toute expression d'appel, l'<strong class="specialO">argument effectif</strong> correspondant peut être <strong class="pros">indifféremment</strong> déclaré comme un <strong class="defin">tableau</strong>, un <strong class="defin">pointeur</strong>, ou même simplement être une <strong class="defin">constante littérale</strong>. </li>
+  </ul>
+</div><!-- important -->
+
+
+
+<div class="exemples"><p class="exemples"></p>
+
+<ol class="numbered">
+  <li> Dans le programme ci‑dessous, on code une <strong class="defin">fonction</strong> <code class="prettyprint lang-c">toupperString</code> qui <strong class="title">met en lettres majuscules</strong> une <strong>chaîne de caractères <em class="sigle">ASCII</em></strong> prise comme <strong class="specialT">argument formel</strong> unique faisant l'objet de <strong>modifications</strong>. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> On utilise pour cela (cf. la ligne n° 6) des fonctions de la bibliothèque standard du langage <strong>C</strong> (fichier d'en‑tête <code class="filename">ctype.h</code>, cf. chap. C3‑VIII <a class="previous" href="../C3-Numeration/Cc3-8_typesCaracteres.html#fonctionsTest" target="_BLANK"></a>) : </div>
+  <ul>
+    <li> la fonction <code class="prettyprint lang-c">islower</code> pour déterminer si un caractère est une <strong>lettre minuscule</strong> (<em class="english">lowercase</em>) ;  </li>
+  
+    <li> la fonction <code class="prettyprint lang-c">toupper</code> qui retourne la <strong>majuscule</strong> (<em class="english">uppercase</em>) correspondant à une minuscule. </li>
+  </ul>
+  <div class="nobullet"> Ces deux fonctions sont déclarées dans le  </div>
+  </div><!-- expert -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+void toupperString(char * str) {
+  do {
+    if (islower(*str)) *str = toupper(*str);
+  }
+  while (*++str);
+}
+
+int main(void) {
+  char fbs[] = "Foo bar.";
+  printf("%s\n", fbs);
+  toupperString(fbs);
+  printf("%s\n", fbs);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="nobullet"> La fonction <code class="prettyprint lang-c">toupperString</code> ne peut être appelée qu'avec pour <strong class="specialO">argument effectif</strong> une chaîne de caractère <strong class="defin">déclarée comme un tableau</strong>, comme par exemple à la ligne n° 12 dans la fonction <code class="prettyprint lang-c">main</code> du programme ci‑dessus. </div>
+
+  <div class="nobullet"> À l'exécution sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient bien la sortie standard attendue :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo Bar.
+FOO BAR.
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> En revanche, si à la ligne n° 12, la chaîne de caractère <code class="prettyprint lang-c">fbs</code> était <strong class="warning">déclarée comme un pointeur</strong> – c'est‑à‑dire, pourtant exactement comme dans l'en‑tête de la fonction :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:12">
+  char * fbs = "Foo bar."; // will cause a segment fault!
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <div class="nobullet"> alors, sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient une <strong class="warning">sortie standard tronquée</strong> (seule la première ligne est affichée). Et en effectuant la même expérience avec <strong>GCC</strong> sur un <em class="mark">PC Linux</em>, on constate comme prévu une <strong class="warning">erreur d'exécution</strong> avec le message : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo Bar.
+<span style="color: orangered">Erreur de segmentation (core dumped)</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+  <li style="margin-top: 1em;"> Dans le programme ci‑dessous, on code une <strong>fonction</strong> <code class="prettyprint lang-c">wordCount</code> qui <strong class="title">compte le nombre de mots</strong> dans une <strong>chaîne de caractères <em class="sigle">ASCII</em></strong> prise comme <strong class="specialLB">argument formel</strong> en lecture seule. </li>
+
+  <div class="expert">
+  <div class="nobullet"> On utilise pour cela (cf. la ligne n° 8) la fonction <code class="prettyprint lang-c">isalnum</code> déclarée dans le fichier d'en‑tête <code class="filename">ctype.h</code> de la bibliothèque standard du langage <strong>C</strong> (cf. chap. C3‑VIII <a class="previous" href="../C3-Numeration/Cc3-8_typesCaracteres.html#fonctionsManip" target="_BLANK"></a>). Elle détecte les caractères <strong>alphanumériques</strong>, ce qui permet de les distinguer des autres catégories de caractères (espace, signes de ponctuation) qui ne constituent pas les mots. </div>
+  </div><!-- expert -->
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+size_t wordCount(const char * str) {
+  size_t count  = 0;
+  int    isWord = 0; // bool value
+  do {
+    if (isalnum(*str)) {
+      if (!isWord) isWord = 1, count++;
+    }
+    else isWord = 0;
+  }
+  while (*++str);
+  return count;
+}
+
+int main(void) {
+  char * fbs = "Foo bar.";
+  printf("\"%s\" contains %zu words\n", fbs, wordCount(fbs));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="nobullet"> La fonction <code class="prettyprint lang-c">wordCount</code> peut être appelée avec <strong class="specialO">n'importe quel argument effectif</strong> de type <strong class="defin">chaîne de style C</strong>, qu'il soit déclaré comme un <strong>tableau</strong>, un <strong>pointeur</strong> (cf. la ligne n° 18), ou même qu'il soit une <strong>constante littérale</strong>. </div>
+
+  <div class="nobullet"> À l'exécution sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient bien la sortie standard attendue :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+"Foo bar." contains 2 words
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol><!-- numbered -->
+
+<div class="expert">
+<p class="remarque"> Dans les deux programmes ci‑dessus, la clause qui détermine la <strong class="title">fin de boucle</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">  while (*++str);</code> 
+</span> <br> 
+teste : </p>
+<ul>
+  <li> la <strong>non‑égalité à zéro</strong> – c'est‑à‑dire <code class="prettyprint lang-c"> != 0x0</code> qui code le caractère de fin de chaîne ;   </li>
+
+  <li> du <strong>code du caractère</strong> pointé par <code class="prettyprint lang-c">str</code> – obtenu par déréférencement (opérateur <code class="prettyprint lang-c">*</code>) ;  </li>
+
+  <li> mais seulement <strong class="warning">après</strong> avoir incrémenté <code class="prettyprint lang-c">str</code> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#compoundOperators#incremUnitaire" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+
+<h3> Retour d'une chaîne de caractères de style <em>C</em> comme valeur de fonction </h3>
+
+
+
+<p> Rappelons qu'en langages <strong>C</strong> et <strong>C++</strong> (cf. chap. C5‑IV <a class="previous" href="Cc5-4_tableauxManipulations.html#retourFonctionTableau" target="_BLANK"></a>), à quelques exceptions près, il n'est <strong class="warning">pas possible</strong> de former une <strong class="title">expression</strong> dont la <strong class="defin">valeur</strong> est un <strong>tableau</strong>. </p>
+
+<p> Par conséquent, une fonction ne peut pas retourner une telle valeur, seulement un <strong class="title">pointeur</strong> sur une <strong>variable</strong> préalablement déclarée de type <strong class="defin">tableau</strong>, qui doit également être <strong class="defin">transmise comme argument</strong> de la fonction. </p>
+
+
+<div class="complement">
+<p> Ces considérations sont valables pour les <strong class="title">chaînes de caractères de style C</strong> qui ne sont pas commode à retourner comme valeur de fonction. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="longueurChaine"> Longueur et taille d'une chaîne de caractères de style <em>C</em> </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on considère usuellement que la <strong class="title">longueur</strong> d'une <strong>chaîne de caractères</strong> est le <strong class="defin">nombre d'unités d'encodage</strong> nécessaires pour représenter cet objet en mémoire, le <strong>caractère de fin de chaîne</strong> <strong  class="specialDR"><em class="sigle">NUL</em></strong> étant <strong class="warning">exclus</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En comparaison avec le <strong class="defin">nombre de caractères</strong> qu'elle contient, la <strong class="title">longueur</strong> d'une <strong>chaîne de style C</strong> est donc : </p>
+<ul>
+  <li> <strong class="pros">égale</strong> si son format d'encodage est à <strong>taille fixe</strong> – <strong><em class="sigle">ASCII</em></strong> et <strong><em class="sigle">UTF‑32</em></strong> ;   </li>
+
+  <li> <strong class="warning">plus grande</strong> si son format d'encodage est à <strong>taille variable</strong> – <strong><em class="sigle">UTF‑8</em></strong> et <strong><em class="sigle">UTF‑16</em></strong>. </li>
+</ul>
+
+<p> On peut facilement coder une <strong class="defin">fonction</strong> qui retourne la <strong class="title">longueur d'une chaîne</strong>, comme par exemple la solution très classique ci‑dessous pour les chaînes <strong><em class="sigle">ASCII</em></strong> et <strong><em class="sigle">UTF‑8</em></strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+size_t stringLength(const char * str) {
+  size_t length = 0;
+  while (*str++) length++;
+  return lenght;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> sachant qu'il existe des solutions <strong class="pros">plus optimisées</strong> et <strong class="pros">robustes</strong> déjà codées dans la <strong>bibliothèque standard</strong> du langage <strong>C</strong>. </p>
+
+<div class="expert">
+<p class="square"> Pour compter le <strong class="title">nombre de caractères</strong> d'une chaîne encodée en <strong><em class="sigle">UTF‑8</em></strong>, on peut coder la  variante ci‑dessous à peine plus complexe : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+size_t u8stringLength(const char * str) {
+  size_t length = 0;
+  do {
+    length += (*str & 0b11000000) != 0b10000000;
+  }
+  while (*++str);
+  return length;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> dans laquelle on ne compte <strong class="warning">pas</strong> les <strong class="specialLB">octets de suite</strong>, c'est‑à‑dire présentant le <strong>motif initial binaire </strong> <code style="color: dodgerblue;">10</code> (cf. chap. C3‑IX <a class="previous" href="../C3-Numeration/Cc3-9_typesCaracteresEtendus.html#encodageUTF-8" target="_BLANK"></a>).  </p>
+</div><!-- expert --> 
+</div><!-- complement -->
+
+
+<p> Quant à la <strong class="title">taille en mémoire</strong> d'une <strong>chaîne de caractères</strong> – qu'on obtient avec l'opérateur <code class="prettyprint lang-c">sizeof</code> –  elle est égale au <strong class="defin">produit</strong> (×) de la taille du <strong class="specialG">type</strong> d'encodage des caractères par : </p>
+<ul>
+  <li> le <strong>nombre total d'éléments</strong> du tableau dans le cas d'une donnée déclarée comme tel ;  </li>
+
+  <li> le <strong>nombre total d'unités d'encodage</strong> – caractère de fin de chaîne <strong  class="specialDR"><em class="sigle">NUL</em></strong> <strong class="defin">inclus</strong> – dans le cas d'une constante littérale.  </li>
+</ul>
+
+<p> Rappelons par ailleurs (cf. chap. C5‑III <a class="previous" href="Cc5-4_tableauxManipulations.html#routineNbElements" target="_BLANK"></a>) qu'il est facile de déterminer le <strong class="title">nombre d'éléments d'un tableau</strong> grâce à une pseudo‑fonction comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#define nbOfElements(tab) (sizeof(tab)/sizeof(tab[0]))</code>
+</span> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="fonctionsChaines"> Fonctions de la bibliothèque standard sur les chaînes de style C </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="complement">
+<p> Les chaînes de caractères étant des objets complexes et néanmoins très utilisés en langages <strong>C</strong>, il existe une <strong class="title">plusieurs dizaines de fonctions</strong> dans la <strong class="defin">bibliothèque standard</strong> afin de les analyser et les manipuler facilement. </p>
+
+<p> En particulier, pour les chaînes dont les <strong>unités d'encodage</strong> sont de type <code class="prettyprint lang-c">char</code>, c'est‑à‑dire au format <strong><em class="sigle">ASCII</em></strong> ou <strong><em class="sigle">UTF‑8</em></strong> <a class="external" href="https://en.cppreference.com/w/c/string/byte" target="_BLANK">C</a> : </p>
+<ul>
+  <li> le fichier d'en‑tête <code class="filename">string.h</code> regroupe la <strong>grande majorité</strong> des prototypes des <strong class="specialLB">fonctions d'analyse et de manipulation</strong> (détermination de la longueur, recherche de caractères et de motifs, recopie, concaténation, etc.) ;    </li>
+
+  <li> le fichier d'en‑tête <code class="filename">stdlib.h</code> contient les prototypes des <strong class="specialLB">fonctions d'interprétation numérique</strong>  de valeurs codées dans une chaîne de caractères selon les différents types standards du langage (<code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">long</code>, <code class="prettyprint lang-c">double</code>, etc.). </li>
+</ul>
+
+<div class="expert">
+<p> Par ailleurs, il existe d'<strong class="specialV">autres fonctions</strong> plus <strong class="specialV">spécialisées</strong> pour le traitement : </p>
+<ul>
+  <li> des <strong>chaînes de caractères</strong> dites « <strong class="specialLB">multibyte</strong> » <a class="external" href="https://en.cppreference.com/w/c/string/multibyte" target="_BLANK">C</a>, c'est‑à‑dire dont les unités d'encodage sont de type <code class="prettyprint lang-c">char</code> mais potentiellement multiples pour un caractère donné – typiquement, au format <strong><em class="sigle">UTF‑8</em></strong> ; ces fonctions sont déclarées dans le fichier d'en‑tête <code class="filename">stdlib.h</code> ; elles comportent le motif <code>mb</code> (pour <em>multibyte</em>) dans leur identificateur ; </li>
+
+  <li> des <strong>chaînes de caractères</strong> dites « <strong class="specialLB">wide</strong> » <a class="external" href="https://en.cppreference.com/w/c/string/wide" target="_BLANK">C</a>, c'est‑à‑dire dont les unités d'encodage sont de type <code class="prettyprint lang-c">wchar_t</code> ; ces fonctions sont déclarées dans le fichier d'en‑tête <code class="filename">wchar.h</code>.</li>
+</ul>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> Dans le cadre de ce chapitre, une <strong>présentation exhaustive</strong> de ces fonctions n'est <strong class="cons">pas envisageable</strong>. L'objectif est d'apporter un <strong class="title">mode d'emploi basique</strong> des <strong class="defin">fonctions les plus usuelles</strong>, chacune dans sa <strong class="pros">variante la plus simple</strong>. </p>
+
+<p> Quant aux <strong class="specialV">fonctions spécialisées</strong> mentionnées ci‑dessus, elles ne seront <strong class="cons">pas abordées</strong>. </p>
+
+<p> Systématiquement, des <strong>liens</strong> vers des <strong class="title">pages de référence</strong> sont données pour accéder à <strong class="warning">plus de détails</strong> si nécessaire. </p>  
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Chaque <strong>fonction</strong> possède <strong class="title">plusieurs variantes</strong>, dont certaines sont dites <strong class="specialMg">sécurisées</strong> – elles sont reconnaissables au <strong>suffixe</strong> <code class="cmd">_s</code> à la fin de leur identificateur. </p>
+
+<p> En règle générale, ces variantes sécurisées imposent des <strong>restrictions de typage</strong> des arguments et produisent des <strong>codes d'erreurs</strong> pour faciliter le diagnostric des scénarios de fonctionnement. Dans un premier temps, il n'est pas forcément utile d'y recourir. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Fonctions d'analyse </h3>
+
+
+
+<h4> Détermination de la longueur d'une chaîne de caractères </h4>
+
+
+<p> Il n'existe qu'<strong>une seule fonction</strong> pour déterminer la <strong class="title">longueur d'une chaîne</strong> de caractères <a class="external" href="https://en.cppreference.com/w/c/string/byte/strlen" target="_BLANK">C</a> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string length
+size_t strlen(const char * str);
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<div class="important"> 
+<p> La <strong class="specialLB">valeur retournée</strong> par la fonction <code class="prettyprint lang-c">strlen</code> est le <strong class="defin">nombre d'unités d'encodage</strong> – c'est‑à‑dire d'<strong>octets</strong> – de <code class="prettyprint lang-c">str</code>, sachant que le <strong>caractère de fin de chaîne</strong> <strong  class="specialDR"><em class="sigle">NUL</em></strong> est <strong class="warning">exclu</strong> du compte (cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#longueurChaine"></a>). </p>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemples"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on effectue les tests suivants. </p>
+
+<ul>
+  <li> Après la déclaration <code class="prettyprint lang-c">char s[8] = "abc";</code> l'appel <code class="prettyprint lang-c">strlen(s)</code> retourne la valeur <code class="cmd">3</code>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> En effet, ni le nombre d'éléments de <code class="prettyprint lang-c">str</code>, ni le caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> ne sont pris en compte dans la valeur retournée. </div>
+  </div><!-- expert -->
+
+  <li> Après la déclaration <code class="prettyprint lang-c">char s[8] = "a\0bc";</code> l'appel <code class="prettyprint lang-c">strlen(s)</code> retourne la valeur <code class="cmd">1</code>. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> En effet, seuls les caractères codés <strong>avant</strong> le premier caractère de fin de chaîne <strong><em class="sigle">NUL</em></strong> sont comptés or ici, on a codé la <strong>séquence d'échappement octale</strong> <code class="prettyprint lang-c">'\0'</code> juste après le premier caractère. </div>
+  </div><!-- expert -->
+
+  <div class="expert">
+  <li> Après la déclaration <code class="prettyprint lang-c">char s[8] = "😉";</code> l'appel <code class="prettyprint lang-c">strlen(s)</code> retourne la valeur <code class="cmd">4</code>. </li>
+
+  
+  <div class="nobullet"> En effet, l'émoticône 😉 – <em class="english">winking face</em> <a class="external" href="https://unicode-table.com/fr/1F609/" target="_BLANK"></a> – se code sur <strong>4 octets en <em class="sigle">UTF‑8</em></strong> (<code>OxF0 Ox9F Ox98 Ox89</code>). </div>
+  </div><!-- expert -->
+  </ul>
+
+</div><!-- exemple -->
+
+
+
+<h4> Recherche d'un caractère ou d'un motif dans une chaîne </h4>
+
+
+<ol class="numbered" style="margin-top:0em">
+  <li id="strchr"> <strong class="title">Première occurrence d'un caractère</strong> dans une chaîne de caractères <a class="external" href="https://en.cppreference.com/w/c/string/byte/strchr" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string character
+char * strchr(const char * str, int ch);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complementExpert">
+  <p> <em class="remark">Attention</em>. L'<strong class="specialT">argument formel</strong> <code class="prettyprint lang-c">ch</code>, bien que déclaré de <strong>type</strong> <code class="prettyprint lang-c">int</code> dans l'en‑tête de la fonction, est <strong class="warning">converti</strong> dans le <strong>type</strong> <code class="prettyprint lang-c">char</code> dans le corps de définition de la fonction. </p>
+
+  <p> C'est pourquoi, dans l'appel de la fonction <code class="prettyprint lang-c">strchr</code>, son <strong class="specialO">argument effectif</strong> correspondant ne doit donc prendre qu'une <strong>valeur d'encodage</strong> comprise entre <code>0x00</code> et <code>0xFF</code>. Ce faisant, il peut éventuellement être codé comme une <strong>valeur de caractère</strong> entre guillemets simples <code class="prettyprint lang-c">''</code> ou une <strong>séquence d'échappement</strong>. </p> 
+
+  </div><!-- complementExpert -->
+
+  <div class="important">
+  <p> La <strong class="specialLB">valeur retournée</strong> par la fonction <code class="prettyprint lang-c">strchr</code> est : </p>
+  <ul>
+    <li> l'<strong class="defin">adresse de la première occurrence</strong> de <code class="prettyprint lang-c">ch</code> dans <code class="prettyprint lang-c">str</code> ;  </li>
+  
+    <li> sinon, en cas d'absence de <code class="prettyprint lang-c">ch</code> dans <code class="prettyprint lang-c">str</code>, le <strong class="defin">pointeur nul</strong> (à <strong class="warning">ne pas confondre</strong> avec le <em>caractère</em> <em class="sigle">NUL</em> – cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#remCarNul"></a>). </li>
+  </ul>
+  </div><!-- important -->
+  
+  <div class="expert">
+  <div class="exemples">
+  <p class="exemple"> Dans le programme ci‑dessous, la <strong>fonction</strong> <code class="prettyprint lang-c">htmlWordCount</code> effectue un <strong class="title">comptage des mots</strong> de texte d'une <strong>page web</strong> (partielle) codée en <strong><em class="sigle">HTML/CSS</em></strong>, ici intégrée sous la forme d'une <strong class="title">chaîne de caractères brute</strong> (cf. chap. R2-IV <a class="previous" href="../../ModuleR/R2-Applications/Rc2-4_webServeur.html#ArduinoChangeBackground" target="_BLANK">R</a>). </p>
+
+  <p> Or dans ce langage, les mots de texte sont codés <strong class="defin">hors des balises</strong>. C'est pourquoi il faut repérer : </p>
+  <ul>
+    <li> les <strong>fins de balise</strong> <code class="prettyprint lang-c">'&gt;'</code> pour effectuer le comptage ; </li>
+
+    <li> les <strong>débuts de balise</strong> <code class="prettyprint lang-c">'&lth;'</code> suspendre le comptage. </li>
+  </ul>
+  <p> Dans les deux cas, on appelle la <strong class="title">fonction</strong> <code class="prettyprint lang-c">strchr</code> (cf. les ligne n° 10 & 19). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+size_t htmlWordCount(const char * str) {
+  size_t count  = 0;
+  int    isWord = 0;  // bool value
+  do {  
+    // end of HTML tag means (re)start of text
+    str = strchr(str, '>');   
+    if (str == NULL) break;
+    do {
+      // symbols in the text are not considered as words
+      if (isalnum(*str)) {  
+        if (!isWord) isWord = 1, count++;
+      }
+      else isWord = 0;
+      str++;
+    }
+    while (*str != '<' && *str != 0); 
+    // begining of HTML tag means end of text
+  }
+  while (*str != 0);  
+  return count;
+}
+
+const char pageTail[] = R"=====(
+&lt;h1&gt; Dynamic page example embedded on Arduino board &lt;/h1&gt;
+&lt;p&gt;&lt;a href='./?bgcolor=white'&gt;White&lt;/a&gt;
+     &lt;!-- 2 non‑break spaces here as inter-margin --&gt;
+   &lt;a href='./?bgcolor=yellow'&gt;Yellow&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+)=====";
+
+int main(void) {
+  printf("%zu words\n", htmlWordCount(pageTail));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> Ce programme produit en sortie standard l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+9 words
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> puisque le code <strong><em class="sigle">HTML</em></strong> de la chaîne de caractères traitée ne compte que les <strong>9 mots</strong> ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite">
+Dynamic page example embedded on Arduino board
+White  Yellow 
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  </div><!-- exemple -->
+  </div><!-- expert -->
+  
+
+  <li style="margin-top:1.5em"> <strong class="title">Dernière occurrence d'un caractère</strong> dans une chaîne de caractères <a class="external" href="https://en.cppreference.com/w/c/string/byte/strrchr" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string reverse character
+char * strrchr(const char * str, int ch);
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="important">
+  <p> Cette fonction <strong class="specialLB">opère comme</strong> <code class="prettyprint lang-c">strchr</code> (cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#strchr"></a>) mais dans l'<strong class="defin">ordre inverse</strong> des caractères de la chaîne <code class="prettyprint lang-c">str</code> – donc en partant de la <strong>fin</strong>. </p>
+  </div><!-- important -->
+
+  <div class="complement">
+  <p> Une telle fonction est particulièrement utile pour des chaînes de caractères où les <strong>données les plus récentes</strong> sont concaténées à la fin relevés de mesure, etc.). </p>
+</div><!-- complement -->
+  <li style="margin-top:1.5em"> <strong class="title">Première occurrence d'un motif</strong> dans une chaîne de caractères <a class="external" href="https://en.cppreference.com/w/c/string/byte/strstr" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string (sub)string
+char * strstr(const char * str, const char * substr);
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="important">
+  <p> Cette fonction <strong class="specialLB">opère comme</strong> <code class="prettyprint lang-c">strchr</code> (cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#strchr"></a>) mais en recherchant dans <code class="prettyprint lang-c">str</code> la première occurrence de la sous‑chaîne <code class="prettyprint lang-c">substr</code>. Si cette dernière est la <strong class="specialO">chaîne vide</strong> <code class="prettyprint lang-c">""</code>, la <strong>valeur retournée</strong> est celle du pointeur <code class="prettyprint lang-c">str</code>. </p>
+  </div><!-- important -->
+  
+  <div class="expert">
+  <div class="complement">
+  <p> La fonction <code class="prettyprint lang-c">strstr</code> permet notamment de <strong class="title">rechercher</strong> dans une chaîne de caractères encodée en <strong><em class="sigle">UTF‑8</em></strong> n'importe quel <strong class="title">caractère</strong> <strong class="defin">hors du jeu <em class="sigle">ASCII</em> restreint</strong> (donc encodé sur plusieurs octets). </p>
+  </div><!-- complement -->
+  
+  <div class="exemples">
+  <p class="exemple">  Dans le programme académique ci‑dessous, on recherche dans la chaîne <code class="prettyprint lang-c">mess</code> la première occurrence du caractère « <em class="bold">ô</em> » (cf. la ligne n° 6). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+  char * mess = "À bientôt !";
+  printf("%s", strstr(mess, "ô"));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ----------> 
+  
+  <p> Comme prévu, on obtient en sortie standard l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+ôt !
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  </div><!-- exemple -->
+  </div><!-- expert -->
+</ol><!-- numbered -->
+
+<!-- 
+<div class="expert">  
+<h4> Parsing littéral d'une chaîne </h4>
+
+<p>  strspn (string span) strcspn (string complementary span) strpbrk (string point break) strtok (string token)</p>
+</div>&lt;!-- expert -->
+
+
+
+<h3 id="interpretationNumerique"> Fonctions d'interprétation numérique </h3>
+
+
+
+<div class="important">
+<p> Ces fonctions permettent d'<strong class="title">interpréter</strong> – en quelque sorte, « convertir » –  dans un <strong class="specialG">type numérique standard</strong> (<code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">long</code>, <code class="prettyprint lang-c">double</code>, etc.) une <strong class="defin">valeur</strong> codée dans une <strong>chaîne de caractères</strong> avec la <strong class="specialO">syntaxe des constantes littérales</strong> (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#constantesLitterales" target="_BLANK"></a> et C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#codageConstanteDecimale" target="_BLANK"></a>). </p>  
+
+<p> Ces fonctions sont déclarées dans le <strong class="specialLB">fichier d'en‑tête</strong> <code class="filename">stdlib.h</code> de la bibliothèque standard du langage <strong>C</strong> (<code class="filenamen">cstdlib</code> pour le <strong>C++</strong>). </p>
+</div><!-- important -->
+
+
+<h4> Interprétation par une valeur entière </h4>
+
+
+<ol class="numbered" style="margin-top:0em">
+  <li id="strchr"> <strong class="title">Interprétation en base 10</strong> dans le <strong>type</strong> <code class="prettyprint lang-c">int</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/atoi" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// ascii to int 
+int atoi(const char * str);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complement">
+  <p> La chaîne <code class="prettyprint lang-c">str</code> est supposée contenir une <strong class="defin">suite de chiffres</strong>, éventuellement précédée de <strong>caractères d'espacement</strong>, de <strong>zéros non significatifs</strong> et d'un <strong class="defin">signe</strong> « <code>-</code> » ou « <code>+</code> ». </p>
+  </div><!-- complement -->
+
+  <div class="important">
+  <p> La <strong class="specialLB">valeur retournée</strong> par la fonction <code class="prettyprint lang-c">atoi</code> est la <strong class="defin">valeur numérique entière</strong> <strong>positive</strong> ou <strong>négative</strong> interprétant la chaîne de chiffres en <strong>base 10</strong>. Toutefois : </p>
+  <ul>
+    <li> en cas de <strong class="warning">débordement</strong> de l'intervalle d'encodage du <strong>type</strong> <code class="prettyprint lang-c">int</code>, la valeur retournée <strong>dépend de l'implémentation</strong> ; </li>
+
+    <li> en cas d'<strong class="cons">échec d'interprétation</strong> – en particulier si, après les éventuelles caractères d'espacement et le signe, le <strong>premier caractère</strong> rencontré n'est <strong class="cons">pas un chiffre</strong> – la <strong>valeur retournée</strong> est <code class="cmd">0</code>. </li>
+  </ul>
+  </div><!-- important -->
+  
+  <div class="exemples"><p class="exemples"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on teste les appels suivants. </p>
+  <ul>
+    <li> <code class="prettyprint lang-c">atoi("  \t \n -0123.45foo")</code> retourne la valeur <code class="cmd">-123</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> C'est le <strong class="pros">comportement normal</strong> avec, après le signe <code class="prettyprint lang-c">'-'</code> un <code class="prettyprint lang-c">'0'</code> non significatif ignoré. Après le premier chiffre trouvé, tout caractère qui n'est pas un chiffre (ici, <code class="prettyprint lang-c">'.'</code>) marque la fin de la chaîne numérique. </div>
+    </div><!-- expert -->  
+
+    <li> <code class="prettyprint lang-c">atoi("foo123")</code> retourne la valeur <code class="cmd">0</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> On a un <strong class="cons">échec d'interprétation</strong> puisque le premier caractère de la chaîne n'est ni un chiffre, ni un signe <code>+</code> ou <code>-</code>, ni un caractère d'espacement. </div>
+    </div><!-- expert --> 
+  
+    <li> <code class="prettyprint lang-c">atoi("12345678900")</code> retourne la valeur <code class="cmd">-539222988</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> On a un <strong class="warning">débordement</strong> traité par <strong>rebouclage cyclique</strong> puisque la chaîne numérique <code class="prettyprint lang-c">"12345678900"</code> représente une valeur supérieure à <code class="cmd">INT_MAX</code> mais néanmoins inférieure à <code class="cmd">LLONG_MAX</code> (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#limits" target="_BLANK"></a>). </div>
+    </div><!-- expert --> 
+
+    <li> <code class="prettyprint lang-c">atoi("123456789012345678900")</code> retourne la valeur <code class="cmd">-1</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> On a un <strong class="warning">débordement</strong> signalé par un <strong>code d'erreur</strong> conventionnel car la chaîne numérique <code class="prettyprint lang-c">"123456789012345678900"</code> représente une valeur supérieure à <code class="cmd">LLONG_MAX</code>.  </div>
+    </div><!-- expert --> 
+  </ul>
+  </div><!-- exemples -->
+ 
+
+  <li style="margin-top:1.5em" id="strchr"> <strong class="title">Interprétation en base 10</strong> dans les <strong>types</strong> <code class="prettyprint lang-c">long</code> et <code class="prettyprint lang-c">long long</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/atoi" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// ascii to long / long long 
+long       atol(const char * str);
+long long atoll(const char * str); 
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="important">
+  <p> Ces fonctions <strong class="specialLB">opèrent comme</strong> <code class="prettyprint lang-c">atoi</code> mais avec un <strong class="specialG">type</strong> d'interprétation de la valeur numérique <strong class="pros">plus large</strong>. </p>
+  </div><!-- important -->
+
+  <li style="margin-top:1.5em" id="strchr"> <strong class="title">Interprétation enchaînable en base n</strong> dans le <strong>type</strong> <code class="prettyprint lang-c">long</code> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string to long 
+long strtol(const char * str, char ** str_end, int base);
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="complement">
+  <p> Cette fonction <strong class="specialLB">opère comme</strong> <code class="prettyprint lang-c">atol</code> mais possède <strong class="specialT">deux arguments supplémentaires</strong>. </p>
+  <ul>
+    <li> L'<strong class="specialT">argument</strong> <code class="prettyprint lang-c">str_end</code> est un <strong class="defin">pointeur de caractère</strong> transmis par adresse pour pouvoir être <strong>modifié par la fonction</strong> (c'est donc un pointeur de pointeur). </li>
+
+    <div class="nobullet"> Il donne le <strong class="defin">caractère immédiatement consécutif</strong> à la chaîne numérique interprétée pour permettre un enchaînement d'interprétation (si la chaîne <code class="prettyprint lang-c">str</code> comporte plusieurs valeurs successives). </div>
+
+    <li> L'<strong class="specialT">argument</strong> <code class="prettyprint lang-c">base</code> permet de coder n'importe quelle <strong class="defin">base</strong> <strong>n</strong> = <em class="bold">2</em> à <strong>n</strong> = <em class="bold">36</em> dans laquelle interpréter la chaîne numérique identifiée.  </li>
+
+    <div class="nobullet"> Dans un appel de <code class="prettyprint lang-c">strtol</code>, on peut également coder pour l'argument <code class="prettyprint lang-c">base</code> la valeur <code class="prettyprint lang-c">0</code>. La fonction opère alors par <strong class="defin">auto‑détection</strong> en recherchant un <strong class="defin">préfixe</strong> à la chaîne numérique – <code class="prettyprint lang-c">0</code> pour la <strong>base 8</strong> et <code class="prettyprint lang-c">0x</code> ou <code class="prettyprint lang-c">0X</code> pour la <strong>base 16</strong> (il n'y a pas de préfixe pour la <em>base 2</em>). </div>
+  </ul>
+  </div><!-- complement -->
+
+  <div class="exemples" id="ex-strtol">
+  <p class="exemple"> Le <strong class="title">programme académique</strong> ci‑dessous montre comment enregistrer dans un <strong class="defin">tableau d'entiers</strong> une <strong>série de valeurs numériques</strong> codées en <strong>base 16</strong> avec le préfixe <code class="prettyprint lang-c">"0x"</code> dans une chaîne de caractères. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+  char * val = "0xAA 0xAB 0xAC 0xAD 0xAE";
+  long tab[5] = {0};
+  for (char * p = val, * e = NULL, i = 0; i < 5 ; p = e, i++) {
+    tab[i] = strtol(p, &e, 0);
+    printf("0x%lX ", tab[i]);
+  }
+  printf("\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+  </div><!-- exemple -->
+  
+  <div class="remarques">
+  <p class="remarque"> Il existe aussi la <strong class="title">fonction</strong> <code class="prettyprint lang-c">strtoll</code> qui est une <strong class="defin">variante similaire</strong> à  <code class="prettyprint lang-c">strtol</code> mais retournant une valeur dans le type <code class="prettyprint lang-c">long long</code>. </p>
+  </div><!-- exemple -->
+
+</ol><!-- numbered -->
+
+  
+<h4> Interprétation par une valeur décimale flottante </h4>
+
+
+<ol class="numbered" style="margin-top: 0em">
+  <li id="strchr"> <strong class="title">Interprétation</strong> dans le <strong>type</strong> <code class="prettyprint lang-c">double</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/atof" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// ascii to floating-point decimal 
+double atof(const char * str);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complement">
+  <p> La chaîne <code class="prettyprint lang-c">str</code> est supposée contenir une <strong class="defin">suite de chiffres</strong> et de <strong class="defin">symboles numériques</strong> conforme à la syntaxe de codage des constantes littérales décimales (cf. C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#codageConstanteDecimale" target="_BLANK"></a>), éventuellement précédée de <strong>caractères d'espacement</strong> et de <strong>zéros non significatifs</strong>. </p>
+  </div><!-- complement -->
+
+  <div class="important">
+  <p> La <strong class="specialLB">valeur retournée</strong> par la fonction <code class="prettyprint lang-c">atof</code> est la <strong class="defin">valeur numérique décimale</strong> interprétant la séquence de chiffres et de symboles. Toutefois : </p>
+  <ul>
+    <li> en cas de <strong class="warning">débordement</strong> par le <strong>haut</strong> (<strong>overflow</strong>) ou par le <strong>bas</strong> (<strong>underflow</strong>) des intervalles encodables dans le <strong>type</strong> <code class="prettyprint lang-c">double</code>, la valeur retournée est un <strong class="defin">élément absorbant</strong>, respectivement <code class="cmd">inf</code> ou <code class="cmd">0.0</code> (cf. C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#debordements" target="_BLANK"></a>) ; </li>
+
+    <li> en cas d'<strong class="cons">échec d'interprétation</strong> – en particulier si, après les éventuelles caractères d'espacement, le <strong>premier caractère</strong> rencontré n'est <strong class="cons">pas un chiffre</strong> – la <strong>valeur retournée</strong> est <code class="cmd">0.0</code>. </li>
+  </ul>
+  </div><!-- important -->
+  
+  <div class="expert">
+  <div class="exemples"><p class="exemples"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on teste les appels suivants. </p>
+  <ul>
+    <li> <code class="prettyprint lang-c">atof("  \t \n -0123.45e+02foo")</code> retourne la valeur <code class="cmd">-12345.0</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> C'est le <strong class="pros">comportement normal</strong> avec, après le signe <code class="prettyprint lang-c">'-'</code> un <code class="prettyprint lang-c">'0'</code> non significatif ignoré. Ici, c'est la lettre <code class="prettyprint lang-c">'f'</code> qui marque la fin de la chaîne décimale à interpréter. </div>
+    </div><!-- expert -->  
+
+    <div class="expert">
+    <li> <code class="prettyprint lang-c">atof("0xA.1p3")</code> retourne la valeur <code class="cmd">80.5</code>. </li>
+
+    <div class="nobullet"> C'est le <strong class="pros">comportement normal</strong> avec une constante littérale codée en <strong>notation hexadécimale</strong> (cf. C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#constanteDecimaleHexa" target="_BLANK"></a>). </div>
+    </div><!-- expert -->  
+
+    <li> <code class="prettyprint lang-c">atof("foo12.3")</code> retourne la valeur <code class="cmd">0.0</code>. </li>
+    
+    <div class="expert">
+    <div class="nobullet"> On a un <strong class="cons">échec d'interprétation</strong> puisque le premier caractère de la chaîne n'est ni un chiffre, ni un point décimal, ni un signe <code>+</code> ou <code>-</code>, ni un caractère d'espacement. </div>
+    </div><!-- expert --> 
+  
+    <li> <code class="prettyprint lang-c">atof("1e400")</code> retourne la valeur <code class="cmd">inf</code>. </li>
+    
+    <div class="expert"> 
+    <div class="nobullet"> On a un <strong class="warning">overflow</strong> traité par l'<strong>élément absorbant</strong> <code class="prettyprint lang-c">inf</code> (<em class="english">infinity</em>) car la chaîne <code class="prettyprint lang-c">"1e400"</code> représente une valeur <strong>supérieure</strong> à <code class="prettyprint lang-c">DBL_MAX</code> (cf. C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#caracteristiques" target="_BLANK"></a>). </div>
+    </div><!-- expert -->
+
+
+    <li> <code class="prettyprint lang-c">atof("1e-400")</code> retourne la valeur <code class="cmd">0.0</code>. </li>
+    
+    <div class="expert"> 
+    <div class="nobullet"> On a un <strong class="cons">underflow</strong> traité par l'<strong>élément absorbant</strong> <code class="prettyprint lang-c">0.0</code> car la chaîne <code class="prettyprint lang-c">"1e-400"</code> représente une valeur <strong>inférieure</strong> à <code class="prettyprint lang-c">DBL_TRUE_MIN</code> (cf. C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#constanteDecimaleHexa" target="_BLANK"></a>). </div>
+    </div><!-- expert -->
+  </ul>
+  
+  </div><!-- exemples -->
+  </div><!-- expert -->
+
+  <li style="margin-top:1.5em" id="strchr"> <strong class="title">Interprétation enchaînable</strong> dans le <strong>type</strong> <code class="prettyprint lang-c">double</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/strtod" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string to double
+double strtod(const char * str, char ** str_end);
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="complement"> 
+  <p> Cette fonction <strong class="specialLB">opère comme</strong> <code class="prettyprint lang-c">atof</code> mais, à l'instar de <code class="prettyprint lang-c">strtol</code>, elle possède aussi un <strong class="specialT">argument</strong> <code class="prettyprint lang-c">str_end</code> qui est un <strong class="defin">pointeur de caractère</strong> transmis par adresse pour pouvoir être <strong>modifié par la fonction</strong> (c'est donc un pointeur de pointeur). Ce dernier donne le <strong class="defin">caractère immédiatement consécutif</strong> à la chaîne numérique interprétée pour permettre un enchaînement d'interprétation (si la chaîne <code class="prettyprint lang-c">str</code> comporte plusieurs valeurs successives). </p>
+  </div><!-- complement -->
+
+  <div class="exemples">
+  <p class="exemple"> Le <strong class="title">programme académique</strong> ci‑dessous montre comment enregistrer dans un <strong class="defin">tableau de décimaux</strong> une <strong>série de valeurs numériques</strong> codées dans une chaîne de caractères au format <strong><em class="sigle">csv</em></strong> (<em class="english">comma‑separated values</em> <a class="external" href="https://fr.wikipedia.org/wiki/Comma-separated_values" target="_BLANK">W</a>). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+  char * val = " 0.1 ,  0.2 , 0.3 , 0.4 , 0.5 ";
+  double tab[5] = {0};
+  for (char * p = val, * e = NULL, i = 0; i < 5; p = e, i++) {
+    tab[i] = strtod(p, &e);
+    printf("%g ", tab[i]);
+    e = strchr(e, ',') + 1;
+  }
+  printf("\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+  </div><!-- exemple -->
+  
+  <p> Parce que la spécification est semblable que celle de l'exemple supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/ex-strtol" target="_BLANK"></a> proposé pour illustrer la fonction <code class="prettyprint lang-c">strtol</code>, ce programme en reprend le <strong class="pros">même algorithme</strong>. Le seul aspect supplémentaire est la ligne n° 9 qui code le <strong>traitement des virgules séparatrices</strong> des valeurs dans la chaîne : elle cherche le caractère <code class="prettyprint lang-c">','</code> et passe au caractère suivant. </p>
+
+  <div class="remarques">
+  <p class="remarque"> Il existe aussi les <strong class="title">fonctions</strong> <code class="prettyprint lang-c">strtof</code> et <code class="prettyprint lang-c">strtold</code> qui sont des <strong class="defin">variantes similaires</strong> à <code class="prettyprint lang-c">strtod</code> mais retournant une valeur respectivement dans les <strong>types</strong> <code class="prettyprint lang-c">float</code> et <code class="prettyprint lang-c">long double</code>. </p>
+  </div><!-- remarque -->
+
+</ol><!-- numbered -->
+
+
+
+<h3 id="fonctionComparaison"> Fonctions de comparaison </h3>
+
+
+
+<div class="important">
+<p> Toute fonction de <strong class="title">comparaison entre deux chaînes de caractères</strong> est basée sur un <strong class="defin">ordre lexicographique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Ordre_lexicographique" target="_BLANK">W</a> défini – à l'instar de celui pour classer les mots dans un dictionnaire. <strong class="specialLB">Par défaut</strong>, cet ordre est basé sur la <strong>valeur ordinale des codes des caractères</strong>, aussi bien en format <strong><em class="sigle">ASCII</em></strong> qu'en <strong><em class="sigle">UTF‑8</em></strong>. </p>
+
+<div class="expert">
+<p> Sous un système <em class="mark">Linux</em>, l'<strong class="defin">ordre lexicographique</strong> dépend de la valeur de <strong>variable d'environnement</strong> <code class="cmd">LC_COLLATE</code> <em class="remark">durant l'exécution du programme</em>. Par défaut, c'est celui de la <strong>locale</strong> <code class="cmd">C</code> qui est sélectionné. </p>
+</div><!-- expert -->
+
+<p> La comparaison est opérée respectivement entre les deux chaînes <strong class="defin">octet par octet</strong> <strong>dans l'ordre de leur position dans les chaînes</strong> – de façon semblable au sens de lecture des mots.  </p>
+</div><!-- important -->
+
+<ol class="numbered">
+  <li style="margin-top:1.5em" id="strchr"> <strong class="title">Comparaison complète</strong> de deux chaînes dans l'<strong class="defin">ordre lexicographique</strong> <a class="external" href="https://en.cppreference.com/w/c/string/byte/strcmp" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string compare 
+int strcmp(const char * lhs, const char * rhs);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complement">
+  <p> Dans l'en‑tête de cette fonction, les <strong class="specialT">arguments formels</strong> sont désignés : </p>
+  <ul>
+    <li> <code class="prettyprint lang-c">lhs</code> pour <strong>left‑hand string</strong> ; </li>
+  
+    <li> <code class="prettyprint lang-c">rhs</code> pour <strong>right‑hand string</strong>. </li>
+  </ul>
+  </div><!-- complement -->
+
+  <div class="important">
+  <p> La <strong class="specialLB">valeur retournée</strong> par la fonction <code class="prettyprint lang-c">strcmp</code> est un <strong class="defin">entier</strong> : </p>
+  <ul>
+    <li> <strong>positif</strong> – typiquement <code class="cmd">1</code> – si <code class="prettyprint lang-c">lhs <span class="nocode"><strong class="defin">></strong></span> rhs</code>, autrement dit si <code class="prettyprint lang-c">lhs</code> <strong class="defin">succède</strong> à <code class="prettyprint lang-c">rhs</code> dans l'ordre lexicographique.  </li>
+
+    <li> <strong>nul</strong> – <code class="cmd">0</code> – si <code class="prettyprint lang-c">lhs <span class="nocode"><strong class="defin">=</strong></span> rhs</code> ;  </li>
+
+    <li> <strong>négatif</strong> – typiquement <code class="cmd">-1</code> – si <code class="prettyprint lang-c">lhs <span class="nocode"><strong class="defin"><</strong></span> rhs</code>.  </li>
+  </ul>
+  </div><!-- important -->
+  
+  <div class="exemples"><p class="exemples"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on teste les appels de <code class="prettyprint lang-c">strcmp</code> suivants. </p>
+  <ul>
+    <li> <code class="prettyprint lang-c">strcmp("abd", "abce")</code> retourne la valeur <code class="cmd">1</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> En effet, même si elle est plus courte, <code class="prettyprint lang-c">"abd"</code> <strong class="defin">succède</strong> à <code class="prettyprint lang-c">"abce"</code> dans l'ordre lexicographique. </div>
+    </div><!-- expert -->
+
+    <li> <code class="prettyprint lang-c">strcmp("&abc", "#abc")</code> retourne la valeur <code class="cmd">1</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> 
+    En effet, le caractère <code class="prettyprint lang-c">'&'</code> (<code>0x26</code>) <strong class="defin">succède</strong> à <code class="prettyprint lang-c">'#'</code> (<code>0x23</code>) en termes de <strong>codes <em class="sigle">ASCII</em></strong> ou <strong><em class="sigle">UTF‑8</em></strong>. </div>
+    </div><!-- expert -->
+
+    <div class="expert">
+    <li> <code class="prettyprint lang-c">strcmp("è", "é")</code> retourne la valeur <code class="cmd">-1</code>. </li>
+
+    <div class="nobullet"> En effet, le caractère <code class="prettyprint lang-c">'è'</code> (code <code>0xC3A8</code>) <strong class="defin">précède</strong> à <code class="prettyprint lang-c">'é'</code> (code <code>0xC3A9</code>) en termes de <strong>codes <em class="sigle">UTF‑8</em></strong>.  </div>
+
+    <li> <code class="prettyprint lang-c">strcmp("e", "é")</code> retourne la valeur <code class="cmd">-1</code> . </li>
+
+    <div class="nobullet"> En effet, le caractère <code class="prettyprint lang-c">'e'</code> (<code>0x65</code>) <strong class="defin">précède</strong> à <code class="prettyprint lang-c">'é'</code> (<code>0xC3A9</code>) car pour le premier octet, on a bien <code>0x65</code> <strong class="defin"><</strong> <code>0xC3</code>.  </div>
+    </div><!-- expert -->
+  </ul>
+  
+  </div><!-- exemples -->
+  
+
+  <li style="margin-top:1.5em" id="strchr"> <strong class="title">Comparaison des n premiers octets</strong> de deux chaînes de caractères dans l'<strong class="defin">ordre lexicographique</strong> <a class="external" href="https://en.cppreference.com/w/c/string/byte/strcmp" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string n‑bytes compare 
+int strncmp(const char * lhs, const char * rhs, size_t count);
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="complement">
+  <p> Cette fonction <strong class="specialLB">opère comme</strong> <code class="prettyprint lang-c">strncmp</code> mais seulement sur les <strong class="defin">n</strong> <strong>premiers octets</strong> respectifs des deux chaînes – ce nombre étant codé par la valeur de l'argument <code class="prettyprint lang-c">count</code>. </p>
+  
+  <div class="expert" id="memcmp">
+  <p> Toutefois, le <strong class="defin">nombre d'octets réellement comparés</strong> <strong class="warning">ne dépasse pas</strong> la <strong>longueur de la plus grande des deux chaînes</strong>, même si la valeur de l'argument effectif codé pour <strong class="defin">n</strong> est supérieur cette longueur. </p>
+
+  <p> Si l'on souhaite une comparaison sur <strong class="defin">n</strong> octets quelles que soient la longueur des chaînes, il faut employer la <strong class="title">fonction</strong> <code class="prettyprint lang-c">memcmp</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/memcmp" target="_BLANK">C</a>. </p>
+  </div><!-- expert -->
+
+  </div><!-- complement -->
+
+  <div class="exemples"><p class="exemples"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on teste les appels de <code class="prettyprint lang-c">strncmp</code> suivants. </p>
+  <ul>
+    <li> <code class="prettyprint lang-c">strncmp("abd", "abce", 2)</code> retourne la valeur <code class="cmd">0</code>. </li>
+
+    <div class="expert">
+    <div class="nobullet"> En effet, les chaînes <code class="prettyprint lang-c">"abd"</code> et <code class="prettyprint lang-c">"abce"</code> ont leurs <strong>deux premiers caractères</strong> <code class="prettyprint lang-c">"ab"</code> respectivement <strong class="defin">égaux</strong>. </div>
+    </div><!-- expert -->
+    
+    <div class="expert">
+    <li> <code class="prettyprint lang-c">strncmp("ab\0a", "ab\0z", 4)</code> retourne la valeur <code class="cmd">0</code>. </li>
+
+    <div class="nobullet"> En effet, seuls les deux premiers caractères respectifs des deux chaînes sont comparés à cause des caractères de <strong>fin de chaîne</strong> <code class="prettyprint lang-c">'\0'</code> codés dans l'une et l'autre en 3<sup>e</sup> position (elles sont interprétées comme des chaînes de longueur 2). </div>
+
+    <div class="nobullet"> A contrario, <code class="prettyprint lang-c">memcmp("ab\0a", "ab\0z", 4)</code> retourne la valeur <code class="cmd">-1</code>. </div>
+
+    <li> <code class="prettyprint lang-c">strncmp("Ù", "é", 1)</code> retourne la valeur <code class="cmd">0</code>. </li>
+
+    <div class="nobullet"> En effet, les caractères <code class="prettyprint lang-c">'Ù'</code> (<code>0xC399</code>) et <code class="prettyprint lang-c">'é'</code> (<code>0xC3A9</code>) ont un <strong>premier octet</strong> <code>0xC3</code> <strong class="defin">identique </strong>dans leur code <strong><em class="sigle">UTF‑8</em></strong>. </div>
+
+    <li> <code class="prettyprint lang-c">strncmp("Ù", "é", 2)</code> retourne la valeur <code class="cmd">-16</code>. </li>
+
+    <div class="nobullet"> En effet, les caractères <code class="prettyprint lang-c">'Ù'</code> et <code class="prettyprint lang-c">'é'</code> sont encodés l'un comme l'autre sur <strong>deux octets</strong> en <strong><em class="sigle">UTF‑8</em></strong> et au regard de leurs codes respectifs, <code class="prettyprint lang-c">'Ù'</code> <strong class="defin">précède</strong> <code class="prettyprint lang-c">'é'</code>. </div>
+
+    <div class="nobullet"> <em class="remark">Remarque</em>. Ce dernier exemple montre qu'une fonction de comparaison peut retourner une <strong class="defin">valeur négative</strong> qui n'est <strong class="warning">pas forcément</strong> <code class="cmd">-1</code>. Il en va de même pour les valeurs positives : elles ne sont pas forcément égales à <code>1</code>. </div>
+    </div><!-- expert -->
+  </ul>
+  </div><!-- exemples -->
+</ol><!-- numbered -->
+
+
+
+<h3> Fonctions de manipulation </h3>
+
+
+<div class="important">
+<p> Parmi les <strong class="title">manipulations usuelles</strong> des chaînes de caractères, on a typiquement la <strong class="specialLB">recopie</strong>, la <strong class="specialLB">concaténation</strong>, l'<strong>affectation uniforme</strong>… </p> 
+
+<p> Dans l'en‑tête de ces fonctions, les <strong class="specialT">arguments formels</strong> sont usuellement désignés : </p>
+<ul>
+    <li> <code class="prettyprint lang-c">dest</code> pour <strong class="specialT">destination</strong> – la chaîne dont l'<strong class="specialO">argument effectif</strong> correspondant est <strong class="defin">modifié</strong> ; ce dernier doit obligatoirement être déclaré comme un <strong>tableau de caractères</strong> ; </li>
+
+    <li> <code class="prettyprint lang-c">src</code> pour <strong class="specialT">source</strong> – la chaîne dont l'<strong class="specialO">argument effectif</strong> n'est <strong class="defin">pas modifié</strong> mais <strong class="defin">seulement lu</strong> ; il peut s'agir d'une chaîne déclarée comme un <strong>tableau</strong> ou un <strong>pointeur de caractères</strong>, voire d'une <strong>constante littérale</strong>. </li>
+  </ul>
+</div><!-- important -->
+
+
+<h4> Recopie d'une chaîne dans une autre </h4>
+
+
+<ol class="numbered" style="margin-top:0em">
+  <li id="strcpy"> <strong class="title">Recopie complète</strong> de <code class="prettyprint lang-c">src</code> dans <code class="prettyprint lang-c">dest</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/strcpy" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string copy 
+char * strcpy(char * dest, const char * src);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complement">
+  <p> La chaîne <code class="prettyprint lang-c">dest</code> est censée être déclarée avec un <strong>nombre d'éléments</strong> <strong class="pros">suffisant</strong> pour enregistrer tous les caractères de <code class="cmd">src</code> – caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> <strong class="defin">inclus</strong>. Sinon, le résultat est <strong class="cons">indéfini</strong>. </p>
+  
+  <div class="expert">
+  <p> De plus, les chaînes <code class="prettyprint lang-c">dest</code> et <code class="prettyprint lang-c">src</code> ne doivent <strong class="warning">pas se chevaucher</strong> (<em class="english">no overlapping</em>) sur le même espace mémoire – sinon, le résultat est également <strong class="cons">indéfini</strong>. </p>
+  </div><!-- expert -->
+  </div><!-- complement -->
+
+  <div class="important">
+  <p> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">strcpy</code> permet de coder une <strong class="defin">affectation groupée</strong> des octets du tableau sur lequel <code class="cmd">dest</code> pointe, pour qu'il prennent respectivement par ordre de position les octets pointés par <code class="prettyprint lang-c">src</code> jusqu'à son caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> <strong class="defin">inclus</strong>. </p>
+
+  <p> Les <strong>octets suivants</strong> dans le tableau pointé par <code class="cmd">dest</code> ne sont <strong class="warning">pas affectés</strong>. </p>
+
+  <p> La <strong class="specialLB">valeur retournée</strong> est simplement un <strong class="defin">pointeur</strong> sur la chaîne <code class="prettyprint lang-c">dest</code>. </p>
+  </div><!-- important -->
+  
+  <div class="exemples" id="ex-strcpy">
+  <p class="exemple"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on peut tester ce <strong class="title">programme académique</strong> qui code un appel de la fonction <code class="prettyprint lang-c">strcpy</code> (cf. la ligne n° 13) sur deux chaînes de caractères <code class="prettyprint lang-c">dest</code> et <code class="prettyprint lang-c">src</code> déclarées comme des <strong class="defin">tableaux de même taille</strong> mais initialisées avec des <strong>contenus différents</strong>. </p>
+
+  <div class="expert">
+  <p> Pour <strong class="defin">inspecter le contenu</strong> de <code class="prettyprint lang-c">dest</code> <strong>avant</strong> et <strong>après</strong> cet appel, on code une fonction <code class="prettyprint lang-c">scanString</code> (cf. les lignes n° 18 à 24) qui prend comme argument une chaîne <code class="prettyprint lang-c">str</code> et une taille <code class="prettyprint lang-c">count</code>. </p>
+  <ul>
+    <li> Avec <code class="prettyprint lang-c">printf</code>, elle affiche d'abord <code class="prettyprint lang-c">str</code> via la spécification de conversion usuelle <code class="cmd" style="color: darkorange;">%s</code>.  </li>
+  
+    <li> Puis elle affiche successivement <strong>chaque caractère</strong> de <code class="prettyprint lang-c">str</code> ou son code s'il n'est pas imprimable, en comptant jusqu'à <code class="prettyprint lang-c">count</code>. </li>
+  </ul>
+  </div><!-- expert -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+void scanString(const char * str, size_t count);
+
+char dest[8] = "Hello";
+char  src[8] = "hi";
+
+
+int main(void) {
+  scanString(dest, 8);
+  strcpy(dest, src);
+  scanString(dest, 8);
+  return 0;
+}
+
+void scanString(const char * str, size_t count) {
+  printf("%s\n", str);
+  for (const char * c = str; c < str + count; c++) {
+    printf(isprint(*c) ? "%3c " : "0x%X ", *c);
+  }
+  printf("\n");
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <p> On obtient en sortie standard l'affichage :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Hello
+  H   e   l   l   o 0x0 0x0 0x0 
+hi
+  h   i 0x0   l   o 0x0 0x0 0x0 
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <div class="expert">
+  <p> où l'on voit qu'après l'appel de <code class="prettyprint lang-c">strcpy</code>, les <strong>5 derniers octets</strong> de <code class="prettyprint lang-c">dest</code> n'ont <strong class="warning">pas changé</strong>. </p>
+
+  <p> En effet, bien que la chaîne <code class="prettyprint lang-c">src</code> soit déclarée comme un tableau de même taille que <code class="prettyprint lang-c">dest</code>, son contenu n'est pas intégralement recopié dans <code class="prettyprint lang-c">dest</code>. C'est son caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> (3<sup>e</sup> octet) qui achève la copie. </p>
+
+  <p class="square"> Examinons maintenant ce que se produit en cas de <strong class="warning">chevauchement</strong> entre les deux chaînes passées dans l'appel de <code class="prettyprint lang-c">strcpy</code>. Dans le programme supra, si l'on remplace la ligne n° 13 par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:13">
+  strcpy(dest, dest + 1);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <p> ce qui revient à vouloir <strong class="defin">supprimer le premier caractère</strong> de <code class="prettyprint lang-c">dest</code>. Comme prévu, le résultat obtenu n'est <strong class="cons">pas satisfaisant</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Hello
+  H   e   l   l   o 0x0 0x0 0x0 
+eloo
+  e   l   o   o 0x0 0x0 0x0 0x0 
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <p> puisque la recopie est erronée à partir du 3<sup>e</sup> caractère (on devrait normalement obtenir <code class="displayDark">ello</code>). On verra infra <a class="infra" href="Cc5-6_chainesCaracteres.html#memcpy"></a> comment résoudre ce problème. </p>
+  </div><!-- expert -->
+  </div><!-- exemple -->
+
+  <li style="margin-top:1.5em" id="strncpy"> <strong class="title">Recopie de n octets</strong> de <code class="prettyprint lang-c">src</code> dans <code class="prettyprint lang-c">dest</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/strcpy" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string n‑bytes copy 
+char * strncpy(char * dest, const char * src, size_t count);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complement">
+  <p> Cette fonction <strong class="specialLB">opère comme</strong> <code class="prettyprint lang-c">strcpy</code> sur les <strong class="defin">n</strong> <strong>premiers octets</strong> respectifs des deux chaînes – ce nombre étant codé par la valeur de l'argument <code class="prettyprint lang-c">count</code>. </p>
+
+  <div class="expert" id="memcpy">
+  <p> Et le <strong class="defin">nombre d'octets réellement copiés</strong> n'est <strong class="pros">pas limité</strong> par la <strong>longueur de la chaîne</strong> <code class="prettyprint lang-c">src</code>. </p>
+  
+  <p> En revanche, on est toujours limité par le fait que les chaînes <code class="prettyprint lang-c">dest</code> et <code class="prettyprint lang-c">src</code> ne doivent <strong class="warning">pas se chevaucher</strong> sur le même espace mémoire. </p>
+
+  <p> Si l'on souhaite recopier une partie d'une chaîne dans elle‑même, il faut employer la <strong class="title">fonction</strong> <code class="prettyprint lang-c">memcpy</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/memcpy" target="_BLANK">C</a>. </p>
+  </div><!-- expert -->
+  </div><!-- complement -->
+  
+  <div class="expert">
+  <div class="exemples">
+  <p class="exemple"> Reprenons l'<strong class="title">exemple académique</strong> supra <a class="supra" href="Cc5-6_chainesCaracteres.html#ex-strcpy"></a> donné pour illustrer l'usage de la fonction <code class="prettyprint lang-c">strcpy</code>. </p>
+  
+  <p class="square"> Dans le programme, si l'on remplace la ligne n° 13 par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:13">
+  strncpy(dest, src, 8);
+</pre>
+<!---------- ne pas indenter ---------->  </p>
+
+<p> on obtient dans <code class="prettyprint lang-c">dest</code> une <strong class="pros">copie intégrale</strong> des <strong class="defin">8 octets</strong> de <code class="prettyprint lang-c">scr</code>, comme le montre l'affichage obtenu en sortie standard :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Hello
+  H   e   l   l   o 0x0 0x0 0x0 
+hi
+  h   i 0x0 0x0 0x0 0x0 0x0 0x0 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p class="square"> Dans le programme, si l'on remplace la ligne n° 13 par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:13">
+  memcpy(dest, dest + 1, 7);
+</pre>
+<!---------- ne pas indenter ---------->  </p>
+
+<p> on obtient dans <code class="prettyprint lang-c">dest</code> une <strong class="pros">copie correcte</strong> de ses octets <strong class="defin">décalés de 1 rang vers la gauche</strong> (d'où la suppression du premier caractère de la chaîne), comme le montre l'affichage obtenu en sortie standard : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Hello
+  H   e   l   l   o 0x0 0x0 0x0 
+ello
+  e   l   l   o 0x0 0x0 0x0 0x0 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  </div><!-- exemple -->
+  </div><!-- expert -->
+
+</ol><!-- numbered -->
+
+
+<h4> Concaténation d'une chaîne au bout d'une autre </h4>
+
+
+<ol class="numbered" style="margin-top:0em">
+  <li id="strcat"> <strong class="title">Concaténation complète</strong> de <code class="prettyprint lang-c">src</code> au bout de <code class="prettyprint lang-c">dest</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/strcat" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string concatenation 
+char * strcat(char * dest, const char * src);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complement">
+  <p> La chaîne <code class="prettyprint lang-c">dest</code> est censée être déclarée avec un <strong>nombre d'éléments</strong> <strong class="pros">suffisant</strong> pour recevoir tous les caractères de <code class="cmd">src</code> en plus de ceux qu'elle contient déjà – caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> <strong class="defin">inclus</strong>. Sinon, le résultat est <strong class="cons">indéfini</strong>. </p>
+  
+  <div class="expert">
+  <p> En principe, les chaînes <code class="prettyprint lang-c">dest</code> et <code class="prettyprint lang-c">src</code> ne doivent <strong class="warning">pas se chevaucher</strong> (<em class="english">no overlapping</em>) sur le même espace mémoire – sinon, le résultat est également <strong class="cons">indéfini</strong>. </p>
+  </div><!-- expert -->
+  </div><!-- complement -->
+
+  <div class="important">
+  <p> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">strcat</code> code une <strong class="defin">affectation groupée</strong> des octets du tableau sur lequel <code class="cmd">dest</code> pointe à partir du caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> <strong class="defin">inclus</strong>, pour qu'il prennent respectivement par ordre de position les octets pointés par <code class="prettyprint lang-c">src</code> jusqu'à son caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> <strong class="defin">inclus</strong>. </p>
+  
+  <div class="expert">
+  <p> Les <strong>octets suivants</strong> dans le tableau pointé par <code class="cmd">dest</code> ne sont <strong class="warning">pas affectés</strong>. </p>
+  </div><!-- expert -->
+
+  <p> La <strong class="specialLB">valeur retournée</strong> est simplement un <strong class="defin">pointeur</strong> sur la chaîne <code class="prettyprint lang-c">dest</code>. </p>
+  </div><!-- important -->
+
+  <div class="exemples" id="ex-strcpy">
+  <p class="exemples"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on peut tester ce <strong class="title">programme académique</strong> similaire à celui pour illustrer l'usage de la fonction <code>strcpy</code> <a class="supra" href="Cc5-6_chainesCaracteres.html#ex-strcpy" target="_BLANK"></a>. L'appel de la fonction <code class="prettyprint lang-c">strcat</code> figure à la ligne n° 14. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+void scanString(const char * str, size_t count);
+
+char dest[8] = "Foo";
+char  src[8] = "Bar";
+
+
+int main(void) {
+
+  scanString(dest, 8);
+  strcat(dest, src);
+  scanString(dest, 8);
+  return 0;
+}
+
+void scanString(const char * str, size_t count) {
+  printf("%s\n", str);
+  for (const char * c = str; c < str + count; c++) {
+    printf(isprint(*c) ? "%3c " : "0x%X ", *c);
+  }
+  printf("\n");
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <p> Comme prévu, on obtient en sortie standard l'affichage :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo
+  F   o   o 0x0 0x0 0x0 0x0 0x0 
+FooBar
+  F   o   o   B   a   r 0x0 0x0 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="expert">
+  <p class="square"> Dans le programme précédent, si on ajoute au début de la fonction <code class="prettyprint lang-c">main</code> l'instruction : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:12">
+  dest[7] = '*';
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <p> alors on obtient en sortie standard l'affichage :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo
+  F   o   o 0x0 0x0 0x0 0x0   * 
+FooBar
+  F   o   o   B   a   r 0x0   * 
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <p> On voit donc que, comme prévu, la concaténation n'a pas modifié le dernier élément de <code class="prettyprint lang-c">dest</code>. </p>
+  </div><!-- expert -->
+  </div><!-- exemples -->  
+  
+  <li style="margin-top:1.5em" id="strncat"> <strong class="title">Concaténation de n octets</strong> de <code class="prettyprint lang-c">src</code> au bout de <code class="prettyprint lang-c">dest</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/strncat" target="_BLANK">C</a> </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// string n‑bytes concatenation 
+char * strncat(char * dest, const char * src, size_t count);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="complement">
+  <p> Cette fonction <strong class="specialLB">opère comme</strong> <code class="prettyprint lang-c">strcat</code> mais en copiant au bout de <code class="prettyprint lang-c">dest</code> les <strong class="defin">n</strong> <strong>premiers octets</strong> de <code class="prettyprint lang-c">src</code> – ce nombre étant codé par la valeur de l'argument <code class="prettyprint lang-c">count</code>. De plus, un caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> est <strong class="defin">ajouté</strong> juste après les caractères concaténés. </p>
+
+  <div class="expert" id="memcpy">
+  <p> De plus, le <strong class="defin">nombre d'octets réellement concaténés</strong> est <strong class="pros">limité</strong> par la <strong>longueur de la chaîne</strong> <code class="prettyprint lang-c">src</code>. </p>
+  
+  <p> Si l'on souhaite s'affranchir de cette limite, il faut employer la <strong class="title">fonction</strong> <code class="prettyprint lang-c">memmove</code> <a class="external" href="https://en.cppreference.com/w/c/string/byte/memmove" target="_BLANK">C</a>. </p>
+  </div><!-- expert -->
+  </div><!-- complement -->
+  
+  <div class="expert">
+  <div class="exemples">
+  <p class="exemples"> Reprenons l'<strong class="title">exemple académique</strong> supra <a class="supra" href="Cc5-6_chainesCaracteres.html#ex-strcpy"></a> donné pour illustrer l'usage de la fonction <code class="prettyprint lang-c">strcpy</code>. </p>
+  
+  <p class="square"> Dans le programme, si l'on remplace la ligne n° 7 par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+char dest[8] = "Foo\0****";
+</pre>
+<!---------- ne pas indenter ----------> 
+  
+  <p> et la ligne n° 14 par :</p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:14">
+  strncat(dest, src, 2);
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <p> on opère au bout de <code class="prettyprint lang-c">dest</code> la <strong>concaténation</strong> de <strong class="defin">2 premiers octets</strong> de <code class="prettyprint lang-c">scr</code>, comme le montre l'affichage obtenu en sortie standard :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo
+  F   o   o 0x0   *   *   *   *
+FooBa
+  F   o   o   B   a 0x0   *   * 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> Et si l'on code <code class="prettyprint lang-c">5</code> dans l'appel de <code class="prettyprint lang-c">strncat</code> pour l'argument <code class="prettyprint lang-c">count</code>, on obtient : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo
+  F   o   o 0x0   *   *   *   * 
+FooBar
+  F   o   o   B   a   r 0x0   * 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> où l'on voir que le <strong>dernier octet</strong> de <code class="prettyprint lang-c">dest</code> n'a <strong class="warning">pas été écrasé</strong> par la concaténation, qui s'est arrêtée au caractère de fin de chaîne de <code class="prettyprint lang-c">src</code> (placé juste après de <code class="prettyprint lang-c">"Bar"</code>). </p>
+  
+  <p> Mais si l'on remplace la ligne n° 14 par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:14">
+  memmove(dest + 3, src, 5);
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <p> alors on obtient un <strong class="pros">écrasement complet</strong> des <strong class="defin">5 derniers octets</strong> de <code class="prettyprint lang-c">dest</code>, comme le montre l'affichage obtenu en sortie standard :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Foo
+  F   o   o 0x0   *   *   *   * 
+FooBar
+  F   o   o   B   a   r 0x0 0x0 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  </div><!-- exemples -->
+  </div><!-- expert -->
+
+</ol><!-- numbered -->
+
+
+<h4> Affectation uniforme d'un caractère répétitif </h4>
+
+
+<p> Il existe <strong>une fonction</strong> pour coder <strong class="title"> l'affectation groupée</strong> de <strong class="defin">n</strong> occurrences du <strong class="defin">même caractère <em class="sigle">ASCII</em></strong> dans une chaîne <a class="external" href="https://en.cppreference.com/w/c/string/byte/memset" target="_BLANK">C</a> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// memory set 
+void * memset(void * dest, int ch, size_t count);
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+<div class="complement">
+<p> La chaîne <code class="prettyprint lang-c">dest</code> doit être déclarée de <strong>type</strong> <code class="prettyprint lang-c">char[]</code> ou <code class="prettyprint lang-c">unsigned char[]</code> avec un <strong>nombre d'éléments</strong> supérieur ou égal à la valeur <strong class="defin">n</strong> prise par l'argument <code class="prettyprint lang-c">count</code>. </p>
+
+<p> <em class="remark">Attention</em>. Comme pour la fonction <code class="prettyprint lang-c">strchr</code> (cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#strchr"></a>), l'<strong class="specialT">argument formel</strong> <code class="prettyprint lang-c">ch</code>, bien que déclaré de <strong>type</strong> <code class="prettyprint lang-c">int</code> dans l'en‑tête de la fonction, est <strong class="warning">converti</strong> dans le <strong>type</strong> <code class="prettyprint lang-c">char</code> dans le corps de définition de la fonction. </p>
+
+<p> C'est pourquoi, dans l'appel de la fonction <code class="prettyprint lang-c">memset</code>, son <strong class="specialO">argument effectif</strong> correspondant ne doit donc prendre qu'une <strong>valeur d'encodage</strong> comprise entre <code>0x00</code> et <code>0xFF</code>. Ce faisant, il peut éventuellement être codé comme une <strong>valeur de caractère</strong> entre guillemets simples <code class="prettyprint lang-c">''</code> ou une <strong>séquence d'échappement</strong>. </p> 
+</div><!-- complement -->
+
+<div class="important">
+<p> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">memset</code> opère l'<strong class="defin">affectation groupée</strong> à la valeur de <code class="prettyprint lang-c">ch</code> des <strong>n</strong> premiers octets du tableau sur lequel <code class="cmd">dest</code> pointe. </p>
+
+<p> Les <strong>octets suivants</strong> du tableau ne sont <strong class="warning">pas affectés</strong>. En particulier, il n'y <strong class="warning">pas d'ajout automatique</strong> d'un caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> à l'octet de position <em class="bold"><var>n</var> + 1</em>. </p>
+
+<p> La <strong class="specialLB">valeur retournée</strong> est simplement un <strong class="defin">pointeur</strong> sur la chaîne <code class="prettyprint lang-c">dest</code>. </p>
+</div><!-- important -->
+
+<div class="exemples" id="ex-memset"><p class="exemples"> Dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong>, on effectue les tests suivants. </p>
+<ul>
+  <li> Après la déclaration <code class="prettyprint lang-c">char str[8] = {0x0};</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("%s\n", (char*) memset(str, '=', 4));</code> 
+  </span> <br>
+  affiche <code class="displayDark">====</code> en sortie standard. </li>
+   
+  <div class="expert"> 
+  <div class="nobullet"> En effet, le tableau <code class="prettyprint lang-c">str</code> a été <strong class="defin">initialisé</strong> avec tous ses éléments valant <strong class="specialDR"><em class="sigle">NUL</em></strong>. Le premier de ces éléments constitue donc le caractère de fin de chaîne. </div>
+  </div><!-- expert -->
+
+  <li> Après la déclaration <code class="prettyprint lang-c">char str[8] = "0123456";</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("%s\n", (char*) memset(str, '=', 4));</code> 
+  </span> <br>
+  affiche <code class="displayDark">====456</code> en sortie standard. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Et l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">printf("%s\n", (char*) memset(str, '=', 8));</code> 
+  </span> <br>
+  <em>peut</em> afficher <code class="displayDark">========</code> en sortie standard. </div> 
+  
+  <div class="nobullet"> Ici, <strong class="warning">il faut être très vigilant !</strong> </div>
+  <ul>
+    <li> Le tableau <code class="prettyprint lang-c">str</code> contient donc <strong>8 caractères</strong> <code class="prettyprint lang-c">'='</code> et sans y prendre garde, on vient d'<strong class="cons">écraser le caractère de fin de chaîne</strong> que contenait <code class="prettyprint lang-c">str[7]</code>. </li>
+  
+    <li> En sortie standard, la fonction <code class="prettyprint lang-c">printf</code> <em>peut</em> afficher seulement ces 8 caractères si, dans la mémoire, l'octet consécutif à <code class="prettyprint lang-c">str[7]</code> vaut <strong>par « chance »</strong> <code class="cmd">0</code>, de sorte qu'il est interprété comme caractère de fin de chaîne. </li>
+
+    <li> Mais si on compile et exécute le programme ci‑dessous, où l'on déclare juste après <code class="prettyprint lang-c">str</code> une <strong class="defin">autre chaîne</strong> de <strong>8 caractères</strong> <code class="prettyprint lang-c">nxt</code> (cf. la ligne n° 7): </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+void scanString(const char * str, size_t count);
+
+char str[8] = "0123456";
+char nxt[8] = "789...";
+
+int main(void) {
+  memset(str, '=', 8);
+  printf("%s\n", str);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+    <div class="nobullet"> alors on obtient en sortie standard l'<strong class="cons">affichage consécutif</strong> de <code class="prettyprint lang-c">str</code> et <code class="prettyprint lang-c">nxt</code>, ce qui n'est <strong class="warning">pas codé</strong> à la ligne n° 11 : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+========789...
+</pre>
+<!---------- ne pas indenter ---------->
+  
+    <div class="nobullet">  En effet, les tableaux <code class="prettyprint lang-c">str</code> et <code class="prettyprint lang-c">nxt</code> ayant l'un et l'autre une taille de 8 octets, ils sont <strong class="defin">stockés l'un après l'autre</strong> dans la mémoire <strong>sans octets de padding</strong> (leur contrainte d'alignement est précisément de 8 octets). Le tableau <code class="prettyprint lang-c">str</code> n'ayant pas de caractère de fin de chaîne, c'est donc celui de <code class="prettyprint lang-c">nxt</code> qui joue ce rôle et termine l'affichage. </div>
+  </ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- exemples -->
+
+
+
+<h3 id="sprintf"> Fonctions de composition et d'analyse polyvalentes </h3>
+
+
+
+<p> Dans le fichier d'en‑tête <code class="filename">stdio.h</code> de la bibliothèque standard du langage <strong>C</strong> sont déclarées les <strong class="title">fonctions</strong> <code class="prettyprint lang-c">sprintf</code> <a class="external" href="https://en.cppreference.com/w/c/io/fprintf" target="_BLANK">C</a> et <code class="prettyprint lang-c">sscanf</code> <a class="external" href="https://en.cppreference.com/w/c/io/fscanf" target="_BLANK">C</a>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+int sprintf(char * buffer, const char * format, ... );
+int sscanf(const char * buffer, const char * format, ... );
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<div class="important">
+<p> Les <strong class="title">fonctions</strong> <code class="prettyprint lang-c">sprintf</code> et <code class="prettyprint lang-c">sscanf</code> constituent respectivement une <strong>variante</strong> des fonctions <code>printf</code> et <code>scanf</code>. Elles opèrent sur une <strong class="defin">chaîne de caractère</strong> – d'où le préfixe <code>s</code> de leur nom – au lieu des <strong>périphériques d'entrées‑sorties standards</strong> (écran et clavier). </p>
+
+<p> Dans leur en‑tête (cf. ci‑dessus), cette chaîne de caractère est nommée <code class="prettyprint lang-c">buffer</code> et constitue le <strong class="specialT">premier argument formel</strong> <strong>avant</strong> la chaîne de format (nommée <code>format</code>).   </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong class="title">argument</strong> <code class="prettyprint lang-c">buffer</code> : </p>
+<ul>
+  <li> est composée par <code class="prettyprint lang-c">sprintf</code> – donc son <strong class="specialO">argument effectif</strong> correspondant doit être déclaré comme un <strong>tableau de caractères</strong> avec un <strong class="defin">nombre d'élément suffisant</strong> pour stocker ceux codés dans la chaîne de format – <strong class="defin">sans oublier</strong> de compter le caractère de fin de chaîne <strong class="specialDR"><em class="sigle">NUL</em></strong> automatiquement ajouté ;  </li>
+
+  <li> est analysée par <code class="prettyprint lang-c">sscanf</code> – donc son <strong class="specialO">argument effectif</strong> correspondant peut être déclaré indifféremment comme un <strong>pointeur</strong> ou un <strong>tableau</strong> de caractères ; il peut également s'agir d'une <strong>constante littérale</strong>.  </li>
+</ul>
+<p> Par ailleurs, la très complexe <strong class="title">syntaxe de codage</strong> des autres arguments des fonctions <code class="prettyprint lang-c">sprintf</code> et <code class="prettyprint lang-c">sscanf</code> est <strong class="pros">la mêmes</strong> que pour <code class="prettyprint lang-c">printf</code> et <code class="prettyprint lang-c">scanf</code>. Succinctement abordée au chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#printf" target="_BLANK"></a>), son étude est approfondie au chap. C5‑VII <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/Cc5-7_flotsEntreesSorties.html" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"> Reprenons des <strong class="title">exemples académiques</strong> proposés au chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#exemplesPrintf" target="_BLANK"></a> <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#exemplesScanf" target="_BLANK"></a>. </p>
+<ul>
+  <li> Après la déclaration <code class="prettyprint lang-c">char date[11];</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">sprintf(date, "%02u/%02u/%u", 1, 9, 2019);</code> 
+  </span> <br>
+  compose la chaîne <code class="prettyprint lang-c">"01/09/2019"</code> dans la variable <code class="prettyprint lang-c">date</code>. </li>
+
+  <li> Réciproquement, après les déclarations <code class="prettyprint lang-c">unsigned day, month, year;</code> l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">sscanf("01/09/2019", "%02u/%02u/%u", &day, &month, &year);</code> 
+  </span> <br>
+  affecte aux variables <code class="prettyprint lang-c">day</code>, <code class="prettyprint lang-c">month</code> et <code class="prettyprint lang-c">year</code> respectivement les valeurs <code>1</code>, <code>9</code> et <code>2019</code>. </li>
+</ul>
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les chaîne de caractères dynamiques en langage <em>C++</em> </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<p> En langage <strong>C++</strong>, il est bien évidemment <strong class="pros">possible</strong> d'employer les <strong class="title">chaînes de style C</strong>, et c'est d'ailleurs <strong class="warning">incontournable</strong> pour certaines fonctionnalités, notamment lorsque l'on code des <strong>arguments à la fonction</strong> <code class="prettyprint lang-c">main</code>. </p>
+
+<p> Néanmoins, les concepts de la programmation orientée objet permettent d'implémenter efficacement des <strong class="title">chaînes de caractères dynamiques</strong>. Dans cette perspective, la bibliothèque standard du <strong>C++</strong> comporte un module dont le fichier d'en‑tête <code class="filename">string</code> qui définit la classe <code class="type">string</code>. Par rapport aux types  offre au codeur une grande souplesse.</p>
+
+
+
+<h3> Déclaration d'un objet de classe <code class="type">string</code> </h3>
+
+
+
+<div class="complement">
+<p> Le fichier d'en‑tête <code class="filename">string</code> de la bibliothèque standard du <strong>C++</strong> ne définit pas seulement une classe mais une <strong class="title">famille de classes</strong> qui sont toutes basées sur le <strong class="defin">même patron</strong> – en anglais, <strong>template</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Template_(programmation)" target="_BLANK">W</a> – nommé <code class="type">basic_string</code>. </p>
+
+<p> Le <strong class="defin">polymorphisme</strong> du <strong>C++</strong> permet ainsi de décliner efficacement la définition de chacune des classes de cette famille en fonction du <strong class="specialG">type</strong> des <strong class="specialLB">unités d'encodage</strong> qu'elle utilise pour les caractères. En particulier :  </p>
+<ul>
+  <li> la classe <code class="type">string</code> emploie le type <code class="prettyprint lang-c">char</code> ;   </li>
+
+  <li> la classe <code class="type">u8string</code> emploie le type <code class="prettyprint lang-c">char8_t</code> ;   </li>
+
+  <li> la classe <code class="type">u16string</code> emploie le type <code class="prettyprint lang-c">char16_t</code> ;   </li>
+
+  <li> la classe <code class="type">u32string</code> emploie le type <code class="prettyprint lang-c">char32_t</code> ;   </li>
+</ul>
+<p> sachant qu'avec certaines implémentations – notamment <strong>GCC</strong> sous <em class="mark">Linux</em> – la classe <code class="type">string</code> est compatible avec le format d'encodage <strong><em class="sigle">UTF‑8</em></strong>. </p>
+</div><!-- complement -->
+
+
+
+<div class="important">
+<p> Dans un programme en <strong>C++</strong>, la déclaration d'une <strong class="title">objet variable</strong> de classe <code class="type">string</code> se code via la syntaxe suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"> <span class="nocode" style="font-size: 105%"><code class="type">std::string</code></span> <span class="nocode"><strong class="specialN">identificateur</strong>  </span><span class="nocode"><span style="color: darkgrey; font-style: normal;">[</span></span> = <span class="nocode"><strong class="specialO">chaîne 1</strong>   <strong class="specialO">chaîne 2</strong> <span style="color: darkgrey; font-style: normal;"> … <strong class="specialO">chaîne i</strong> ]</span></span>; </code>
+</span> <br>
+où les <strong>constantes littérales</strong> <strong class="specialO">chaîne 1</strong>, <strong class="specialO">chaîne 2</strong>… adoptent la <strong class="pros">même syntaxe</strong> qu'en langage <strong>C</strong> (préfixe d'encodage facultatif et saisie entre guillemets doubles – cf. supra <a class="supra" href="Cc5-6_chainesCaracteres.html#stringLiteral"></a>).
+</p>
+
+<p> Dans cette syntaxe, on peut simplifier le <strong class="specialG">descripteur de classe</strong> avec juste <code class="type">string</code> en codant préalablement l'instruction : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">using namespace std;</code>
+</span> <br>
+c'est‑à‑dire en précisant que le programme utilise l'<strong>espace de nom standard</strong> <a class="external" href="https://en.wikipedia.org/wiki/Namespace#C++" target="_BLANK">W</a>, nommé <code class="prettyprint lang-c">std</code>. </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Comme la <strong>déclaration d'une chaîne de style C</strong>, celle d'un objet de classe <code class="type">string</code> peut être assortie de <strong class="title">modificateurs</strong> comme <code class="prettyprint lang-c">const</code> et/ou <code class="prettyprint lang-c">static</code> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#classeStatique" target="_BLANK"></a>).  </p>
+
+<p> De plus, il également possible d'adopter les <strong class="title">syntaxes alternatives</strong> du <strong>C++</strong> pour l'<strong class="defin">initialisation</strong> d'une donnée (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#initC++" target="_BLANK"></a>).  </p>
+</div><!-- expert -->
+
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="title">programme académique</strong> ci‑dessous donne un simple exemple de <strong class="defin">déclaration</strong> en <strong>C++</strong> d'une <strong>variable</strong> de classe <code class="type">string</code> nommée <code class="prettyprint lang-c">mess</code> et initialisée avec des caractères accentués (cf. la ligne n° 7). Il peut être testé dans l'environnement <strong class="OnlineGDB">OnLineGDB</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;cstdio&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+int main() {
+  string mess = "À bientôt.";
+  printf("%s\n", mess.c_str());
+} 
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<div class="expert">
+<p> <em class="remark">Remarque</em>. L'<strong class="title">affichage</strong> en sortie standard avec la fonction <code class="prettyprint lang-c">printf</code> d'une chaîne de classe <code class="type">string</code>  nécessite un recours à la <strong>méthode</strong> <code class="prettyprint lang-c">c_str</code> (détaillée infra <a class="external" href="Cc5-6_chainesCaracteres.html#c_str"></a>), car la spécification de conversion <code class="cmd" style="color: darkorange;">%s</code> attend une valeur de type <code class="prettyprint lang-c">char*</code>. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<h3> Opérateurs de la classe <code class="type">string</code> </h3>
+
+
+
+<h3> Principales méthodes de la classe <code class="type">string</code> </h3>
+
+
+
+<h3> La classe <code class="prettyprint lang-c">String</code> du framework <em class="mark">Arduino</em> </h3>
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

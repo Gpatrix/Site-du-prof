@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="3"
+	data-pagenumber="I"
+	data-pageState="travaux"
+	data-pageheadtitle="Couche transport"
+	data-pagefulltitle="La couche transport  –  les protocole UDP et TCP"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+<p class="square"> La <strong class="title">couche transport</strong> a été brièvement décrite dans le chapitre R1‑IV <a class="preivous" href="../R1-Generalites/Rc1-4_protocoles.html#coucheTransport" target="_BLANK"></a> portant sur l'étude générale des protocoles. Après avoir passé en revue toutes sortes de protocoles applicatifs qui font nécessairement appel à un <strong>protocole de transport</strong>, le moment est venu d'<strong class="defin">étudier en détail</strong> en quoi consiste un tel protocole. </p>
+
+<p> Comparativement à la <strong class="specialG">couche application</strong> à laquelle toute la partie <span class="partie">R2</span> de ce module (8 chapitres) est consacrée, la <strong class="title">couche transport</strong> apparaît <strong class="pros">nettement plus simple</strong> – et ce seul présent chapitre suffit à en expliquer l'essentiel. En effet, elle offre principalement une alternative entre <strong class="specialLB">deux protocoles</strong> : </p>
+<ul>
+	<li> <strong class="specialLB"><em class="sigle">UDP</em></strong> (<strong>user datagram protocol</strong>), maintes fois évoqué tant ce protocole est utilisé par les <strong class="defin">services des réseaux</strong> – <strong><em class="sigle">DNS</em></strong>, <strong><em class="sigle">DHCP</em></strong>, <strong><em class="sigle">NTP</em></strong>… – ainsi que les applications de <strong>streaming</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Streaming" target="_BLANK">W</a> et <strong>VoIP</strong> (cf. chap. R2‑VIII <a class="previous" href="../R2-Applications/Rc2-8_fluxMultimedia.html" target="_BLANK"></a>) ; </li>
+
+	<li> <strong class="specialLB"><em class="sigle">TCP</em></strong> (<strong>transmission control protocol</strong>), qui est le protocole employé pour la plupart des <strong class="defin">échanges de données massifs</strong> – <strong><em class="sigle">HTTP</em></strong> (pages web), <strong><em class="sigle">FTP</em></strong> (fichiers), <strong><em class="sigle">SMTP</em></strong> et <strong><em class="sigle">IMAP</em></strong> (courriels), etc. </li>
+</ul>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheTransport2.png" width="300px" style="margin-top: 1em">
+<p class="square"> Dans le modèle <strong><em class="sigle">OSI</em></strong>, la <strong class="title">couche transport</strong> peut être vue comme <strong class="defin">la plus basse des couches hautes</strong>, c'est‑à‑dire des couches qui sont prises en charge seulement par la <strong>machine émettrice</strong> (celle qui est à l'initiative de la communication) et la <strong>machine destinataire</strong>. </p>
+
+<p> En général, <strong class="title">protocoles <em class="sigle">UDP</em></strong> et <strong class="title"><em class="sigle">TCP</em></strong> sont mis en œuvre par des <strong>composants logiciels</strong> des <strong class="defin">systèmes d'exploitation</strong> respectifs des machines émettrices et destinataires. Néanmoins, on a vu qu'une simple <strong class="defin">carte à microcontrôleur</strong> – machine qui n'est pas dotée d'un système d'exploitation – peut aussi émettre et recevoir des datagrammes <strong><em class="sigle">UDP</em></strong>, par exemple dans le rôle de <strong>client <em class="sigle">NTP</em></strong>, à condition d'être équipée d'une interface réseau (cf. TP R2‑4 <a class="previous" href="../R2-Applications/Rtp2-4_clientNTP.html" target="_BLANK"></a>). </p>
+</div><!-- display -->
+	
+<p class="square"> Pour un technicien réseau, la connaissance des protocoles <strong class="specialLB"><em class="sigle">UDP</em></strong> et <strong class="specialLB"><em class="sigle">TCP</em></strong> fait partie de la <strong class="title">culture générale</strong> <strong class="warning">indispensable</strong>. Connaître leurs principes de fonctionnements, leurs <strong class="pros">avantages</strong> et <strong class="cons">inconvénients</strong> respectifs est en effet nécessaire pour pouvoir faire un choix dans le cadre du développement d'une nouvelle application réseau, en particulier sur des systèmes à microcontrôleur (domotique, <em class="mark">IoT</em>, etc.) </p>
+
+<p> Ce chapitre a donc pour <strong class="title">objectif</strong> d'apporter cette culture générale : </p>
+<ul>
+	<li> en commençant par le <strong class="specialLB">protocole <em class="sigle">UDP</em></strong>, en raison de sa <strong class="pros">simplicité</strong> ; </li>
+
+	<div class="nobullet"> dans cette section seront notamment abordées les notions transversales de <strong class="defin">port logiciel</strong> et de <strong class="defin">somme de contrôle</strong> qui sont valable aussi pour le <strong>protocole <em class="sigle">TCP</em></strong> ; </div>
+
+	<li> en terminant par le <strong class="specialLB">protocole <em class="sigle">TCP</em></strong>, qui nécessite bien plus de développements qu'<strong><em class="sigle">UDP</em></strong> en raison de sa <strong class="warning">complexité</strong> ;  </li>
+
+	<div class="nobullet"> dans cette section, on développera tout ce qui fait la spécificité de ce protocole : les mécanismes de <strong class="defin">connexion/déconnexion</strong> (<em class="english">3‑way handshake</em>…), la <strong class="defin">segmentation</strong> en paquets et le <strong class="defin">contrôle de flux</strong> des paquets. </div>
+</ul>
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="UDP"> Le protocole UDP </h2>
+
+
+
+<h3> Caractéristiques générales </h3>
+
+
+
+<div class="important">
+<p> Le protocole <strong class="title"><em class="sigle">UDP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/User_Datagram_Protocol" target="_BLANK">W</a> – pour <strong>user datagram protocol</strong> – est un <strong class="defin">protocole de transport</strong> pour <strong class="specialO">données de petite taille</strong>. Sommairement spécifié en 1980 par la <strong><em class="sigle">RFC 768</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc768" target="_BLANK"></a>, il opère : </p>
+<ul>
+	<li> <strong>sans segmentation</strong> (donc sans contrôle de flux), </li>
+
+	<li> en <strong>mode non connecté</strong> et nativement en <strong>multicast</strong> (on peut donc l'employer en <strong>broadcast</strong>) ; </li>
+
+	<li> et <strong>sans contrôle de bonne réception</strong> des données pour l'émetteur, mais en laissant la possibilité aux destinataires d'effectuer un <strong>contrôle d'intégrité</strong> des données transmises. </li>
+</ul>
+<p> Au regard des deux derniers points, on dit qu'<strong><em class="sigle">UDP</em></strong> procède <strong class="defin">« au mieux »</strong> – c'est‑à‑dire en référence à l'expression anglaise <strong>best‑effort delivery</strong> <a class="external" href="https://en.wikipedia.org/wiki/Best-effort_delivery" target="_BLANK">W</a>. On peut aussi également dire que c'est un <strong class="specialO">protocole sans état</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Protocole_sans_état" target="_BLANK">W</a> (<em class="english">stateless protocol</em>). </p>
+
+<p> Dans le cadre d'<strong><em class="sigle">UDP</em></strong>, les <strong class="title"><em class="sigle">PDU</em></strong> (<em class="english">protocol data units</em> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#principesComm" target="_BLANK"></a>) sont appelés <strong class="defin">datagrammes</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Détaillons ces différents aspects. </p>	
+<ul>
+	<li> L'<strong class="title">absence de segmentation</strong> et la <strong class="specialO">petite taille</strong> des <strong>datagrammes</strong> s'explique par le fait que ce protocole est conçu pour les transmissions de données qui ne requièrent <em class="remark">a priori</em> qu'<strong>un seul datagramme</strong> ; par exemple, quelques <em>adresses</em> <em class="sigle">IP</em></strong> pour le protocole <strong><em class="sigle">DHCP</em></strong>, quelques <em class="english">timestamp</em> pour le protocole <strong><em class="sigle">NTP</em></strong>, etc.  </li>
+
+	<div class="expert"> 
+	<div class="nobullet">	Néanmoins, rien n'interdit d'employer <strong class="title"><em class="sigle">UDP</em></strong> pour transmettre un <strong class="defin">grand volume de données</strong> : il suffit que la segmentation et la désegmentation soient assurées par une couche supérieure – typiquement, la <strong class="specialG">couche application</strong> qui utilise <strong><em class="sigle">UDP</em></strong>. C'est notamment le cas de la technologie <strong>VoIP</strong> – avec le protocole <strong><em class="sigle">RTP</em></strong> – et plus généralement des applications qui opèrent en <em class="english">streaming</em>. </div>
+  </div><!-- expert -->
+
+	<li> L'<strong class="title">absence de connexion</strong> entre les machines qui se transmettent des données via <strong><em class="sigle">UDP</em></strong> fait qu'il n'y a <strong class="defin">aucune synchronisation</strong> entre elles. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Cette désynchronisation n'est pas anodine, elle impose des <strong class="defin">contrainte de fonctionnement</strong> : </div>
+  <ul>
+  	<li> Lors de l'<strong class="specialLB">envoi d'un datagramme</strong> par la machine émettrice, la machine réceptrice n'est <strong class="warning">pas prévenue préalablement</strong>. Elle doit donc être en permanence à l'<strong class="defin">écoute des ports</strong> sur lesquels les datagrammes sont émis, <strong class="cons">sinon</strong> les datagrammes reçus sont <strong class="cons">ignorés</strong>. </li>
+
+  	<li> La <strong class="specialLB">réception d'un datagramme</strong> ne présume en rien du fait que d'autres datagrammes puissent suivre. Le <strong>processus de réception</strong> – comme d'ailleurs celui d'émission – est <strong class="cons">à répéter intégralement</strong> à chaque nouveau datagramme. Mais ce processus étant bref, cela ne constitue pas un inconvénient significatif. </li>
+  </ul>
+  </div><!-- expert -->
+
+  <li> L'<strong class="title">absence de contrôle de bonne réception</strong> fait que le protocole <strong><em class="sigle">UDP</em></strong> est réputé <strong class="cons">non fiable</strong> : la machine émettrice n'acquiert la confirmation que son datagramme émis a été bien reçu par une machine destinataire seulement si cette dernière lui répond (éventuellement pour lui demander de renouveler une émission), mais ce n'est pas prévu dans le protocole <strong><em class="sigle">UDP</em></strong>. Son principe est donc en quelque sorte : « <em>pas de nouvelle, bonne nouvelle !</em> » </li>
+
+  <div class="expert"> 	
+	<div class="nobullet">	Certes, le protocole <strong><em class="sigle">UDP</em></strong> offre la possibilité aux machines destinataires d'effectuer un <strong class="specialLB">contrôle d'intégrité</strong> (par somme de contrôle, cf. infra), mais il ne prévoit aucun dispositif pour remédier aux <strong class="cons">datagrammes corrompus</strong>. Une machine destinataire peut très bien les <strong class="warning">ignorer</strong>. </div>
+
+	<div class="nobullet"> En d'autres termes, si une transmission de données présente des <strong class="title">exigences de fiabilité</strong>, rien n'interdit d'employer le protocole <strong class="title"><em class="sigle">UDP</em></strong> : il suffit que l'<strong class="specialG">application</strong> qui y recourt mette elle‑même en œuvre les dispositifs algorithmiques de <strong class="defin">vérification de bonne réception</strong> (envoi de datagrammes de confirmation par les machines réceptrices, etc.). À titre d'exemple, c'est typiquement ce que prévoir le protocole <strong><em class="sigle">DHCP</em></strong> (cf. chap. R2‑II <a class="previous" href="../R2-Applications/Rc2-2_dhcp.html" target="_BLANK"></a>).</div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> On peut être <strong class="warning">surpris</strong> qu'un protocole aussi central qu'<strong class="title"><em class="sigle">UDP</em></strong> soit  <strong class="title">uniquement spécifié par la <em class="sigle">RFC 768</em></strong>. En effet, ayant le statut de <strong class="defin">standard de l'Internet</strong>, cette dernière <a class="external" href="https://datatracker.ietf.org/doc/rfc768/" target="_BLANK"></a> :  </p>
+<ul>
+	<li> fait <strong>seulement 3 pages</strong> ; </li>
+
+	<li>n'a fait l'objet d'<strong>aucun erratum</strong> ni d'<strong>aucune mise à jour</strong> par une <strong><em class="sigle">RFC</em></strong> ultérieure.  </li>
+</ul>
+<p> Elle est néanmoins complétée par la <strong class="specialLB"><em class="sigle">RFC 8085</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc8085" target="_BLANK"></a> qui précise les <strong class="pros">bonnes pratiques d'utilisation</strong> du <strong>protocole <em class="sigle">UDP</em></strong>. Son but principal est d'apporter des recommandations techniques pour la <strong class="defin">maîtrise des congestions</strong> dans les réseaux liés à l'utilisation croissante d'<strong><em class="sigle">UDP</em></strong> – notamment du développement des applications de <strong class="specialG">streaming</strong>.  </p>
+</div><!-- remarque -->
+
+
+
+
+<h3 id="datagramme"> Format des datagrammes UDP </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> Le format des <strong class="title">datagrammes</strong> du protocole <strong><em class="sigle">UDP</em></strong> est volontairement <strong class="pros">minimaliste</strong>. Il se compose (cf. figure ci‑après) : </p>
+<ul>
+	<li> d'un <strong class="specialDO">en‑tête</strong> (<strong class="specialDGr">header</strong> ou <strong><em class="sigle">PCI</em></strong> pour <em class="english">protocol control information</em> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#principesComm" target="_BLANK"></a>) de <strong class="defin">8 octets</strong>, composé de <strong>4 champs</strong> de <strong>2 octets chacun</strong> (16 bits) – soit 4 entiers non signés, donc compris entre <em class="bold">0</em> et <em class="bold">65&#8239;535</em>, codés en binaire naturel ;  </li>
+
+	<li> d'une <strong class="specialO">charge utile</strong> (<strong class="specialDGr">payload</strong> ou <strong><em class="sigle">SDU</em></strong> pour <em class="english">service data unit</em>) formée par le <strong class="specialG">message de l'application</strong> qui fait appel au protocole <strong><em class="sigle">UDP</em></strong> pour le transport ; elle a une <strong class="defin">taille variable</strong> mais <strong>limitée</strong> (cf. infra <a class="infra" href="Rc3-1_coucheTransport.html#longueurDatagramme"></a>). </li>
+</ul>
+	<img class="top-left" src="../img/UDPdatagram.png" style="max-width: 600px">
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+<p> Détaillons maintenant les différents <strong class="title">champs d'en‑tête</strong> (<em class="english">header's fields</em>) d'un <strong>datagramme <em class="sigle">UDP</em></strong>.  </p>
+	
+<ul>
+	<li> On a d'abord les  <strong class="specialO">numéros de port</strong> <strong class="specialN">source</strong> et <strong class="specialN">destinataire</strong> :  </li>
+	<ul>
+		<li> le <strong>nº</strong> de <strong class="specialO">port source</strong> spécifie aux machines réceptrices sur quel numéro de port elle doivent spécifiquement adresser un éventuel datagramme de <strong>réponse</strong> ; c'est un renseignement <strong class="defin">optionnel</strong> qui peut être codé à <code class="cmd">0</code> par défaut ;  </li>
+
+		<li> le <strong>nº </strong> de <strong class="specialO">port destinataire</strong> est <strong class="warning">impératif</strong> pour permettre aux machine réceptrices d'<strong class="defin">identifier l'application</strong> à laquelle s'adresse le datagramme qu'elles reçoivent – <strong>sinon</strong>, le datagramme est <strong class="cons">ignoré</strong>. </li>
+	</ul>
+
+  <div class="expert">
+  <div class="nobullet"> En règle générale, dans un protocole qui met en œuvre des requêtes et réponses par datagrammes, les applications émettrice et destinataire renseignent donc respectivement des <strong>numéros de ports permutés</strong>. </div>
+  </div><!-- expert -->
+
+	<li> On a ensuite la <strong class="specialO">longueur du datagramme</strong> (<strong class="specialDGr">datagram length</strong>), qui est simplement son <strong class="defin">nombre d'octets</strong> – <strong>en‑tête incluse</strong>. </li>
+
+	<li> On a enfin une <strong class="specialO">somme de contrôle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Somme_de_contrôle" target="_BLANK">W</a> (<strong class="specialDGr">checksum</strong>) qui est calculée sur l'ensemble des mots binaires de 16 bits formant non seulement l'<strong>en‑tête et les données</strong> du datagramme, mais aussi sur la partie non‑optionnelle de l'<strong>en‑tête du <em class="sigle">PDU</em></strong> du protocole <em class="sigle">IP</em></strong> qui encapsule le datagramme – on parle de <strong class="specialDO">pseudo‑entête</strong> (cf. le schéma ci‑dessous pour un datagramme en <em class="mark">IPv4</em>, chap. R3‑II <a class="next" href="Rc3-2_coucheReseau.html#datagrammes" target="_BLANK"></a>). </li>
+  	<img class="top-left" src="../img/UDPchecksum.png"  style="max-width: 600px">
+
+	<div class="expert"> 	
+	<div class="nobullet"> La <strong class="specialO">somme de contrôle</strong> est <strong>calculée par la machine émettrice</strong> par la méthode dite du <strong class="specialY">complément à 1</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Complément_à_un" target="_BLANK">W</a> de tous les mots binaires qu'elle traite : elle génère une unité supplémentaire à chaque débordement et opère le complément à 1 final du résultat <a class="external" href="https://en.wikipedia.org/wiki/User_Datagram_Protocol#Checksum_computation" target="_BLANK">W</a>. <strong>Recalculée à lors de la réception</strong> par la machine destinataire selon le même algorithme, la somme de contrôle <strong class="defin">doit être identique</strong> à la <strong>valeur inscrite</strong> dans l'en‑tête du datagramme <strong><em class="sigle">UDP</em></strong>, faute de quoi ce dernier est réputé <strong class="warning">corrompu</strong>.  </div>
+
+	<div class="nobullet"> Par ailleurs, il faut savoir que ce contrôle d'intégrité : </div>
+
+  <ul>
+  	<li> est <strong class="pros">facultatif</strong> en <strong>IPv4</strong> – il suffit de renseigner la valeur <em class="bold">0</em> dans le champ de la somme de contrôle ; cette souplesse est intéressante lorsqu'un contrôle d'intégrité est déjà mis en œuvre par l'<strong class="specialG">application</strong> qui fait appel à <strong><em class="sigle">UDP</em></strong> ; </li>
+
+  	<li> est <strong class="warning">obligatoire</strong> en <strong>IPv6</strong>. </li>
+  </ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Le fait que la <strong class="title">somme de contrôle</strong> d'un datagramme prenne en compte les <strong>adresses</strong> <strong><em class="sigle">IP</em></strong> permet de procéder à une <strong class="defin">double vérification</strong> pour un temps de calcul <strong class="pros">à peine plus long</strong>. </p>
+
+<p> Mais elle oblige à <strong class="cons">recalculer</strong> la <strong>somme de contrôle</strong> en cas d'usage d'un protocole de <strong class="defin">translation d'adresse</strong> – mécanisme qui permet aux paquets <strong><em class="sigle">IP</em></strong> de passer dans un réseau privé à adresses non routables (cf. chap. R3‑II <a class="next" href="Rc3-2_coucheReseau.html#NAT" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+
+
+<h4 id="longueurDatagramme"> Longueur des datagrammes UDP – notion de MTU </h4>
+
+
+<div class="important">
+<p> En théorie, la <strong class="title">longueur totale</strong> d'un <strong>datagramme</strong> (<strong>en‑tête incluse</strong>) est limitée à <strong class="defin">65&#8239;535 octets</strong>, conformément au nombre maximal encodable dans le 3<sup>e</sup> champ de son en‑tête (cf. supra <a class="supra" href="Rc3-1_coucheTransport.html#datagramme"></a>). </p>
+
+<p> En pratique, pour garantir l'<strong class="pros">absence de fragmentation</strong> du datagramme par le protocole <strong><em class="sigle">IP</em></strong>, cette longueur est <strong class="warning">fortement limitée</strong>. En effet, lorsqu'un datagramme entre dans un réseau <strong><em class="sigle">IP</em></strong> via être un routeur‑passerelle, il est <strong class="defin">automatiquement fragmenté</strong> si sa longueur dépasse le <strong class="title"><em class="sigle">MTU</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Maximum_transmission_unit" target="_BLANK">W</a> ou <strong>maximum transmission unit</strong> imposée en sortie du routeur. </p>
+</div><!-- important -->
+<!-- indiquer une référence vers le chap. R3‑III pour MTU -->
+
+<div class="complement">
+<p> Le <strong class="title"><em class="sigle">MTU</em></strong> est un paramètre qui dépend de la <strong>technologie de liaison</strong> employée. Usuellement, la <strong class="title">longueur</strong> d'un <strong>datagramme</strong> est <strong class="warning">limitée</strong> à : </p>
+<ul>
+	<li> <strong class="defin">1500 octets</strong> sur les liaisons <strong>Ethernet</strong> ;   </li>
+
+	<li> <strong class="defin">1468 octets</strong> sur les liaisons <strong><em class="sigle">ADSL</em></strong> et <strong>Wi‑fi</strong>.  </li>
+</ul>
+
+<div class="expert">
+<p> Pour les <strong class="specialG">applications de service</strong> – <strong><em class="sigle">DNS</em></strong> en <strong>IPv4</strong>, <strong><em class="sigle">DHCP</em></strong>, <strong><em class="sigle">NTP</em></strong>… – cette longueur maximale est <strong class="pros">largement suffisante</strong>. </p>
+
+<p> Mais pour du <strong class="specialG">streaming</strong> où la vitesse est déterminante, une telle limite peut impacter l'efficacité des transmissions. Certains réseaux <em class="mark">Ethernet</em> réhaussent donc la limite jusqu'à <strong class="defin">9000 octets</strong>. On parle alors de <strong>trames géantes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Trame_géante" target="_BLANK">W</a> (<em class="english">jumbo frames</em>). </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+
+<h3 id="ports"> Nomenclature des ports logiciels </h3>
+
+
+
+<div class="important">
+<p> Par le format d'en‑têtes des datagrammes <strong><em class="sigle">UDP</em></strong> (ainsi que des paquets <strong><em class="sigle">TCP</em></strong>), un <strong class="title">numéro de port logiciel</strong> qui permet d'identifier l'<strong class="specialG">application réseau</strong> source ou destinataire du datagramme est nécessairement <strong>compris</strong> entre <strong class="defin">0</strong> et <strong class="defin">65&#8239;535</strong>. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ianaGlobe.png" width="80px">
+<p> Dans cette étendue de valeurs possibles, les numéros <strong class="defin">inférieurs à 1023</strong> (inclus) sont attribués par l'<em class="bold"><em class="sigle">IANA</em></em> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#organismes" target="_BLANK"></a>) aux <strong class="specialG">applications les plus courantes</strong> – on parle de <strong class="specialLB">ports connus</strong> (en anglais, <strong>well‑known ports</strong>) ou <strong class="specialLB">ports systèmes</strong>. </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement">
+<p> En principe, un <strong>numéro</strong> de <strong class="title">port connu</strong> ne doit <strong class="warning">pas</strong> être utilisé par <strong class="defin">aucune autre application</strong> que celle à laquelle il est attribué. D'ailleurs, une telle « usurpation » nécessite des <strong>droits d'administrateur</strong> pour être autorisée par le <strong>système d'exploitation</strong> de la machine, dans la mesure où elle présente un fort <strong class="warning">risque de conflit</strong>. </p>
+
+<p> En revanche, on dispose de plus de souplesse pour les <strong class="title">autres ports</strong>. </p>
+<ul>
+	<li> Ceux dont les <strong>numéros</strong> vont de <em class="bold">1024</em> à <em class="bold">49&#8239;151</em> sont également attribués par l'<em class="bold"><em class="sigle">IANA</em></em> mais à des <strong class="specialG">applications plus spécialisées</strong>, d'usage moins courant. Ils peuvent donc être utilisés par d'autres applications avec, a priori, un <strong class="defin">moindre risque de conflit</strong>  – mais néanmoins non nul. On parle de <strong class="specialLB">ports enregistrés</strong>. </li>
+
+	<li> Ceux dont les <strong>numéros</strong> vont de <em class="bold">49&#8239;152</em> à <em class="bold">65&#8239;535</em> ne sont pas attribués par l'<em class="bold"><em class="sigle">IANA</em></em>. Ils peuvent être utilisé a priori <strong class="pros">sans risque de conflit</strong>. On parle de <strong class="specialLB">ports dynamiques</strong> ou <strong class="specialLB">privés</strong>. </li>
+</ul>
+<p> Au chapitre R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#applicationsUtilisateurs" target="_BLANK"></a>, on avait donné une « liste minimale » de ports connus utilisés par les applications les plus courantes. De façon beaucoup plus détaillée, une <strong class="title">liste</strong> assez fournie des <strong class="title">ports logiciels</strong> est consultable à ce lien <a class="external" href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers" target="_BLANK">W</a>. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Sur une <strong class="title">carte à microcontrôleur</strong>, le <strong>risque de conflit</strong> est <strong class="pros">très faible</strong> sur l'usage d'un numéro de port, dans la mesure où la carte ne peut mettre en œuvre qu'un <strong>nombre très réduit</strong> d'<strong class="specialG">applications réseau</strong> – sachant d'autant plus que le codeur a en principe la maîtrise complète du programme utilisateur, donc des applications effectivement mises en œuvre. </p>
+
+<p>	Néanmoins, simplement par soucis de <strong class="pros">lisibilité</strong>, on s'efforce d'adopter les <strong class="defin">mêmes conventions de choix de ports</strong> que sur les autres machines. </p>
+</div><!-- exemple -->
+
+
+
+<h3> Intérêt du protocole UDP </h3>
+
+
+
+<div class="important">
+<p> Les inconvénients notoires du <strong>protocole <em class="sigle">UDP</em></strong>  – <strong class="cons">non connecté</strong>, <strong class="cons">non fiable</strong>, etc. – lui confèrent aussi <strong class="title">deux avantages indéniables</strong> : la <strong class="pros">rapidité</strong> et la <strong class="pros">souplesse</strong>. </p>
+</div><!-- important -->
+
+<p class="square"> S'il s'agit de transmettre une <strong class="title">donnée de petite taille</strong>, l'<strong class="defin">absence de connexion préalable</strong> (qui nécessite plusieurs échanges entre les applications émettrice et destinataire), ainsi que l'absence de <strong class="defin">contrôle de bonne réception</strong>, sont des stratégies tout à fait <strong class="pros">pertinentes</strong>. En effet, si l'application émettrice a émis une requête et attend une réponse, alors de deux choses l'une : </p>
+<ul>
+	<li> ou bien une réponse arrive et cela signifie que le datagramme de requête est bien arrivé ;  </li>
+
+	<li> ou bien aucune réponse n'arrive et au delà d'un délai pré‑établi, l'application émettrice peut réitérer sa requête, exactement comme elle le ferait en cas d'échec dans le cadre d'un protocole sécurisé.  </li>
+</ul>
+
+<p class="square"> Par ailleurs, la possibilité de choisir une <strong class="defin">absence de contrôle d'intégrité</strong> permet de <strong class="pros">économiser le temps de calcul</strong> de la somme de contrôle, certes minime pour un seul datagramme, mais qui devient significatif pour un grand nombre de datagrammes dans le cadre d'une transmission de données en <strong>streaming</strong>. </p>
+
+
+
+<h3> Mise en œuvre sur une carte <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;"> 
+	<img class="top-right" src="../img/ArduinoEthernetShield.png" width="200px" style="padding-top: 0.0em">	
+<p> Dans le <strong>module de bibliothèque</strong> <strong class="Arduino">Arduino Ethernet</strong> <a class="external" href="https://www.arduino.cc/en/reference/ethernet" target="_BLANK">A</a>, on trouve tous les éléments de code – <strong class="specialG">classes</strong> et <strong class="specialLB">méthodes</strong> - nécessaires pour <strong class="title">envoyer et recevoir des datagrammes</strong> via le protocole <strong class="title"><em class="sigle">UDP</em></strong> avec une carte reliée au réseau par une <strong>liaison Ethernet</strong> (typiquement, avec un <strong>shield</strong> monté sur la carte – cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#carteMicrocontroleur" target="_BLANK"></a>). Ce module prend implicitement en charge le protocole de routage <strong>IPv4</strong>.</p>
+</div><!-- display -->
+
+<div class="expert">
+<p> Pour une carte reliée au réseau par <strong class="title">liaison Wi‑Fi</strong> – par exemple, à SoC <em class="mark">ESP8266</em> ou <em class="mark">ESP32</em> – on trouve des <strong class="defin">éléments de codes similaires</strong> dans un <strong>module de bibliothèque</strong> spécialement adapté <a class="external" href="https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi" target="_BLANK">G</a>. </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Avant tout, le <strong>module de bibliothèque</strong> <strong class="Arduino">Arduino Ethernet</strong> définit la <strong class="specialG">classe</strong> <code class="prettyprint lang-c">EthernetUDP</code>. Toutes les <strong class="specialLB">méthodes</strong> décrites ci‑après sont définies dans cette classe. </p>
+
+
+<p> En début de programme, dans le fichier principal, il faut obligatoirement <strong class="title">déclarer une instance</strong> – on dit aussi un <strong class="title">objet</strong> – de cette classe pour pouvoir <strong>mettre en œuvre le protocole <em class="sigle">UDP</em></strong>. On code donc typiquement par une instruction comme : <br>
+<span class="inline"> 
+	<code class="prettyprint lang-c">EthernetUDP udp;</code>
+</span> <br>
+où <code class="prettyprint lang-c">udp</code> est l'<strong class="specialN">objet</strong> dont seront issues tous les <strong class="specialO">appels de méthodes</strong> codés dans le programme. </p>
+
+<div class="expert">	
+<p> Le <strong class="title">code source</strong> de ces <strong class="specialLB">méthodes</strong> est consultable dans le fichier <code class="filename">EthernetUdp.cpp</code> au lien suivant <a class="external" href="https://github.com/arduino-libraries/Ethernet/blob/master/src/EthernetUdp.cpp" target="_BLANK">G</a>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<p class="square"> Ensuite, il est nécessaire d'<strong class="title">opérer un</strong> <strong class="specialV">socket réseau</strong> – c'est‑à‑dire une <strong class="defin">tâche de fond</strong> s'exécutant en parallèle du programme pour <strong class="defin">recevoir et envoyer des données</strong> sur le réseau. Comme pour une liaison série, une telle tâche utilise un <strong class="specialLP">buffer de réception</strong> et un <strong class="specialMg">buffer d'émission</strong> (cf. chap. C3‑X <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-10_moniteurSerie.html#buffersSerial" target="_BLANK">C</a>). </p>
+
+<p> Pour employer un <strong class="specialV">socket réseau</strong>, le codeur dispose des <strong class="specialLB">méthodes</strong> suivantes. </p>
+<ul>
+	<li> <code class="prettyprint lang-c">begin</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetUDPBegin" target="_BLANK">A</a> <strong>mobilise un socket</strong>, sachant : </li>
+	<ul>
+		<li> que cette méthode prend comme argument un <strong class="specialT">numéro de port local</strong> (c'est‑à‑dire, pour la carte) – à choisir en fonction de l'application dont on veut transmettre les messages ; </li>
+
+		<li> qu'elle retourne la valeur <code class="cmd">1</code> en cas de succès (socket disponible), <code class="cmd">0</code> sinon.  </li>
+	</ul>
+
+	<li> <code class="prettyprint lang-c">stop</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetUDPStop" target="_BLANK">A</a> <strong>libère le socket</strong> ; elle est sans argument et ne retourne aucune valeur. </li>
+</ul>
+
+<p class="square"> Pour <strong class="title">recevoir un datagramme <em class="sigle">UDP</em></strong>, on dispose notamment des <strong class="specialLB">méthodes</strong> suivantes. </p> 
+<ul>
+	<li> <code class="prettyprint lang-c">parsePacket</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetUDPParsePacket" target="_BLANK">A</a> permet d'<strong>identifier un datagramme</strong> éventuellement présent dans le <strong class="specialLP">buffer de réception</strong>.  </li>
+
+	<div class="nobullet"> Sans argument, elle <strong>retourne</strong> la <strong class="defin">taille du datagramme</strong> en <strong>octets</strong> ou la valeur <code class="cmd">0</code> si <strong class="cons">aucun datagramme</strong> n'a été trouvé.  </div>
+
+	<li> <code class="prettyprint lang-c">read</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetUDPRead" target="_BLANK">A</a> permet de <strong>copier</strong> dans un <strong class="specialT">tableau d'octet</strong> passé en <strong>premier argument</strong> (sous la forme d'un pointeur) <strong class="specialT">n</strong> <strong>octets lus</strong> dans le <strong class="specialLP">buffer de réception</strong> – <strong class="specialT">n</strong> étant passé en <strong>deuxième argument</strong>.  </li>
+  
+  <div class="expert">
+	<div class="nobullet"> Cette méthode peut aussi être passée <strong class="defin">sans argument</strong>. Dans tous les cas, elle <strong>retourne</strong> : </div>
+  <ul>
+  	<li> soit le <strong class="defin">dernier octet lu</strong> dans le <strong class="specialLP">buffer de réception</strong> – chaque octet lu étant <strong>supprimé du buffer</strong> ; </li>
+
+  	<li> soit la valeur <code class="cmd">-1</code> si le buffer est <strong>vide</strong>.  </li>
+  </ul>
+	</div><!-- expert -->
+</ul>
+
+<p class="square"> Pour <strong class="title">envoyer un datagramme <em class="sigle">UDP</em></strong>, on dispose notamment des <strong class="specialLB">méthodes</strong> suivantes. </p> 
+<ul>
+	<li> <code class="prettyprint lang-c">beginPacket</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetUDPBeginPacket" target="_BLANK">A</a> compose l'<strong>en‑tête <em class="sigle">UDP</em></strong> et l'<strong>en‑tête IPv4</strong> encapsulant la charge utile à venir.  </li>
+  <ul>
+  	<li> Elle prend <strong>deux arguments</strong> : l'<strong class="specialT">adresse IPv4</strong> (de type <code class="prettyprint lang-c">IPAddress</code>) et le <strong class="specialT">numéro de port</strong> (de type <code class="prettyprint lang-c">uint16_t</code>) du <strong>destinataire</strong> du datagramme. </li>
+
+  	<li> Elle retourne la valeur <code class="cmd">1</code> en cas de <strong class="pros">succès</strong>, <code class="cmd">0</code> en cas d'<strong class="cons">échec</strong>. </li>
+  </ul>
+  <div class="nobullet"> Les octets de l'en‑tête sont mémorisés dans le <strong class="specialMg">buffer d'émission</strong> du socket réseau. </div>
+	
+	<li> <code class="prettyprint lang-c">write</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetUDPWrite" target="_BLANK">A</a> compose la <strong class="specialO">charge utile</strong> du datagramme <strong><em class="sigle">UDP</em></strong> dans le <strong class="specialMg">buffer d'émission</strong>, en recopiant depuis un <strong class="specialT">tableau d'octet</strong></strong> passé en <strong>premier argument</strong> (sous la forme d'un pointeur) <strong class="specialT">n</strong> <strong>octets</strong> – <strong class="specialT">n</strong> étant passé en <strong>deuxième argument</strong>.  </li>
+    
+  <div class="expert">
+	<div class="nobullet"> Cette méthode <strong>retourne</strong> le nombre d'octets écrits. </div>
+	</div><!-- expert -->
+
+	<li> <code class="prettyprint lang-c">endPacket</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetUDPEndPacket" target="_BLANK">A</a> <strong class="defin">envoie le datagramme</strong> composé par les méthodes ci‑dessus.  </li>
+
+	<div class="nobullet"> Elle retourne la valeur <code class="cmd">1</code> en cas de <strong class="pros">succès</strong>, <code class="cmd">0</code> en cas d'<strong class="cons">échec</strong>. </div>
+</ul>
+
+
+
+<!-- développer un programme de talk via UDP -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="TCP"> Le protocole TCP </h2>
+
+
+
+<h3> Caractéristiques générales </h3>
+
+
+
+<div class="important">
+<p> Le protocole <strong class="title"><em class="sigle">TCP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transmission_Control_Protocol" target="_BLANK">W</a> – pour <strong>transmission control protocol</strong> – est un <strong class="defin">protocole de transport</strong> adapté aux <strong class="specialO">données de grande taille</strong> (fichiers, courriels, etc.). Encore aujourd'hui principalement basé sur la <strong><em class="sigle">RFC 793</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc793" target="_BLANK"></a> de 1981, il opère : </p>
+<ul>
+	<li> <strong>avec segmentation</strong>, associé à un <strong>contrôle de flux</strong>, </li>
+
+	<li> en <strong>mode connecté</strong>, donc forcément en <strong>unicast</strong>, </li>
+
+	<li> et <strong>avec contrôle de bonne réception</strong> des données, associé à un <strong>contrôle d'intégrité</strong>. </li>
+</ul>
+
+<p> Dans le cadre de ce protocole, les <strong class="title"><em class="sigle">PDU</em></strong> (<em class="english">protocol data units</em> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#principesComm" target="_BLANK"></a>) sont appelés <strong class="defin">paquets</strong>. </p>
+
+<p> Quant aux <strong class="title">fragments</strong> de données qu'ils transportent, on les désigne par le terme de <strong class="defin">segment</strong> et on parle donc de <strong class="defin">segmentation</strong> pour désigner le découpage en segments d'un ensemble de données à envoyer. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le protocole <strong class="title"><em class="sigle">TCP</em></strong> est <strong class="warning">beaucoup plus complexe</strong> qu'<strong><em class="sigle">UDP</em></strong>. Le descriptif ci‑dessous reste sommaire pour le moment, afin de ne pas en compromettre la compréhension par une avalanche de détails. </p>
+<ul>
+	<li> Une <strong class="title">connexion</strong> est mise en place au <strong>début de la transmission</strong>. Elle consiste en un <strong class="defin">processus bilatéral</strong> : </li>
+	<ul>
+		<li> sur la <strong class="specialLB">machine émettrice</strong>, pour <strong>envoyer</strong> des paquets de données et <strong>recevoir</strong> leurs paquets d'acquittements respectifs ;   </li>
+	
+		<li> sur la <strong class="specialLB">machine destinataire</strong>, pour <strong>recevoir</strong> les paquets de données et <strong>émettre</strong> leurs paquets d'acquittements respectifs ;  </li>
+	</ul>
+	<div class="nobullet"> sachant qu'une <strong class="defin">inversion des rôles</strong> entre les deux machine peut très bien intervenir <strong>durant la transmission</strong>. Par exemple, c'est typiquement le cas lorsqu'un client <strong><em class="sigle">HTTP</em></strong> exécute une requête auprès d'un serveur.  </div>
+  
+  <div class="expert">
+	<div class="nobullet"> Évidemment, ces <strong>processus</strong> présentent <strong class="defin">différents états</strong> selon le déroulement de la transmission ; on dit donc que <strong><em class="sigle">TCP</em></strong> est un <strong class="specialO">protocole à états</strong> (<em class="english">stateful protocol</em>).  </div>
+	</div><!-- expert -->
+ 
+	<li> La <strong class="title">segmentation</strong> des données en <strong class="title">segments</strong> s'accompagne bien entendu d'une <strong class="defin">numérotation de contrôle</strong>, afin que les <strong>octets des données</strong> puissent être <strong>ordonnés</strong> après réception par la machine destinataire – dans la mesure où aucune garantie n'existe quant l'ordre d'arrivée des paquets transportant les données (ils peuvent être routés différemment dans le réseau). </li>
+
+	<div class="expert">
+	<div class="nobullet"> Dans le cadre de cette segmentation, la question de la <strong class="defin">taille des segments</strong> est importante. Elle fait l'objet de nombreux dispositifs annexes (cf. infra <a class="infra" href="Rc3-1_coucheTransport.html#segmentation"></a>).  </div>	
+	</div><!-- expert -->
+
+	<li> Le <strong class="title">contrôle de réception</strong> et d'<strong class="title">intégrité</strong> est également <strong class="defin">bilatéral</strong>. Il consiste, pour chacune des <strong class="specialLB">deux machines</strong> : </li>
+  <ul>
+  	<li> à <strong class="defin">indiquer</strong> quels <strong>numéros d'octets</strong> des données ont bien été correctement <strong>reçus</strong> ou <strong>acquittés</strong> ;  </li>
+  
+  	<li> à <strong class="defin">réitérer l'envoi</strong> de <strong>tout paquet perdu</strong> ou corrompu, qu'il s'agisse d'un paquet d'émission ou d'acquittement.  </li>
+  </ul>
+  
+	<li> Le <strong class="title">contrôle de flux</strong> signifie que le <strong>rythme d'émission des paquets</strong> est <strong class="defin">ajusté</strong> en fonction de celui de réception des <strong>paquets d'acquittement</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<p> Ci‑après, une sous‑section est respectivement consacrée à chacun de ces aspects pour apporter tous les détails nécessaires à leur bonne compréhension. </p>
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Malgré ses 85 pages, la <strong class="title"><em class="sigle">RFC 793</em></strong> reste <strong class="pros">assez imprecise</strong> sur les détails de fonctionnement du protocole <strong><em class="sigle">TCP</em></strong>, ce qui est compréhensible au regard de sa date d'édition très ancienne (1981). Et malheureusement, les explications complémentaires sont dispersées dans de nombreuses <strong class="specialLB">autres <em class="sigle">RFC</em></strong>, ce qui ne facile pas l'étude de ce protocole. </li>
+
+	<li> Bien que les <strong><em class="sigle">RFC</em></strong> soient assez rigoureuses en matière de <strong class="title">terminologie</strong>, il peut exister dans le reste de la littérature certaines <strong class="warning">ambiguïtés</strong> entre les termes de <strong>paquet</strong> et de <strong>segment</strong>, qui sont essentiellement <strong class="defin">synonymes</strong> à une métonymie près (confusion contenant/contenu). </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="formatPaquetTCP"> Format des paquets TCP </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> Un <strong class="title">paquet</strong> du protocole <strong class="title"><em class="sigle">TCP</em></strong> adopte une forme globale comparable à celle d'un datagramme <strong><em class="sigle">UDP</em></strong>. On y trouve : </p>
+	
+<ul>
+	<li> un <strong class="specialDO">en‑tête</strong> (<strong class="specialDGr">header</strong> ou <strong><em class="sigle">PCI</em></strong> pour <em class="english">protocol control information</em> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#principesComm" target="_BLANK"></a>) de <strong class="defin">20 à 60 octets</strong>, composé de <strong>8 champs obligatoires</strong> et d'<strong>autres optionnels</strong>, chacun de différentes largeurs ;  </li>
+
+	<li> une <strong class="specialO">charge utile</strong> (<strong class="specialDGr">payload</strong> ou <strong><em class="sigle">SDU</em></strong> pour <em class="english">service data unit</em>) qui constitue un <strong>segment</strong> des données de l'<strong class="specialG">application</strong> qui fait appel au protocole <strong><em class="sigle">TCP</em></strong>. </li>
+</ul>
+	<img class="top-left" src="../img/TCPpacket.png" style="max-width: 700px">
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Détaillons maintenant les différents <strong class="title">champs d'en‑tête</strong> (<em class="english">header's fields</em>) d'un paquet <strong><em class="sigle">TCP</em></strong> :  </p>
+<ul>
+	<li> On a d'abord les <strong class="specialO">numéros de port</strong> <strong>source</strong> et <strong>destinataire</strong>, exactement comme pour un datagramme <strong><em class="sigle">UDP</em></strong> (cf. supra <a class="supra" href="Rc3-1_coucheTransport.html#datagramme"></a>).  </li>
+
+	<li> On a ensuite le <strong class="specialO">numéro de séquence</strong> du premier octet du <strong>segment</strong> dans la numérotation globale des données à envoyer – comparable à l'indice de cet octet dans le fichier dont il est issu. C'est un <strong>entier non signé</strong> encodé sur <strong>32 bits</strong> (donc avec une valeur maximale d'environ 4 milliards), traité par arithmétique cyclique en cas de débordement. </li>
+
+  <div class="expert">
+ 	<div class="nobullet"> Il apparaît donc que, contrairement à la première intuition qu'on pourrait avoir, ce ne sont <strong class="warning">pas les paquets</strong> ou segments qui sont <strong>numérotés</strong> mais les <strong class="defin">octets des données</strong> qu'ils contiennent. Deux segments successifs n'ont donc pas des numéros de séquences immédiatement successifs : leur différence est égale au nombre d'octets transmis dans le premier des deux segments. </div>
+
+ 	<div class="nobullet"> On va voir que cette technique permet aussi bien à la machine émettrice que destinataire de savoir où en est son homologue dans la transmission.  </div>
+  </div><!-- expert -->
+
+	<li> Puis on a le <strong class="specialLB">numéro d'acquittement</strong> (<strong class="specialDGr">acknowledgment number</strong>), qui est a priori le <strong>numéro de séquence</strong> du <strong class="defin">prochain octet de données attendu</strong> par la machine – qu'il s'agisse d'un paquet d'émission ou d'acquittement. C'est également un <strong>entier non signé</strong> encodé sur <strong>32 bits</strong>, traité par arithmétique cyclique en cas de débordement. </li>
+
+	<li> Le <strong class="specialO">mot composite</strong> est quant à lui codé sur <strong class="defin">16 bits</strong> et comporte <strong>11 champs</strong> dont <strong>9 drapeaux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Drapeau_(informatique)" target="_BLANK">W</a> (bits de signalisation, en anglais <em class="english">flags</em>). </li>
+
+	<div class="expert" style="display: inline-block;">
+		<img class="top-right" src="../img/TCPflags.png"  width="400px">
+	<ul>
+		<li> Le <strong>champ</strong> <strong class="specialO">décalage des données</strong>  (<strong class="specialDGr">data offset</strong>), encodé sur <strong>4 bits</strong> indique la <strong>taille de l'en‑tête</strong> du paquet exprimée en <strong>mots de 32 bits</strong>, autrement dit le nº du mot de 32 bits du paquet à partir duquel se trouve le premier octet de données ; ce décalage dépend de la longueur cumulée des champs d'options (cf. infra). </li>
+
+		<li> Le <strong>champ</strong> <strong class="specialO">réservé</strong> est, comme son nom l'indique, réservé pour des <strong>développements futurs</strong> de la norme du protocole ; pour le moment, ce champ doit être rempli de <em class="bold">0</em>. </li>
+
+		<li id="ECN"> Le <strong>champ</strong> des <strong class="specialO">drapeaux</strong> encode <strong>9 informations binaires</strong>. </li>
+		<ul>
+			<li> Les <strong>trois premiers bits</strong> sont utilisés pour la <strong class="specialMg">gestions des congestions</strong> – <em class="english">explicit congestion notification</em> ou <strong><em class="sigle">ECN</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Explicit_Congestion_Notification#Operation_of_ECN_with_TCP" target="_BLANK"></a> : </li>
+			<ol>
+			 	<li> le <strong>bit</strong> <code class="cmd">NS</code> – pour <em class="sigle">ECN</em> <em class="english">nonce sum</em> – est encore d'usage expérimental, il sert pour la protection contre la dissimulation (accidentelle ou malicieuse) des paquets signalés <em class="sigle">ECE</em> (cf. le bit éponyme ci‑après) ; </li>
+      
+      	<li> le <strong>bit</strong> <code class="cmd">CWR</code> – pour <em class="english">congestion window reduced</em> – indique que la <strong class="specialMg">congestion</strong> a été <strong class="pros">prise en compte</strong> par l'émetteur ; </li>
+
+				<li> le <strong>bit</strong> <code class="cmd">ECE</code> – pour <em class="sigle">ECN</em> <em class="english">echo</em> – indique qu'une <strong class="specialMg">congestion</strong> est <strong class="defin">signalée</strong> par le protocole <strong><em class="sigle">IP</em></strong>. </li>
+			</ol>
+
+			<li> Le <strong>bit</strong> <code class="cmd">URG</code> – pour <em class="english">urgent</em> – signale que la valeur du <strong class="specialR">pointeur d'urgence</strong> (champ ultérieur – cf. infra) est pertinente. </li>
+
+			<li> Le <strong>bit</strong> <code class="cmd">ACK</code> – pour <em class="english">acknowledgement</em> – indique l'<strong class="defin">acquittement d'une connexion</strong> ; une fois que la transmission est en cours, ce bit signale que le <strong>numéro d'acquittement</strong> est <strong>valide</strong> (si le bit vaut 0, le numéro d'acquittement n'est pas pertinent et doit être ignoré). </li>
+
+			<li> Le <strong>bit</strong> <code class="cmd">PSH</code> indique que la fonction <strong class="defin">push</strong> est demandée. Elle permet d'accélérer la transmission des données à l'application sur la machine destinataire, sans attendre dans le buffer de réception. </li>
+
+			<li> Le <strong>bit</strong> <code class="cmd">RST</code> – pour <em class="english">reset</em> – indique une demande de <strong class="defin">réinitialisation</strong> de la transmission en cours. </li>
+
+			<li> Le <strong>bit</strong> <code class="cmd">SYN</code> – pour <em class="english">synchronize</em> – est utilisé durant l'<strong>établissement d'une connexion</strong>, laquelle consiste en la <strong class="defin">synchronisation des numéros de séquence</strong> entre les deux machines. </li>
+
+			<li> Le <strong>bit</strong> <code class="cmd">FIN</code> – pour <em class="english">finish</em> – indique la <strong class="defin">fin de la transmission</strong> (dernier paquet). Il est également utilisé pour effectuer la <strong>terminaison de la connexion</strong> entre les machines émettrice et destinataire. </li>
+		</ul>
+	</ul>
+  </div><!-- expert -->
+
+	<li> Ensuite, on a la <strong class="specialO">taille de la fenêtre</strong> <strong>de transmission</strong> (<strong class="specialDGr">windows size</strong>), qui indique le <strong>nombre d'octets</strong> qu'une machine destinataire peut traiter dans son <strong>buffer de réception</strong>. La valeur de ce champ est ajustée en temps réel au fur et à mesure de la transmission et participe ainsi au <strong class="defin">contrôle de flux</strong>. </li>
+
+	<li> Puis on a la <strong class="specialO">somme de contrôle</strong> (<strong class="specialDGr">checksum</strong>), qui utilise la <strong>même formule</strong> que celle du protocole <strong><em class="sigle">UDP</em></strong> en intégrant l'en‑tête du protocole <strong><em class="sigle">IP</em></strong> (cf. supra <a class="supra" href="Rc3-1_coucheTransport.html#datagramme"></a>) ; </li>
+
+	<li> Puis on a le <strong class="specialO">pointeur d'urgence</strong> (<strong class="specialDGr">urgent pointer</strong>) qui, si le bit <code class="cmd">URG</code> vaut <em class="bold">1</em>, indique le <strong>numéro de séquence</strong> des octets qu'il est <strong class="warning">urgent d'envoyer</strong> (ce champ est spécifié par la machine destinataire dans la perspective d'assembler les données). </li>
+
+	<li> Enfin, on a les <strong class="specialO">champs d'options</strong>, qui sont facultatifs et qui peuvent prendre de <em class="bold">0</em> à <em class="bold">10</em> <strong>mots</strong> de 32 bits, chaque mot pouvant présenter 1 à 3 octets de remplissage garnis exclusivement de bits <em class="bold">0</em> (<strong class="specialDGr">padding</strong>).  </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3> Déroulement du protocole TCP </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">déroulement du protocole <em class="sigle">TCP</em></strong> comporte nominalement <strong class="specialLB">3 phases</strong> : </p>
+<ul>
+	<li> l'<strong class="specialLB">établissement de la connexion</strong> entre les machines émettrice et destinataire ;  </li>
+
+	<li> le <strong class="specialLB">transfert de données</strong>, durant lequel la connexion est maintenue ; </li>
+
+	<li> la <strong class="specialLB">clôture de la connexion</strong>, qui nécessite également un échange protocolaire. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">connexion <em class="sigle">TCP</em></strong> se traduit par le démarrage, sur chacune des deux machines, d'un <strong>processus</strong> s'exécutant en <strong>tâche de fond</strong> du système d'exploitation – un <strong class="defin">socket réseau</strong> <a class="external" href="https://en.wikipedia.org/wiki/Network_socket" target="_BLANK">W</a> – qui contrôle l'émission et la réception des paquets. </p> 
+
+<p> Cette connexion opère en <strong class="specialLB">circuit virtuel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Circuit_virtuel" target="_BLANK">W</a> car elle ne mobilise <strong class="pros">aucune liaison</strong> particulière entre les machines. Elle ne nécessite donc <strong>aucune indication de routage</strong> et laisse cette problématique entièrement à la charge du protocole <strong><em class="sigle">IP</em></strong> – lequel doit être mis en œuvre sur tous les réseaux traversés et permet de faire éventuellement passer les paquets par différents chemins.  </p>
+</div><!-- complement -->
+
+
+<h4> Établissement d'une connexion TCP </h4>
+
+
+<div class="important">
+<p> L'<strong class="title">établissement d'une connexion</strong> en <strong class="specialLB">circuit virtuel</strong> entre la <strong>machine émettrice</strong> et la <strong>machine destinataire</strong> nécessite la transmission de <strong class="defin">trois paquets</strong> – en anglais, on parle de <strong class="specialO">three‑way handshake</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Three-way_handshake" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Au cours de cet échange protocolaire, les <strong class="title">deux machines</strong> <strong class="defin">valident mutuellement</strong> leurs <strong>numéros de séquences</strong> respectifs en les mettant à jour dans l'en‑tête des paquets <strong><em class="sigle">TCP</em></strong>, et en utilisant également les <strong class="specialO">drapeaux</strong> <code class="cmd">SYN</code> (<em class="english">synchronization</em>) et <code class="cmd">ACK</code> (<em class="english">acknowledgment</em>) figurant dans le mot composite des paquets (cf. supra. <a class="supra" href="Rc3-1_coucheTransport.html#formatPaquetTCP"></a>). </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Sauf dysfonctionnement, le protocole se déroule comme dans l'<strong class="title">exemple générique</strong> suivant : </p> 
+	<img class="top-left" src="../img/TCPconnection.png" style="max-width: 800px">
+<ol class="numbered">
+	<li> L'émetteur – typiquement, un <strong class="specialN">poste de travail</strong> – envoie au destinataire – typiquement, un <strong class="specialN">serveur</strong> – un <strong class="title">paquet initial</strong> dont le bit <code class="cmd">SYN</code> est mis à <code class="cmd">1</code> ; de plus : <br>
+	<ul>
+		<li> il génère son <strong>numéro de séquence</strong> par un <strong class="specialO">nombre aléatoire</strong>, noté ici <strong>x</strong></strong> ;  </li>
+
+		<li> son <strong>numéro d'acquittement</strong> est mis à <em class="bold">0</em> mais cette valeur est <strong class="defin">non pertinente</strong> car le bit <code class="cmd">ACK</code> est mis à <code class="cmd" style="color:grey">0</code> ;  </li>
+
+		<li> a priori, le paquet ne contient <strong>aucune donnée</strong>. </li>
+	</ul> </li>
+
+	<li> Après réception et contrôle d'intégrité de ce paquet initial, le destinataire envoie à l'émetteur un <strong class="title">paquet d'acquittement</strong> dont les bits <code class="cmd">SYN</code> et <code class="cmd">ACK</code> sont tous les deux mis à <code class="cmd">1</code> ; de plus : <br>
+	<ul>
+		<li> il génère son propre <strong>numéro de séquence</strong> par un autre <strong class="specialO">nombre aléatoire</strong>, noté ici <strong>y</strong> ;  </li>
+
+		<li> il inscrit dans <strong>numéro d'acquittement</strong> la valeur <em class="bold"><var>x</var> + 1</em>, signifiant par là qu'il accuse bonne réception du numéro de séquence de l'émetteur ;  </li>
+
+		<li> a priori, le paquet ne contient <strong>aucune donnée</strong>. </li>
+	</ul> </li>
+
+	<li> Après réception et contrôle d'intégrité de ce paquet d'acquittement, l'émetteur envoie un <strong class="title">paquet de confirmation</strong> dont seul le bit <code class="cmd">ACQ</code> est mis à <code class="cmd">1</code> ;  <br>
+	<ul>
+		<li> il inscrit dans son numéro de séquence la valeur <em class="bold"><var>x</var> + 1</em>  ;  </li>
+
+		<li> il inscrit dans <strong>numéro d'acquittement</strong> la valeur <em class="bold"><var>y</var> + 1</em>, signifiant par là qu'il accuse bonne réception du numéro de séquence du destinataire ;  </li>
+
+		<li> éventuellement, ce paquet pourrait être mis à profit pour envoyer des données.  </li>
+	</ul> </li>
+</ol>
+<p> Notons que ce paquet de confirmation fera lui‑même l'objet d'un <strong class="title">acquittement</strong> par le destinataire, comme pour tous les envois par l'émetteur. Néanmoins, cet acquittement ne fait pas explicitement partie de la phase d'établissement de la connexion et l'émetteur n'a <strong class="pros">pas besoin d'attendre sa réception</strong> pour envoyer des données. </p>
+</div><!-- expert -->
+
+<!-- chargement de la page d'accueil du site SNIR en HTTP capture wireshark (fichier à mettre en accès libre)
+<div class="exemple">
+<p class="exemple">  </p>
+</div> --><!-- exemple -->
+
+
+
+
+<h4> Transmission de données </h4>
+
+
+<div class="important">
+<p> Une fois que la connexion est établie, le protocole <strong><em class="sigle">TCP</em></strong> cadence la <strong class="title">transmission de données</strong> par une <strong class="defin">succession d'émission‑réception de paquets</strong>, chaque paquet contenant soit un <strong>segment</strong> des données à envoyer, soit une information d'<strong>acquittement</strong> pour un segment bien reçu, sachant qu'il n'y a <strong>pas forcément une stricte alternance</strong> entre les segments envoyés et leurs acquittements respectifs. </p>
+</div><!-- important -->
+
+<div class="complement">
+<ul>
+	<li> Après chaque <strong class="specialLB">segment envoyé</strong>, l'émetteur <strong class="defin">incrémente</strong> son <strong>numéro de séquence</strong> du nombre d'octets que ce segment contient.  </li>
+
+	<li> Après chaque <strong class="specialLB">segment reçu</strong> et <strong class="pros">vérifié</strong>, le destinataire <strong class="defin">incrémente</strong> son <strong>numéro d'acquittement</strong> du nombre d'octets que ce segment contient. </li> </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Pour l'étude du déroulement du protocole <strong><em class="sigle">TCP</em></strong>, Il est plus commode de raisonner en termes de <strong class="title">numérotation relative</strong>, c'est‑à‑dire en occultant les valeurs aléatoires <strong>x</strong> et <strong>y</strong> générées respectivement par l'émetteur et le destinataire pour former leurs <strong>numéros de séquence</strong>. </p>	
+
+<p> Ici, dans la continuité de l'exemple générique précédent, on se place dans le cas où, <strong>après l'établissement de la connexion</strong>, le <strong class="specialN">serveur</strong> traite une requête <strong><em class="sigle">HTTP</em></strong> (typiquement, une méthode <code>GET</code> – cf. chap. R2‑III <a class="external" href="../R2-Applications/Rc2-3_webClient.html#ligneInitiale" target="_BLANK"></a>) envoyée juste avant par le <strong class="specialN">poste de travail</strong>. Il a donc <strong class="defin">inversion des rôles</strong> a priori supposés : </p>
+<ul>
+	<li> le serveur joue le rôle d'<strong>émetteur</strong> – avec un numéro de séquence <strong>a</strong> ; il envoie régulièrement des segments de <strong>n</strong> octets ;  </li>
+
+	<li> le poste de travail joue le rôle de <strong>destinataire</strong> – avec un numéro de séquence <strong>b</strong> ; il répond au serveur par autant de paquets d'acquittement qui ne contiennent aucune donnée. </li>
+</ul>
+
+  <img class="top-left" src="../img/TCPtransmission.png" style="max-width: 800px">
+
+<p> On peut remarquer qu'après chaque envoi d'un paquet d'acquittement, les deux machines ont leurs numéros de séquence et d'acquittement respectivement égaux. </p>
+
+<!-- chargement de la page d'accueil du site SNIR en HTTP capture wireshark (fichier à mettre en accès libre)
+<div class="exemple">
+<p class="exemple">  </p>
+</div> --><!-- exemple -->
+
+<p> Pour une illustration avec un <strong class="title">exemple réel</strong>, on pourra consulter cette page web <a class="external" href="https://packetlife.net/blog/2010/jun/7/understanding-tcp-sequence-acknowledgment-numbers/" target="_BLANK"></a>, qui fournit un lien pour télécharger un <strong>fichier de capture de trames</strong> à ouvrir dans le logiciel <strong class="specialLB">Wireshark</strong>. </p>
+</div><!-- expert -->
+
+
+<h4> Terminaison d'une connexion TCP </h4>
+
+
+<div class="complement">
+<p> Quant à la <strong class="title">terminaison</strong> d'une connexion <strong><em class="sigle">TCP</em></strong>, elle se déroule selon un protocole similaire à celui d'établissement, mais en <strong>quatre étapes</strong>, avec utilisation des bits <code class="cmd">FIN</code> et <code class="cmd">ACK</code> (cf. la figure ci‑dessous). </p>
+</div><!-- complement -->
+	<img class="top-left" src="../img/TCPclosing.png" style="max-width: 800px">
+
+<!-- chargement de la page d'accueil du site SNIR en HTTP capture wireshark (fichier à mettre en accès libre)
+<div class="exemple">
+<p class="exemple">  </p>
+</div> --><!-- exemple -->
+
+
+<h3> Le contrôle de réception et d'intégrité </h3>
+
+
+
+<div class="important">
+<p> Le protocole <strong><em class="sigle">TCP</em></strong> met en œuvre un <strong class="title">contrôle de bonne réception</strong> <strong class="pros">systématique</strong> de tous les paquets issus de la machine émettrice : </p>
+<ul>
+	<li> tout paquet reçu par une machine destinataire déclenche immédiatement l'envoi par cette dernière d'un <strong class="specialLB">paquet d'acquittement</strong> ;  </li>
+  
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/sablier.png"  width="80px" style="padding-top: 0.5em">
+	<li> ainsi, après écoulement du <strong class="defin">délai maximal</strong> supposé nécessaire à la transmission d'un paquet et de son acquittement – le <strong>timeout</strong> – toute <strong class="cons">non réception</strong> de ce dernier par la machine émettrice signale un dysfonctionnement, ce qui permet de déclencher une <strong>procédure corrective</strong>. </li>
+  </div><!-- display -->
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> La valeur limite du <strong class="title">délai d'acquittement</strong> (<strong>timeout</strong>) doit être judicieusement choisie :  </p>
+<ul>
+	<li> une valeur <strong class="cons">trop petite</strong> engendre de trop fréquentes réitération d'envoi des paquets supposés perdus alors qu'ils allaient arriver ; par <strong class="warning">impatiente</strong>, la machine émettrice perd du temps en envois inutiles et contribue davantage à une éventuelle <strong class="cons">congestion</strong> du réseau.  </li>
+
+	<li> une valeur <strong class="cons">trop grande</strong> engendre du <strong class="warning">retard</strong> dans la réitération d'envoi de paquets réellement manquants ; or tant que tous les paquets n'ont pas été reçus, la donnée transmise ne peut pas être reconstituée sur une machine destinataire.   </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> En pratique, le <strong class="title">délai d'acquittement</strong> est un <strong class="specialO">paramètre dynamique</strong> calculé en fonction de la fluidité réelle des communications entre les machines émettrice et destinataire. Cette fluidité est usuellement quantifié par le <strong class="defin">round-trip time</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Round-trip_delay_time" target="_BLANK">W</a> ou <strong><em class="sigle">RTT</em></strong> – aussi dit <strong>ping time</strong>, car c'est le temps que met la machine émettrice à recevoir une réponse à un  <strong><em class="sigle">PDU</em></strong> qu'elle envoie par le protocole <strong><em class="sigle">ICMP</em></strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#ICMP" target="_BLANK"></a>).   </p>
+
+<p> Typiquement, on affecte au <strong class="defin">timeout</strong> la <strong>valeur moyenne</strong> de <strong><em class="sigle">RTT</em></strong> augmentée de <strong>4 fois sa variance</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Variance_(mathématiques)" target="_BLANK">W</a> – les paramètres statistiques (moyenne et variance) étant réactualisés en permanence <a class="external" href="https://fr.wikipedia.org/wiki/Transmission_Control_Protocol#Temporisation" target="_BLANK">W</a>. </p>	
+</div><!-- expert -->	
+
+
+<h4> Contrôle d'intégrité </h4>
+
+
+<div class="important">
+<p> Le contrôle de réception se double du <strong class="title">contrôle d'intégrité</strong> de chaque paquet, mis en œuvre par le calcul d'une <strong class="defin">somme de contrôle</strong> qui, comme on l'a vu, utilise la <strong>même formule</strong> que ceux du protocole <strong><em class="sigle">UDP</em></strong> (cf. supra <a class="supra" href="Rc3-1_coucheTransport.html#datagramme"></a>). </p>
+
+<p> En revanche, la <strong class="defin">stratégie</strong> mise en œuvre en cas de paquet corrompu ne procède <strong>pas par ignorance</strong> comme dans le protocole <em class="sigle">UDP</em>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Tout <strong>paquet</strong> <strong class="warning">réputé corrompu</strong> déclenche l'émission par une machine destinataire d'un paquet de <strong class="defin">non-acquittement</strong>, codé par le fait que son <strong>bit</strong> <code class="cmd">ACK</code> vaut <em class="bold">0</em>. Cette procédure est meilleure que celle qui consisterait à ne rien faire dans la mesure où elle permet de <strong>signaler le problème</strong> à la machine émettrice <strong class="pros">le plus tôt possible</strong>, donc avant l'expiration du délai de non‑réception. </p>
+</div><!-- complement -->
+
+
+<p> Les contrôles de bonne réception et d'intégrité garantissent au protocole <strong class="title"><em class="sigle">TCP</em></strong> son excellente <strong class="pros">fiabilité</strong>. </p>
+
+
+
+
+<h3> La segmentation des données </h3>
+
+
+<p> On a vu supra que la <strong class="title">transmission des données</strong> par le <strong>protocole <em class="sigle">TCP</em></strong> opère par une succession d'émission‑réception de <strong>paquets</strong>, chaque paquet issus de la machine émettrice contenant dans sa charge utile un <strong class="defin">segment</strong> des données à transmettre.  </p>
+
+<!-- ajouter une figure (fichier découpé en segments) -->
+
+
+<div class="important">
+<p> La <strong class="title">segmentation des données</strong> à envoyer est opérée selon un <strong class="specialN">nombre maximal d'octets</strong> <strong class="defin">fixé</strong> lors de l'établissement de la connexion. Cette information est transmise dans le <strong class="specialO">champ d'option <em class="sigle">MSS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Maximum_Segment_Size" target="_BLANK">W</a> – pour <strong>maximum segment size</strong> – du paquet <strong><em class="sigle">SYN</em></strong> envoyé la machine émettrice. Il doit être <strong class="defin">confirmé</strong> par le paquet <strong><em class="sigle">SYN‑ACK</em></strong> envoyé en retour par la machine destinataire.</p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">valeur du champ <em class="sigle">MSS</em></strong> est optimisée pour éviter le plus possible la fragmentation des paquets au niveau du protocole <strong><em class="sigle">IP</em></strong>, en se basant sur la <strong class="specialR">limite</strong> déterminée par la <strong>technologie de liaison</strong> la plus contraignante sur laquelle les données transitent – limite appelée <strong class="specialR"><em class="sigle">MTU</em></strong>, déjà évoquée lors de l'étude du protocole <strong><em class="sigle">UDP</em></strong> (cf. supra <a class="supra" href="Rc3-1_coucheTransport.html#longueurDatagramme"></a>). </p>
+
+<p> En tenant compte de la <strong class="specialO">taille de l'en‑tête</strong> du <strong>paquet <em class="sigle">TCP</em></strong> – soit <strong class="specialO">20 octets</strong> – et de celle du <strong>datagramme <em class="mark">IPv4</em></strong> qui l'encapsule (encore <strong class="specialO">20 octets</strong>), la formule retenue est <span class="framedSmall"><em class="bold"><em class="sigle">MSS</em> = <em class="sigle">MTU</em> − 40</em></span>. </p>
+
+<p> <em class="remark">Exemple</em> : pour une liaison <em class="mark">Ethernet</em>, on a <em class="sigle">MSS</em> = 1500 − 40 = 1460 octets. </p>
+</div><!-- complement -->
+
+
+
+
+
+<h3> Le contrôle de flux TCP </h3>
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Contrôle_de_flux" target="_BLANK">W</a> <a class="external" href="https://en.wikipedia.org/wiki/Flow_control_(data)" target="_BLANK">W</a> <a class="external" href="https://zestedesavoir.com/tutoriels/2789/les-reseaux-de-zero/dans-les-basses-couches-du-modele-osi/aujourdhui-controle/" target="_BLANK"></a> </p>
+
+<p> algorithme stop and wait <a class="external" href="https://www.youtube.com/watch?v=4l2_BCr-bhw" target="_BLANK">Y</a> </p>
+
+<p> algorithme sliding window <a class="external" href="https://www.youtube.com/watch?v=klDhO9N01c4" target="_BLANK">Y</a> </p>
+
+
+
+<!-- 
+<p> <a class="external" href="https://fr.wikibooks.org/wiki/Les_réseaux_informatiques/La_couche_transport_:_UDP_et_TCP#Le_séquencement_des_paquets" target="_BLANK">W</a></p>
+-->
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

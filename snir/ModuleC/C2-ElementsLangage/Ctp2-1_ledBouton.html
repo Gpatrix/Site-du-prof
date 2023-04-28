@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="TP"
+	data-modulepartnumber="2"
+	data-pagenumber="1"
+	data-pageState="OK"
+	data-pageheadtitle="Led & bouton"
+	data-pagefulltitle="Led & bouton"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<!-- ajouter des chronogrammes pour illustrer les spécifications de chaque exercice -->
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont de mettre en œuvre :  </p>
+
+<ul>
+	<li> les <strong class="defin">instructions de bases</strong> du langage <strong>C</strong> et du framework <strong class="Arduino">Arduino</strong>, notamment le rôle bien distinct des fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code> ; </li>
+
+	<li> la <strong>manipulation</strong> des <strong class="defin">variables booléennes</strong> et des <strong class="defin">entrées‑sorties</strong> ; </li>
+
+	<li> la détection d'un <strong class="defin">front montant</strong> du signal de tension sur un bouton et non pas seulement de son état (appuyé/relâché) ;</li>
+
+	<li> des <strong class="defin">structures de contrôle</strong> (<code class="prettyprint lang-c">if</code>, <code class="prettyprint lang-c">for</code>, <code class="prettyprint lang-c">while</code>), notamment pour factoriser les instructions répétitives ; </li>
+
+	<li> la <strong class="defin">gestion temps</strong> (fonction <code class="prettyprint lang-c">delay</code>) et les techniques de codage pour obtenir des <strong>programmes réactifs</strong> (fonction <code class="prettyprint lang-c">millis</code>). </li>
+</ul>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ce sujet de TP, il est recommandé d'avoir étudié le cours jusqu'au <strong>chapitre</strong> <strong class="warning">C2‑VIII</strong> <strong>inclus</strong> (à l'exception du chap. C2‑VI). Néanmoins, la plupart des exercices ne font appel qu'à un nombre ciblé de connaissances et des renvois aux principaux éléments de cours requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Spécifications matérielles générales </h3>
+
+
+<div style="display: inline-block;">
+
+<img class="top-right" src="../img/Ctp2-1_ledBouton.png" width="400px">
+
+<p>	Tous les exercices sont à traiter dans l'environnement de <strong>simulation en ligne</strong> <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK"></a>, en implémentant préalablement le <strong class="title">montage électronique</strong> en figure ci‑contre, qui comprend :</p>
+
+<ul>
+	<li> une <strong>carte</strong>  <strong class="Arduino">Arduino Uno</strong> ; </li>
+
+	<li> une <strong>platine d'essai</strong> (<em class="english">breadboard</em>) de taille moyenne, dont les rails « <em class="bold">+</em> » et « <em class="bold">−</em> » sont respectivement reliés aux broches <em class="bold" style="color:red">5V</em></em> et <em class="bold">GND</em> de la carte <em class="mark">Arduino</em> ; </li>
+
+	<li> une <strong class="specialDR">led rouge</strong> telle que : </li>
+	<ul>
+		<li> son anode est reliée à la <strong>broche nº 2</strong> du port numérique de la carte <em class="mark">Arduino</em> ; cette broche doit donc être configurée dans les programmes comme une <strong>sortie</strong> (cf. chap. C2‑VII <a class="cours" href="Cc2-7_entreesSortiesBooleennes.html#OUTPUT" target="_BLANK"></a>) ; </li>
+
+		<li> sa cathode est reliée au rail « <em class="bold">−</em> » de la platine via une <strong>résistance de limitation</strong> de courant de <em class="bold">220 Ω</em> ; </li>
+	</ul>
+
+	<li> un <strong class="specialGr">bouton‑poussoir</strong> tel que : </li>
+	<ul>
+		<li> son pôle gauche est relié au rail « <em class="bold">+</em> » de la platine ; </li>
+
+		<li> son pôle droit est relié à la <strong>broche nº 7</strong> du port numérique de la carte <em class="mark">Arduino</em> ; cette broche doit donc être configurée dans les programmes comme une <strong>entrée</strong> ; </li>
+
+		<div class="nobullet"> de plus, pour être référencé à un potentiel déterminé même quand le bouton n'est pas appuyé, ce pôle doit aussi être relié au rail « <em class="bold">−</em> » de la platine via une <strong>résistance de pull‑down</strong> de <em class="bold">2 kΩ</em> ; le bouton fonctionnera donc en <strong class="defin">logique positive</strong> (cf. chap. C2‑VII <a class="cours" href="Cc2-7_entreesSortiesBooleennes.html#INPUT" target="_BLANK"></a>) ;  </div>
+
+		<li> enfin, les pôles doublés sont reliés par un <strong>condensateur</strong> <em>anti‑rebond</em> de 10 nF (recommandé en pratique, mais facultatif en simulation, voire néfaste – à mettre hors circuit si les appuis sont mal détectés sur <strong class="Tinkercad">Tinkercad</strong> (cf. chap. C2‑VII <a class="cours" href="Cc2-7_entreesSortiesBooleennes.html#remConfigES" target="_BLANK"></a>). </li>
+	</ul>
+</ul>
+
+</div><!-- display -->	
+
+
+
+<h3 class="nocount"> Spécifications logicielles générales </h3>
+
+
+
+<p> Les <strong>exercices</strong> consistent à coder des programmes pour commander l'allumage de la <strong class="specialDR">led</strong> de différentes manières : </p>
+
+<ul>
+	<li> par <strong class="title">clignotement</strong> périodique ou temporaire (<em class="english">blink</em>)  avec différentes durées pour la durée d'allumage et d'extinction ; </li>
+
+	<li> par <strong class="title">séquences de clignotements</strong> particulières pour émettre un message en <strong>code morse</strong> ; </li>
+
+	<li> par <strong class="title">commande directe</strong> de l'état de la led par le <strong class="specialGr">bouton‑poussoir</strong> ; </li>
+
+	<li> par <strong class="title">contrôle du mode</strong> de fonctionnement de la led par le <strong class="specialGr">bouton‑poussoir</strong>. </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+
+<div class="important"; style="margin-left: 0em;">
+<p> Il est recommandé de traiter les exercices <strong class="pros">dans l'ordre</strong>. </p>
+
+<p> Dans un <strong class="title">nouveau circuit</strong> sous <strong class="Tinkercad">Tinkercad</strong> : </p>
+<ul>
+	<li> <strong class="specialLB">effectuer le câblage</strong> de la partie matérielle ;</li>
+
+	<li> <strong class="specialLB">vérifier le câblage</strong> par branchements directs temporaires, typiquement en reliant l'anode de la led au potentiel de référence <em class="bold" style="color:red">5V</em> de la carte.  </li>
+</ul>
+
+<p> Sur le poste de travail, créer un <strong class="title">répertoire de TP</strong> nommé avec la référence du sujet, typiquement <code class="filename">C2_TP1</code>. </p>
+
+<p> Puis,	avec un <strong class="title">éditeur de code</strong> (<em class="mark">Sublime Text</em>, <em class="mark">Atom</em>…) : </p>
+
+<ul>
+	<li> <strong class="specialLB">Coder</strong> les programmes demandés en respectant les <strong class="pros">règles de bonnes pratiques</strong> (cf. chap. C2‑IX <a class="cours" href="Cc2-9_bonnesPratiques.html#nomsExplicites" target="_BLANK"></a>).  </li>
+
+	<li> <strong class="specialLB">Enregistrer</strong> le programme de <strong>chaque exercice</strong> dans un <strong class="pros">fichier distinct</strong> nommé <code class="filename">Ctp21_ex<strong class="defin" style="padding-left: 0.1em; padding-right: 0.1em">n</strong>.ino</code>, où <strong class="defin">n</strong> est le nº de l'exercice. </li>
+</ul>
+
+<p> Pour <strong class="title">tester le bon fonctionnement</strong> de chaque programme, procéder par <strong>copier‑coller </strong>dans la fenêtre d'édition de <strong class="Tinkercad">Tinkercad</strong>. En cas de <strong class="defin">modifications ponctuelles</strong> de mise au point, ne pas oublier d'effectuer un <strong>copier‑coller inverse</strong> dans l'éditeur de code et d'enregistrer les modifications. </p>
+
+<p>	Répondre aux <strong class="title">questions supplémentaires</strong> sur feuille ou cahier. </p>
+</div><!-- important -->
+
+
+<h4> Consignes de codage </h4>
+
+
+<div class="consignes" style="margin-left: 0em;">
+<p> <strong class="title">Déclarer les constantes globales</strong> (cf. chap. C2‑III <a class="cours" href="Cc2-3_declarationDonnees.html#declarationConst" target="_BLANK"></a>), au début du programme, hors de toute fonction, de type <code class="prettyprint lang-c">int</code> : </p>
+<ul>
+	<li> <code style="background: white">ledPin</code> pour désigner le <strong>numéro de broche</strong> du port numérique de la <strong>carte</strong> <strong class="Arduino">Arduino</strong> à laquelle est reliée la <strong class="specialDR">led</strong> ; </li>
+
+	<li> <code class="prettyprint lang-c">buttonPin</code> pour désigner le <strong>numéro de broche</strong> du port numérique de la <strong>carte</strong> <strong class="Arduino">Arduino</strong> à laquelle est relié le <strong class="specialGr">bouton‑poussoir</strong> .</li>
+</ul>
+
+<p style="margin-top: 1em"> <strong class="title">Dans la fonction</strong> <code class="prettyprint lang-c">setup</code> : </p>
+<ul>
+	<li> configurer comme <strong>sortie</strong> et initialiser à l'état logique <strong>bas</strong> (<code class="cmd">LOW</code>) la broche du port numérique reliée à la <strong class="specialDR">led</strong> (cf. chap. C2‑VII <a class="cours" href="Cc2-7_entreesSortiesBooleennes.html#OUTPUT" target="_BLANK"></a>) ; </li>
+
+	<li> configurer comme <strong>entrée</strong> la broche du port numérique reliée au <strong class="specialGr">bouton‑poussoir</strong> (cf. chap. C2‑VII <a class="cours" href="Cc2-7_entreesSortiesBooleennes.html#INPUT" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- consignes -->
+
+
+
+
+
+
+
+
+
+
+<ol class="exercice">
+	<li id="exo1">  Coder un programme de <strong class="title">clignotement</strong> de la <strong class="specialDR">led</strong> (cf. chap. C2‑VIII <a class="cours" href="Cc2-8_gestionTemps.html#blinkDelay" target="_BLANK"></a>) avec : <br>
+
+	<ul>
+		<li> une <strong class="defin">période</strong> <strong>T</strong> = <em class="bold">1 s</em> <a class="external " href="https://fr.wikipedia.org/wiki/Fonction_périodique" target="_BLANK">W</a>, </li>
+
+		<li> un <strong class="defin">rapport cyclique</strong> <em class="bold">α</em> = <em class="bold">50 %</em> <a class="external " href="https://fr.wikipedia.org/wiki/Rapport_cyclique" target="_BLANK">W</a> (signal carré),</li>
+	</ul>
+
+  c'est‑à‑dire une <strong class="defin">demi‑période</strong> de <em class="bold">500 ms</em> (déclarer une constante de type <strong class="specialG">entier non signé</strong> <code class="prettyprint lang-c">blinkHalfPeriod</code> pour cette valeur). <br>
+
+	<div style="margin-top: 0.5em;">Vérifier le bon fonctionnement en contrôlant la <strong>durée d'exécution</strong> du programme affichée par l'environnement <strong class="Tinkercad">Tinkercad</strong> (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#TinkercadSimulation" target="_BLANK"></a>). </div> </li><!-- exo1 -->
+
+	<li id="exo2"> À l'aide d'une boucle <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="cours" href="Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>) dans la fonction <code class="prettyprint lang-c">setup</code>, faire <strong class="title">clignoter 3 fois</strong> la <strong class="specialDR">led</strong> avec une période <strong>T</strong> = <em class="bold">1 s</em> et un rapport cyclique <em class="bold">α</em> = <em class="bold">25 %</em>, puis l’<strong>allumer définitivement</strong>.  <br>
+
+	<div style="margin-top: 0.5em;"> <em class="remark">Remarque</em> : le <strong class="specialLB">signal de clignotement</strong> n'étant <strong class="warning">pas carré</strong> (α</em> ≠ 50 %), il ne peut pas être caractérisé par une seule constante temporelle. À la place de <code>blinkHalfPeriod</code>, on peut déclarer <strong>deux constantes entières non signées</strong> nommées respectivement <code class="prettyprint lang-c">blinkLowDuration</code> (durée du temps bas) et <code class="prettyprint lang-c">blinkHighDuration</code> (durée du temps haut). </li><!-- exo2 -->
+
+  <div class="nobullet">  </div>
+	
+
+	<li id="exo3"> À l'aide de plusieurs boucles <code class="prettyprint lang-c">for</code> consécutives dans la fonction <code class="prettyprint lang-c">loop</code>, coder un programme qui fait clignoter la <strong class="specialDR">led</strong> pour répéter sans fin le <strong class="defin">message « <em class="sigle">SOS</em> »</strong> en <strong class="title">code Morse international</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Code_Morse_international" target="_BLANK">W</a> en tenant compte des deux spécifications ci‑dessous : <br>
+
+	<ul>
+		<li> pour optimiser la visualisation en simulation, on impose dans le tableau ci‑dessous des <strong>durées en millisecondes</strong> des éléments du code supérieures à celles employées en télégraphie ; on définira ces valeurs comme des <strong>constantes</strong> nommées respectivement dans la colonne de droite, toutes à déclarer de type <strong class="specialG">entier non signé</strong> ; </li>
+
+		<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+    <table style="margin: 0em"> 
+			<tr> 
+				<th> Élément du code morse </th>
+				<th> Durée  </th>
+				<th> Identificateur </th>
+			</tr>
+			<tr>
+				<td> 	trait </td>
+				<td>  750 ms  </td>
+				<td>  <code>dashDuration</code> </td>
+			</tr>
+			<tr>
+				<td> 	point </td>
+				<td>  250 ms  </td>
+				<td>  <code>dotDuration</code> </td>
+			</tr>
+			<tr>
+				<td> 	séparateur de symboles </td>
+				<td>  250 ms  </td>
+				<td>  <code>betweenSymbolsDuration</code> </td>
+			</tr>
+			<tr>
+				<td> 	séparateur de lettres </td>
+				<td>  750 ms  </td>
+				<td>  <code>betweenLettersDuration</code> </td>
+			</tr>
+			<tr>
+				<td> 	séparateur de mots </td>
+				<td>  3500 ms  </td>
+				<td>  <code>betweenWordsDuration</code> </td>
+			</tr>
+		</table>
+		</div><!-- overflow -->	
+
+		<li> pour des questions pédagogiques, on impose de coder un <strong>séparateur de lettres</strong> dans le sigle « <em class="sigle">SOS</em> » qui, selon la norme, n'en comporte pas (cette exception normalisée est motivée par l'urgence que sous‑tend un message « <em class="sigle">SOS</em> ») <a class="external" href="https://fr.wikipedia.org/wiki/SOS_(signal_de_détresse)" target="_BLANK">W</a>. </li>
+	</ul> </li><!-- exo3 -->
+
+	<li id="exo4"> Coder un programme de <strong class="title">commande monostable</strong> d'allumage  de la <strong class="specialDR">led</strong>, c'est‑à‑dire pour qu'elle s'allume seulement <strong>tant qu’on appuie</strong> sur le <strong class="specialGr">bouton‑poussoir</strong> ; on pourra pour cela effectuer une <strong>composition d'appels de fonction</strong> en écrivant sur la broche de la led la valeur logique du niveau de tension lu sur la broche du bouton (cf. chap. C2‑VII <a class="cours" href="Cc2-7_entreesSortiesBooleennes.html#digitalRead" target="_BLANK"></a>). </li><!-- exo4 -->
+
+	<li id="exo5"> Coder un programme de <strong class="title">commande bistable</strong> d'allumage  de la <strong class="specialDR">led</strong>, c'est‑à‑dire qui inverse son état (allumée/éteinte) <strong>à chaque appui</strong> sur le <strong class="specialGr">bouton‑poussoir</strong>. Ce programme nécessite d'exploiter les <strong class="defin">fronts montants</strong> (cf. chap. C2‑VII <a class="cours" href="Cc2-7_entreesSortiesBooleennes.html#detectionFronts" target="_BLANK"></a>) du signal de tension sur la broche de la carte à laquelle le bouton est relié : on codera que si un front montant est détecté, on écrit sur la broche de la led la <strong>valeur contraire</strong> (opérateur <code class="prettyprint lang-c">!</code> – cf. chap. C2‑IV <a class="cours" href="Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a>) du niveau de tension lu sur cette même broche. </li><!-- exo5 -->
+	
+
+	<li id="exo6"> Dans la fenêtre de code de <strong class="Tinkercad">Tinkercad</strong>, copier‑coller directement le code source ci‑dessous. </li>
+  
+  <div style="margin-left: 1.5em">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// Module C - TP2-1 - exercice 6 - led-blink3
+
+const int ledPin = 2;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+}
+
+int previousMillis = millis();
+const unsigned blinkHalfPeriod = 500;
+
+void loop() {
+  if (millis() - previousMillis >= blinkHalfPeriod){
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(ledPin, !digitalRead(ledPin));
+  }
+  delay(10); // only for a quicker Tinkercad simulation
+}
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  
+	<div class="nobullet"> Lancer la simulation et observer le comportement. Quel est l’<strong class="pros">intérêt</strong> de recourir à la <strong>fonction</strong> <code class="prettyprint lang-c">millis</code> (cf. chap. C2‑VIII <a class="cours" href="Cc2-8_gestionTemps.html#reactivite" target="_BLANK"></a>) ? </div>
+
+	<div class="nobullet"> <strong class="warning">Que se passe‑t‑il</strong> au bout de <strong>33 secondes</strong> ? Proposer une explication et une correction pour régler le problème constaté (cf. chap C2‑VIII <a class="cours" href="Cc2-8_gestionTemps.html#blinkReactif" target="_BLANK"></a>). </div>
+  </div><!-- padding -->
+	<!-- exo6 -->
+
+	<li id="exo7"> En codant l'algorithme de clignotement seulement dans la fonction <code class="prettyprint lang-c">loop</code> et en utilisant la fonction <code class="prettyprint lang-c">millis</code>, faire <strong class="title">clignoter durant 5 s</strong> la <strong class="specialDR">led</strong> avec une période <strong>T</strong> = <em class="bold">0,3 s</em> et un rapport cyclique <em class="bold">α</em> = <em class="bold">50 %</em>, puis l’<strong>éteindre définitivement</strong>. On négligera le temps d’exécution de la fonction <code class="prettyprint lang-c">setup</code>. </li><!-- exo7 -->
+
+	<li id="exo8"> <em class="bold">*</em> Coder un programme de <strong class="title">commande bi‑mode</strong> de la <strong class="specialDR">led</strong>, qui alterne à chaque appui sur le <strong class="specialGr">bouton‑poussoir</strong> les <strong>modes</strong> de fonctionnement <strong>fixe</strong> et <strong>clignotant</strong> avec, pour le mode clignotant, les spécifications temporelles <strong>T</strong> = <em class="bold">1 s</em> et <em class="bold">α</em> = <em class="bold">50 %</em>. <br>
+
+	<ul>
+		<li> Ce programme doit être <strong class="defin">réactif</strong> comme celui de l'exercice 5 (cf. chap. C2‑VIII <a class="cours" href="Cc2-8_gestionTemps.html#reactivite" target="_BLANK"></a>). </li>
+
+		<li> De plus, il nécessite de déclarer une <strong class="defin">variable booléenne</strong> pour mémoriser le <strong>mode</strong> de fonctionnement de la led ; on peut nommer cette variable <code class="prettyprint lang-c">isLEDblinking</code> par exemple. </li>
+	</ul> </li><!-- exo8 -->
+
+	<li id="exo9"> <em class="bold">*</em> Reprendre l'énoncé de l'<strong>exercice précédent</strong> avec un mode clignotant de rapport cyclique <em class="bold">α</em> = <em class="bold">20 %</em> (et non plus 50 %). </li><!-- exo9 -->
+</ol><!-- exercice -->
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

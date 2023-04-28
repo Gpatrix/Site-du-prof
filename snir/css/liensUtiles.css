@@ -1,0 +1,45 @@
+h2, a{
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+}
+h2{
+	margin-right: 4%;
+	margin-left: 0.5%;
+	margin-bottom: 0.2em;
+	text-align: left;
+	
+	font-size: 140%;
+	font-weight: bold;
+	color: black;
+}
+h2:not(:first-child){
+	margin-top: 0.8em;
+	border-top: solid black 1px;
+	padding-top: 0.3em;
+}
+ul{
+	margin-left: -1.5em;
+	list-style-type: none;
+	font-weight: normal;
+}
+a{
+	display: block;
+	
+	text-decoration: none;
+	font-weight: normal;
+	font-size: 110%;
+	color: mediumblue;
+}
+
+a:hover{
+	text-shadow: 0.02em 0.02em black;
+}
+
+
+
+
+
+
+
+
+
+

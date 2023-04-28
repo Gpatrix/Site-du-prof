@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="1"
+	data-pagenumber="III"
+	data-pageState="OK"
+	data-pageheadtitle="Adressage"
+	data-pagefulltitle="L'adressage sur les réseaux informatiques"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+<p class="square"> Pour bien comprendre les principes de l'adressage sur les réseaux informatiques, on peut commencer par se référer au système de <strong class="title">numérotation des lignes téléphoniques</strong> des <strong><em class="sigle">RTC</em></strong> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#reseauRTC" target="_BLANK"></a>), qui est relativement bien connu du grand public. </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/telephoneStandard.jpg" width="300px" style="padding-top: 0.5em">
+<ul>
+	<li> Chaque numéro de ligne commence par un <strong class="specialLB">indicatif international</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Liste_des_indicatifs_téléphoniques_internationaux_par_indicatif" target="_BLANK">W</a> – par exemple, <code class="cmd">+33</code> pour la France métropolitaine – qu'il n'est pas nécessaire de composer si l'appel est depuis le même territoire.  </li>
+
+	<li> Le reste du numéro est à <strong class="specialLB">format variable selon le pays</strong> ; en <strong>France</strong>, le plan de numérotation actuel impose <strong>10 chiffres</strong> pour les numéros longs avec le format <code class="cmd">EZ AB PQ MC DU</code> <a class="external" href="https://fr.wikipedia.org/wiki/Plan_de_numérotation_en_France#Plan_de_numérotation_actuel_(depuis_1996)" target="_BLANK">W</a> où <code class="cmd">E</code> chiffre l'exploitant (obsolète), <code class="cmd">Z</code> la zone géographique, etc. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Ce format permet de générer dans <strong>chaque zone géographique</strong> une <strong class="defin">centaine de millions de numéros</strong>, ce qui est a priori <strong class="pros">largement suffisant</strong> pour un pays comme la France (ce ne serait pas forcément le cas pour un pays très peuplé comme la Chine).  </div>
+
+  <li> Et même s'il n'y a pas de pénuries de numéros, il n'est pas rare de mettre en place dans certains lieux des <strong class="defin">lignes privées</strong> qui ne sont accessibles que via un <strong>standard téléphonique</strong>, pour des questions tant économiques (les tarifs d'abonnement dépendent du nombre de lignes souhaitées) que pratiques (la centralisation via un standard facilite le câblage et l'administration du réseau local). </li>
+  </div><!-- expert -->
+</ul>
+<p> Le <strong class="title">plan de numérotation</strong> par <strong class="defin">zones géographiques</strong> n'a pas toujours été aussi complexe, il a évolué au fur et à mesure de l'augmentation du nombre d'abonnés et de la ramification du réseau  <a class="external" href="https://fr.wikipedia.org/wiki/Plan_de_numérotation_en_France#Historique_du_plan_de_numérotation" target="_BLANK">W</a>. Il est évidemment lié à l'<strong>ancien système de commutation</strong> du réseau <strong><em class="sigle">RTC</em></strong> : il rationalisait les mécanismes d'établissement de la ligne de communication entre le numéro appelant et le numéro appelé. Et par simplicité pour les usagers, il reste inchangé même si aujourd'hui, les communications téléphoniques sont essentiellement opérées en <strong>VoIP</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Voix_sur_IP" target="_BLANK">W</a>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/adressesReseau.png" width="500px" style="padding-top: 1.2em">
+<p class="square"> Les <strong class="title">réseaux informatiques</strong> présentent une <strong class="warning">architecture plus complexe</strong> que celle des réseaux téléphoniques commutés (ne serait‑ce que par la variété des machines) et opèrent un mode <strong class="warning">communication asynchrone</strong> : durant un échange de données, il n'y a pas d'établissement d'une ligne physique de transmission continue entre les machines émettrice et réceptrice. C'est pourquoi la problématique de l'adressage est traitée de façon différente :   </p>
+
+<ul>
+	<li> ce sont les machines – plus précisément les <strong class="defin">interfaces réseau</strong> – et non pas les liaisons qui sont <strong>identifiées</strong> ; </li>
+
+	<li> chaque <strong>interface</strong> est identifiée par au moins <strong class="defin">deux adresses</strong> (cf. chap.R2‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#adresses" target="_BLANK"></a>). </li>
+  
+  <div class="expert">	
+	<ul>
+		<li> L'<strong class="specialLB">adresse physique</strong>, en principe attribuée une fois pour toute par le constructeur de l'interface, permet à la sous‑couche <strong><em class="sigle">MAC</em></strong> des protocoles comme <strong>Ethernet</strong> ou <strong>Wi‑Fi</strong> d'aiguiller les trames de données dans un <strong class="defin">réseau local</strong>. </li>
+
+		<li> L'<strong class="specialLB">adresse logique</strong> qui permet au protocole <strong><em class="sigle">IP</em></strong> de router les paquets de données à travers l'<strong class="defin">Internet</strong> ; en principe temporaire, l'obtention d'une telle adresse est l'<strong class="warning">enjeu principal</strong> de la possibilité pour une machine de communiquer. </li> 
+	</ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- display -->
+
+<div class="expert">	
+<p> De plus, le <strong class="title">système d'adressage <em class="sigle">IP</em></strong> a <strong class="defin">significativement évolué</strong> depuis les premiers développement de l'Internet. La principale raison de cette évolution est la <strong>croissance exponentielle</strong> du nombre de machines à connecter et de l'<strong class="cons">épuisement des adresses</strong> qui a découlé d'un format initial d'adresses <strong class="cons">mal conçu</strong>. </p>
+</div><!-- expert -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/IPaddresses.png" width="600px" style="padding-top: 0.2em">
+<p> Aujourd'hui coexistent les <strong class="specialLB">deux normes</strong> d'adresses <strong class="warning">incompatibles</strong>, dites <strong class="specialO">IPv4</strong> et <strong class="specialO">IPv6</strong> – la deuxième étant amenée à progressivement remplacer la première, du moins sur les <strong>infrastructures « publiques »</strong> de l'Internet.  </p>
+</div><!-- display -->
+
+
+<p class="square"> Pour un technicien des réseaux, une <strong>bonne connaissance</strong> des <strong class="title">systèmes d'adressage</strong> est absolument <strong class="warning">indispensable</strong>. Au delà du fait que les machines ne peuvent pas communiquer dans un réseau si elles sont dépourvues d'adresses – d'où l'importance de savoir les configurer – le <strong class="defin">plan d'adressage</strong> adopté détermine en grande partie l'<strong>architecture du réseau</strong>. </p>
+
+<p> Ce chapitre a donc pour principal <strong class="title">objectif</strong> d'apporter toutes les <strong class="defin">notions fondamentales</strong> et les <strong class="defin">connaissances pratiques</strong> pour <strong class="pros">maîtriser le sujet</strong>.    </p>
+<ul>
+	<li> On commence par décrire la <strong class="specialLB">configuration d'une interface</strong> qui, outre ses <strong class="defin">deux adresses</strong> <strong>physique</strong> et <strong>logique</strong>, comporte d'autres éléments indispensables pour la bonne exécution des protocoles de communication – <strong>masque</strong> du (sous‑)réseau, adresses <em class="sigle">IP</em> de la <strong>passerelle par défaut</strong> et du <strong>résolveur <em class="sigle">DNS</em></strong>… </li>
+
+	<li> On présente ensuite le système d'<strong class="specialLB">adressage physique MAC</strong>, qui ne <strong class="pros">pas de difficulté particulière</strong>. Il s'agit donc d'une section est relativement courte. </li>
+
+	<li> On poursuit avec le système d'<strong class="specialLB">adressage logique IPv4</strong>, qui est bien <strong class="warning">plus complexe</strong>. On doit rappeler le formatage historique des adresses par <strong class="defin">classes de réseaux</strong> et les différentes techniques qui ont été inventées pour pallier au spectre de l'<strong class="cons">épuisement des adresses</strong> – notion de <strong>sous‑réseau</strong>, d'<strong>adresse privée</strong>, d'<strong>adressage dynamique</strong>.  </li>
+
+  <div class="expert">
+	<div class="nobullet"> Ces aspects sont essentiels pour comprendre comment configurer une machine dans le <strong>système d'adressage actuel</strong> <strong class="defin">sans classes</strong>.  </div>
+  </div><!-- expert -->
+  
+  <div class="expert">
+	<li> On termine avec le système d'<strong class="specialLB">adressage logique IPv6</strong>, qui gagne en importance au fur et à mesure de la migration engagée par les fournisseurs d'accès et les opérateurs de transport. </li>
+
+	<div class="nobullet"> En effet, même si cette migration semble plus lente que annoncée, elle est <strong class="warning">inéluctable</strong>, car l'exécution de deux piles de protocoles sur les machines entraîne un surcoût pour la mémoire d'une machine et son temps de traitement des transmissions requise). </div>
+  </div><!-- expert -->
+</ul>
+
+<div class="expert">
+<p> Quant aux spécificités de l'adressage sur les <strong>réseaux domotiques</strong> et <strong>industriels</strong>, elles seront abordées directement dans les chapitres consacrés à ces thèmes (partie <span class="partie">R3</span> du module). </p>
+
+<p> À titre de <strong class="title">complément</strong> sur l'adressage <strong><em class="sigle">IP</em></strong>, on pourra consulter ce cours <a class="external" href="http://tvaira.free.fr/bts-sn/reseaux/cours/cours-adressage-ip+annexes.pdf" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+ 
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="configuration"> Configuration d'une interface réseau </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+		<img class="top-right" src="../img/ordinateurSymbole.png" width="200px" style="padding-top: 0.0em">
+<p> Pour qu'un <strong>ordinateur</strong> – ou tout autre machine terminale (serveur, imprimante, etc.) – puisse pleinement communiquer dans et hors d'un réseau local, il doit être équipé d'au moins une <strong class="title">interface réseau</strong> qui soit <strong class="pros">correctement configurée</strong>. Cette configuration comporte les <strong class="defin">5 paramètres</strong> suivants : </p>
+</div><!-- display -->
+<ul>
+	<li> l'<strong class="specialLB">adresse <em class="sigle">MAC</em></strong> de l'<strong>interface</strong> (pour l'étiquetage des trames de la couche liaison) ; </li>
+
+	<li> une <strong class="specialLB">adresse <em class="sigle">IP</em></strong> <strong>disponible</strong> dans le réseau local (pour l'étiquetage des paquets de la couche réseau) ; </li>
+
+	<li> le <strong class="specialLB">masque du (sous‑)réseau</strong> qui permet de déterminer à partir de l'adresse <strong><em class="sigle">IP</em></strong> de l'interface celle du <strong>(sous‑)réseau local</strong> dans lequel l'interface est hébergée ; </li>
+
+	<li> l'<strong>adresse <em class="sigle">IP</em></strong> de la <strong class="specialLB">passerelle par défaut</strong> du (sous‑)réseau local vers un <strong>réseau externe</strong> (typiquement, l'Internet) ; sinon, la machine ne peut pas communiquer au delà de son (sous‑)réseau local ;  </li>
+
+	<li> l'<strong>adresse <em class="sigle">IP</em></strong> d'au moins un <strong class="specialLB">résolveur <em class="sigle">DNS</em></strong> (<em class="english">domain name system</em> – cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#DNS" target="_BLANK"></a>) ; sinon, la machine ne peut pas formuler des <strong>noms de domaines</strong> dans ses requêtes vers des ressources. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> On verra plus loin que, sauf cas particuliers (notamment pour certaines cartes à microcontrôleurs), l'<strong class="title">adresse <em class="sigle">MAC</em></strong> est mémorisée dans l'interface et <strong class="pros">automatiquement renseignée</strong> dans sa configuration.  </p>
+
+<p> En revanche, toute la <strong class="title">configuration <em class="sigle">IP</em></strong> est susceptible d'être <strong class="defin">effectuée manuellement</strong>. Dans un tel cas, il faut être particulièrement attentif : la moindre <strong class="warning">omission</strong> ou <strong class="warning">erreur</strong> suffit à compromettre la capacité de l'interface à communiquer dans le réseau. </p>
+</div><!-- complement -->
+
+
+<h4 id="casRouteur"> Cas d'un routeur </h4>
+
+
+<div class="complement">
+<div style="display: inline-block;">
+		<img class="top-right" src="../img/routeurSymbole2.png" width="80px" style="padding-top: 0.0em">
+<p> En termes de configuration, le cas d'un <strong class="title">routeur</strong> est un peu différent de celui d'un ordinateur :   </p>
+</div><!-- display -->
+<ul>
+	<li> il dispose forcément de <strong class="defin">plusieurs interfaces</strong> qui sont hébergées dans des <strong class="warning">réseaux différents</strong>, donc chacune doit avoir une <strong>configuration spécifique</strong> ; </li>
+
+	<li> <strong>chaque interface</strong> doit également disposer d'une <strong class="defin">table de routage</strong> ; pour qu'elle puisse router correctement les datagrammes que l'interface reçoit, cette table met en correspondance des <strong class="specialO">adresses <em class="sigle">IP</em></strong> de <strong>réseaux destinataires</strong> et de <strong>routeurs voisins</strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<h4> Emploi d'un serveur proxy </h4>
+
+
+<div class="important">
+<p> Dans un réseau local d'entreprise ou de collectivité, il est usuel que les <strong>accès à l'Internet</strong> soient relayés par une machine dédiée appelée <strong class="title">serveur proxy</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Proxy" target="_BLANK">W</a>, également dit <strong class="title">serveur mandataire</strong>.  Cette solution permet notamment : </p>
+
+<ul>
+	<li> d'<strong class="pros">optimiser les temps d'accès</strong> aux ressources en mémorisant dans un <strong>cache volumineux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Mémoire_cache" target="_BLANK">W</a> les pages web les plus fréquemment demandées ;  </li>
+
+	<li> de <strong class="pros">filtrer les accès</strong> aux ressources (interdictions de certains domaines, suppression de la publicité).  </li>
+</ul>
+</div><!-- important -->	
+
+<div class="complement">
+<p> Chaque machine du réseau doit donc impérativement disposer de l'<strong class="title">adresse <em class="sigle">IP</em></strong> du serveur proxy et des <strong>numéros de ports</strong> spécifiquement dédiés au traitement des requêtes par les protocoles <code>http</code> et <code>https</code> afin pouvoir accéder aux ressources de l'Internet. </p>
+
+<p>	Toutefois, ces informations ne sont pas considérées comme faisant explicitement partie de la configuration des interfaces. Elle sont <strong>rattachées</strong> au <strong class="defin">système d'exploitation</strong> de la machine, qui chapeaute toutes les interfaces. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Par ailleurs, certains <strong class="title">navigateurs</strong> – notamment <strong>Firefox</strong> – permettent de définir le <strong class="defin">paramétrage spécifique</strong> de recours au proxy qui écrase celle définie dans le système d'exploitation du poste de travail. </p>
+
+<p> Cette solution peut être <strong class="pros">utile</strong> lorsqu'on ne dispose <strong class="warning">pas</strong> des <strong>droits d'administration</strong> pour modifier les paramètres de recours au proxy. Mais sinon, elle n'est <strong class="cons">pas recommandée</strong> puisqu'elle n'est opérationnelle que pour un seul navigateur et ne permet d'accéder aux ressources de l'Internet par des commandes en ligne. </p>
+</div><!-- expert -->
+
+
+
+<h3> Modes de configuration des interfaces et du recours au proxy </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">configuration d'une interface réseau</strong> peut être mise en œuvre :  </p>
+<ul>
+	<li> « <strong class="specialLB">manuellement</strong> », en imposant aux paramètres de la configuration des <strong>valeurs déterminées par l'utilisateur</strong> ou l'administrateur de la machine ; </li>
+
+	<li> <strong class="specialLB">automatiquement</strong>, à l'aide du <strong>protocole <em class="sigle">DHCP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" target="_BLANK">W</a> (<em class="english">dynamic host configuration protocol</em>) si ce dernier est mis en œuvre dans le réseau local (cf. chap. R2‑II <a class="next" href="../R2-Applications/Rc2-2_dhcp.html" target="_BLANK"></a>). </li>
+</ul>
+<p> Il en va <strong class="defin">de même</strong> pour la configuration du recours à un <strong class="title">serveur proxy</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le vocabulaire peut prêter à confusion car la <strong class="title">configuration « manuelle »</strong> d'une interface peut être effectuée automatiquement par un <strong>script de commande</strong> qui s'exécute au démarrage de la machine. C'est pourquoi il est préférable de parler de <strong class="defin">configuration statique</strong>, au sens où les paramètres – et notamment l'<strong>adresse <em class="sigle">IP</em></strong> – sont attribués de façon <strong>définitive</strong> (ou du moins jusqu'à une éventuelle modification « manuelle » des paramètres). </p>
+
+<p> Et a contrario, on emploie le terme de <strong class="defin">configuration dynamique</strong> lorsqu'on recourt au protocole <strong><em class="sigle">DHCP</em></strong>, car les paramètres de la configuration sont alors déterminés par un <strong>serveur dédié</strong>. En particulier, l'<strong>adresse <em class="sigle">IP</em></strong> de l'interface est allouée pour une <strong>durée limitée</strong> (le plus souvent renouvelable ad libitum) en fonction des disponibilités. </p>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Règles de choix du mode de configuration </h4>
+
+
+<div class="important">
+<p> <strong>En règle générale</strong>, il est préférable de choisir une <strong class="title">configuration dynamique</strong>. Ainsi, on bénéficie des éléments qu'il n'est pas forcément facile d'obtenir (adresses de la passerelle par défaut, etc.) et de leur <strong class="pros">mise à jour automatique</strong> au gré des évolutions décidées par l'administrateur du réseau. On ne risque pas d'être confronté à une configuration obsolète. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Toutefois, pour pour des machines comme les imprimantes, les caméras, les serveurs, etc. qui hébergent des <strong>ressources ou des services partagés</strong> à disposition d'autres machines du réseau, une <strong class="title">configuration statique</strong> peut se justifier. En effet, la pérennité d'une telle configuration <strong class="pros">simplifie l'accès</strong> aux ressources ou services hébergées. </p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+
+<h3 id="accesParam"> Stockage et accès aux paramètres réseau d'une machine </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">stockage</strong> de la <strong>configuration d'une interface réseau</strong> dépend beaucoup du <strong class="defin">type de machine</strong> dans laquelle elle est intégrée, et de son éventuel <strong class="defin">système d'exploitation</strong>. Il peut évoluer au fil des <strong>versions</strong> de ce dernier. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il est donc difficile d'exposer de manière fiable comment ce stockage est implémenté et quelles sont les procédures pour y accéder. Dans la pratique, il est souvent nécessaire de <strong class="warning">renouveler ses connaissances</strong> par des <strong>recherches sur le web</strong>. Les explications données ci‑après ne sont ni exhaustives, ni forcément pérennes.  </p>
+</div><!-- complement -->
+
+
+<h4> Machines de type poste de travail </h4>
+
+
+<div class="complement">
+<p> Sur une machine de type <strong class="title">poste de travail</strong>, la configuration des interfaces réseau et du recours à un serveur proxy est le plus souvent stockée dans des <strong class="defin">fichiers binaires</strong>. Ces derniers ne sont accessibles en lecture et écriture que via des <strong>fenêtres de dialogue</strong> du système d'exploitation ou des <strong>commandes en ligne</strong>. </p>
+
+<p> Les accès ne requièrent <strong class="pros">pas forcément</strong> les <strong>droits d'administration</strong> de la machine. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/WindowsParamReseau1.png" width="200px" style="padding-top: 0.5em">
+	<li> Sur un <strong class="title">PC Windows</strong>, on peut notamment accéder à la configuration des interfaces réseau par un <strong>clic‑droit</strong> sur l'icône de la <strong>connexion réseau</strong> dans la <strong>barre des tâches</strong>. </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/WindowsParamReseau2.png" width="400px" style="padding-top: 0.0em">
+  <div class="nobullet"> Une <strong class="specialLB">fenêtre de dialogue</strong> s'ouvre alors, avec un <strong>panneau latéral de navigation</strong> pour accéder à l'état de la connexion, aux paramètres des différentes interfaces classées par type (<em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>, etc.), du recours au serveur proxy, etc.  </div>
+
+  <div class="nobullet"> Cette méthode permet de visualiser et modifier tous les paramètres réseau <strong class="pros">de façon conviviale</strong> mais elle nécessite que l'utilisateur travaille <strong class="cons">physiquement sur la machine</strong>. Elle est d'autant moins commode que le nombre de machines est important et qu'elles sont disposées en différents lieux. </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/WindowsParamReseau3.png" width="400px" style="padding-top: 0.0em">
+  <div class="nobullet"> En qualité d'administrateur réseau, il est plus usuel d'opérer via un <strong class="specialLB">terminal</strong>, avec notamment les <strong>commandes</strong> : </div>
+  <ul>
+  	<li> <code class="cmd">ipconfig</code> <a class="external" href="https://fr.wikipedia.org/wiki/Ipconfig" target="_BLANK">W</a>  pour <strong>visualiser</strong> les paramètres des différentes interfaces réseau ; </li>
+
+  	<li> <code class="cmd">netsh</code> <a class="external" href="https://fr.wikipedia.org/wiki/Netsh" target="_BLANK">W</a> pour <strong>modifier</strong> les paramètres</strong> réseau. </li>
+  </ul>
+  </div><!-- display -->
+
+	<li> Sur un <strong class="title">PC Linux</strong>, on peut également accéder à la configuration des interfaces réseau via des <strong>fenêtres de dialogue</strong>. Même si ces fenêtres sont présentées différemment, on y trouve les mêmes éléments. </li>
+
+
+	<div class="expert">
+	<div class="nobullet"> De plus, on peut trouver facilement les fichiers binaires définissant les différentes configurations enregistrées. Par exemple, dans une distribution <em class="mark">Linux Mint</em>, elles sont placées dans le dossier : <br>
+	<span class="inline">
+		<code class="filename">/etc/NetworkManager/system-connections</code>
+	</span> <br>
+	On peut visualiser leur contenu en saisissant la commande <code class="displayDark" style="padding-top: 0.1em; padding-bottom: 0.1em"><span class="displayDarkGreen">sudo cat</span> <span class="nocode"><strong class="specialLY">nom du fichier</strong></span></code>.  </div>
+  </div><!-- expert -->
+
+	<div class="nobullet"> Et pareillement, on peut aussi opérer dans un <strong class="specialLB">terminal</strong> à l'aide de la <strong>commande</strong> <code class="cmd">ip</code> <a class="external" href="https://linuxize.com/post/linux-ip-command/" target="_BLANK"></a> (anciennement <code class="grey">ifconfig</code> <a class="external" href="https://fr.wikipedia.org/wiki/Ifconfig" target="_BLANK">W</a>). </div>
+
+  <div class="expert" id="RaspberryPi">
+  <div style="display: inline-block;">	
+	<img class="top-right" src="../img/RaspberryPi.png" width="300px" style="padding-top: 0.5em">
+  <li> Avec certaines distributions <em class="mark">Linux</em>, on peut également agir en modifiant un <strong>fichier de configuration</strong>. Par exemple, sur une carte <strong class="Raspberry">Raspberry Pi</strong> (système <em class="mark">Linux Raspbian</em>), il suffit d'éditer le <strong>fichier</strong> <code class="filename">dhcpcd.conf</code> (pour <em class="sigle">DHCP</em> <em class="english">client daemon configuration</em>) placé dans le <strong>dossier</strong> <code class="filename">/etc</code>. Au démarrage de la carte, ce fichier est lu par le système pour configurer l'interface <em class="mark">Ethernet</em> intégrée, identifiée <code>eth0</code>. </li>
+	</div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/RpiConfig.png" width="500px" style="padding-top: 0.0em">
+	<div class="nobullet"> Sur la capture d'écran ci‑contre, on peut voir qu'il suffit de <strong class="defin">décommenter et renseigner</strong> les lignes nº 44 à 48 pour donner la <strong class="specialLB">configuration statique souhaitée</strong> à l'interface <em class="mark">Ethernet</em>, selon le réseau dans lequel elle sera hébergée.  </div>
+
+	<div class="nobullet"> <em class="remark">Remarques.</em> </div>
+  <ul>
+  	<li> Il peut légitimement sembler <strong class="cons">contre‑intuitif</strong> de donner une <strong class="specialLB">configuration statique</strong> à une interface dans un fichier nommé en référence à un système de <strong>configuration dynamique</strong>. Néanmoins, cette solution présente l'avantage d'<strong class="pros">identifier facilement le fichier</strong> de paramétrage de l'interface <em class="mark">Ethernet</em>, ce qui n'est usuellement pas le cas dans les distributions de <em class="mark">Linux</em>. </li>
+
+  	<li> Quant au paramétrage de l'<strong>interface Wi‑Fi</strong>, il sera abordé seulement au chap. R3‑IV <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html#RaspberryPi" target="_BLANK"></a> car il nécessite de bien comprendre la problématique et les solutions pour la <strong class="warning">sécurité</strong> propre aux connexions sans fil. </li>
+  </ul>
+	</div><!-- display -->
+  </div><!-- expert -->
+</ul>
+</div><!-- exemples -->
+
+
+<h4 id="carteMicrocontroleur"> Cartes à Microcontrôleur </h4>
+
+
+<div class="complement">
+<p> Sur une <strong class="title">carte à microcontrôleur</strong> dotée d'au moins une <strong>interface réseau</strong>, la <strong class="specialLB">configuration <em class="sigle">IP</em></strong> est codée par les <strong>instructions du programme utilisateur</strong> (rappelons qu'il n'y a pas de système d'exploitation). Sachant la complexité des protocoles de communication mis en œuvre, il est vivement recommandé de recourir à une <strong class="defin">bibliothèque de fonctions spécialisées</strong>.  </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/ArduinoEthernetShield.png" width="300px" style="padding-top: 0.5em">
+<p class="exemple"> Pour accéder au réseau, une <strong class="Arduino">carte Arduino</strong> peut être équipée d'un <strong class="specialN">shield Ethernet</strong> qui embarque un <em class="sigle">ASIC</em> de communication <em class="mark">WIZnet W5500</em> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#carteReseau" target="_BLANK"></a>) et un lecteur de carte <em class="mark">Micro‑SD</em> (cf. la photo ci‑contre). </p>
+
+<p> Le <em class="english">shield</em> communique avec la carte <em class="mark">Arduino</em> par un ensemble de broches de son port numérique formant un <strong class="specialMg">bus <em class="sigle">SPI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serial_Peripheral_Interface" target="_BLANK">W</a> (<em class="english">serial peripheral interface</em>). Il s'agit d'un bus de terrain <strong class="defin">maître‑esclave</strong> à <strong class="defin">adressage physique</strong>. La carte <em class="mark">Arduino</em> est le maître, elle sélectionne l'esclave avec lequel elle veut échanger des données via une <strong>broche spécifique à chaque esclave</strong> – la broche dite <strong><em class="sigle">SS</em></strong> pour <em class="english">slave select</em>. </p>
+</div><!-- display -->
+
+<p class="square"> Pour une <strong class="pros">exploitation facile du shield</strong>, on utilise les <strong class="title">modules de bibliothèque</strong> <code class="filename">SPI</code> et <code class="filename">Ethernet</code> qui sont l'un et l'autre <strong class="pros">intégré par défaut</strong> dans le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong>. Pour cela, il suffit de coder : </p>
+<ul>
+	<li> en préambule du programme, les <strong class="defin">directives d'inclusion</strong> de ces modules  (cf. les ligne nº 2 & 3 dans le programme ci‑après) et la mémorisation de l'<strong>adresse <em class="sigle">MAC</em></strong> de l'interface dans un tableau de 6 octets (ligne nº 6) ; </li>
+
+	<li> dans la fonction <code class="prettyprint lang-c">setup</code>, l'appel de la <strong>méthode</strong> <code class="prettyprint lang-c">Ethernet.init</code> avec pour argument le numéro de la <strong>broche <em class="sigle">SS</em></strong> qui sélectionne l'<em class="sigle">ASIC</em> <em class="mark">Ethernet</em> (cf. les lignes nº 4 et 9 dans le programme ci‑après). </li>
+</ul>
+
+<div class="expert">
+<p> En fait, le <strong>module de bibliothèque</strong> <strong class="Arduino">Arduino</strong> <code class="filename">Ethernet</code> <a class="external" href="https://github.com/arduino-libraries/Ethernet/tree/master/src" target="_BLANK">G</a> comporte <strong>15 fichiers sources</strong> et fait également appel à plusieurs <strong>fichiers du noyau</strong> : <code class="filename">Client.h</code>, <code class="filename">Server.h</code>, <code class="filename">IPAddress.h</code> et <code class="filename">IPAddress.cpp</code> (cf. ce lien <a class="external" href="https://github.com/arduino/ArduinoCore-avr/tree/master/cores/arduino" target="_BLANK"></a> pour les cartes à cœur <em class="sigle">AVR</em>). Et dans le fichier <code class="filename">Ethernet.h</code> sont codées les directives d'appel des fichiers <code class="filename">Client.h</code>, <code class="filename">Server.h</code> et <code class="filename">Udp.h</code> qui eux‑même appellent d'autres fichiers par des directives d'inclusion. </p>	
+
+<p> Dans le fichier <code class="filename">Ethernet.h</code> <a class="external" href="https://github.com/arduino-libraries/Ethernet/blob/master/src/Ethernet.h" target="_BLANK">G</a>, on trouve la déclaration de la <strong class="specialG">classe</strong> <code class="prettyprint lang-c">EthernetClass</code> (lignes nº 74 à 145) et la déclaration de l'<strong class="specialN">objet</strong> <code class="cmd">Ethernet</code> (ligne nº 147) comme une instance de cette classe. </p>
+</div><!-- expert -->	
+
+<p class="square"> Avec ces modules de bibliothèque, il est <strong class="pros">assez intuitif</strong> donner à l'interface une <strong class="title">configuration statique IPv4</strong>. Par exemple, dans le programme ci‑après, on a codé dans la fonction <code class="prettyprint lang-c">setup</code> : </p>
+<ul>
+	<li> aux lignes nº 13 à 16, quatre instanciations par constructeur <a class="external" href="https://fr.wikipedia.org/wiki/Constructeur_(programmation)" target="_BLANK">W</a> de la <strong class="specialG">classe</strong> <code class="prettyprint lang-c">IPAddress</code> pour mémoriser respectivement les éléments de cette configuration – à savoir l'<strong>adresse <em class="sigle">IP</em></strong>, le <strong>masque de sous‑réseau</strong>, la <strong>passerelle par défaut</strong> et le <strong>résolveur <em class="sigle">DNS</em> primaire</strong> ;  </li>
+
+	<li> à la ligne nº 17, l'appel la <strong>méthode</strong> <code class="prettyprint lang-c">Ethernet.begin</code> pour <strong class="defin">établir la connexion</strong> au réseau avec comme arguments l'<strong>adresse <em class="sigle">MAC</em></strong> de l'interface et tous les éléments de la <strong>configuration <em class="sigle">IP</em></strong> préalablement mémorisés.  </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;SPI.h&gt;
+#include &lt;Ethernet.h&gt;
+
+const int SPI_SS_ETHERNET_PIN = 10; // choice depends of the Arduino board  
+
+byte mac[] = {0x90, 0xA2, 0xDA, 0x0D, 0x15, 0x43};
+
+void setup() {
+  Ethernet.init(SPI_SS_ETHERNET_PIN); 
+  /* ===== Dynamic IP config - uncomment next line */
+  // Ethernet.begin(mac);
+  /* ===== Static IP config  - uncomment the next 5 lines */
+  IPAddress ip      (192, 168,   1,  20); 
+  IPAddress subnet  (255, 255, 255,   0);
+  IPAddress gateway (192, 168,   1,   1);
+  IPAddress dns     (  8,   8,   8,   8);
+  Ethernet.begin(mac, ip, dns, gateway, subnet);
+  // =======================================================
+
+  Serial.begin(115200);
+ 
+  if (Ethernet.linkStatus() == LinkON) {
+    Serial.println("Network connection successful :)");
+    Serial.print("IPv4    = "); Serial.println(Ethernet.localIP());
+    Serial.print("Gateway = "); Serial.println(Ethernet.gatewayIP());
+    Serial.print("DNS     = "); Serial.println(Ethernet.dnsServerIP());
+    Serial.println(""); 
+  }
+  else {
+    Serial.println("Network connection failed :(");
+  }
+}
+
+void loop() {
+  delay(10);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p class="square"> Par ailleurs, on peut obtenir dans le programme toutes les <strong class="title">informations</strong> relatives à la <strong class="title">connexion au réseau</strong> de l'interface grâce à des <strong>méthodes dédiées</strong> (toutes sans argument) : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">Ethernet.linkStatus</code> pour connaître l'état de la connexion <a class="external" href="https://www.arduino.cc/reference/en/libraries/ethernet/ethernet.linkstatus/" target="_BLANK">A</a> – elle retourne l'une des trois constantes énumérées suivantes <code>Unknown</code>, <code>LinkON</code> ou <code>LinkOFF</code> ; </li>
+
+	<li> <code class="prettyprint lang-c">Ethernet.localIP</code> pour obtenir l'<strong class="specialLB">adresse <em class="sigle">IP</em></strong> de l'interface <a class="external" href="https://www.arduino.cc/en/Reference/EthernetLocalIP" target="_BLANK">A</a> ;	sa valeur de retour s'affiche directement sur le moniteur série en <strong>notation décimale pointée</strong> via la méthode <code class="prettyprint lang-c">Serial.print</code> ou <code class="prettyprint lang-c">println</code> ; </li>
+
+	<li> <code class="prettyprint lang-c">Ethernet.subnetMask</code> pour obtenir le <strong class="specialLB">masque de sous‑réseau</strong> associé <a class="external" href="https://www.arduino.cc/en/Reference/EthernetSubnetMask" target="_BLANK">A</a> ;	idem pour l'affichage sur le moniteur série de sa valeur de retour ; </li>
+
+	<li> etc. – cf. la même page de référence générale <a class="external" href="https://www.arduino.cc/en/reference/ethernet" target="_BLANK">A</a>. </li>
+</ul>
+
+<p> De même, il existe des méthodes pour <strong class="title">modifier individuellement</strong>, au fur et à mesure du programme, <strong class="title">tel ou tel élément</strong> de la <strong>configuration <em class="sigle">IP</em></strong> de l'interface : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">Ethernet.setLocalIP</code> pour définir l'<strong class="specialLB">adresse <em class="sigle">IP</em></strong> de l'interface <a class="external" href="https://www.arduino.cc/en/Reference/EthernetSetLocalIP" target="_BLANK">A</a> ; </li>
+
+  <li> etc. – cf. <a class="external" href="https://www.arduino.cc/en/reference/ethernet" target="_BLANK">A</a>. </li>
+</ul>
+
+<p> <em class="remark">Remarque</em> : pour les mêmes raisons de complexité qu'exposées supra dans le cas des cartes <em class="mark">Raspberry Pi</em> <a class="supra" href="Rc1-3_adressage#RaspberryPi"></a>, on abordera seulement au chap. R3‑IV <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html#ESP8266" target="_BLANK"></a> le paramétrage d'une <strong>interface <em class="mark">Wi‑Fi</em></strong> de carte à microcontrôleur – typiquement, une carte à SoC <em class="mark">ESP8266</em> (cf. chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#cartesWifi" target="_BLANK">C</a>). </p>
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+
+<h3 id="listeInterfaces"> Liste des interfaces réseau d'une machine </h3> 
+
+
+
+<div class="important">
+<p> On peut lister la <strong class="title">totalité des interfaces réseau</strong> <strong class="specialLB">physiques</strong> et <strong class="specialLB">virtuelles</strong> sur une machine par une commande en ligne, typiquement :   </p>
+<ul>
+	<li> <code class="displayDark"><span class="displayDarkGreen">ipconfig</span> /all</code> sur un <strong>PC Windows</strong> ; </li>
+
+	<li> <code class="displayDark"><span class="displayDarkGreen">ip</span> a</code> (<code>a</code> pour <em class="english">address</em>) sur une machine <strong>Linux</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">liste</strong> obtenue étant souvent <strong class="cons">longue</strong>, il importe de savoir à quoi correspondent les différentes interfaces identifiées. Et là encore, les désignations dépendent du <strong class="defin">système d'exploitation</strong> de la machine. </p>
+<ul>
+	<li> sur un <strong>PC Windows</strong>, elles sont <strong class="pros">libellées clairement</strong>, typiquement : </li>
+	<ul>
+		<li> <code>Carte Ethernet Local Area Connexion</code> </li>
+
+		<li> <code>Carte réseau sans fil Wi-Fi</code></li>
+	</ul>
+
+	<li> mais sur une machine <strong>Linux</strong>, elles sont désignées par des <strong class="cons">abréviations</strong> ou des <strong class="cons">codes</strong> plus ou moins complexes : </li>
+	<ul>
+		<li> anciennement <code>eth0</code>, <code>eth1</code>, etc. pour les cartes <em class="mark">Ethernet</em>, et <code>wlan0</code>, <code>wlan1</code> pour les cartes <em class="mark">Wi‑Fi</em> ; </li>
+
+		<li> mais, sur les versions récentes (ultérieures à 2015) de certaines distributions, par exemple <code>enp0s31f6</code> ; ces codes sont basés sur la technique dite <strong> predictable interface naming</strong> dont on peut trouver des explications au lien suivant <a class="external" href="https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html" target="_BLANK"></a>. </li>
+	</ul>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="loopback"> Interface virtuelle de rebouclage </h4>
+
+
+<div class="important">
+<p> Tout <strong>poste de travail</strong> est doté d'une <strong class="title">interface virtuelle de rebouclage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Loopback" target="_BLANK">W</a> créée par le <strong class="defin">système d'exploitation</strong>.  </p>
+
+<p> Cette interface est automatiquement dotée de l'<strong class="specialLB">adresse IPv4</strong> <code class="cmd">127.0.0.1</code> et <strong class="specialLB">IPv6</strong> <code class="cmd">::1</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong class="title">interface virtuelle de rebouclage</strong> permet de <strong class="defin">tester le bon fonctionnement des protocoles</strong> de communication installés sur la machine <strong class="pros">sans nécessiter de connexion à un réseau</strong>. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Certains systèmes d'exploitation attribuent à l'<strong class="title">interface de rebouclage</strong> par convention l'<strong class="specialLB">adresse <em class="sigle">MAC</em></strong> <code class="cmd">00-00-00-00-00-00</code>.  </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="adresseMAC"> Le système d'adressage physique MAC </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaisonMAC.png" width="200px" style="padding-top: 0.5em">
+<p> On appelle <strong class="title">adresse <em class="sigle">MAC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_MAC" target="_BLANK">W</a> d'une <strong>interface réseau</strong> son <strong class="defin">identifiant numérique</strong> (un nombre entier positif) utilisé par <strong>divers protocoles</strong> (<em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>, <em class="mark">Bluetooth</em>) de la <strong class="specialR">couche liaison</strong> (niveau 2) du modèle <strong><em class="sigle">OSI</em></strong>. </p>
+
+<div class="expert">
+<p> Plus précisément, l'<strong class="title">adresse <em class="sigle">MAC</em></strong> sert à indiquer respectivement les interfaces <strong>émettrice</strong> et <strong>destinataire</strong> dans l'en‑tête de toute <strong class="defin">trame de donnée</strong> émise sur une liaison. Cette tâche d'étiquetage est dévolue à ce qu'on appelle la <strong class="specialR">sous‑couche <em class="sigle">MAC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Contrôle_d'accès_au_support" target="_BLANK">W</a> (<em class="english">medium access control</em>). </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Attribuée initialement par le <strong>constructeur de l'interface</strong>, l'<strong class="title">adresse <em class="sigle">MAC</em></strong> est le plus souvent « <strong class="defin">gravée</strong> » dans une <strong>mémoire morte</strong> (<em class="sigle">ROM</em>) de l'interface, c'est pourquoi on parle d'<strong class="tdefin">adresse physique</strong> (en anglais, de <em class="mark">burned‑in address</em>). Elle est parfois aussi indiquée par une <strong>étiquette</strong> collée au dos de la carte ou de l'équipement. </p>
+
+<div class="expert">
+<p> Dans le cas particulier des <strong class="Arduino">cartes Arduino</strong> ou <strong>shields</strong> disposant d'une connectivité <em class="mark">Ethernet</em>, <strong class="title">l'adresse <em class="sigle">MAC</em></strong> n'est même <strong class="warning">pas gravée</strong> dans une puce. Elle est simplement indiquée sur une <strong class="defin">étiquette</strong> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#adresses" target="_BLANK"></a>), que l'on peut exploiter pour configurer l'interface dans le code du programme utilisateur.
+</p>
+</div><!-- expert -->
+
+<p> Dans un <strong>segment</strong> de réseau (typiquement la topologie en étoile d'un switch), tout <strong class="warning">conflit</strong> entre deux interfaces partageant la <strong class="cons">même adresse</strong> compromettrait le bon acheminement des trames de données par les protocoles de la <strong>couche liaison</strong>. Chaque constructeur veille donc à attribuer une <strong class="title">adresse <em class="sigle">MAC</em></strong> <strong class="defin">unique</strong> à chaque interface qu'il produit. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Contre‑intuitivement, il est <strong class="pros">possible</strong> de <strong class="title">changer l'adresse <em class="sigle">MAC</em></strong> d'une interface dès lors que l'on possède les <strong>droits d'administration</strong> de la machine, ou que l'on a accès au code source du programme s'il s'agit d'une carte à microcontrôleur. Cette fonctionnalité permet notamment d'<strong class="pros">empêcher le pistage d'une interface</strong> dans un réseau public, tout en ne risquant pas d'engendrer des conflits car il est extrêmement improbable que deux adresses <strong><em class="sigle">MAC</em></strong> générées aléatoirement soient identiques. Mais il ne s'agit le plus souvent que d'un <strong class="defin">changement logiciel</strong>, qui opère au niveau du <strong>pilote</strong> de l'interface, et non pas de sa mémoire morte. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="formatsMAC"> Les formats d'adresse MAC </h3>
+
+
+
+<div class="important">
+<p> Les <strong class="title">adresses <em class="sigle">MAC</em></strong> sont codées conformément à des <strong class="defin">formats normalisés</strong> dans le standard <strong><em class="sigle">802</em></strong> de l'<strong><em class="sigle">IEEE</em></strong> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#organismes" target="_BLANK"></a> et <a class="external" href="https://fr.wikipedia.org/wiki/IEEE_802" target="_BLANK">W</a>). </p>
+
+<p> Dans ce standard, le terme pour désigner une <strong>adresse</strong> est « <strong class="defin">extended unique identifier</strong> », abrégé <strong class="defin"><em class="sigle">EUI</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> <strong class="title">Deux formats</strong> d'adresse <strong><em class="sigle">MAC</em></strong> existent : </p>
+<ul>
+	<li> l'<strong class="specialLB"><em class="sigle">EUI‑48</em></strong> codé sur <strong>48 bits</strong>, soit <strong>6 octets</strong>, qui est utilisé dans <strong class="pros"> les principaux protocoles</strong> de la <strong class="specialR">couche liaison</strong> – <strong>Ethernet</strong> (cf. chap. R3‑III <a class="next" href="../R3-TransportReseauLiaison/Rc3-3_coucheLiaisonEthernet.html" target="_BLANK"></a>) et <strong>Wi‑Fi</strong> (cf. chap. R3‑III <a class="next" href="../R3-TransportReseauLiaison/Rc3-4_coucheLiaisonWifi.html#identification" target="_BLANK"></a>) ; </li>
+
+	<li> l'<strong class="specialLB"><em class="sigle">EUI‑64</em></strong> codé sur <strong>64 bits</strong>, soit <strong>8 octets</strong>, qui utilisé notamment pour le protocole <strong>IPv6</strong> (cf. infra <a class="infra" href="Rc1-3_adressage#IPv6localLink"></a>) et certaines technologies domotiques ou autres (<em class="mark">ZigBee</em>, <em class="mark">LoRaWan</em> – cf. chap. R3‑V <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4_technologieWPAN.html#ZigBee" target="_BLANK"></a>) ; </li>
+
+	<div class="nobullet">ce format étendu est aussi pensé pour remplacer progressivement le format <strong><em class="sigle">EUI‑48</em></strong>. </div>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Notation hexadécimale </h4>
+
+
+<div class="important">
+<p> Quel que soit son format, une <strong class="title">adresse <em class="sigle">MAC</em></strong> est un nombre entier positif – un <strong>numéro</strong> – qu'on affiche toujours en <strong class="defin">base 16</strong>, <strong>octet par octet</strong>, chacun étant exprimé sur <strong>2 digits</strong>. On parle de <strong class="defin">notation hexadécimale</strong>. </p>
+
+<p> Par souci de lisibilité, les octets sont séparés les uns des autres par des <strong class="defin">séparateurs</strong> <code class="cmd">:</code> (en anglais, <em class="english">colon</em>) ou <code class="cmd">-</code> (en anglais, <em class="english">dash</em>), ce symbole étant à privilégier pour <strong class="pros">éviter les confusions</strong> avec la notation des adresses <strong>IPv6</strong>. </p>
+
+<p> Dans le même objectif, l'usage veut qu'on y représente les <strong>valeurs spécifiquement hexadécimales</strong> des digits par les <strong class="defin">lettres majuscules</strong> <code style="color:green">A</code> à <code style="color:green">F</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On rappelle que sur <strong class="title">un octet</strong>, on peut stocker n'importe quel <strong>nombre entier positif</strong> compris entre <em class="bold">0</em> et <em class="bold">255</em>. En <strong class="defin">base 16</strong>, cet intervalle est encodable sur exactement <strong>2 digits</strong>. </p>
+</div><!-- complement -->
+
+<p> Même s'il n'est jamais nécessaire de convertir une adresse <strong><em class="sigle">MAC</em></strong> en base 10, il est souhaitable ici de bien comprendre le principe de l'écriture des nombres en <strong class="title">base 16</strong>. Le tableau ci‑dessous donne <strong>quelques valeurs remarquables</strong> pour fixer les idées : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th style="min-width: 4em; width: 4em;"> base 10  </th>
+    <th> <code>0</code> </th>   <th> <code>15</code> </th> 
+    <th> <code>16</code> </th>  <th> <code>127</code> </th> 
+    <th> <code>128</code> </th>  <th> <code>255</code> </th> 
+  </tr>
+  <tr>
+    <th style="color: green"> base 16  </th>
+    <td style="text-align: center"> <code style="color:green">00</code> </td>
+    <td style="text-align: center"> <code style="color:green">0F</code> </td>
+    <td style="text-align: center"> <code style="color:green">10</code> </td>
+    <td style="text-align: center"> <code style="color:green">7F</code> </td>
+    <td style="text-align: center"> <code style="color:green">80</code> </td>
+    <td style="text-align: center"> <code style="color:green">FF</code> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<p> Pour revoir quelques notions sur codage en base 16, on pourra consulter le chapitre C3‑II sur les types entiers <a class="cours" href="../../moduleC/C3-Numeration/Cc3-2_typesEntiers.html#interetBase16" target="_BLANK">C</a>. </p>
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> Dans l'exemple supra <a class="supra" href="Rc1-3_adressage#exShieldEthernet"></a>, l'<strong class="title">adresse <em class="sigle">MAC</em></strong> du <strong>shield Ethernet</strong> <strong class="Arduino">Arduino</strong> est dans le programme sous la forme d'un tableau de 6 entiers de type <code>byte</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:6">
+byte macAddress[] = {0x90, 0xA2, 0xDA, 0x0D, 0x15, 0x43}; 
+</pre>
+<!---------- ne pas indenter ----------> </li>
+
+	<div class="nobullet"> avec pour chaque octet le préfixe <code>0x</code> requis pour exprimer une constante littérale en base 16. </div>
+
+	<div class="nobullet"> Mais sur l'étiquette collée au dos du <em class="english">shield</em>, cette adresse est <strong class="pros">simplement notée</strong> : <br>
+	<span class="inline">
+		<code class="cmd">90-A2-DA-0D-15-43</code>
+	</span> </div>
+
+  <li> Sur un <em class="mark">PC</em> doté d'un système <strong class="Mint">Linux Mint</strong> et d'une <strong>interface réseau Ethernet</strong>, on obtient son <strong class="title">adresse <em class="sigle">MAC</em></strong> via la commande : <br>
+  <span class="inline">
+		<code class="displayDark"><span class="displayDarkGreen">ip</span> link <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">grep</span> ether</code>
+	</span> <br> et on obtient une sortie comme par exemple : <br>
+  <span class="inline">
+		<code class="displayDark">   link/ether <span style="color: limegreen; font-weight: bold;">f8:32:e4:44:c4:2e</span> brd ff:ff:ff:ff:ff:ff</code>
+	</span> </li>
+	<div class="expert">
+	<div class="nobullet"> <em class="remark">Remarque</em> : la deuxième adresse affichée « <code>brd</code> » est l'<strong>adresse de broadcast</strong> sur la liaison (cf. chap. R3 <a class="next" href="../R3-TransportReseauLiaison/Rc3-3_coucheLiaisonEthernet.html#broadcast" target="_BLANK"></a>). </div>
+  </div><!-- expert -->
+</ol>
+</div><!-- exemple -->
+
+
+<h4 id="EUI48"> Le format EUI‑48 </h4>
+
+
+<div class="important">
+<p> Le <strong>format d'adresse <em class="sigle">MAC</em></strong> <strong class="title"><em class="sigle">EUI‑48</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_MAC#Structure" target="_BLANK">W</a> (6 octets, soit 48 bits) se décompose en <strong class="defin">deux parties</strong> de <strong>3 octets</strong> chacune. Dans le sens de lecture, on a :   </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/EUI-48.png" width="400px" style="padding-top: 0.2em">
+<ul>
+	<li> d'abord l'<strong class="specialLP"><em class="sigle">OUI</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Organizationally_unique_identifier" target="_BLANK">W</a> (<em class="english">organizationally unique identifier</em>), numéro <strong>attribué par l'<em class="sigle">IEEE</em></strong> qui identifie le <strong class="defin">constructeur</strong> de l'interface (sauf s'il s'agit d'adresses spéciales) ; </li>
+
+	<li> ensuite le <strong class="specialDR"><em class="sigle">NIC</em></strong> (<em class="english">network interface controller</em>) <strong class="specialDR">specific identifier</strong>, numéro <strong>attribué par le constructeur</strong> spécifiquement à chaque <strong class="defin">interface</strong> produite. </li>
+</ul>
+</div><!-- display -->
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Le format <strong class="title"><em class="sigle">EUI‑48</em></strong> permet d'encoder environ <strong class="defin">2,8 × 10<sup>14</sup> adresses différentes</strong> (en fait, 2<sup>48</sup>), soit près de 281&#8239;000 milliards. Ce nombre peut sembler très grand mais il est dimensionné pour une <strong>centaine d'années de production</strong> d'interfaces seulement. </p>
+
+<p> De plus, sachant que sur <strong class="specialLB">3 octets</strong>, on peut encoder environs <strong>16 millions d'identifiants</strong> : </p>
+<ul>
+	<li> le nombre d'identifiants possibles pour le champ <strong class="specialLP"><em class="sigle">OUI</em></strong> est a priori <strong class="cons">surdimensionné</strong> (le nombre de constructeurs se chiffre tout au plus en centaines) ; </li>
+
+	<li> le nombre d'identifiants possibles pour le champ <strong class="specialDR"><em class="sigle">NIC</em></strong> est a priori <strong class="cons">sous‑dimensionné</strong> (par exemple, plus de 40 millions de cartes <em class="mark">Raspberry Pi</em> ont déjà été vendues). </li>
+</ul>
+<p> Un <strong class="title">même constructeur</strong> peut donc demander <strong class="defin">plusieurs numéros <em class="sigle">OUI</em></strong> à l'<strong><em class="sigle">IEEE</em></strong> pour disposer de plus d'adresses pour identifier les interfaces qu'il produit. </p>
+<ul>
+	<li> Il existe des <strong>pages web</strong> – par exemple celle‑ci <a class="external" href="https://macvendors.com/" target="_BLANK"></a> – qui affiche le <strong class="defin">nom du constructeur</strong> à partir d'une adresse <strong><em class="sigle">MAC</em></strong> saisie. </li>
+
+	<li> On trouve également une <strong>page web</strong> <a class="external" href="https://gist.github.com/aallan/b4bb86db86079509e6159810ae9bd3e4" target="_BLANK"></a> où sont recensés un grand nombre d'<strong class="defin">identifiants</strong> de constructeurs. En faisant une recherche dans la page (<code>Ctrl‑F</code>), on peut donc trouver le ou les identifiants associés à un constructeur.  </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert" id="detailOUI">
+<p> Par ailleurs, sur le <strong class="title">premier octet de l'</strong><strong class="specialLP"><em class="sigle">OUI</em></strong> spécifie  <strong class="defin">deux caractéristiques</strong> de l'adresse :  </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/formatOUI.png" width="200px" style="padding-top: 0.2em">
+<ul>
+	<li> le <strong class="specialLB">bit de rang 0</strong>, dit <strong><em class="sigle">I/G</em></strong> (pour <em class="english">individual</em>/<em class="english">group</em>), précise si l'interface est capable de prendre en charge les <strong class="defin">diffusions</strong> de trames : </li>
+  <ul>
+    <li> simplement en <strong>unicast</strong>, avec la valeur <code class="prettyprint lang-c">0</code> (<strong>octet pair</strong>) ; </li>
+
+  	<li> ou aussi en <strong>multicast</strong>, avec la valeur <code class="prettyprint lang-c">1</code> (<strong>octet impair</strong>). </li>
+  </ul>
+
+	<li> le <strong class="specialLB">bit de rang 1</strong>, dit <strong><em class="sigle">U/L</em></strong> (pour <em class="english">universal</em>/<em class="english">local</em>), précise si l'adresse attribuée est de <strong class="defin">catégorie</strong> : </li>
+	<ul>
+		<li> <strong>universelle</strong> (<em class="english">universally administrated address</em> ou <em class="sigle">UAA</em>), c'est‑à‑dire attribuée par le constructeur et conforme au standard de l'<em class="sigle">IEEE</em>, avec la valeur <code class="prettyprint lang-c">0</code> ;  </li>
+
+		<li> <strong>locale</strong> (<em class="english">locally administrated address</em> ou <em class="sigle">LAA</em>) dans le cas contraire, avec la valeur <code class="prettyprint lang-c">1</code>. </li>
+	</ul>
+</ul>
+</div><!-- display -->
+
+<div class="exemples">
+<p class="exemple"> Dans l'adresse <code class="cmd">90-A2-DA-0D-15-43</code> du <strong>shield Ethernet</strong> <strong class="Arduino">Arduino</strong> donnée supra <a class="supra" href="Rc1-3_adressage#"></a>, le premier octet <code class="cmd">90</code> s'écrit <code class="prettyprint lang-c">10010000</code> en binaire. Il s'agit donc :  </p>
+<ul>
+	<li> d'une interface qui opère en <strong>unicast</strong> uniquement (bit <em class="sigle">I/G</em> à <code class="prettyprint lang-c">0</code>) ; </li>
+
+	<li> d'une adresse <strong>universelle</strong> (bit <em class="sigle">U/L</em> à <code class="prettyprint lang-c">0</code>). </li>
+</ul>
+</div><!-- complement -->
+
+
+<!-- expert -->
+<h4 id="EUI64"> Le format EUI‑64 </h4>
+
+<div class="important">
+<p> Le <strong>format d'adresse</strong> <strong class="title"><em class="sigle">EUI‑64</em></strong> reprend le principe du format <strong><em class="sigle">EUI‑48</em></strong> avec un encodage étendu sur <strong>64 bits</strong>. </p>
+
+<p> Pour le moment, il est surtout utilisé par le protocole <strong>IPv6</strong> de la <strong class="specialDO">couche réseau</strong> pour permettre aux machines de générer leur propre <strong>adresse <em class="sigle">IP</em> de lien local</strong> (cf. infra <a class="infra" href="Rc1-3_adressage#IPv6localLink"></a>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">format <em class="sigle">EUI‑64</em></strong> est également utilisé comme <strong>adresse physique d'interface</strong> de certaines technologies de réseaux de communication <strong>sans fil</strong> (<em class="english">wireless</em>) : </p>
+<ul>
+	<li> la technologie domotique ouverte <strong>ZigBee</strong> (cf. chap. R3‑V <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4_technologieWPAN.html#ZigBee" target="_BLANK"></a>) ;  </li>
+
+	<li> la technologie de réseaux étendus <strong>LoRaWan</strong> (cf. chap. R3‑V <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R3-TransportReseauLiaison/Rc3-4_technologieWPAN.html#LoraWan" target="_BLANK"></a>)  </li>
+</ul>
+</div><!-- complement -->
+</div><!-- expert -->	
+
+
+
+<h3> Détermination de l'adresse MAC d'une interface </h3>
+
+
+
+<p> En l'absence d'inscription sur l'équipement, on a vu supra <a class="supra" href="Rc1-3_adressage#accesParam"></a> qu'il est <strong class="pros">facile</strong> de déterminer l'<strong class="title">adresse <em class="sigle">MAC</em></strong> de son (ou ses) interface(s) via une fenêtre de dialogue ou une commande en ligne. Mais encore faut‑il pouvoir <strong>être connecté</strong> sur la machine que cette interface équipe…  </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/cameraIP.png" width="250px" style="padding-top: 0.5em">
+<p> Lorsqu'on raccorde au réseau un <strong>équipement</strong> qui ne possède ni clavier ni  écran permettant d'ouvrir une fenêtre et de saisir une commande – c'est par exemple le cas d'une <strong>caméra <em class="sigle">IP</em></strong> comme celle en photo ci‑contre – le moyen usuel d'en prendre le contrôle consiste à ouvrir une <strong class="title">connexion distante</strong> depuis un poste de travail du réseau, typiquement : </p>
+<ul>
+	<li> une session <code>ssh</code> <a class="external" href="https://fr.wikipedia.org/wiki/Secure_Shell" target="_BLANK">W</a> dans un <strong>terminal de commande</strong> ; </li>
+
+	<li> ou encore une <strong>page web</strong> dans un navigateur si l'équipement embarque un serveur web. </li>
+</ul>
+
+<p> Dans ces deux cas, la connexion requiert la saisie de l'<strong class="title">adresse <em class="sigle">IP</em></strong> de l'équipement. Or s'il est configuré en <strong>client <em class="sigle">DHCP</em></strong> comme c'est très souvent le cas par défaut, cette adresse <strong class="cons">ne peut être connue préalablement</strong> puisqu'elle est choisie par le <strong>serveur <em class="sigle">DHCP</em></strong>. Un moyen usuel consiste, à l'aide d'un logiciel analyseur de réseaux (cf. chap. R1‑II <a class="previous" href="Rc1-2_architecture.html#scannerReseau"></a>), à <strong class="defin">scanner</strong> la <strong>plage d'adresses <em class="sigle">IP</em> dynamiques</strong> que distribue le serveur <strong><em class="sigle">DHCP</em></strong> et y chercher celle de l'équipement. Si le réseau local comporte déjà plusieurs machines du même constructeur, pour éviter toute confusion, la meilleure solution consiste à identifier l'équipement avec son <strong class="defin">adresse <em class="sigle">MAC</em></strong> ! Mais on se trouve alors pris dans un cercle vicieux, puisqu'on cherche précisément à déterminer cette information… </p>
+</div><!-- display -->
+
+<div class="complement">
+<p> <strong class="title">Plusieurs solutions</strong> sont néanmoins envisageables :  </p>
+<ul>
+	<li> <strong>raccorder</strong> préalablement l'équipement dans un <strong class="specialLB">très petit réseau local</strong>, où il ne peut pas être confondu avec une autre machine ; son <strong class="defin">adresse <em class="sigle">MAC</em></strong> peut alors être facilement identifiée par scan ; </li>
+
+	<li> <strong>connecter/déconnecter</strong> <strong class="specialLB">successivement plusieurs fois</strong> l'équipement, afin de repérer dans la liste des adresses scannées celle qui apparaît/disparaît.   </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<!-- 
+<h3> Changement de l'adresse MAC d'une interface </h3>
+
+
+
+<p> Néanmoins, la procédure de <strong class="title">changement d'adresse <em class="sigle">MAC</em></strong> – dite <strong>spoofing</strong> <a class="external" href="https://en.wikipedia.org/wiki/MAC_spoofing" target="_BLANK">W</a> est plus ou moins <strong class="pros">complexe</strong> selon le type d'interface. </p>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="IPv4"> Le système d'adressage <em class="mark">IPv4</em> </h2>
+
+
+
+<h3> Généralités  </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheReseau2.png" width="250px" style="padding-top: 0.0em">
+<p> L'<strong class="title">adressage logique</strong> dit « <strong class="title"><em class="sigle">IP</em></strong> » est un des aspects du <strong>protocole <em class="sigle">IP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Protocol" target="_BLANK">W</a> (<em class="english">Internet Protocol</em>) de la <strong class="specialDO">couche réseau</strong> du modèle <strong><em class="sigle">OSI</em></strong> (niveau 3) – cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#modeleOSI" target="_BLANK"></a> et chap. R1‑IV <a class="next" href="Rc1-4_protocoles.html#coucheReseau" target="_BLANK"></a>. </p>	
+
+<p> De façon générale, une <strong class="title">adresse <em class="sigle">IP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_IP" target="_BLANK">W</a> est un nombre entier positif – un <strong class="defin">numéro</strong> – utilisé par le <strong>protocole <em class="sigle">IP</em></strong> pour identifier aussi bien les <strong>interfaces</strong> que les <strong>réseaux</strong> dans lesquelles ces dernières sont hébergées. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément : </p>
+<ul>
+	<li> dans l'en‑tête de tout <strong class="specialLB">datagramme</strong> routé par le <strong>protocole <em class="sigle">IP</em></strong> figurent les <strong class="title">adresses <em class="sigle">IP</em></strong> respectives de l'interface <strong>émettrice</strong> et de l'interface ou du réseau <strong>destinataire</strong> (dans le cas d'un <em class="english">broadcast</em>) ; </li>
+
+	<li> dans les <strong class="specialLB">tables de routage</strong> sont mises en correspondance des <strong class="title">adresses <em class="sigle">IP</em></strong> des <strong>réseaux destinataires</strong> connus avec celles des <strong>interfaces des routeurs voisins</strong> à qui envoyer les datagrammes pour un routage optimal. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Format d'une adresse <em class="mark">IPv4</em> </h4>
+
+
+<div class="important">
+<p> Dans la <strong class="specialO">norme IPv4</strong>, une <strong class="title">adresse</strong> est encodée en <strong>binaire naturel</strong> sur <strong>4 octets</strong>, soit <strong>32 bits</strong>. Il existe donc <em class="bold">2<sup>32</sup></em>, soit environ <strong class="defin">4 milliards d'adresses différentes</strong>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/IPv4addressFormat.png" width="450px" style="padding-top: 0.0em">
+<p> Dans les systèmes informatiques, l'<strong class="title">affichage</strong> et la <strong class="title">saisie</strong> d'une adresse <strong class="specialO">IPv4</strong> s'effectue <strong>octet par octet</strong> en <strong class="specialO">notation décimale pointée</strong>, c'est‑à‑dire avec la valeur de chaque octet exprimée en <strong>base 10</strong> (de <em class="bold">0</em> à <em class="bold">255</em> – les zéros non significatifs étant omis), séparée de la suivante par un <strong>point</strong>.  </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Une <strong>adresse <em class="sigle">IP</em></strong> comme <code class="cmd">192.168.0.12</code> constitue un <strong class="title">exemple typique</strong> dans un réseau local. On verra infra <a class="infra" href="Rc1-3_adressage#adressesPrivees"></a> qu'il s'agit d'une <strong class="defin">adresse privée</strong>. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Le numéro <strong>4</strong> de version de la norme <strong class="title">IPv4</strong> n'a <strong class="warning">aucun rapport</strong> avec le fait qu'une <strong>adresse <em class="mark">IPv4</em></strong> est encodée sur <strong>4 octets</strong>. </p>
+</div><!-- exemple -->
+
+
+
+<h4> Notion de réseau – adresses de réseau et de <em class="english">broadcast</em> </h4>
+
+
+<div class="important">
+<p> Conformément au <strong class="title">protocole <em class="sigle">IP</em></strong>, un <strong class="title">réseau</strong> est nécessairement formé d'un <strong class="defin">ensemble d'adresses consécutives</strong>. De plus, par convention : </p>
+<ul>
+	<li> la <strong class="title">première</strong> de ces adresses est <strong class="warning">réservée</strong> pour identifier le <strong>réseau lui‑même</strong> ;  </li>
+
+	<li> la <strong class="title">dernière</strong> de ces adresses est <strong class="warning">réservée</strong> pour le <strong>broacast</strong> dans le réseau, c'est‑à‑dire la <strong>diffusion générale</strong> à toutes les adresses d'interface du réseau (cf. chap. R1‑II <a class="previous" href="Rc1-2_architecture.html#diffusion" target="_BLANK"></a>) ;  </li>
+</ul>
+<p> Aucune de ces deux adresses ne peut donc être attribuée à une interface. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Typiquement, on peut définir un <strong class="title">réseau local</strong> constitué de <strong>256 adresses <em class="sigle">IP</em></strong> allant de <code class="cmd">192.168.0.0</code> à <code class="cmd">192.168.0.255</code>, où : </p>
+
+<ul>
+	<li> <code class="cmd">192.168.0.0</code> est l'adresse du <strong>réseau local</strong> lui‑même ; </li>
+
+	<li> de <code class="cmd">192.168.0.1</code> à <code class="cmd">192.168.0.254</code>, on dispose de 254 adresses attribuables aux <strong>interfaces</strong> ; </li>
+
+  <li> <code class="cmd">192.168.0.255</code> est l'adresse de <strong>broadcast</strong> dans le réseau local. </li>
+</ul>
+</div><!-- exemple -->
+
+
+<h4> Complexité de l'adressage <em class="mark">IPv4</em> </h4>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/InternetMapFeb82.png" width="400px" style="padding-top: 0.2em">
+<p> Même avec ses adresses relativement courtes, le <strong class="title">système d'adressage IPv4</strong> ne manque pas de <strong class="warning">complexité</strong> et pose de réelles difficultés de compréhension aux débutants. La raison principale de cette complexité tient à ses <strong class="defin">multiples évolutions</strong> depuis la première publication en 1981 du <strong>protocole IPv4</strong> (<em class="sigle">RFC 791</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc791" target="_BLANK"></a>). On ne parlera pas des versions précédentes qui sont restées expérimentales. </p>
+
+
+<p> En effet, lors de la mise en service à grande échelle de ce protocole, qui marque la <strong class="title">création de l'Internet</strong> aux États‑Unis, le réseau ne comptait que <strong>quelques dizaines de routeurs</strong> (cf. la carte ci‑contre datée du 25 février 1982). Il était alors difficile d'imaginer qu'un système d'adressage comptant <strong>5 classes</strong> et <strong>4 milliards d'identifiants</strong> ferait sentir ses <strong class="cons">limites</strong> une dizaine d'années plus tard seulement. </p>
+
+<p> Plusieurs <strong class="title">évolutions</strong> – segmentation en <strong>sous‑réseaux</strong>, <strong>abandon des classes</strong>, <strong>adresses privés</strong> – ont donc été apportées au système d'adressage initial pour aboutir à celui que l'on connait aujourd'hui. </p>
+</div><!-- display -->
+
+<div class="expert">
+<p> Pour surmonter les difficultés de compréhension, il est <strong class="pros">utile d'étudier ces évolutions</strong> et donc d'en passer par la description système initial d'<strong class="title">adressage des réseaux par classes</strong>, même s'il est depuis longtemps <strong class="cons">obsolète</strong>. Cela permet en particulier de comprendre la <strong class="defin">notion de sous‑réseau</strong> et de savoir pourquoi cette notion est également caduque. </p>
+</div><!-- expert -->
+
+
+
+<h3> Principe initial d'adressage <em class="mark">IPv4</em> par classes (obsolète) </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">système initial d'adressage IPv4</strong>, dit <strong>classful</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Classe_d'adresse_IP" target="_BLANK">W</a>, divise l'ensemble de toutes les adresses en <strong class="defin">5 classes</strong>, respectivement notées par les lettres <strong class="defin">A</strong> à <strong class="defin">E</strong>. </p>
+
+
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément : </p>	
+<ul>
+	<li> chaque <strong class="title">classe</strong> d'adresse se voit attribuer une <strong class="defin">plage globale d'adresses</strong> définie par un <strong>préfixe binaire</strong> de largeur croissante (les 1, 2, 3 puis 4 bits de poids fort) ; </li>
+
+	<li> les adresses de <strong class="specialLB">classe A</strong>, <strong class="specialLB">B</strong> et <strong class="specialLB">C</strong> sont regroupées en <strong class="defin">réseaux</strong> comportant des identifiants d'hôtes encodés sur respectivement <strong>3</strong>, <strong>2</strong> et <strong>1 octet</strong> ; on parle alors de <strong class="defin">réseaux de classe A</strong>, <strong class="defin">B</strong> ou <strong class="defin">C</strong> ;  </li>
+
+	<li> les adresses allant de <code class="cmd">224.0.0.0</code>  à <code class="cmd">255.255.255.255</code> sont réservées pour des usages ultérieurs ; </li>
+
+	<div class="nobullet"> cette plage sera par la suite divisée pour constituer les <strong class="specialLB">classes D</strong> (adresses pour les diffusions ciblées <strong>multicast</strong>) et <strong class="specialLB">E</strong> (adresses pour <strong>expérimentations</strong>) ;   </div>
+</ul>
+<p> ce que détaille le tableau ci‑dessous. </p>
+
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> classe <br> d'adresses </th>  
+    <th> préfixe <br> binaire  </th>
+    <th> nombre <br> de réseaux </th>
+    <th> adresses <br> par réseau </th>
+    <th> forme <br> des adresses </th>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <strong class="specialLB">A</strong> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">0</code> </td>
+    <td style="text-align: center;"> 128 </td>
+    <td style="text-align: center;"> ≃ 16,7 × 10<sup>6</sup> </td>
+    <td style="text-align: right; padding-right: 1em;"> de <code class="cmd"><span style="color: dodgerblue;">0</span>.<span style="color: firebrick;">cdu</span>.<span style="color: firebrick;">cdu</span>.<span style="color: firebrick;">cdu</span></code> <br>  à  <code class="cmd"><span style="color: dodgerblue;">127</span>.<span style="color: firebrick;">cdu</span>.<span style="color: firebrick;">cdu</span>.<span style="color: firebrick;">cdu</span></code></td>
+  </tr> 
+  <tr>
+    <td style="text-align: center;"> <strong class="specialLB">B</strong> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">10</code> </td>
+    <td style="text-align: center;"> 16&#8239;384 </td>
+    <td style="text-align: center;"> 65&#8239;536 </td>
+    <td style="text-align: right; padding-right: 1em;"> de <code class="cmd"><span style="color: dodgerblue;">128</span>.<span style="color: dodgerblue;">000</span>.<span style="color: firebrick;">cdu</span>.<span style="color: firebrick;">cdu</span></code> <br>  à  <code class="cmd"><span style="color: dodgerblue;">191</span>.<span style="color: dodgerblue;">255</span>.<span style="color: firebrick;">cdu</span>.<span style="color: firebrick;">cdu</span></code></td>
+  </tr> 
+  <tr>
+    <td style="text-align: center;"> <strong class="specialLB">C</strong> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">110</code> </td>
+    <td style="text-align: center;"> ≃ 2 × 10<sup>6</sup> </td>
+    <td style="text-align: center;"> 256 </td>
+    <td style="text-align: right; padding-right: 1em;"> de <code class="cmd"><span style="color: dodgerblue;">192</span>.<span style="color: dodgerblue;">000</span>.<span style="color: dodgerblue;">000</span>.<span style="color: firebrick;">cdu</span></code> <br>  à  <code class="cmd"><span style="color: dodgerblue;">223</span>.<span style="color: dodgerblue;">255</span>.<span style="color: dodgerblue;">255</span>.<span style="color: firebrick;">cdu</span></code></td>
+  </tr> 
+  <tr>
+    <td style="text-align: center;"> <strong class="specialLB">D</strong> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">1110</code> </td>
+    <td style="text-align: center;"> – </td>
+    <td style="text-align: center;"> – </td>
+    <td style="text-align: right; padding-right: 1em;"> de <code class="cmd">224.0.0.0</code> <br>  à  <code class="cmd">239.255.255.255</code></td>
+  </tr> 
+  <tr>
+    <td style="text-align: center;"> <strong class="specialLB">E</strong> </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">1111</code> </td>
+    <td style="text-align: center;"> – </td>
+    <td style="text-align: center;"> – </td>
+    <td style="text-align: right; padding-right: 1em;"> de <code class="cmd">240.0.0.0</code> <br>  à  <code class="cmd">255.255.255.255</code></td>
+  </tr> 
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+
+<p class="square"> L'emploi des <strong class="title">préfixes binaires</strong> et la structuration en octets des <strong class="title">3 classes</strong> <strong class="specialLB">A</strong>, <strong class="specialLB">B</strong> et <strong class="specialLB">C</strong>  apportent un <strong class="pros">avantage</strong> remarquable. Par le préfixe de l'adresse d'une interface, on peut très facilement déterminer la <strong class="defin">classe du réseau</strong> dans lequel elle est hébergé, donc l'<strong>adresse du réseau</strong>, ce qui est essentiel pour le routage.  </p>
+
+<div class="exemples">
+<p class="exemple"> L'adresse d'<strong>interface</strong> <code class="cmd">172.20.13.115</code> est de <strong class="specialLB">classe B</strong> (en effet, son premier octet <code class="cmd">172</code> se code <code class="prettyprint lang-c">10101100</code> en binaire dans lequel on trouve le préfixe <code class="prettyprint lang-c">10</code>). Donc, son <strong class="title">réseau</strong> a pour adresse <code class="cmd"><span style="color: dodgerblue;">172</span>.<span style="color: dodgerblue;">20</span>.<span style="color: firebrick;">0</span>.<span style="color: firebrick;">0</span></code>. </p>
+</div><!-- exemple -->
+
+<p class="square"> En revanche, ce <strong class="title">système initial</strong> d'adressage s'est révélé rapidement <strong class="cons">malcommode</strong>. En effet, en définissant les <strong class="defin">identifiants de réseaux</strong> <strong>octet par octet</strong>, ces derniers formaient des ensembles d'adresses le plus souvent <strong>trop petits</strong> (réseaux de classe <strong class="specialLB">C</strong>) ou <strong class="cons">trop grands</strong> (réseaux de classe <strong class="specialLB">A</strong> ou <strong class="specialLB">B</strong>) au regard des parcs machines des organisations. Sans autre choix que de procéder en <strong class="warning">surdimensionnement</strong>, l'attribution des adresses par classes de réseaux a constitué la première cause de la <strong class="warning">pénurie</strong> qui n'a pas manqué de survenir.  </p>
+
+<div class="expert">
+<p> En effet, pour n'importe quelle organisation humaine (entreprise, université…), même avec des moyens informatiques avancés, et si tant est que le besoin existe, il est <strong class="warning">très difficile</strong> de gérer de façon monolithique un réseau de <strong class="title">classe A</strong> hébergeant <strong>plusieurs millions de machines</strong>. Pour une gestion efficace d'un grand nombre d'équipements, il faut <strong class="pros">segmenter</strong> – et cette règle reste valable même pour un réseau de <strong class="title">classe B</strong>. </p>
+</div><!-- expert -->
+
+
+<div class="remarques">
+<p class="remarque"> Ce système de <strong class="title">préfixes binaires</strong> est employé de façon analogue pour l'encodage des caractères au format <strong><em class="sigle">UTF‑8</em></strong> (cf. chap. C3‑IX <a class="cours" href="../../moduleC/C3-Numeration/Cc3-9_typesCaracteresEtendus.html#formatUTF-8" target="_BLANK">C</a>). </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="masque"> Segmentation d'un réseau <em class="mark">IPv4</em> en sous‑réseaux – notion de masque </h3>
+
+
+
+<p> Pour résoudre la trop faible variété des tailles de réseaux attribuables par classes, la norme <strong>IPv4</strong> introduit dès 1984 (<em class="sigle">RFC 917</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc917" target="_BLANK"></a>) la notion de <strong class="title">sous‑réseau</strong>. </p>
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/diffusionBroadcast.png" width="150px">
+<p> La <strong class="defin">plage d'adresses</strong> d'un <strong>réseau</strong> de <strong>classe A</strong>, <strong>B</strong> ou <strong>C</strong> peut être segmentée pour constituer <strong class="title">plusieurs sous‑réseaux indépendants</strong>, chacun ayant son <strong class="specialLB">adresse de réseau</strong> et son <strong class="specialMg">adresse de broadcast</strong> spécifiques. </p>
+</div><!-- display -->
+
+<p> Pour cela, on définit un mot binaire appelé <strong class="title">masque de sous‑réseau</strong> — en anglais, <strong>subnet mask</strong> – formé sur <strong>4 octets</strong> dans le sens usuel de lecture : </p>
+	<img class="top-left" src="../img/IPv4subnetMask.png" style="max-width: 600px">
+<ul>
+	<li> d'une <strong class="specialLB">série de bits</strong> valant <code class="cmd" style="color:dodgerblue;">1</code> qui délimite dans une adresse <em class="sigle">IP</em> la partie permettant d'<strong>identifier le réseau et le sous‑réseau</strong> (<em class="english">net and subnet identifier</em>) ; </li>
+
+	<li> puis d'une <strong class="specialMR">série de bits</strong> valant <code class="cmd" style="color:firebrick;">0</code>  qui délimite dans une adresse <em class="sigle">IP</em> la partie permettant d'<strong>identifier une interface hébergée</strong> dans le sous‑réseau (<em class="english">host identifier</em>). </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement" id="tableauConv">
+<p> Comme une adresse <em class="sigle">IP</em>, une <strong class="title">masque de sous‑réseau</strong> s'exprime en <strong class="defin">notation décimale pointée</strong>. Étant donné sa forme binaire (une série de <code style="color:dodgerblue;">1</code> puis de <code style="color:firebrick;">0</code>), chacun de ses octets ne peut prendre qu'une des <strong>neuf valeurs décimales</strong> listées dans le tableau ci‑dessous :   </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th style="min-width: 4em; width: 4em;"> base 2  </th>
+    <th> <code style="color:firebrick">00000000</code> </th> 
+    <th> <code style="color:firebrick"><span style="color:dodgerblue;">1</span>0000000</code> </th> 
+    <th> <code style="color:firebrick"><span style="color:dodgerblue;">11</span>000000</code> </th> 
+    <th> <code style="color:firebrick"><span style="color:dodgerblue;">111</span>00000</code> </th>
+    <th> <code style="color:firebrick"><span style="color:dodgerblue;">1111</span>0000</code> </th>  
+    <th> <code style="color:firebrick"><span style="color:dodgerblue;">11111</span>000</code> </th> 
+    <th> <code style="color:firebrick"><span style="color:dodgerblue;">111111</span>00</code> </th> 
+    <th> <code style="color:firebrick"><span style="color:dodgerblue;">1111111</span>0</code> </th> 
+    <th> <code style="color:dodgerblue">11111111</code> </th> 
+  </tr>
+  <tr>
+  	<th style="min-width: 4em; width: 4em;"> base 10  </th>
+    <td style="text-align: center"> <code class="cmd">0</code> </td>
+    <td style="text-align: center"> <code class="cmd">128</code> </td>
+    <td style="text-align: center"> <code class="cmd">192</code> </td>
+    <td style="text-align: center"> <code class="cmd">224</code> </td>
+    <td style="text-align: center"> <code class="cmd">240</code> </td>
+    <td style="text-align: center"> <code class="cmd">248</code> </td>
+    <td style="text-align: center"> <code class="cmd">252</code> </td>
+    <td style="text-align: center"> <code class="cmd">254</code> </td>
+    <td style="text-align: center"> <code class="cmd">255</code> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<p> De plus, <strong class="defin">un seul octet</strong> du masque ne peut prendre un valeur <strong class="warning">autre que</strong> <code class="cmd">0</code> ou <code class="cmd">255</code>. C'est l'octet dans lequel se situe la <strong>transition</strong> entre la séquence des <code style="color:dodgerblue;">1</code> et celle des <code style="color:firebrick;">0</code>.  </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exempleMasque">
+<p class="exemple"> Considérons un <strong>réseau de</strong> <strong class="specialLB">classe B</strong> d'adresse <code class="cmd">172.20.0.0</code>. En lui associant par exemple le <strong>masque</strong> <code class="cmd">255.255.224.0</code>, c'est‑à‑dire : <br>
+<span class="inline">
+	<code class="cmd"><span style="color: dodgerblue;">11111111</span>.<span style="color: dodgerblue;">11111111</span>.<span style="color: dodgerblue;">111</span><span style="color: firebrick;">00000</span>.<span style="color: firebrick;">00000000</span></code> 
+</span> <br>
+on le segmente en <strong class="title">8 sous‑réseaux</strong> de 2<sup>5+8</sup> = 2<sup>13</sup> = <strong>8192 adresses</strong> chacun (13 est le nombre de <code style="color:firebrick;">0</code> dans le masque). De plus : </p>
+<ul>
+	<li> le 1<sup>er</sup> de ces sous‑réseaux a pour adresse <code class="cmd">172.20.0.0</code>, </li>
+
+	<li> le 2<sup>e</sup> de ces sous‑réseaux a pour adresse <code class="cmd">172.20.32.0</code>, </li>
+
+	<li> le 3<sup>e</sup> de ces sous‑réseaux a pour adresse <code class="cmd">172.20.64.0</code>, etc. </li>
+</ul>
+</div><!-- exemples -->
+
+
+<h4 id="calculAvecMasque"> Détermination des adresses remarquables d'un sous‑réseau <em class="mark">IPv4</em> </h4>
+
+
+<div class="complement">
+<p> Étant donné une interface configurée par son <strong>adresse <em class="sigle">IP</em></strong> et son <strong>masque de sous‑réseau</strong>, on peut déterminer les <strong class="title">adresses remarquables</strong> du sous‑réseau par les <strong class="defin">opérations logiques bits à bits</strong> suivantes :    </p>
+
+<ul>
+	<li> <code class="prettyprint lang-c" style="border: solid 2px dodgerblue;"><span class="nocode"><strong class="specialLB">adresse <em class="sigle">IP</em> sous‑réseau</strong></span> = <span class="nocode"><strong>adresse <em class="sigle">IP</em> interface</strong></span> & <span class="nocode"><strong style="">masque</strong></span></code> sachant que <code class="prettyprint lang-c">&</code> est l'opérateur logique « <strong>et</strong> » bits à bits – cf. chap. C3‑III <a class="cours" href="../../ModuleC/C3-Numeration/Cc3-3_typesBooleens.html#bitwizeOperators" target="_BLANK">C</a> ; </li>
+
+  <li> <code class="prettyprint lang-c" style="border: solid 2px magenta;"><span class="nocode"><strong class="specialMg">adresse <em class="sigle">IP</em> broadcast</strong></span> = <span class="nocode"><strong class="specialLB">adresse <em class="sigle">IP</em> sous‑réseau</strong></span> | ~ <span class="nocode"><strong>masque</strong></span></code> sachant que <code class="prettyprint lang-c">|</code> et <code class="prettyprint lang-c">~</code> sont respectivement les opérateurs logiques « <strong>ou</strong> » et « <strong>non</strong> » bits à bits – cf. chap. C3‑III <a class="cours" href="../../ModuleC/C3-Numeration/Cc3-3_typesBooleens.html#bitwizeOperators" target="_BLANK">C</a>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Considérons l'interface configurée par l'<strong>adresse <em class="sigle">IP</em></strong> <code class="cmd">172.20.20.60</code> et le <strong>masque de sous‑réseau</strong> <code class="cmd">255.255.224.0</code>. On détermine les deux <strong class="title">adresses remarquables</strong> suivantes : </p>
+
+<ul>
+	<li style="border: solid 1px dodgerblue;"> <code><span class="nocode"><strong class="specialLB">adresse <em class="sigle">IP</em> sous‑réseau</strong></span> <span style="color:blue">=</span> 172.20.60.40 <span style="color:blue">&</span> 255.255.224.0<br>                  <span style="color:blue">=</span> <span style="color: dodgerblue;">172</span>.<span style="color: dodgerblue;">20</span>.<span style="color: dodgerblue;">32</span>.<span style="color: dodgerblue;">0</span></code> </li>
+
+	<div class="expert">
+	<div class="nobullet"> En effet, en posant l'opération binaire, on a : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="code" style="padding-top:0em">
+   10101100.00010100.00111100.00101000  <span class="nocode"><strong>adresse <em class="sigle">IP</em> interface</strong></span>
+<span style="color:blue"> &</span> <span style="color: dodgerblue;">11111111</span>.<span style="color: dodgerblue;">11111111</span>.<span style="color: dodgerblue;">111</span><span style="color: firebrick;">00000</span>.<span style="color: firebrick;">00000000</span>  <span class="nocode"><strong>masque</strong></span>
+<span style="color:blue"> =</span> <span style="color: black;">10101100</span>.<span style="color: black;">00010100</span>.<span style="color: black;">001</span><span style="color: firebrick;">00000</span>.<span style="color: firebrick;">00000000</span>  <span class="nocode"><strong class="specialLB">adresse <em class="sigle">IP</em> sous‑réseau</strong></span>  
+</pre>	
+<!---------- ne pas indenter ---------->	
+
+  </div><!-- expert -->		
+
+  <li style="border: solid 1px magenta;"> <code><span class="nocode"><strong class="specialMg">adresse <em class="sigle">IP</em> broadcast</strong></span> <span style="color:blue">=</span> <span style="color: dodgerblue;">172</span>.<span style="color: dodgerblue;">20</span>.<span style="color: dodgerblue;">32</span>.<span style="color: dodgerblue;">0</span> <span style="color:blue">| ~</span> 255.255.224.0<br>               <span class="nocode">&#8239;&#8239;&#8239;&#8239;</span><span style="color:blue">=</span> <span style="color: magenta;">172</span>.<span style="color: magenta;">20</span>.<span style="color: magenta;">63</span>.<span style="color: magenta;">255</span></code> </li>
+
+  <div class="expert">
+	<div class="nobullet"> En effet, en posant l'opération binaire, on a : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="code" style="padding-top:0em">
+   <span style="color: black;">10101100</span>.<span style="color: black;">00010100</span>.<span style="color: black;">001</span><span style="color: black;">00000</span>.<span style="color: black;">00000000</span>  <span class="nocode"><strong class="specialLB">adresse <em class="sigle">IP</em> sous‑réseau</strong></span>
+<span style="color:blue"> |</span> <span style="color: dodgerblue;">00000000</span>.<span style="color: dodgerblue;">00000000</span>.<span style="color: dodgerblue;">000</span><span style="color: firebrick;">11111</span>.<span style="color: firebrick;">11111111</span>  <span style="color:blue">~</span><span class="nocode"> <strong>masque</strong></span>
+<span style="color:blue"> =</span> <span style="color: black;">10101100</span>.<span style="color: black;">00010100</span>.<span style="color: black;">001</span><span style="color: firebrick;">11111</span>.<span style="color: firebrick;">11111111</span>  <span class="nocode"><strong class="specialMg">adresse <em class="sigle">IP</em> broadcast</strong></span>  
+</pre>	
+<!---------- ne pas indenter ---------->	
+
+  </div><!-- expert -->		
+</ul>
+</div><!-- exemple -->
+
+
+
+<h3> Abandon des classes de réseaux <em class="mark">IPv4</em> </h3>
+
+
+
+<div class="complement">
+<p> Au début des années 1990 sont apparus la notion de <strong class="title">page web</strong> et les premiers <strong>logiciels navigateurs</strong>. L'internet, jusque‑là cantonné aux universités et aux instituts de recherche scientifique, ainsi qu'aux départements R & D des entreprises technologiques, a commencé à présenter un grand <strong class="defin">intérêt commercial</strong>. Les demandes d'adresses <em class="sigle">IP</em> ont fortement augmenté… </p>
+
+<ul>
+	<li> Pour repousser le spectre grandissant de la pénurie d'adresse, mais aussi simplifier les algorithmes de routage, la notion de <strong class="specialLB">classe de réseaux</strong> a été <strong class="warning">abandonnée</strong> en 1993. L'espace des adresses <em class="mark">IPv4</em> dans son ensemble a alors pu faire l'objet d'une <strong class="pros">segmentation fine</strong>. </li>
+
+	<li> Le <strong class="specialLB">masque</strong> est devenu un <strong>paramètre indispensable</strong> de la configuration d'une interface, permettant à partir de son adresse <em class="sigle">IP</em> de déterminer l'<strong>adresse du réseau</strong> dans lequel elle est hébergée. </li>
+
+	<div class="nobullet"> Quant aux <strong class="specialLB">préfixes</strong> qui servaient à distinguer les classes de réseaux, ils sont devenus <strong class="cons">inutiles</strong>.  En effet, il n'était plus nécessaire de distinguer des sous‑réseaux dans un réseau plus grand. Autrement dit, la notion de « <strong>sous‑réseau</strong> » a fusionné avec celle de <strong class="defin">réseau</strong>, en tant que <strong>segment</strong> dans l'espace total d'adressage <em class="mark">IPv4</em>.   </div>
+</ul>
+<p> C'est donc par inertie psychologique que le terme de « <strong class="cons">masque de sous‑réseau</strong> » (<em class="english">subnet mask</em>) est encore employé aujourd'hui. En réalité, on doit parler seulement de <strong class="title">masque de réseau</strong> (<em class="english">net mask</em>). </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Cette « nouvelle » <strong class="title">méthode d'adressage</strong> est dite <strong class="title">sans classe</strong> – en anglais, <strong>classless inter‑domain routing</strong>, abrégée <strong class="title"><em class="sigle">CIDR</em></strong>. Elle est introduite par la <em class="sigle">RFC 1519</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1519" target="_BLANK"></a>. </p>
+
+<p> Elle permet également de <strong class="pros">rationaliser les tables de routage</strong>, par la technique dite d'<strong>agrégation des adresses</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_IP#Agrégation_des_adresses" target="_BLANK">W</a> et donc des <strong>routes</strong>. </p>
+</div><!-- important -->
+
+
+<h4 id="CIDR"> Notation abrégée du masque en adressage <em class="mark">CIDR</em> </h4>
+
+
+<div class="important">
+<p> Un <strong class="title">masque de réseau</strong> présente donc toujours une <strong class="pros">forme très simple</strong> : une <strong>série de bits</strong> valant <code style="color: dodgerblue;">1</code> suivie d'une <strong>série de bits</strong> valant <code style="color:firebrick;">0</code>. De ce fait, un masque peut s'exprimer par une <strong class="pros">notation plus plus concise</strong> que la valeur détaillée de ses 4 octets : il suffit d'indiquer le <strong class="define">nombre de bits valant </strong> <code style="color: dodgerblue;">1</code> qu'il comporte – ce nombre ne pouvant aller que de <code class="cmd">0</code> à <code class="cmd">32</code>. </p>
+
+<p> Pour désigner ainsi un <strong class="title">masque de réseau</strong>, on fait précéder son nombre d'un caractère <strong>slash</strong> <code class="cmd">/</code>, qui sert également de séparateur lorsque ce masque est associé à une adresse. C'est la <strong class="specialLB">notation abrégée</strong> <strong class="specialLB">dite <em class="sigle">CIDR</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Pour passer de la notation complète à la notation abrégée (et réciproquement), on peut coder un <strong>programme</strong> (cf. l'exercice 3 de la feuille C3 <a class="TP" href="../../ModuleC/C3-Numeration/Cexo3_numeration.html#exo3" target="_BLANK">C</a>) ou utiliser une <strong class="warning">page web de calcul</strong> spécialement conçue à cet effet, par exemple celle‑ci <a class="external" href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/CalculMasque/" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> On a vu dans l'exemple supra <a class="supra" href="Rc1-3_adressage#exempleMasque"></a>  que le <strong>masque</strong> <code class="cmd">255.255.224.0</code> commence par une série de <strong>19 bits</strong> valant <code  class="cmd" style="color: dodgerblue;">1</code> (puis 13 bits valant  <code style="color: firebrick;">0</code>). </p>
+
+<p> En <strong class="title">notation <em class="sigle">CIDR</em></strong>, ce masque s'écrit tout simplement <code class="cmd">/19</code>. </p> 
+
+<p> De même, l'association de l'<strong>adresse <em class="sigle">IP</em></strong> <code class="cmd">172.20.20.60</code> et du <strong>masque</strong> <code class="cmd">255.255.224.0</code> s'écrit simplement : <br>
+<span class="inline">
+	<code class="cmd">172.20.20.60/19</code>
+</span> </p>
+</div><!-- exemple -->
+
+<div class="expert">
+<p> On peut aussi procéder par <strong class="pros">calcul mental</strong>. </p>	
+<ul>
+	<li> Pour passer de la <strong>notation décimale pointée</strong> à la <strong class="title">notation abrégée</strong>, on compte <em class="bold">8</em> pour chaque octet valant <code class="cmd">255</code> et on décompose la valeur de l'<strong class="defin">octet de transition</strong> en une <strong>somme de puissances décroissantes de 2</strong> (ou de se reporter au tableau supra <a class="supra" href="Rc1-3_adressage#tableauConv")></a>). </li>
+
+	<div class="exemples">
+	<p class="exemple"> En partant de sa <strong class="title">notation décimale pointée</strong>, on calcule que le <strong>masque</strong> <code class="cmd">255.255.224.0</code> compte 8 + 8 + 3 = <em class="bold">19</em> bits à <code style="color: dodgerblue;">1</code>. En effet : <br>
+  <span class="inline">
+  	<code class="cmd">224</code><code> = 128 + 64 + 32 = </code><code style="color:firebrick"><span style="color:dodgerblue;">111</span>00000</code><sub>(2)</sub>
+  </span> </p>
+
+	<p> Il se note donc <code class="cmd">/19</code> en <strong class="title">notation <em class="sigle">CIDR</em></strong>.</p>
+  </div><!-- exemple -->
+
+	<li> Pour passer de la <strong>notation abrégée</strong> à la <strong class="title">notation décimale pointée</strong>, on effectue la division entière par <em class="bold">8</em> du masque pour déterminer le nombre d'octets valant <code class="cmd">255</code>. Quant à l'<strong class="defin">octet de transition</strong>, il est déterminé par le <strong>reste</strong> de la division, en calculant la <strong>somme des puissances décroissantes de 2</strong> (ou en se reportant au tableau supra <a class="supra" href="Rc1-3_adressage#tableauConv")></a>). </li>
+
+	<div class="exemples">
+	<p class="exemple"> En partant de sa <strong class="title">notation <em class="sigle">CIDR</em></strong>, on calcule que le <strong>masque</strong> <code class="cmd">/26</code> compte 26÷8 = 3 octets qui valent chacun <code class="cmd">255</code>. Le reste 2 de la division 26÷8 donne le nombre de bits valant <code style="color: dodgerblue;">1</code> du dernier octet du masque, qui vaut donc <code style="color:firebrick"><span style="color:dodgerblue;">11</span>00000</code><sub>(2)</sub><code> = 128 + 64 =</code> <code class="cmd">192</code>. </p>
+
+	<p> Ce masque s'écrit donc <code class="cmd">255.255.255.192</code> en <strong class="title">notation décimale pointée</strong>. </p>
+  </div><!-- exemple -->
+</ul>
+</div><!-- expert -->
+
+
+
+<h3 id="adressesPrivees"> Introduction des adresses <em class="mark">IPv4</em> privées </h3>
+
+
+
+<div class="complement">
+<p> Si l'<strong class="title">abandon des classes de réseaux</strong> a indéniablement mis un terme au gâchis des adresses <em class="sigle">IP</em> lors de l'attribution des blocs aux organismes demandeurs, il n'a <strong class="warning">pas suffi</strong> à écarter durablement le risque de l'<strong class="cons">épuisement des adresses</strong> disponibles en IPv4. </p>
+
+<p> Aussi dès 1994 apparaît la notion d'<strong class="title">adresse privée</strong> (introduite par la <em class="sigle">RFC 1597</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1597" target="_BLANK"></a> et officialisée par la <em class="sigle">RFC 1918</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1918" target="_BLANK"></a> en 1996) – d'où découle la notion de <strong class="title">réseau privé</strong> – qui présente un double intérêt : </p>
+<ul>
+	<li> permettre, dans le réseau global formé par l'interconnexion physique de toutes les machines, l'<strong class="pros">existence de parties privées</strong>, c'est‑à‑dire non accessibles à tous, et ce par un <strong class="defin">cloisonnement logiciel</strong> de bas niveau ;  </li>
+
+	<li> ce faisant <strong class="pros">réduire fortement le besoin en adresses uniques</strong> aux <strong class="defin">seules parties publiques</strong> du réseau global – ce qu'on appelle communément l'<strong>Internet</strong>.  </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="important">
+<p> Une <strong class="title">adresse <em class="sigle">IP</em> privée</strong> est une adresse <em class="sigle">IP</em> qui n'est <strong class="defin">pas routée sur l'Internet</strong>, au sens où elle est <strong>exclue de toute table de routage</strong> des routeurs qui forment la <strong class="defin">partie publique</strong> des réseaux de transport et d'interconnexion de données le protocole <em class="sigle">IP</em>. </p>
+
+<p> On appelle <strong class="title">réseau privé</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réseau_privé" target="_BLANK">W</a> un réseau de machines dont les interfaces réseau sont dotées d'<strong class="defin">adresses <em class="sigle">IP</em> privées</strong> pouvant <strong>communiquer</strong> entre elles <strong class="pros">sans passer par l'Internet</strong>. </p>
+</div><!-- important -->
+
+
+<h4 id="adressesPriveesGenerales"> Adresses <em class="mark">IPv4</em> privées d'usage général </h4>
+
+
+<div class="important">
+<p> Depuis 1996, l'<strong><em class="sigle">IANA</em></strong> réserve les <strong class="title">3 blocs d'adresses IPv4</strong> listés ci‑dessous, qui peuvent être <strong class="pros">librement segmentés et utilisés</strong> pour l'adressage des <strong class="title">réseaux privés</strong> et des interfaces qu'ils hébergent :  </p>
+<ul>
+	<li> <code class="cmd">10.0.0.0/8</code>, soit environ <strong>16,7 millions d'adresses</strong> comprises entre <code>10.0.0.0</code> et <code>10.255.255.255</code> ;  </li>
+
+	<li> <code class="cmd">172.16.0.0/12</code>, soit environ <strong>1 millions d'adresses</strong> comprises entre <code>172.16.0.0</code> et <code>172.31.255.255</code> ;  </li>
+
+	<li> <code class="cmd">192.168.0.0/16</code>, soit <strong>65&#8239;536 adresses</strong> comprises entre <code>192.168.0.0</code> et <code>192.168.255.255</code>.  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> En <strong class="title">règle générale</strong>, par la vieille habitudes des classes de réseaux, il est usuel : </p>
+
+<ul>
+	<li> pour les <strong class="specialLB">réseaux domestiques</strong>,  d'employer le bloc d'adresses <code class="cmd">192.168.0.0/24</code> ; </li>
+
+  <div class="expert">
+  <div class="nobullet"> et éventuellement de recourir à d'autres blocs comme <code class="cmd">192.168.1.0/24</code>, <code class="cmd">192.168.2.0/24</code> si l'on souhaite segmenter le réseaux en <strong>plusieurs <em class="sigle">VLAN</em></strong> ; </div>
+  </div><!-- expert -->
+
+	<li> pour les <strong class="specialLB">réseaux locaux</strong> d'entreprises ou de collectivités, d'employer des blocs d'adresse <code class="cmd">192.168.x.0/24</code> ou <code class="cmd">172.x.0.0/16</code> pour les interfaces des <strong class="defin">machines terminales</strong> (PC, imprimantes, serveurs…), segmentées selon les départements auxquels ces machines sont rattachées (recherche et développement, administration, direction, etc.) ;  </li>
+
+	<div class="nobullet"> et d'utiliser le bloc <code class="cmd">10.0.0.0/8</code> pour les <strong class="defin">principaux routeurs</strong> du réseau local, formant ce qu'on appelle un <strong>backbone</strong> par analogie avec un réseau de transport. </div>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Mais insistons sur le fait que dans un <strong>réseau local</strong>, à moins de recourir à d'<strong class="cons">anciennes versions de protocoles</strong> basés sur les classes de réseaux (comme, par exemple, <em class="sigle">RIP</em> <a class="external" href="https://fr.wikipedia.org/wiki/Routing_Information_Protocol" target="_BLANK">W</a>), la <strong class="title">liberté de segmentation</strong> des <strong>blocs d'adresses <em class="sigle">IP</em> privées</strong> est <strong class="pros">totale</strong>.  </p>
+
+<div class="exemples" id="adressesBackbone">
+<p class="exemple"> Ainsi, rien n'interdit – et c'est même une pratique courante – de <strong class="title">segmenter le bloc</strong> <code class="cmd">10.0.0.0/8</code> avec le <strong class="defin">masque</strong> <code class="cmd">/24</code> (256 adresses) comme sur la figure ci‑dessous pour identifier les interfaces des routeurs d'un <strong>backbone</strong>. </p>
+  <img class="top-left" src="../img/backboneIP.png" style="max-width: 800px">
+<p> En effet, chaque <strong>liaison entre deux routeurs</strong> constitue un <strong class="warning">réseau à part entière</strong>, avec seulement deux hôtes. Il serait donc absolument démesuré de lui associer un masque <code class="cmd">/8</code> (16,7 millions d'adresses), d'autant plus qu'on a ici 3 liaisons entre routeurs (on épuiserait les adresses en <code class="cmd">10.0<span class="nocode" style="color: grey">…</span></code> dès la première liaison). </p>
+
+<p> <em class="remark">Remarque</em>. Comme dans un réseau d'interconnexion public, il serait possible d'employer un <strong class="title">masque</strong> <code class="cmd">/30</code> (4 adresses, donc 2 pour les interfaces puisqu'il faut laisser de côté l'adresse du réseau lui‑même et celle de <em class="english">broadcast</em>). Néanmoins, ce choix est <strong class="cons">moins lisible</strong> que celui ci‑dessus car les adresses de réseaux ne se terminent pas toutes pas l'octet <code class="cmd">0</code>, mais par un multiple de 4 : <code class="cmd">10.0.0.0/30</code>, <code class="cmd">10.0.0.4/30</code>, <code class="cmd">10.0.0.8/30</code>, etc. Un tel choix ne se justifierait que si l'on avait plus de 256 liaisons à gérer. </p>
+</div><!-- exemple -->
+
+
+<!-- expert -->
+<h4 id="adressesPriveesSpeciales"> Adresses <em class="mark">IPv4</em> privées spéciales </h4>
+
+
+<div class="complement">
+<p> En plus des adresses privées d'usage général, l'<strong>espace d'adressage IPv4</strong> comporte également quelques <strong class="title">blocs d'adresses privées</strong> qui remplissent des <strong class="specialO">fonctions spéciales</strong>.  </p>
+
+<ul>
+	<li> Le <strong>bloc</strong> <code class="cmd">127.0.0.0/8</code> est réservé pour les <strong>interfaces virtuelles</strong> dites de <strong class="specialLB">rebouclage</strong> (loopback) – cf. supra <a class="supra" href="Rc1-3_adressage#loopback"></a>. Il permet de constituer un <strong>réseau local interne</strong> à la machine. </li>
+
+	<li> Le <strong>bloc</strong> <code class="cmd">169.254.0.0/16</code> est réservé pour l'<strong class="specialLB">auto‑configuration</strong> des interfaces sur des adresses dites de <strong class="specialLB">lien locale</strong> (<em class="english">link‑local address</em>). Ce processus peut être mis en œuvre par le système d'exploitation d'une machine dont une interface est en <strong class="cons">échec</strong> avec le protocole <strong><em class="sigle">DHCP</em></strong> (cf. chap. R2‑II <a class="next" href="../R2-Applications/Rc2-2_dhcp.html#APIPA" target="_BLANK"></a>). Il permet <strong class="pros">d'obtenir malgré tout une adresse <em class="sigle">IP</em></strong> qui permet à la machine de communiquer dans son réseau local. </li>
+
+	<li> La <strong>méta‑adresse</strong> <code class="cmd">0.0.0.0</code> <a class="external" href="https://fr.wikipedia.org/wiki/0.0.0.0" target="_BLANK"></a> est réservée pour diverses usages spéciaux, notamment les deux suivants. </li>
+	<ul>
+		<li> C'est l'adresse adoptée pour la <strong class="specialLB">configuration initiale</strong> des machines dans le cadre du protocole <strong><em class="sigle">DHCP</em></strong> (cf. chap. R2‑II <a class="next" href="../R2-Applications/Rc2-2_dhcp.html#initialisation" target="_BLANK"></a>) ; en règle générale, elle identifie une interface qui n'a <strong class="defin">pas (encore) d'adresse <em class="sigle">IP</em></strong>.  </li>
+	
+		<li> Associée au masque <code class="cmd">/0</code>, elle représente l'ensemble de <strong class="specialPR">toutes les adresses de destination possibles</strong> pour leur attribuer une <strong>route par défaut</strong> dans la table de routage d'une machine située sur un nœud terminal d'un réseau (typiquement, une station de travail).  </li>
+	</ul>
+	
+	<li> L'<strong>adresse</strong> <code class="cmd">255.255.255.255</code> <a class="external" href="https://fr.wikipedia.org/wiki/0.0.0.0" target="_BLANK"></a> est réservée pour la <strong class="specialLB">diffusion générale restreinte</strong> (<em class="english">limited broadcast</em>) applicable à n'importe quel segment d'un réseau local, notamment dans le cadre du protocole <strong><em class="sigle">DHCP</em></strong> (cf. chap. R2‑II <a class="next" href="../R2-Applications/Rc2-2_dhcp.html#initialisation" target="_BLANK"></a>). Elle permet l'envoi d'un <strong>paquet <em class="sigle">IP</em></strong> à <strong class="defin">toutes les machines du segment</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> Toutes ces <strong class="title">adresses privées spéciales</strong> ont la particularité d'être <strong class="warning">non‑routables en général</strong>, autrement dit pas seulement sur l'Internet, mais via n'importe quel routeur même dans un réseau local (passerelle, dorsale, etc.). </p>
+
+<p> Elles ne sont donc <strong>pas relayées par les interfaces des routeurs</strong>, <strong class="defin">sauf</strong> celles qui sont <strong class="defin">spécialement configurées</strong> à cette fin (ce qui est typiquement le cas d'un <strong>relais <em class="sigle">DHCP</em></strong>). </p>
+</div><!-- important -->
+
+<p> La <strong class="title">limitation de routage</strong> des <strong>adresses privées spéciales</strong>, notamment celle de broadcast limité, permet de <strong class="pros">ne pas saturer la bande passante</strong> par de trop nombreux datagrammes de diffusion qui se répandrait dans tous les segments d'un réseau local. </p>
+
+</div><!-- expert -->
+
+
+
+<h3 id="NAT"> Connexion d'un réseau privé à l'Internet </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/publicGateway.png" width="300px" style="padding-top: 0.5em">
+<p> Pour que les machines d'un <strong>réseau privé</strong> puissent avoir <strong class="title">accès à l'Internet</strong>, il est nécessaire de disposer d'un <strong class="specialB">routeur‑passerelle</strong> dont : </p>
+<ul>
+	<li> au moins <strong>une interface</strong> est configurée avec une <strong class="specialG">adresse <em class="sigle">IP</em> publique</strong> ; </li>
+
+	<li> au moins une <strong>autre interface</strong> est configurée avec une <strong class="specialPV">adresse <em class="sigle">IP</em> privée</strong> du réseau – celle qui est en principe renseignée pour la <strong class="specialB">passerelle par défaut</strong> dans la configuration de toutes les machines du réseau privé.  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Simple en apparence, cette architecture nécessite, pour permettre le <strong class="defin">routage des paquets</strong> à travers la passerelle, de recourir à <strong>diverses techniques logicielles</strong> dites de <strong class="title">translation d'adresse</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Network_address_translation" target="_BLANK">W</a> – en anglais, <em class="english">network address translation</em> ou <strong><em class="sigle">NAT</em></strong>. </p>
+<ul>
+	<li> Dans le cas le plus simple d'un <strong class="specialLB">réseau domestique</strong> qui, en règle générale, ne comporte un petit nombre d'adresses privées, <strong class="defin">une seule</strong> <strong>adresse <em class="sigle">IP</em> publique</strong> suffit. On recourt alors à la technique appelée <strong class="defin"><em class="sigle">NAT</em> overload</strong> ou <strong class="defin"><em class="sigle">NAPT</em></strong> (<em class="english">network address and port translation</em>) ou encore simplement <strong class="defin"><em class="sigle">PAT</em></strong> (<em class="english">port address translation</em>). </li>
+
+	<li> Dans le cas d'un <strong class="specialLB">grand réseau local</strong> (plusieurs centaines de machines et éventuellement des serveurs ouverts), il est souvent nécessaire de disposer de <strong>plusieurs adresses <em class="sigle">IP</em> publiques</strong>. On peut alors opter pour une technique de <strong class="defin"><em class="sigle">NAT</em> dynamique</strong> où l'interface publique de la passerelle peut très rapidement changer d'adresse <strong><em class="sigle">IP</em></strong>. </li>
+</ul>
+<p> Les  techniques de <strong class="title">translation d'adresse</strong> présentent un <strong class="pros">intérêt décisif</strong> pour la <strong>sécurité des réseaux privés</strong> par le fait qu'elles <strong class="defin">masquent les adresses</strong> des interfaces hébergées dans ces réseaux. Dès lors, il est très difficile d'en prendre le contrôle par accès distant depuis l'extérieur. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Clef de voûte des réseaux privés en <strong>IPv4</strong>, les techniques de <strong class="title">translation d'adresse</strong> contribuent activement à leur <strong class="pros">sécurité</strong> et permettent de faire de <strong class="pros">grandes économies d'adresses publiques</strong>. Néanmoins, elles posent des <strong class="cons">problèmes de compatibilité</strong> avec certains protocoles de communication, comme les <strong>connexions distantes</strong> (<em class="english">remote login</em>) et les <strong>applications pair‑à‑pair</strong>. </p>
+</ul>
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Dans son <em class="remark">sens général</em>, le <strong>terme anglais</strong> <strong class="title">translation</strong> est un <strong class="warning">faux‑ami</strong> : il se traduit usuellement <strong>en français</strong> par « <strong class="defin">traduction</strong> » <a class="external" href="https://www.linguee.fr/francais-anglais/search?source=anglais&query=translation" target="_BLANK"></a>.  </p>
+
+<p> Mais dans le cas des techniques de <strong class="title"><em class="sigle">NAT</em></strong>, il ne s'agit pas de passer d'une langue à une autre (quoi qu'on puisse affirmer sans argument convainquant, par exemple ici <a class="external" href="http://www.linux-france.org/prj/edu/archinet/systeme/ch59s02.html" target="_BLANK"></a>). Il semble <strong class="pros">plus pertinent</strong> de considérer qu'on parle de <strong class="defin">translation</strong> (mot transparent) dans un <strong>sens « géométrique »</strong>, dans la mesure où l'on passe d'un espace d'adresses à un autre (idem pour les numéros de ports). </p>
+
+<p> Quant au terme français de <strong>transposition</strong>, il pourrait sembler approprié mais il n'est pas en usage chez les professionnels des réseaux. En définitive, même si l'on pêche par anglicisme, l'expression <strong class="pros">translation d'adresse</strong> à l'avantage de faire immédiatement penser au terme anglais. </p>
+</div><!-- remarque -->
+
+
+
+<div class="expert"> 
+<h3> Adresses de multidiffusion <em class="mark">IPv4</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/diffusionMulticast.png" width="200px" style="padding-top: 0.5em">
+<p> Dans un réseau, la multidiffusion ou <strong class="title">diffusion multicast</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multicast" target="_BLANK">W</a> consiste à émettre des données à des destinataires multiples sur une <strong class="defin">adresse <em class="sigle">IP</em> de diffusion</strong>, comme s'il s'agissait d'un destinataire unique.  </p>
+
+<p> Ce sont les <strong class="specialLB">routeurs</strong> du réseau qui, lors qu'ils sont chargés de la transmission de ces données, les transfèrent aux <strong>adresses <em class="sigle">IP</em></strong> respectives des différents <strong>destinataires</strong>, ces derniers étant <strong class="defin">abonnés</strong> à l'adresse de diffusion. </p>
+
+<p> Cette technique est définie dans la <strong><em class="sigle">RFC 1112</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc1112" target="_BLANK"></a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En <strong class="specialO">IPv4</strong>, c'est le <strong class="title">bloc d'adresses</strong> <code class="cmd">224.0.0.0/4</code> – c'est‑à‑dire allant de <code>224.0.0.0</code> à <code>239.255.255.255</code> constituant historiquement les adresses de <em>classe D</em>, cf. supra <a class="supra" href="Rc1-3_adressage#classful"></a> – qui est dévolu aux <strong>protocoles</strong> de <strong class="title">multidiffusion</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multicast" target="_BLANK">W</a>. Il comporte divers <strong class="title">sous‑blocs</strong> réservés par l'<strong><em class="sigle">IANA</em></strong> pour des <strong class="defin">usages spécifiques</strong>.  </p>
+</div><!-- complement -->
+<ul>
+	<li> <code class="cmd">224.0.0.0/24</code> est le <strong class="specialLB">local network control block</strong> <a class="external" href="https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml#multicast-addresses-1" target="_BLANK"></a>. Il comprend 255 adresses de multidiffusion sur un <strong>(sous‑)réseau</strong> – donc, non routables sur l'Internet – chacune spécifique à un protocole ou un type de composant matériel ou logiciel.   </li>
+  
+  <div class="nobullet"> Par exemple, <code>224.0.0.2</code> est l'adresse de multidiffusion à tous les routeurs du (sous‑)réseau. </div>
+
+	<li> <code class="cmd">224.0.1.0/24</code> est l'<strong class="specialLB">Internetwork control block</strong> <a class="external" href="https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml#multicast-addresses-2" target="_BLANK"></a>. Il comprend 255 adresses de multidiffusion sur l'<strong>Internet</strong> – chacune spécifique à un protocole ou un type de composant matériel ou logiciel. </li>
+  
+  <div class="nobullet"> Par exemple, <code>224.0.1.33</code> et <code>34</code> sont deux adresses de multidiffusion exploitées par le protocole <strong><em class="sigle">RSVP</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Resource_Reservation_Protocol" target="_BLANK">W</a>. </div>
+
+  <li> Les plages <code class="cmd">224.0.2.0 - 224.0.2.0</code>, <code class="cmd">224.3.0.0 - 224.4.255.255</code> et <code class="cmd">233.252.0.0 - 233.255.255.255</code> sont respectivement les <strong class="specialLB">ad‑hoc block I</strong> <a class="external" href="https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml#multicast-addresses-3" target="_BLANK"></a>, <strong class="specialLB">II</strong> <a class="external" href="https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml#multicast-addresses-6" target="_BLANK"></a> & <strong class="specialLB">III</strong> <a class="external" href="https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml#multicast-addresses-11" target="_BLANK"></a>. Ces adresses routables sur l'Internet sont principalement réservés pour des applications propriétaires. </li>
+
+  <div class="nobullet"> Par exemple, <code>224.0.6.151</code> est une adresse de multidiffusion ad‑hoc réservée pour les photocopieurs de la marque <em class="mark">Canon</em>. </div>
+  
+  <li> <code class="cmd">239.0.0.0/8</code> est l'<strong class="specialLB">administratively scoped block</strong> <a class="external" href="https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml#multicast-addresses-12" target="_BLANK"></a>. Ce sont des <strong class="defin">adresses privées</strong>, donc <strong>non routables sur l'Internet</strong>. Et comme toutes les adresses privées générales (cf. supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/adressesPriveesGenerales"></a>), elles peuvent être librement employées sur les réseaux locaux, mais spécifiquement pour mettre en œuvre des diffusions <strong>multicast</strong>. </li>
+</ul>
+</div><!-- expert -->	
+
+<h3 id="attributionIP"> Attribution des adresses <em class="mark">IPv4</em> publiques </h3>
+
+
+
+<h4> Historique de l'IANA et création des RIR </h4>
+
+
+<p> Rappelons que l'<strong class="title">attribution des adresses <em class="sigle">IP</em> publiques</strong> – c'est‑à‑dire <strong>routables sur l'Internet</strong> – est depuis 1998 placée sous l'autorité de l'<strong class="defin"><em class="sigle">IANA</em></strong> (<em class="english">Internet assigned numbers authority</em> – cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#ICANN" target="_BLANK"></a>).  </p>
+
+<div class="expert">
+<p> Aux tous débuts des expérimentations de l'Internet (dès 1972), ce travail était accompli par une seule personne – John Postel <a class="external" href="https://fr.wikipedia.org/wiki/Jon_Postel" target="_BLANK">W</a> – au sein de l'<em class="sigle">USC</em> (<em class="english">University of Southern California</em>). À partir des années 1980, il dut quand même constituer une équipe pour le seconder, qui prit l'appellation <strong><em class="sigle">IANA</em></strong>. Son existence et sa mission furent officialisées en 1988 par le gouvernement américain. Mais inévitablement, le développement des activités commerciales et l'<strong class="defin">explosion de la demande mondiale d'adresses <em class="sigle">IP</em></strong> au début des années 1990 finit par rendre cette <strong class="cons">organisation centralisée</strong> totalement inadéquate. </p>
+</div><!-- expert -->
+
+<div class="complement">
+<p> Au début des années 1990, afin d'en limiter le monopole stratégique par les États‑Unis, l'<strong class="defin">espace des adresses IPv4</strong> encore non attribuées a été divisé en <strong>256 blocs</strong> de <strong>16 millions d'adresses</strong> (c'est‑à‑dire divisés par un masque <strong><em class="sigle">CIDR</em></strong> <code>/8</code>) pour être peu à peu confiés à des <strong>organismes « régionaux »</strong> à l'échelle du globe – les <strong class="title">regional Internet registries</strong>, en abrégé <strong class="title"><em class="sigle">RIR</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Registre_Internet_régional" target="_BLANK">W</a>. Ces organismes sont apparus progressivement au fur et à mesure du développement des réseaux informatiques dans les différentes grandes régions du monde :  </p>
+<div style="display:inline-flex; flex-direction: row;">
+<div style="flex-direction: column;">
+<ul>
+	<li> le <strong class="specialLB"><em class="sigle">RIPE-NCC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/RIPE_Network_Coordination_Centre" target="_BLANK">W</a> (<em>réseaux IP européens - network coordination centre</em>), créé en 1992 pour couvrir l'Europe, la Russie et le Moyen‑Orient ; </li>
+
+	<li> l'<strong class="specialLB"><em class="sigle">APNIC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/APNIC" target="_BLANK">W</a> (<em>Asia Pacific network information center</em>), créé en 1993 ; </li>
+
+  <li> l'<strong class="specialLB"><em class="sigle">ARIN</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/American_Registry_for_Internet_Numbers" target="_BLANK">W</a> (<em>American registery for Internet numbers</em>), créé en 1997 pour couvrir les États‑Unis et le Canada ; </li>
+
+  <li> le <strong class="specialLB"><em class="sigle">LACNIC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/LACNIC" target="_BLANK">W</a> (<em>Latin America and Caribbean network information centre</em>), créé en 1999 ; </li>
+
+  <li> l'<strong class="specialLB"><em class="sigle">AFRINIC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/AFRINIC" target="_BLANK">W</a> (<em>African network information Centre</em>), créé en 2005. </li>
+</ul>
+
+<div class="expert">
+<p style="padding-top: 0.5em"> En 2011, l'<strong><em class="sigle">IANA</em></strong> a achevé l'attribution du <strong class="defin">dernier bloc</strong> dont elle disposait encore. En définitive, on peut voir sur le diagramme ci‑contre que la <strong class="title">distribution</strong> a été <strong class="warning">très inéquitable</strong> entre les <strong><em class="sigle">RIR</em></strong> – et ce d'autant plus qu'avant leur création, l'ensemble des adresses « historiques » a presque exclusivement bénéficié aux <strong>États‑Unis</strong>. Ce pays dispose aujourd'hui de <strong>près de 50 % de tous l'espace IPv4</strong>. </p>
+</div><!-- expert -->
+</div><!-- column -->
+<div style="flex-direction: column;">
+	<img class="top-right" src="../img/rir-map.png" width="400px" style="padding-top: 0.2em">
+	<div class="expert">
+		<img class="top-right" src="../img/IPv4-rir.png" width="400px">
+  </div><!-- expert -->
+</div><!-- column -->
+</div><!-- display -->
+
+<div class="expert">
+<p style="padding-top: 0.5em"> Quant aux adresses <strong>réservées</strong>, il correspond aux anciennes classes <strong>D</strong> (toujours utilisées pour le <em class="english">multicast</em>) et <strong>E</strong> (non routables car incompatibles avec de nombreuses implémentations du protocole <strong><em class="sigle">IP</em></strong>). </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<h4 id="roleRIR"> Rôle et fonctionnement des RIR </h4>
+
+
+<div class="important" style="display: inline-block;">
+<p> Un <strong class="title"><em class="sigle">RIR</em></strong> est un <strong class="defin">organisme transnational</strong> <strong class="pros">à but non lucratif</strong> qui regroupe essentiellement des <strong>opérateurs de télécommunication</strong>, des <strong>fournisseurs d'accès à l'Internet</strong> et d'<strong>entreprises</strong>. Typiquement, chaque membre paye des frais d'entrée et une cotisation annuelle. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">rôle d'un <em class="sigle">RIR</em></strong> consiste essentiellement à <strong class="defin">définir la politique de segmentation et de distribution</strong> à ses membres des <strong>blocs d'adresses</strong> reçus de l'<strong><em class="sigle">IANA</em></strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples" style="display: inline-block;">
+	<img class="top-right" src="../img/RIPE-NCClogo.png" width="300px" style="padding-top: 0.2em">
+<p class="exemple"> Le <strong class="title"><em class="sigle">RIPE NCC</em></strong> compte <strong>plusieurs milliers de membres</strong>. Il en publie la <strong>liste</strong> par pays à partir de cette page web <a class="external" href="https://www.ripe.net/participate/member-support/list-of-members" target="_BLANK"></a>. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Grâce aux bases de données maintenues par les <strong><em class="sigle">RIR</em></strong>, il est possible de <strong class="title">localiser géographiquement une adresse <em class="sigle">IP</em></strong>. Ce service est disponible <strong class="pros">gratuitement</strong> sur des <strong>pages web</strong> comme celle ci <a class="external" href="https://db-ip.com/" target="_BLANK"></a>. </p>
+</div><!-- remarque -->
+
+
+
+<h4 id="LIR_NIR"> Notion de LIR et de NIR </h4>
+
+
+<div class="complement">
+<p> La plupart des membres d'un <strong><em class="sigle">RIR</em></strong> agissent en qualité de <strong class="title">local Internet registry</strong>, en abrégé <strong class="title"><em class="sigle">LIR</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Local_Internet_registry" target="_BLANK">W</a>. Ce sont eux qui mènent des <strong class="defin">activités commerciales</strong> en allouant des <strong>adresses <em class="sigle">IP</em></strong> aux clients finaux (les abonnés à l'Internet, qu'ils soient particuliers ou professionnels).  </p>
+
+<div class="expert">
+<p> Par ailleurs, certains <strong><em class="sigle">RIR</em></strong> (<em class="sigle">APNIC</em>, <em class="sigle">LACNIC</em>) comptent parmi leur membres des <strong class="title">national Internet registries</strong>, en abrégé <strong class="title"><em class="sigle">NIR</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Registre_Internet_national" target="_BLANK">W</a>. Ce sont des <strong class="defin">agences étatiques</strong> qui peuvent ainsi exercer une <strong class="cons">coercition</strong> de l'Internet dans leurs pays respectifs. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<h3 id="IPv4depleting"> Épuisement des adresses IPv4 publiques </h3>
+
+
+<div class="complement">
+<p> L'<strong class="specialLB"><em class="sigle">ARIN</em></strong> et le <strong class="specialLB"><em class="sigle">RIPE NCC</em></strong> ont alloués les <strong class="cons">derniers blocs d'adresses IPv4</strong> dont ils disposaient respectivement en <em class="bold">2015</em> <a class="external" href="https://www.arin.net/vault/announcements/2015/20150924.html" target="_BLANK"></a> et <em class="bold">2019</em> <a class="external" href="https://www.ripe.net/publications/news/about-ripe-ncc-and-ripe/the-ripe-ncc-has-run-out-of-ipv4-addresses" target="_BLANK"></a>. Ils gardent cependant en réserve quelques adresses pour les besoins critiques au bon fonctionnement des réseaux (<em class="sigle">DNS</em>, etc.) et pour aider à la migration vers la norme <strong>IPv6</strong>. </p>
+
+<p> Quant aux <strong class="specialLB">autres <em class="sigle">RIR</em></strong>, ils ont <strong class="cons">fortement restreint</strong> leur politique d'attribution (par blocs de masque <code>/22</code> au <strong><em class="sigle">LACNIC</em></strong> <a class="external" href="https://www.lacnic.net/978/1/lacnic/solicitar-ip-y-asn" target="_BLANK"></a> et à l'<strong><em class="sigle">APNIC</em></strong> <a class="external" href="https://www.apnic.net/manage-ip/ipv4-exhaustion/" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Bien qu'il existe des opportunités de récupération de blocs historiquement attribués mais inutilisés, et un marché secondaire de revente, l'<strong class="title">épuisement des adresses IPv4 publiques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/épuisement_des_adresses_IPv4" target="_BLANK">W</a> est devenu <strong class="warning">inéluctable</strong> dans les années 2020. </p>
+
+<p> Et c'est d'ores et déjà une <strong class="warning">réalité tangible</strong> dans les <strong>pays les plus développés</strong>. C'est pourquoi ces derniers se sont engagés depuis longtemps dans la <strong class="defin">migration vers la norme IPv6</strong>. </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> En attendant, certaines <strong class="defin">alternatives</strong> sont envisagées, comme le recours à la <strong>translation d'adresse</strong> dans les <strong>réseaux de collecte des <em class="sigle">FAI</em></strong>, appelée <strong class="title">carrier‑grade NAT</strong>, abrégée <strong class="title"><em class="sigle">CGN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Carrier-grade_NAT" target="_BLANK">W</a>. </p>
+
+<p> Cette technique permet notamment de <strong class="pros">remplacer les adresses publiques</strong> attribuées aux <strong>box Internet</strong> des particuliers par des <strong class="defin">adresses privées</strong>, la <strong class="title">translation d'adresse</strong> étant alors opérée au niveau du <strong>routeur‑passerelle</strong> de jonction entre la boucle locale et le réseau de transport. </p> 	
+
+<p> Néanmoins, cette solution pose les <strong class="cons">mêmes problèmes de compatibilité</strong> avec <strong>certains protocoles</strong> que pour les autres applications des techniques de <em class="sigle">NAT</em> (cf. supra <a class="supra" href="Rc1-3_adressage#NAT"></a>). De surcroît, elle rencontre un <strong class="warning">problème juridique majeur</strong>, car il n'est pas toujours possible de garder la trace de l'adresse <em class="sigle">IP</em> privée qui est à l'origine d'une transmission de donnée. Or en cas d'action illégale (téléchargement non autorisé, attaque, etc.), il faut pouvoir <strong class="defin">identifier la personne responsable</strong>, ce qui est <strong class="pros">beaucoup plus facile</strong> lorsque chaque box est dotée d'une <strong>adresse <em class="sigle">IP</em> publique</strong>, attribuée sur la base d'un abonnement, et donc d'un <strong>souscripteur</strong>. </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="expert">
+<h2 id="ipv6"> Le système d'adressage <em class="mark">IPv6</em> </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="complement">
+<p> Comme exposé supra <a class="supra" href="Rc1-3_adressage#IPv4"></a>, l'<strong class="title">adressage logique</strong> dit « <strong class="title">IPv6</strong> » est un aspect particulier du <strong>protocole <em class="sigle">IP</em></strong> dans sa version <strong>v6</strong> <a class="external" href="https://fr.wikipedia.org/wiki/IPv6" target="_BLANK">W</a>. Cet adressage est principalement défini par la <strong><em class="sigle">RFC 4291</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc4291" target="_BLANK"></a>. </p>
+
+<p> Le <strong class="title">format des adresses IPv6</strong> permet avant tout de <strong class="defin">résoudre définitivement le problème de pénurie</strong> d'adresses publiques en <strong>IPv4</strong>, mais pas seulement. Il est également conçu pour : </p>
+<ul>
+	<li> <strong class="pros">faciliter le compartimentage</strong> de l'<strong>espace d'adressage</strong> (l'ensemble de toutes les adresses) en fonction des besoins – adresses locales, adresses privées, adresses de diffusion, etc. ; le nombre d'adresses disponibles est tellement grand qu'il n'est pas nécessaire d'optimiser l'efficacité du <strong>codage des blocs d'adresses</strong> ;  </li>
+  
+  <li> <strong class="pros">faciliter l'agrégation des routes</strong>, donc réduire la <strong>taille des tables de routage</strong>, et donc diminuer les temps de traitement des routeurs ;  </li>
+
+	<li> <strong class="pros">simplifier le routage <em class="sigle">IP</em></strong> en supprimant a priori la nécessité de recourir aux protocoles <strong>translation d'adresses</strong> et en diminuant les détails codés dans l'en‑tête des paquets ;   </li>
+   
+	<li> <strong class="pros">améliorer la sécurité des transmissions</strong> en termes d'authentification et de confidentialité en intégrant systématiquement du <strong>chiffrement</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> Toutes ces améliorations passent par des <strong class="title">changements conceptuels</strong> qu'il est indispensable d'évoquer dès maintenant pour <strong class="pros">bien comprendre</strong> l'<strong>adressage IPv6</strong>. En particulier, on verra que : </p>
+<ul>
+	<li> la notion de <strong class="cons">masque de (sous‑)réseau</strong> n'existe plus ; elle est <strong>remplacée</strong> par celle de <strong class="specialLB">préfixe</strong> ; </li>
+
+	<li> les notions d'<strong class="cons">adresse de réseau</strong> et d'<strong class="cons">adresse de broadcast</strong> <strong>n'existent plus</strong> ; une <strong class="specialMR">interface</strong> peut donc avoir un <strong>identifiant</strong> dont les bits sont <strong>tous à</strong> <code class="cmd">0</code> ou encore <strong>tous à</strong> <code class="cmd">1</code>.  </li>
+</ul>
+<p> De plus, la <strong class="title">terminologie</strong> évolue. En <strong class="specialO">IPv6</strong> : </p>
+<ul>
+	<li> on ne parle plus d'<strong class="cons">hôte</strong> du réseau mais uniquement d'<strong class="specialMR">interface</strong>. </li>
+
+	<li> pour désigner un <strong class="cons">réseau local</strong>, on emploie préférentiellement le terme de <strong class="defin">site</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="remarques">
+<p class="remarque"> Le <strong>terme</strong> <strong class="title">« site »</strong> a néanmoins posé des <strong class="warning">problèmes</strong> – notamment pour l'emploi des <strong>adresses locales de sites</strong> – car les travaux de l'<strong><em class="sigle">IETF</em></strong> n'ont pas permis de dégager un consensus sur la notion précise de site (cf. notamment la <em class="sigle">RFC 3879</em> <a class="external" href="https://www.rfc-editor.org/rfc/rfc3879" target="_BLANK"></a>). </p>
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4> Transition de l'<em class="mark">IPv4</em> vers l'<em class="mark">IPv6</em></h4>	
+
+
+<p> Engagée depuis 2003, la <strong class="title">transition</strong> de l'<strong>IPv4</strong> vers l'<strong class="specialO">IPv6</strong>  se révèle <strong class="pros">plus lente</strong> qu'annoncée (pour la France, cf. le dernier baromètre annuel publié par l'Arcep <a class="external" href="https://www.arcep.fr/cartes-et-donnees/nos-publications-chiffrees/transition-ipv6/barometre-annuel-de-la-transition-vers-ipv6-en-france.html" target="_BLANK"></a>). On peut conjecturer que la tâche a été sous‑estimée non seulement dans son <strong>ampleur</strong> (le nombre de machines en fonctionnement à configurer est énorme), mais dans sa <strong>difficulté opérationnelle</strong>. En effet, pour être menée à bien, elle nécessite du <strong class="defin">personnel formé</strong> ; sachant la complexité du nouveau format d'adresse et des notions qu'il sous‑tend, un <strong class="warning">effort de formation</strong> considérable est donc requis. Et bien entendu, pour les entreprises du secteur, le coût engendré n'est supportable que s'il est réparti dans le temps…   </p>
+
+<p> Inévitablement, la <strong class="title">coexistence des deux normes</strong> va se prolonger encore nombreuses années, d'autant plus que dans les réseaux locaux, il n'y a pas de pénurie d'adresses et que, face à la difficulté de s'adapter aux nouveautés, « les vieilles habitudes ont la vie dure ». </p>
+
+</div><!-- expert -->
+
+
+
+<h3> Format général d'une adresse IPv6 </h3>
+
+
+
+<div class="important">
+<p> Une <strong class="title">adresse IPv6</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_IPv6" target="_BLANK">W</a> est codée sur <strong class="defin">128 bits</strong>, soit <strong>16 octets</strong>. Cela permet de constituer un <strong class="specialLB">espace d'adressage </strong> de <strong>2<sup>128</sup> adresses</strong>, c'est‑à‑dire environ <strong>3,4 × 10<sup>38</sup></strong>.  </p>
+
+<p> Le format d'<strong class="title">affichage</strong> et de <strong class="title">saisie</strong> d'une telle adresse (cf. comme illustré ci‑dessous) procède par <strong class="defin">notation hexadécimale double‑pointée</strong> en <strong>8 nombres</strong> de <strong>4 digits</strong> <code class="cmd">xxxx</code> – en français, on parle parfois d'« <em>hextet</em> » pour désigner un tel double octet.  </p>
+
+	<img class="top-left" src="../img/IPv6address.png" style="max-width: 800px">
+
+</div><!-- important -->
+
+<div class="complement">
+<p> De plus, pour obtenir une <strong class="title">représentation canonique</strong> en <strong class="specialO">IPv6</strong> (cf. infra <a class="infra" href="Rc1-3_adressage#IPv6abrege"></a>), il est <strong class="pros">recommandé</strong>  d'employer les <strong class="defin">lettres minuscules</strong> pour exprimer les <strong>valeurs spécifiquement hexadécimales</strong> des digits <code class="cmd" style="color:green">a</code> à <code class="cmd" style="color:green">f</code>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p class="square"> Par rapport à la notation décimale pointée employée en <em class="mark">IPv4</em>, le choix de la <strong class="title">notation hexadécimale double‑pointée</strong> n'est <strong>pas un hasard</strong> : </p>
+<ul>
+	<li> le recours à la <strong>base 16</strong> <strong class="pros">optimise le nombre de digits</strong> nécessaires à l'expression des adresses <strong class="specialO">IPv6</strong>, ce qui est bienvenu au regard de leur longueur ;  </li>
+
+	<li> le <strong>séparateur</strong> <code class="cmd">:</code> <strong class="pros">évite toute confusion</strong> avec les adresses <em class="mark">IPv4</em> lors de l'emploi de la <strong>notation abrégée</strong> des adresses <strong class="specialO">IPv6</strong> (cf. infra <a class="infra" href="Rc1-3_adressage#IPv6abrege"></a>). </li>
+</ul>
+
+<p class="square"> En <strong>IPv6</strong>, le <strong class="title">nombre d'adresses</strong> possibles est tellement grand qu'il peut être considéré comme <strong class="pros">illimité</strong>. On pourrait même penser que ce nombre est très largement surdimensionné. En effet, un encodage sur 8 octets aurait été plus que suffisant pour résoudre de le problème de pénuries d'adresses publiques en <em class="mark">IPv4</em> (cela aurait multiplié leur nombre par 4 milliards). </p>
+
+<p> Mais en fait, le choix de la taille d'encodage <strong>16 octets</strong> a été motivé par l'objectif de <strong class="defin">faciliter les algorithmes</strong> de <strong>routage</strong> et de <strong>génération automatique d'adresses</strong>. En particulier, en <strong class="specialO">IPv6</strong>, l'<strong class="specialMR">identifiant d'interface</strong> peut : </p>
+<ul>
+	<li> être généré automatiquement à partir de son adresse <strong><em class="sigle">MAC</em></strong> au format <strong><em class="sigle">EUI‑64</em></strong> ;  </li>
+
+	<li> ou encore <strong>embarquer une adresse IPv4</strong>.  </li>
+</ul>
+</div><!-- expert -->
+
+	
+<h4 id="IPv6abrege"> Notation abrégée d'une adresse IPv6</h4>
+
+
+<div class="important">
+<p> Même avec la notation hexadécimale, la <strong class="specialLB">lecture</strong> et la <strong class="specialLB">saisie</strong> d'une <strong>adresse IPv6</strong> restent <strong class="cons">fastidieuses</strong>. C'est pourquoi on adopte une <strong class="title">notation abrégée</strong> qui <strong class="defin">omet</strong> les <code class="prettyprint lang-c">0</code> <strong class="defin">non‑significatifs</strong>.  </p>
+
+<div class="expert">
+<p> Il peut exister <strong class="cons">plusieurs</strong> <strong class="title">représentations abrégées</strong> possibles d'une <strong>même adresse IPv6</strong>. Néanmoins, il est recommandé d'adopter la <strong class="pros">représentation canonique</strong> définie par la <strong><em class="sigle">RFC 5952</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc5952.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> À partir de sa notation complète, la <strong class="title">notation abrégée</strong> d'une <strong>adresse IPv6</strong> s'obtient en <strong class="specialLB">deux étapes</strong>.</p>	
+<ol class="numbered">
+	<li> Dans tout <strong>nombre de 4 digits</strong> composant l'adresse, tout <code class="prettyprint lang-c">0</code> <strong class="defin">non‑significatif</strong> est <strong class="pros">omis</strong> ; par exemple :  </li>
+  <ul>
+  	<li> <code class="prettyprint lang-c">:06f1:</code> se note simplement <code class="prettyprint lang-c">:6f1:</code> ;  </li>
+  
+  	<li> <code class="prettyprint lang-c">:002a:</code> se note simplement <code class="prettyprint lang-c">:2a:</code> ;  </li>
+
+  	<li> <code class="prettyprint lang-c">:0009:</code> se note simplement <code class="prettyprint lang-c">:9:</code>.  </li>	
+  </ul>
+  <div class="nobullet"> Cette notation est tout à fait <strong class="pros">conforme</strong> à celle employée pour les <strong>nombres entiers usuels</strong>. </div>
+  
+	<li> Si la notation comporte alors <strong class="defin">une séquence de plusieurs nombres zéros</strong> <code class="prettyprint lang-c">:0:</code> alors ces derniers ainsi que leurs <strong>séparateurs intermédiaires</strong> <code class="prettyprint lang-c">:</code> peuvent être <strong class="pros">omis</strong>, c'est‑à‑dire : </li>
+	<ul>
+		<li> <code class="prettyprint lang-c">:0:0:</code> s’abrège <code class="prettyprint lang-c">::</code> ;  </li>
+	
+		<li> <code class="prettyprint lang-c">:0:0:0:</code> s’abrège <code class="prettyprint lang-c">::</code> ;  </li>
+
+		<li> etc.</li>
+	</ul>
+	<div class="nobullet"> sachant que cette abréviation ne peut s'appliquer qu'<strong class="warning">une seule fois</strong>, sinon il serait impossible de reconstituer l'adresse complète à partir de sa notation abrégée. </div>
+  
+	<div class="expert">
+	<div class="nobullet"> En <strong class="title">représentation canonique</strong> : </div>
+  <ul>
+  	<li> Si une adresse présente <strong class="defin">une séquence de plusieurs zéros</strong>, il est <strong class="warning">obligatoire</strong> de l'abréger par <code class="prettyprint lang-c">::</code>. </li>
+  
+  	<li> De surcroît, lorsqu'une adresse présente <strong class="defin">deux séquences</strong> de la sorte, il faut appliquer l'abréviation : </li>
+    <ul>
+    	<li> à <strong>la plus longue</strong> des deux séquences ; </li>
+    
+    	<li> ou <strong>la première dans le sens de lecture</strong> (en partant de la gauche) si les séquences sont de même longueur. </li>
+    </ul>
+  </ul>
+  </div><!-- expert -->
+</ol>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> L'<strong>adresse IPv6</strong> ci‑dessous, déjà partiellement abrégée, qui présente <strong class="defin">deux séquences de zéros</strong> de même longueur : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">3ffe:7ac:<span style="text-decoration: underline;">0:0</span>:1:<span style="text-decoration: underline;">0:0</span>:1</code>
+</span> <br>
+admet la <strong class="title">représentation canonique</strong> suivante : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">3ffe:7ac<span style="text-decoration: underline;">::</span>1:0:0:1</code>
+</span> <br>
+où seule la <strong>première séquence</strong> de zéros a été abrégée par <code class="prettyprint lang-c">::</code>.
+ </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="IPv6prefix"> Structure d'une adresse <em class="mark">IPv6</em>  –  notion de préfixe </h3>
+
+
+
+<p> Comme en <em class="mark">IPv4</em>, une <strong class="defin">adresse IPv6</strong> présente une <strong class="title">structure</strong> avec : </p>
+<ul>
+	<li> des <strong class="specialLB">bits de haut rang</strong> qui sont <strong class="defin">communs</strong> à un <strong>réseau</strong> ou plus généralement un <strong>bloc d'adresses</strong> consécutives ; </li>
+
+	<li> les <strong class="specialN">bits restant</strong> qui sont spécifiques à l'<strong class="specialMR">interface</strong> et éventuellement au <strong class="specialDB">sous‑réseau</strong> qui l'héberge. </li>
+</ul>
+
+<p> Mais contrairement à la norme <em class="mark">IPv4</em>, il n'y a <strong class="warning">pas de notion de masque</strong> en <strong>IPv6</strong>. Elle est remplacée par celle de <strong class="title">préfixe</strong> qui est différente.  </p>	
+
+<div class="important">
+<p> Un <strong class="title">préfixe d'adresse IPv6</strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc4291.html#section-2.3" target="_BLANK"></a> est une <strong>suite de bits de haut rangs</strong> qui sont <strong class="defin">communs à un bloc d'adresses</strong>. Il peut s'exprimer comme un <em class="mark">masque en IPv4</em> avec la convention <em class="sigle">CIDR</em>, c'est‑à‑dire de la forme : <br>
+<span class="inline">
+	<code class="prettyprint"><span class="nocode"><strong>adresse IPv6</strong></span>/<span class="nocode"><strong class="specialLB">n</strong></span></code>
+</span>	<br>
+où <strong class="specialLB">n</strong> est un <strong>nombre de bits de haut rang</strong> qu'on appelle la <strong class="specialLB">longueur</strong> du préfixe. </p>
+
+<p> <em class="remark">Remarque</em> : dans la pratique, il est courant d'assimiler – par <strong class="cons">abus de langage</strong> – un <strong>préfixe</strong> à sa <strong class="specialLB">longueur</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette forme, un <strong class="title">préfixe d'adresse IPv6</strong> sert typiquement à <strong class="defin">extraire</strong> de l'<strong>adresse</strong> son <strong class="specialLB">identifiant de routage</strong> qui est la partie de l'adresse limitée à ses <strong class="specialLB">n</strong> <strong>bits de haut rang</strong> – partie qui est <strong class="defin">commune</strong> à toutes les adresses consécutives dans l'ensemble ainsi désigné. </p>
+
+<p> Mais un tel <strong>préfixe</strong> peut aussi servir à définir un <strong class="title">bloc d'adresses</strong> et, à l'instar de ceux en <em class="mark">IPv4</em>, on trouve des pages web pour les décoder — par exemple, celle‑ci <a class="external" href="https://subnettingpractice.com/ipv6-subnet-calculator.html" target="_BLANK"></a>.  </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="title">préfixe d'adresse IPv6</strong> (ayant appartenu au réseau expérimental <em class="mark">6bone</em> <a class="external" href="https://fr.wikipedia.org/wiki/6bone" target="_BLANK">W</a>, désormais obsolète) ci‑dessous : <br>
+<span class="inline">
+	<code class="cmd lang-c">3ffe:7ac::1:0:0:1/<span style="color:dodgerblue;">48</span></code>
+</span> <br>
+a une <strong class="specialLB">longueur</strong> de <strong class="specialLB">48 bits</strong>. Il permet d'extraire le <strong class="specialLB">préfixe de routage</strong> de l'adresse, à savoir ses 48 bits de haut rang <code class="cmd"><span style="color: dodgerblue;">3ffe</span>:<span style="color: dodgerblue;">7ac</span>:<span style="color: dodgerblue;">0</span></code>. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> La <strong class="title">différence</strong> entre la notion de <strong>préfixe en IPv6</strong> et celle de <strong class="cons">masque en IPv4</strong> peut paraître <strong class="warning">subtile</strong>. Pour bien la comprendre, rappelons le fait qu'un masque, explicité au même format qu'une adresse (sur 32 bits), sert notamment au <strong class="defin">calcul</strong> par opérations logiques bit‑à‑bit de l'<strong>adresse de réseau</strong> ou de <strong>broadcast</strong> (cf. supra <a class="supra" href="Rc1-3_adressage#calculAvecMasque"></a>). </p>
+
+<p> En <strong>IPv6</strong>, ces notions n'existent pas, donc de tels calculs sont inutiles. La connaissance de la <strong class="specialLB">longueur</strong> du préfixe <strong class="pros">suffit</strong> pour extraire l'identifiant du site par une simple opération de <strong>sélection</strong>.  </p>
+</div><!-- remarque -->
+
+
+<h4> Notion d'adresse non spécifiée </h4>
+
+
+<div class="complement">
+<p> Comme en <em class="mark">IPv4</em> avec la notation <code>0.0.0.0</code> (cf. supra <a class="supra" href="Rc1-3_adressage#adressesPriveesSpeciales"></a>), l'<strong>adresse nulle</strong> également notée par le <strong>préfixe</strong> : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">::/128</code>
+</span>	<br>
+exprime une <strong class="title">adresse non spécifiée</strong> qu'on peut trouver comme valeur initiale dans le code source d'un programme de configuration d'interface. </p>
+
+<p> Toutefois, contrairement à la pratique en <em class="mark">IPv4</em>, une telle adresse n'est <strong class="warning">jamais employée</strong> dans un datagramme <strong>IPv6</strong>. En effet, on verra infra que tout système d'exploitation d'une machine doit être capable d'<strong class="pros">auto‑configurer</strong> ses interfaces avec une <strong>adresse de lien local</strong> <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/IPv6LinkLocal"></a>.  </p>
+</div><!-- complement -->
+
+
+<h4 id="defaultRouteIPv6"> Notion de route par défaut </h4>
+
+
+<div class="complement">
+<p> Comme en <em class="mark">IPv4</em> avec la notation <code>0.0.0.0/0</code> (cf. supra <a class="supra" href="Rc1-3_adressage#adressesPriveesSpeciales"></a>), le <strong>préfixe</strong> : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">::/0</code>
+</span>	<br>
+désigne <strong class="defin">toutes les adresses possibles</strong> de l'espace <strong>IPv6</strong>. Ce préfixe est utilisé dans les tables de routage des machines pour désigner la <strong class="title">route par défaut</strong> <a class="external" href="https://en.wikipedia.org/wiki/Default_route" target="_BLANK">W</a>.  </p>
+</div><!-- complement -->
+
+
+
+<h3> Type et portée d'une adresse IPv6 </h3>
+
+
+
+<div class="important">
+<p> Comme en <em class="mark">IPv4</em>, il existe <strong class="title">différentes types d'adresses IPv6</strong>, que l'on peut classifier selon deux aspects fondamentaux :  </p>
+<ol class="numbered">
+	<li> Le mode de <strong class="defin">diffusion</strong>. Il peut être <strong>unicast</strong>, <strong>anycast</strong> ou <strong>multicast</strong> (cf. chap. R2‑II <a class="previous" href="Rc1-2_architecture.html#diffusion" target="_BLANK"></a>) et distingue ainsi les trois principales <strong class="defin">catégories</strong> d'adresses.  </li>
+
+	<li> La <strong class="defin">portée</strong> – en anglais, <strong>scope</strong>. C'est l'<strong>espace de validité</strong> dans le réseau, qui peut être limité par les routeurs. Typiquement, on a des adresses : </li>
+	<ul>
+		<li> <strong>globales</strong>, c'est‑à‑dire <strong class="pros">routable</strong> sur l'Internet ; </li>
+	
+		<li> <strong>locales</strong>, c'est‑à‑dire <strong class="cons">non‑routable</strong> ou seulement sur les routeurs du réseau local. </li>
+	</ul>
+</ol>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/IPv6highOrderWord.png" width="250px" style="padding-top: 0.0em">
+<p> Grossièrement, on peut repérer le <strong class="title">type</strong> d'une <strong>adresse IPv6</strong> par son <strong class="specialO">1<sup>er</sup> hextet</strong> (mot des 16 bits de haut rang) dans le sens de lecture. Les valeurs remarquables listées dans le tableau ci‑dessous sont à connaître. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> 1<sup>er</sup> hextet </th>  
+    <th> Type d'adresse <em class="mark">IPv6</em>  </th>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">00xx</code> </td>
+    <td><strong>spéciales</strong> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">2xxx</code> à <code class="cmd">3xxx</code> </td>
+    <td> <strong>anycast</strong> ou <strong>unicast</strong> globales </td>
+  </tr> 
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">fcxx</code> à <code class="cmd">fdxx</code> </td>
+    <td>  <strong>unicast locales</strong> (non routables sur l'Internet) </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">fe8x</code> à <code class="cmd">febx</code> </td>
+    <td> <strong>unicast</strong> de <strong>lien local</strong> (non routables) </td>
+  </tr> 
+  <tr>
+    <td style="text-align: center;"> <code class="cmd">ffxx</code> </td>
+    <td> <strong>multicast</strong> </td>
+  </tr> 
+</table>
+</div><!-- overflow -->
+<p> Les <strong class="title">autres valeurs</strong> pour le <strong class="specialO">1<sup>er</sup> hextet</strong> – c'est‑à‑dire <code class="cmd">1xxx</code> et de <code class="cmd">4xxx</code> à <code class="cmd">fbxx</code> – correspondent à des adresses qui ne sont <strong>pas attribuées</strong>. Elles sont réservées pour des usages ultérieurs <a class="external" href="https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xhtml" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+
+<h3> Les adresses <em class="mark">IPv6</em> <em class="english">unicast</em>   –  Généralités</h3>
+
+
+
+<div class="important">
+<p> Une <strong class="title">adresse IPv6 unicast</strong> est attribuée à une <strong class="defin">interface réseau</strong> pour lui permettre d'<strong>émettre</strong> et <strong>recevoir</strong> des <strong>datagrammes IPv6</strong> à titre individuel dans sa portée. </p>
+
+<p>	Comme en <em class="mark">IPv4</em>, le bon acheminement des datagrammes repose sur le <strong class="title">principe d'unicité</strong> d'une adresse dans sa <strong class="defin">portée</strong> : une <strong>même adresse</strong> ne doit <strong class="warning">pas</strong> être attribuée à <strong class="cons">deux interfaces différentes</strong>.   </p>
+
+<p> En revanche, une <strong class="defin">même interface</strong> <em class="remark">peut</em> se voir attribuer <strong class="warning">plusieurs adresses IPv6</strong>, chacune de <strong>différent type</strong>, selon les besoins en communication de la machine qui l'héberge. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">différents types</strong> d'<strong>adresse IPv6 unicast</strong> qu'une interface peut se voir attribuer sont :  </p>
+<ul>
+	<li> les <strong class="specialLB">adresses globales</strong>, qui sont <strong class="defin">routables sans restriction</strong> sur <strong>tout l'Internet</strong> et dans les <strong>réseaux locaux privés</strong> ;  </li>
+
+	<li> les <strong class="specialLB">adresses locales uniques</strong>, qui ne sont en principe <strong>routables</strong> <strong class="warning">seulement</strong> dans un <strong>réseau local privé</strong> ;   </li>
+
+	<li> les <strong class="specialLB">adresses de lien local</strong>, qui ne sont <strong class="warning">pas routables</strong> et ont donc une portée réduite au lien local auquel l'interface est raccordée ;   </li>
+
+	<li> l'<strong class="specialLB">adresse de rebouclage</strong> – en anglais, <strong>loopback address</strong>, dont la portée est limitée à la <strong>machine</strong> qui héberge l'interface ; elle est désignée par le <strong>préfixe</strong> : <br>
+	<span class="inline">
+		<code class="prettyprint lang-c">::1/128</code>
+	</span> <br> 
+  correspond à l'adresse <code>127.0.0.1</code> en <em class="mark">IPv4</em> (cf. supra <a class="supra" href="Rc1-3_adressage#adressesPriveesSpeciales"></a>. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h4> Structure d'une adresse <em class="mark">IPv6</em> <em class="english">unicast</em> </h4>
+
+
+<div class="important">
+<p> Hormis l'adresse de rebouclage, toute <strong class="title">adresse IPv6 unicast</strong> présente systématiquement un <strong class="specialMR">identifiant d'interface</strong> de <strong>64 bits</strong> – les derniers dans le sens de lecture de l'adresse. </p>
+
+<p> Le <strong class="specialLB">préfixe de routage</strong> – encore appelé <strong class="specialLB">préfixe global</strong> – constituant les autres <strong>64 bits</strong> présente une <strong>sous‑structure spécifique</strong> pour chaque type d'adresse <em class="english">unicast</em>. </p>  
+
+	<img class="top-left" src="../img/IPv6unicast.png" style="max-width: 800px">
+</div><!-- important -->
+
+<div class="complement">
+<p> Un <strong class="specialLB">préfixe global</strong> de longueur <code class="prettyprint lang-c">/64</code> définit un bloc de <strong>18 milliards de milliards d'adresses</strong> consécutives. C'est la taille minimale de bloc d'adresses qui peut être alloué à une organisation pour configurer ses machines. Bien évidemment, une telle taille est <strong class="pros">hyper surdimensionnée</strong> et seule une infime minorité d'adresses seront effectivement alloués (aucune organisation ne dispose de ne serait‑ce qu'un milliard de machines) dans un bloc en <code class="prettyprint lang-c">/64</code>. </p>
+</div><!-- complement -->
+
+
+<h3 id="IPv6GlobalUnique"> Adresses globales <em class="mark">unicast</em> </h3>
+
+
+<div class="important">
+<p> Une <strong class="title">adresse globale unicast</strong> – en anglais, <strong>global unicast address</strong>, abrégé <strong><em class="sigle">GUA</em></strong> – est une <strong>adresse IPv6</strong> <strong class="pros">routable partout</strong> sur l'<strong>Internet</strong> et dans les <strong>réseaux privés</strong>. </p>
+
+<p> Elle peut être allouée à n'importe quelle interface de machine opérant en <strong>IPv6</strong> <a class="external" href="https://en.wikipedia.org/wiki/IPv6_address#General_allocation" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+
+<h4> Allocation des adresses globales </h4>
+
+
+<div class="complement" style="padding-top: 0em">
+<p class="square"> Par décision de l'<strong><em class="sigle">IANA</em></strong> (<em class="english">Internet assigned numbers authority</em> – cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#ICANN" target="_BLANK"></a>), une <strong class="title">adresse IPv6 globale</strong> appartient nécessairement au <strong class="specialLB">bloc</strong> <code class="prettyprint lang-c">2000::/3</code>, lequel constitue 1/8<sup>e</sup> de l'espace total d'adressage <strong>IPv6</strong>. Toutefois, pour simplifier les tables de routage, seule une (grande) <strong>partie du bloc</strong> : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">2000::/4</code> 
+</span> <br>
+est <strong class="defin">allouable</strong> – précisément jusqu'au préfixe <code>2cff:ffff:ffff:ffff/64</code>. Cette partie compte quand même près de 1 milliard de milliards de <strong>blocs « unitaires »</strong> en <code class="prettyprint lang-c">/64</code> (9,3 × 10<sup>17</sup>). Quant aux blocs : <br>
+<span class="inline">
+	<code class="grey">2d00::/8</code>,  <code class="grey">2e00::/7</code>  et  <code class="grey">3000::/4</code>  
+</span> <br>
+soit tous les préfixes de <code>2e00::/64</code> à <code>3fff:ffff:ffff:ffff/64</code>, ils sont <strong class="warning">réservés</strong> pour d'éventuelles allocations dans un futur (très) lointain. </p>
+
+
+<p> Ce <strong class="title">bloc partiel</strong> <code class="prettyprint lang-c">2000::/4</code> est alloué par l'<strong><em class="sigle">IANA</em></strong> aux cinq <strong><em class="sigle">RIR</em></strong> (<em class="english">regional Internet registries</em> – cf. supra <a class="supra" href="Rc1-3_adressage#RIR" ></a>) essentiellement par <strong>blocs</strong> en <code class="prettyprint lang-c">/12</code> (4,5 millions de milliards de blocs en <code class="prettyprint lang-c">/64</code>) et en <code class="prettyprint lang-c">/23</code> (environ 2200 milliards de <code class="prettyprint lang-c">/64</code>), mais aussi parfois en <code class="prettyprint lang-c">/18</code>, <code class="prettyprint lang-c">/19</code>, etc. Typiquement, on pourrait segmenter le bloc <code class="prettyprint lang-c">2000::/4</code> en 2<sup>19</sup> ≈ 500&#8239;000 blocs en <code class="prettyprint lang-c">/23</code> – soit environ 100&#8239;000 pour chaque <strong><em class="sigle">RIR</em></strong>, ce qui est encore une fois <strong class="pros">très largement surdimensionné</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples" style="display: inline-block;">
+	<img class="top-right" src="../img/RIPE-NCClogo2.png" width="100px" style="padding-top: 0.2em">
+<p class="exemple"> Le <strong><em class="sigle">RIR</em></strong> <strong class="title"><em class="sigle">RIPE NCC</em></strong> (<em class="mark">réseaux IP européens - network coordination centre</em>) s'est vu successivement allouer par l'<strong><em class="sigle">IANA</em></strong> les blocs : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">2001:0600::/23</code> en 1999 ; </li>
+
+	<li> <code class="prettyprint lang-c">2001:0800::/22</code> en 2002 ; </li>
+
+	<li> <code class="prettyprint lang-c">2001:1400::/22</code> en 2003 (début de la migration vers <em class="mark">IPv6</em>) ; </li>
+
+	<li> <code class="prettyprint lang-c">2001:1a00::/23</code>, <code class="prettyprint lang-c">2001:1c00::/22</code>, <code class="prettyprint lang-c">2001:2000::/19</code>, <code class="prettyprint lang-c">2001:4000::/23</code>, <code class="prettyprint lang-c">2001:4600::/23</code>, <code class="prettyprint lang-c">2001:4c00::/23</code>, <code class="prettyprint lang-c">2001:5000::/20</code> en 2004 ; </li>
+
+  <li> <code class="prettyprint lang-c">2003::/18</code> en 2005 ; </li>
+
+  <li> <code class="prettyprint lang-c">2a00::/12</code> en 2006 ; </li>
+
+  <li> <code class="prettyprint lang-c">2a10::/12</code> en 2019. </li>
+</ul>
+<p> Cela représente l'équivalent d'environ <strong>4200 blocs</strong> en <code class="prettyprint lang-c">/23</code> qui ont permis de couvrir largement tous les besoins d'allocation du <code class="prettyprint lang-c"><em class="sigle">RIPE NCC</em></code>. </p>
+</div><!-- exemple -->
+
+<p> On peut consulter le détail de ces allocations sur cette page web de l'<strong><em class="sigle">IANA</em></strong> <a class="external" href="http://www.iana.org/assignments/ipv6-unicast-address-assignments/ipv6-unicast-address-assignments.xhtml" target="_BLANK"></a>. </p>
+
+
+<div class="complement" style="padding-top: 0em">
+<p class="square"> En segmentant leurs blocs, les <strong class="title"><em class="sigle">RIR</em></strong> peuvent allouer à leurs membres – des <strong><em class="sigle">LIR</em></strong> (<em class="english">local Internet registries</em>) ou des <strong><em class="sigle">NIR</em></strong> (<em class="english">national Internet registries</em>), cf. supra <a class="supra" href="Rc1-3_adressage#LIR_NIR"></a> – des <strong>blocs</strong> en <code class="prettyprint lang-c">/19</code> à <code class="prettyprint lang-c">/32</code>, selon les besoins. Et pour fixer les idées, un bloc en <code class="prettyprint lang-c">/23</code> se segmente en 2<sup>9</sup> ≈ 512 blocs en <code class="prettyprint lang-c">/32</code>. </p>
+</div><!-- complement -->
+
+<div class="exemples" style="display: inline-block;">
+	<img class="top-right" src="../img/RIPE-NCClogo2.png" width="100px" style="padding-top: 0.2em">
+<p class="exemple"> Avec l'équivalent des <strong>4200 blocs</strong> en <code class="prettyprint lang-c">/23</code> alloués par l'<em class="sigle">IANA</em>, le <strong class="title"><em class="sigle">RIPE NCC</em></strong> dispose d'environ <strong>2 millions de blocs</strong> en <code class="prettyprint lang-c">/32</code> à distribuer à ses quelques <strong>20&#8239;000 membres</strong>. En moyenne, cela ferait environ une centaine de blocs par membre, mais bien évidemment, tous n'ont pas les mêmes besoins. En effet, on ne peut pas comparer un opérateur de transport et fournisseur d'accès opérant à l'échelle nationale d'un pays et une petite société de service informatique aux entreprises. </p>
+
+<p> La <strong class="title">politique d'allocation</strong> des <strong>adresses IPv6</strong> du <strong><em class="sigle">RIPE NCC</em></strong> peut être consultée au lien suivant <a class="external" href="https://www.ripe.net/publications/docs/ripe-738" target="_BLANK"></a>. </p>
+</div><!-- exemple -->
+
+<div class="complement" style="padding-top: 0em">
+<p class="square"> Au bout de la chaîne d'allocation, un <strong><em class="sigle">LIR</em></strong> peut exploiter les <strong>blocs d'adresses IPv6</strong> dont il dispose pour : </p>
+<ul>
+	<li> la <strong class="defin">configuration des interfaces</strong> des routeurs et des serveurs de ses <strong>infrastructures de transport</strong> ; </li>
+
+	<li> la <strong class="defin">allocation d'adresses</strong> à ses <strong>clients</strong>. </li>
+</ul>
+
+<p> En règle générale, l'<strong class="title">allocation des adresses IPv6</strong> aux <strong>clients des <em class="sigle">LIR</em></strong> – entreprises, collectivités, associations, particuliers – procède : </p>
+<ul>
+	<li> par <strong>blocs</strong> en <code class="prettyprint lang-c">/48</code>, chacun pouvant être segmenté en <strong>65&#8239;536 blocs</strong> en <code class="prettyprint lang-c">/64</code> pour constituer autant de <strong>sous‑réseaux</strong> ; c'est la solution adoptée pour une grande organisation (entreprise, ministère,  ; </li>
+
+	<li> par <strong>blocs</strong> en <code class="prettyprint lang-c">/56</code>, chacun pouvant être segmenté en <strong>256 blocs</strong> en <code class="prettyprint lang-c">/64</code> pour constituer autant de sous‑réseaux ; c'est la solution adoptée pour une petite organisation (<em class="sigle">PME</em>, mairie de communes moyennes, etc.) ; </li>
+
+	<li> par <strong>blocs</strong> « unitaires » en <code class="prettyprint lang-c">/64</code> pour les particuliers (via une box Internet) ; bien entendu, dans une <strong>boucle locale</strong>, pour <strong class="pros">simplifier les tables de routage</strong>, le fournisseur d'accès alloue les préfixes <code class="prettyprint lang-c">/64</code> issus d'un même bloc de préfixe moins long.   </li>
+</ul>
+
+<p> sachant qu'un seul <strong>bloc</strong> en <code class="prettyprint lang-c">/32</code> se segmente : </p>
+<ul>
+	<li> <strong>65&#8239;536 blocs</strong> en <code class="prettyprint lang-c">/48</code> ;  </li>
+
+	<li> <strong>16 millions de blocs</strong> en <code class="prettyprint lang-c">/56</code> ;  </li>
+
+	<li> <strong>4 milliards de blocs</strong> en <code class="prettyprint lang-c">/64</code>.  </li>
+</ul>
+<p> Encore une fois, on peut constater l'<strong class="pros">hyper surdimensionnement</strong> de l'<strong>espace d'adressage IPv6</strong> au regard des besoins, même dans les pays les plus développés.   </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+
+<ol class="numbered">
+	  <img class="top-right" src="../img/boxFree.png" width="200px" style="padding-top: 0.8em">
+	<li> Dans un <strong>réseau domestique</strong> dont le <strong><em class="sigle">FAI</em></strong> opère en <strong>IPv6</strong>, la <strong class="defin">box Internet</strong> diffuse aux machines connectées le <strong class="specialLB">préfixe</strong> <code class="prettyprint lang-c">/64</code> qui lui est alloué. </li>
+
+	<div class="nobullet"> Comme pour une adresse de <em class="mark">lien local</em> (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/IPv6LinkLocal"></a>), chaque machine reliée à la box peut alors disposer automatiquement de sa propre <strong class="title">adresse globale unicast</strong> avec ce préfixe et un <strong class="specialMR">identifiant</strong> généré : </div>
+	<ul>
+	<li> soit de façon <strong>aléatoire</strong> (c'est la solution maintenant adoptée pour éviter les pistages) ;  </li>
+
+	<li> soit à partir de son adresse <strong><em class="sigle">MAC</em></strong>, mis au format <strong><em class="sigle">EUI‑64</em></strong>. </li>
+	</ul>
+
+	<li> Dans un <strong><em class="sigle">LAN</em></strong>, l'administrateur réseau disposant d'un <strong class="title">bloc d'adresses</strong> en <code class="prettyprint lang-c">/48</code> ou en <code class="prettyprint lang-c">/56</code> peut configurer chaque interface de machine soit par une procédure automatique comme dans un réseau domestique, soit « manuellement », conformément à un <strong class="defin">plan d'adressage</strong>.  </li>
+</ol>
+</div><!-- exemple -->
+
+<div class="important">
+<p> Plus généralement, on peut donc considérer qu'une <strong class="title">adresse globale unicast</strong> présente typiquement la <strong class="defin">structure</strong> suivante :  </p>
+	<img class="top-left" src="../img/IPv6_GUA.png" style="max-width: 800px">
+<p> où l'on peut distinguer : </p>
+<ul>
+	<li> le <strong class="specialLB">préfixe</strong> dit <strong class="specialLB">de site</strong> (ou <strong class="specialLB">net identifier</strong>) en <code class="prettyprint lang-c">/48</code> qui suffit pour router depuis l'Internet tous les datagrammes à destination des machines du <strong><em class="sigle">LAN</em></strong> ; </li>
+
+	<li> le <strong class="specialLB">préfixe global</strong> en <code class="prettyprint lang-c">/64</code> (qui inclut le <strong class="specialDB">subnet identifier</strong>) à employer dans les tables de routage des routeurs internes au <strong><em class="sigle">LAN</em></strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="expert">
+<h4> Adresses globales spéciales </h4>
+
+
+<p> Dans le bloc <code class="prettyprint lang-c">2000::/4</code>, il existe certains <strong class="defin">blocs réservés</strong> pour des <strong class="title">usages spéciaux</strong>. Les cas mentionnés ci‑dessous ne sont pas exhaustifs.  </p>
+<ul>
+	<li> Le bloc <code class="prettyprint lang-c">2001:678::/29</code> est réservé par le <strong><em class="sigle">RIPE NCC</em></strong> pour allouer directement des <strong class="defin">adresses indépendantes de tout <em class="sigle">FAI</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Provider-independent_address_space" target="_BLANK">W</a> et <a class="external" href="https://www.ripe.net/manage-ips-and-asns/ipv6/request-ipv6/how-to-request-an-ipv6-pi-assignment" target="_BLANK"></a>.   </li>
+
+	<li> le bloc <code class="prettyprint lang-c">2001:7f8::/29</code> est réservé par le <strong><em class="sigle">RIPE NCC</em></strong> pour configurer les interfaces des <strong class="defin">serveurs de noms</strong> à la <strong>racine du <em class="sigle">DNS</em></strong> (cf. chap. R2‑I <a class="next" href="../R2-Applications/Rc2-1_dns_url.html#nameServers" target="_BLANK"></a> et <a class="external" href="Rc1-3_adressage" target="_BLANK"></a>). </li>
+</ul>
+
+</div><!-- expert -->
+
+
+<h3 id="IPv6LocalUnique"> Adresses locales uniques </h3>
+
+
+<div class="important">
+<p> Même s'il n'y a <strong class="pros">aucune pénurie</strong> envisageable d'adresses <strong class="specialO">IPv6</strong>, la norme définit également des <strong class="defin">adresses non routables sur l'Internet</strong> mais <strong class="defin">routables localement</strong>, similaires aux <strong>adresses privées</strong> d'usage général en <em class="mark">IPv4</em>. Elles sont appelées <strong class="title">adresses locales uniques</strong> <a class="external" href="https://en.wikipedia.org/wiki/Unique_local_address" target="_BLANK">W</a> – en anglais, <strong>unique local addresses</strong>, abrégé <strong><em class="sigle">ULA</em></strong> <a class="external" href="Rc1-3_adressage" target="_BLANK"></a> – et sont définies par la <strong><em class="sigle">RFC 4193</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc4193" target="_BLANK"></a>. </p>
+
+<p> Techniquement, une telle adresse doit être issue du <strong class="specialLB">bloc</strong> <code class="prettyprint lang-c">fd00::/8</code> et présenter, en plus des 8 bits du préfixe <code>fd</code> imposé par l'<strong><em class="sigle">IANA</em></strong>, un complément de <strong class="defin">40 bits aléatoires</strong> pour former un <strong class="specialLB">préfixe de site</strong> en <code class="prettyprint lang-c">/48</code> a priori unique sur l'Internet. </p>
+
+	<img class="top-left" src="../img/IPv6_ULA.png" style="max-width: 800px">
+
+<p> Les <strong class="specialDB">16 bits</strong> restant du préfixe global en <code class="prettyprint lang-c">/64</code> ainsi que ceux de l'identifiant d'interface sont laissés à la <strong class="defin">liberté de l'administrateur</strong> du réseau. </p>
+</div><!-- important -->
+
+
+
+<div class="complement" style="padding-top: 0em">
+
+<div class="expert">
+<p class="square" > En fait, cette notion a été introduite dès 2003, dans la <strong><em class="sigle">RFC 3513</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc3513#section-2.5.6" target="_BLANK"></a> sous l'appellation d'<strong class="title">adresse locale de site</strong>, définie dans le <strong class="specialLB">bloc</strong> <code class="prettyprint lang-c">fc00::/7</code>. La motivation principale était le fait de pouvoir instituer du <strong>cloisonnement</strong> dans un réseau local <em class="mark">IPv6</em>, en rendant certaines interfaces accessibles uniquement en interne. </p>
+
+<p> Mais le concept de « <strong class="defin">site</strong> » n'ayant pu faire l'objet d'une définition consensuelle, la notion d'<strong class="title">adresse locale de site</strong> a été rendue <strong class="cons">obsolète</strong> par la <strong><em class="sigle">RFC 3879</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc3879" target="_BLANK"></a> et remplacée par celle d'<strong class="specialLB">adresse locale unique</strong>, reformalisée en 2005 dans la <strong><em class="sigle">RFC 4193</em></strong>. Le bloc <code class="prettyprint lang-c">fc00::/8</code> qui lui seul avait été exploité pour les adresses locales de sites est maintenant réservé et donc inexploitable. </p>
+</div><!-- expert -->
+
+<p class="square"> En principe, une <strong class="title">adresse locale unique</strong> est <strong class="defin">routable seulement dans le réseau local</strong> où est hébergée l'interface qui la porte. Mais dans la pratique, tout <strong class="specialDGr">routeur passerelle</strong> peut router une telle adresse si sa table de routage est paramétrée comme il faut. À partir du moment où le <strong class="specialLB">préfixe de site</strong> de l'adresse est bien <strong class="defin">aléatoire</strong>, il n'y a a priori <strong class="pros">pas de conflit</strong> avec une autre adresse locale unique de n'importe quel autre site. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/IPv6lanRegrouping.png" width="300px" style="padding-top: 0.8em">
+<p> Ainsi, il est possible de <strong class="title">réunir deux <em class="sigle">LAN</em></strong> via un routeur passerelle <strong class="pros">sans changer leurs plans d'adressage</strong>. A priori, une telle opération n'est <strong class="cons">pas faisable en IPv4</strong> : on aurait forcément des conflits entre les différentes adresses privées employées de part et d'autre. </p>
+</div><!-- display -->
+
+<p> Par ailleurs, une interface peut employer une <strong>adresse locale unique</strong>  pour <strong class="title">accéder à l'Internet</strong>, à condition que le <strong class="specialDGr">routeur passerelle</strong> dédié à cet accès mette en œuvre un protocole de <strong class="defin">translation d'adresses IPv6</strong> – <strong><em class="sigle">NAT66</em></strong> ou <strong><em class="sigle">NPTv6</em></strong>. En effet, les tables de routage des routeurs de l'Internet excluent les adresses locales uniques. </p>
+
+<p class="square"> La principale raison pour laquelle un administrateur de <strong><em class="sigle">LAN</em></strong> préfère allouer aux interfaces des <strong>adresses locales</strong> plutôt que des adresses globales est l'<strong class="pros">indépendance aux <em class="sigle">FAI</em></strong> qu'elles confèrent. En effet, si une organisation décide de <strong class="title">changer de <em class="sigle">FAI</em></strong>, l'administrateur est obligé de <strong class="specialLB">modifier</strong> le <strong class="specialLB">préfixe de site</strong> pour toutes les adresses globales qu'elle utilise. </p>
+
+<p> En optant pour des <strong>adresses locales</strong>, un <strong class="title">changement de <em class="sigle">FAI</em></strong> est beaucoup plus simple à gérer : il suffit seulement de modifier le paramétrage des <strong class="specialDGr">routeurs passerelles</strong> qui mettent en œuvre les protocoles de translation d'adresse. </p>
+</div><!-- complement -->
+
+
+
+
+
+<h4 id="IPv6LinkLocal"> Adresses de lien local </h4>
+
+
+<div class="important">
+<p> En <strong class="specialO">IPv6</strong>, <strong class="defin">toute interface</strong> s'attribue <strong class="pros">automatiquement</strong> une <strong class="title">adresse de lien local</strong> – en anglais, <strong>link‑local address</strong> <a class="external" href="https://en.wikipedia.org/wiki/Link-local_address" target="_BLANK">W</a> avec : </p>
+<ul>
+	<li> un <strong class="specialLB">préfixe</strong> <strong>commun</strong> <code class="cmd"><span style="color: dodgerblue;">fe80</span>::/64</code>, c'est‑à‑dire  <code class="cmd"><span style="color: dodgerblue;">fe80</span>:<span style="color: dodgerblue;"><span style="color: dodgerblue;">0</span></span>:<span style="color: dodgerblue;">0</span>:<span style="color: dodgerblue;">0</span></code> ;  </li>
+
+	<li> un <strong class="specialMR">identifiant d'interface</strong> qui peut être :  </li>
+	<ul>
+		<li> soit généré à partir de son <strong>adresse <em class="sigle">MAC</em></strong> au format <strong class="defin"><em class="sigle">EUI‑64</em></strong> (cf. ci‑après), ce qui garantit son unicité ;  </li>
+	
+		<li> soit <strong class="defin">généré aléatoirement</strong> pour des raisons de confidentialité – la probabilité que deux interfaces génèrent un même identifiant étant infime. </li>
+	</ul>
+</ul>
+<p> Cette <strong>auto‑configuration</strong> intervient <strong class="pros">dès le démarrage</strong> de l'interface, et non <strong class="warning">pas</strong> comme en <em class="mark">IPv4</em> à la suite d'un échec du protocole <em class="sigle">DHCP</em> (cf. chap. R2‑II <a class="next" href="../R2-Applications/Rc2-2_dhcp.html#APIPA" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complement" style="padding-top: 0em">
+<p class="square"> Le fait que le <strong class="specialLB">préfixe</strong> soit <strong>commun</strong> à toutes les <strong>adresses de lien local</strong> fait que ces dernières ne sont <strong class="warning">pas routables</strong>. En effet, en <strong class="specialO">IPv6</strong>, c'est exclusivement le préfixe des adresses qui est enregistré dans les table de routage pour déterminer la route des paquets de données à transporter. </p>
+
+<p> Une telle adresse permet donc à l'interface que seulement communiquer sur son <strong class="title">lien local</strong>, c'est‑à‑dire les machines qui sont reliées à elles exclusivement par des <strong>commutateurs</strong> (cf. chap. R1‑II <a class="previous" href="Rc1-2_architecture.html#link‑local" target="_BLANK"></a>). </p>
+
+<p class="square"> L'<strong class="specialMR">identifiant d'interface</strong> au <strong class="title">format <em class="sigle">EUI‑64</em></strong> est généré à partir l'<strong>adresse <em class="sigle">MAC</em></strong> de l'interface au format <strong><em class="sigle">EUI‑48</em></strong> via le procédé suivant :  </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/EUI-64.png" width="400px" style="padding-top: 0.0em">
+<ul>
+	<li> le <strong>bit <em class="sigle">U/L</em></strong> de l'<strong class="specialLP"><em class="sigle">OUI</em></strong> est mis à <code class="prettyprint lang-c">1</code>, pour signifier qu'il s'agit d'un identifiant <strong class="defin">administré localement</strong> (cf. supra <a class="supra" href="Rc1-3_adressage#detailOUI"></a>) ;  </li>
+
+	<li> les <strong>6 octets</strong> du format <strong><em class="sigle">EUI‑48</em></strong> sont alors répartis sur <strong class="defin">8 octets</strong> en séparant l'<strong class="specialLP"><em class="sigle">OUI</em></strong> et le <strong class="specialDR"><em class="sigle">NIC</em></strong> par la séquence de deux octets <code class="prettyprint">fffe</code>, comme illustré sur la figure ci‑contre. </li>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Sur un <em class="mark">PC</em> doté d'un système <strong class="Mint">Linux Mint</strong> et d'une <strong>interface réseau Ethernet</strong>, on obtient son <strong class="title">adresse IPv6 de lien local</strong> via la commande : <br>
+<span class="inline">
+	<code class="displayDark"><span class="displayDarkGreen">ip</span> a <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">grep</span> <span class="displayDarkRed">-E</span> 'inet6.*link'</code>
+</span> <br> et on obtient une sortie comme par exemple : <br>
+<span class="inline">
+	<code class="displayDark">    inet6 <span style="color: limegreen; font-weight: bold;">fe80::82ff:3522:76c1:db1f/64</span> scope link noprefixroute</code>
+	</span> </p>
+
+<p> On peut noter que dans cette adresse, l'<strong class="title"><em class="sigle">EUI‑64</em></strong> <code class="cmd">82ff:3522:76c1:db1f</code> a été <strong class="defin">généré aléatoirement</strong> puisqu'il ne présente <strong>pas</strong> le motif central <code>ff:fe</code>. </p>
+</div><!-- exemple -->
+
+
+<!--
+<h3> Les adresses <em class="mark">IPv6</em> <em class="english">multicast</em> </h3>
+
+
+
+
+
+
+
+<h3> Les adresses <em class="mark">IPv6</em> <em class="english">anycast</em> </h3>
+
+
+<h3> Implémentation d'une adresse IPv6 en langage C </h3>
+
+cf. /mnt/BLT/SOURCES/SNIR/C_prog/IPv6
+-->
+
+</div><!-- expert -->
+
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

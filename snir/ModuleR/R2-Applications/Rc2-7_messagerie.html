@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="2"
+	data-pagenumber="VII"
+	data-pageState="travaux"
+	data-pageheadtitle="Services messagerie"
+	data-pagefulltitle="Les services de messagerie"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+
+
+<p class="square"> Les <strong class="title">services de messagerie</strong> font partie des <strong>applications les plus anciennes et les plus utilisées</strong> de l'Internet, et il en existe une <strong class="defin">grande diversité</strong>. </p>
+
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoMail.png" width="150px" style="margin-top: 0.5em">
+	<li> Principalement, on a le service de <strong class="specialLB">courrier électronique</strong> ou <strong class="specialLB">courriel</strong>  <a class="external" href="https://fr.wikipedia.org/wiki/Courrier_éectronique" target="_BLANK">W</a>, en anglais, <strong>e‑mail</strong>, abréviation de <em class="english">electronic mail</em>, dont la francisation <em>mel</em> – pour « message électronique » – n'a pas vraiment réussi à concurrencer l'anglicisme direct. </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/logoIM.png" width="150px" style="margin-top: 0.5em">
+	<li>  Très largement utilisés également, mais d'usage moins formel, on trouve les services de <strong class="specialLB">messagerie instantanée</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Messagerie_instantanée" target="_BLANK">W</a>  – en anglais, <strong>instant messaging</strong> abrégée <strong><em class="sigle">IM</em></strong>. Plus anciens qu'on pourrait le penser (ils sont l'héritage de la commande <em>talk</em> <a class="external" href="https://en.wikipedia.org/wiki/Talk_(software)" target="_BLANK">W</a> du système d'exploitation <em class="mark">Unix</em>), ces services reposent sur des <strong class="defin">architectures matérielles et logicielles différentes</strong> de celles du courriel. Ils ne seront <strong>pas abordés</strong> dans ce chapitre. </li>
+  </div><!-- display -->
+</ul>
+
+
+
+<p class="square"> Comme le web, le <strong class="title">courriel</strong> est une <strong>application</strong> opérant sur les réseaux, <strong class="defin">massivement utilisée</strong> par le grand public, mais dont la <strong class="warning">complexité</strong> est souvent <strong class="cons">méconnue</strong>. Cette complexité s'est accentuée ces dix dernières années avec l'essor de la <strong>mobilité</strong> (ordinateurs portables, smartphones…) qui a multiplié le nombre de clients par utilisateur et fait émerger le besoin pour chaque utilisateur de « dématérialiser » le stockage des courriels. </p>
+
+<p> Pour un technicien en informatique, une <strong class="pros">bonne connaissance</strong> du service de messagerie est <strong class="warning">indispensable</strong>. Dans cet <strong class="title">objectif</strong> général, ce chapitre propose dans l'ordre : </p>
+<ul>
+	<li> une <strong class="specialLB">présentation générale</strong> qui doit suffire pour effectuer des tâches simples comme <strong>paramétrer</strong> un <strong class="defin">logiciel client de messagerie</strong> pour un particulier ou un travailleur indépendant ;   </li>
+
+	<li> une description détaillée de l'<strong class="specialLB">architecture matérielle et logicielle</strong> qui doit fournir les bases pour participer à la <strong>mise en place</strong> (installation et configuration) d'un <strong class="defin">serveur de messagerie</strong> dans un contexte professionnel plus large. </li> 
+</ul>
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Généralités </h2>
+
+
+
+<h3 id="archiSimple"> Architecture simplifiée </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">service de courriel</strong> est basé sur un <strong>double</strong> <strong class="defin">modèle client‑serveur</strong> : </p>
+<ul>
+	<li> l'un pour <strong class="specialLB">expéditeur</strong> </li>
+
+	<li> un autre pour <strong>chaque</strong> <strong class="specialT">destinataire</strong> d'un courriel. </li>
+</ul>
+
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+<p> Pour comprendre le <strong class="title">principe</strong> de cette architecture, représentée de façon simplifiée sur la figure ci‑dessous, suivons les <strong>étapes de transmission d'un courriel</strong> depuis son <strong>expéditeur</strong> jusqu'à un <strong>destinataire</strong> unique. On ne tient pas compte ici des potentiels scénarios d'erreur : destinataire inconnus, etc. </p>
+	<img class="top-left" src="../img/mailService1.png" style="max-width: 800px">
+
+<ol class="numbered">
+	<li> Agissant comme <strong>client</strong>, un <strong class="specialLB">hôte de l'expéditeur</strong> transmet un courriel jusqu'au <strong class="specialDGr">serveur de courriel</strong> auprès duquel il a souscrit à un compte de messagerie. Ce courriel est alors stocké dans une base de données, précisément dans le dossier <code>Envoyés</code> de l'expéditeur. </li>
+
+	<div class="nobullet"> Éventuellement, à la requête d'un <strong>autre</strong> <strong class="specialLB">hôte de l'expéditeur</strong> agissant comme client synchronisé sur le même compte de messagerie, le serveur peut lui délivrer ce courriel pour qu'il soit placer dans le dossier <code>Envoyés</code> sur cet hôte. </div>
+
+	<li> Le serveur de courriel sortant transmet le courriel au <strong class="specialDGr">serveur de courriel</strong> auprès duquel le <strong class="specialT">destinataire</strong> a souscrit son compte de messagerie. </li>
+
+	<div class="nobullet"> Agissant comme <strong>clients</strong>, les <strong class="specialT">hôtes du destinataire</strong> font régulièrement des requêtes auprès du <strong class="specialDGr">serveur de courrier</strong> pour savoir s'il y a des courriels à lui transmettre. C'est seulement alors que chacun reçoit le courriel envoyé par l'expéditeur. </div>
+</ol>
+
+<p> Dans ce processus, seules les deux étapes numérotées ci‑dessus se déroulent dans un ordre déterminé. En revanche, il n'est pas possible de déterminer l'ordre de délivrance du courriel aux différents clients. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Le <strong class="title">choix</strong> de cette <strong>architecture</strong> se justifie par <strong class="defin">deux aspects déterminants</strong>. </p>
+<ul>
+	<li> Elle ne requiert <strong class="pros">aucune synchronisation</strong> entre les machines hôtes respectives de l'<strong class="specialLB">expéditeur</strong> et du <strong class="specialT">destinataire</strong>. Ces deux machines jouent toujours le rôle de <strong>client</strong> et n'ont donc <strong>aucun impératif de continuité de fonctionnement</strong> pour garantir le bon fonctionnement du service. </li>
+
+	<li> Le choix d'un <strong>serveur</strong> de messagerie électronique – qui, lui, assure la <strong class="defin">continuité de service</strong> – peut être <strong class="pros">différent</strong> entre le destinataire et l'expéditeur. Autrement dit, l'envoi de courriels n'est pas limité aux clients d'un même serveur de messagerie. </li>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3> Notion de fournisseur de messagerie </h3>
+
+
+
+<div class="important">
+<p> Un peu comme avec la notion de <em class="sigle">FAI</em> pour l'accès au web (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#FAI" target="_BLANK"></a>), on parle de <strong class="title">fournisseur de messagerie électronique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fournisseur_de_messagerie_électronique" target="_BLANK">W</a> – en anglais, <strong>email service provider</strong> ou <strong><em class="sigle">ESP</em></strong> – pour désigner un organisme qui <strong class="defin">gère des serveurs</strong> de service de courriel pour des utilisateurs. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Dans la pratique, le <strong class="title">choix d'un service de messagerie</strong> dépend principalement du <strong>statut social</strong> du client. </p>
+<ul>
+	<li> Un <strong class="specialLB">particulier</strong> opte en général pour son <strong><em class="sigle">FAI</em></strong> (<em class="mark">Free</em>, <em class="mark">Orange</em>, etc.), ou encore un grand acteur du web (<em class="mark">Google</em>, <em class="mark">Yahoo</em>, etc.). </li>
+  
+  <div class="expert">
+	<div class="nobullet"> 
+	Individuellement, il représente une faible charge en volumes et en requêtes, donc ses données sont  hébergées sur des <strong class="cons">serveurs mutualisés</strong>. </div>
+  </div><!-- expert -->
+
+	<li> Une <strong class="specialLB">petite structure</strong> – entreprise ou autre organisme – qui fait appel à un <strong>hébergeur de données</strong> (<em class="sigle">OVH</em>, <em class="mark">Ikoula</em>, etc.) peut négocier auprès de ce dernier la prise en charge de son serveur de courriel, avec à la clef la possibilité de disposer d'un <strong class="pros">nombre suffisant d'adresses</strong> et d'un <strong class="pros">nom de domaine personnalisé</strong>. </li>
+
+  <div class="expert">
+	<div class="nobullet"> Il est également possible, moyennant finance, de négocier l'<strong class="pros">exclusivité</strong> d'un serveur. </div>
+  </div><!-- expert -->
+
+
+	<li> Une <strong class="specialLB">grande structure</strong> ayant du <strong>personnel suffisamment qualifié</strong> a économiquement et techniquement intérêt à mettre en place son <strong class="defin">propre serveur de messagerie</strong>. Ce dernier n'est alors pas situé dans l'Internet comme sur la figure supra, mais <strong>dans un réseau local</strong> de l'entreprise ou de l'organisme, sur des serveurs accessibles depuis l'extérieur (en <strong><em class="sigle">DMZ</em></strong> – cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#DMZ" target="_BLANK"></a>). </li>
+
+	<div class="expert">
+	<div class="nobullet">  Cette solution apporte des garanties sur la <strong class="pros">confidentialité</strong> des données, une grande maîtrise de la <strong class="pros">qualité du service</strong>, ainsi que la possibilité de mettre en œuvre un <strong>contrôle du contenu</strong> des courriels entrants et sortants. </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> La « démocratisation » des <strong>nano‑ordinateurs</strong> (<em class="mark">Raspeberry Pi</em>, <em class="mark">Odroid</em>, etc…) permet aujourd'hui à une <strong class="specialLB">petite structure</strong> de mettre en place à <strong class="pros">moindre coût</strong> (acquisition de la carte et d'un disque dur, très faible consommation électrique de l'appareil) un <strong class="title">serveur de messagerie interne</strong>. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="compteMail"> Notion de compte et d'adresse de messagerie </h3>
+
+
+
+<div class="important">
+<p> Pour pouvoir utiliser le service de messagerie électronique sur l'Internet, il faut <strong>souscrire</strong> un <strong class="title">compte de messagerie</strong> auprès d'un <strong>fournisseur de messagerie</strong>. Ce compte est constitué : </p>
+<ul>
+	<li> d'une <strong class="specialLB">adresse électronique</strong> <strong class="defin">unique</strong>, rattachée à un <strong class="specialR">nom de domaine</strong> hébergeant un serveur de messagerie ; </li>
+
+	<li> d'un <strong class="specialLB">espace de stockage</strong> réservé sur un <strong>serveur</strong> du fournisseur de messagerie pour mémoriser et rendre en permanence accessibles à l'utilisateur ses courriels entrants, sortants et autres (brouillons, archives, poubelle…). </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong class="title">adresse électronique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_électronique" target="_BLANK">W</a> d'un compte de messagerie est une <strong class="defin">chaîne de caractères</strong> composée de la forme : <br>
+<span class="inline">
+	<code class="filename"><strong class="specialO">partie locale </strong>@<strong class="specialR"> nom de domaine</strong></code>
+</span> <br>
+de telle sorte que la <strong>combinaison</strong> des deux <strong>chaînes de caractères</strong> de part et d'autre du symbole <code class="cmd">@</code> (prononcé usuellement « <em class="english">at</em> » à par anglicisme) soit <strong class="defin">unique</strong>. </p>
+
+<p> Lors de la <strong class="title">souscription</strong> d'un compte de messagerie, le fournisseur de messagerie <strong class="warning">refuse</strong> automatiquement la création du compte si l'adresse est <strong class="cons">déjà répertoriée</strong> comme utilisée dans ses bases de données. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p class="square"> Le service de messagerie datant des premiers développement de l'Internet, les <strong class="title">adresses</strong> ont dès le départ été <strong>composées exclusivement</strong> dans le <strong>jeu de caractères</strong> <strong class="defin"><em class="sigle">ASCII</em> restreint</strong> (cf. chap. C3‑VIII <a class="previous" href="../../moduleC/C3-Numeration/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK">C</a>). </p>
+
+<p> De plus, la <strong class="specialO">partie locale</strong> obéit à des <strong class="defin">règles syntaxiques supplémentaires</strong>, formelles ou d'usage : </p>
+<ul>
+	<li> le caractère <code class="filename">.</code> usuellement employé comme <strong>séparateur</strong> ne doit être <strong class="warning">ni</strong> <strong>initial</strong>, <strong class="warning">ni</strong> <strong>final</strong>, <strong class="warning">ni</strong> <strong>réitéré</strong> à suite (la sous-chaîne <code class="filename" style="background: lightgrey">..</code> est interdite) ;  </li>
+
+	<li> usuellement, <strong class="warning">aucune distinction de casse</strong> n'est opérée, et il est d'usage d'écrire les adresses exclusivement en lettres <strong>minuscules</strong> ;  </li>
+
+	<li> les <strong>symboles</strong> employés comme préfixe ou séparateurs dans les <strong><em class="sigle">URL</em></strong> sont <strong class="warning">à éviter</strong> (par exemple, <code>/ ? # &</code> etc. – cf. chap. R2‑I <a class="previous" href="Rc2-1_dns_url.html#URL" target="_BLANK"></a>), même si rien n'interdit formellement leur usage. </li>
+</ul>
+
+<p class="square"> Par ailleurs, la <strong class="specialO">partie locale</strong> n'est soumise à <strong class="title">aucune contrainte d'identification</strong> de l'<strong>utilisateur</strong>. Autrement dit, on peut choisir <strong class="defin">n'importe quel nom</strong>, tant qu'il n'est pas déjà utilisé pour un autre compte sur le même domaine. </p>
+
+<p> En revanche, pour une <strong class="title">adresse professionnelle</strong>, il est <strong class="pros">recommandé</strong> d'adopter le <strong>format usuel</strong> : <br>
+<span class="inline">
+	<code class="cmd"><strong class="specialO">nom </strong>.<strong class="specialO"> prénom</strong></code>
+</span> <br>
+éventuellement suivi d'un <strong>numéro</strong> en cas d'<strong class="cons">homonymie</strong>. Cette convention <strong class="pros">facilite l'identification</strong> d'un <strong>expéditeur</strong> par son destinataire. De même, cela facilite les tentatives d'un expéditeur d'adresser un courriel à un destinataire dont il n'a pas l'adresse mais dont il connaît le nom et l'organisme pour lequel il travaille.  </p>
+</div><!-- expert -->
+
+
+
+<h3> Solutions logicielles pour les clients </h3>
+
+
+
+<div class="important">
+<p> Du côté de l'<strong>utilisateur</strong>, le <strong class="title">service de messagerie électronique</strong> peut être mis en œuvre de <strong class="specialLB">deux façons</strong>. </p>
+
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/faviconThunderbird.png" height="80px" style="padding-top: 0.3em;">
+		<img class="top-right" src="../img/logoOutlook.png" height="80px" style="padding-top: 0.3em;">
+	<li> On peut employer un <strong>logiciel</strong> <strong class="specialLB">client de messagerie</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Client_de_messagerie" target="_BLANK">W</a>, c'est‑à‑dire une application dédiée à ce service qui s'exécute directement sur une machine hôte (par exemple, <em class="mark">Microsoft Outlook</em>, <em class="mark">Mozilla Thunderbird</em>…). On parle de <strong class="defin">client lourd</strong>. </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/logoGmail.png" height="80px" style="padding-top: 0.3em;">
+		<img class="top-right" src="../img/logoMailOne.png" height="80px" style="padding-top: 0.3em;"> 
+	<li> On peut aussi opérer par l'intermédiaire d'une <strong class="specialLB">messagerie web</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Messagerie_web" target="_BLANK">W</a> (en anglais, <strong>webmail</strong>), c'est‑à‑dire une <strong>page web dynamique</strong> pouvant s'exécuter sur n'importe quel <strong>logiciel navigateur</strong> qui constitue une <strong>application web</strong> dédiée à ce service, mise à disposition du client par son fournisseur (par exemple, <em class="mark">Gmail</em>, <em class="mark">Mail.one</em>…). On parle alors de <strong class="defin">client léger</strong>. </li>
+  </div><!-- display -->
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> La <strong class="title">distinction</strong> entre <strong>client</strong> <strong class="defin">lourd</strong> et <strong class="title">léger</strong> s'explique par le fait dans pour cette deuxième solution, il n'y a <strong class="pros">pas de de transfert des courriels</strong> – ni entrant, ni sortants – entre la machine <strong>hôte de l'utilisateur</strong> et son <strong>serveur de messagerie</strong>. En effet, en règle générale, l'application <strong>webmail</strong> s'exécute précisément sur le même serveur (machine) que l'ensemble des composants logiciels nécessaires au service de messagerie. </p>
+</div><!-- complement -->
+
+
+
+<h3> Protocoles de messagerie électronique </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="180px" style="margin-top:1em">	
+<p> Quelles que soient les solutions logicielles retenues, la transmission de courriels fait appel à des <strong class="title">protocoles de communication</strong> <strong>applicatifs</strong> (couche nº 7 du modèle <strong><em class="sigle">OSI</em></strong>) spécifiques : </p>
+</div><!-- display -->
+<ul>
+	<li> <strong class="defin"><em class="sigle">SMTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol" target="_BLANK">W</a> (<em class="english">simple mail transfer protocol</em>) pour les <strong>courriels sortants</strong> ; </li>
+
+	<li> <strong class="defin"><em class="sigle">POP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Post_Office_Protocol" target="_BLANK">W</a> (<em class="english">post office protocol</em>) ou <strong class="defin"><em class="sigle">IMAP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Message_Access_Protocol" target="_BLANK">W</a> (<em class="english">Internet message access protocol</em>) pour les <strong>courriels entrants</strong>. </li>
+</ul>
+<p> La connaissance de ces sigles est utile pour paramétrer un client de messagerie.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Pour les <strong class="title">courriels entrants</strong>, le protocole <strong class="defin"><em class="sigle">IMAP</em></strong>, plus récent que <strong><em class="sigle">POP</em></strong>, est devenu le plus couramment employé, en raison de la <strong class="pros">synchronisation</strong> qu'il met en œuvre entre les <strong>différents hôtes clients</strong> pour un <strong class="defin">même compte de messagerie</strong>. Avec ce protocole, toutes les actions sur les messages du compte de messagerie (envoi, suppression, classement, etc.) depuis un client sont répercutées à l'ensemble des autres clients. Il en résulte que : </p>
+<ul>
+	<li> cela <strong class="pros">facilite la gestion du compte</strong> ; en particulier, il n'est pas nécessaire de supprimer un message indésirable sur chacun des clients ; </li>
+
+	<li> mais cela <strong class="cons">diminue la robustesse aux erreurs</strong> – par exemple, après avoir vider la corbeille sur un client, il n'est pas possible de récupérer son contenu sur un autre client. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Les protocoles de messagerie utilisent théoriquement des <strong class="title">ports standards</strong> : le <strong class="specialLB">nº 25</strong> pour <strong><em class="sigle">SMTP</em></strong> et le <strong class="specialLB">nº 143</strong> pour <strong><em class="sigle">IMAP</em></strong> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#applicationsUtilisateurs" target="_BLANK"></a>. Mais dans la pratique, dès lors que l'on fait appel à un <strong class="defin">système de chiffrement</strong> (<strong><em class="sigle">SSL/TLS</em></strong> par exemple) ou qu'on utilise diverses possibilités offertes par un client de messagerie, d'<strong class="defin">autres numéros de port</strong> sont requis, avec en général : </p>
+<ul>
+	<li> le <strong class="specialLB">nº 587</strong> (chiffrement explicite) ou le <strong class="specialLB">nº 465</strong> (chiffrement implicite) pour <strong><em class="sigle">SMTP</em></strong> ;</li>
+
+	<li> le <strong class="specialLB">nº 993</strong> pour <strong><em class="sigle">IMAP</em></strong>. </li>
+</ul>
+<p> Ces valeurs sont <strong class="pros">utiles à connaître</strong> pour configurer un client de messagerie, même si de plus en plus, elle sont <strong class="pros">automatiquement renseignées</strong> par les logiciels grand‑public dans leur interface fenêtrée de configuration. </p>
+</div><!-- expert -->	
+
+<div class="remarques">
+<p class="remarque"> Sauf exception, le <strong>port nº 25</strong> est tout simplement <strong class="warning">bloqué</strong> par les <strong><em class="sigle">FAI</em></strong> pour empêcher la submersion des comptes de messagerie (et donc des serveurs…) par du <strong class="cons">spam</strong>. Aujourd'hui, il n'est utilisé qu'entre les <strong>relais <em class="sigle">SMTP</em></strong>. </p> 
+</div><!-- remarques -->
+
+
+
+<h3 id="formatCourriel"> Constitution d'un courriel </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">courriel</strong> est un objet potentiellement <strong class="warning">complexe</strong>, toujours divisé en <strong class="specialLB">deux sections</strong>.   </p>
+<ul>
+	<li> Il commence par son <strong class="specialLB">en‑tête</strong> (<em class="english">header</em>), qui est un texte constitué une <strong class="defin">suite de champs</strong>, de la forme : <br>
+  <span class="inline">
+  	<code class="cmd"><strong>nom</strong>: <strong>valeur</strong></code>
+  </span> <br>
+  dont certains (<em>expéditeur</em>, <em>destinataires</em>, <em>sujet</em>) sont <strong>spécifiés par l'utilisateur</strong> lors de la composition du courriel ; les autres champs (date, encodage) sont automatiquement déterminés par le client ou les serveurs de messagerie participant à son transfert ; </li>
+
+  <li> Il se poursuit avec son <strong class="specialLB">corps</strong> (<em class="english">body</em>), qui forme le <strong>contenu du message</strong> à proprement parler et qui peut inclure <strong>toutes sortes de données</strong> (texte avec ou sans mise en forme, images, vidéos, etc.). </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Sur un <strong>client de messagerie</strong> ou une page <strong>webmail</strong>, les <strong class="title">noms des champs</strong> sont souvent traduits et explicités dans la langue de l'interface utilisateur. Néanmoins, on les trouve parfois dans leur format original, en particulier :  </p>
+
+<ul>
+	<li> le champ <code class="cmd">cc:</code>, dont le nom signifie <strong>carbon copy</strong> pour faire référence au procédé ancien de duplication d'un document <a class="external" href="https://fr.wikipedia.org/wiki/Copie_carbone" target="_BLANK">W</a>. Il permet de mettre un ou plusieurs destinataires <strong class="defin">en copie</strong> – au sens où ils ne sont pas considérés comme faisant partie des destinataires directs du courriel ;  </li>
+
+	<li> le champ <code class="cmd">bcc:</code> qui signifie <strong>blind carbon copy</strong>, le terme <em class="english">blind</em> (en français, « aveugle ») précisant que la ou les adresses spécifiées à la suite recevront une copie du courriel <strong class="pros">sans être visibles</strong> par les autres destinataires (d'où le sigle français <code class="cmd">cci:</code> pour <em>copie carbone invisible</em>). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Lorsqu'un courriel est adressé seulement à des <strong class="title">destinataires en copie cachée</strong> (invisible), le terme <strong>undisclosed recipients</strong> (en français, « destinataires confidentiels ») apparaît à la réception dans le champ <code>destinataire</code>. C'est un procédé commode pour les listes de diffusion réunissant des publics qui n'ont pas à connaître mutuellement leurs adresses.  </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Architecture matérielle et logicielle détaillée </h2>
+
+
+
+<h3> Schéma de principe et composants logiciels</h3>
+
+
+
+<div class="complement">
+<p> Pour des motifs évidents de pédagogie, le schéma de principe du <strong class="title">service de courriel</strong> présenté supra <a class="supra" href="Rc2-7_messagerie.html#archiSimple"></a> n'est <strong class="cons">pas détaillé</strong>. Mais pour un futur technicien réseau, il est nécessaire de <strong class="pros">connaître et situer</strong> les <strong class="defin">différents processus à l'œuvre</strong>  – des <strong>composants logiciels</strong> s'exécutant en tâche de fond. </p>
+
+<p> Sur la figure ci‑dessous, l'architecture n'est détaillée que pour <strong>un seul utilisateur</strong>. Il faut imaginer une architecture potentiellement symétrique chez un autre utilisateur, l'un comme l'autre pouvant jouer le rôle d'<strong class="specialLB">expéditeur</strong> et de <strong class="specialT">destinataire</strong>.   </p>
+	<img class="top-left" src="../img/mailService2.png" style="max-width: 800px">
+
+<div class="expert">	
+<p> La <strong class="title">complexité</strong> de cette architecture découle de plusieurs facteurs : </p>
+<ul>
+	<li> les <strong class="warning">gigantesques</strong> <strong>volumes de données</strong> que représentent aujourd'hui les courriels des utilisateurs stockés sur les serveurs du fait des protocoles synchronisés majoritairement utilisés ; </li>
+
+	<li> la nécessité pour les fournisseurs de service de mettre en œuvre des <strong>dispositifs de filtrage</strong> pour diminuer l'impact des <strong class="warning">spams</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Spam" target="_BLANK">W</a>sur le trafic et les données stockées sur l'Internet.  </li>
+</ul>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<p> Les <strong class="title">composants logiciels</strong> intervenant dans le <strong class="defin">service de courriels</strong> sont désignés par des <strong>sigles de trois lettres</strong> commençant tous par « <em class="bold">M</em> » pour <em class="english">mail</em> ou <em class="english">message</em> et se terminant tous par « <em class="bold">A</em> » pour <em class="english">agent</em>. </p>	
+<ul>
+	<li> Un <strong class="specialLB"><em class="sigle">MUA</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Email_client" target="_BLANK">W</a> ou <strong class="specialLB">mail user agent</strong> désigne aussi bien un logiciel <strong>client de messagerie</strong> qu'une page de <strong>messagerie web</strong>.  Hébergée sur une machine hôte d'un réseau local, cette application agit comme <strong>client</strong> pour le protocoles <strong class="specialG"><em class="sigle">SMTP</em></strong>. </li>
+
+	<li> Un <strong class="specialLB"><em class="sigle">MRA</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Mail_retrieval_agent" target="_BLANK">W</a> ou <strong class="specialLB">mail retrieval agent</strong> est un composant intermédiaire pour la <strong>récupération des courriels</strong> d'un utilisateur depuis le serveur de son fournisseur de messagerie. Il agit donc comme client pour les protocoles <strong class="specialG"><em class="sigle">IMAP</em></strong> ou <strong class="specialG"><em class="sigle">POP3</em></strong>. </li>
+
+  <div class="nobullet"> Il est intégré dans la même application que le <strong><em class="sigle">MUA</em></strong> (client de messagerie ou messagerie web). </div>
+  
+	<li> Un <strong class="specialDGr"><em class="sigle">MSA</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Email_client" target="_BLANK">W</a> ou <strong class="specialDGr">mail submission agent</strong>, exécuté sur un serveur, joue le rôle d'<strong>intermédiaire</strong> entre le <strong><em class="sigle">MUA</em></strong> et le <strong><em class="sigle">MTA</em></strong> du fournisseur de service de messagerie du client expéditeur. </li>
+
+	<li> Un <strong class="specialDGr"><em class="sigle">MTA</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Message_transfer_agent" target="_BLANK">W</a> ou <strong class="specialDGr">mail transfer agent</strong>, très souvent intégré à la même application que celle qui exécute le <strong><em class="sigle">MSA</em></strong>, a pour rôle de <strong>router les courriels</strong> entrants et sortants à destination des <strong><em class="sigle">MDA</em></strong>. </li>
+
+	<li> Un <strong class="specialDGr"><em class="sigle">MDA</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Mail_delivery_agent" target="_BLANK">W</a> ou <strong class="specialDGr">mail delivery agent</strong> transmet les courriels sortant à destination des serveurs des fournisseurs de messagerie des destinataires. Un autre <strong class="specialDGr"><em class="sigle">MDA</em></strong> est également chargé d'alimenter la <strong>base de données</strong> des courriels d'un utilisateurs, tant avec les courriels entrants que les courriels sortants.  </li>
+
+	<li> Un <strong class="specialDGr"><em class="sigle">MAA</em></strong> ou <strong class="specialDGr">mail access agent</strong> est un composant exécuté sur serveur qui sert à accéder à la <strong>base de données</strong> des courriels du client pour répondre aux requêtes de consultation des <strong class="specialDGr"><em class="sigle">MRA</em></strong>. </li>
+</ul>
+
+
+
+<h3 id="MX"> Enregistrement des serveurs de messagerie</h3>
+
+
+
+<div class="complement">
+<p> Comme tout nom de domaine (cf. chap. R2‑I <a class="previous" href="Rc2-1_dns_url.html#nomDomaine" target="_BLANK"></a>), le <strong class="specialR">nom de domaine</strong> d'un <strong>compte de messagerie</strong> (cf. supra <a class="supra" href="Rc2-7_messagerie.html#compteMail" target="_BLANK"></a>) doit : </p>
+<ul>
+	<li> être <strong class="defin">conforme</strong> aux <strong>règles de syntaxe</strong> qui les régissent ;  </li>
+
+	<li> faire l'objet d'un <strong class="defin">enregistrement <em class="sigle">DNS</em></strong>, c'est‑à‑dire dans le <strong>serveur de nom</strong> du domaine auquel il appartient (par exemple, <code class="filename">gmail.com</code> est enregistré dans le serveur de nom du domaine <code class="filename">.com</code>). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> De plus, tout <strong>serveur de messagerie</strong> qui participe au protocole <strong class="specialG"><em class="sigle">SMTP</em></strong> doit faire l'objet d'un <strong class="title">enregistrement <em class="sigle">DNS</em></strong> de type <strong class="defin"><em class="sigle">MX</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Enregistrement_Mail_eXchanger" target="_BLANK">W</a> – pour <strong>mail exchanger</strong>. Un tel enregistrement est de la forme : </p>
+<div class="inline">
+	<span style="background: white; border-radius: 0.2em"> <strong class="specialT">domain name</strong>     <strong class="specialMg"><em class="sigle">TTL</em></strong>     <strong class="specialM">class</strong>     <strong class="specialG">type</strong>     <strong class="specialDB">priority</strong>     <strong class="specialV">host</strong> </span>
+</div><!-- inline -->
+<p> où le champ <strong class="specialDB">priority</strong> est un <strong>entier positif</strong> qui spécifie la <strong>préférence</strong> à accorder à cet hôte pour l'envoi d'un courriel. </p>
+</div><!-- important -->
+
+
+
+
+
+
+
+<h3 id="SMTP"> Le protocole de courriels sortants <em class="sigle">SMTP</em> </h3>
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="180px" style="margin-top:1em">		
+<p> Le <strong class="title">protocole <em class="sigle">SMTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol" target="_BLANK">W</a> (<em class="english">simple mail transfer protocol</em>) est un protocole applicatif (couche n° 7 du modèle <em class="sigle">OSI</em>) pour l'<strong class="defin">émission de courriels</strong>. Il est utilisé par <em class="remark">pratiquement tous</em> les <strong>logiciels clients de messagerie</strong>, qu'ils soient lourds ou légers, ainsi que par les <strong>agents relais <em class="sigle">SMTP</em></strong> des <strong>serveurs d'échanges de courriels</strong> (<em class="sigle">MSA</em>, <em class="sigle">MTA</em>, <em class="sigle">MDA</em>). </p>
+</div><!-- display -->
+
+<p> Développé au début des années 1980, le <strong class="title">protocole <em class="sigle">SMTP</em></strong> est maintenant basé sur la <strong><em class="sigle">RFC 5321</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc5321" target="_BLANK"></a> publiée en 2008. Parce que les courriels sont potentiellement volumineux, il recourt au <strong class="specialO">protocole de transport <em class="sigle">TCP</em></strong> (cf. chap. R1-IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#TCP" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Le <strong class="title">protocole <em class="sigle">SMTP</em></strong> utilise par défaut le <strong>port nº 25</strong>, et dans sa version sécurisée par <strong class="specialLB"><em class="sigle">TLS</em></strong>, ou bien le port <strong class="specialLB">nº 587</strong> (chiffrement explicite), ou bien le <strong class="specialLB">nº 465</strong> (chiffrement implicite). </p>	
+
+<p> Outre le recours à <em class="sigle">TCP</em>, le <strong class="title">protocole <em class="sigle">SMTP</em></strong> présente plusieurs <strong class="pros">similitudes</strong> avec le protocole <strong><em class="sigle">HTTP</em></strong> : </p>
+<ul>
+	<li> Il opère selon un modèle <strong class="defin">client‑serveur</strong>, y compris entre deux serveurs d'échange, l'un jouant le rôle de client, l'autre de serveur.  </li>
+
+	<li> Il opère essentiellement en <strong class="defin">mode texte</strong> au sens où, à la manière du protocole <strong><em class="sigle">HTTP 1.1</em></strong>, il met en œuvre des <strong>échanges de lignes de caractères</strong> (chacune terminée par un saut de ligne <code class="prettyprint lang-c">\r \n</code>) et non pas des messages conventionnellement présentés en mots de 32 bits comme <em class="sigle">DHCP</em>, <em class="sigle">NTP</em>, <em class="sigle">TCP</em>, etc. </li>
+  
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/SMTPreplyCodes.png" width="450px" style="margin-top:1em">
+	<li> Il utilise des <strong class="defin">codes numériques</strong> pour les <strong>réponses du serveur</strong>, comme résumés sur le figure ci‑contre (cf. par exemple cette page web pour plus de détails <a class="external" href="https://mailtrap.io/blog/smtp-commands-and-responses/" target="_BLANK"></a>). </li>
+  
+
+  <div class="nobullet"> Parmi les codes de réponse typiques, on trouve notamment :  </div>
+  <ul>
+  	<li> <code class="cmd" style="color: limegreen">250</code> pour <em class="english">requested mail action okay</em> ;  </li>
+  
+  	<li> <code class="cmd" style="color: darkorange">354</code> pour <em class="english">start mail input</em> ;  </li>
+
+  	<li> <code class="cmd" style="color: firebrick;">452</code> pour <em class="english"> requested action not taken: insufficient system storage</em> ;  </li>
+
+  	<li> <code class="cmd" style="color: darkslategray;">550</code> pour <em class="english"> requested action not taken: mailbox unavailable</em> ;  </li>
+  </ul>
+  
+	</div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<p> Mais par ailleurs, le <strong class="title">protocole <em class="sigle">SMTP</em></strong> présente plusieurs <strong class="specialO">spécificités</strong>, notamment celle d'être <strong class="defin">orienté connexion</strong> – en plus de la connexion établie préalablement via le protocole <strong><em class="sigle">TCP</em></strong>.  </p>
+<ul>
+	<li> On parle de <strong class="specialLB">session <em class="sigle">SMTP</em></strong> pour désigner la <strong>succession d'échanges de données</strong> entre le client et le serveur pour l'envoi d'un courriel.  </li>
+
+	<li> Une <strong>session</strong> met en œuvre un <strong>nombre variable</strong> de <strong class="specialLB">transactions <em class="sigle">SMTP</em></strong>, chacune consistant en une <strong class="defin">séquence de requêtes/réponses</strong>. </li>
+
+  <li> On parle préférentiellement de <strong class="specialLB">commande</strong> pour désigner une <strong class="defin">requête du client</strong>, dont les plus usuelles sont celles décrites ci‑dessous : </li>
+	<ul>
+		<li> <code class="cmd">HELO</code> suivi de l'<strong class="defin">adresse <em class="sigle">IP</em></strong> ou du nom de domaine du <strong>client</strong> (qui, rappelons‑le, peut être un serveur) ;   </li>
+
+		<div class="nobullet"> cette commande est alternativement libellée <code class="cmd">EHLO</code> lorsque le client utilise l'<strong>extension <em class="sigle">ESMTP</em> </strong> ; </div>
+	
+		<li> <code class="cmd">MAIL FROM</code> suivi de l'<strong class="defin">adresse de courriel</strong> de l'<strong class="defin">émetteur</strong> – cet argument étant appelé le <code>return-path</code> du courriel ;   </li>
+
+		<li> <code class="cmd">RCPT TO</code> suivi de l'<strong class="defin">adresse de courriel</strong> de <strong class="defin">destinataire</strong> – cet argument étant appelé un <code>forward-path</code> du courriel (il faut réitérer cette commande pour chaque destinataire, qu'il soit direct ou en copie) ;  </li>
+
+		<li> <code class="cmd">DATA</code> pour ensuite <strong class="defin">envoyer les données</strong> constituant le courriel (en‑tête et corps), qui sont envoyées <strong>ligne par ligne</strong> ; le client termine l'émission par une ligne constituée du seul caractère <code class="cmd">.</code>  </li>
+
+		<li> <code class="cmd">QUIT</code> pour <strong class="defin">terminer la session</strong>.  </li>
+	</ul>
+</ul>
+
+<div class="exemples" style="margin-top: 1em">
+<p class="exemple"> La figure ci‑dessous illustre un <strong class="title">exemple académique virtuel</strong> de <strong>session <em class="sigle">SMTP</em></strong>. </p>
+
+  <img class="top-left" src="../img/SMTPexample.png" style="max-width: 800px"> </p>
+</div><!-- exemple -->
+
+
+
+<h3> Le protocole de courriels entrants <em class="sigle">IMAP</em> </h3>
+
+
+<a class="external" href="https://fr.wikipedia.org/wiki/Internet_Message_Access_Protocol" target="_BLANK">W</a>
+
+
+<h3> Encodage d'un courriel </h3>
+
+
+<div class="important">
+<p> Comme une page web, un <strong class="title">courriel</strong> est n'est pas seulement constitué de <strong class="defin">texte</strong>, il peut aussi inclure des <strong class="defin">images</strong> ou d'autres <strong class="defin">fichiers joints</strong>, sans restrictions de format. </p>
+<ul>
+	<li> Pour les éléments de Q, comme dans le web, la tendance est à la <strong class="title">généralisation</strong> de l'<strong>encodage des caractères</strong> en <strong class="defin"><em class="sigle">UTF‑8</em></strong> . En effet, ce format a l'avantage de prendre en charge avec un <strong class="pros">surcoût minimal</strong> l'ensemble du jeu de caractères <strong class="defin">Unicode</strong> (cf. chap. C3‑IX <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-9_typesCaracteresEtendus.html#formatUTF-8" target="_BLANK">C</a>). </li>
+
+	<li> Quant aux <strong class="specialLB">autres types de données</strong> (images, son, etc.), ils sont encodés/décodés dans différents formats grâce au <strong class="specialO">standard de transcodage <em class="sigle">MIME</em></strong> avant leur émission/réception (cf. infra). </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Néanmoins, la question de l'<strong class="title">encodage des courriels</strong> reste épineuse en raison du maintien de <strong class="cons">contraintes historiques</strong> pour l'<strong>en‑tête</strong> : </p>
+<ul>
+	<li> les <strong class="specialLB">noms des champs</strong> doivent être composés <strong class="warning">exclusivement</strong> dans le jeu de caractères <strong class="defin"><em class="sigle">ASCII</em> restreint</strong> ;  </li>
+
+	<li> les <strong class="specialLB">valeurs des champs</strong> peuvent être composés dans le jeu de caractères <strong class="defin">Unicode</strong> <strong class="warning">seulement si</strong> le client de messagerie et les serveurs d'acheminement mettent en œuvre le protocole <strong class="defin"><em class="sigle">SMTPUTF8</em></strong> (car le protocole <strong><em class="sigle">SMTP</em></strong> ne gère <strong class="warning">que</strong> les caractères du jeu <strong><em class="sigle">ASCII</em> restreint</strong>). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Il arrive encore qu'un courriel parvienne à son destinataire avec des <strong class="title">problèmes d'encodage des lettres accentuées</strong> – typiquement, « Ã© » à la place du « é » – dans le champ sujet alors que le corps du texte est correctement affiché. Il suffit pour cela qu'il ait été composé en <strong><em class="sigle">UTF-8</em></strong> mais acheminé via un serveur ne prenant <strong class="warning">pas</strong> en charge le protocole <strong><em class="sigle">SMTPUTF8</em></strong>. </p>
+</div><!-- expert -->
+
+
+<h4> Le standard MIME </h4>
+
+
+<div class="important">
+<p> Le <strong class="title">standard <em class="sigle">MIME</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multipurpose_Internet_Mail_Extensions" target="_BLANK">W</a> – pour <strong>multipurpose Internet mail extensions</strong> – est une <strong class="defin">norme de transcodage</strong> qui permet la prise en charge par les protocoles de messagerie de <strong>contenus</strong> encodés dans des <strong class="pros">formats autres que l'<em class="sigle">ASCII</em></strong> : texte en caractères larges (<em class="sigle">UTF‑8</em> ou autre), images, etc. </p>
+
+<p> Il est mis en œuvre par tous les <strong>clients</strong> et <strong>serveurs de messagerie</strong> récents.   </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme l'indique le terme « <strong>multipurpose</strong> », le <strong class="title">standard <em class="sigle">MIME</em></strong> est une norme <strong>polyvalente</strong>. Elle fait appel à <strong class="defin">diverses techniques de transcodage</strong> pour : </p>
+<ul>
+	<li> être <strong class="pros">rétro‑compatible</strong> avec les systèmes d'échange de courriels existant, en particulier avec le protocole <strong><em class="sigle">SMTP</em></strong> qui n'accepte les courriels encodés dans le standard <strong><em class="sigle">ASCII</em> restreint</strong> (donc formés d'octets <em>7‑bits</em>, c'est‑à‑dire dont la valeur décimale ne dépasse pas <code>127</code>) ; </li>
+
+	<li> <strong class="pros">être efficace</strong> quel que soit le <strong>type de données</strong> que l'on souhaite incorporer dans un courriel, c'est‑à‑dire adapter la technique de transcodage au type de données (texte, image, etc.). </li>
+</ul>
+<p> La <strong class="title">mise en œuvre</strong> de <strong><em class="sigle">MIME</em></strong> consiste, avant l'émission d'un courriel, à <strong>transcoder</strong> (coder) dans le jeu de caractère <strong><em class="sigle">ASCII</em> restreint</strong> tout contenu qui ne l'était pas, et à effectuer le transcodage réciproque (décoder) à la réception du courriel. </p>
+
+<!-- faire une figure -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> Pour cela, le <strong class="title">standard <strong><em class="sigle">MIME</em></strong></strong> ajoute aux courriels quelques <strong class="defin">champs d'en‑tête</strong> <strong>spécifiques</strong> (cf. supra <a class="supra" href="Rc2-7_messagerie.html#formatCourriel"></a>).   </p>
+<ul>
+	<li> Le champ <code class="cmd">MIME-Version:</code> précise la <strong>version</strong> de la norme, actuellement <code class="cmd">1.0</code>. </li>
+
+	<li> Le champ <code class="cmd">Content-Type:</code> indique le <strong>type de données</strong> contenues dans le corps du courriel. On peut notamment avoir : </li>
+	<ul>
+		<li> <code class="cmd">text/plain</code> pour un corps constitué <strong>texte non formaté</strong> (le terme anglais <em class="english">plain</em> signifie « simple » en français) ; </li>
+
+		<li> <code class="cmd">text/html</code> pour un corps constitué <strong>texte formaté</strong> en langage <strong><em class="sigle">HTML</em></strong> ; </li>
+
+		<li> <code class="cmd">multipart/mixed</code> pour un corps structuré en <strong>plusieurs parties</strong> encodées dans différents formats, typiquement un courriel avec des pièces jointes. </li>
+	</ul>
+
+  <li> Le champ <code class="cmd">Content-Transfert-Encoding:</code> indique la <strong>technique de transcodage</strong> du contenu pour permettre le transfert du courriel. On peut notamment avoir : </li>
+  <ul>
+  	<li> <code class="cmd">7bits</code> si <strong>aucun transcodage</strong> n'est appliqué ; le corps du courriel (ou la partie) doit alors être codé comme une suite de lignes de caractères exclusivement pris dans le <strong>jeu <em class="sigle">ASCII</em> restreint</strong>, chaque ligne ne dépassant pas 998 caractères et se terminant un saut de ligne codé par la séquence <strong><em class="sigle">CR</em> <em class="sigle">LF</em></strong> (cf. chap. C3‑VIII <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/C3-Numeration/Cc3-8_typesCaracteres.html#caracteresControle" target="_BLANK">C</a>) ; </li>
+
+  	<li> <code class="cmd">quoted-printable</code> <a class="external" href="https://fr.wikipedia.org/wiki/Quoted-Printable" target="_BLANK">W</a> qui met en œuvre un <strong>transcodage</strong> d'autant plus efficace que le contenu est un <strong>texte</strong> constitué de caractères du <strong>jeu <em class="sigle">ASCII</em> restreint</strong> ; </li>
+
+  	<li> <code class="cmd">base64</code> <a class="external" href="https://fr.wikipedia.org/wiki/Base64" target="_BLANK">W</a> qui met en œuvre un <strong>transcodage</strong> mieux adapté aux <strong>autres types de données</strong> (images, etc.) qui ne sont pas encodées sous forme de texte. </li>
+  </ul>
+</ul>
+
+<p> Lorsqu'un message est structuré en <strong class="title">plusieurs parties</strong>, chacune est délimitée de la partie antérieure par une <strong class="defin">frontière</strong> – en anglais, <strong>boundary</strong> – et possède ses <strong>propres champs d'en‑tête <em class="sigle">MIME</em></strong>. </p>
+</div><!-- expert -->
+
+
+<div class="exemples">
+<p class="exemple"> On donne ci‑après le <strong>contenu brut</strong> d'un <strong class="title">courriel de démonstration</strong> : </p>
+<ul>
+	<li> dont le <strong class="defin">sujet</strong> est « <code class="displayDark" style="color: limegreen; font-weight: bold">Démonstration MIME</code> » (il contient une lettre accentuée, donc <strong class="warning">hors</strong> du jeu <strong><em class="sigle">ASCII</em> restreint</strong>) ;  </li>
+
+	<li> dont le <strong class="defin">corps</strong> est le texte « <code class="displayDark" style="color: limegreen; font-weight: bold">Courriel écrit en français.</code> » (sans formatage) ;  </li>
+
+	<li> qui inclut <strong class="defin">deux pièces jointes</strong> : </li>
+	<ul>
+		<li> une <strong>image</strong> au format <code class="filename">.png</code> ; </li>
+
+		<li> un <strong>autre courriel</strong>, portant le sujet « <code class="displayDark" style="color: limegreen; font-weight: bold">essai ASCII</code> » et contenant le texte « <code class="displayDark" style="color: limegreen; font-weight: bold">Hello, World.</code> » (exclusivement composé en <strong><em class="sigle">ASCII</em> restreint</strong>) ; </li>
+	</ul>
+</ul>
+<p> sachant que le client de messagerie utilisé (<em class="mark">Mozzilla Thunderbird</em>) encode par défaut le courriel en <strong><em class="sigle">UTF‑8</em></strong>. Ce contenu est obtenu via la commande <code>Afficher la source</code> accessible via le bouton contextuel <span class="framedSmall"><code>Autres</code></span>. </p>
+
+<p> En plus des éléments en <code class="displayDark" style="color: limegreen; font-weight: bold">vert</code> ci‑dessus, pour <strong class="pros">bien visualiser</strong> les aspects essentiels de l'<strong class="title">encodage <em class="sigle">MIME</em></strong> : </p>
+<ul>
+	<li> les <strong>frontières</strong> de découpage du courriel en différentes <strong>parties <em class="sigle">MIME</em></strong> ont été coloriés en <code class="displayDark" style="color: red; font-weight: bold">rouge</code> ;  </li>
+
+	<li> dans chaque partie, les valeurs des <strong>champs d'en‑tête <em class="sigle">MIME</em></strong> ont été coloriés en <code class="displayDark" style="color: dodgerblue; font-weight: bold">bleu</code> ;  </li>
+
+	<li> Les passages sans intérêt on été coupés et remplacés par le symbole <code class="displayDark">[…]</code> et les adresses <strong><em class="sigle">IP</em></strong> ont été masquées. </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Return-path: &lt;Francois.Girault@ac-versailles.fr>
+Received: from smtpout2.ac-versailles.fr ([XXX.XXX.XXX.XXX])
+ by storel.in.ac-versailles.fr
+ (Oracle Communications Messaging Server 7.0.5.38.0 64bit (built Nov 28 2016))
+ with ESMTP id <0QKN00IKTPDCFH70@storel.in.ac-versailles.fr> for
+ francois.girault@ac-versailles.fr; Tue, 01 Dec 2020 11:34:24 +0100 (CET)
+Original-recipient: rfc822;francois.girault@ac-versailles.fr
+Received: from localhost (localhost [127.0.0.1])	by smtpout2.ac-versailles.fr
+ (Postfix) with ESMTP id AFDDEE80C48	for &lt;francois.girault@ac-versailles.fr>;
+ Tue,  1 Dec 2020 11:34:24 +0100 (CET)
+[…]
+X-Virus-Scanned: Debian amavisd-new at smtpout2.in.ac-versailles.fr
+X-Spam-Flag: NO
+X-Spam-Score: -2.9
+X-Spam-Level:
+X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.2
+	tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
+Received: from smtpout2.ac-versailles.fr ([127.0.0.1])
+	by localhost (smtpout2.in.ac-versailles.fr [127.0.0.1])
+ (amavisd-new, port 10024)	with ESMTP id gp-J4VDQ_-f5 for
+ &lt;francois.girault@ac-versailles.fr>;	Tue,  1 Dec 2020 11:34:24 +0100 (CET)
+Received: from [192.168.0.12] (unknown [XXX.XXX.XXX.XXX])
+	by smtpout2.ac-versailles.fr (Postfix) with ESMTPA id 5EC26E80BFC	for
+ &lt;francois.girault@ac-versailles.fr>; Tue,  1 Dec 2020 11:34:24 +0100 (CET)
+To: =?UTF-8?Q?fran=c3=a7ois_Girault?= &lt;Francois.Girault@ac-versailles.fr>
+From: =?UTF-8?Q?Fran=c3=a7ois_Girault?= &lt;Francois.Girault@ac-versailles.fr>
+Subject: <span style="color: limegreen; font-weight: bold">=?UTF-8?Q?D=c3=a9monstration_MIME?=</span>
+Message-id: <7f27afdb-ef6c-d2b9-e370-e03ae3382a50@ac-versailles.fr>
+Date: Tue, 01 Dec 2020 11:33:31 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-version: 1.0
+Content-type: <span style="color: red; font-weight: bold">multipart/mixed; boundary=------------471AF95E97E742D31C117386</span>
+Content-language: fr
+
+This is a multi-part message in MIME format.
+<span style="color: red; font-weight: bold">--------------471AF95E97E742D31C117386</span>
+Content-Type: <span style="color: dodgerblue; font-weight: bold">text/plain; charset=utf-8; format=flowed</span>
+Content-Transfer-Encoding: <span style="color: dodgerblue; font-weight: bold">quoted-printable</span>
+
+<span style="color: limegreen; font-weight: bold">Courriel =C3=A9crit en fran=C3=A7ais.</span>
+
+
+<span style="color: red; font-weight: bold">--------------471AF95E97E742D31C117386</span>
+Content-Type: <span style="color: dodgerblue; font-weight: bold">image/png;</span>
+ name="iconShowPannel.png"
+Content-Transfer-Encoding: <span style="color: dodgerblue; font-weight: bold">base64</span>
+Content-Disposition: attachment;
+ filename="iconShowPannel.png"
+
+iVBORw0KGgoAAAANSUhEUgAAAQUAAAD0CAYAAACSLzOZAAAACXBIWXMAAA7DAAAOwwHHb6hk
+AAAGqUlEQVR42u3bsWoUQQAG4Nv1wBSKQioRRIQ0FnZiI/gSahEkT2BlZRM8Gysfw8YTrGyC
+[…]
+AhCgIFBo9wACFAQKix5AgIJAYdEDCPlkfPobVx7cr3/fvnX55Gdlwq/zzG/azVJ9vXT92iBQ
+aDCo17c2gZBJirp2MBCRs//5ICJQEBGBgohAQUSgICKdcgSNq7rwTTL0BAAAAABJRU5ErkJg
+gg==
+<span style="color: red; font-weight: bold">--------------471AF95E97E742D31C117386</span>
+Content-Type: <span style="color: dodgerblue; font-weight: bold">message/rfc822;</span>
+ name="essai ASCII.eml"
+Content-Transfer-Encoding: <span style="color: dodgerblue; font-weight: bold">7bit</span>
+Content-Disposition: attachment;
+ filename="essai ASCII.eml"
+
+Return-path: &lt;Francois.Girault@ac-versailles.fr>
+Received: from smtpout1.ac-versailles.fr ([XXX.XXX.XXX.XXX])
+ by storel.in.ac-versailles.fr
+ (Oracle Communications Messaging Server 7.0.5.38.0 64bit (built Nov 28 2016))
+ with ESMTP id <0QKN00IZ5P9TFH60@storel.in.ac-versailles.fr> for
+ francois.girault@ac-versailles.fr; Tue, 01 Dec 2020 11:32:17 +0100 (CET)
+Original-recipient: rfc822;francois.girault@ac-versailles.fr
+[…]
+X-Virus-Scanned: Debian amavisd-new at smtpout1.in.ac-versailles.fr
+X-Spam-Flag: NO
+X-Spam-Score: -0.999
+X-Spam-Level:
+X-Spam-Status: No, score=-0.999 tagged_above=-999 required=6.2
+	tests=[ALL_TRUSTED=-1, TVD_SPACE_RATIO=0.001]	autolearn=ham autolearn_force=no
+Received: from [192.168.0.12] (unknown [XXX.XXX.XXX.XXX])
+	by smtpout1.ac-versailles.fr (Postfix) with ESMTPA id 60F1532100E	for
+ &lt;francois.girault@ac-versailles.fr>; Tue,  1 Dec 2020 11:32:17 +0100 (CET)
+To: =?UTF-8?Q?fran=c3=a7ois_Girault?= &lt;Francois.Girault@ac-versailles.fr>
+From: =?UTF-8?Q?Fran=c3=a7ois_Girault?= &lt;Francois.Girault@ac-versailles.fr>
+Subject: <span style="color: limegreen; font-weight: bold">essai ASCII</span>
+Message-id: &lt;ab4f72a4-760b-6b3b-4c24-0bc2223a4e16@ac-versailles.fr>
+Date: Tue, 01 Dec 2020 11:31:24 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-version: 1.0
+Content-type: <span style="color: dodgerblue; font-weight: bold">text/plain; charset=utf-8; format=flowed</span>
+Content-transfer-encoding: <span style="color: dodgerblue; font-weight: bold">7bit</span>
+Content-language: fr
+
+<span style="color: limegreen; font-weight: bold">Hello, World.</span>
+
+
+<span style="color: red; font-weight: bold">--------------471AF95E97E742D31C117386--</span>
+
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+</section>
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

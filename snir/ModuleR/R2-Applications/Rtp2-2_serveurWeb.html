@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="2"
+  data-pagenumber="2"
+  data-pageState="OK"
+  data-pageheadtitle="Serveur web & BDD"
+  data-pagefulltitle="Serveur web et base de donnée"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">objectifs principaux</strong> de ce sujet de travaux pratiques sont d'<strong>exécuter</strong> et de <strong>comprendre</strong> : </p>
+<ul>
+  <li> une <strong class="defin">procédure d'installation</strong> d'un <strong class="specialLB">serveur web</strong> associé à une <strong class="specialLB">base de donnée</strong>. </li>
+
+  <li> la <strong class="defin">mise en œuvre</strong> d'une <strong class="specialLB">application web simple</strong> sur la base de cette architecture 3 niveaux.  </li>
+</ul>
+
+<p> Un <strong class="title">objectif secondaire</strong> est de se familiariser avec la <strong class="defin">pratique</strong> des <strong>interfaces de commande de ligne</strong>. </p>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié les <strong>chapitres R2‑III</strong> et <strong>R2‑IV</strong>  du cours. Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+
+<h3 class="nocount"> Environnement et matériel </h3>
+
+
+
+<p>	Les manipulations demandées sont à accomplir sur un <strong class="specialO">réseau local</strong> utilisant la pile de protocole <strong><em class="sigle">TCP/IP</em></strong> et disposant de tous les services attendus : <strong>passerelle</strong> vers l'Internet, serveur <strong><em class="sigle">DHCP</em></strong>, résolveur <strong><em class="sigle">DNS</em></strong>. </p>
+
+<div class="remarques">
+<p class="remarque"> La présence d'un <strong class="warning">serveur proxy</strong> comme ceux mis en œuvre par les <strong><em class="sigle">DSI</em></strong> académiques de l'Éducation nationale peut sérieusement <strong class="cons">compliquer certaines procédures d'installation</strong>. </p>
+</div><!-- remarque -->
+
+<p>  On requiert le matériel listé ci‑dessous : </p>
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/R2tp2_architecture.png" width="500px">
+<ul>
+  <li> pour jouer le rôle de <strong class="specialLB">client web</strong>, un <strong class="title">poste de travail</strong> – de préférence un <strong class="specialLB">PC Linux</strong>, sinon un PC <em class="mark">Windows</em> avec service <code>ssh</code> activé dans le terminal <em class="mark">Powershell</em> (cela évite de recourir à un logiciel tiers comme <em class="mark">PuTTY</em>) ;  </li>
+
+  <li> pour jouer le rôle de <strong class="specialGr">serveur web</strong> et de <strong class="specialDGr">base de données</strong>, un <strong class="title">nano‑ordinateur</strong> de type <strong class="Raspberry">Raspberry Pi 4</strong> (ou éventuellement <strong>3B</strong>), son <strong>bloc d'alimentation</strong> au secteur et une <strong>carte microSD</strong> de 8 Go minimum pour installer son système d'exploitation et ses logiciels. </li>
+</ul>
+
+<p> Ces deux machines doivent être l'une et l'autre <strong class="specialO">raccordées au réseau local</strong> – typiquement, via un <strong>switch</strong> comme sur la figure ci‑dessus – et se voir attribuer chacune une <strong>adresse <em class="sigle">IP</em></strong> sur le <strong class="defin">même segment</strong> pour pouvoir communiquer – ce qui est assuré avec la présence d'un serveur <strong><em class="sigle">DHCP</em></strong> sur le réseau local et la configuration appropriée des machines (cf. chap R2‑II <a class="cours" href="Rc2-2_dhcp.html" target="_BLANK"></a>). Évidemment, il faut connaître la <strong>plage d'adresses <em class="sigle">IP</em> dynamiques</strong> paramétrée par l'administrateur du réseau. </p>
+
+<p> Pour des questions pédagogiques, pour contrôler la <strong>carte</strong> <strong class="Raspberry">Raspberry Pi</strong>, plutôt que de lui raccorder spécifiquement un écran et un clavier, on fait le choix d'une <strong class="defin">connexion</strong> <code class="cmd">ssh</code> via un <strong>terminal de commandes en ligne</strong> sur le poste de travail. C'est en effet la solution usuellement adoptée dans un contexte professionnel, et tout particulièrement dans le domaine du <em class="english">cloud computing</em>. </p>
+</div><!-- display -->
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer toutes les <strong class="title">manipulations</strong>  méticuleusement <strong class="warning">dans l'ordre</strong> indiqué. Saisir les <strong class="title">commandes en ligne</strong> par <strong>copier‑coller des commandes</strong> pour éviter les fautes de frappe et d'inattention. Dans une perspective de consolidation des connaissances, il est recommandé de bien <strong class="pros">comprendre</strong> le <strong>rôle de chaque commande</strong>, en consultant éventuellement les <strong>pages web</strong> données en référence. </p>
+
+<p> Répondre aux <strong class="title">explications demandées</strong> sur un <strong>cahier</strong> ou dans un <strong>fichier</strong>. </p>
+</div><!-- important -->
+
+
+<h4 style="padding-top: 1em"> I  –  Travail préparatoire </h4>
+
+<ol class="exercice">
+  <li id="prepaPoste" style="padding-top: 0em;"> <em class="bold">Préparation du poste de travail</em> </li>
+
+  <ol class="questions">
+    <img class="top-right" src="../img/logoRaspberry.png" width="50px" style="padding-top:0.5em">
+    <li> Pour le <strong>gravage de la clef <em class="sigle">USB</em> bootable</strong> d'une carte <strong class="Raspberry">Raspberry Pi</strong>, quel que soit le système d'exploitation du poste de travail, il est recommandé d'employer l'<strong class="title">utilitaire</strong> dédié <strong class="Raspberry">Raspberry Pi Imager</strong>. </li>
+    
+    <div class="expert">
+    <div class="nobullet"> En effet, depuis sa <strong>version 1.7</strong>, cet utilitaire permet de paramétrer dès la procédure de gravage la création d'un <strong class="defin">compte d'utilisateur</strong> avec un <strong class="pros">mot de passe personnalisé</strong>. Ce paramétrage est <strong>indispensable</strong> pour mettre en œuvre les systèmes d'exploitation <strong class="Raspberry">Raspberry Pi OS</strong> dans leurs <strong>versions ultérieures à juin 2022</strong>. </div>
+    </div><!-- expert -->
+
+      <img class="top-right" src="../img/workstation.png" width="100px" style="padding-top:0.0em">
+    <div class="nobullet"> Si <strong class="Raspberry">Raspberry Pi Imager</strong> n'est pas déjà installé, sur un poste à système <strong class="Mint">Linux Mint</strong>, il suffit de <strong>télécharger</strong> son fichier <code class="filename">.deb</code> (paquets <em class="mark">Debian</em>) via le lien suivant <a class="external" href="https://downloads.raspberrypi.org/imager/imager_latest_amd64.deb" target="_BLANK"></a>. L'<strong>installation</strong> s'effectue en double‑cliquant sur ce fichier. </li>
+    </div><!-- display -->
+
+    <div class="nobullet"> Une fois que l'installation est achevée, retrouver cette application dans le <strong>menu principal</strong> du système d'exploitation et créer son <strong>raccourci</strong> dans le tableau de bord (barre de tâche). </div>
+
+    
+    
+    
+    <!-- 
+    <ul>
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/usb-creator.png" width="60px" style="padding-top:0.5em">
+      <li> Avec un système <strong class="specialLB">Linux</strong> comme <em class="mark">Ubuntu</em> ou <em class="mark">Mint</em>, on trouve normalement dans la logithèque l'accessoire <strong class="specialGr">Créateur de clé <em class="sigle">USB</em></strong>. C'est la <strong class="pros">solution recommandée</strong>. </li>
+      </div>
+      
+      
+      <div style="display: inline-block;">
+        <img class="top-right" src="../img/logoBalenaEtcher.png" width="60px" style="padding-top:0.5em">
+      <div class="nobullet"> On peut aussi installer un logiciel plus polyvalent comme <strong class="specialLG">Balena Etcher</strong> en téléchargeant son fichier <code class="filename">.deb</code> (paquets <em class="mark">Debian</em>) via le lien suivant <a class="external" href="https://github.com/balena-io/etcher/releases/download/v1.7.1/balena-etcher-electron_1.7.1_amd64.deb" target="_BLANK"></a> puis en double‑cliquant sur ce fichier. </div>
+      </div>
+
+      <li> Avec un système <strong class="specialLB">Windows</strong>, on peut installer <strong class="Raspberry">Raspberry Pi Imager</strong> <a class="external" href="https://downloads.raspberrypi.org/imager/imager_latest.exe" target="_BLANK"></a>, <strong class="specialLG">Balena Etcher</strong> <a class="external" href="https://www.balena.io/etcher/" target="_BLANK"></a> ou <strong class="specialGr">Rufus</strong> <a class="external" href="https://rufus.ie/fr/" target="_BLANK"></a>, avec une préférence pour le premier en termes de simplicité de mise en œuvre. </li>
+    </ul> 
+    -->
+    
+  
+    <li> Sur le poste de travail, vérifier qu'un <strong class="title">logiciel de scan réseau</strong> est installé (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#scannerReseau" target="_BLANK"></a>). </li>
+
+      <img class="top-right" src="../img/angryIPscannerLogo.png" width="80px">
+    <div class="nobullet"> Sinon, procéder à son installation, sachant que, quel que soit le système d'exploitation, <strong class="specialSG">Angry IP Scanner</strong> est ici recommandé pour sa <strong class="pros">simplicité</strong>. On s'en servira seulement pour déterminer l'<strong>adresse <em class="sigle">IP</em></strong> de la carte <em class="mark">Raspberry Pi</em>. </div>
+
+    <div class="nobullet"> Comme à la question <em class="bold">1.a</em>, pour effectuer cette <strong>installation</strong> sur un poste de travail à système <strong class="Mint">Linux Mint</strong>, télécharger le fichier  <code class="filename">.deb</code> (paquets <em class="mark">Debian</em>) sur la page de téléchargement du site de l'application <a class="external" href="https://angryip.org/download/#linux" target="_BLANK"></a> puis double‑cliquer sur le fichier obtenu pour lancer l'installation. </div>
+
+    <div class="nobullet"> Comme à la question <em class="bold">1.a</em>, une fois que l'installation est achevée, créer son <strong>raccourci</strong> dans le tableau de bord (barre de tâche). </div>
+
+    <div class="nobullet"> De plus, lancer l'application et via la <strong>commande</strong> <code>Fetchers…</code> du <strong>menu</strong> <code>Outils</code>, <strong class="defin">ajouter les colonnes</strong> <code>Constructeur MAC</code> et <code>Adresse Mac</code> dans fenêtre d'affichage (cf. la capture d'écran ci‑dessous). </div>
+    
+    <img class="top-left" src="../img/angryIPscannerColumns.png" style="max-width: 800px">
+
+
+    <div class="nobullet">  Ces informations seront <strong class="pros">très utiles</strong> pour retrouver une carte <em class="mark">Raspberry Pi</em> dans le scan d'un réseau accueillant de nombreuses machines.  </div>
+  </ol><!-- questions exo I.1 -->
+  
+
+
+
+  <li id="prepaServeur" style="margin-top: 2em;"> <em class="bold">Préparation du système d'exploitation du serveur</em> </li>
+
+  <ol class="questions">
+    <li> Pour le futur serveur, <strong class="title">télécharger l'image</strong> du système d'exploitation <strong class="Raspberry">Raspberry Pi OS</strong> dans sa <strong>version 64 bits « lite »</strong> (<em class="english">without desktop</em>) la plus récente <a class="external" href="https://www.raspberrypi.com/software/operating-systems/" target="_BLANK"></a>. Il s'agit d'un fichier d'archive <code class="filename">.xz</code>. </li>
+
+      <img class="top-right" src="../img/carteMicroSDlecteur.png" width="200px">
+    <li> Introduire la <strong>carte microSD</strong> dans un <strong>lecteur <em class="sigle">USB</em></strong> et la brancher au poste de travail. Si elle n'est pas vierge, il est <strong class="pros">inutile de la formater</strong> ; cette opération sera automatiquement effectuée avant le gravage. </li>
+
+    <div class="nobullet">  À l'aide du logiciel de gravage <strong class="Raspberry">Raspberry Pi Imager</strong> (cf. question <em class="bold">1.a</em>), <strong class="title">graver l'image</strong> du système d'exploitation du futur serveur, en suivant la procédure ci‑dessous : </div>
+    <ul>
+      <li> Pour le <strong>système d'exploitation</strong>, choisir l'option « <em class="mark">utiliser une image personnalisée</em> » et sélectionner celle téléchargée à la question <em class="bold">2.a</em>. </li>
+
+      <li> Pour le <strong>support de stockage</strong>, sélectionner la <strong>carte MicroSD</strong> branchée sur le poste – attention à <strong class="warning">ne pas confondre</strong> avec une <strong>clef <em class="sigle">USB</em> personnelle</strong> qui serait éventuellement montée sur le poste, le risque étant d'écraser tout son contenu. </li>
+
+      <li> Cliquer alors sur le <strong>bouton de paramétrage</strong> <em class="bold">⚙</em> et cocher les options suivante : </li>
+      <ul style="list-style: circle;">
+        <li> <code class="cmd">Set hostname</code> en modifiant le nom proposé par par défaut : saisir <code>rpi</code><strong class="defin">X</strong> où <strong class="defin">X</strong> est un numéro indiqué par l'enseignant, différent pour chaque carte ; </li>
+
+        <li> <code class="cmd">Enable SSH</code> avec l'option <code>use password authentication</code> ; </li>
+
+        <li> <code class="cmd">Set username and password</code> avec le <strong>nom d'utilisateur</strong> <code>pi</code> par défaut et le <strong>mot de passe</strong> indiqué par l'enseignant ; </li>
+
+        <div class="nobullet"> <em class="remark">Attention</em> : pour éviter toute <strong class="cons">erreur sur le mot de passe</strong>, il est vivement recommandé de le <strong class="pros">saisir dans un éditeur de code</strong> afin qu'il puisse être <strong>contrôlé visuellement</strong> avant de le copier‑coller dans le champ <code>Password</code>. </div>
+
+        <li> <code class="cmd">Set locale settings</code> avec la <strong>zone horaire</strong> locale (Paris) et le <strong>clavier</strong> <code>fr</code>. </li>
+      </ul>
+
+      <div class="nobullet"> Finalement, <strong>décocher</strong> l'option <code class="cmd">Enable telemetry</code> et <strong>sauvegarder</strong> ces paramétrages en cliquant sur le <strong>bouton</strong> <code class="cmd">Save</code>. </div>
+
+      <div class="nobullet"> On peut alors cliquer sur le <strong>bouton</strong> <code class="cmd">Écrire</code> pour démarrer le <strong>gravage l'image</strong> du système sur la carte <em class="mark">MicroSD</em>. </div>
+    </ul>
+    
+    <!-- 
+    <div style="display: inline-block;">
+        <img class="top-right" src="../img/usb-creator.png" width="50px">
+    <div class="nobullet"> <em class="remark">Remarque</em> : avec le logiciel recommandé <strong class="specialGr">Créateur de clé <em class="sigle">USB</em></strong>, il est nécessaire de préalablement <strong>extraire le fichier d'image</strong> de son format d'archive (<code class="filename">.zip</code>, <code class="filename">.xz</code> ou autre), sinon il n'est pas détecté. </div>
+    </div> -->
+
+    <div class="nobullet"> L'opération de <strong class="title">gravage</strong> peut prendre <strong>plusieurs minutes</strong>, selon les performances du poste de travail. Elle crée <strong class="defin">deux partitions</strong> :  </div>
+    <ul>
+      <li> <code class="filename">boot</code>, qui constitue le <strong>secteur de démarrage</strong> du système ;  </li>
+    
+      <li> <code class="filename">rootfs</code>, qui constitue le <strong>racine du système de fichiers</strong>.  </li>
+    </ul>
+
+    <!--
+    <li> Dans un explorateur de fichier de type <code>Poste de travail</code>, retrouver ces partitions et <strong class="title">monter la partition boot</strong> (commande exécutée via le menu contextuel accessible par clic‑droit). </li>
+
+    <div class="nobullet"> Dans cette partition – et <strong class="warning">surtout pas</strong> dans le répertoire <code class="filename">/rootfs/boot</code> – <strong class="title">créer un fichier vide</strong> nommé <code class="filename">ssh</code>. Il sera <strong class="warning">indispensable</strong> pour amorcer la connexion distante par protocole <strong class="title">ssh</strong> au serveur depuis le poste de travail. Cette opération peut être effectuée : </div>
+    <ul>
+      <li> soit en effectuant un clic‑droit dans la fenêtre de l'explorateur de fichier, via la commande <code class="cmd">Créer un nouveau document vide</code>.
+    
+      <li> soit en saisissant la commande <code class="displayDark">touch ssh</code> dans un terminal. </li>
+    </ul>
+    -->
+
+    <div class="nobullet"> Une fois que l'opération de gravage est terminée, on peut <strong class="title">éjecter</strong> la carte <strong>microSD</strong> du poste de travail (seul l'icône de la partition <code>boot</code> apparaît sur le bureau). </div>
+    
+  </ol><!-- questions exo I.2 -->
+
+
+
+
+  <li id="paramSystem" style="margin-top: 2em;"> <em class="bold">Mise en service et paramétrage du serveur</em> </li>
+
+  <ol class="questions">
+      <img class="top-right" src="../img/microSDmounted.png" width="120px">
+    <li> Introduire la carte <strong>microSD</strong> dans le bon sens dans le logement sous la carte <strong class="Raspberry">Raspberry Pi</strong> (cf. la photo ci‑contre) puis raccorder cette dernière au réseau local via un <strong>câble Ethernet</strong> avant sa <strong class="title">mise sous tension</strong>. </li>
+
+      <img class="top-right" src="../img/RPi4_led.jpg" width="120px">
+    <div class="nobullet"> La <strong class="specialG">led verte</strong> dite <strong class="specialG"><em class="sigle">ACT</em></strong> (pour <em class="english">SD card activity</em>) de la carte <strong class="Raspberry">Raspberry Pi</strong> se met alors à clignoter de façon irrégulière. Elle témoigne du <strong>chargement du système d'exploitation</strong> en mémoire vive (comme le témoin d'accès au disque dur sur un PC). Il faut attendre – environ une trentaine de secondes – qu'elle soit <strong class="defin">durablement éteinte</strong> avant de scanner le réseau (sinon elle risque de ne pas être visible).</div>
+
+      <img class="top-right" src="../img/angryIPscannerLogo.png" height="60px">
+    <li> <strong class="title">Scanner le réseau local</strong> sur toute la <strong>plage d'adresses <em class="sigle">IP</em> dynamiques</strong>. Repérer l'<strong class="defin">adresse <em class="sigle">IP</em></strong> de la carte en correspondance avec son <strong>adresse <em class="sigle">MAC</em></strong> ou son <strong>hostname</strong>. </li>
+
+    <div class="nobullet"> Dans le contexte d'un établissement éducatif où de nombreuses machines sont raccordées au réseau, il est recommandé de <strong class="defin">trier le tableau</strong> affiché par le scanner via la colonne <strong>constructeurs <em class="sigle">MAC</em></strong> pour regrouper les lignes de toutes les cartes <strong class="Raspberry">Raspberry Pi</strong>. </div>
+    
+    <div class="expert">
+    <div class="nobullet"> Si l'<strong>adresse <em class="sigle">MAC</em></strong> de la carte est <strong class="cons">inconnue</strong>, il faut procéder en <strong class="defin">plusieurs étapes</strong> d'arrêt-redémarrage pour voir la apparaître-disparaître dans le tableau et ainsi l'identifier. </div>
+    </div><!-- expert -->
+
+    <li> Sur le <strong>poste de travail</strong>, ouvrir un terminal de commandes en ligne et <strong class="title">se connecter</strong> à la carte <strong class="Raspberry">Raspberry Pi</strong> via la commande : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">ssh</span> pi@<span class="nocode"><strong style="color: yellow">adresse IP</strong></span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> puis saisir le <strong>mot de passe</strong> de l'utilisateur <code>pi</code> paramétré lors de l'opération de gravage (cf. question 2.b). </div>
+
+    <div class="nobullet"> Sauf indication contraire, toutes les manipulations qui suivent se font dans le cadre de cette <strong>connexion</strong> <code>ssh</code>. </div>
+    
+    <div class="nobullet"> Si le mot de passe a été mal choisi (trop banal, par exemple), à l'aide de la commande <code class="displayDarkGreen">passwd</code>, <strong class="title">changer le mot de passe</strong> en adoptant celui indiqué par l'enseignant. Avec l'identifiant d'utilisateur associé, le noter dans un fichier pour le retrouver en cas d'oubli ultérieur. </div>
+    
+    <div class="expert">
+    <div class="nobullet"> Dans tout <strong>contexte professionnel</strong>, cette <strong class="warning">précaution de sécurité</strong> doit bien évidemment être accomplie <strong class="defin">dès la mise en service</strong> de la carte. Dans le cas particulier d'une séance de travaux pratiques en groupe ou les enjeux de sécurité restent théoriques, cela permet quand même d'éviter qu'un étudiant ne se connecte par erreur à une autre carte que la sienne. </div>
+    </div><!-- expert -->
+
+    <li> À l'aide de la commande <code class="displayDarkGreen">date</code>, vérifier si le système est réglé sur la bonne <strong class="title">zone horaire</strong> (cf. chap. R2‑VI <a class="next" href="Rc2-6_serviceTemps.html#zoneHoraire" target="_BLANK"></a>) et que l'heure est synchrone avec celle affichée par le poste de travail. </li>
+
+    <div class="nobullet"> Sinon, <strong class="defin">régler la bonne zone horaire</strong> à l'aide des commandes ci‑dessous : </div> 
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo timedatectl</span> set-timezone Europe/Paris <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">sudo timedatectl</span> set-ntp True
+</pre>
+<!---------- ne pas indenter ---------->   
+
+    <div class="nobullet"> puis vérifier, encore avec la commande <code class="displayDarkGreen">date</code>, que le système est bien réglé sur l'<strong class="pros">heure locale</strong>, à savoir la <strong>zone horaire <em class="sigle">CET</em></strong> – <em class="english">Central European Time</em> – ou <strong><em class="sigle">CEST</em></strong> – <em class="english">Central European Summer Time</em>. </div>  
+
+    <li> À l'aide de la commande <code class="displayDarkGreen">locale</code>, vérifier si les valeurs des variables d'environnement du système (notamment <code>LANG</code> et <code>LANGUAGE</code>) sont cohérentes avec les <strong class="title">paramètres régionaux</strong> <a class="external" href="https://en.wikipedia.org/wiki/Locale_(computer_software)" target="_BLANK">W</a> de la France. </li>
+
+    <div class="nobullet"> Sinon, <strong class="defin">régler les paramètres régionaux</strong> conformément à la <strong>locale</strong> <code>fr.FR-UTF-8</code> en suivant la procédure ci‑dessous. </div>
+    <ul>
+      <li> Modifier le <strong>fichier de sélection</strong> des locales : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> /etc/locale.gen
+</pre>
+<!---------- ne pas indenter ----------> 
+
+      <div class="nobullet"> en commentant (c'est‑à‑dire en ajoutant le symbole <code>#</code> en début de ligne) <code>en_GB.UTF-8 UTF-8</code> et en décommentant <code>fr_FR.UTF-8 UTF-8</code>. Taper <code><em>Ctrl</em>-S</code> (<em class="english">save</em>) et <code><em>Ctrl</em>-X</code> (<em class="english">exit</em>). </div>
+
+      <li> Saisir la <strong>commande</strong> <code class="displayDarkGreen">sudo locale-gen</code> pour générer la locale sélectionnée <code>fr.FR-UTF-8</code>.  </li>
+
+      <li> Modifier le <strong>fichier de configuration</strong> des paramètres régionaux de langage : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> /etc/default/locale
+</pre>
+<!---------- ne pas indenter ----------> 
+
+      <div class="nobullet"> et y coder les affectations des variables d'environnement : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+LANG=fr_FR.UTF-8
+LANGUAGE=fr_FR.UTF-8
+</pre>
+<!---------- ne pas indenter ----------> 
+
+      <div class="nobullet"> puis sauvegarder (<code><em>Ctrl</em>-S</code>) et quitter (<code><em>Ctrl</em>-X</code>).  </div>
+
+      <li> Pour rendre ces modifications effectives, exécuter la commande : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">source</span> /etc/default/locale
+</pre>
+<!---------- ne pas indenter ----------> 
+      
+      <div class="nobullet"> À l'aide de la commande <code class="displayDarkGreen">locale</code>, vérifier que les paramètres régionaux sont <strong class="pros">conformes</strong> à la localisation du système. </div>
+ 
+      <div class="nobullet"> Sinon, <strong>redémarrer le système</strong> via la commande <code class="displayDarkGreen">sudo reboot</code> puis renouveler la connexion <code>ssh</code> (avec le nouveau mot de passe) et re‑vérifier les paramètres régionaux. </li>
+    </ul>
+
+    <li id="update"> <strong class="title">Mettre à jour le système</strong> par la séquence de commandes suivantes : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt update<span class="displayDarkGreen">
+<span class="displayDarkGreen">sudo apt full-upgrade</span> <span class="displayDarkRed">-y</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> sachant que cette opération prend plusieurs minutes, voire plus d'une dizaine de minutes selon le débit de connexion. Ensuite, il est vivement recommandé de <strong class="title">purger les paquets inutiles</strong> puis de <strong class="title">redémarrer le système</strong> pour être sûr que toutes les mises à jour sont prises en compte : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt autoremove</span>
+<span class="displayDarkGreen">sudo reboot</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> Et bien entendu, une fois le redémarrage terminé, il faut encore renouveler la connexion <code>ssh</code>. </div>
+
+    <div class="remarques">
+    <p class="remarque"> Si la <strong class="title">commande de mise à jour</strong> du système <strong class="warning">échoue</strong> au motif que le serveur des paquets est indisponible (typiquement, avec une erreur 503), cela peut être dû au serveur proxy académique.  </p>
+
+    <p> Pour y remédier, une solution peut consister à <strong>changer de site de dépôt</strong>, en suivant la procédure ci‑dessous. </p>
+    <ul>
+      <li> Sur le poste de travail, à l'aide d'un navigateur, <strong>sélectionner un site de dépôt</strong> sur la page web suivante <a class="external" href="https://www.raspbian.org/RaspbianMirrors" target="_BLANK"></a> (copier son <strong><em class="sigle">URL</em></strong> dans le presse‑papier). </li>
+    
+      <li> Sur la carte <strong class="Raspberry">Raspberry Pi</strong>, coller cet <strong><em class="sigle">URL</em></strong> à la place de ceux codés dans les fichiers suivants (à éditer à l'aide de la commande <code class="displayDarkGreen">sudo nano</code>) :   </li>
+      <ul style="list-style-type: circle;">
+        <li> <code class="filename">/etc/apt/sources.list</code> </li>
+      
+        <li> <code class="filename">/etc/apt/sources.list.d/raspi.list</code></li>
+      </ul>
+    </ul>
+
+    <p> Recommencer alors la procédure de mise à jour (<code>update</code>, <code>upgrade</code> et <code>reboot</code>) décrite supra . </p>
+    </div><!-- remarques -->
+    
+  </ol><!-- questions exo I.3 -->
+
+
+
+
+
+
+<h4 style="padding-top: 2em"> II  –  Installation et test d'un serveur web </h4>
+
+<ol class="exercice">
+
+  <img class="top-right" src="../img/logoApache.png" height="70px" style="padding-top: 0.5em">
+  <li id="apache" style="margin-top: 2em;"> <em class="bold"> Installation du logiciel serveur <em class="sigle">HTTP</em> <em class="mark">Apache</em> </em> </li>
+
+  <ol class="questions">
+    <li> En connexion <code>ssh</code> avec la carte <strong class="Raspberry">Raspberry Pi</strong>, <strong class="title">installer</strong> le logiciel <strong class="specialR">serveur <em class="sigle">HTTP</em> Apache2</strong> (cf. chap. R2‑IV <a class="cours" href="Rc2-4_webServeur.html#logicielsServeursHTTP" target="_BLANK"></a>) :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> apache2 -y
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <li> Spécifier le <strong class="title">nom du serveur</strong> en éditant le fichier de configuration (avec activation de la <strong>numérotation des lignes</strong> de l'éditeur <code>nano</code>) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> <span class="displayDarkRed">-l</span> /etc/apache2/apache2.conf
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> et en ajoutant à la ligne nº 70 :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+ServerName snir<span class="nocode"><strong style="color: yellow">X</strong></span>webserver
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> où <code class="displayDark"><span class="nocode"><strong style="color: yellow">X</strong></span></code> est un numéro spécifique indiqué par l'enseignant, différent pour chaque carte sur le réseau (le même qu'à la question <em class="bold">1.b</em> –). </div>
+
+    <li> Relancer le service <code>apache2</code> (une authentification de l'utilisateur par mot de passe est requise) puis <strong class="title">vérifier</strong> ensuite qu'il est bien <strong class="defin">actif</strong> en tâche de fond :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">systemctl restart</span> apache2 <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">systemctl status</span> apache2
+</pre>
+<!---------- ne pas indenter ---------->   
+
+    <div class="nobullet"> Sur le <strong>poste de travail</strong>, vérifier que la <strong class="title">page d'accueil par défaut</strong> du serveur <strong>Apache</strong> s'affiche dans un navigateur avec l'<strong><em class="sigle">URL</em></strong> :  <br>
+    <span class="inline">
+     <code class="filename">http://<span class="nocode"><strong class="specialY">adresse IP</strong></span></code>
+    </span></div>
+
+    <li> Donner à l'utilisateur <code>pi</code> la <strong class="title">propriété du répertoire</strong> <code class="filename">/var/www</code> qui constitue pour l'application <code>apache2</code> la <strong>racine des fichiers de pages web</strong> qu'elle peut servir : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo chown</span> <span class="displayDarkRed">-R</span> pi<span class="displayDarkBlue">:</span>pi /var/www
+</pre>
+<!---------- ne pas indenter ---------->  
+
+    <div class="nobullet"> et vérifier que cette modification est effective : </div> 
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">ls</span> <span class="displayDarkRed">-l</span> /var/www
+</pre>
+<!---------- ne pas indenter ---------->      
+  
+    <li> Créer un répertoire <code class="filename">examplePHP</code> et y charger la <strong class="title">page web dynamique</strong> <code class="filename"> changeBackground.php</code> donnée à titre d'exemple académique dans le cours (cf. chap. R2‑IV <a class="cours" href="Rc2-4_webServeur.html#langagePHP" target="_BLANK"></a>) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">cd</span> /var/www/html <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">mkdir</span> examplePHP <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">cd</span> examplePHP/
+<span class="displayDarkGreen">wget</span> http://lycee-ferry-versailles.fr/snir/moduleR/prog/R2tp2_serveurs/changeBackground.txt
+<span class="displayDarkGreen">mv</span> changeBackground.txt changeBackground.php
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> Sur le <strong>poste de travail</strong>, dans un navigateur, ouvrir cette page via son <strong><em class="sigle">URL</em></strong> :  <br>
+    <span class="inline">
+      <code class="filename">http://<span class="nocode"><strong class="specialY">adresse IP</strong></span>/examplePHP/changeBackground.php</code>
+    </span> <br>
+    et constater qu'elle est <strong class="cons">dysfonctionnelle</strong>. Proposer une explication mais <strong class="warning">ne pas fermer cet onglet</strong> (il sera réutilisé ultérieurement). </div>
+
+  </ol><!-- questions exo II.1 -->
+
+
+
+
+  
+  <li id="php" style="margin-top: 2em;"> <em class="bold"> Installation du langage de backend <em class="mark">PHP</em> </em> </li>
+
+  <ol class="questions">
+     <img class="top-right" src="../img/logoPHP.png" height="70px" style="padding-top: 0.5em">
+   <li> Toujours en connexion <code>ssh</code> avec la carte <strong class="Raspberry">Raspberry Pi</strong>, <strong class="title">installer les paquets</strong> du <strong class="php">langage php</strong> (cf. chap. R2‑IV <a class="cours" href="Rc2-4_webServeur.html#langagePHP" target="_BLANK"></a>) dans sa version stable (7.4) sélectionnée sur le dépôt <em class="mark">Raspberry Pi</em>, ainsi que les <strong>paquets communs</strong> partagés par toutes les versions : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> php php-common <span class="displayDarkRed">-y</span> 
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <li> Installer quelques <strong class="title">modules d'extension</strong> supplémentaires usuellement utilisées pour le développement web :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> php7.4-mysql php7.4-curl php7.4-gd  php7.4-intl php7.4-mbstring php7.4-xml php7.4-zip php7.4-fpm <span class="displayDarkRed">-y</span>
+</pre>
+<!---------- ne pas indenter ---------->   
+
+    <div class="nobullet"> Le <strong>module d'extension</strong> <code>fpm</code> <a class="external" href="https://fr.wikipedia.org/wiki/PHP-FPM" target="_BLANK">W</a> (<em class="english">fastGCI process manager</em>) n'étant <strong class="cons">pas activée par défaut</strong>, il faut le faire « manuellement » via la séquence de commandes suivantes : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo a2enmod</span> proxy_fcgi setenvif <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">sudo a2enconf</span> php7.4-fpm <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">sudo a2dismod</span> php7.4
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> puis il faut redémarrer le processus <code>apache</code> via la commande : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">systemctl restart apache2</span>
+</pre>
+<!---------- ne pas indenter ---------->
+    
+    <div class="nobullet"> laquelle nécessite une <strong>authentification par mot de passe</strong> de l'utilisateur. </div>
+
+    <li> Après ces installation, on peut <strong class="title">vérifier</strong> la <strong>liste des modules d'extension installés</strong> par la commande <code class="displayDarkGreen">php <span class="displayDarkRed">-m</span></code>. </li>
+
+    <div class="nobullet"> Enfin, sur la carte <strong class="Raspberry">Raspberry Pi</strong>, on peut construire la <strong class="title">page d'information</strong> de <strong>php</strong> :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">nano</span> /var/www/html/info.php
+</pre>
+<!---------- ne pas indenter ---------->  
+
+    <div class="nobullet"> en y codant seulement la <strong>balise</strong> <code class="displayDark">&lt;?php  phpinfo(); ?&gt;</code>. Après avoir sauvegardé ce fichier, il suffit d'ouvrir la page web sur le poste de travail via l'<strong><em class="sigle">URL</em></strong> : <br>
+    <span class="inline">
+      <code class="filename">http://<span class="nocode"><strong class="specialY">adresse IP</strong></span>/info.php</code>
+    </span> <br>
+    pour y lire toutes les caractéristiques techniques de l'environnement d'exécution de <strong>php</strong>. </div>
+  
+    <div class="expert">
+    <div class="nobullet"> <em class="remark">Remarque</em> : les nombreux modules d'extension installés ne sont pas tous nécessaires dans le cadre de ce sujet de travaux pratiques, mais ils le seraient pour la mise en œuvre d'applications web professionnelles. </div>
+    </div><!-- expert -->
+
+    <li> Dans le navigateur du poste de travail, on peut maintenant recharger la page web <code class="filename">changeBackground.php</code> ouverte à la question <em class="bold">1.e</em> et constater qu'elle <strong class="pros">fonctionne comme prévu</strong>. Si tel n'est pas le cas, <strong>vider le cache du navigateur</strong> pour cette entrée (avec <em class="mark">Firefox</em>, utiliser la commande <code>Oublier ce site</code> depuis l'historique de navigation, accessible dans le menu principal). </li>
+
+    
+  </ol><!-- questions exo II.2 -->
+
+
+
+
+  
+  <li style="margin-top: 2em;" id="MariaDB"> <em class="bold"> Installation du <em class="sigle">SGBDR</em> <em class="mark">MariaDB</em> </em> </li>
+
+  <ol class="questions">
+      <img class="top-right" src="../img/logoMariaDB.png" height="60px">
+		<li> Toujours en connexion <code>ssh</code> avec la carte <strong class="Raspberry">Raspberry Pi</strong>, <strong class="title">installer les paquets</strong> du <strong class="specialN"><em class="sigle">SGBDR</em> MariaDB</strong> (cf. chap. R2‑IV <a class="cours" href="Rc2-4_webServeur.html#Oracle" target="_BLANK"></a>) dans sa version stable sélectionnée sur le dépôt <em class="mark">Raspberry Pi</em> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> mariadb-server <span class="displayDarkRed">-y</span> 
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <li> <strong class="title">Paramétrer la sécurité</strong> du <strong><em class="sigle">SGBDR</em></strong> via la commande :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mysql_secure_installation</span>
+</pre>
+<!---------- ne pas indenter ---------->  
+
+    <div class="nobullet"> et <strong class="title">répondre méthodiquement</strong> aux questions comme indiqué ci‑dessous : </div>
+    <ul>
+      <li> adopter le <strong class="defin">même mot de passe</strong> pour l'utilisateur <code>root</code> que celui de <code>pi</code> pour la carte <em class="mark">Raspberry Pi</em> ; </li>
+
+      <li> <strong class="warning">ne pas</strong> recourir à l'<strong>authentification</strong> par <code>unix_socket</code> (puisque l'accès est déjà sécurisé par mot de passe) ;  </li>
+
+      <li> <strong class="warning">ne pas</strong> changer le <strong>mot de passe</strong> de l'utilisateur <code>root</code> ;  </li>
+
+      <li> <strong class="defin">supprimer</strong> l'accès aux <strong>utilisateurs anonymes</strong> ;  </li>
+
+      <li> <strong class="defin">supprimer</strong> la possibilité d'<strong>accès distant </strong>pour l'utilisateur <code>root</code> ;  </li>
+
+      <li> <strong class="defin">supprimer</strong> la <strong>base de donnée de test</strong> et son accès ; </li>
+
+      <li> <strong class="defin">recharger</strong> la <strong>table des privilèges</strong> maintenant. </li>
+    </ul>
+
+    <li> <strong class="title">Exécuter</strong> <strong>MariaDB</strong> (logiciel identifié par la commande <code>mysql</code>) en tant qu'utilisateur <code>root</code> et avec saisie de mot de passe : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mysql</span> <span class="displayDarkRed">-u</span> root <span class="displayDarkRed">-p</span>
+</pre>
+<!---------- ne pas indenter ---------->     
+
+    <div class="nobullet"> Créer alors un <strong class="title">compte d'accès</strong> à l'utilisateur <code>pi</code> avec <strong>tous les droits</strong> sur toutes les bases de données, et avec le <strong class="defin">même mot de passe</strong> que <code>root</code>, <strong class="warning">à modifier dans la commande ci‑dessous</strong> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+GRANT ALL PRIVILEGES ON *.* TO 'pi'@'localhost' IDENTIFIED BY '<span class="nocode"><strong style="color: yellow">mot de passe</strong></span>' WITH GRANT OPTION;
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> puis quitter <strong>MariaDB</strong> avec la commande <code class="displayDark">quit</code>. </div>
+
+    <li> Créer un répertoire <code class="filename">example3tier</code> et y charger les <strong class="title">fichiers source</strong> d'un exemple d'application 3‑tiers proposé dans le cours (cf. chap. R2‑IV <a class="cours" href="Rc2-4_webServeur.html#exMariaDB" target="_BLANK"></a>) : </li>    
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">cd</span> /var/www/html <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">mkdir</span> example3tier <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">cd</span> example3tier/
+<span class="displayDarkGreen">wget</span> <span class="displayDarkRed">-r --no-parent -nH -l1 --cut-dirs</span>=6 <span class="displayDarkGreen">--reject</span>="index.html*" <span class="displayDarkGreen">--reject</span>="example3tier*" http://lycee-ferry-versailles.fr/snir/moduleR/prog/R2tp2_serveurs/example3tier
+<span class="displayDarkGreen">for</span> f <span class="displayDarkGreen">in</span> *.txt; <span class="displayDarkGreen">do mv</span> <span class="displayDarkRed">--</span> "$f" "${f%.txt}.php"; <span class="displayDarkGreen">done</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> <strong class="title">Éditer</strong> le fichier <code class="filename">dbConnect.php</code>, en activant la <strong>numérotation des lignes</strong> de l'éditeur <code>nano</code> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span> <span class="displayDarkRed">-l</span> dbConnect.php
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> et modifier la ligne n° 4 pour donner à la variable <code class="prettyprint lang-php">$dbpasswd</code> le <strong>mot de passe</strong> de l'utilisateur <code>pi</code>. Sauvegarder (<code>Crtl-S</code>) et quitter (<code>Ctrl-X</code>). </div>
+
+    <li> puis, <strong class="title">ouvrir la page web</strong> sur le poste de travail via l'<strong><em class="sigle">URL</em></strong> : <br> 
+    <span class="inline">
+      <code class="filename">http://<span class="nocode"><strong class="specialY">adresse IP</strong></span>/example3tier/index.php</code>
+    </span> <br>
+    mais <strong class="warning">ne pas tester son fonctionnement</strong> pour le moment (cela produirait une erreur de connexion puisqu'aucune base de donnée n'a encore été créée). </li>
+
+    <li> Toujours en connexion <code>ssh</code> avec la carte <strong class="Raspberry">Raspberry Pi</strong>, consulter le contenu du <strong class="title">fichier source</strong> <code class="filename">tableCreation.sql</code> qui va servir à créer la base de donnée nécessaire : 
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">cat</span> tableCreation.sql
+</pre>
+<!---------- ne pas indenter ---------->    
+
+
+    <div class="nobullet"> Lancer <strong>MariaDB</strong> en tant qu'utilisateur <code>pi</code> avec saisie de mot de passe :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mysql</span> <span class="displayDarkRed">-u</span> pi <span class="displayDarkRed">-p</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> puis <strong class="title">exécuter</strong> le <strong class="title">fichier source</strong> de création de la base de données <code>userPref</code> et de la table <code>favoriteColors</code> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+source tableCreation.sql
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> En exécutant la commande <em class="mark">SQL</em> suivante, <strong class="title">vérifier</strong> que la <strong>base de données</strong> <code>userPref</code> est bien créée : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+SHOW DATABASES;
+</pre>
+<!---------- ne pas indenter ----------> 
+    
+    <div class="nobullet"> Vérifier ensuite que la <strong>table</strong> <code>favoriteColors</code> existe, puis détailler sa structure : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+SHOW TABLES;
+DESCRIBE `favoriteColors`;
+</pre>
+<!---------- ne pas indenter ---------->    
+
+    <li> Sur le <strong>poste de travail</strong>, dans le navigateur, recharger la page web <code class="filename">index.php</code> puis tester son fonctionnement en saisissant par exemple la <strong class="title">couleur</strong> nommé <code>mediumyellow</code> avec les valeurs <code>(255, 255, 127)</code> comme code <strong><em class="sigle">RGB</em></strong>. Cliquer sur le bouton <code class="grey">Record</code> pour valider la saisie. </li>
+
+    <div class="nobullet"> Sur la carte <strong class="Raspberry">Raspberry Pi</strong>, toujours dans l'environnement d'exécution de <strong>MariaDB</strong>, lister le contenu de la table <code>favoriteColors</code> grâce à la commande <em class="mark">SQL</em> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+SELECT * FROM `favoriteColors`;
+</pre>
+<!---------- ne pas indenter ---------->  
+
+    <div class="nobullet"> et constater qu'on y trouve bien la couleur <code>mediumyellow</code> enregistrée via la page web. <strong class="title">Effacer</strong> alors cet enregistrement avec la commande <em class="mark">SQL</em> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+DELETE FROM `favoriteColors` WHERE `colorName`="mediumyellow";
+</pre>
+<!---------- ne pas indenter ---------->
+    
+    <div class="nobullet"> et vérifier qu'elle disparaît de l'affichage sur le navigateur en rechargeant la page web. </div>
+
+    <div class="nobullet"> <strong class="title">Insérer à nouveau</strong> cette couleur par la commande <em class="mark">SQL</em> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+INSERT INTO `favoriteColors` (colorName, redCode, greenCode, blueCode) VALUES ("mediumyellow", 255, 255, 127);
+</pre>
+<!---------- ne pas indenter ---------->
+    
+    <div class="nobullet"> et vérifier qu'elle ré‑apparaît dans la fenêtre du navigateur en rechargeant la page web. </div>
+
+    <div class="nobullet"> Pour finir, <strong class="title">modifier</strong> la composante <strong>bleu</strong> du code <strong><em class="sigle">RGB</em></strong> de la couleur <code>mediumyellow</code> via la commande <em class="mark">SQL</em> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+UPDATE `favoriteColors` SET `blueCode` = 128 WHERE `colorName`="mediumyellow";
+</pre>
+<!---------- ne pas indenter ---------->
+    
+    <div class="nobullet"> et vérifier que cette modification est effective dans la fenêtre du navigateur en rechargeant la page web. </div>
+
+    <div class="nobullet"> Quitter <strong>MariaDB</strong> avec la commande <code class="displayDark">quit</code>. Faire alors une recherche dans le fichier source <code class="filename">addColor.php</code> pour y retrouver le codage de la commande <code>INSERT</code> en langage <strong>php</strong> : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">cat</span> addColor.php <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">grep</span> "INSERT"
+</pre>
+<!---------- ne pas indenter ---------->   
+    
+    <div class="expert">
+    <div class="nobullet"> Pour une compréhension plus globale, l'intégralité du <strong>fichier source</strong> <code class="filename">addColor.php</code> est accessible dans le cours, chap. R2‑IV <a class="cours" href="Rc2-4_webServeur.html#addColor" target="_BLANK"></a>. </div>
+    </div><!-- expert -->
+	</ol><!-- questions exo II.3 -->
+
+
+
+  <li id="phpmyadmin" style="margin-top: 2em;"> <em class="bold">Installation de l'interface web <em class="mark">phpMyAdmin</em></em> </li>
+
+  <ol class="questions">
+      <img class="top-right" src="../img/logoPHPmyAdmin.png" height="90px">
+    <li> <strong class="title">Installer les paquets</strong> de l'interface web <strong class="specialO">phpMyAdmin</strong> d'administration d'une base de donnée de type <em class="mark">mySQL</em> (cf. chap. R2‑IV <a class="cours" href="Rc2-4_webServeur.html#phpMyAdmin" target="_BLANK"></a>) dans sa version stable sélectionnée sur le dépôt <em class="mark">Raspberry Pi</em> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> phpmyadmin <span class="displayDarkRed">-y</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+    <div class="nobullet"> Dans l'interface semi‑graphique, <strong class="title">répondre méthodiquement</strong> aux questions comme indiqué ci‑dessous :  </div>
+    <ul>
+      <li> <strong class="defin">choisir</strong> <code>apache2</code> comme serveur web à configurer ; </li>
+    
+      <li> <strong class="defin">valider</strong> le choix de configurer la base de donnée avec <code>dbconfig-common</code> ;  </li>
+
+      <li> saisir le <strong class="defin">même mot de passe</strong> qu'avec <strong>MariaDB</strong> pour l'accès à <strong>phpMyAdmin</strong>. </li>
+    </ul>
+
+    <div class="nobullet"> puis <strong class="title">finaliser la configuration</strong> de l'accès à <strong>phpMyAdmin</strong> :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo ln</span> <span class="displayDarkRed">-s</span> /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
+<span class="displayDarkGreen">sudo a2enconf</span> phpmyadmin <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">systemctl reload</span> apache2
+</pre>
+<!---------- ne pas indenter ---------->  
+
+    <li> Sur le <strong>poste de travail</strong>, dans un navigateur, ouvrir la page web de connexion à <strong>phpMyAdmin</strong> via l'<strong><em class="sigle">URL</em></strong> : <br> 
+    <span class="inline">
+      <code class="filename">http://<span class="nocode"><strong class="specialY">adresse IP</strong></span>/phpmyadmin</code>
+    </span> <br>
+    et <strong class="title">se connecter</strong> avec l'<strong>identifiant</strong> <code>pi</code> (et non pas <code>root</code>) et le <strong>mot de passe</strong> utilisé depuis le début. Puis : </li>
+
+    <ul>
+      <li> s'il est masqué, <strong class="title">afficher le panneau navigation</strong> en cliquant sur le bouton en haut à gauche de la page ; </li>
+
+      <li> dans ce panneau, <strong class="title">retrouver la base de donnée</strong> <code>userPref</code> et cliquer sur son bouton « <code>+</code> » pour visualiser la liste des tables qu'elle contient ; </li>
+
+
+      <li> y <strong class="title">retrouver la table</strong> <code>favoriteColors</code> et cliquer sur son bouton « <code>+</code> » pour visualiser la liste de ses colonnes ; puis cliquer sur le nom de la table – qui est un <strong>hyperlien</strong> – pour afficher la page qui permet de manipuler son contenu ; </li>
+
+      <li> Avec les fonctionnalités de la <strong>page web dynamique</strong> : <br> 
+      <span class="inline">
+        <code class="filename">http://<span class="nocode"><strong class="specialY">adresse IP</strong></span>/example3tier/index.php</code>
+      </span> <br>
+      <strong class="title">ajouter de nouvelles couleurs</strong> et constater qu'elles apparaîssent dans la table <code>favoriteColors</code> en rafraichissant la page ; </li>
+
+      <li> dans l'interface <strong>phpMyAdmin</strong>, expérimenter les différentes possibilités de <strong class="title">modifier les données</strong> de la table : ajouter des lignes, modifier une ligne, supprimer une ligne, etc. </li>
+    </ul>
+
+    <div class="nobullet"> et enfin, <strong class="title">se déconnecter</strong> de <strong>phpMyAdmin</strong> en cliquant sur le 2<sup>e</sup> bouton situé sous le logo dans le panneau de navigation. </div>
+    
+  </ol><!-- questions exo II.4 -->
+
+
+
+</ol><!-- exercices serveur web -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

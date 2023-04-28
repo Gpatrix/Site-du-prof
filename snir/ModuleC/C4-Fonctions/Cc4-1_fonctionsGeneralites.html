@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="4"
+  data-pagenumber="I"
+  data-pageState="OK"
+  data-pageheadtitle="Fonctions"
+  data-pagefulltitle="Les fonctions  –  généralités"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<!-- relecture partielle en 2022 -->
+<!-- compléter et mettre en couleur les introductions de certains exemples -->
+
+
+
+<div class="exergue">
+
+<p class="square"> Pour gérer la complexité grandissante des programmes, on s'efforce autant que possible de les décomposer en <strong class="title">sous‑programmes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/sous-programme" target="_BLANK">W</a> (en anglais, <em class="english">subroutine</em>), chacun exécutant un <strong>traitement spécifique</strong>. Lorsque la décomposition est bien pensée, les sous‑programmes peuvent être codés par <strong class="pros">différents développeurs</strong> puis assemblés pour constituer le programme complet. Et pour optimiser autant que possible les coûts de développement, on conçoit les sous‑programmes de sorte qu'ils puissent être <strong class="pros">compilés indépendamment</strong> les uns des autres, et éventuellement réutilisés dans d'autres programmes. En les organisant en <strong class="title">bibliothèques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bibliothèque_logicielle" target="_BLANK">W</a> (en anglais, <em class="english">libraries</em>), on met ainsi en œuvre une <strong class="defin">programmation modulaire</strong> (cf. chap. C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#modularite" target="_BLANK"></a>). </p>
+
+
+<p class="square"> En langages <em class="mark">Pascal</em> ou <em class="mark">Delphi</em>, il existe les deux mots‑clef <code>function</code> et <code>procedure</code> pour déclarer un sous‑programme, afin de distinguer le fait que ce dernier rende ou ne rende pas une <strong>valeur</strong> en fin d'exécution. Le mot‑clef <code>function</code> apparaît également dans divers langages, notamment <em class="mark">JavaScript</em> ou <em class="mark">php</em>. </p>
+
+<p> En langages <strong>C</strong> et <strong>C++</strong>, il n'y a <strong class="warning">aucun mot‑clef</strong> qui code directement la <strong>notion de sous‑programme</strong>. La distinction entre les notions de fonction et de procédure est codée autrement et il est d'usage de parler de <strong class="title">fonction</strong> dans un <strong class="pros">sens très général</strong> – bien plus général que celui de <em>fonction mathématique</em>. En effet, en programmation, une fonction peut très bien : </p>
+<ul>
+  <li> d'un moment à un autre, rendre <strong>différentes valeurs en sortie</strong> alors que les variables d'entrée – on parle d'<strong class="defin">arguments</strong> ou de <strong class="defin">paramètres</strong> – gardent les mêmes valeurs ; </li>
+
+  <li> ne retourner éventuellement <strong >aucune valeur</strong>, comme pour une « <code>procedure</code> » en langage <em class="mark">Pascal</em> ; </li>
+
+  <li> en plus ou au lieu de retourner une valeur, effectuer d'<strong>autres actions</strong>, notamment des opérations d'entrées‑sorties, des modifications de variables globales, etc. </li>
+</ul>
+
+
+<p class="square"> Incontournable, la <strong>notion de fonction</strong> fait donc l'objet exclusif de ce chapitre d'introduction de la partie <span class="partie">C4</span> du module, avec les <strong class="title">objectifs</strong> listés ci‑dessous. </p>
+
+<ul>
+  <li> Après avoir donné quelques <strong class="specialLB">exemples simples</strong>, on peut exposer les <strong class="specialLB">aspects fondamentaux</strong> sous‑jacents au concept de fonction – <strong>corps</strong>, <strong>en‑tête</strong>, <strong>argument</strong>, <strong>valeur de retour</strong>, etc. – et détailler les <strong class="specialLB">règles de syntaxe</strong> qui les gouvernent. </li>
+
+  <li> On étudie ensuite les <strong class="specialLB">bases de la programmation modulaire</strong> qui repose, pour chaque fonction, sur le <strong>codage séparé</strong> de sa <strong class="specialLG">déclaration</strong> – appelée aussi <strong class="specialLG">prototype</strong> – et de sa <strong class="specialG">définition</strong>, c'est‑à‑dire son <strong>code intégral</strong>. </li>
+
+
+  <div class="expert">
+  <li> Enfin, on introduit des <strong class="specialLB">particularités et possibilités de codage avancées</strong> : </li>
+  <ul>
+    <li> fonction <strong>sans valeur de retour</strong> et/ou <strong>sans argument</strong>, grâce au type <code class="prettyprint lang-c">void</code> ; </li>
+
+    <li> transmission des arguments <strong>par référence</strong> ; </li>
+
+    <li> arguments optionnels avec une <strong>valeur par défaut</strong> ; </li>
+
+    <li> <strong>surcharge</strong> d'un identificateur de fonction ; </li>
+  </ul>
+  <div class="nobullet"> autant de notions complémentaires, dont la maîtrise est indispensable pour devenir un codeur expérimenté. </div>
+  </div><!-- expert -->
+</ul>
+<p> Tous ces aspects méritent la plus grande attention. Ils seront <strong class="pros">essentiels</strong> pour pouvoir aborder sereinement les chapitres suivants, y compris des <strong>autres parties</strong> du module. </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Exemples élémentaires </h2>
+
+
+
+<h3> Des fonctions mathématiques </h3>
+
+
+
+<h4> La fonction <em>cube</em> </h4>
+
+
+<div class="exemples">
+<p class="exemple"> Examinons le programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+double cube (double x) {
+  return x * x * x;
+}
+
+int main(void) { 
+  for (int a = 0; a <= 10; a++) {
+    printf("%2d³ = %g\n", a, cube(a));
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On y trouve : </p>
+<ul>
+  <li> aux lignes nº 3 à 5, la <strong class="title">définition</strong> de la fonction mathématique <em class="bold"><var>x</var> ⟼ <var>x</var>³</em> (ℝ ⟶ ℝ) ; </li>
+  <ul>
+    <li> la ligne nº 3 constitue son <strong class="title">en‑tête de définition</strong> (<em class="english">header</em>) avec dans l'ordre :  </li>
+    <ul>
+      <li> son <strong class="specialG">type</strong> de valeurs retournées <code class="prettyprint lang-c">double</code> ;  </li>
+
+      <li> son <strong class="specialN">identificateur</strong> <code class="prettyprint lang-c">cube</code> ; </li>
+    
+      <li> son (seul) <strong class="specialT">argument formel</strong> identifié par <code class="prettyprint lang-c">x</code>, qui est de type <code class="prettyprint lang-c">double</code>.</li>
+    </ul>
+
+    <li> le <strong class="title">corps de définition</strong> de la fonction est un bloc ne comprenant qu'<strong>une seule instruction</strong> (ligne nº 4), laquelle code la <strong class="defin">valeur retournée</strong> par la fonction, déterminée par l'expression <code class="prettyprint lang-c">x * x * x</code>.  </li>
+  </ul>
+
+  <li> aux lignes nº 8 à 10, dans la fonction principale <code class="prettyprint lang-c">main</code>, l'affichage en sortie standard des <strong>valeurs</strong> prises par cette fonction pour <strong>x</strong> allant de <em class="bold">0</em> à <em class="bold">10</em> par valeurs entières. </li>
+
+  <div class="nobullet"> À la ligne nº 9, l'expression <code class="prettyprint lang-c">cube(a)</code> constitue un <strong class="title">appel</strong> de la fonction <code class="prettyprint lang-c">cube</code> dont l'<strong class="specialO">argument effectif</strong> est l'expression <code class="prettyprint lang-c">a</code>. </div>
+</ul>
+
+<p> Ce programme produit l'affichage suivant (abrégé) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+ 0³ = 0
+ 1³ = 1
+ 2³ = 8
+ 3³ = 27
+    ⁝
+10³ = 1000
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Il constitue un <strong class="title">jeu d'essai</strong> <strong>partiel</strong> de la fonction. </p>
+
+</div><!-- exemple -->
+
+
+<h4> La fonction factorielle </h4>
+
+
+<div class="exemples">
+<p class="exemple"> Examinons le programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+unsigned long long fact(unsigned n) {
+  unsigned long long f = 1;
+  for (unsigned k = 1; k <= n; k++) {
+    f *= k;
+  }
+  return f;
+}
+
+int main(void) { 
+  for (unsigned a = 0; a <= 10; a++) {
+    printf("%2u! = %llu\n", a, fact(a));
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On y trouve : </p>
+<ul>
+  <li> aux lignes nº 3 à 5, la <strong class="title">définition</strong> de la fonction mathématique <em class="bold"><var>n</var> ⟼ <var>n</var>!</em> = 1 × 2 … × <var>n</var> (ℕ⁺ ⟶ ℕ⁺); </li>
+  <ul>
+    <li> la ligne nº 3 constitue son <strong class="title">en‑tête de définition</strong> (<em class="english">header</em>) avec dans l'ordre :  </li>
+    <ul>
+      <li> son <strong class="specialG">type</strong> de valeurs retournées <code class="prettyprint lang-c">unsigned long long</code> (parce que ces valeurs sont rapidement très grandes) ;  </li>
+
+      <li> son <strong class="specialN">identificateur</strong> <code class="prettyprint lang-c">fact</code> ; </li>
+    
+      <li> son (seul) <strong class="specialT">argument formel</strong> identifié par <code class="prettyprint lang-c">n</code>, qui est de type <code class="prettyprint lang-c">unsigned</code> (la fonction n'est pas définie sur ℕ⁻).</li>
+    </ul>
+
+    <li> jusqu'à la ligne nº 9, le <strong class="title">corps de définition</strong> de la fonction est un bloc comprenant notamment : </li>
+    <ul>
+      <li> à la ligne nº 4, la déclaration d'une <strong>variable locale</strong> <code class="prettyprint lang-c">f</code> ; </li>
+
+      <li> aux lignes nº 5 à 7, une boucle <code class="prettyprint lang-c">for</code> qui calcule dans <code class="prettyprint lang-c">f</code> le produit itératif 1 × 2 … × <var>n</var> ; </li>
+    
+      <li> à la ligne nº 8, l'<strong>instruction</strong> qui code la <strong class="defin">valeur retournée</strong> par la fonction, déterminée par l'expression <code class="prettyprint lang-c">f</code>. </li>
+    </ul>
+  </ul>
+
+  <li> aux lignes nº 12 à 14, dans la fonction principale, l'affichage en sortie standard des <strong>valeurs</strong> prises par cette fonction pour <strong>n</strong> allant de <em class="bold">0</em> à <em class="bold">10</em>. </li>
+
+  <div class="nobullet"> À la ligne nº 13, l'expression <code class="prettyprint lang-c">fact(a)</code> constitue un <strong class="title">appel</strong> de la fonction <code class="prettyprint lang-c">fact</code> dont l'<strong class="specialO">argument effectif</strong> est l'expression <code class="prettyprint lang-c">a</code>. </div>
+</ul>
+
+<p> Ce programme produit l'affichage suivant (abrégé) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+ 0! = 1
+ 1! = 1
+ 2! = 2
+ 3! = 6
+    ⁝
+10! = 3628800
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Il constitue un <strong class="title">jeu d'essai</strong> <strong>partiel</strong> de la fonction. </p>
+
+</div><!-- exemple -->
+
+
+
+<h3> Des fonctions d'entrée‑sortie </h3>
+
+
+
+<div class="exemples">
+<p class="exemple"> Le code du programme <strong class="Arduino">Arduino</strong> pour traiter l'exercice nº 3 <a class="TP" href="../C2-ElementsLangage/Ctp2-1_ledBouton.html#exo3" target="_BLANK"></a> du sujet de <em class="bold">TP C2‑2</em> (Led & bouton), à savoir la génération en <strong>morse</strong> d'un <strong>signal SOS</strong> répétitif – <strong class="pros">gagne en lisibilité</strong> à être <strong class="title">décomposé à l'aide de fonctions</strong>, comme ci‑dessous :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin = 2;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+}
+
+// Morse code durations in milliseconds
+const int dashDuration           = 750;
+const int dotDuration            = 250;
+const int betweenSymbolDuration  = 250;
+const int betweenLettersDuration = 750;
+const int betweenWordsDuration   = 3500;
+
+void loop() {
+  letter_S();
+  delay(betweenLettersDuration);
+  letter_O();
+  delay(betweenLettersDuration);
+  letter_S();
+  delay(betweenWordsDuration);
+}
+
+void letter_S() {
+  for (int dot = 1; dot <= 3; dot++) {
+    digitalWrite(ledPin, HIGH);
+    delay(dotDuration);
+    digitalWrite(ledPin, LOW);
+    if (dot < 3) delay(betweenSymbolDuration);
+  }
+}
+
+void letter_O() {
+  for (int dash = 1; dash <= 3; dash++) {
+    digitalWrite(ledPin, HIGH);
+    delay(dashDuration);
+    digitalWrite(ledPin, LOW);
+    if (dot < 3) delay(betweenSymbolDuration);
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ici, on définit <strong class="title">deux fonctions</strong>, <code class="prettyprint lang-c">letter_S</code> (lignes nº 24 à 31) et <code class="prettyprint lang-c">letter_O</code> (lignes nº 33 à 40), qui sont l'une comme l'autre : </p>
+<ul>
+  <li> <strong class="defin">sans valeur de retour</strong>, d'où le type <code class="prettyprint lang-c">void</code> ;  </li>
+
+  <li> <strong>sans</strong> <strong class="defin">argument effectif</strong>, d'où le code <code class="prettyprint lang-c">()</code>.  </li>
+</ul>
+
+<p> Elles consistent simplement à <strong>regrouper des instructions de sorties booléennes dans un bloc</strong> que l'on peut ensuite <strong class="title">appeler à volonté</strong> pour qu'elles s'exécutent dans le code d'une autre fonction, <strong class="pros">sans répéter leur code</strong>. Ainsi, dans <code class="prettyprint lang-c">loop</code>, on trouve : </p>
+<ul>
+  <li> deux appels de <code class="prettyprint lang-c">letter_S</code> (lignes nº 16 & 20) ;  </li>
+
+  <li> un appel de <code class="prettyprint lang-c">letter _0</code> (ligne nº 18). </li>
+</ul>
+
+
+<p> Il en résulte que le code de la <strong>fonction</strong> <code class="prettyprint lang-c">loop</code> devient très court, et donc <strong class="pros">très facile à lire</strong>. Il n'est pas encombré du détail des actions qu'il accomplit (code qui peut être trouvé plus loin si nécessaire). </p>
+
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="aspectsFondamentaux"> Aspects fondamentaux de la notion de fonction </h2>
+
+
+
+<h3> Préambule </h3>
+
+
+<div class="expert">
+<h4> Analogie avec la notion de fonction mathématique </h4> 
+
+<div class="complement">
+<p> La notion de <strong class="title">fonction mathématique</strong> est un <strong>concept algébrique</strong> qui permet d'établit une <strong class="defin">correspondance particulière</strong> entre : </p>
+  <img class="top-right" src="../img/fonction.png" width="300px">
+<ul>
+  <li> des éléments d'un <strong>ensemble</strong> dit de <strong class="defin">départ</strong>, </li>
+
+  <li> et des éléments d'un <strong>ensemble</strong> dit d'<strong class="defin">arrivée</strong>, </li>
+</ul>
+
+<p> avec la restriction qu'un <strong class="defin">antécédent</strong> <strong>x</strong> dans l'ensemble de départ ne peut avoir qu'<strong class="warning">au plus une seule</strong> <strong class="defin">image</strong> <strong>y</strong> dans l'ensemble d'arrivée <a class="external" href="https://fr.wikipedia.org/wiki/Fonction_(mathématiques)" target="_BLANK">W</a> (cette unicité est essentielle). </p>
+
+<p> De plus, on pourrait dire qu'une fonction mathématique est « <strong class="warning">invariante dans le temps</strong> », dans la mesure où à un antécédent <strong>x</strong> donné, une fonction <strong>f</strong> fait toujours correspondre la même image <em class="bold"><var>y</var> = <var>f</var>(<var>x</var>)</em>. En fait, il est préférable de considérer qu'il n'y a ici tout simplement <strong class="cons">pas de notion de temps</strong>. </p>
+</div><!-- complement -->
+
+<div style="display: inline-block;">
+<p> Même si l'on observe tout de suite des <strong class="warning">différences essentielles</strong> avec la notion de fonction en programmation, on peut quand établir une <strong class="title">analogie intéressante</strong> pour certains <strong>aspects fondamentaux</strong>, illustrés en figure ci‑contre : </p>
+  <img class="top-right" src="../img/fonction_def.png" width="450px" style="padding-top: 0em">
+<ul>
+  <li> la <strong>distinction</strong> entre la <strong class="specialLG">déclaration</strong> et la <strong class="specialG">définition</strong>, </li>
+
+  <li> les notions d'<strong class="specialY">appel</strong> et de <strong class="specialDR">jeu d'essais</strong>, </li>
+
+  <li> la distinction entre les <strong class="specialT">arguments formels</strong> et <strong class="specialO">effectifs</strong>. </li>
+</ul>
+</div><!-- display -->
+
+
+<h4> Généralités syntaxiques </h4>
+</div><!-- expert -->
+
+
+<div class="important">
+<p> De façon générale, dans le <strong>code source</strong> d'un programme, il est avant tout impératif de <strong class="warning">ne pas confondre</strong> : </p>
+
+<ul>
+  <li> le <strong class="specialLB">code</strong> de la fonction, qui est <strong>unique</strong> et qui se décompose en <strong>deux parties</strong> : un <strong class="specialLG">en‑tête déclaratif</strong>, puis un <strong class="specialG">corps de définition</strong> ; </li>
+
+  <li> et une ou plusieurs <strong>expression(s)</strong> d'<strong class="specialO">appel</strong> de cette fonction afin de l'utiliser le programme. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme souvent en langages <strong>C</strong> et <strong>C++</strong>, ces éléments de langage obéissent à des <strong class="title">règles de syntaxe</strong> <strong class="warning">complexes</strong> qui ont évolué au fil des normes. Pour ne pas compliquer davantage ce chapitre, la syntaxe « historique » du langage <strong>C</strong> n'est pas exposée dans ce cours, dans la mesure où elle est aujourd'hui <strong class="cons">désuète</strong>. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="enteteDeclaratif"> Codage de l'en‑tête déclaratif d'une fonction </h3>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, l'<strong class="title">en‑tête</strong> (en anglais <em class="english">header</em>) d'une fonction est une <strong class="defin">expression déclarative</strong> dont la forme syntaxique usuelle (simplifiée) est : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong style="color : green;">descripteur de type</strong></span>
+    <span class="nocode"><strong class="specialN">nom de la fonction</strong></span>
+     (<span class="nocode"><strong>liste des</strong> <strong class="specialT">arguments formels</strong></span>)
+  </code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette forme syntaxique : </p>  
+<ul>
+  <li> le <strong style="color: green;">descripteur de type</strong> code le <strong class="specialG">type</strong> des <strong class="specialMg">valeurs retournées</strong> – on dit aussi <strong class="specialMg">rendues</strong> – par la fonction (ces valeurs étant elles-mêmes déterminées par les instructions du corps de définition) ; </li>
+
+  <li> le <strong class="specialN">nom de la fonction</strong> est un <strong class="defin">identificateur</strong> choisi par le codeur pour pouvoir ensuite <strong>appeler</strong> la fonction dans le programme ; ce nom obéit aux règles usuelles de formation des identificateurs (cf. chap. C2‑IX <a class="previous" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#identificateurs" target="_BLANK"></a>) ; </li>
+
+  <li> la <strong>liste des</strong> <strong class="specialT">arguments formels</strong> – on emploie aussi le terme de <strong class="specialT">paramètre</strong> – est une séquence (éventuellement vide) de <strong>n</strong> <strong class="defin">expressions de déclaration de données</strong>, conformes à la syntaxe générale déclarative (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>), c'est‑à‑dire de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">
+      <span class="nocode"><strong style="color : green;">descr. de type 1</strong></span>
+      <span class="nocode"><strong>nom de l'argument 1</strong></span>,
+      <span class="nocode"><strong>…</strong></span> ,
+      <span class="nocode"><strong style="color : green;">descr. de type n</strong></span>
+      <span class="nocode"><strong>nom de l'argument n</strong></span>
+    </code>
+    </span> <br>
+  chaque <strong>nom d'argument</strong> étant un <strong>identificateur</strong> choisi par le codeur qui sera utilisable <strong class="warning">exclusivement</strong> <strong>dans le corps de définition</strong> de la fonction afin d'exploiter sa valeur.  </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarques"> Dans l'en‑tête d'une fonction : </p> 
+
+<ol class="littered">
+  <li> Les <strong>parenthèses</strong> <code class="prettyprint lang-c">( )</code> délimitant la liste des arguments formels sont <strong class="defin">essentielles</strong>. Ce sont elles qui, syntaxiquement, distinguent la déclaration d'une <strong>fonction</strong> de celle d'une donnée. </li>
+
+  <li> Comme dans la déclaration d'une donnée, le <strong style="color: green;">descripteur de type</strong> peut être <strong class="cons">omis</strong>. <strong>Implicitement</strong>, le compilateur encode alors les valeurs rendues par la fonction dans le type <code class="prettyprint lang-c">int</code>. Une telle omission est <strong class="warning">vivement déconseillée</strong> car elle entâche inutilement la lisibilité du programme source. </li>
+
+  <div class="no bullet"> En revanche, il est possible de coder une fonction qui <strong>ne retourne pas de valeur</strong>. Il suffit d'employer le mot‑clef <code class="prettyprint lang-c">void</code> comme descripteur de type – cf. infra <a class="infra" href="Cc4-1_fonctionsGeneralites.html#typeVoid"></a>. </div>
+
+  <li> Les <strong class="specialT">arguments formels</strong> d'une fonction peuvent être déclarés <strong>constants</strong> (avec le mot‑clef <code class="prettyprint lang-c">const</code>) <a class="infra" href="Cc4-1_fonctionsGeneralites.html#corpsFonction"></a>. Ils peuvent même se voir affecter une <strong>valeur par défaut</strong> pour devenir <strong>optionnels</strong> lors du codage d'un appel <a class="infra" href="Cc4-1_fonctionsGeneralites.html#argumentsOptionnels"></a>.   </li>  
+</ol>
+</div><!-- remarques -->
+
+<div id="en-teteArePrime" class="exemples">
+<p class="exemple"> On souhaite implémenter une <strong class="title">fonction</strong> qui détermine si <strong>deux nombres entiers</strong> strictement positifs sont <strong class="defin">premiers entre eux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nombres_premiers_entre_eux" target="_BLANK">W</a>, c'est‑à‑dire s'ils n'ont <strong>aucun diviseur commun</strong> hormis le nombre <em class="bold">1</em>. Donc, cette fonction doit : </p>
+
+<ul>
+  <li> prendre <strong>deux arguments</strong> (les deux nombres entiers à tester) déclarés par exemple dans le type <code class="prettyprint lang-c">unsigned</code> ; </li>
+
+  <li> <strong>retourner une valeur</strong> <strong style="color: green;">booléenne</strong> : </li>
+  <ul>
+    <li> <code class="prettyprint lang-c">true</code> si les arguments passés lors d'un appel sont des nombres premiers entre eux, </li>
+
+    <li> <code class="prettyprint lang-c">false</code> dans le cas contraire. </li> 
+  </ul>
+</ul>
+
+<p> Ainsi, l'en‑tête de cette fonction peut se coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+bool arePrime (unsigned a, unsigned b) //...
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+<h3 id="corpsFonction"> Codage du corps de définition d'une fonction </h3>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, le <strong class="title">corps</strong> (en anglais, <em class="english">body</em>) d'une fonction est un <strong class="defin">bloc d'instructions</strong> qui <strong>suit immédiatement l'en‑tête</strong>. Comme tout bloc, il délimité par des <strong>accolades</strong> <code class="prettyprint lang-c">{ }</code> et peut inclure autant d'instructions que nécessaire. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans le corps d'une fonction, on peut notamment :  </p>
+
+<ul>
+  <li> <strong class="defin">déclarer des données locales</strong>, c'est‑à‑dire des constantes ou variables qui n'existent que dans son bloc ; ces données peuvent ensuite être lues et modifiées (sauf les constantes, bien sûr) dans toutes les instructions du bloc qui suivent leur déclaration ; </li>
+
+  <li> <strong class="defin">lire et modifier les valeurs des arguments formels</strong> (<strong class="warning">sauf</strong> s'ils ont été déclarés <strong>constants</strong>) ; </li>
+
+  <div class="nobullet"> <em class="remark">attention</em>, les modifications sont effectives seulement lors de l'exécution du bloc, et n'ont aucun impact sur les valeurs des éventuelles variables composant les expressions des arguments effectifs lors d'un appel de la fonction – c'est la notion de <strong>transmission par valeur</strong> (cf. infra <a class="infra" href="Cc4-1_fonctionsGeneralites.html#transmissionValeur"></a>) ; </div>
+
+  <li> <strong class="defin">lire et modifier des données globales</strong> du programme qui sont déclarées avant le corps de définition ; toutefois, cette pratique doit être <strong class="warning">aussi rare que possible</strong>, afin de minimiser les riques d'<strong>effets de bord</strong> <strong class="cons">indésirables</strong> (cf. chap. C2‑IV <a class="external" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#effetBord" target="_BLANK"></a>) ; </li>
+
+  <li> <strong class="defin">appeler des fonctions préalablement déclarées</strong>, y compris la <strong>fonction elle‑même</strong> (on parle alors de <strong>récursivité</strong>) ; </li>
+
+  <li> <strong class="defin">coder des points de retour à l'instruction appelante</strong> par des instructions de la forme : <br>
+    <span class="inline">
+      <code class="prettyprint lang-c">return
+      <span class="nocode"><strong>expression</strong></span>; </code>
+    </span> <br>
+  où l'<strong>expression</strong> code la <strong class="specialMg">valeur retournée</strong> par la fonction lors de l'exécution. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Notion de point de retour </h4>
+
+
+<div  class="complement" style="display: inline-block;"> 
+  
+<p> Dès à présent, il importe de bien comprendre la notion de <strong class="title">point de retour</strong>. Lors de l'évaluation d'une expression d'<strong class="specialO">appel</strong> de la fonction, le <strong class="specialLB">processus d'exécution</strong> : </p>
+<img class="top-right" src="../img/fonctionAppel.png" width="300px">
+<ul>
+  <li> suspend l'<strong class="specialO">instruction appelante</strong> (celle dans laquelle l'expression d'appel est codée) ; </li>
+
+  <li> passe aux instructions de la <strong class="defin">fonction appelée</strong> dans l'ordre défini par son code (ordre des instructions et structures de contrôle) ; </li>
+
+  <li> et ce jusqu'à rencontrer la première instruction commençant par le <strong>mot‑clef</strong> <code class="prettyprint lang-c">return</code> ; </li>
+</ul>
+<p> Le processus d'exécution <strong class="title">retourne</strong> alors à celui de l'<strong class="specialO">instruction appelante</strong> en y injectant la <strong class="specialMg">valeur retournée</strong> par la fonction appelée. </p>
+</div><!-- complement -->
+
+<p> En l'<strong class="cons">absence</strong> d'instruction <code class="prettyprint lang-c">return</code>, la fonction appelée est exécutée jusqu'à sa <strong>dernière instruction</strong> et retourne une <strong class="warning">valeur « aléatoire »</strong>. </p>
+
+
+<div class="remarques">
+<p class="remarque"> Dans le corps de définition d'une fonction, il est possible de coder des points de <strong class="specialV">sortie de la fonction principale</strong> <code class="prettyprint lang-c">main</code>, qui non seulement mettent fin à l'exécution de la fonction, mais qui également <strong class="warning">achève l'exécution du programme</strong>. </p>
+
+<p> Il suffit pour cela d'appeler la <strong>fonction</strong> <code class="prettyprint lang-c">exit</code> avec la syntaxe : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">exit(<span class="nocode"><strong>expression</strong></span>); </code>
+</span> <br>
+où l'<strong>expression</strong> donne la valeur du <strong>code de sortie de la fonction</strong> <code class="prettyprint lang-c">main</code> (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#fonctionMain" target="_BLANK"></a>). </p>
+
+
+<p> La fonction <code class="prettyprint lang-c">exit</code> est déclarée dans le fichier d'en‑tête de la bibliothèque standard <code class="filename">stdlib.h</code> du langage <strong>C</strong> (<code class="filename">cstdlib</code> en <strong>C++</strong>). Il faut donc une directive d'inclusion de ce fichier pour pouvoir l'utiliser. </p>
+</div><!-- remarque -->
+
+
+<h4 id="arePrimeDef"> Exemple </h4>
+
+
+<div class="exemples">
+<p> Reprenons l'exemple supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C4-Fonctions/en-teteArePrime"></a> d'une fonction qui détermine si <strong>deux nombres entiers positifs</strong> sont <strong class="defin">premiers entre eux</strong>. Après l'en‑tête, le <strong class="title">corps de définition</strong> de cette fonction peut se coder comme ci‑dessous (à partir de l'accolade ouvrante <code class="prettyprint lang-c">{</code> à la fin de la ligne nº 4, et jusqu'à l'accolade fermante de la ligne nº 12) en appliquant une version itérative de l'<em>algorithme d'Euclide</em> <a class="external" href="https://fr.wikipedia.org/wiki/Algorithme_d'Euclide" target="_BLANK">W</a> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool arePrime (unsigned a, unsigned b) {
+  if (a == 0 || b == 0) exit(1);  // because algorithm would fail
+  while (b != 0) {
+    unsigned c = b;
+    b = a % b;     // if (b) gets 0, then (b) is a multiple of (a)
+    a = c;
+  }
+  return (a == 1); // if (a == 1), then (b) had no higher dividers
+}
+
+//...
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ce bloc de définition code un processus récursif de calcul de reste de la <strong>division</strong> d'un nombre par l'autre, itéré tant que ce reste est différent de <em class="bold">0</em>. On y trouve : </p>
+
+<ul>
+  <li> une <strong>variable locale</strong> <code class="prettyprint lang-c">c</code> déclarée en ligne nº 7 ; elle sert à garder en mémoire la valeur de l'argument formel <code class="prettyprint lang-c">b</code> pour la recopier ensuite dans l'argument formel <code class="prettyprint lang-c">a</code> ; </li>
+
+  <li> des <strong>modifications</strong> des <strong class="specialT">arguments formels</strong> (lignes nº 8 & 9), ce qui est possible puisqu'ils n'ont pas été déclarés constants ; </li>
+
+  <li> un <strong>point de retour</strong> <strong class="defin">normal</strong> à la fonction appelante, afin de retourner soit la <strong class="specialMg">valeur booléenne</strong> <code class="prettyprint lang-c">1</code> (équivalente à <code class="prettyprint lang-c">true</code>), soit la valeur <code class="prettyprint lang-c">0</code> (équivalente à <code class="prettyprint lang-c">false</code>). </li>
+
+  <li> un <strong>point de sortie</strong> <strong class="warning">anormale</strong>, si l'un des deux arguments formels est nul, car dans ce cas, l'algorithme ne peut aboutir (cf. la remarque supra en version <span class="version" style="color: #CC050E">INITIÉ</span>). </li>	
+</ul>
+</div><!-- exemple -->
+
+<div id="remCasLimite" class="remarques"><p class="remarques"> Dans ce corps de la fonction, on aurait pu aussi coder à la place de la ligne nº 11 (de façon algorithmiquement équivalente mais moins experte) : </p> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:11">
+  if (a == 1) {
+    return true;
+  }
+  else {
+    return false;
+  }  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On aurait eu alors <strong>deux points de sortie</strong>.</p>
+</div><!-- remarque -->
+
+
+
+<div class="expert">
+<h4> Restrictions du langage <em class="mark">C++</em> </h4>
+
+
+<p> La norme du langage <strong>C++</strong> impose certaines <strong class="warning">restrictions</strong> au codage du <strong class="specialG">corps de définition</strong> d'une fonction. En particulier : </p>
+
+<ul>
+  <li> Il est <strong class="warning">interdit</strong> d'y coder des <strong class="specialLB">définitions de fonctions</strong> (autrement dit, de coder des fonctions « gigognes »). </li>
+
+  <div class="exemples"> 
+  <p class="exemple"> Ainsi le programme académique ci‑dessous n'est <strong class="warning">pas compilable</strong> en <strong>C++</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+void foo(void);
+
+int main(void) {
+  foo(); 
+}
+
+void foo(void) {
+  void bar(void) {
+    printf("bar\n");
+  }
+  bar();
+}
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  </div><!-- exemple -->
+
+
+  <li> en revanche, les <strong class="specialLB">prototypes</strong> de fonctions sont <strong class="defin">acceptés</strong> ; </li>
+
+  <div class="exemples"> 
+  <p class="exemple"> Ainsi, on peut donc rendre compilable le programme précédent en codant la fonction <code class="prettyprint lang-c">foo</code> comme ci‑dessous et en externalisant la définition de la fonction <code class="prettyprint lang-c">bar</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:9">
+void foo(void) {
+  void bar(void);
+  bar();
+}
+
+void bar(void) {
+  printf("bar\n");
+}
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  </div><!-- exemple -->
+
+</ul>
+
+<div class="complement">
+<p> Même si cette restriction n'existe pas en langage <strong>C</strong>, il est vivement recommandé de <strong class="warning">ne pas</strong> <strong>définir les fonctions les unes dans les autres</strong>, par soucis de bonne <strong class="pros">lisibilité</strong>. </p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+
+<h3 id="appelFonction"> Codage d'un appel d'une fonction </h3>
+
+
+
+<div class="important">
+<p> En <strong>C</strong> et <strong>C++</strong> (comme dans la plupart des autres langages), un <strong class="title">appel de fonction</strong> est une <strong class="defin">expression</strong> de la forme : </p>
+<div class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong class="specialN">nom de la fonction</strong></span>(<span class="nocode"><strong>liste des</strong> <strong class="specialO">arguments effectifs</strong></span>)
+  </code>
+</div><!-- inline -->
+<p> qui est d'ailleurs la syntaxe usuelle employée en mathématiques. </p>  
+
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans une expression d'<strong class="title">appel</strong> de fonction : </p>
+<ul>
+  <li> le <strong class="specialN">nom de la fonction</strong> est l'<strong  class="defin">identificateur de la fonction</strong> déclaré précédemment dans le fichier source ou dans le fichier d'en‑tête d'un module de bibliothèque inclus dans le programme ; </li>
+
+  <li> la <strong>liste des</strong> <strong class="specialO">arguments effectifs</strong> est une séquence de <strong>n</strong> <strong class="defin">expressions</strong> – <strong class="warning">autant</strong> que d'<strong class="specialT">arguments formels</strong> dans l'en‑tête de la fonction – séparées par le symbole <code class="prettyprint lang-c">,</code>. </li>
+</ul>
+
+<p> Au début de l’<strong class="specialLB">exécution</strong> d'un appel de la fonction, l'<strong>évaluation</strong> de chacune de ces expressions donne une <strong class="specialY">valeur</strong> qui est <strong>affectée</strong> – on dit <strong>transmise</strong> – à chaque <strong class="specialT">argument formel</strong>  de la fonction, respectivement <strong>dans l'ordre de la liste</strong>. </p>
+ <img class="top-left" src="../img/transmissionValeurs.png">
+</div><!-- complement -->
+
+<p> Nonobstant les limites des langages <em class="mark">C</em> et <em class="mark">C++</em> (notamment pour l'initialisation des variables globales – cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>), on peut coder un appel de fonction <strong class="pros">dans n'importe quelle expression</strong> d'un code source dès lors que cette fonction a été déclarée préalablement. </p>
+
+
+
+<h4 id="exemplesAppelFonction"> Exemples </h4>
+
+
+<div class="exemples">
+<p> Reprenons le cas de la fonction <code class="prettyprint lang-c">arePrime</code> définie plus haut <a class="supra" href="Cc4-1_fonctionsGeneralites.html#arePrimeDef"></a>. </p>	
+<ol class="numbered">
+	<li> Une expression comme par exemple <code class="prettyprint lang-c">arePrime(10, 3)</code> affecte les <strong class="specialY">valeurs</strong> des <strong class="specialO">arguments effectifs</strong> <code class="prettyprint lang-c">10</code> et <code class="prettyprint lang-c">3</code> respectivement aux <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> de la fonction déclarée <code class="prettyprint lang-c">arePrime</code>. Tout se passe <strong>comme si</strong>, au début du corps de la fonction s'ajoutaient les instructions : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">unsigned a = 10;</code>      et     <code class="prettyprint lang-c">unsigned b = 10;</code>
+  </span> <br>
+  Ensuite, l'évaluation de l'expression <code class="prettyprint lang-c">arePrime(10, 3)</code> prend la <strong class="specialMg">valeur</strong> <code class="prettyprint lang-c">1</code> (« <em>vrai</em> ») qui est retournée par la fonction <code class="prettyprint lang-c">arePrime</code> puisque les entiers <em class="bold">10</em> et <em class="bold">3</em> sont <strong>premiers entre eux</strong>. </li>
+
+	<li> Considérons maintenant le code de la fonction principale <code class="prettyprint lang-c">main</code> d'un programme qui fait appel à la fonction <code class="prettyprint lang-c">arePrime</code>. </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool arePrime (unsigned a, unsigned b) {
+  if (a == 0 || b == 0) exit(1);  // because algorithm would fail
+  while (b != 0) {
+    unsigned c = b;
+    b = a % b;     // if (b) gets 0, then (b) is a multiple of (a)
+    a = c;
+  }
+  return (a == 1); // if (a == 1), then (b) had no higher dividers
+}
+
+int main(void) { // test if two numbers are relatively prime
+  unsigned nb1 = 0, nb2 = 0;
+  while (true) {
+    printf("Nombre entier 1 (taper 0 pour sortir) : ");
+    scanf("%u", &nb1);
+    if (nb1 == 0) break;
+    printf("Nombre entier 2 (taper 0 pour sortir) : ");
+    scanf("%u", &nb2);
+    if (nb2 == 0) break;
+    if (arePrime(nb1, nb2)) {
+      printf("%u et %u sont PREMIERS ENTRE EUX.\n\n", nb1, nb2);
+    }
+    else {
+      printf("%u et %u ne sont PAS premiers entre eux.\n\n", nb1, nb2);
+    }
+  }
+  printf("Au revoir.\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<ul>
+		<li> À la ligne nº 22, l'expression <code class="prettyprint lang-c">arePrime(nb1, nb2)</code> appelle la fonction <code class="prettyprint lang-c">arePrime</code> avec comme <strong class="specialO">arguments effectifs</strong> les variables <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> (elles sont locales à la fonction <code class="prettyprint lang-c">main</code>). </li>
+
+	
+		<li> Lors de l'exécution, les <strong class="specialY">valeurs</strong> courantes (préalablement saisies sur terminal par un utilisateur) de ces deux variables seront respectivement affectées aux <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> de la fonction <code class="prettyprint lang-c">arePrime</code>. </li>
+
+		<li> Les valeurs des variables <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> ne sont <strong class="warning">pas modifiées</strong> par l'appel de la fonction <code class="prettyprint lang-c">arePrime</code>. Ce sont seulement leurs <strong class="specialY">valeurs</strong> qui sont affectées aux <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> de façon temporaire lors de l'exécution. </li>
+
+		<div class="nobullet"> C'est pourquoi même <strong>après</strong> l'évaluation de l'expression d'appel <code class="prettyprint lang-c">arePrime(nb1, nb2)</code> (ligne nº 22), lors des appels de la fonction <code class="prettyprint lang-c">printf</code> aux lignes nº 23 et 26, les expressions <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> gardent chacune la valeur qui a été saisie par l'utilisateur (par les appels de la fonction <code class="prettyprint lang-c">scanf</code> codés aux lignes nº 19 et 21). </div>
+ 	</ul>
+</ol>
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Dans l'exemple <em class="bold">2)</em> ci‑dessus, les variables <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> auraient très bien pu être nommées <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> comme dans le bloc de définition de la fonction, car le compilateur fait la <strong class="warning">distinction</strong> entre les <strong class="specialT">arguments formels</strong> d'une fonction et les <strong class="specialO">arguments effectifs</strong> d'un appel de cette même fonction. </p>
+</div><!-- remarques -->
+
+
+<h4 id="transmissionValeur"> Notion de transmission d'arguments par valeur </h4>
+
+
+<p> On formalise ce qui vient d'être abordé dans le cadre de l'exemple précédent. </p>
+<div class="important">
+<p> La <strong>syntaxe usuelle</strong> (simplifié) de codage d'une fonction exposée au début du chapitre <a class="supra" href="Cc4-1_fonctionsGeneralites.html#enteteDeclaratif"></a> induit, lors de l'appel de cette fonction, une <strong class="title">transmission d'argument</strong> <strong class="defin">par valeur</strong>. </p>
+
+<p> Dans ce mode de transmission, les <strong>éventuelles variables</strong> figurant dans les expressions formant les <strong class="specialO">arguments effectifs</strong> ne sont <strong class="warning">pas modifiées</strong> par un appel de la fonction, même si chacune de ces expression a le même identificateur que son <strong class="specialT">argument formel</strong> correspondant. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément, lors de l'évaluation d'une expression d'appel de la fonction, chaque de ses <strong class="specialT">arguments formels</strong> fait l'objet d'une affectation et prend la <strong>valeur courante</strong> de son <strong class="specialO">argument effectif</strong> correspondant. En aucun cas la fonction n'agit directement sur l'espace mémoire adressable réservé aux arguments effectifs, pour la bonne et simple raison que ces arguments ne sont <strong>pas nécessairement des variables déclarées</strong>, mais parfois de simples constantes numériques mémorisées dans le code machine du programme (donc sans espace mémoire adressable) – cf. l'exemple <em class="bold">1)</em> supra. </p>
+
+<p> Et quand bien même les arguments effectifs se réduiraient à des identificateurs de variables, ces dernières ne sont pas modifiées par appel d'une fonction dont la syntaxe est celle d'une transmission d'arguments par valeur. Il ne s'agit en quelque sorte que d'une « copie » de valeurs comme dans l'exemple <em class="bold">2)</em> supra. </p>
+</div><!-- complement -->
+
+
+<p> Mais il existe d'<strong class="title">autres syntaxes</strong> de codage qui permettent spécifiquement de <strong class="defin">modifier des variables</strong> prises comme <strong class="specialO">arguments effectifs</strong> d'une fonction : </p>
+
+<ul>
+  <li> la <strong>transmission d'argument</strong> <strong class="defin">par référence</strong>, qui sera abordée plus loin dans ce chapitre (cf. infra. <a class="infra" href="Cc4-1_fonctionsGeneralites.html#transmissionReference"></a>) ; </li>
+
+  <li> la <strong>transmission d'argument</strong> <strong class="defin">par adresse</strong>, plus complexe, qui sera abordée lors de l'étude des pointeurs (cf. chap. C5‑II <a class="next" href="../C5-StructuresPointeurs/Cc5-2_pointeursApplications.html#transmissionAdresse" target="_BLANK"></a>). </li>
+</ul>
+
+ 
+
+<h3 id="jeuEssais"> Jeu d'essais d'une fonction </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">jeu d'essai</strong> d'une <strong>fonction</strong> est un <strong>programme</strong> qui comprend une <strong class="defin">série d'appels</strong> de la fonction pour tester son bon fonctionnement. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> Pour chaque appel, il importe de <strong class="pros">choisir judicieusement</strong> les <strong>valeurs des arguments effectifs</strong> – valeurs <strong class="defin">usuelles</strong>, valeurs <strong class="defin">remarquables</strong>, cas <strong class="defin">limites</strong>… – sachant que tester la <strong>totalité des combinaisons</strong> des valeurs est le plus souvent <strong class="warning">infaisable</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Pour la fonction <code class="prettyprint lang-c">arePrime</code> codée plus haut <a class="supra" href="Cc4-1_fonctionsGeneralites.html#arePrimeDef"></a>, on propose le jeu d'essai mis en œuvre dans la fonction <code class="prettyprint lang-c">main</code> ci‑dessous : </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool arePrime (unsigned a, unsigned b) {
+  if (a == 0 || b == 0) exit(1);  // because algorithm would fail
+  while (b != 0) {
+    unsigned c = b;
+    b = a % b;     // if (b) gets 0, then (b) is a multiple of (a)
+    a = c;
+  }
+  return (a == 1); // if (a == 1), then (b) had no higher dividers
+}
+
+int main(void) {
+  unsigned nb1 = 10;
+  for (unsigned nb2 = nb1; nb2 >= 1; nb2--) {
+    if (arePrime(nb1, nb2)) {
+      printf("%u et %u sont PREMIERS ENTRE EUX. \n", nb1, nb2);
+    }
+    else {
+      printf("%u et %u ne sont PAS premiers entre eux. \n", nb1, nb2);
+    }
+    if (arePrime(nb1, nb2) != arePrime(nb2, nb1)) {
+      printf("ERREUR pour %d et %d !!! \n", nb1, nb2);
+    }
+  }
+  arePrime(0, 1); // you must test also arePrime(0, 1) and arePrime(0, 0)
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+<p> et, avec <strong class="OnlineGDB">OnlineGDB</strong>,  on obtient en sortie standard l'affichage suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+10 et 10 ne sont PAS premiers entre eux. 
+10 et 9 sont PREMIERS ENTRE EUX. 
+10 et 8 ne sont PAS premiers entre eux. 
+10 et 7 sont PREMIERS ENTRE EUX. 
+10 et 6 ne sont PAS premiers entre eux. 
+10 et 5 ne sont PAS premiers entre eux. 
+10 et 4 ne sont PAS premiers entre eux. 
+10 et 3 sont PREMIERS ENTRE EUX. 
+10 et 2 ne sont PAS premiers entre eux. 
+10 et 1 sont PREMIERS ENTRE EUX. 
+
+<span style="color: lime">...Program finished with exit code 1</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Donc, ce jeu d'essai est conçu pour : </p>
+<ul>
+  <li> afficher le résultat de la fonction pour <strong>dix combinaisons de valeurs</strong> en fixant le premier entier à <em class="bold">10</em> et décrémentant le deuxième de <em class="bold">10</em> à <em class="bold">1</em> ; tous les résultats obtenus sont facile à vérifier de tête ;</li>
+
+  <li> vérifier automatiquement que la fonction rend bien la <strong class="pros">même valeur</strong> lorsqu'on <strong>permute les valeurs</strong> des deux arguments effectifs ; sinon, il signale l'erreur (ici, ce n'est pas le cas donc tout va bien) ; </li>
+
+  <li> tester le <strong class="warning">cas limites</strong> où le premier argument effectif est nul ; et on obtient bien le code de sortie <code class="displayDark" style="color: lime">1</code> (et non pas <code>0</code>) du programme en fin d'exécution. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Comme indiqué en commentaire de la ligne nº 28, pour bien faire, il faut aussi tester les cas <code class="prettyprint lang-c">arePrime(0, 1)</code> et <code class="prettyprint lang-c">arePrime(0, 0)</code>, mais cela n'est pas possible en une seule exécution, puisqu'une sortie anticipée du programme ne peut intervenir qu'une seule fois par exécution. Il faut donc modifier le code source et exécuter le programme pour chaque cas. </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="progMod"> Bases de la programmation modulaire </h2>
+
+
+
+<h3> Principes de la programmation modulaire </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">programmation modulaire</strong> est une <strong class="defin">méthode de codage</strong> qui consiste à concevoir tout programme avec un <strong>algorithme principal</strong> – celui de la fonction <code class="prettyprint lang-c">main</code> – <strong class="pros">le moins raffiné possible</strong> : </p>
+
+<ul>
+  <li> chaque <strong class="specialLB">étape</strong> (ou partie) de l'algorithme faisant appel à une <strong>fonction distincte</strong>, qu'on peut qualifier d'<strong class="defin">auxiliaire</strong> ;  </li>
+
+  <li> chaque fonction auxiliaire pouvant elle‑même se décomposer de la sorte, jusqu'à atteindre une <strong class="pros">« élémentarité »</strong> suffisante pour que son code soit <strong>très facile à programmer et vérifier</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Avec une telle décomposition, les <strong class="title">fonctions « élémentaires »</strong> doivent pouvoir être <strong class="defin">codées séparément</strong> par les différents codeurs d'une équipe de développement (ou même par des sous‑traitants), sans connaître le code source des autres fonctions, mais en donnant simplement pour chacune : </p>
+<ul>
+  <li> son <strong class="specialN">identificateur</strong>, son <strong class="specialG">type</strong> de <strong>valeur de retour</strong> et ses <strong class="specialT">arguments formels</strong> – autrement dit tous les éléments de sa déclaration ;</li>
+
+  <li> son <strong class="specialLB">objectif</strong> – ou son <strong class="specialLB">rôle</strong> – c'est‑à‑dire, en définitive, tout ce qui détermine sa valeur de retour pour les différentes valeurs possibles de ses arguments formels. </li>
+</ul>
+</div><!-- complement -->
+
+
+<p> Dans le cadre du développement d'un logiciel, le choix de ces <strong class="title">spécifications</strong> incombe en général au <strong>chef de projet</strong> ou à l'<strong>ingénieur principal</strong>, qui doit faire en sorte que son équipe dispose des informations nécessaires au travail de codage des définitions des fonctions. Par ailleurs, pour des raisons évidentes d'optimisation des coûts de développement, on s'efforce : </p>
+
+<ul>
+  <li> d'employer des <strong class="pros">fonctions déjà codées</strong> – en particulier dans les bibliothèques existantes – plutôt que de tout systématiquement « réinventer » ; </li>
+
+  <li> d'organiser les <strong>nouvelles fonctions</strong> en modules de <strong class="pros">bibliothèque</strong> compilables séparément si elles sont susceptibles d'être réutilisées dans d'autres programmes. </li>
+</ul>
+
+<div class="exemples">
+<p class="exemple"> Le programme de l'exemple <em class="bold">2)</em> supra <a class="supra" href="Cc4-1_fonctionsGeneralites.html#exemplesAppelFonction"></a> peut encore être décomposé. En particulier, dans la fonction principale <code class="prettyprint lang-c">main</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+int main(void) { // test if two numbers are relatively prime
+  unsigned nb1 = 0, nb2 = 0;
+  while (true) {
+    printf("Nombre entier 1 (taper 0 pour sortir) : ");
+    scanf("%u", &nb1);
+    if (nb1 == 0) break;
+
+    printf("Nombre entier 2 (taper 0 pour sortir) : ");
+    scanf("%u", &nb2);
+    if (nb2 == 0) break;
+
+    if (arePrime(nb1, nb2)) {
+      printf("Les entiers %u et %u sont PREMIERS ENTRE EUX.\n", nb1, nb2);
+    }
+    else {
+      printf("Les entiers %u et %u ne sont PAS premiers entre eux.\n", nb1, nb2);
+    }
+  }
+  printf("Au revoir.\n")
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> la saisie des deux nombres à tester emploie <strong class="cons">deux fois un code similaire</strong> (lignes nº 18 à 20 et nº 22 à 24). On a donc intérêt factoriser ce code dans une nouvelle une <strong class="defin">nouvelle fonction</strong> comme celle nommée <code class="prettyprint lang-c">enteringNumber</code> ci‑dessous (elle utilise un argument de type <em>pointeur</em> qui sera étudié au chap. C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a>) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool arePrime (unsigned a, unsigned b) {
+  if (a == 0 || b == 0) exit(1);  // because algorithm would fail
+  while (b != 0) {
+    unsigned c = b;
+    b = a % b;     // if (b) gets 0, then (b) is a multiple of (a)
+    a = c;
+  }
+  return (a == 1); // if (a == 1), then (b) had no higher dividers
+}
+
+void enteringNumber(unsigned n, unsigned * number) {
+  printf("Nombre entier %u (taper 0 pour sortir): ", n);
+  scanf("%u", number);
+  if (*number == 0) {
+    printf("Au revoir.\n");
+    exit(0);
+  }
+}
+
+int main(void) { // test if two numbers are relatively prime
+  unsigned nb1 = 0, nb2 = 0;
+  while (true) {
+    enteringNumber(1, &nb1);
+    enteringNumber(2, &nb2);
+    if (arePrime(nb1, nb2)) {
+      printf("%u et %u sont PREMIERS ENTRE EUX.\n\n", nb1, nb2);
+    }
+    else {
+      printf("%u et %u ne sont PAS premiers entre eux.\n\n", nb1, nb2);
+    }
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Avec deux fonctions auxiliaires, ce programme est <strong class="pros">plus modulaire</strong> que dans sa version précédente. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="prototype"> Notion de prototype d'une fonction </h3>
+
+
+
+<div class="complement">
+<p> Une <strong>idée clef</strong> de la <strong class="title">programmation modulaire</strong> est de permettre, pour toute fonction auxiliaire, de <strong class="defin">séparer sa déclaration et sa définition</strong>, dans la perspective que : </p>
+
+<ul>
+  <li> la <strong class="specialLB">déclaration</strong> puisse être <strong>communiquée sans réserve</strong> à tous les développeurs du projet (ou du moins, à une grande partie) ;  </li>
+
+  <li> tandis que la <strong class="specialLB">définition</strong> reste <strong>confidentielle</strong> à un nombre restreint de personnes (ses développeurs bien sûr, le chef de projet…), comme un concept de <strong>boîte noire</strong> dont le reste de l'équipe n'a pas besoin de connaître les détails de fonctionnement. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert"> 
+<p> C'est ainsi que fonctionnent les produits techniques , notamment les appareils « grand public » (pensons à un lecteur de <em class="sigle">DVD</em>), que l'on commande à l'aide d'une interface très simple au regard de la complexité interne, que l'utilisateur n'a pas besoin – ni même envie – de maîtriser. </p>
+</div><!-- expert -->
+
+
+<div class="important">
+<p> Les langages <strong>C</strong> et <strong>C++</strong> disposent pour cela de la notion de <strong class="title">prototype</strong> <strong>d'une fonction</strong>. C'est une <strong class="defin">instruction déclarative</strong> qui est : </p>
+
+<ul>
+  <li> constituée du seul <strong>en‑tête</strong> de la fonction (et donc, pas suivi de son corps de définition) ;  </li>
+
+  <li> simplement terminée par le <strong>délimiteur</strong> <code class="prettyprint lang-c">;</code> de fin d'instruction. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="title">prototype</strong>  de la fonction <code class="prettyprint lang-c">arePrime</code> définie supra <a class="supra" href="Cc4-1_fonctionsGeneralites.html#arePrimeDef"></a> se code tout simplement : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    bool arePrime (unsigned a, unsigned b);
+  </code>
+</span> </p>
+</div><!-- exemples -->
+
+<div class="expert">
+<p class="square"> <em class="remark">Attention</em>, pour coder certains <strong class="title">aspects avancés</strong> (cf. infra <a class="infra" href="Cc4-1_fonctionsGeneralites.html#particularites"></a>), le <strong class="specialLB">prototype</strong> d'une fonction peut être <strong class="warning">différent</strong> de l'<strong class="specialLB">en‑tête de son code de définition</strong>. </p>
+
+<p> En particulier, lorsqu'une fonction n'a <strong class="defin">pas arguments optionnels</strong>, on peut coder son <strong class="title">prototype abrégé</strong> : dans la liste des arguments formels de la fonction, on peut <strong>omettre les identificateurs</strong>. </p>
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="title">prototype abrégé</strong>  de la fonction <code class="prettyprint lang-c">arePrime</code> définie supra <a class="supra" href="Cc4-1_fonctionsGeneralites.html#arePrimeDef"></a> se code : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    bool arePrime (unsigned, unsigned);
+  </code>
+</span> </p>
+</div><!-- exemples -->
+
+</div><!-- expert -->
+
+
+
+<h3> Structure d'un programme modulaire </h3>
+
+
+
+<div class="important">
+<p> Dans un programme en langage <strong>C</strong> ou <strong>C++</strong>, comme pour les données, il est <strong class="warning">obligatoire</strong> de <strong class="title">préalablement déclarer</strong> toute <strong class="specialLB">fonction auxiliaire</strong> <strong class="warning">avant</strong> de l'utiliser dans le code, c'est‑à‑dire de l'appeler dans une autre fonction. </p>
+
+<p> C'est en particulier à cela que sert son <strong class="specialLB">prototype</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Même en restant dans le cadre d'<strong>un fichier unique</strong> (les techniques de <strong>compilation séparée</strong> ne seront abordées qu'au chapitre C4‑VII <a class="next" href="Cc4-7_bibliothequesStandards.html"></a>), un <strong class="title">programme modulaire</strong> doit être <strong class="defin">structuré</strong> selon des <strong class="pros">règles de bonnes pratiques</strong>. Toutes les <strong class="specialLB">fonctions auxiliaires</strong> sont : </p>
+
+<ul>
+  <li> déclarées par leur <strong class="defin">prototype</strong> <strong>avant</strong> la fonction principale <code class="prettyprint lang-c">main</code> ; </li>
+
+  <li> définies par leur <strong class="defin">code complet</strong> (en‑tête et corps de définition) <strong>après</strong> la fonction <code class="prettyprint lang-c">main</code>, dans le <strong>même ordre</strong> que celui des prototypes. </li>
+</ul>
+
+<p> Cette manière de coder permet de garder la fonction <code class="prettyprint lang-c">main</code> <strong class="pros">en début de fichier</strong>, plutôt que de la placer après la définition de toutes les fonctions auxiliaires, donc <strong class="cons">en fin de fichier</strong>, pénible à atteindre dans un éditeur de code. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> L'<strong class="title">ordre de déclaration</strong> des prototypes dépend de la complexité du programme. On peut adopter l'ordre d'occurrence des appels des fonctions dans la fonction <code class="prettyprint lang-c">main</code>. Mais on peut aussi privilégier un ordre thématique, par exemple regrouper toutes les fonctions d'entrées-sorties, etc. </p>
+</div><!-- expert -->
+
+<div id="exempleFinal" class="exemples">
+<p class="exemple"> Le programme qui, en boucle, teste si deux entiers saisis par l'utilisateur sont premiers entre eux, peut finalement se coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+void enteringNumber(unsigned n, unsigned * number);
+bool arePrime (unsigned a, unsigned b);
+
+
+int main(void) { // test if two numbers are relatively prime
+  unsigned nb1 = 0, nb2 = 0;
+  while (true) {
+    enteringNumber(1, &nb1);
+    enteringNumber(2, &nb2);
+    if (arePrime(nb1, nb2)) {
+      printf("%u et %u sont PREMIERS ENTRE EUX.\n\n", nb1, nb2);
+    }
+    else {
+      printf("%u et %u ne sont PAS premiers entre eux.\n\n", nb1, nb2);
+    }
+  }
+  return 0;
+}
+
+void enteringNumber(unsigned n, unsigned * number) {
+  printf("Nombre entier %u (taper 0 pour sortir) : ", n);
+  scanf("%u", number);
+  if (*number == 0) {
+    printf("Au revoir.\n");
+    exit(0);
+  }
+}
+
+bool arePrime (unsigned a, unsigned b) {
+  if (a == 0 || b == 0) exit(1);  // because algorithm would fail
+  while (b != 0) {
+    unsigned c = b;
+    b = a % b;     // if (b) gets 0, then (b) is a multiple of (a)
+    a = c;
+  }
+  return (a == 1); // if (a == 1), then (b) had no higher dividers
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<h4 id="casArduino"> Cas d'un programme <em class="mark">Arduino</em> </h4>
+
+
+<div class="important">
+<p> Dans les fichiers d'extension <code class="filename">.ino</code> d'un programme pour <strong>carte</strong> <strong class="Arduino">Arduino</strong>, le codeur n'a <strong class="pros">pas besoin</strong> de déclarer préalablement les prototypes des fonctions auxiliaires avant de les employer dans les fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code>. </p>
+
+<p> Le fait de coder leur prototype en début de fichier peut même causer des <strong class="warning">erreurs de compilation</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En effet, sans doute pour faciliter la programmation aux codeurs « débutants », le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> effectue des <strong class="specialV">traitements préliminaires</strong> avant la compilation <strong>C++</strong>. Et en particulier, il ajoute automatiquement en début de fichier les prototypes des fonctions auxiliaires non déclarées. </p>
+</div><!-- complement -->
+
+<p> On peut donc se contenter de coder toutes les fonctions auxiliaires <strong class="defin">sans prototypes</strong> en fin de fichier, mais en gardant à l'esprit : </p>
+
+<ul>
+  <li> que cette pratique n'est <strong class="warning">pas valide</strong> dans un programme usuel en <strong>C</strong> ou <strong>C++</strong>, ou même dans un projet <em class="mark">Arduino</em> comportant des fichiers d'extension <code class="filename">.cpp</code> ; </li>
+
+  <div class="nobullet"> et qu'elle n'est pas prise en charge dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong> ; </div>
+
+  <li> que les <strong>prototypes</strong> restent parfois <strong class="warning">indispensables</strong> même dans un fichier <code class="filename">.ino</code>, par exemple pour coder des fonctions avec des arguments prenant une valeur par défaut <a class="infra" href="Cc4-1_fonctionsGeneralites.html#argumentsOptionnels"></a>. </li>
+</ul>
+
+
+<!-- à approfondir, vérifier, illustrer avec exemples -->
+
+<div class="exemples">
+<p class="exemple"> Dans un programme pilotant des <strong class="title">led</strong>, il est usuel de regrouper tous les appels de fonctions pour la <strong class="specialLB">configuration et l'initialisation</strong>  des <strong>broches d'entrées‑sorties numériques</strong> dans une fonction de type <code class="prettyprint lang-c">void</code> nommée par exemple <code class="prettyprint lang-c">initPins</code>. </p>	
+
+<p> De même, on peut utilement coder un <strong class="specialLB">bloc de clignotement</strong> paramétré par la <strong>période</strong> et la <strong>durée du clignotement</strong> dans une fonction séparée de type <code class="prettyprint lang-c">void</code> (cf. la section suivante), nommée par exemple <code class="prettyprint lang-c">busyBlink</code>. </p>
+
+<p> Le programme ci‑dessous met en œuvre ces deux fonctions avec un bouton‑poussoir qui déclenche une telle séquence de clignotement de la led. Il peut être testé sur <strong class="Tinkercad">Tinkercad</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int buttonPin = 8;
+const int ledPin = LED_BUILTIN;
+
+bool previousButtonLevel = LOW;   
+bool currentButtonLevel = LOW;
+ 
+void setup() {
+  initPins();
+}
+
+void loop() {
+  previousButtonLevel = currentButtonLevel;
+  currentButtonLevel = digitalRead(buttonPin); 
+  if (currentButtonLevel == HIGH && previousButtonLevel == LOW) { // rising edge
+    busyBlink(200, 1000);
+  }
+}
+
+void initPins() {
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+
+  pinMode(buttonPin, INPUT);
+}
+
+void busyBlink(const uint16_t halfPeriod, const uint32_t duration) {
+  uint32_t millisecondsCounter = 0;
+  while (millisecondsCounter <= duration - halfPeriod) {
+    digitalWrite(ledPin, HIGH);
+    delay(halfPeriod);
+    millisecondsCounter += halfPeriod;
+    digitalWrite(ledPin, LOW);
+    if (millisecondsCounter > duration - halfPeriod) {
+      return;
+    } // else
+    delay(halfPeriod);
+    millisecondsCounter += halfPeriod;
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p class="remarque"> La fonction <code class="prettyprint lang-c">busyBlink</code> étant plus complexe qu'un simple <em class="english">blink</em> (cf. chap. C2‑VIII <a class="previous" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html#blinkDelay" target="_BLANK"></a>, elle aurait significativement compliqué la lecture de la fonction <code class="prettyprint lang-c">loop</code> si ses instructions avaient été codées directement dedans. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="expert">
+<h2 id="particularites"> Particularités et possibilités avancées de codage d'une fonction </h2>
+
+
+
+<h3 id="typeVoid"> Fonction sans valeur et/ou sans arguments  –  le type <code class="prettyprint lang-c">void</code> </h3>
+
+
+
+<div class="complement">
+<p> Rappelons que <strong>par défaut</strong> : </p>
+
+<ul>
+  <li> s'il n'est pas explicitement codé, le <strong class="specialG">type</strong> des <strong>valeurs retournées</strong> par une fonction est <code class="prettyprint lang-c">int</code> ; </li>
+
+  <li> sans occurrence du <strong>mot‑clef</strong> <code class="prettyprint lang-c">return</code> suivi d'une expression, la <strong class="defin">valeur retournée</strong> par une fonction est <strong class="warning">aléatoire</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Fonction sans valeur de retour </h4>
+
+
+<p> Pour prévenir les risques de confusion évoqués supra et d'éventuelles erreurs conséquentes, il est <strong class="pros">utile</strong> de pouvoir coder des <strong>fonctions qui, explicitement, ne retournent</strong> <strong class="title">aucune valeur</strong> – ce qui correspond à la notion de « <em>procédure</em> » dans un langage comme <em class="mark">Pascal</em>. </p>
+
+<div class="important">
+<p> Les langages <strong>C</strong> et <strong>C++</strong> mettent à disposition le mot‑clef <code class="prettyprint lang-c">void</code> qui désigne le <strong class="title">type vide</strong>. Ainsi, un en‑tête de fonction de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    void
+    <span class="nocode"><strong class="specialN">nom de la fonction</strong></span>
+     (<span class="nocode"><strong>liste des</strong> <strong class="specialT">arguments formels</strong></span>)
+  </code>
+</span> <br>
+déclare une fonction qui <strong class="defin">ne retourne pas de valeur</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En conséquence, une telle fonction ne peut <strong class="warning">pas</strong> être appelée dans une expression de <strong>calcul</strong> ou d'<strong>affectation</strong>, mais seulement dans une instruction constituée du seul <strong class="title">appel</strong> de cette fonction, c'est‑à‑dire de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong>nom de la fonction</strong></span>
+     (<span class="nocode"><strong>liste des</strong> <strong class="specialO">arguments effectifs</strong></span>);
+  </code>
+</span> </p>
+
+<p> Dans le <strong class="specialLB">corps de définition</strong> d'une telle fonction, on peut coder des <strong class="specialV">points de retour</strong> à l'instruction dans laquelle elle est appelée (<code class="prettyprint lang-c">main</code> ou autre) par autant d'instructions de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">return;</code>
+</span> <br>
+<strong>sans expression de retour</strong> après le mot‑clef <code class="prettyprint lang-c">return</code>. </p>
+</div><!-- complement -->
+
+<p> Bien entendu, ce n'est pas parce qu'une fonction ne retourne aucune valeur qu'elle est sans effet. </p>
+
+
+<div class="exemples">
+<p class="exemples"> De nombreuses <strong>fonctions</strong> <strong class="Arduino">Arduino</strong> comme <code class="prettyprint lang-c">setup</code>, <code class="prettyprint lang-c">loop</code>, <code class="prettyprint lang-c">delay</code>, <code class="prettyprint lang-c">digitalWrite</code>, <code class="prettyprint lang-c">bitSet</code>, etc. sont de <strong>type</strong> <code class="prettyprint lang-c">void</code>. </p>
+
+<p> En revanche, certaines fonctions comme <code class="prettyprint lang-c">printf</code> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#printf" target="_BLANK"></a>) ne sont <strong class="warning">pas</strong> de type <code class="prettyprint lang-c">void</code>, même si elles sont très souvent appelées comme telles, en ignorant leur valeur de retour. </p>
+</div><!-- exemples -->
+
+
+<h4> Fonction sans arguments </h4>
+
+
+<div class="important">
+<p> Le type <code class="prettyprint lang-c">void</code> permet également de coder une <strong>fonction</strong> qui n'admet <strong class="title">aucun argument</strong>, avec un en‑tête de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong style="color : green;">descripteur de type</strong></span>
+    <span class="nocode"><strong class="specialN">nom de la fonction</strong></span> (void) </code>
+</span> <br>
+où la <strong>liste des</strong> <strong class="specialT">arguments formels</strong> est donc remplacée par le <strong>mot‑clef</strong> <code class="prettyprint lang-c">void</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On code un <strong class="title">appel</strong> d'une telle fonction par une expression de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong>nom de la fonction</strong></span>()
+  </code>
+</span> <br>
+où la <strong>liste des</strong> <strong class="specialO">arguments effectifs</strong> est simplement <strong class="defin">vide</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemples"> De nombreuses <strong>fonctions</strong> <strong class="Arduino">Arduino</strong> comme <code class="prettyprint lang-c">setup</code>, <code class="prettyprint lang-c">loop</code>, <code class="prettyprint lang-c">millis</code>, <code class="prettyprint lang-c">Serial.end</code>, <code class="prettyprint lang-c">Serial.available</code>, etc. sont <strong class="title">sans argument</strong>. </p>
+
+<p> De même, la fonction <code class="prettyprint lang-c">main</code> est très souvent codée sans arguments (mais il peut en être autrement – cf. partie <span class="partie">C6</span>). </p>
+</div><!-- exemples -->
+
+<div class="remarques"><!-- à vérifier -->
+<p class="remarque"> Il existe une <strong class="title">deuxième syntaxe</strong> fréquemment employée qui consiste à coder la <strong>liste des</strong> <strong class="specialT">arguments formels</strong> de la fonction simplement par des <strong class="defin">parenthèses vides</strong> <code class="prettyprint lang-c">()</code>. </p>
+
+<p> Toutefois, <strong class="warning">en langage C</strong>, cette deuxième syntaxe n'est <strong class="warning">pas équivalente</strong> à la précédente. Pour comprendre la différence, il importe de bien distinguer le <strong class="specialLB">prototype</strong> et l'<strong class="specialLB">en‑tête de définition</strong> de la fonction. En effet, dans le <strong class="specialLB">prototype</strong> : </p>
+<ul>
+  <li> le code <code class="prettyprint lang-c">(void)</code> impose explicitement que la fonction n'admet <strong class="warning">aucun</strong> <strong class="specialT">argument formel</strong> ; </li>
+  <ul>
+    <li> alors l'<strong class="specialLB">en‑tête de définition</strong> de la fonction ne doit admettre aucun argument, autrement dit être codé <code class="prettyprint lang-c">()</code> ou <code class="prettyprint lang-c">(void)</code>, sinon la compilation <strong class="warning">échouera</strong> ;  </li>
+
+    <li> et de même, toute <strong>expression d'appel</strong> de la fonction codée avec un <strong class="specialO">argument effectif</strong> sera <strong class="warning">rejetée</strong> par le compilateur ; </li>
+  </ul>
+
+  <li> tandis que le code <code class="prettyprint lang-c">()</code> indique le fait que la fonction accepte un <strong class="specialV">nombre quelconque d'arguments</strong> qui est déterminé dans l'<strong class="specialLB">en‑tête de définition</strong> ; </li>
+  
+  <div class="nobullet"> et alors, même quand cet en‑tête est codé <code class="prettyprint lang-c">(void)</code>, les <strong>expressions d'appel</strong> de la fonction <strong class="cons">avec</strong> <strong class="specialO">arguments effectifs</strong> sont <strong>acceptés</strong> par le compilateur, qui se contente de les ignorer. </div>
+</ul>
+
+<p> Ainsi, le programme académique volontairement incohérent ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+void foo();
+void bar();
+
+int main(void) {
+  foo(2, 3); // not consistent with the definition of foo!
+  bar(4);    // not consistent with the definition of bar!
+  return 0;
+}
+
+void foo(int a) {
+  printf("a = %d\n", a);
+}
+
+void bar(void) {
+  printf("bar\n");
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> est <strong class="warning">compilable en C</strong> –  ce qui est tout à fait <strong class="cons">regrettable</strong> – mais heureusement, pas en <strong>C++</strong>. </p>
+
+<p> De plus, si on remplace la ligne nº 7 par : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  foo(); // not either consistent with the definition of foo!
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> on obtient lors de l'exécution une sortie standard comme <code class="displayDark">a = 1</code> alors que l'appel de la fonction <code class="prettyprint lang-c">foo</code> ne comporte <strong>aucun</strong> <strong class="specialO">argument effectif</strong>. La valeur <code class="prettyprint lang-c">1</code> affichée pour l'<strong class="specialT">argument formel</strong> <code class="prettyprint lang-c">a</code> est donc « fictive ». </p>
+
+
+<p class="square"> En fait, cette deuxième syntaxe n'est maintenue valide que pour des questions de compatibilité avec les <strong>normes anciennes</strong> du langage <strong>C</strong>. Bien que <strong class="cons">moins rigoureuse</strong>, elle est <strong class="defin">très usitée</strong>, sans doute par « facilité » et ignorance des subtiles différences entre le <strong>C</strong> et le <strong>C++</strong>. Quoi qu'il en soit, il est recommandé de <strong class="warning">ne pas l'employer</strong>. </p>
+</div><!-- remarques -->  
+
+
+
+<h3 id="transmissionReference"> Transmission des arguments par référence </h3>
+
+
+
+<p> On a vu supra <a class="supra" href="Cc4-1_fonctionsGeneralites.html#transmissionValeur"></a> que la <strong>syntaxe usuelle de codage</strong> d'une fonction opère la <strong>transmission de</strong> tout <strong class="specialO">argument effectif</strong> à son <strong class="specialT">argument formel</strong> correspondant <strong class="defin">par valeur</strong> : même si dans une expression d'appel, l'argument effectif est codé comme l'identificateur d'une variable, la valeur de cette dernière n'est <strong class="cons">pas modifiée</strong> par l'appel de la fonction. </p>
+
+<p> Néanmoins, en programmation impérative, il est <strong class="title">indispensable</strong> que des fonctions puissent aussi <strong class="defin">modifier des variables</strong>. </p>
+
+
+<div class="exemples"> 
+<p class="exemple">	On souhaite coder une <strong class="title">fonction</strong> <code class="prettyprint lang-c">swapInt</code> qui <strong>permute les valeurs respectives de deux variables entières</strong> :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+void swapInt(int a, int b) { // warning: DOES NOT WORK!
+  int c = a;
+  a = b;
+  b = c;
+}
+
+int main(void) { 
+  int nb1 = 1, nb2 = 2;
+  printf("BEFORE swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+  swapInt(nb1, nb2);
+  printf(" AFTER swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+  return 0;
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Néanmoins, lors de l'exécution, la fonction <code class="prettyprint lang-c">swapInt</code> codée ci‑dessus ne produit <strong class="warning">pas le résultat attendu</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+BEFORE swap: nb1 = 1   nb2 = 2
+ AFTER swap: nb1 = 1   nb2 = 2
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, elle adopte la syntaxe usuelle de <strong>transmission des arguments</strong> <strong class="cons">par valeurs</strong>. </p> 
+</div><!-- exemple -->
+
+<div class="complement">
+<p> Bien entendu, il existe des solutions : </p>
+
+<ul>
+  <li> en langage <strong>C</strong> (et donc aussi en <strong>C++</strong>), avec le recours aux <strong class="specialLB">pointeurs</strong> et la transmission des arguments <strong class="title">par adresse</strong>, mais cette technique est abordée seulement à partir du chapitre C5‑I <a class="next" href="../C5-StructuresPointeurs/Cc5-1_pointeursGeneralites.html" target="_BLANK"></a> ; </li>
+
+  <li> en langage <strong>C++</strong> (et donc aussi en <strong class="Arduino">Arduino</strong>, mais pas en <em class="mark">C</em>), grâce à la notion de <strong class="title">référence</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Référence_(programmation)" target="_BLANK">W</a>, dont l'usage est très simple et peut être étudié dès maintenant. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="transmissionReferenceSyntaxe"> Transmission d'un argument par référence (en <em class="mark">C++</em> seulement) </h4>
+
+
+<div class="important">
+<p> En langage <strong>C++</strong>, dans le codage d'une fonction, un <strong>argument</strong> est <strong class="title">transmis par référence</strong> si, dans la liste des <strong class="specialT">arguments formels</strong> de l'<strong class="specialLB">en‑tête</strong> de la fonction, il est codé conformément au schéma syntaxique ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    <span class="nocode"><strong style="color : green;">descripteur de type</strong></span> & <span class="nocode"><strong>nom de l'argument</strong></span>
+  </code>
+</span> </p>
+<p> Dans l'appel de la fonction, l'<strong class="specialO">argument effectif</strong> doit alors <strong class="warning">impérativement</strong> être l'<strong>identificateur d'une variable</strong> de <strong class="defin">type équivalent</strong> – même <strong class="defin">taille</strong>, même <strong class="defin">format</strong> – à celui de l'<strong class="specialT">argument formel</strong>. </p>
+
+<p> Quant au codage du <strong class="specialG">corps de définition</strong> de la fonction, il suit les <strong class="pros">mêmes règles syntaxiques</strong> que si l'argument était transmis par valeur : ce dernier est manipulable directement par l'identificateur codé dans l'en‑tête. </p>
+</div><!-- important -->
+
+<div class="complement"> 
+<p> Dans le <strong class="specialLB">prototype abrégé</strong> de la fonction (cf. supra <a class="supra" href="Cc4-1_fonctionsGeneralites.html#prototype"></a>), l'<strong>identificateur</strong> de l'<strong class="specialT">argument formel</strong> peut être <strong class="pros">omis</strong> (comme pour une transmission par valeur) mais le symbole de référence <code class="prettyprint lang-c">&</code> <strong class="warning">doit être codé</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Reprenons l'exemple précédent la fonction qui doit permuter la valeur de deux variables entières. Codée ci‑dessous en <strong>C++</strong> avec la transmission de ses deux arguments <strong class="title">par référence</strong> :   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;cstdio&gt;
+
+void swapInt(int & a, int & b) { // IT WORKS!
+  int c = a;
+  a = b;
+  b = c;
+}
+
+int main() { 
+  int nb1 = 1, nb2 = 2;
+  printf("BEFORE swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+  swapInt(nb1, nb2);
+  printf(" AFTER swap: nb1 = %d   nb2 = %d\n", nb1, nb2);
+  return 0;
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> la fonction <code class="prettyprint lang-c">swapInt</code> devient opérationnelle puisqu'on obtient en sortie standard l'<strong class="defin">affichage attendu</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+BEFORE swap: nb1 = 1   nb2 = 2
+ AFTER swap: nb1 = 2   nb2 = 1
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Dans le programme ci‑dessus, on voit donc que par rapport à une transmission d'argument par valeur, seul l'en‑tête de la fonction <code class="prettyprint lang-c">swapInt</code> est modifié. D'un point de vue syntaxique, la transmission d'argument par référence est donc <strong class="pros">particulièrement facile à coder</strong>, ce qui est appréciable pour les débutants. </p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> L'exigence d'<strong class="defin">équivalence de types</strong> entre un <strong class="specialT">argument formel</strong> de fonction et son <strong class="specialO">argument effectif</strong> lors d'un appel est <strong class="warning">stricte</strong> et <strong>aucune conversion</strong> implicite ou explicite ne peut y remédier. </li>
+
+	<div class="nobullet"> Cela ne signifie pas que les deux types soient identiques, mais ils doivent bien avoir le <strong class="defin">même format</strong> et la <strong class="defin">même taille</strong> : </div>
+  
+  <ul>
+    <li> si, dans l'exemple supra, à la ligne nº 6, on codait les <strong class="specialO">arguments effectifs</strong> <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> de type <code class="prettyprint lang-c">int32_t</code>, le programme resterait compilable pour un PC puisque sur une telle machine, le type <code class="prettyprint lang-c">int</code> des <strong class="specialT">arguments formels</strong> <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> est encodé sur 32 bits,  ; </li>
+
+    <li> en revanche, si on codait <code class="prettyprint lang-c">nb1</code> et <code class="prettyprint lang-c">nb2</code> de type <code class="prettyprint lang-c">unsigned</code>, la compilation échouerait, par imcompatibilité de format (non signé <em>versus</em> signé) avec le type <code class="prettyprint lang-c">int</code>.  </li>
+  </ul>
+
+	<li> Insistons sur le fait que dans une transmission d'argument par référence, <strong class="warning">l'argument effectif ne peut pas être une expression quelconque</strong> – alors que ce peut être le cas avec une transmission par valeur. Pour le comprendre, imaginons l'<strong class="cons">exemple absurde</strong> de l'instruction d'appel (non compilable) ci‑dessous : <br>
+	<span class="inline">
+  	<code class="grey">swapInt(1, 2);</code>
+	</span> <br>
+  Cela reviendrait à essayer de permuter les valeurs stockées aux adresses respectives des nombres <code>1</code> et <code>2</code> – adresses qui bien évidemment n'<strong>existent pas</strong> puisque ce ne sont pas des données déclarées. </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="argumentsOptionnels"> Argument prenant une valeur par défaut </h3>
+
+
+
+<div class="complement">
+<p> Dans un <strong>appel de fonction</strong>, il est parfois commode de pouvoir <strong class="title">omettre</strong> un <strong class="specialO">argument effectif</strong>, et qu'alors son <strong class="specialT">argument formel</strong> correspondant prenne une <strong class="specialV">valeur par défaut</strong>. Un tel argument peut alors être considéré comme « <strong class="title">optionnel</strong> ». </p>
+
+<p> Cette possibilité existe en langage <strong class="title">C++</strong> (pas en <strong>C</strong>) en codant <strong class="warning">uniquement</strong> dans le <strong class="specialLB">prototype</strong> de la fonction (et pas dans l'en‑tête de définition) une <strong class="specialV">affectation de valeur</strong> à l'<strong class="specialT">argument formel</strong> (comme pour une initialisation dans le cadre d'une déclaration), conformément au schéma syntaxique :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c">
+    (<span class="nocode"><strong style="color:green">descripteur de type</strong> <strong>identificateur</strong></span> = <span class="nocode"><strong class="specialV">valeur</strong></span>) </code>
+</span> </p>
+
+<p> Et si <strong>plusieurs arguments</strong> font l'objet d'un tel codage, ils doivent être <strong class="warning">tous regroupés à la fin de la liste</strong> des <strong class="specialT">arguments formels</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans les <strong>protocoles de communication</strong> (notamment pour la liaison série), on effectue souvent un <strong class="title">contrôle de parité</strong> pour vérifier la bonne transmission des données. Ce contrôle consiste en particulier à <strong class="defin">compter</strong> dans un <strong>mot binaire</strong> le <strong>nombre de bits à</strong> <code class="prettyprint lang-c">1</code> (cf. les techniques de <em class="english">checksum</em> <a class="external" href="https://fr.wikipedia.org/wiki/Somme_de_contrôle" target="_BLANK">W</a>). </p>
+
+<p> À titre académique, on se propose de coder une fonction nommée <code class="prettyprint lang-c">bitCount</code> : </p>
+<ul>
+  <li> qui <strong>compte</strong> et retourne le nombre de bits valant <code class="prettyprint lang-c">1</code> dans une donnée de type <code class="prettyprint lang-c">uint8_t</code> ; </li>
+
+  <li> et ceci en partant du bit de <strong>rang</strong> <em class="bold">0</em> et en allant jusqu'à un <strong class="defin">rang limite</strong> constituant un <strong>argument</strong> de la fonction, avec <code class="prettyprint">7</code> comme <strong class="specialO">valeur par défaut</strong> (le plus haut rang possible des bits pour le type <code class="prettyprint lang-c">uint8_t</code>). </li>
+</ul>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+int bitCount(const uint8_t data, int limitRank = 7); 
+
+int main(void) {
+  uint8_t byteData = 0b11111111;
+  printf("%d\n", bitCount(byteData, 4));
+  printf("%d\n", bitCount(byteData));
+  return 0;
+}
+
+int bitCount(const uint8_t data, int limitRank) {   
+  if (limitRank < 0) return -1;
+  else if (limitRank > 7) limitRank = 7;
+  int counter = 0;
+  uint8_t mask = 0b1;
+  for (int rank = 0; rank <= limitRank; rank++) {
+    if ((mask & data) == mask) counter++;
+    mask <<= 1;
+  }
+  return counter;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Dans le <strong class="specialLB">prototype</strong> de la fonction <code class="prettyprint lang-c">bitCount</code>, l'argument formel <code class="prettyprint lang-c">limitRank</code> se voit donc attribué <code class="prettyprint lang-c">7</code> comme <strong class="specialV">valeur par défaut</strong>. Cet aspect n'est <strong class="warning">pas codé</strong> dans l<strong class="specialLB">'en‑tête de définition</strong> de la fonction. </p>
+
+<p> Dans la fonction <code class="prettyprint lang-c">main</code>, on teste deux appels de cette fonction <code class="prettyprint lang-c">bitCount</code> sur le mot binaire <code class="prettyprint lang-c">byteData</code> qui vaut <code class="prettyprint lang-c">0b11111111</code> (8 bits à <code class="prettyprint lang-c">1</code>) : </p>
+<ul>
+  <li> en ligne nº 8, avec la valeur <code class="prettyprint lang-c">4</code> comme <strong>deuxième</strong> <strong class="specialO">argument effectif</strong>, qui <strong>écrase la valeur par défaut</strong> ; </li>
+
+  <div class="nobullet"> on obtient donc en sortie standard la valeur <code class="displayDark">5</code> puisqu'il y a bien 5 bits à <code class="prettyprint lang-c">1</code> du rang 0 au rang 4 ; </div>
+
+  <li> en ligne nº 9, avec <strong>un seul</strong> <strong class="specialO">argument effectif</strong>, autrement dit sans valeur transmise à <code class="prettyprint lang-c">limitRank</code>, qui prend alors sa <strong class="specialV">valeur par défaut</strong> (<code class="prettyprint lang-c">7</code>) ;   </li>
+
+  <div class="nobullet"> et on obtient donc en sortie standard la valeur <code class="displayDark">8</code> comme attendu. </div>
+</ul>
+</div><!-- exemple -->
+
+<div class="remarques"> 
+<p class="remarque"> Sur <strong class="OnlineGDB">OnlineGDB</strong>, on peut facilement vérifier que ce programme n'est <strong class="warning">pas compilable</strong> en langage <strong>C</strong>. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Surcharge d'un identificateur de fonction </h3>
+
+
+
+<div class="complement">
+<p> Dans un programme, il est souvent utile qu'un <strong>argument de fonction</strong> puisse prendre des <strong class="specialY">valeurs</strong> de <strong class="title">types différents</strong>. C'est notamment le cas avec les opérateurs arithmétiques, qui s'appliquent aussi bien à des données entières que décimales, et ce quelle que soit la taille ou le caractère signé/non signé du type dans lequel ces données sont encodées. </p>
+
+<p> Cette possibilité existe en langage <strong class="title">C++</strong> (pas en <strong>C</strong>) à travers la notion de <strong class="title">surcharge d'identificateur</strong> de fonction – on parle aussi de <strong>sur‑définition de fonction</strong> : </p>
+
+<ul>
+	<li> techniquement, le compilateur accepte qu'un <strong class="specialN">même identificateur</strong> soit employé pour <strong class="defin">plusieurs déclarations</strong> de la fonction, chaque déclaration étant accompagnée de sa définition ; </li>
+
+	<li> mais pour que le compilateur puisse ensuite choisir quelle définition de la fonction appliquer lors d'un appel, il est impératif que chacune se distingue des autres par une <strong>liste d'</strong><strong class="specialT">arguments formels</strong> qui lui soit propre, grâce à des <strong>différences de</strong> <strong class="specialG">types</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<p> En termes de compilation, les <strong class="title">règles de choix</strong> d'une fonction sur‑définie sont <strong class="warning">complexes</strong> (elles ne seront pas détaillées ici), et elles ne peuvent suffire à résoudre tous les <strong>conflits</strong> imaginables entre deux voire plusieurs déclarations. En particulier, un problème peut se poser lorsque une fonction sur‑définie est appelée avec un argument effectif dont le type ne correspond à aucun des types de l'argument formel qui lui est associé par sa position dans la liste. Le compilateur doit alors effectuer une <strong>conversion</strong> mais laquelle ? Lorsqu'un conflit est <strong class="cons">non résolu</strong>, il engendre une <strong class="warning">erreur de compilation</strong>. </p>
+
+
+
+<div class="exemples">
+<p class="exemple"> On souhaite que la fonction <code class="prettyprint lang-c">bitCount</code> présentée supra <a class="supra" href="Cc4-1_fonctionsGeneralites.html#argumentsOptionnels"></a> puisse aussi s'appliquer à un mot binaire de type <code class="prettyprint lang-c">uint16_t</code>. Bien entendu, dans ce cas, la valeur par défaut de l'argument <code class="prettyprint lang-c">limitRank</code> sera <code class="prettyprint lang-c">15</code> et non plus <code class="prettyprint lang-c">7</code>.</p>
+
+<p> Au programme précédent, il suffit donc d'ajouter un <strong>nouveau prototype</strong> :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+int bitCount(const uint16_t data, int limitRank = 15); 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> et une <strong>nouvelle définition</strong> de fonction : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:24">
+int bitCount(const uint16_t data, int limitRank) {   
+  if (limitRank < 0) return -1;
+  else if (limitRank > 15) limitRank = 15;
+  int counter = 0;
+  uint16_t mask = 0b1;
+  for (int rank = 0; rank <= limitRank; rank++) {
+    if ((mask & data) == mask) counter++;
+    mask <<= 1;
+  }
+  return counter;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Dans la fonction <code class="prettyprint lang-c">main</code>, on peut alors coder un appel de chaque fonction <code class="prettyprint lang-c">bitCount</code> avec pour <strong>premier</strong> <strong class="specialO">argument effectif</strong> un mot binaire de longueur implicitement spécifié par son type, par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+int main(void) {  
+  uint8_t byteData = 0b11111111;
+  uint16_t wordData = 0b111111111111111;
+  printf("%d\n", bitCount(byteData));
+  printf("%d\n", bitCount(wordData));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Le compilateur <code>g++</code> saura automatiquement laquelle des deux fonctions <code class="prettyprint lang-c">bitCount</code> appliquer. </p>
+
+
+
+</div><!-- exemple -->
+
+<div class="remarques"> 
+<p class="remarque"> Le programme supra n'est <strong class="warning">pas compilable</strong> si on code directement une <strong class="title">constante littérale</strong> comme premier <strong class="specialO">argument effectif</strong> dans un appel de fonction <code class="prettyprint lang-c">bitCount</code>, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:8">
+  printf("%d\n", bitCount(0b11111111));
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, le compilateur n'est alors <strong class="cons">pas capable de choisir la fonction</strong> à appliquer car il commence par interpréter cette constante littérale dans le type standard <code class="prettyprint lang-c">unsigned int</code> (promotion systématique – cf. chap. C3‑VI <a class="previous" href="../C3-Numeration/Cc3-6_conversionsTypes.html" target="_BLANK"></a>) et ensuite, il n'est pas capable d'identifier le type de l'<strong class="specialT">argument formel</strong> qui lui correspond le mieux. </p>
+</div><!-- remarque --> 
+
+</div><!-- expert h2 -->
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

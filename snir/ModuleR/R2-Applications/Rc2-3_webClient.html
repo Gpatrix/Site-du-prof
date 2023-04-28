@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="2"
+	data-pagenumber="III"
+	data-pageState="OK"
+	data-pageheadtitle="Web client - HTTP"
+	data-pagefulltitle="Le web côté client  –  Le protocole HTTP"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+
+<p class="square"> Le <strong class="title">world wide web</strong> <a class="external" href="https://fr.wikipedia.org/wiki/World_Wide_Web" target="_BLANK">W</a>, c'est‑à‑dire le réseau des <strong>milliards de pages d'hypertexte</strong> – dites <strong class="defin">pages web</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Page_web" target="_BLANK">W</a> et accessibles à l'aide d'un logiciel <strong>navigateur</strong> – est la principale application (au sens général) de l'Internet. Comme beaucoup d'autres applications, elle est basée sur un <strong>modèle</strong> <strong class="defin">client‑serveur</strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#clientServeur" target="_BLANK"></a>). </p>
+
+<div style="display:inline-block">
+	<video class="top-right" src="../img/logoNetscape.mp4" width="200px" controls autoplay loop></video>
+<p>	À l'origine, les <strong class="title">pages web</strong> étaient des <strong class="defin">documents statiques</strong> codés dans un <strong>langage à balises</strong> (<strong><em class="sigle">HTML</em>/<em class="sigle">CSS</em></strong>) et transmis du serveur au client par le <strong class="specialLB">protocole <em class="sigle">HTTP</em></strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#applicationsUtilisateurs" target="_BLANK"></a>). Mais très vite, elles ont commencé à inclure des <strong class="defin">objets dynamiques</strong> : boutons, formulaires, animations audio et vidéo… – cf. ci‑contre ce logo au format animé <code>gif</code> de l'ancien navigateur <em class="mark">Netscape</em> (ici, converti au format <code>mp4</code>). </p>
+</div><!-- display --> 
+
+<p class="square"> Aujourd'hui, les <strong class="title">pages web</strong> peuvent mettre en œuvre des <strong class="defin">applications complexes</strong> – édition de documents bureautiques, logiciels de <strong><em class="sigle">CAO</em></strong>, jeux <strong><em class="sigle">3D</em></strong>… Elles sont devenues un <strong class="defin">support incontournable</strong> des services de <strong>messagerie</strong> (<em class="english">web‑mail</em>, <em class="english">chat</em>…), des <strong>réseaux sociaux</strong>, du <strong>commerce en ligne</strong>, des <strong>médias d'information</strong>, des <strong>démarches administratives</strong>… Tout cela a été rendu possible grâce à : </p>
+<ul>
+	<li> le développement de nouveaux <strong class="specialLB">langages de programmation</strong> (<em class="mark">PHP</em>, <em class="mark">Java</em>, <em class="mark">JavaScript</em>, <em class="mark">SQL</em>…) et une multitude de <strong>framemorks</strong> ; </li>
+
+	<li> la « ramification » du <strong class="specialLB">modèle client‑serveur</strong>, non seulement du côté du client, mais surtout du côté du serveur, avec l'apparition d'architectures dite <strong>multi‑tiers</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Architecture_trois_tiers" target="_BLANK">W</a>. </li>
+</ul>
+
+<p> En effet, dans ce <strong class="title">modèle client‑serveur</strong> <a class="external" href="https://en.wikipedia.org/wiki/Front_end_and_back_end" target="_BLANK">W</a>, comme illustré sur la figure ci‑dessous, on trouve le plus souvent : </p>
+	<img class="top-left" src="../img/webClientServerModel0.png">
+
+<ul>
+	<li> du côté du <strong class="title">client</strong> – ce qu'on appelle en anglais le <strong>front end</strong> – essentiellement un <strong class="defin">navigateur web</strong> – logiciel complexe qui effectue de nombreux traitements (client <strong><em class="sigle">HTTP</em></strong>, interpréteur <strong><em class="sigle">HTML/CSS/JS</em></strong>…) – et aussi, souvent, d'<strong>autres composants logiciels</strong> modulaires, appelés <strong>plugins</strong> (par exemple, un lecteur de fichiers <code>pdf</code>) ;  </li>
+
+	<li> du côté du <strong class="title">serveur</strong> – ce qu'on appelle en anglais le <strong>back end</strong> –, un logiciel <strong class="defin">serveur web</strong> qui stocke les fichiers sources de la page web, et qui peut également accomplir des <strong class="warning">traitements très complexes</strong> sur le contenu des fichiers à transmettre aux clients. </li>
+  
+  <div class="expert">
+	<div class="nobullet"> Ces traitements, qui peuvent être codés dans <strong class="defin">divers langages</strong> de programmation (principalement <em class="mark">PHP</em> mais aussi <em class="mark">JavaScript</em> avec l'extension <em class="mark">Node.JS</em>, <em class="mark">Python</em>, <em class="mark">Ruby</em>…), permettent notamment d'aller chercher des données stockées : </div>
+	<ul>
+		<li> dans des <strong>bases de données</strong>, lesquelles sont souvent être hébergées sur d'autres serveurs ; </li>
+
+		<li> dans des <strong>serveurs dédiés</strong> à des applications particulières (messagerie, vidéos, etc.). </li>
+	</ul>
+	</div><!-- expert -->
+</ul>
+
+
+<p class="square"> À la lumière de cette brève description, on comprend qu'il serait déraisonnable pédagogiquement de vouloir décrire ici une telle diversité de technologies. Ce chapitre se donne donc l'<strong class="title">objectif limité</strong> d'aborder seulement  : </p>
+<ul>
+	<li> l'<strong class="specialLB">architecture logicielle du côté du client</strong> et notamment le fonctionnement général d'un <strong class="defin">navigateur web</strong> ; d'un point de vue pratique, on présentera des <strong>caractéristiques</strong> et des <strong>fonctionnalités</strong> souvent méconnues du grand public, mais qui sont indispensables pour un informaticien (mémoire cache, console…) ;  </li>
+
+	<li> le <strong class="specialLB">protocole <em class="sigle">HTTP</em></strong> dans ses <strong>principes de fonctionnement</strong> et un premier niveau de détail de ses <strong>messages</strong> (requêtes et réponses). </li>
+</ul>
+
+<div class="expert">
+<p> Quant à la technologie <strong>du côté du serveur</strong>, bien qu'essentielles pour comprendre le fonctionnement du web, elle ne sera abordée qu'au chapitre suivant. Les impatients pourront néanmoins consulter cette vidéo <a class="external" href="https://www.youtube.com/watch?v=tpLAcLFn9-U" target="_BLANK">Y</a> qui en donne une bonne introduction. </p>
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Architecture web côté client (<em class="english">front end</em>) </h2>
+
+
+
+<h3> Le navigateur web  –  généralités </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/webBrowserLogo.png" width="100px" style="padding-top: 0.0em">
+<p> Du côté du client, l'<strong class="title">architecture web</strong> est typiquement basée sur l'exécution d'un <strong class="specialLB">navigateur web</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Navigateur_web" target="_BLANK">W</a> – en anglais <strong>web browser</strong>. </p>
+
+<p> Il s'agit d'un <strong>logiciel</strong> <strong class="warning">complexe</strong>, qui intègre de <strong class="defin">nombreuses fonctionnalités</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Parmi ces <strong class="title">fonctionnalités</strong>, on trouve principalement les suivantes : </p>
+<ul>
+	<li> un <strong class="specialLB">client</strong> pour le <strong class="specialLB">protocole <em class="sigle">HTTP</em></strong> ;  </li>
+
+	<div class="expert">
+	<div class="nobullet"> Ce client a typiquement pour rôle d'<strong class="defin">adresser des requêtes</strong> à des serveurs web afin d'obtenir les fichiers codant la <strong>ressource</strong> – tout ou partie d'une <strong>page web</strong> à afficher – et toutes les données nécessaires à son fonctionnement dynamique. Il est évidemment capable aussi de <strong class="defin">traiter les réponses</strong> qu'il reçoit de la part des serveurs pour en extraire les éléments attendus.  </div>
+  </div><!-- expert -->
+
+	<li> un <strong class="specialLB">moteur de rendu <em class="sigle">HTML</em></strong> pour <strong class="defin">interpréter le code <em class="sigle">HTML/CSS/JS</em></strong> des pages web chargées ; </li>
+
+	<div class="nobullet"> Véritable cœur du navigateur, c'est donc un <strong>interpréteur</strong> au sens logiciel du terme (cf. chap. C1‑I <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-1_langagesGeneralites.html#compileInterprete" target="_BLANK">C</a>) qui transforme le code de la page en affichage dans l'interface utilisateur du navigateur. En particulier, le moteur de rendu intègre un <strong>interpréteur du langage <em>JavaScript</em></strong>. </div>
+
+	<li> une <strong class="specialLB">interface utilisateur</strong> qui met en œuvre le <strong class="defin">dialogue homme‑machine</strong> et dont les éléments principaux sont bien sûr : </li>
+	<ul>
+		<li> la <strong>fenêtre d'affichage</strong> multi‑onglets des pages web chargées ;  </li>
+
+		<li> la <strong>barre d'adresse</strong> qui permet de saisir les <strong class="defin"><em class="sigle">URL</em></strong> (cf. chap. R2‑I <a class="previous" href="Rc2-1_dns_url.html#URL" target="_BLANK"></a>) pour accéder aux pages web ; </li>
+	</ul>
+
+	<div class="expert">
+	<div class="nobullet"> Avec des <strong>boutons</strong> et des <strong>menus</strong>, l'interface utilisateur permet aussi de <strong>personnaliser</strong> le mode d'affichage, de modifier la politique de sécurité, d'effectuer des recherches de mots dans la page courante, de d'enregistrer des pages web, etc.. </div>
+
+	<div class="nobullet"> L'interface utilisateur comporte par ailleurs toute une série d'<strong>outils de développement</strong> (inspecteur d'éléments, console d'exécution, débogueur, etc.) pour surveiller l'exécution d'une page web et corriger les éventuelles erreur de codage. </div>
+	</div><!-- expert -->
+
+
+	<li> un <strong class="specialLB">gestionnaire d'extensions et de plugins</strong> pour ajouter des fonctionnalités au navigateur ; </li>
+
+  <div class="expert">
+	<div class="nobullet"> Cet élément permet d'employer d'<strong>autres composants logiciels</strong> sur le poste client, notamment pour <strong class="pros">augmenter la puissance d'affichage</strong> (animations <em class="mark">flash</em>, documents <code>pdf</code>, etc.), mais aussi pour <strong class="pros">filtrer</strong> d'éventuels éléments indésirables (bloqueur de publicité, etc.).  </div>
+  </div><!-- expert -->
+
+	<li> un <strong class="specialLB">système de stockage de données persistantes</strong> – ce qu'on appelle usuellement la <strong>mémoire cache</strong>. </li>
+
+  <div class="expert"> 
+	<div class="nobullet"> Ce dispositif permet de diminuer le nombre de requêtes et le flux des données sur le réseau ; il accélère la navigation sur les pages web les plus consultées.  </div>
+	</div><!-- expert -->
+</ul>
+<p> Et bien entendu, le navigateur comporte un <strong class="specialLB">noyau logiciel</strong> pour coordonner tous ces composants, qu'on appelle parfois le <strong>moteur principal du navigateur</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> Autrefois modeste, un <strong class="title">navigateur</strong> est aujourd'hui un <strong class="defin">logiciel remarquable</strong> à bien des égards. </p>
+<ul>
+	<li> Par la <strong>complexité des traitements</strong> qu'il met en œuvre et la rapidité qu'on attend de lui pour bénéficier d'un affichage fluide, un navigateur requiert d'<strong class="warning">importantes ressources matérielles</strong> (espace disque d'installation, mémoire vive et temps de processeur en fonctionnement). </li>
+
+	<li> Fruit de recherches incessantes, un navigateur fait l'objet de <strong class="warning">mises à jours très fréquentes</strong> pour l'<strong>amélioration des performances</strong> et l'invention de nouvelles fonctionnalités. Ces dernières sont aussi parfois motivées par des questions urgentes de <strong>sécurité</strong>  (découverte d'une faille) et doivent donc être appliquées sans tarder. </li>
+
+	<li> En synergie avec le <strong class="defin">système d'exploitation</strong> auquel il est souvent associé (pensons par exemple au couple <em class="mark">Android</em> & <em class="mark">Google Chrome</em>), il permet d'imposer incidemment à l'utilisateur diverses options cachées de navigation – acceptation de <strong>cookies</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Cookie_(informatique)" target="_BLANK">W</a> non indispensables et autres dispositifs de <strong>télémétrie</strong> <a class="external" href="https://en.wikipedia.org/wiki/Telemetry#Software" target="_BLANK">W</a> – de <strong class="warning">surveiller son comportement</strong> et de collecter des données qui, à grande échelle, représentent un intérêt commercial significatif. </li>
+</ul>
+
+
+
+<!-- expert -->
+<h4> Évolution du marché des navigateurs </h4>
+
+
+<p> Le dernier point évoqué ci‑dessus explique en partie pourquoi les <strong class="title">navigateurs</strong> sont tous des <strong class="defin">logiciels gratuits</strong> : les entreprises qui les développent peuvent rentabiliser leurs investissement en commercialisant des données qu'elles récoltent par télémétrie. </p>
+
+<div style="display: flex;">
+<p>	Toutefois, il ne faut pas perdre de vue qu'historiquement, le développement des navigateurs s'est d'abord déroulé dans le cadre d'un <strong class="defin">travail de recherche collaboratif</strong>, notamment au <strong><em class="sigle">CERN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Tim_Berners-Lee#L'invention_du_World_Wide_Web" target="_BLANK">W</a> et au <strong><em class="sigle">NCSA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/National_Center_for_Supercomputing_Applications" target="_BLANK">W</a>). Après une transition dans un cadre entrepreneurial, avec la création de <strong class="specialV">Netscape Navigator</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Netscape_Navigator" target="_BLANK">W</a> (d'où vient d'ailleurs le terme « navigateur »), le fruit de ce travail a ensuite émulé dans le monde de l'<strong class="pros">open‑source gratuit</strong>, aboutissant notamment à la création de <strong class="specialV">Mozilla Firefox</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Mozilla_Firefox" target="_BLANK">W</a>. </p>
+<div style="flex-direction: column;">
+	<img class="top-right" src="../img/logoNetscape.png" width="100px" style="padding-top: 0.0em">
+	<img class="top-right" src="../img/logoFirefox.png" width="100px" style="padding-top: 0.0em">
+</div><!-- flex column -->
+</div><!-- flex -->	
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoIE7.png" width="100px" style="padding-top: 0.0em">
+<p> Cette alternative a permis, au début des années 2000, de tempérer le monopole du navigateur <strong class="specialV">Internet Explorer</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Explorer" target="_BLANK">W</a> de <strong>Microsoft</strong>, installé d'office avec son système d'exploitation <strong>Windows</strong> ultra dominant sur le marché des ordinateurs personnels. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoChrome.png" width="100px" style="padding-top: 0.0em">
+<p> En revanche, l'existence de <strong>Firefox</strong> n'a pas réussi à limiter le même phénomène avec le navigateur <strong class="specialV">Google Chrome</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Google_Chrome" target="_BLANK">W</a>, indissociable du système d'exploitation <strong>Android</strong> qui <strong class="defin">domine le marché</strong> des smartphones et des tablettes. Avec la forte croissance des smartphones depuis les années 2010, <strong class="specialV">Chrome</strong> a fini par conquérir près de <strong class="warning">65 %</strong> des parts de marché des navigateurs. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoSafari.png" width="100px" style="padding-top: 0.0em">
+<p> Le seul <strong class="defin">challenger</strong> de cette quasi hégémonie est le constructeur <strong>Apple</strong>, qui a développé son propre navigateur <strong class="specialV">Safari</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Safari_(navigateur_web)" target="_BLANK">W</a>, lequel représente aujourd'hui entre 15 % et 20 % du marché, parce qu'il constitue le navigateur par défaut pour les ordinateurs <em class="mark">Macintosh</em> et surtout les très « populaires » <em class="mark">I‑Phones</em>. </p>
+</div><!-- display -->
+
+
+<div style="display:inline-block">
+	<iframe class="top-right" src="https://www.youtube.com/embed/W4wWdmfOibY"   allowFullScreen frameBorder="0" style="padding-top: 0.1em;" ></iframe>
+<p> Aujourd'hui, dans les 20 % restant du marché, seul <strong>quatre navigateurs</strong> dépassent <strong class="cons">1 %</strong> : <em class="mark">Edge</em>, <em class="mark">Firefox</em>, <em class="mark">Opera</em> et <em class="mark">Samsung Internet</em> <a class="external" href="https://fr.wikipedia.org/wiki/Navigateur_web#Parts_de_marché" target="_BLANK">W</a> (cf. également l'animation ci‑contre, avec des statistiques un peu différentes). Pour continuer à suivre cette évolution, on peut par exemple consulter cette page web <a class="external" href="https://gs.statcounter.com/browser-market-share" target="_BLANK"></a>. </p>
+</div><!-- display -->
+
+
+<div class="remarques">
+<div style="display:inline-block">	
+	<img class="top-right" src="../img/logoEdge.png" width="90px" style="padding-top: 0.0em">
+<p class="remarque"> Le cas d'<strong class="specialV">Internet Explorer</strong> est particulièrement instructif. En position de <strong>quasi‑monopole</strong> au début des années 2000, le navigateur n'occupe plus aujourd'hui qu'une <strong class="cons">position marginale</strong>, malgré un <em class="english">rebranding</em> complet nommé <strong class="specialV">Edge</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Microsoft_Edge" target="_BLANK">W</a>. </p>
+</div><!-- display --> 
+
+<p> D'ailleurs, fin 2018, l'entreprise <strong>Microsoft</strong> a abandonné le développement et l'exploitation de son propre moteur de rendu (<em class="mark">EdgeHTML</em>) pour adopter celui de <em class="mark">Google Chrome</em> (nommé <em class="mark">Blink</em>) ! </p>
+</div><!-- remarque -->
+</div><!-- expert -->
+
+
+
+<h3 id="moteurHTML"> Le moteur de rendu HTML </h3>
+
+
+
+<div class="important">
+<p> Peu connu du grand public, le <strong class="title">moteur de rendu <em class="sigle">HTML</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Moteur_de_rendu_HTML" target="_BLANK">W</a> (en anglais, <em class="english">browser engine</em>, ou <em class="english">layout engine</em>, ou <em class="english">rendering engine</em>) est le <strong>composant logiciel central</strong> d'un navigateur web</strong>. Son rôle principal est d'<strong class="defin">interpréter le code source</strong> d'un page web pour <strong class="defin">produire l'affichage</strong> dans la fenêtre principale du navigateur. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> À l'instar du navigateur, le <strong>moteur de rendu <em class="sigle">HTML</em></strong> remplit de <strong class="title">nombreuses fonctions</strong> pour afficher une page web, notamment celles listées ci‑dessous. </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/HTMLlogo.png" width="80px" style="padding-top: 0.5em">
+	<li> Il <strong class="specialLB">interprète le code <em class="sigle">HTML</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Hypertext_Markup_Language" target="_BLANK">W</a> (<em class="english">hypertext markup language</em>) pour afficher le <strong>contenu de la page web</strong>. </li>
+  
+  <div class="expert">
+	<div class="nobullet"> Le <strong class="defin">langage <em class="sigle">HTML</em></strong> est un <strong>langage à balises</strong>, qui permet de structurer les éléments d'un page web par inclusions de balises les unes dans les autres. Ainsi, le <strong class="defin">code <em class="sigle">HTML</em></strong> d'une page web : </div>
+  <ul>
+  	<li> forme implicitement ce qu'on appelle le <strong><em class="sigle">DOM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Document_Object_Model" target="_BLANK">W</a> ou <strong>document object model</strong> ; </li>
+
+  	<li> peut par ailleurs être <strong>réparti sur plusieurs fichiers</strong> pour coder de façon rationnelle différentes parties de la page (corps, panneau de navigation, etc.). </li>
+  </ul>
+	</div><!-- expert -->
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/CSSlogo.png" width="80px" style="padding-top: 0.5em">
+	<li> Il <strong class="specialLB">obéit à des règles de présentation</strong> du contenu, codées dans des <strong>feuilles de styles</strong> en <strong class="defin">langage <em class="sigle">CSS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Feuilles_de_style_en_cascade" target="_BLANK">W</a> (<em class="english">cascading style sheets</em>). </li>
+
+  <div class="expert">
+	<div class="nobullet"> Le <strong class="defin">code <em class="sigle">CSS</em></strong> d'une page web définit des <strong>catégories d'éléments</strong> et leurs les <strong>propriétés de style</strong> – couleur, taille, position, etc. – qui peuvent ensuite être employées dans le code <strong><em class="sigle">HTML</em></strong> de la page web. </div>
+
+	<div class="nobullet"> Comme le code <strong><em class="sigle">HTML</em></strong>, le <strong class="defin">code <em class="sigle">CSS</em></strong> d'une page web peut être <strong>hiérarchisé</strong> et <strong>réparti</strong> sur plusieurs fichiers. </div>
+	</div><!-- expert -->
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/JSlogo.png" width="80px" style="padding-top: 0.5em">
+	<li> Il <strong class="specialLB">exécute les scripts</strong> codés en <strong class="defin">langage JavaScript</strong> <a class="external" href="https://fr.wikipedia.org/wiki/JavaScript" target="_BLANK">W</a> inclus ou appelés dans le code <strong><em class="sigle">HTML</em></strong> de la page web pour lui donner un <strong>comportement dynamique et interactif</strong> sans nécessiter son rechargement complet. </li>
+
+	<div class="nobullet"> Cette fonctionnalité est rendue possible par l'intégration dans le navigateur d'un composant logiciel spécifique appelé <strong class="title">moteur JavaScript</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Moteur_JavaScript" target="_BLANK">W</a>. Très puissant, il permet de <strong>créer</strong> ou <strong>supprimer</strong> en temps‑réel des éléments de la page, et d'en <strong>modifier</strong> toutes les propriétés.  </div>
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<div class="exemples" id="exempleJSclient">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/changeBackground.png" width="80px" style="padding-top: 0.5em">
+<p class="exemple"> À titre d'illustration purement académique, le <strong class="title">code <em class="sigle">HTML/CSS/JS</em></strong> ci‑dessous, enregistré dans un fichier nomme <code class="filename">changeBackground.html</code>, crée une <strong>page web très simple</strong> avec <strong class="defin">deux balises de liens dynamiques</strong> permettant respectivement de <strong class="pros">choisir entre deux couleurs d'arrière‑plan</strong> (<span class="bkg-white">blanc</span> ou <span class="bkg-yellow">jaune</span>). </p>
+</div><!-- display --> 
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-html linenums:1">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Dynamic page client JS &lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style="background: white"&gt;
+&lt;h1&gt; Dynamic page example with client side JS &lt;/h1&gt;
+
+&lt;p&gt;
+  &lt;a href="#" onclick="document.body.style.backgroundColor = 'white'"&gt;White&lt;/a&gt;
+    &lt;!-- 2 no-break-spaces here --&gt;
+  &lt;a href="#" onclick="document.body.style.backgroundColor = 'yellow'"&gt;Yellow&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> L'emploi du langage <strong class="defin">JavaScript</strong> apparaît dans les <strong>attributs</strong> <code class="prettyprint lang-html">onclick</code> des balises <code class="prettyprint lang-html">&lt;a&gt; &lt;/a&gt;</code> codées aux lignes n° 11 & 13 : ils viennent modifier la propriété de style <code class="prettyprint lang-html">backgroundColor</code> de l'<strong>objet</strong> <code class="prettyprint lang-html">body</code> de la page. </p>
+
+<div class="expert">
+<p> Ce code peut être <strong class="title">testé</strong> en l'ouvrant dans n'importe quel navigateur. Le comportement dynamique est ici <strong class="pros">entièrement pris en charge du côté client</strong>. </p>
+
+<p> Il servira de <strong class="title">point de comparaison</strong> avec les techniques de <strong>codage côté serveur</strong> au chap. R2‑IV <a class="next" href="Rc2-4_webServeur.html#langagePHP" target="_BLANK"></a></p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Un <strong class="title">moteur de rendu <em class="sigle">HTML</em></strong> peut également être utilisé dans d'<strong class="defin">autres application</strong> qui elles aussi requièrent l'affichage de contenus codés en <strong><em class="sigle">HTML/CSS/JS</em></strong>. </p>
+
+<p> C'est notamment le cas des logiciels <strong class="defin">clients de messagerie</strong> – <em class="mark">Mozilla Thunderbird</em>, <em class="mark">Microsoft Outlook</em>, etc. (cf. chap. R2‑VI <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/Rc2-6_messagerie.html" target="_BLANK"></a>). Depuis longtemps, ils permettent d'intégrer dans les courriels de nombreux des éléments de mise en forme du texte, des hyperliens, etc. </p> 
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4> Évolution des moteurs de rendu HTML </h4>
+
+
+<p> On a pu observer au cours des années 2000 une intéressante diversité de <strong class="title">moteurs de rendu <em class="sigle">HTML</em></strong>. Cependant, on peut considérer que, depuis fin 2018, il n'en reste <strong class="defin">plus que trois</strong> à être employés dans les <strong>principaux navigateurs</strong> (cf. tableau ci‑dessous).  </p>
+
+<div style="overflow-x: auto; margin: 0.5em;">
+<table style="margin: 0em; ">
+	<col style="min-width:25%; max-width:25%">
+	<col style="min-width:25%; max-width:25%">
+	<col style="width:auto">
+	<thead><tr>  
+    <th> Moteur de rendu <em class="sigle">HTML</em>  </th>
+    <th> Moteur JavaScript </th>
+    <th> Navigateurs ou autres applications </th>
+  </tr></thead>
+  <tbody>
+  <tr>
+  	<td> <strong class="defin">Blink</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Blink_(moteur_de_rendu)" target="_BLANK">W</a></td>
+  	<td> <strong>V8</strong> <a class="external" href="https://fr.wikipedia.org/wiki/V8_(moteur_JavaScript)" target="_BLANK">W</a></td>
+  	<td> <em class="mark">Chrome</em> <img class="icon" src="../img/faviconChrome.png">, <em class="mark">Chromium</em> <img class="icon" src="../img/faviconChromium.png">, <em class="mark">Brave</em> <img class="icon" src="../img/faviconBrave.png">, <em class="mark">Opera</em> <img class="icon" src="../img/faviconOpera.png">, <em class="mark">Vivaldi</em> <img class="icon" src="../img/faviconVivaldi.png">, <em class="mark">Edge</em> <img class="icon" src="../img/faviconEdge.png">…</td>
+  </tr>
+  <tr>
+  	<td> <strong class="defin">WebKit</strong> <a class="external" href="https://fr.wikipedia.org/wiki/WebKit" target="_BLANK">W</a></td>
+  	<td> <strong>JavaScriptCore</strong> <a class="external" href="https://fr.wikipedia.org/wiki/JavaScriptCore" target="_BLANK">W</a></td>
+  	<td> <em class="mark">Safari</em> <img class="icon" src="../img/faviconSafari.png">…</td>
+  </tr>
+  <tr>
+  	<td> <strong class="defin">Gecko</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Gecko_(moteur_de_rendu)" target="_BLANK">W</a></td>
+  	<td> <strong>SpiderMonkey</strong> <a class="external" href="https://fr.wikipedia.org/wiki/SpiderMonkey" target="_BLANK">W</a></td>
+  	<td> <em class="mark">Firefox</em> <img class="icon" src="../img/faviconFirefox.png">, <em class="mark">Thunderbird</em> <img class="icon" src="../img/faviconThunderbird.png">…</td>
+  </tr>
+  </tbody>
+ </table>
+</div><!-- overflow --> 
+
+
+
+<!-- expert -->
+<h4> Spécificités du moteur <em class="mark">JavaScript</em> </h4>
+
+
+<p> Le <strong class="title">moteur JavaScript</strong> occupe une <strong class="defin">place spécifique</strong> dans les fonctionnalités du <strong>moteur de rendu <em class="sigle">HTML</em></strong>, au point qu'il est souvent considéré comme une composante à part entière du navigateur lui‑même. </p>
+<ul>
+	<li> Avec des <strong>scripts de plus en plus complexes</strong> et nombreux dans les pages web, les techniques d'interprétation du langage ont évolué et procèdent maintenant par <strong class="defin">compilation à la volée</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Compilation_à_la_volée" target="_BLANK">W</a> (<em class="english">just‑in‑time compilation</em>) de blocs d'instructions dans un <strong>langage intermédiaire</strong> appelé <strong class="defin">bytecode</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bytecode" target="_BLANK">W</a> (cf. également chap. C1‑I <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-1_langagesGeneralites.html#remarquesCompilation" target="_BLANK">C</a>). </li>
+
+	<div class="nobullet"> C'est pourquoi on parle de <strong>« moteur »</strong> et non pas d'« interpréteur ». </div>
+
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/logoNodeJS.png" width="120px" style="padding-top: 0.5em">
+	<li> De plus, le <strong>moteur Javascript</strong> dit <strong class="defin">V8</strong> de <strong>Blink</strong> est également exploité dans la <strong>plateforme</strong> <strong class="specialG">Node.js</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Node.js" target="_BLANK">W</a> pour permettre l'utilisation du langage <strong class="title">JavaScript</strong> dans un <strong class="pros">contexte général</strong> – notamment en ligne de commande – et non plus seulement au sein d'une page web. </li>
+  
+	<div class="nobullet"> La plateforme <strong class="specialG">Node.js</strong> est de plus en plus exploitée <strong>du côté du serveur web</strong> pour coder des fonctionnalités dynamiques complexes (cf. chap. R2‑IV <a class="next" href="Rc2-4_webServeur.html#NodeJS" target="_BLANK"></a>).  </div>
+	</div><!-- display -->
+</ul>
+</div><!-- expert -->
+
+
+<h4> Tendance du développement des pages web dynamiques </h4>
+
+
+<div class="important">
+<p> Dans la mesure du possible, en termes d'<strong>efficacité</strong> et de <strong>réactivité</strong>, il est <strong class="pros">préférable</strong> d'implémenter le <strong class="title">fonctionnement dynamique</strong> d'une page web <strong class="defin">du côté du client</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Client_side_scripting" target="_BLANK">W</a> (on parle de <em class="english">client side scripting</em>). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/clientSideScripting.png" width="150px">
+<p> En effet, en plus de toutes les requêtes de chargement d'une page web, le <strong>serveur</strong> qui l'héberge doit aussi répondre à toutes les requêtes de <strong class="defin">comportements dynamiques</strong> qui sont codés de son côté. Le fait de coder ces comportements <strong class="title">du côté du client</strong> permet de <strong class="pros">distribuer la charge</strong> de traitement et ainsi de soulager d'autant le serveur. </p>
+</div><!-- complement -->
+
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/serverSideScripting.png" width="400px" >
+<p> Néanmoins, certains <strong class="title">traitements</strong> sont <strong class="warning">impossibles</strong> à implémenter <strong>du côté du client</strong>, notamment :  </p>
+<ul>
+	<li> l'<strong class="specialLGr">agrégation de données</strong> issues de <strong>bases de données</strong> à <strong class="warning">acccès restreint</strong> (données de compte utilisateur, catalogue de produits marchands, etc.) ; </li>
+
+	<li> la <strong class="specialLGr">manipulation de fichiers</strong> dans l'aborescence de la <strong>machine du client</strong>, et ce pour des raisons de sécurité évidentes (sinon il serait très simple d'installer un virus…). </li>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3 id="extensionsPlugins"> Les extensions et plugins </h3>
+
+
+
+<div class="important">
+<p> Comme tous les gros logiciels, un <strong>navigateur</strong> adopte une <strong class="title">architecture modulaire</strong> pour <strong cpros>s'adapter</strong> au mieux aux besoins et aux ressources des utilisateurs. </p>
+
+<p> Sur la base d'une installation nominale, on peut ajouter : </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoExtension.png" width="60px" style="padding-top: 0.2em">
+	<li> des <strong class="specialLB">extensions</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Extension_(Mozilla)" target="_BLANK">W</a>, c'est‑à‑dire des composants qui deviennent <strong class="defin">internes au navigateur</strong> (correcteur orthographique, bloqueur de publicité, etc.) ;   </li>
+  </div><!-- display -->
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoPlugin.png" width="60px" style="padding-top: 0.5em">  
+	<li> des <strong class="specialLB">plugins</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Plugin" target="_BLANK">W</a>, c'est‑à‑dire des composants qui permettent d'exploiter au sein d'une page web des <strong class="defin">logiciels externes au navigateur</strong> (lecteur de fichiers <code>pdf</code>, environnement <em class="mark">Java</em>, etc.). </li>
+  </div><!-- display -->
+</ul>
+</div><!-- important -->
+
+
+<div class="complement" id="pluginJava">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoJava.png" width="60px" >
+<p> En particulier, un <strong class="title">plugin Java</strong> permet au navigateur d'<strong class="defin">interpréter</strong> dans une page web, de préférence dans une balise <code>&lt;objet&gt;</code>, un <strong>programme pré‑compilé</strong> en <em class="mark">bytecode Java</em> – on parle alors d'<strong class="defin">applet Java</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Applet_Java" target="_BLANK">W</a>. </p>
+</div><!-- display -->
+
+<p> Pour cela, le <strong>plugin Java</strong> donne accès à la <strong class="specialLB">l'environnement d'exécution <em class="sigle">JRE</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Environnement_d'exécution_Java" target="_BLANK">W</a> (<em class="english">Java runtime environment</em>) qui doit être préalablement installée sur la machine du client et s'exécuter en arrière‑plan. Cet environnement offre alors aux pages web des possibilités de <strong>fonctionnement dynamique</strong> <strong class="pros">sans limites de complexité</strong>. </p> 
+</div><!-- complement -->
+
+<div class="expert">
+<p> Toutefois, depuis une dizaine d'année, les exigences en matière de <strong class="warning">sécurité</strong> ont amené à <strong class="cons">réduire drastiquement</strong> l'emploi de certains plugins, notamment : </p> 
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoActiveX.png" width="100px" style="padding-top: 0.5em">
+	<li> <strong class="specialLB">ActiveX</strong> <a class="external" href="https://fr.wikipedia.org/wiki/ActiveX" target="_BLANK">W</a>, un module de scripts permettant de <strong>manipuler des fichiers du côté client</strong> sur les systèmes d'exploitation <em class="mark">Windows</em> ; son développement est abandonné depuis 2015 ; </li>
+  </div><!-- display -->
+  
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/logoFlash.png" width="60px" style="padding-top: 0.5em">
+	<li> <strong class="specialLB">Adobe Flash Player</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Adobe_Flash_Player" target="_BLANK">W</a>, un <strong>lecteur multimédia</strong> dont le format <code>swf</code> <a class="external" href="https://fr.wikipedia.org/wiki/Small_Web_Format" target="_BLANK">W</a> a été très employé pour générer des animations à partir de logiciels de dessin vectoriel ; son développement est abandonné depuis fin 2020. </li>
+	</div><!-- display -->
+</ul>
+</div><!-- expert -->
+
+
+
+<h3> L'interface utilisateur  </h3>
+
+
+
+<div class="important">
+<p> D'un navigateur à l'autre, les <strong>possibilités offertes</strong> par l'<strong class="title">interface utilisateur</strong> peuvent être considérablement <strong class="warning">différentes</strong>. </p>	
+</div><!-- important -->
+
+<div class="complement">
+<p> Sur certains navigateurs, on peut notamment : </p>
+
+<ul>
+	<li> spécifier des <strong class="specialLB">paramètres de connexion</strong> au réseau (serveur proxy, etc.) indépendamment de ceux renseignés au niveau du <strong>système d'exploitation</strong> de la machine hôte ; cela peut s'avérer très utile lorsqu'on ne dispose pas des droits d'administration ; </li>
+
+	<li> choisir la <strong class="specialLB">politique de sécurité</strong> et de <strong class="specialLB">confidentialité</strong> (historique, cookies, mémoire cache, mots de passe…) ; </li>
+
+	<li> examiner le code de la page dans une <strong class="specialLB">console</strong>, détailler les propriétés de chaque élément, lister des erreurs générées, observer les échanges de données sur le réseau – toutes ces possibilités étant  très utiles pour le <strong>développement</strong> des pages web. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3> La mémoire cache  </h3>
+
+
+
+<div class="important">
+<p> Comme pour les réponses d'un <strong><em class="sigle">DNS</em></strong> (cf. chap. R2‑I <a class="previous" href="../../moduleR/R2-Applications/Rc2-1_dns_url.html#cache" target="_BLANK"></a>), il est <strong class="pros">efficace</strong> qu'un navigateur conserve en <strong class="title">mémoire cache</strong> les <strong class="defin">dernières pages web</strong> chargées. Cela lui évite de devoir les recharger entièrement lorsque l'utilisateur ferme un onglet puis le ré‑ouvre peu de temps après, donc : </p>
+<ul>
+	<li> cela rend la <strong>navigation</strong> <strong class="pros">plus rapide</strong>,</li>
+
+	<li> plus généralement, cela <strong class="pros">diminue le flux</strong> de données qui transitent sur le réseau. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Toutefois, le <strong class="title">stockage en mémoire cache</strong> peut <strong class="cons">obérer temporairement</strong> des <strong>modifications récentes</strong> dans le contenu d'une page, et ce sans qu'un clic sur le bouton <img class="icon" src="../img/boutonActualiser.png"> d'actualisation de la page suffisent pour y remédier. C'est en particulier le cas lorsque une modification de codage de la page est opérée dans un <strong>fichier JavaScript</strong>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/FirefoxEffacerDonnees.jpg" width="600px">
+<p> Dans ce cas, une <strong class="title">solution</strong> consiste à <strong class="defin">vider le contenu</strong> de la <strong>mémoire cache</strong> de la page. Une telle manipulation est possible dans l'interface utilisateur (par exemple, sous <em class="mark">Firefox</em>, dans le menu <em>Option/Vie privée et sécurité</em> (cf. la capture d'écran ci‑contre) ou encore dans dans l'historique de navigation, en choisissant la commande <em>Oublier ce site</em> dans le menu contextuel. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> Contrairement à ce que l'on pourrait naïvement penser, le <strong class="title">code <em class="sigle">HTML/CSS/JS</em></strong>  d'une page web affichée dans un navigateur n'est <strong class="warning">pas</strong> enregistré par ce dernier sous forme de <strong>fichiers</strong> <code>.html</code>, <code>.css</code> et <code>.js</code>, même si la page est statique. Ce code est directement stocké en <strong class="defin">mémoire vive</strong> pour être interprété avec le maximum de rapidité. </p>
+	
+<p> Lors de la fermeture de la page, la <strong class="title">sauvegarde en mémoire cache</strong> de ses éléments  est <strong class="warning">complexe</strong>. Elle tient compte du nombre de requêtes dont la page a fait l'objet pour calculer sa <strong>date d'expiration</strong>, car sauf situations particulières, l'usage intensif du navigateur <strong class="cons">sature</strong> rapidement la mémoire cache. En conséquence, toute sauvegarde d'une page se fait donc au détriment d'une autre.  </p>
+
+<p> Sur <strong>divers navigateurs</strong> (mais pas <em class="mark">Chrome</em>), on peut <strong class="title">consulter le contenu détaillé de la mémoire cache</strong> en saisissant dans la barre de navigation l'<strong><em class="sigle">URL</em></strong> <code class="filename"><span class="specialR">about</span>:<span class="specialLG">cache</span></code> (cf. la capture d'écran ci‑dessous avec <em class="mark">Firefox</em>). </p>
+	<img class="top-left" src="../img/FirefoxAboutCache.jpg">
+<p> On peut également aller constater la complexité de la structure de la mémoire cache en explorant le répertoire indiqué à la rubrique <code>disk</code>. </p>
+
+
+
+<!-- expert -->
+<h3> Autres clients web </h3>
+
+
+
+<div class="important">
+	<div style="display: inline-block;">
+	<img class="top-right" src="../img/tabletteSmartphone.png" width="200px" style="padding-top: 1em">
+<p> Les <strong>navigateurs</strong> ne sont <strong class="warning">pas les seuls clients web</strong> qui existent. En fait, n'importe quel logiciel qui exécute des <strong class="specialG">requêtes <em class="sigle">HTTP</em></strong> forme un <strong class="title">client web</strong>.  </p>
+
+
+<p> Et notamment, c'est le cas de la plupart des <strong class="specialLB">applications web</strong> embarquées sur les <strong>appareils mobiles</strong> – smartphones, tablettes – disposant d'un connexion à l'Internet. </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoJava.png" width="100px" >
+<p> Ces <strong class="title">applications web</strong> sont presque toujours codées en <strong class="defin">langage Java</strong> et exécutées sur l'environnement d'exécution <strong class="specialLB"><em class="sigle">JRE</em></strong> (cf. supra <a class="supra" href="Rc2-3_webClient.html#pluginJava"></a>). En effet, cela évite de devoir, pour chaque application, coder autant de versions de l'application qu'il existe de systèmes d'exploitation (<em class="mark">Android</em>, <em class="sigle">IOS</em>, etc.). Il suffit de coder « une fois pour toute » le <strong><em class="sigle">JRE</em></strong> pour chacun de ces systèmes, ce qui est <strong class="pros">beaucoup plus économique</strong> puisque le nombre de système se compte en unités alors que les applications se compte au moins en milliers. </p>
+</div><!-- dispaly -->
+
+<p> Est donc un <strong class="title">client web</strong> toute <strong>application</strong> qui fait appel à des <strong class="defin">données externes</strong> à la machine sur laquelle elle s'exécute, que ces données soient <strong>publiques</strong> (données météorologiques, horaires de trains…) ou <strong>privées</strong> (comptes clients de toute sorte, catalogues marchands…). </p>
+</div><!-- complement -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoCloudComputing.png" width="200px" >
+<p> Et plus généralement, est également un <strong class="title">client web</strong> tout <strong class>logiciel installé</strong> sur une machine (poste de travail ou autre) qui fait appel à des <strong class="defin">services</strong> et/ou des <strong class="defin">données dématérialisées</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Cloud_computing" target="_BLANK">W</a> (<em class="english">cloud computing</em>). </p>
+
+<p> En effet, pour exploiter ces données ou services externe, un logiciel va presque toujours utiliser des <strong>fonctions avancées</strong> du <strong class="specialG">protocole <em class="sigle">HTTP</em></strong> (comme, par exemple, la méthode <code>fetch</code> en <em class="mark">JavaScript </em><a class="external" href="https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="protocoleHTTP"> Le protocole HTTP </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="150px" style="margin-top:1em">	
+<p> Le <strong class="title">protocole <em class="sigle">HTTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol" target="_BLANK">W</a> – en anglais, <strong>hypertext transfer protocol</strong> – est le <strong class="specialG">protocole applicatif</strong> (niveau 7 dans le modèle <strong><em class="sigle">OSI</em></strong> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#modeleOSI" target="_BLANK"></a>) qui formalise les <strong>requêtes</strong> et les <strong>réponses</strong> entre un <strong>client</strong> et un <strong>serveur web</strong>. </p>
+</div><!-- display -->
+
+<p> Il utilise le <strong class="defin">port nº 80</strong> de façon nominale (parfois aussi le port nº 8080) et le <strong class="specialO">port nº 443</strong> dans sa <strong class="specialN">variante</strong> <strong class="specialT"><em class="sigle">HTTPS</em></strong> <strong class="specialN">sécurisée</strong> par le protocole <strong class="specialT"><em class="sigle">TLS</em></strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#TLS" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme pour tout protocole, il existe <strong class="title">plusieurs versions</strong> de <strong><em class="sigle">HTTP</em></strong>. Techniquement, une <strong class="specialLB">version y.x</strong> est <strong>notée</strong> : </p>
+<ul>
+	<li> <strong><em class="sigle">HTTP/</em></strong><strong class="specialLB">y.x</strong> si <strong>x</strong> ≠ <em class="bold">0</em> ; </li>
+
+	<li> <strong><em class="sigle">HTTP/</em></strong><strong class="specialLB">x</strong> dans les cas particuliers des versions <em class="bold">1.0</em>, <em class="bold">2.0</em>, etc.  </li>
+</ul>
+<p> De plus, on adopte la <strong>notation</strong> <strong class="specialLB">1.x</strong> pour désigner l'<strong>ensemble des versions 1</strong> (quel que soit le numéro de sous‑version <strong>x</strong>). </p>
+</div><!-- complement -->
+
+
+<h4> Principales caractéristiques du protocole HTTP </h4>
+
+
+<div class="important">
+<p> Les grandes <strong class="title">qualités</strong> du protocole <strong><em class="sigle">HTTP</em></strong> sont qu'il est à la fois : </p>
+<ul>
+	<li> <strong class="defin">modulaire</strong> – il permet de <strong>charger une page</strong> <strong class="pros">par parties</strong> et non pas d'un seul bloc ; </li>
+
+	<li> <strong class="defin">extensible</strong> – il peut servir à <strong>échanger</strong> <strong class="pros">toutes sortes de données</strong> – audio, vidéos, formulaires, données numériques… – et non <strong>pas seulement</strong> du code <strong><em class="sigle">HTML/CSS/JS</em></strong>. </li>
+</ul> 
+</div><!-- important -->
+
+<div class="complement">
+<p> Jusqu'à sa version <strong class="specialLB"><strong><em class="sigle">HTTP/2</em></strong> incluse</strong>, le protocole <strong class="title"><em class="sigle">HTTP(S)</em></strong> s'appuie sur le <strong>protocole de transport</strong> <strong class="specialO"><em class="sigle">TCP</em></strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#TCP" target="_BLANK"></a> et R3‑I <a class="next" href="../R3-TransportReseauLiaison/Rc3-1_coucheTransport.html#TCP" target="_BLANK"></a>). En effet : </p>
+<ul>
+	<li> le fait d'opérer en <strong class="defin">mode connecté</strong> assure la <strong>disponibilité</strong> du <strong>serveur</strong> comme du <strong>client</strong> lors des échanges, et contribue in fine à une <strong class="pros">meilleure efficacité</strong> qu'en mode non connecté ;   </li>
+
+	<li> le <strong class="defin">découpage en paquets</strong> est évidemment justifié au regard du <strong>volume important</strong> des données à transmettre (la moindre page web ne peut pas tenir dans un datagramme <strong><em class="sigle">UDP</em></strong>).</li>
+</ul>
+<p> Sans conteste, la <strong class="defin">fiabilité</strong> du protocole <strong><em class="sigle">TCP</em></strong> est <strong class="pros">bienvenue</strong> car, en matière de transmission de pages web, <strong class="warning">aucune erreur n'est acceptable</strong> à la réception des données. </p>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Évolution des versions du protocole HTTP </h4>
+
+
+<p class="square"> Même si elle n'est pas la plus récente, la <strong class="title">version <em class="sigle">HTTP/1.1</em></strong> est encore <strong class="defin">encore utilisée</strong> pour le <strong>service non sécurisé</strong> des <strong>pages web</strong> – essentiellement <strong>statiques</strong>. Finalisée depuis juin 1999 par la <strong><em class="sigle">RFC 2616</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc2616" target="_BLANK"></a>, elle présente <strong class="pros">plusieurs avancées</strong> par rapport à la <strong class="cons">version antérieure <em class="sigle">HTTP/1.0</em></strong> (<em class="sigle">RFC 1945</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1945" target="_BLANK"></a>) : </p>
+
+<ul>
+	<li> elle met en œuvre par défaut une <strong class="defin">connexion persistante</strong> entre le client et le serveur (valeur <code>Keep-alive</code> de l'attribut <code>Connection</code>), ce qui permet d'<strong>enchaîner les requêtes</strong> <strong class="pros">sans attendre les réponses</strong> (on parle alors de <strong>pipelining</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Pipelining_HTTP" target="_BLANK">W</a>) ; </li>
+
+	<li> elle permet la <strong class="defin">négociation du contenu</strong>, en spécificant (dans des valeurs de la forme <code>Accept-</code>) les <strong>langues</strong> et les <strong>formats de données</strong> <strong class="pros">préférés</strong> : encodage <strong><em class="sigle">UTF‑8</em></strong> ou autre (cf. C3‑IX <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-9_typesCaracteresEtendus.html#formatsUTF" target="_BLANK">C</a>), types <strong><em class="sigle">MIME</em></strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#mime" target="_BLANK"></a>), etc. </li>
+</ul>
+
+<p class="square"> La <strong class="title">version <em class="sigle">HTTP/2</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol/2" target="_BLANK">W</a> est définie depuis mai 2015 par la <strong><em class="sigle">RFC 7540</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc7540" target="_BLANK"></a>. Aujourd'hui, c'est cette version qui est la plus <strong class="pros">largement adoptée</strong> car elle est facilite l'emploi du protocole de chiffrement <strong class="specialT"><em class="sigle">TLS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transport_Layer_Security" target="_BLANK">W</a> dans ses normes les plus récentes (1.2 depuis 2008, 1.3 depuis 2018). </p>
+
+<p> Rétro‑compatible avec <strong><em class="sigle">HTTP/1.1</em></strong>, la version <strong class="title"><em class="sigle">HTTP/2</em></strong> présente <strong class="pros">plusieurs avantages</strong>, notamment :  </p>
+<ul>
+	<li> la <strong class="defin">segmentation</strong> de chaque message et l'encapsulation chaque segment dans une « <strong>trame</strong> » – en anglais, on emploie le mot <strong class="defin">frame</strong>, qu'il est préférable d'employer aussi français pour <strong class="warning">ne pas confondre</strong> avec la notion de <strong>trame</strong> du <strong>niveau 2</strong> du modèle <strong><em class="sigle">OSI</em></strong> ; </li>
+
+	<li> le <strong class="defin">codage binaire</strong> <strong>des frames</strong>, et non <strong class="warning">plus</strong> sous forme de <em>caractères</em> ; ainsi, pour un humain, il est impossible de déchiffrer les messages sans l'assistance d'un programme de décodage ; </li>
+
+	<li> le <strong class="defin">multiplexage</strong> <strong>des frames</strong>, qui permet de s'affranchir du problème de <em class="english">Head‑of‑line blocking</em> <a class="external" href="https://en.wikipedia.org/wiki/Head-of-line_blocking" target="_BLANK">W</a>. </li>
+</ul>
+
+<p class="square"> Enfin, la <strong class="title">version <em class="sigle">HTTP/3</em></strong> vient d'être définie par la <strong><em class="sigle">RFC 9114</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc9114" target="_BLANK"></a> de juin 2022. Cette nouvelle version apporte un <strong class="warning">changement majeur</strong> car elle s'appuie sur le <strong>protocole de transport</strong> <strong class="defin"><em class="sigle">QUIC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/QUIC" target="_BLANK">W</a>, lequel opère non pas par paquets <strong><em class="sigle">TCP</em></strong> mais avec un <strong>multiplexage</strong> de connexions échangeant des <strong>datagrammes <em class="sigle">UDP</em></strong>. </p>
+</div><!-- expert -->
+
+
+
+<h3> Principe des messages HTTP – requêtes et réponses </h3>
+
+
+
+<div class="important">
+<p> Dans les <strong>versions 1.x</strong>, il n'existe que <strong class="title">deux types</strong> de <strong class="title">messages</strong> <strong><em class="sigle">HTTP</em></strong> : </p>
+<ul>
+	<li> les <strong class="specialLB">requêtes</strong> que le <strong class="defin">client</strong> adresse au <strong>serveur</strong>, typiquement pour demander le chargement de tout ou partie d'une page web, mais aussi pour lui transmettre des données (par exemple, le contenu d'un formulaire) ;  </li>
+
+	<li> les <strong class="specialLB">réponses</strong> que le <strong class="defin">serveur</strong> adresse au <strong>client</strong> pour satisfaire au mieux à ses requêtes, dans la mesure du possible.  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> En règle générale, une <strong class="title">communication par le protocole <em class="sigle">HTTP</em></strong> est <strong class="defin">toujours initiée</strong> par la <strong>requête d'un client</strong>. Ce dernier est alors désigné par le terme <strong class="defin">user agent</strong> <a class="external" href="https://fr.wikipedia.org/wiki/User_agent" target="_BLANK">W</a>. </p>
+</div><!-- complement -->
+
+
+<h4> Format général des messages HTTP 1.<em>x</em> </h4>
+
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/httpRequestResponse.png" width="500px">
+<p> A contrario de ceux de la plupart des autres protocoles (<em class="sigle">DNS</em>, <em class="sigle">DHCP</em>, <em class="sigle">NTP</em>, <em class="sigle">TCP</em>, <em class="sigle">UDP</em>, etc.), les <strong class="title">messages du protocole <em class="sigle">HTTP</em></strong> n'adoptent <strong class="warning">pas un format unique</strong> qui serait décrit sur une échelle de 32 bits. Cela s'explique essentiellement par <strong>deux spécificités</strong> : </p>
+<ul>
+  <li> la <strong class="defin">grande asymétrie</strong> que présentent : </li>
+	<ul>
+		<li> les <strong class="specialLB">requêtes</strong>, qui sont des messages le plus souvent <strong>très courts</strong> ; </li>
+
+		<li> les <strong class="specialLB">réponses</strong>, qui sont des messages potentiellement <strong>très longs</strong>. </li>
+	</ul>
+
+	<li> le fait que les messages sont codés par des <strong class="defin">chaînes de caractères</strong>, et non pas par des mots binaires. </li>
+</ul>
+</div><!-- expert -->
+
+<div class="important">
+<p> Formellement, un <strong class="title">message <em class="sigle">HTTP/1.</em>x</strong> est constitué d'une <strong class="defin">suite de lignes de textes</strong>, c'est‑à‑dire des <strong>chaînes de caractères</strong> chacune terminée par les deux <strong>séquences d'échappement</strong> <code class="cmd">\r\n</code>, correspondant respectivement aux caractères de contrôle <strong><em class="sigle">CR</em></strong> (<em class="english">carriage return</em>) et <strong><em class="sigle">LF</em></strong> (<em class="english">line feed</em> ou <em class="english">new line</em>) – cf. chap. C3‑VIII <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-8_typesCaracteres.html#caracteresControle" target="_BLANK">C</a>. </p>	
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Chaque type de <strong>message <em class="sigle">HTTP</em></strong> – requête ou réponse – possède un <strong class="defin">format particulier</strong> défini au regards des besoins spécifiques en termes d'informations à transmettre. Néanmoins, elles partagent le <strong>point commun</strong> de se diviser en <strong class="title">deux ou trois parties</strong>. </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/httpMessage.png" width="200px">
+<ul>
+	<li> La <strong class="specialLB">première partie</strong> se limite à <strong>une seule ligne</strong> dite <strong class="defin">ligne initiale</strong> (<em class="english">start line</em>) ; </li>
+
+	<li> La <strong class="specialLB">deuxième partie</strong> regroupe ce qu'on appelle les <strong class="defin">en‑têtes</strong> (<em class="english">headers</em>). Ils forment une suite de <strong>lignes de champs</strong> (<em class="english">field lines</em>), chacune codant une ou plusieurs <strong>valeurs</strong> pour le champ indiqué en début de ligne. </li>
+
+	<div class="nobullet"> Cette partie s'achève toujours par une <strong class="defin">ligne vide</strong>, c'est‑à‑dire seulement constituée des séquences d'échappement <strong><em class="sigle">CR LF</em></strong>. </div>
+
+	<li> La <strong class="specialLB">troisième partie</strong>, dite <strong class="defin">corps</strong> (<em class="english">body</em>) du message, est <strong>optionnelle</strong>. Son format est « libre » et se divise éventuellement en plusieurs <strong>contenus</strong> (<em class="english">contents</em>). </li>
+
+	<div class="nobullet"> Le <strong class="defin">corps</strong> constitue la <strong>charge utile</strong> du message, lorsque ce dernier est destiné à transmettre des données (du <strong><em class="sigle">HTML/CSS/JS</em></strong>, etc.) </div>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p> La <strong class="defin">ligne initiale</strong> comporte quelques éléments d'information importants, mais c'est surtout la partie des <strong class="defin">en‑têtes</strong> qui recèle les <strong>paramètres techniques essentiels</strong> et dont le codage est une affaire de spécialistes. <strong class="pros">Préférentiellement</strong>, ces deux premières parties doivent être <strong class="warning">composées exclusivement</strong> en caractères <strong><em class="sigle">US-ASCII</em></strong>, c'est‑à‑dire en <em class="sigle">ASCII</em> restreint codé sur 8 bits (cf. chap. C3‑VIII <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK">C</a>). </p>
+
+
+
+
+<h3> Format d'une requête HTTP/1.<em>x</em> </h3>
+
+
+
+<div class="exemples" id="exempleHTTPrequest">
+<p class="exemple"> À titre d'illustration préliminaire, observons la <strong class="title">requête <em class="sigle">HTTP/1.1</em></strong> reproduite ci‑dessous, issue d'une navigation avec <strong class="specialO">Firefox</strong> sur la <strong>page d'accueil de ce module de formation</strong>, c'est‑à‑dire à l'<strong><em class="sigle">URL</em></strong> : <br>
+<span class="inline">
+	<code class="filename">http://www.lycee-ferry-versailles.fr/snir/</code>
+</span> </p>
+
+<p> À l'aide du logiciel <strong class="specialLB">Wireshark</strong>, on obtient le contenu de la requête sous forme de chaînes de caractères : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="background: #F0FFC0">
+<em class="bold">GET /snir/ HTTP/1.1\r\n</em>
+<em class="bold"><span class="green">Host:</span></em> www.lycee-ferry-versailles.fr\r\n
+<em class="bold"><span class="green">User-Agent:</span></em> Mozilla/5.0 (X11; Linux x86_64; rv:107.0) Gecko/20100101 Firefox/107.0\r\n
+<em class="bold"><span class="green">Accept:</span></em> text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r\n
+<em class="bold"><span class="green">Accept-Language:</span></em> fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3\r\n
+<em class="bold"><span class="green">Accept-Encoding:</span></em> gzip, deflate\r\n
+<em class="bold"><span class="green">Connection:</span></em> keep-alive\r\n
+<em class="bold"><span class="green">Upgrade-Insecure-Requests:</span></em> 1\r\n
+\r\n
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Elle est seulement constituée de <strong class="title">deux parties</strong> seulement : </p>
+<ul>
+	<li> une <strong class="defin">ligne initiale</strong> (mise en gras), </li>
+
+	<li> une série de <strong class="defin">8 en‑têtes</strong>, </li>
+</ul>
+<p> que l'on va détailler ci‑après. Elle s'achève par une <strong class="defin">ligne vide</strong> (séquence <code>\r\n</code>).</p>
+</div><!-- exemple -->
+
+
+<h4 id="ligneInitiale"> Ligne initiale d'une requête HTTP </h4>
+
+
+<div class="important">
+<p> La <strong class="title">ligne initiale</strong> d'une requête (<em class="english">request line</em>) comporte <strong>trois informations</strong> : </p>
+<ul>
+	<li> le nom de la <strong class="defin">méthode</strong> utilisée, qui détermine le <strong>type de requête</strong> effectuée ; </li>
+
+	<li> la <strong class="defin">cible</strong> de la requête, définie par le <strong class="specialLG">chemin</strong> dans l'<strong><em class="sigle">URL</em></strong> qui vise la <strong>ressource ciblée</strong> par la requête (cf. chap. R2‑I <a class="previous" href="Rc2-1_dns_url.html#urlLibreAcces" target="_BLANK"></a>) ;  </li>
+
+	<li> et enfin la <strong class="defin">version</strong> employée du protocole <strong><em class="sigle">HTTP</em></strong> . </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">méthode</strong> est toujours <strong class="defin">choisie par le client</strong> parmi <strong>une dizaine</strong> de méthodes différentes. Les <strong class="title">deux plus usuelles</strong> sont les suivantes. </p>
+<ul>
+	<li> La <strong class="specialLB">méthode</strong> <code class="cmd">GET</code> permet au client d'<strong class="defin">obtenir la représentation de la ressource</strong> ciblée – c'est‑à‑dire son <strong>code</strong>, qu'il s'agisse d'une page web, d'une image, etc. (et il revient ensuite au serveur de fournir ce code). </li>
+
+	<div class="nobullet"> C'est typiquement cette méthode qui est employée par un navigateur (le client) lorsqu'un utilisateur <strong>clique sur un hyperlien</strong>.  </div>
+
+  <li> La <strong class="specialLB">méthode</strong> <code class="cmd">POST</code> permet au client d'<strong class="defin">envoyer des données</strong> qui viennent <strong>s'insérer</strong> dans la  ressource ciblée (et il revient ensuite au serveur de les réceptionner). </li>
+
+  <div class="nobullet"> C'est typiquement cette méthode qui est employée par un navigateur lorsqu'un utilisateur <strong>remplit et valide un formulaire</strong> dans une page web.  </div>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Pour la requête proposée dans l'exemple supra <a class="supra" href="Rc2-3_webClient.html#exempleHTTPrequest"></a>, à l'examen de la <strong class="title">request line</strong> :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="background: #F0FFC0">
+<em class="bold">GET /snir/ HTTP/1.1\r\n</em>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> on déduit qu'il s'agit d'une <strong>méthode</strong> <code class="cmd">GET</code> dont la cible est visée par le <strong class="specialLG">chemin</strong> (sur le serveur hôte de la ressource) : <br>
+<span class="inline">
+	<code class="filename">/snir/</code> <br>
+</span>
+via le protocole <strong><em class="sigle">HTTP</em></strong> en <strong>version 1.1</strong>. </p>
+</div><!-- exemple -->
+
+<div class="expert">
+<p class="square"> Par ailleurs, dans le cadre de développements web, on peut être amené à coder des instructions qui mettent en œuvre d'<strong class="title">autres méthodes de requêtes <em class="sigle">HTTP</em></strong>, notamment les suivantes. </p>
+<ul>
+	<li> La <strong class="specialLB">méthode</strong> <code class="cmd">HEAD</code> permet au client de n'<strong>obtenir</strong> que la <strong class="defin">ligne initiale</strong> et les <strong class="defin">en‑têtes</strong> – et donc, <strong class="warning">pas de corps</strong> – dans la réponse du serveur pour la  ressource ciblée. </li>
+
+  <div class="nobullet"> Cette méthode permet donc au client de s'assurer de la <strong>disponibilité d'une ressource</strong> et d'en connaître la <strong>taille</strong>, <strong class="pros">sans engager un transfert de contenu</strong>. Elle est notamment utilisée par les <strong class="specialV">moteurs de recherche</strong>. </div>
+
+  <li> La <strong class="specialLB">méthode</strong> <code class="cmd">PUT</code> permet au client d'<strong class="defin">envoyer des données</strong> au serveur, soit pour <strong>ajouter</strong> une nouvelle ressource, soit pour <strong>remplacer</strong> la  ressource ciblée. </li>
+
+  <div class="nobullet">	Cette méthode est dite <strong class="specialO">idempotente</strong> car sa ré‑itération n'engendre aucun effet supplémentaire. </div>
+
+  <li> La <strong class="specialLB">méthode</strong> <code class="cmd">DELETE</code> permet au client de <strong class="defin">supprimer</strong> sur le serveur la <strong>ressource</strong> ciblée. </li>
+
+  <div class="nobullet"> C'est aussi une méthode <strong class="specialO">idempotente</strong> car lorsqu'une ressource est supprimée, demander à nouveau sa suppression est sans effet. </div>
+</ul>
+
+<p> Pour une <strong>présentation exhaustive</strong> des <strong class="title">méthodes de requêtes <em class="sigle">HTTP</em></strong>, on peut consulter le site de la <em class="mark">Fondation Mozilla</em> <a class="external" href="https://developer.mozilla.org/fr/docs/Web/HTTP/Méthode" target="_BLANK"></a> (on trouve sur cette page web les hyperliens vers les <strong><em class="sigle">RFC</em></strong> en vigueur correspondantes). </p>
+</div><!-- expert -->
+
+
+<h4 id="requestHeader"> En‑têtes d'une requête HTTP </h4>
+
+
+<div class="important">
+<p> Les <strong class="title">en‑têtes</strong> d'une requête (<em class="english">request headers</em>) sont une suite de <strong>spécifications de valeur(s)</strong> pour <strong class="defin">paramétrer la requête</strong>. </p>
+
+<p> Individuellement, chaque en‑tête spécifie <strong class="defin">un seul paramètre</strong>, appelé <strong class="title">champ</strong> (<em class="english">field</em>). </p>
+
+<p> Certains champs sont <strong class="warning">essentiels</strong> pour spécifier la requête, alors que d'autres peuvent n'avoir qu'un <strong class="specialY">rôle informatif</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Un <strong class="title">en‑tête</strong> se code selon la <strong class="defin">forme syntaxique</strong> suivante : <br>
+<span class="inline">
+	<code class="cmd"><span class="nocode"><strong class="specialG">identificateur de champ</strong></span> : <span class="nocode"><strong>chaîne de spécification</strong></span> </code>
+</span> <br>
+sachant que la <strong>chaîne de spécification</strong> est <strong class="defin">différente pour chaque champ</strong> et peut être <strong class="warning">assez complexe</strong>. </p>
+
+<p> Pour connaître les différents <strong class="title">champs d'en‑tête standards et usuels</strong> d'une <strong>requête <em class="sigle">HTTP</em></strong> ainsi que des <strong class="pros">exemples de codage</strong>, on peut consulter un tableau récapitulatif via ce lien <a class="external" href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields" target="_BLANK">W</a> avec, pour chaque champ, un renvoi vers la <em class="sigle">RFC</em> qui le spécifie. </p>
+
+<div class="expert">
+<p> Pour <strong class="pros">plus de détails</strong> et une présentation plus conviviale, on peut encore une fois consulter les pages web de la <em class="mark">Fondation Mozilla</em>, avec celle‑ci comme point de départ <a class="external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans la requête proposée en exemple supra <a class="supra" href="Rc2-3_webClient.html#exempleHTTPrequest"></a>, on trouve ainsi en 4<sup>e</sup> <strong class="title">en‑tête</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="background: #F0FFC0">
+<em class="bold"><span class="green">Accept-Language:</span></em> fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3\r\n</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Il spécifie que : </p>
+<ul>
+	<li> le client <strong class="defin">accepte</strong> les <strong>contenus</strong> en langue française (<code class="cmd">fr,fr-FR</code>), américaine</strong> (<code class="cmd">en-us</code>) et <strong>anglaise</strong> (<code class="cmd">en</code>) ;  </li>
+
+	<li> avec une <strong>préférence</strong> pour la langue française qui se voit implicitement attribuer la valeur de <em class="mark">qualité</em> <code>q=0.8</code> (un poids) plus élevé que celui attribué aux langues américaine (<code>en-us</code>) et anglaise (<code>en</code>), respectivement <code class="cmd">q=0.5</code> et <code class="cmd">q=0.3</code> (cf. ce lien. <a class="external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- exemples -->
+
+
+<h4 id="requestBody"> Corps d'une requête HTTP </h4>
+
+
+<div class="important">
+<p> Le <strong class="title">corps</strong> d'une <strong>requête  <em class="sigle">HTTP</em></strong> est présent <strong>seulement si</strong> la méthode met en œuvre un <strong class="defin">envoi de données au serveur</strong> (typiquement, avec une méthode <code class="cmd">POST</code>). </p>
+
+<p> Les <strong class="title">caractéristiques du contenu</strong> du corps – <strong>taille</strong> en octets, <strong>type de données</strong>, etc. – sont spécifiés dans divers <strong class="defin">en‑têtes</strong> de la requête. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">corps</strong> d'une requête forme un <strong>texte</strong> au sens large. </p>
+<ul>
+	<li> Il est potentiellement <strong class="defin">grand</strong> (même si cela est rare pour une requête). En théorie (selon la norme), il n'y a pas de limite de taille, mais en pratique le corps est <strong>limité</strong> par un paramétrage du client. </li>
+
+	<div class="expert">
+	<div class="nobullet"> La <strong class="specialLB">taille</strong> de corps est spécifiée par le champ <code class="cmd">Content-length</code> dont la valeur indique le <strong>nombre d'octets</strong> contenus. </div>
+	</div><!-- expert -->
+	
+	<li> Éventuellement, le corps se compose de <strong class="defin">plusieurs parties</strong>. Ce cas est spécifié dans un en‑tête par le champ <code class="cmd">content-type</code> qui prend une valeur de la forme <code class="cmd">multipart</code>. </li>
+
+	<li> Le corps peut être encodé dans <strong>divers formats</strong> possibles, celui qui est choisi étant spécifié dans plusieurs en‑têtes. </li> 
+
+	<div class="expert">
+  <ul>
+  	<li> Le champ <code class="cmd">content-type</code> spécifie le <strong>type de données</strong> contenues (texte, image, etc.) et son encodage (<em class="sigle">HTLM</em>, <em class="sigle">PNG</em>, etc.). </li>
+  
+  	<li> Le champ <code class="cmd">content-encoding</code> specifie l'<strong>algorithme de compression</strong> employé avant la transmission.  </li>
+  </ul>
+	</div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="HTTPresponse"> Format d'une réponse HTTP/1.<em>x</em> </h3>
+
+
+
+<div class="exemples" id="httpResponse">
+<p class="exemple"> À titre d'illustration préliminaire, observons la <strong class="title">réponse <em class="sigle">HTTP/1.1</em></strong> délivrée par le serveur hébergeant la ressource demandée par la requête donnée en exemple supra <a class="supra" href="Rc2-3_webClient.html#exempleHTTPrequest"></a>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="background: #F0FFC0">
+<em class="bold">HTTP/1.1 200 OK\r\n</em>
+<em class="bold"><span class="green">Date:</span></em> Wed, 30 Nov 2022 10:04:29 GMT\r\n
+<em class="bold"><span class="green">Server:</span></em> Apache/2.4.23 (Win64) PHP/5.6.25\r\n
+<em class="bold"><span class="green">Last-Modified:</span></em> Thu, 01 Sep 2022 19:42:12 GMT\r\n
+<em class="bold"><span class="green">ETag:</span></em> "5b7-5e7a2cf5699e2"\r\n
+<em class="bold"><span class="green">Accept-Ranges:</span></em> bytes\r\n
+<em class="bold"><span class="green">Content-Length:</span></em> 1463\r\n
+<em class="bold"><span class="green">Keep-Alive:</span></em> timeout=5, max=100\r\n
+<em class="bold"><span class="green">Connection:</span></em> Keep-Alive\r\n
+<em class="bold"><span class="green">Content-Type:</span></em> text/html\r\n
+\r\n
+&lt;!DOCTYPE html&gt;\r\n
+&lt;html lang="fr"&gt;\r\n
+\r\n
+&lt;head&gt;\r\n
+\t&lt;title&gt; BTS SNIR - Sommaire &lt;/title&gt;\r\n
+\t&lt;meta charset="utf-8"&gt;\r\n
+\t&lt;link rel="stylesheet" type="text/css" href="css/main.css"&gt;\r\n
+\t&lt;link rel="icon" type="image/png" href="img/faviconSNIR.png"&gt;\r\n
+&lt;/head&gt;\r\n
+  <em>[...]</em>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Cette réponse est constituée de <strong class="title">trois parties</strong> seulement : </p>
+<ul>
+	<li> une <strong class="defin">ligne initiale</strong> (mise en gras), </li>
+
+	<li> une série de <strong class="defin">9 en‑têtes</strong>, </li>
+
+	<li> le corps de la réponse, qui contient comme prévu le <strong>code <em class="sigle">HTML</em></strong> de la <strong>page web</strong> d'accueil de ce module de formation.  </li>
+</ul>
+
+    
+
+que l'on va détailler ci‑après. Elle s'achève par une ligne vide (séquence \r\n).
+
+
+<p> Il s'agit bien évidemment du <strong>code <em class="sigle">HTML</em></strong> d'une <strong>page web</strong>.</p>
+</div><!-- exemple -->
+
+
+<h4> Ligne initiale d'une réponse HTTP </h4>
+
+
+<div class="important">
+<p> La <strong class="title">ligne initiale</strong> d'une réponse (<em class="english">response line</em>) comporte <strong class="defin">deux informations</strong> : </p>
+<ul>
+	<li> la <strong class="defin">version</strong> employée, exactement <strong>comme dans la ligne initiale d'une requête</strong> ;  </li>
+
+	<li> le <strong>code numérique à trois chiffres</strong> de <strong class="defin">statut</strong> de la réponse, assorti du <strong>libellé</strong> explicitant la signification du code. </li>
+
+	<div class="nobullet"> Ce <strong class="defin">statut</strong> précise le <strong>caractère global</strong> de la réponse du serveur au client, notamment en termes de <strong class="pros">succès</strong> ou d'<strong class="cons">échec</strong>. </div>
+</ul>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block; ">
+	<img class="top-right" src="../img/HTTPresponseStatus.png" width="250px">
+<p> Grâce à sa valeur purement numérique, le <strong class="title">code de statut</strong> permet de <strong>programmer facilement des tests</strong>, et des stratégies de requêtes alternatives en cas d'erreur ou de redirection. </p>
+
+<p> Il existe une <strong>soixantaine de codes différents</strong>, classés en <strong class="specialLB">cinq catégories</strong> respectivement indiquées par le <strong class="defin">chiffre des centaines</strong>, conformément à la figure ci‑contre. </p>
+
+<p> En particulier, le <strong>code</strong> <code class="cmd" style="color: darkorange;">200 OK</code> signifie que la requête a été traitée par le serveur avec <strong class="pros">succès</strong> (typiquement, la page web est chargée normalement).</p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Également connu, le <strong>code</strong> <code class="cmd" style="color: teal">404 NOT FOUND</code> est classé dans la catégorie <span style="color: teal; background: white;"> <em class="bold">4xx</em> – <strong>client error</strong> </span> parce qu'il découle le plus souvent d'une <strong class="cons">erreur dans l'<em class="sigle">URL</em></strong> spécifiée par le client – typiquement, un chemin mal orthographié ou ciblant une ressource non répertoriée sur un site existant. </p>
+
+<p> En réalité, le <strong>code</strong> <code class="cmd" style="color: teal">404</code> est souvent <strong>employé par le serveur</strong> comme <strong class="warning">alibi</strong> pour <strong class="pros">ne pas révéler le vrai motif d'erreur</strong>. </p>
+
+
+<p> Plus généralement, on peut trouver la <strong class="title">liste exhaustive</strong> des <strong>codes de statuts</strong> aux liens suivants <a class="external" href="https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP" target="_BLANK">W</a> <a class="external" href="https://www.restapitutorial.com/httpstatuscodes.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<h4> En‑têtes d'une réponse HTTP </h4>
+
+
+<div class="important">
+<p> Comme dans une requête, les <strong class="title">en‑têtes</strong> d'une réponse (<em class="english">response headers</em>) sont une suite de <strong>spécifications de valeur(s)</strong> pour <strong class="defin">paramètrer la réponse</strong> – chaque en‑tête spécifiant un seul <strong class="defin">champ</strong> (<em class="english">field</em>), avec parfois un rôle purement informatif. </p>
+</div><!-- important -->
+
+
+
+<div class="complement">
+<p> Un <strong>en‑tête de réponse</strong>  se code exactement selon la <strong class="titre">même forme syntaxique </strong> qu'une requête (cf. supra <a class="supra" href="Rc2-3_webClient.html#requestHeader"></a>). </p>
+
+<p> En revanche, les identificateurs des <strong class="title">champs</strong> et les <strong>valeurs</strong> qu'ils peuvent prendre sont <strong class="defin">spécifiques</strong>, on peut consulter le lien suivant pour connaître les champs d'en‑tête standards et usuels d'une réponse <strong><em class="sigle">HTTP</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Response_fields" target="_BLANK">W</a>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans la <strong>réponse <em class="sigle">HTTP</em></strong> présentée supra <a class="supra" href="Rc2-3_webClient.html#httpResponse"></a>, on trouve notamment l'<strong class="title">en‑tête</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="background: #F0FFC0">
+<em class="bold"><span class="green">Content-Type:</span></em> text/html; charset=UTF-8
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Cet en‑tête informe le client que le <strong class="specialLB">corps</strong> (<em class="english">content</em>) de la réponse envoyée par le serveur est constitué de <strong>texte</strong> ou de <strong>code <em class="sigle">HTML</em></strong> dont les caractères sont encodés au <strong>format <em class="sigle">UTF‑8</em></strong>. </p>
+</div><!-- exemples -->
+
+
+<h4> Corps d'une réponse HTTP </h4>
+
+
+<div class="important">
+<p> Dans une <strong>réponse</strong>, le <strong class="title">corps</strong> est en général présent, mais <strong>pas systématiquement</strong>. </p>
+
+<p> Contrairement à une requête, ce n'est pas tant le type de méthode qui détermine la présence d'un corps dans le message, mais le <strong class="defin">statut</strong> de la réponse : en cas d'<strong class="cons">erreur</strong>, il n'y a en général <strong>pas de données à transmettre</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme pour une requête (cf. supra.<a class="supra" href="Rc2-3_webClient.html#requestBody"></a>), le <strong class="title">corps</strong> d'une <strong>réponse</strong> forme un <strong class="defin">texte</strong> pouvant être codé dans <strong class="pros">tous types de format</strong>.  </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans la <strong>réponse <em class="sigle">HTTP</em></strong> présentée supra (cf. supra <a class="supra" href="Rc2-3_webClient.html#httpResponse"></a>), le <strong class="title">corps</strong> est partiellement restitué (pour des raisons évidentes de place) :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="background: #F0FFC0">
+&lt;!DOCTYPE html&gt;\r\n
+&lt;html lang="fr"&gt;\r\n
+\r\n
+&lt;head&gt;\r\n
+\t&lt;title&gt; BTS SNIR - Sommaire &lt;/title&gt;\r\n
+\t&lt;meta charset="utf-8"&gt;\r\n
+\t&lt;link rel="stylesheet" type="text/css" href="css/main.css"&gt;\r\n
+\t&lt;link rel="icon" type="image/png" href="img/faviconSNIR.png"&gt;\r\n
+&lt;/head&gt;\r\n
+  <em>[...]</em>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Sans surprise, il est constitué comme prévu de <strong>texte</strong> codé en langage <strong><em class="sigle">HTML</em></strong>.</p>
+</div><!-- exemple -->
+
+
+
+<h3> Observation des messages dans la console d'un navigateur </h3>
+
+
+
+<div class="complement">
+<p> La <strong>console</strong> d'un navigateur (onglet <code>⇅Réseau</code> sur <em class="mark">Firefox</em>) permet de <strong class="defin">lister</strong> et d'<strong class="defin">examiner</strong> le contenu des <strong class="title">messages</strong> échangés entre le client et le serveur lors de l'accès à une page web. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> <strong>En désactivant le cache</strong> (case à cocher dans la console), lors du chargement de la <strong class="title">page d'accueil du site <em class="sigle">SNIR</em></strong> via l'<strong><em class="sigle">URL</em></strong> suivante : <br> 
+<span class="inline">
+	<code class="filename">http://www.lycee-ferry-versailles.fr/snir/</code>
+</span> <br>
+on peut voir sur la capture d'écran ci‑dessous que l'ensemble des fichiers nécessaires (page web, feuille de style, images) sont obtenus avec <strong class="pros">succès</strong> (<strong>code</strong> <code class="cmd" style="background: lime">200</code>) par la <strong class="specialLB">méthode</strong> <code class="cmd">GET</code>. </p>
+
+<img class="top-left" src="../img/HTTPmessagesSNIR.png">
+
+<p> Tous ces appels de la méthode <code class="cmd">GET</code> sont déclenchés lors de l'interprétation du code de la page par le traitement de <strong>balises <em class="sigle">HTML</em></strong> de type <code>&lt;img&gt;</code>, <code>&lt;link&gt;</code> ou autre… </p>
+
+<div class="expert" style="margin-top: 1em">
+<p> Par ailleurs, <strong>en activant le cache</strong> et en réactualisant la page, on observe que certaines images sont obtenues avec le code <code>304</code> (libellé <em class="english">Not Modified</em>). En effet, elles sont stockées dans la mémoire cache donc elles n'ont pas besoin d'être rechargées depuis le serveur. </p>
+
+<p> Enfin, en cliquant sur la ligne d'un <strong>fichier d'image</strong> – ici, par exemple, <code>logoSNIR.png</code> – on peut voir ci‑dessous à droite le détail des <strong class="specialLB">en‑têtes</strong> de la <strong>réponse</strong> et de la <strong>requête</strong>. </p>
+
+<img class="top-left" src="../img/HTTPentetesSNIR.png">
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<!-- 
+<h3> Programmation de requêtes HTTP </h3>	
+-->
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

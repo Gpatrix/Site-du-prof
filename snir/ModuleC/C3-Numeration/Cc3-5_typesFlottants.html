@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="V"
+  data-pageState="OK"
+  data-pageheadtitle="Types décimaux"
+  data-pagefulltitle="Les types décimaux à « virgule » flottante"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<!-- pas de relecture 2021 -->
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/constantesPhysiques.png" width="400px" style="margin-top: 1.2em">
+<p class="square"> Rappelons tout d'abord qu'intuitivement, un <strong class="title">nombre décimal</strong> est un nombre qui peut s'écrire sous la forme d'une <strong class="defin">partie entière</strong> et d'une <strong class="defin">partie décimale</strong> <strong class="specialN">finies</strong>, l'une et l'autre séparées par une « virgule » – un <strong>point</strong>, selon l'usage anglo‑saxon. De plus, pour écrire les <strong>nombres très petits</strong> ou <strong>très grands</strong> nombres, on emploie la <strong class="specialLB">notation scientifique</strong> avec des puissances de 10 (cf. les exemples ci‑contre de la <em>charge élémentaire</em> <a class="external" href="https://fr.wikipedia.org/wiki/Charge_élémentaire" target="_BLANK">W</a> et du <em>nombre d'Avogadro</em> <a class="external" href="https://fr.wikipedia.org/wiki/Nombre_d'Avogadro" target="_BLANK">W</a>). </p>  
+</div><!-- display -->
+
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/constantesMath.png" width="400px" style="margin-top: 0.2em">
+<p> A contrario, un <strong class="title">nombre rationnel</strong> ou <strong class="title">irrationnels</strong> ne peuvent pas s'écrire sous une telle forme, car leur partie décimale nécessiterait une <strong class="cons">infinité de chiffres</strong>. On doit donc se contenter d'approximations (cf. les exemples ci‑contre de π <a class="external" href="https://fr.wikipedia.org/wiki/Pi" target="_BLANK">W</a> et 22/7). </p>
+</div><!-- display -->
+
+
+
+<p class="square"> Comme tous les langages de programmation généralistes, <strong>C</strong> et <strong>C++</strong> disposent de <strong class="title">types élémentaires</strong> de données pour représenter les <strong>nombres décimaux</strong>. Ces types de données sont dits à « <strong class="defin">virgule</strong> » <strong class="defin">flottante</strong> – en anglais, <strong>floating‑point</strong> – parce qu'ils sont encodés dans un format où la virgule est déplacée par multiplication ou division et compensée par un <strong class="defin">facteur exponentiel</strong> (comme en notation scientifique où l'on écrit 1,5 × 10<sup>−2</sup> plutôt que 0,015). </p>
+
+
+<p> Les <strong>trois</strong> <strong class="title">types standards</strong> <strong class="specialN">à virgule flottante</strong> des langages <strong>C</strong> et <strong>C++</strong> sont codés <code class="prettyprint lang-c">float</code> (déjà évoqué aux chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a> et C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#typesLangC" target="_BLANK"></a>), <code class="prettyprint lang-c">double</code>  et <code class="prettyprint lang-c">long double</code>. Ils sont conformes à la <strong class="defin">norme</strong> américain <em class="bold"><em class="sigle">ANSI</em>/<em class="sigle">IEEE</em> <em class="sigle">754‑1985</em></em>, laquelle est approuvée et référencée par la norme internationale <em class="bold"><em class="sigle">IEC</em></em> sous la référence <em class="bold"><em class="sigle">60559:1989</em></em>. </p>
+
+<p> Bien entendu, les types flottants standards présentent des <strong class="title">caractéristiques différentes</strong> les autres des autres, à la fois en termes d'<strong class="defin">étendue</strong> et la <strong class="defin">précision</strong> des valeurs qu'ils peuvent encoder, en contre‑partie de la <strong class="defin">taille</strong> de la mémoire requise pour cela. Le choix d'un type ne doit donc pas être négligé. </p>
+
+<p class="square"> Dans le cadre d'une formation à la programmation, l'acquisition d'une <strong class="pros">bonne connaissance</strong> des <strong>types flottants</strong> est indispensable. Avec une approche similaire à celle du chapitre C2‑II consacré aux types entiers, le présent chapitre a pour <strong class="title">objectif</strong> : </p>
+
+<ul>
+  <li> de rappeler les <strong class="specialLB">notions mathématiques</strong> de nombre <strong>décimal</strong> et de nombre <strong>réel</strong>, et le principe de la <strong>notation scientifique</strong> des nombres ; </li>
+
+  <li> de présenter les <strong class="specialLB">types flottants</strong> standards, en détaillant leurs <strong>caractéristiques</strong> (taille, étendue, etc.) ; </li>
+
+  <li> de donner la <strong class="specialLB">syntaxe de codage</strong> des <strong>constantes littérale</strong> décimales ; </li>
+
+  <li> d'expliquer le <strong class="specialLB">format d'encodage</strong> des <strong>données décimales</strong> dans les types flottants standards – <em>signe</em>, <em>exposant décalé</em> et <em>significande</em> – y compris pour les <strong>valeurs</strong> dites <strong class="specialSG">dénormalisées</strong> et les <strong>valeurs</strong> <strong class="defin">spéciales</strong> ( « <strong class="specialR">infinis</strong> » et <strong class="specialM"><em class="sigle">NAN</em></strong>, c'est‑à‑dire <em class="english">not a number</em>) ; </li>
+
+  <li> d'exposer les particularités et précautions d'emploi des <strong class="specialLB">opérateurs</strong> et des <strong class="specialLB">fonctions</strong> sur les valeurs de types flottants, avec notamment les problématiques de <strong class="warning">débordements</strong> et d'<strong>opérations</strong> <strong class="specialM">non définies</strong>. </li>
+</ul>
+
+<div class="expert">
+<p class="square"> Néanmoins, même si ce chapitre peut sembler étoffé, il faut avoir conscience qu'il ne s'agit que d'une <strong>introduction</strong> pour permettre au codeur débutant d'employer à bon escient les types flottants. En réalité, il s'agit d'un <strong class="warning">thème très complexe</strong> et d'une <strong class="warning">importance capitale</strong>. Sur l'encodage des nombres flottants repose la qualité des calculs effectués dans tous les logiciels scientifiques et techniques, et ce quel que soit le langage de programmation adopté ! </p>
+
+<p> Dans une perspective d'<strong class="title">approfondissement</strong> des connaissances, on pourra consulter l'article de <em class=mark>Wikipedia</em> en français <a class="external" href="https://fr.wikipedia.org/wiki/IEEE_754" target="_BLANK">W</a> puis en anglais <a class="external" href="https://en.wikipedia.org/wiki/IEEE_754" target="_BLANK">W</a> comme point de départ, en exploitant tous les liens vers des publications de référence que l'on peut trouver dans ces pages web. </p>
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Rappels de mathématiques </h2>
+
+
+
+<h3> Notion de nombre décimal </h3>
+
+
+<div class="important">
+<p> Un <strong>nombre</strong> <strong class="title">décimal</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nombre_décimal" target="_BLANK">W</a> est un nombre formé d'une <strong class="defin">partie entière</strong> et d'une <strong class="defin">partie décimale</strong>, chacune constituée d'un <strong class="warning">nombre fini de chiffres</strong> et éventuellement nulle (ce qui inclut donc les nombres entiers). Mathématiquement, il peut s'écrire de la forme <var>a</var>/10<sup><var>n</var></sup> où </p>
+
+<p> On appelle <strong class="defin">décimales</strong> les <strong>chiffres</strong> de sa <strong>partie décimale</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il existe une <strong class="title">infinité</strong> de nombre décimaux mais cette infinité est <strong class="defin">dénombrable</strong>. En effet, si on fixe des <strong>limites d'étendue</strong> (donc, le nombre de chiffres de la partie entière) et de <strong>précision</strong> (donc, le nombre de décimales), leur <strong>encodage exhaustif</strong> est <strong class="defin">possible</strong> – même si ce n'est pas la stratégie adoptée par les formats à virgule flottante. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Il y a 20&#8239;001 <strong class="title">nombres à deux décimales</strong> compris entre −100,00 et +100,00 (bornes incluses). En effet, il ne faut pas oublier le nombre 0.</p>
+</p>
+</div><!-- exemple -->
+
+
+
+<h3> Notion de nombre réel </h3>
+
+
+
+<div class="important">
+<p> Un <strong>nombre</strong> <strong class="title">réel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nombre_réel" target="_BLANK">W</a> qui n'est <strong>pas décimal</strong> possède une <strong class="defin">partie décimale</strong> constituée d'un <strong>nombre infini de chiffres</strong>. </p>
+
+<p> Un <strong>nombre</strong> est dit <strong class="title">rationnel</strong> s'il est définissable par une <strong>fraction</strong> de deux nombres entiers, sinon il est dit <strong class="defin">irrationnel</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>  <strong class="warning">Aucun format</strong> ne permet d'<strong >encoder sans erreur</strong> la <strong>valeur réelle</strong> d'un nombre <strong>irrationnel</strong>, ou même d'un nombre rationnel non décimal (comme la fraction 1/3). Dans les programmes, on doit toujours se contenter d'<strong class="defin">approximations décimales</strong> pour représenter ces nombres. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> De plus, il existe une <strong class="title">infinité</strong> <strong class="warning">indénombrable</strong> de nombres réels, mais il est difficile de conceptualiser cette indénombrabilité. Une manière de l'approcher est donnée par l'argument de la <strong>diagonale de Cantor</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Argument_de_la_diagonale_de_Cantor" target="_BLANK">W</a> dont on trouvera une explication très pédagogique dans la vidéo au lien suivant <a class="external" href="https://www.arte.tv/fr/videos/097454-005-A/voyages-au-pays-des-maths/" target="_BLANK"></a>. </p>
+
+<p> Et il faut avoir conscience que, quelles que soient deux bornes <em class="bold"><var>a</var></em> et <em class="bold"><var>b</var></em> (avec <var>a</var> < <var>b</var>), il existe <strong class="warning">autant de réels</strong> dans l'intervalle <em class="bold">[<var>a</var>, <var>b</var>]</em> que dans l'ensemble <em class="bold">ℝ</em> de tous les nombres réels. (Cette propriété est aussi vraie pour l'ensemble ℚ des nombres rationnels.)</p>
+</div><!-- expert -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Les <strong class="title">approximations décimales</strong> ci‑dessous : </p>
+<ul>
+  <li> 1/3 ≃ 0,33333333333… (nombre rationnel) </li>
+
+  <li> 1/7 ≃ 0,14285714286… (nombre rationnel) </li>
+
+  <li> √2 ≃ 1,41421356237… (nombre irrationnel) </li>
+
+  <li> π ≃ 3,14159265359… (nombre irrationnel) </li>
+</ul>
+<p> sont données avec <strong>12 chiffres significatifs</strong> (exacts) en comptant la partie entière. </p>
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Certaines <strong class="title">expressions calculatoires</strong> peuvent former des <strong>valeurs</strong> qui <strong class="warning">n'appartiennent pas</strong> à ℝ : </p>
+
+<ul>
+  <li> √−1 est un nombre <strong>complexe</strong>,  </li>
+
+  <li> 1/0 est un « nombre » <strong>infini</strong>, </li>
+
+  <li> 0/0 est <strong>non défini</strong> (ce n'est pas un nombre)… </li>
+</ul>
+
+<p> De telles expressions <strong class="warning">peuvent intervenir en programmation</strong>, aussi est‑il nécessaire que leurs valeurs puissent être gérées. </p>
+</div><!-- remarques -->
+
+
+<h3 id="notationScientifique"> Principe de la notation scientifique des nombres </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">notation scientifique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Notation_scientifique" target="_BLANK">W</a> d'un <strong>nombre décimal</strong> est son <strong class="defin">écriture en base 10</strong> de la forme : <br>
+<span class="inline" style="line-height: 95%">
+	<em class="bold">±<strong class="specialMg">m</strong> × 10<sup><strong class="specialLB">n</strong></sup></em>
+</span> <br>
+où <strong class="specialMg">m</strong> est un nombre décimal appelée <strong class="specialMg">mantisse</strong> et <strong class="specialLB">n</strong> est un nombre entier appelé l'<strong class="specialLB">exposant</strong>. </p>
+</div><!-- important --> 
+
+<div class="complement">
+<p> De plus, la <strong class="title">notation scientifique</strong> impose : </p>
+<ul>
+	<li> que la <strong class="defin">partie entière</strong> de la <strong class="specialMg">mantisse</strong> soit réduite à <strong>un seul chiffre</strong>, obligatoirement <strong>non nul</strong> ; c'est le chiffre <strong>le plus significatif</strong> du nombre ;  </li>
+
+	<li> que la <strong class="defin">partie décimale</strong> de la <strong class="specialMg">mantisse</strong> comporte <strong>autant de décimales que nécessaire</strong> (mais éventuellement aucune) pour représenter le nombre ; la dernière décimale (la plus à droite) doit être <strong>non nulle</strong>, c'est le chiffre <strong>le moins significatif</strong> du nombre ; </li>
+
+	<li> l'<strong class="specialLB">exposant</strong> est un <strong>nombre entier</strong>, éventuellement nul ou négatif ; le <strong class="defin">facteur exponentiel</strong> <em class="bold">10<sup><strong class="specialLB">n</strong></sup></em> donne l'<strong>ordre de grandeur</strong> du nombre. </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> En <strong class="title">notation scientifique</strong> : </p>
+<ul>
+  <li> 0,357 s'écrit <em class="bold">3,57 × 10<sup>−1</sup></em> ; </li>
+
+  <li> −65&#8239;536 s'écrit <em class="bold">−6,5536 × 10<sup>4</sup></em> ; </li>
+
+  <li> 5&#8239;000&#8239;000 s'écrit <em class="bold">5 × 10<sup>6</sup></em>. </li>
+</ul>
+</div><!-- exemples -->
+
+
+
+
+
+
+
+
+
+
+<h2> Variété des types à virgule flottante </h2>
+
+
+
+
+<h3 id="principeFlottants"> Principe des types à virgule flottante </h3>
+
+
+
+<div class="important">
+<p> Un <strong>type</strong> dit <strong class="title">à virgule flottante</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Virgule_flottante" target="_BLANK">W</a> – ou tout simplement <strong class="title">flottant</strong> – est un <strong class="defin">type élémentaire</strong> de <strong>données numériques décimales</strong>. Son <strong class="defin">format binaire</strong>, détaillé infra <a class="infra" href="Cc3-5_typesFlottants.html#encodageFlottants"></a>, permet : </p>
+
+<ul>
+	<li> d'encoder aussi bien les nombres <strong class="specialO">négatifs</strong> que <strong class="specialO">positifs</strong> ; </li>
+
+	<li> pour chaque nombre, de <strong>répartir</strong> au mieux les <strong>chiffres</strong> de sa partie entière et sa partie décimale en fonction de sa valeur, grâce à un <strong class="specialLB">facteur exponentiel</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement" style="display: block">
+<p> De façon générique pour tout type flottant, on peut schématiser comme ci‑dessous, sur l'axe des nombres réels (l'ensemble ℝ), les <strong class="title">intervalles</strong> des <strong>valeurs encodables</strong>. Ces intervalles sont <strong class="defin">symétriques</strong> par rapport à l'origine de l'axe (le point d'abscisse <em class="bold">±0</em>). Sont surlignés : </p>
+
+<ul>
+  <li> en vert foncé, les intervalles des <strong>valeurs</strong> dites <strong class="specialG">normalisées</strong> (<em class="english">normal number</em> <a class="external" href="https://en.wikipedia.org/wiki/Normal_number_(computing)" target="_BLANK">W</a>) ; </li>
+
+  <li> en vert clair, les intervalles des <strong>valeurs</strong> dites <strong class="specialSG">dénormalisées</strong> (<em class="english">denormal values</em>, anciennement appelées <em class="english">subnormal number</em> <a class="external" href="https://en.wikipedia.org/wiki/Denormal_number" target="_BLANK">W</a>), qui sont très petites en valeur absolue. </li>
+</ul>
+
+<img class="top-left" src="../img/floatIntervals.png" width="100%">
+</div><!-- complement -->
+
+<p> Un type à virgule flottante peut donc encoder, en valeurs absolues, aussi bien : </p>  
+
+<ul>
+  <li> de <strong class="pros">très grands</strong> <strong>nombres</strong>  – par exemple, jusqu'à 10<sup>38</sup> pour le type <code class="prettyprint lang-c">float</code> ; </li>
+
+  <li> de <strong class="pros">très petits</strong> <strong>nombres</strong> – par exemple, jusqu'à 10<sup>−45</sup> pour le type <code class="prettyprint lang-c">float</code>. </li>
+</ul>
+
+
+<p> En contre‑partie de cette optimisation de l'étendue des valeurs encodables, un type flottant n'offre qu'une <strong class="title">précision</strong> <strong class="cons">relative</strong> au regard de la valeur des nombres. Sur la figure ci‑dessus, il faut imaginer que les intervalles surlignés en couleur sont en fait « <strong>pleins de trous</strong> ». Les milliards de valeurs effectivement encodable dans un type flottant ne représentent qu'une <strong>infime minorité</strong> au regard de l'innombrabilité des réels.  </p>
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> Dans le type <code class="prettyprint lang-c">float</code> dit à « simple précision » : </p>
+<ul>
+  <li> le nombre <em class="bold">11&#8239;111&#8239;111&#8239;111&#8239;111&#8239;111</em> (≃ 1,11 × 10<sup>16</sup>) est encodé comme <code>11111111533264896</code>, donc : </li>
+
+  <ul>
+  	<li> son <strong>erreur absolue</strong> d'encodage est d'environ 4,22 × 10<sup>8</sup>, </li>
+
+  	<li> mais elle correspond à une <strong>erreur relative</strong> d'environ 3,8 × 10<sup>−8</sup>. </li>
+  </ul>
+
+  <li style="margin-top: 0.7em"> le nombre <em class="bold">0,01</em> est encodé comme <code>0.009999999776</code>, donc : </li>
+
+  <ul>
+  	<li> son <strong>erreur absolue</strong> d'encodage est d'environ 2,24 × 10<sup>−10</sup>, </li>
+
+  	<li> mais elle correspond à une <strong>erreur relative</strong> d'environ 2,24 × 10<sup>−8</sup>. </li>
+  </ul>
+
+</ul>
+
+<p> Dans les deux cas, l'<strong>erreur relative</strong> est de l'ordre de <em class="bold">10<sup>−8</sup></em>, soit 0,000001 %. </p>
+</div><!-- exemples -->
+
+
+<div class="expert">
+<h4> Erreur relative d'encodage </h4>
+
+
+<div class="complement">
+<p> Les exemples ci‑dessus montrent que, dans un type flottant donné, l'<strong class="title">erreur relative</strong> <strong>d'encodage</strong> garde un <strong class="defin">ordre de grandeur constant</strong> sur toute l'étendue des valeurs normalisées, même si cette erreur relative <strong class="cons">varie</strong> quand même un peu d'un nombre à l'autre. </p>
+</div><!-- complement -->
+
+<p> L'erreur d'encodage peut aussi être <strong class="pros">nulle</strong> : en effet, les nombres qui sont égaux à une <strong>somme</strong> finie de <strong>puissances croissantes</strong> de <strong class="specialG">2</strong> (éventuellement d'exposant négatif) sont encodables <strong class="pros">sans erreur</strong>. </p>
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> Dans le type <code class="prettyprint lang-c">float</code>, dit à « simple précision » : </p>
+
+<ul>
+  <li> le nombre <em class="bold">0,03125</em> est encodé <strong class="pros">sans erreur</strong> parce qu'il est une puissance de 2 (il vaut exactement 2<sup>−5</sup>) ; </li>
+
+  <li> le nombre <em class="bold">1&#8239;073&#8239;741&#8239;824</em> est encodé <strong class="pros">sans erreur</strong> parce qu'il est une puissance de 2 (il vaut exactement 2<sup>30</sup>) ;  </li>
+</ul>
+
+<p> mais ce sont en quelques sortes des exceptions, puisque dans le cas du premier nombre, ses « voisins » 0,03124 et 0,03126 (entre autres) se sont pas encodables sans erreur. </p>
+</div><!-- exemples -->
+
+
+<div class="important">
+<p> En définitive, on peut caractériser la <strong class="title">précision</strong> <strong>d'encodage</strong> d'un type flottant par la <strong class="warning">valeur maximale</strong> de l'<strong class="defin">erreur relative d'encodage</strong> pour toutes les <strong>valeurs normalisées</strong> encodées dans ce type. </p>
+</div><!-- important -->
+
+
+<h4> Notion de chiffres significatifs </h4>
+
+
+<div class="important">
+<p> En complément de l'erreur relative d'encodage, on définit la <strong class="title">précision</strong> <strong>d'encodage</strong>  d'un type flottant comme le <strong class="defin">nombre de chiffres significatifs</strong> (en notation scientifique) successivement exacts que l'encodage garantit comme identiques après encodage/décodage d'une valeur, et avec <strong>arrondi</strong> au dernier chiffre significatif le plus proche. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cette notion fait référence à celle de <em>précision arithmétique</em> d'une valeur numérique, employée en mathématiques <a class="external" href="https://fr.wikipedia.org/wiki/Précision_arithmétique" target="_BLANK">W</a>. </p> 
+
+<p> L'<strong class="warning">erreur d'encodage</strong> commence donc à s'exprimer à partir du chiffre (éventuellement décimal) écrit à droite <strong>juste après le dernier chiffre (le moins) significatif</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p> 
+<p> Le type <code class="prettyprint lang-c">float</code> admet une précision de <strong>8</strong> <strong class="defin">chiffres significatifs</strong> exacts pour la plupart des valeurs, mais qui peut fluctuer entre <strong>7</strong> et <strong>9</strong> chiffres significatifs. En reprenant les exemples donnés supra : </p>
+
+<ul>
+	<li> le nombre <em class="bold">11&#8239;111&#8239;111&#8239;111&#8239;111&#8239;111</em> est encodé avec 8 chiffres significatifs (comme <code>11111111<span style="color: red">533264896</span></code>) ; </li>
+
+	<li> le nombre <em class="bold">0,01</em> est encodé aussi avec 8 chiffres significatifs (comme <code>0.009999999<span style="color: red">776</span></code>, soit <code>0.010000000</code> après arrondi au 8<sup>e</sup> chiffre significatif le plus proche). </li>
+</ul>
+
+<p> Dans les deux cas, l'<strong class="title">erreur d'encodage</strong> commence à s'exprimer à partir de la <strong class="warning">8 <sup>e</sup> décimale</strong> de la <strong class="specialMg">mantisse</strong> en notation scientifique. </p>
+</div><!-- exemples -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="classificationFloat"> Classification des types à virgule flottante </h3>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, il existe <strong>trois types</strong> <strong class="defin">standards</strong>  <strong class="title">à virgule flottante</strong>, usuellement désignés respectivement par : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">float</code> (simple précision), </li>
+
+  <li> <code class="prettyprint lang-c">double</code> (double précision) , </li>
+
+  <li> <code class="prettyprint lang-c">long double</code> (double précision <em>étendue</em>) <a class="external" href="https://en.wikipedia.org/wiki/Long_double" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement" style="display: block">
+<p> Ces trois types diffèrent les uns des autres par la <strong class="defin">taille</strong> en mémoire et donc aussi par la <strong class="defin">précision</strong> et l'<strong class="defin">étendue</strong> des intervalles de valeurs encodables. </p>
+
+<p> Mais comme pour les types entiers standards, l'<strong class="specialLB">implémentation</strong> joue un rôle crucial. Pour une machine de type <strong>PC</strong> à architecture <strong>64 bits</strong> avec une chaîne de compilation adaptée (<em class="mark">GCC</em> ou <em class="mark">Mingw-w64</em>), les caractéristiques essentielles sont détaillées dans le tableau ci‑dessous : </p>
+
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>  
+    <th style="min-width: 7em; width: 7em"> PC 64 bits  </th>
+    <th> taille </th>
+    <th> <code>TRUE_MIN</code> </th>
+    <th> <code>MIN</code> </th>
+    <th> <code>MAX</code> </th>
+    <th> <strong>erreur relative</strong> <br> <strong>maximale</strong> </th>
+    <th> <strong>chiffres</strong> <br> <strong>significatifs</strong>  </th>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">float</code> </td>
+    <td style="text-align: center;"> 4 </td>
+    <td style="text-align: center;"> ≃ 1,4 × 10<sup>−45</sup> </td>
+    <td style="text-align: center;"> ≃ 1,1 × 10<sup>−38</sup> </td>
+    <td style="text-align: center;"> ≃ 3,4 × 10<sup>38</sup>  </td>
+    <td style="text-align: center;"> ≃ 6,0 × 10<sup>−8</sup> </td>
+    <td style="text-align: center;"> 7 à 9 </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">double</code> </td>
+    <td style="text-align: center;"> 8 </td>
+    <td style="text-align: center;"> ≃ 4,9 × 10<sup>−324</sup> </td>
+    <td style="text-align: center;"> ≃ 2,2 × 10<sup>−308</sup> </td>
+    <td style="text-align: center;"> ≃ 1,7 × 10<sup>308</sup>  </td>
+    <td style="text-align: center;"> ≃ 1,1 × 10<sup>−16</sup> </td>
+    <td style="text-align: center;"> 15 à 17  </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">long double</code> </td>
+    <td style="text-align: center;"> 12/16 </td>
+    <td style="text-align: center;"> ≃ 3,6 × 10<sup>−4951</sup></td>
+    <td style="text-align: center;"> ≃ 3,3 × 10<sup>−4932</sup> </td>
+    <td style="text-align: center;"> ≃ 1,1 × 10<sup>4932</sup>  </td>
+    <td style="text-align: center;"> ≃ 5,4 × 10<sup>−20</sup></td>
+    <td style="text-align: center;"> 19 à 21  </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+<p> sachant que dans le cas du type <code class="prettyprint lang-c">long double</code>, seuls 12 des 16 bits sont réellement exploités pour le codage (la taille est implémentée comme un multiple de celle de l'architecture). </p>
+</div><!-- complement -->
+
+<p class="square" id="floatArduino"> En revanche, sur des cartes à microcontrôleur, les types <code class="prettyprint lang-c">double</code> et <code class="prettyprint lang-c">long double</code> peuvent être <strong class="warning">réduits</strong>. Ainsi : </p>
+
+<ul>
+  <li> sur les cartes à coeur <strong>8 bits</strong> (<em class="mark">Arduino Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…) , ces deux types sont encodés sur <strong class="cons">4 octets seulement</strong> ; ils sont donc <strong class="cons">équivalents</strong> au type <code class="prettyprint lang-c">float</code> et n'apportent <strong class="warning">aucune précision supplémentaire</strong> (mais réciproquement, aucun surcoût en termes de temps de calcul) ; </li>
+
+  <li> sur les cartes à coeur <strong>32 bits</strong> (<em class="mark">Arduino Due</em>, <em class="mark">Zero</em>, <em class="mark">ESP8266</em>), ces deux types sont l'un et l'autre encodés sur <strong>8 octets</strong> ; autrement dit : </li>
+  <ul>
+    <li> le type <code class="prettyprint lang-c">double</code> apporte bien une <strong class="pros">double précision</strong> par rapport au type <code class="prettyprint lang-c">float</code>, mais au prix de <strong class="cons">temps de calcul doublés</strong> puisqu'il fait deux fois la taille de l'architecture ; </li>
+
+    <li> le type <code class="prettyprint lang-c">long double</code> n'apporte <strong class="warning">aucune précision supplémentaire</strong> (mais son emploi serait « indolore » en termes de temps de calculs) par rapport au type double. </li>
+  </ul>
+</ul>
+
+
+<div class="remarques"> <p class="remarques"></p>
+<ol class="littered"> 
+  <li> Les normes des langages <em class="mark">C</em> et <em class="mark">C++</em> ne sont pas plus exigeantes avec le type <code class="prettyprint lang-c">long double</code> qu'avec le type <code class="prettyprint lang-c">double</code>. Elles n'imposent que deux types flottants standards effectivement différents – respectivement à simple et double précision – et laissent aux implémentations la liberté de fournir au codeur un troisième type flottant ayant réellement une double précision <em>étendue</em>. </li>
+
+  <div class="nobullet"> En ce sens, on peut dire que la norme du langage <strong>C++</strong> n'est respectée que pour les <strong>cartes</strong> <strong class="Arduino">Arduino</strong> à cœur <em class="bold"><em class="sigle">ARM</em></em>, et pas pour les cartes à cœur <em class="bold"><em class="sigle">AVR</em></em>. </div>
+
+  <li> En général sur les PC, le type <code class="prettyprint lang-c">long double</code> n'exploite réellement que <strong>80 bits</strong>, donc moins que la totalité des bits que lui confère sa taille (96 bits pour 12 octets, 128 bits pour 16 octets), laquelle est déterminée au regard des <strong>contraintes d'alignement</strong> de l'architecture machine (cf. chap. C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#contraintesAlignement" target="_BLANK"></a>). </li>
+
+  <li> Il existe aussi trois types flottants désignés respectivement <code class="prettyprint lang-c">_decimal32</code> <a class="external" href="https://en.wikipedia.org/wiki/Decimal32_floating-point_format" target="_BLANK">W</a>, <code class="prettyprint lang-c">_decimal64</code> <a class="external" href="https://en.wikipedia.org/wiki/Decimal64_floating-point_format" target="_BLANK">W</a> et <code class="prettyprint lang-c">_decimal128</code> <a class="external" href="https://en.wikipedia.org/wiki/Decimal128_floating-point_format" target="_BLANK">W</a>, qui diffèrent des types flottants standards à plusieurs titres : </li>
+  <ul>
+    <li> ils sont à <strong>taille fixe</strong>, quelle que soit l'implémentation ; </li>
+
+    <li> leur format binaire permet d'encoder <strong class="pros">sans erreur</strong> toutes les <strong>constantes littérales fractionnaires</strong> codées en base 10 avec un nombre restreint de décimales (mais en contre‑partie, pas les valeurs qui sont des sommes de puissances de 2). </li>
+  </ul>
+
+  <div class="nobullet"> Toutefois, ces types ne sont <strong class="cons">pas encore implémentés par défaut</strong>, même sur les implémentations récentes, et nécessitent plus que la simple inclusion d'un fichier d'en‑tête de bibliothèque pour pouvoir être employés. En revanche, il sont déjà inclus dans la future norme <strong>C23</strong> <a class="external" href="https://en.cppreference.com/w/c/keyword" target="_BLANK">C</a>. </div>
+</ol>  
+</div><!-- remarques -->
+
+
+<h4 id="caracteristiques"> Caractéristiques des types flottants sur une machine cible </h4>
+
+
+<div class="important">
+<p> À l'instar de ce qui est fait pour les types entiers (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#limits" target="_BLANK"></a>), la <strong>bibliothèque standard</strong> du langage <strong>C</strong> fournit dans un <strong class="title">fichier d'en‑tête</strong> nommé <code class="filename">float.h</code> <a class="external" href="https://sites.uclouvain.be/SystInfo/usr/include/float.h.html" target="_BLANK"></a> (<code class="filename">cfloat</code> pour le <strong>C++</strong>) les <strong class="defin">caractéristiques</strong> des types flottants, notamment leurs valeurs <strong class="defin">limites d'encodage</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces caractéristiques sont données sous forme de <strong class="title">pseudo‑constantes</strong> qui prennent chacune une <strong class="defin">valeur spécifique</strong> lors de la compilation selon l'implémentation (machine cible <em>et</em> chaîne de compilation). Ces pseudo‑constantes sont désignées par des <strong class="defin">identificateurs</strong> en <strong>majuscules</strong> qui (à une exception près) comporte un <strong>préfixe</strong> de <strong>type</strong>. En règle général, ce préfixe est de la forme : </p> 	
+
+<ul>
+	<li> <code class="prettyprint lang-c">FLT</code> pour les pseudo‑constantes qui caractérisent le type <code class="prettyprint lang-c">float</code> ; </li>
+
+	<li> <code class="prettyprint lang-c">DBL</code> pour les pseudo‑constantes qui caractérisent le type <code class="prettyprint lang-c">double</code> ; </li>
+
+	<li> <code class="prettyprint lang-c">LDBL</code> pour les pseudo‑constantes qui caractérisent le type <code class="prettyprint lang-c">long double</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<p> Le tableau ci‑dessous liste quelques unes de ces pseudo‑constantes, dont on trouvera la liste exhaustive sur une page de référence comme <a class="external" href="https://en.cppreference.com/w/c/types/limits#Limits_of_floating_point_types" target="_BLANK">C</a> : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+	<tr>
+		<th> Identificateur </th> <th> Caractéristique exprimée </th>
+  </tr>
+  <tr> 
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span></span>_MAX</code> </td>
+
+    <td> <strong>plus grande valeur</strong> <strong class="specialG">normalisée</strong> encodable </td>
+  </tr>
+  <tr> 
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_MIN</code> </td>
+
+    <td> <strong>plus petite valeur</strong> <strong class="specialG">normalisée</strong> encodable </td>
+  </tr>
+  <tr> 
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_TRUE_MIN</code> </td>
+
+    <td> <strong>plus petite valeur</strong> <strong class="specialLG">dénormalisée</strong> encodable </td>
+  </tr>
+  <tr> 
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_EPSILON</code> </td>
+    <td> <strong>écart absolu</strong> entre la valeur codée <code class="prettyprint lang-c">1.0</code> et <strong>la plus proche valeur</strong> encodable – donc, le double de l'erreur relative maximale – dite pseudo‑constante de <strong class="defin">résolution</strong></td>
+  </tr>
+  <tr>
+  <td> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_DECIMAL_DIG</code> </td>
+    <td> <strong>nombre de chiffres significatifs</strong> inchangés par encodage/décodage d'une valeur  </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered"> 
+  <li> Certaines pseudo‑constantes ne sont <strong class="cons">pas définies</strong> dans les <strong>anciennes implémentations</strong> des langages. C'est notamment le cas des  <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_TRUE_MIN</code> qui ont été introduites seulement à partir de la norme <strong>C11</strong>  </li> 
+
+  <li> Certaines pseudo‑constantes sont préfixées par <code class="prettyprint lang-c">FLT</code> mais ne sont <strong class="warning">pas spécifiques</strong> au type <code class="prettyprint lang-c">float</code>. C'est notamment le cas de : </li>
+
+  <ul>
+    <li> <code class="prettyprint lang-c">FLT_ROUNDS</code> <a class="external" href="https://en.cppreference.com/w/c/types/limits/FLT_ROUNDS" target="_BLANK">C</a> qui indique la <strong class="defin">méthode d'arrondi</strong> employée lors des opérations sur les valeurs de <strong>tous types flottants standards</strong> ; </li>
+
+    <li> <code class="prettyprint lang-c">FLT_EVAL_METHOD</code> <a class="external" href="https://en.cppreference.com/w/c/types/limits/FLT_EVAL_METHOD" target="_BLANK">C</a> qui indique dans quelle <strong class="defin">classe de précision</strong> sont effectuées les opérations sur les valeurs de <strong>tous types flottants standards</strong>. </li>
+  </ul>
+   </li> 
+</ol>  
+</div><!-- remarques -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="syntaxe"> Syntaxe de codage des valeurs décimales </h2>
+
+
+
+<h3 id="codageConstanteDecimale"> Codage d'une constante littérale décimale </h3>
+
+
+
+<div class="important">
+<p> Dans un programme en langage <strong>C</strong> ou <strong>C++</strong>, un peu comme sur une calculatrice scientifique, on code une <strong class="title">constante littérale décimale</strong>  par la <strong class="defin">syntaxe générale</strong> suivante, sans <strong class="warning">aucun espace</strong> (ni saut de ligne) : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"> ±<span class="nocode"><strong class="specialMg">x</strong></span>.<span class="nocode"><strong class="specialMg">y</strong></span><span class="nocode"><code style="color: blue; font-size: 105%">e</code></span>±<span class="nocode"><strong class="specialLB">n</strong></span> </code>
+</span>  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette forme syntaxique, <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">x</strong></span></code>, <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">y</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">n</strong></span></code> sont trois <strong>séquences de chiffres</strong> (<code>0</code> à <code>9</code>) tels que : </p>
+<ul>
+	<li> la séquence <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">x</strong></span>.<span class="nocode"><strong class="specialMg">y</strong></span></code> forme la <strong class="specialMg">mantisse</strong>, qui est elle-même constituée de : </li>
+  <ul>
+  	<li> sa <strong class="defin">partie entière</strong> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">x</strong></span></code> ; </li>
+
+  	<li> sa <strong class="defin">partie décimale</strong> <code class="prettyprint lang-c">.<span class="nocode"><strong class="specialMg">y</strong></span></code> ; </li>
+  </ul>
+
+	<li> la séquence <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">n</strong></span></code> est l'<strong class="specialLB">exposant</strong> et la séquence <code class="prettyprint lang-c"><span class="nocode"><code style="color: blue; font-size: 105%">e</code></span>±<span class="nocode"><strong class="specialLB">n</strong></span></code> forme le <strong class="defin">facteur exponentiel</strong>, interprété comme valant <em class="bold">10<sup>±<strong class="specialLB">n</strong></sup></em>. </li> 
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Particularités syntaxiques </h4>
+
+
+<div class="complement">
+<p> Le <strong>séparateur d'exposant</strong> <code class="prettyprint lang-c">e</code> est <strong class="pros">insensible à la casse</strong> : il peut aussi se coder <code class="prettyprint lang-c">E</code>. </p>
+
+<p> Par ailleurs, plusieurs éléments de la syntaxe peuvent être <strong class="pros">facultatifs</strong> : </p>
+<ul>
+	<li> tout <strong>zéro</strong> <strong class="cons">non significatif</strong>, c'est‑à‑dire ; </li>
+	<ul>
+  	<li> à gauche dans les séquences <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">x</strong></span></code> ou <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">n</strong></span></code> ; </li>
+
+  	<li> à droite dans la séquence <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">y</strong></span></code> ; </li>
+  </ul>
+
+  <li> le <strong>signe</strong> <code class="prettyprint lang-c">+</code> de la mantisse <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">x</strong></span>.<span class="nocode"><strong class="specialMg">y</strong></span></code>, comme celui de l'exposant <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">n</strong></span></code> ; </li> 
+
+  <li> la <strong>partie décimale</strong> si la séquence <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">y</strong></span></code> est <strong>nulle</strong> et si le facteur exponentiel est codé ; </li>
+
+  <li> le <strong>facteur exponentiel</strong> si la séquence <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">n</strong></span></code> est <strong>nulle</strong> et si la partie décimale est codée. </li>
+</ul>
+
+<p> Enfin, les valeurs exprimées par les séquences <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">x</strong></span></code>, <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">y</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong class="specialLB">n</strong></span></code> doivent respecter certaines <strong class="defin">limites</strong> pour ne pas causer de <strong class="warning">débordement</strong> (cf. le tableau supra <a class="supra" href="Cc3-5_typesFlottants.html#classificationFloat"></a>). </p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<ul>	
+	<li> La <strong class="title">constante littérale</strong> <code class="prettyprint lang-c">123.45e6</code> code la valeur <em class="bold">123,45 × 10<sup>6</sup></em>. </li>
+
+
+	<li> La <strong class="title">constante littérale</strong> <code class="prettyprint lang-c">0123.450e06</code> se code <strong>simplement</strong> <code class="prettyprint lang-c">123.45e6</code>. </li>
+
+	<li> La <strong class="title">constante littérale</strong> <code class="prettyprint lang-c">123.0e5</code> se code <strong>simplement</strong> <code class="prettyprint lang-c">123e5</code>.  </li>
+
+  <div class="nobullet"> En revanche, la constante <code class="prettyprint lang-c">123.0</code> ne se code <strong class="warning">pas</strong> <code>123</code> car cette chaîne numérique serait interprétée par le compilateur comme une <strong class="cons">constante littérale entière</strong>. Au pire, on pourrait coder <code class="prettyprint lang-c">123.</code> mais l'absence du zéro décimal impacterait la lisibilité du code source. </div>
+
+  <li> La <strong class="title">constante littérale</strong> <code class="prettyprint lang-c">123.0e0</code> se code <strong>simplement</strong> <code class="prettyprint lang-c">123.0</code>. </li>
+
+  <div class="nobullet"> En revanche, la constante <code class="prettyprint lang-c">123e0</code> ne se code <strong class="warning">pas</strong> <code>123</code> pour la même raison que celle donnée à l'exemple précédent. </div>
+</ul>  
+</div><!-- exemples -->
+
+
+<div class="expert">
+<h4 id="constanteDecimaleHexa"> Syntaxe de codage alternative en notation hexadécimale et puissances de 2 </h4>	
+
+
+<div class="complement">
+<p> On peut également coder les constantes littérales flottantes en <strong class="title">notation hexadécimale et puissances de</strong> </strong specialG> <strong>2</strong> via la <strong class="defin">syntaxe générale</strong> exposée supra <a class="supra" href="Cc3-5_typesFlottants.html#codageConstanteDecimale"></a> mais : </p>
+
+<ul>
+	<li> en préfixant la <strong>mantisse</strong> par <code class="prettyprint lang-c">0x</code> et en codant ses digits en <strong>base</strong> <strong class="specialG">16</strong> (avec les chiffres <code>0</code> à <code>9</code> et les lettres <code>A</code> à <code>F</code>) ;  </li>
+
+	<li> en codant le <strong>séparateur d'exposant</strong> par le symbole <code class="prettyprint lang-c">p</code> (et non pas <code>e</code>), le facteur exponentiel étant alors interprété comme valant <em class="bold">2<sup>±<strong class="specialLB">n</strong></sup></em> ;  </li>
+</ul>  
+<p> sachant que cette syntaxe alternative est entièrement <strong class="pros">insensible à la casse</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> La <strong class="title">constante littérale</strong> codée <code class="prettyprint lang-c">0xA.1p3</code> prend la <strong class="defin">valeur décimale</strong> : <br>
+<span class="inline">
+  10,0625 × 2<sup>3</sup> = <em class="bold">80,5</em>
+</span> <br>
+car A<sub>(16)</sub> = 10 et 0,1<sub>(16)</sub> = 0,1/16 = 0,0625. </p>
+
+<p> On peut aussi coder cette constante <code class="prettyprint lang-c">0Xa.1P3</code>, puisque la syntaxe de codage des constantes littérales décimales est indifférente à la casse. </p>
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> En employant cette <strong class="title">syntaxe alternative</strong> (dans les limites des intervalles d'encodage du type de la constante), on code une valeur qui est forcément une somme de puissances de 2, donc encodable <strong class="pros">sans erreur</strong>.  </p>
+</div><!-- remarques -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="pseudoConstMath"> Pseudo‑constantes mathématiques </h3>
+
+
+
+<p> On a vu au chapitre C2‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C2-ElementsLangage/C2%C3%A2%E2%82%AC%E2%80%984_manipulationDonnees.html#constMath " target="_BLANK"></a> que certaines implémentations du fichier d'en‑tête <code class="filename">math.h</code> de la bibliothèque standard du langage <strong>C</strong>  (<code class="filename">cmath</code> en <strong>C++</strong>) définissent par des <strong class="title">pseudo‑constantes</strong> des approximations décimales de <strong class="defin">constantes mathématiques</strong> usuelles : <code class="prettyprint lang-c">M_PI</code> pour <em class="bold">π</em>, <code class="prettyprint lang-c">M_E</code> pour <strong>e</strong>, etc. </p>
+
+
+<div class="complementExpert">
+<p> De plus, certaines implémentations définissent dans le même fichier des <strong class="defin">pseudo‑constantes</strong> relatives aux <strong class="title">valeurs spéciales</strong> encodables dans les types flottants, notamment : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">INFINITY</code> dont la valeur est celle que prend toute expression de type flottant qui <strong class="specialR">déborde</strong> par le haut en valeurs absolues (<em class="english">overflow</em>) de ses limites d'encodage ±<code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_MAX</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">NAN</code> (<em class="english">not a number</em>) dont la valeur est celle que prend toute expression de type flottant qui code une <strong class="specialM">opération non définie</strong> dans ce type (opérations telles que 0/0, √−1, etc.) ;   </li>
+</ul>
+
+<p> Ces pseudo‑constantes permettent notamment de tester la valeur de certaines expressions lors de l'exécution d'un programme et mettre en œuvre une gestion des erreurs. </p>
+</div><!-- complementExpert -->
+
+<div class="remarques">
+<p class="remarque"> Plus précisément, la valeur prise par la pseudo‑constante <code class="prettyprint lang-c">NAN</code> est un <strong>q</strong><strong  class="specialM"><em class="sigle">NAN</em></strong> (cf. infra <a class="infra" href="Cc3-5_typesFlottants.html" target="_BLANK"></a>). En effet, lors de l'exécution du programme, puisque cette valeur n'est pas engendrée par un calcul mais introduite intentionnellement par le codeur, il ne serait pas pertinent qu'elle soit signalée. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Typage d'une valeur décimale </h3>
+
+
+
+<h4 id="typageDefaut"> Type par défaut d'une valeur décimale </h4>
+
+
+<div class="important">
+<p> Dans une <strong>expression</strong> en langage <strong>C</strong> ou <strong>C++</strong>, toute constante littérale interprétée par le compilateur comme une valeur décimale est <strong>encodée</strong> <strong class="defin">par défaut</strong> (c'est‑à‑dire sauf spécification particulière) comme étant de <strong class="title">type</strong> <code class="prettyprint lang-c">double</code> ou <code class="prettyprint lang-c">long double</code> <strong class="defin">par ordre de préférence</strong>, dès que cette valeur entre dans l'<strong>étendue</strong> d'un de ces types. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Dans une expression, sauf via une conversion explicite ou spécification par préfixe, une <strong class="title">valeur décimale</strong> n'est donc <strong class="warning">jamais</strong> traitée comme étant de type <code class="prettyprint lang-c">float</code> même si elle est incluse dans les intervalles des valeurs encodables de ce type. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Comme pour les entiers, cette stratégie permet de <strong class="pros">minimiser les risques</strong> de <strong class="warning">débordement</strong> et de <strong class="specialO">pertes de précision</strong> au cours de l'évaluation des expressions calculatoires. De plus, elle <strong class="pros">optimise</strong> la <strong>capacité de calcul</strong> des architectures <strong>64 bits</strong> puisque, en mémoire comme en registre, une donnée de type <code class="prettyprint lang-c">double</code> fait exactement cette largeur. </p>
+
+<p> Toutefois, cette stratégie présente un <strong class="cons">coût</strong> non négligeable en termes de <strong class="cons">temps de calcul</strong> sur des architectures « étroites » comme les <strong>cartes à microcontrôleur</strong>. C'est pourquoi l'environnement <strong class="Arduino">Arduino</strong> limite la taille des types <code class="prettyprint lang-c">double</code> et <code class="prettyprint lang-c">long double</code>(cf. supra), au détriment de leur étendue et de leur précision (cf. chap. C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#coutCalcul" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> Quelle que soit l'architecture de machine considérée : </p>
+<ul>
+  <li> la <strong class="title">constante littérale</strong> décimale codée <code class="prettyprint lang-c">1e23</code> est encodée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">double</code>, même si elle aurait pu être encodée à moindre coût mémoire dans le type <code>float</code> (on rappelle que <code>FLT_MAX</code> vaut environ 3,4 × 10<sup>38</sup>) ; </li>
+
+  <li> la <strong class="title">constante littérale</strong> décimale codée <code class="prettyprint lang-c">4e567</code> est encodée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">long double</code> car elle n'entre pas dans l'étendue du type <code class="prettyprint lang-c">double</code> (on rappelle que <code>DBL_MAX</code> vaut environ 1,7 × 10<sup>308</sup>). </li>
+</ul>
+</div><!-- exemples -->	
+
+
+<div class="expert">
+<h4 id="suffixe"> Spécification d'un type flottant </h4>
+
+
+<div class="important"> Comme pour les valeurs entières (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#specifTypage" target="_BLANK"></a>), les langages <strong>C</strong> et <strong>C++</strong> permettent d'<strong>imposer</strong> un <strong class="title">type flottant</strong> <strong>autre</strong> que <code class="prettyprint lang-c">double</code> à toute constante littérale décimale. Il suffit d'adjoignant à cette dernière le <strong>suffixe</strong> : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">f</code> ou <code class="prettyprint lang-c">F</code> pour qu'elle soit encodée de type <code class="prettyprint lang-c">float</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">l</code> ou <code class="prettyprint lang-c">L</code> pour qu'elle soit encodée de type <code class="prettyprint lang-c">long double</code>. </li>
+</ul>
+</div><!-- important -->
+
+
+<p class="square"> Pour coder l'<strong>affectation</strong> d'une constante littérale à une donnée de type <code class="prettyprint lang-c">long double</code>, l'emploi du suffixe <code class="prettyprint lang-c">l</code> ou <code class="prettyprint lang-c">L</code> est <strong class="warning">indispensable</strong>.  Sinon la valeur est encodée dans le type <code class="prettyprint lang-c">double</code> avant l'affectation proprement dite, avec à la clef une <strong>perte de précision</strong>.  </p>
+
+<div class="exemples">
+<p class="exemple"> Considérons les deux déclarations-initialisations codées ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+long double a = 1.1;  // prefix l or L missing!
+long double b = 1.1L; // OK
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Compilées sur <strong class="OnlineGDB">OnlineGDB</strong> (compilateur <code>gcc 5.4.1 c99</code>) : </p>
+<ul>
+  <li> la première affecte à la variable <code class="prettyprint lang-c">a</code> la valeur : <br> 
+  <span class="inline">
+     <code>1.100000000000000088178…</code>
+  </span> <br>
+  avec une précision de <strong>17 chiffres significatifs</strong> qui est <strong class="cons">seulement</strong> celle du type <code class="prettyprint lang-c">double</code> ;  </li>
+
+  <li> la deuxième affecte à la variable <code class="prettyprint lang-c">b</code> la valeur : <br> 
+  <span class="inline">
+     <code>1.1000000000000000000217…</code>
+  </span> <br>
+  avec une précision de <strong>20 chiffres significatifs</strong> qui est <strong class="pro">bien</strong> celle du type <code class="prettyprint lang-c">long double</code>.  </li>
+</ul>
+</div><!-- exemples -->
+
+<p class="square"> A contrario, coder le suffixe <code class="prettyprint lang-c">f</code> ou <code class="prettyprint lang-c">F</code> est <strong class="cons">inutile</strong> pour l'<strong>affectation</strong> d'une constante littérale à une donnée de type <code class="prettyprint lang-c">float</code>. En effet, même sans suffixe, la constante sera de toute façon convertie dans le type dans le type <code class="prettyprint lang-c">float</code> lors de l'affectation. Et a priori, rien ne permet d'affirmer que l'ajout du suffixe <code class="prettyprint lang-c">f</code> ou <code class="prettyprint lang-c">F</code> puisse améliorer la vitesse de compilation ou d'exécution du programme, tant les compilateurs modernes intègrent des mécanismes d'optimisation…  </p>
+
+<div class="exemples">
+<p class="exemple"> Considérons les deux déclarations-initialisations codées ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+float c = 1.1;  
+float d = 1.1F; 
+</pre>
+<!---------- ne pas indenter ---------->
+<p> Toujours sur <strong class="OnlineGDB">OnlineGDB</strong>, l'une et l'autre affectent respectivement aux variables <code class="prettyprint lang-c">c</code> et <code class="prettyprint lang-c">d</code> la <strong class="pros">même valeur</strong> : <br> 
+<span class="inline">
+   <code>1.100000023841858…</code>
+</span> <br>
+avec une précision de <strong>8 chiffres significatifs</strong> qui est bien celle du type <code class="prettyprint lang-c">float</code>.  </p>
+</div><!-- exemple -->
+
+
+<p> Néanmoins, le suffixe <code class="prettyprint lang-c">f</code> ou <code class="prettyprint lang-c">F</code> trouve son <strong class="pros">utilité</strong> dans les <strong>expressions calculatoires hétérogènes</strong>, faisant intervenir des données décimales et entières. Si le type <code class="prettyprint lang-c">float</code> est systématiquement imposé aux données décimales, les données entières ne seront converties que dans ce type, et non <strong>pas</strong> dans le type <code class="prettyprint lang-c">double</code>, avec à la clef un gain en rapidité et en registres de calcul, ce qui est peut être appréciable sur des cartes à microcontrôleur. </p>
+
+<div class="exemples">
+<p class="exemple"> Sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> à cœur <em class="bold"><em class="sigle">ARM</em></em> (<em class="mark">Due</em>, <em class="mark">Zero</em>…), si <code class="prettyprint lang-c">a</code> est une donnée déclarée de type <code class="prettyprint lang-c">int</code>, alors l'expression : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">sizeof(0.1 * a)</code>
+</span> <br>  
+prend la valeur <em class="bold">8</em> (octets), car la constante littérale <code class="prettyprint lang-c">0.1</code> est interprétée de type <code class="prettyprint lang-c">double</code>. Alors que l'expression : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">sizeof(0.1f * a)</code>
+</span> <br>  
+prend seulement la valeur <em class="bold">4</em> (octets), grâce au <strong>suffixe</strong> <code class="prettyprint lang-c">f</code>. C'est donc dans le type <code class="prettyprint lang-c">float</code> qu'elle sera évaluée. </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="specificationsConversion"> Spécifications de conversion pour les entrées‑sorties standards </h3>
+
+
+
+<div class="important">
+<p> Les <strong class="title">fonctions d'entrée‑sortie</strong> standards formatées des familles <code class="prettyprint lang-c">printf</code> et <code class="prettyprint lang-c">scanf</code> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#printf" target="_BLANK"></a>) requièrent des <strong class="specialDR">spécifications de conversions</strong> <strong class="defin">particulières</strong> pour l'écriture et la lecture des <strong>valeurs décimales</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong style="color: crimson">caractères‑codes</strong> de ces spécifications sont indiquées dans le tableau ci‑dessous : </p>  
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Caractère <br> code </th> 
+    <th> Format <br> d'affichage </th> 
+  </tr>
+  <tr>
+    <td style="text-align: center; min-width: 4em; width: 4em;"> <code style="color: crimson; background: white;">g</code> ou  <code style="color: crimson; background: white;">G</code> </td> 
+    <td> valeur <strong>décimale</strong>, virgule <strong>flottante</strong> (format le plus court possible, 6 chiffres par défaut)
+      </td> 
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code style="color: crimson; background: white;">f</code> ou  <code style="color: crimson; background: white;">F</code> </td>
+    <td> valeur <strong>décimale</strong>, virgule <strong>fixe</strong> (sans exposant) </td> 
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code style="color: crimson; background: white;">e</code> ou  <code style="color: crimson; background: white;">E</code> </td>
+    <td> valeur <strong>décimale</strong>, virgule <strong>flottante</strong> (avec exposant) </td> 
+  </tr>
+</table>
+
+<div class="expert"> 
+<table style="margin: 0em">
+  <tr>
+    <td style="text-align: center; min-width: 4em; width: 4em;"> <code style="color: crimson; background: white;">a</code> ou  <code style="color: crimson; background: white;">A</code></td>
+    <td> valeur <strong>hexadécimale</strong>, virgule <strong>flottante</strong> (avec exposant</strong>)  </td> 
+  </tr>
+</table>
+</div><!-- expert -->
+</div><!-- overflow -->
+
+<p> sachant que la <strong class="defin">casse</strong> des <strong style="color: crimson">caractères-codes</strong> (<em>minuscule</em> ou <em>majuscule</em>) spécifie seulement la <strong>casse d'affichage</strong>. </p> 
+
+
+
+<p> En règle générale, la spécification de conversion <code class="prettyprint lang-c">%<span class="nocode"><code style="color: crimson">g</code></span></code> est <strong>à privilégier</strong>. Les autres spécifications restent utiles pour des besoins spécifiques. </p>
+
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Le programme <strong>C</strong> ci‑dessous montre à titre comparatif les sorties standards pour deux constantes <code class="prettyprint lang-c">exF1</code> et <code class="prettyprint lang-c">exF2</code> déclarées de type <code class="prettyprint lang-c">float</code>. Ces affichages sont codés respectivement avec les trois spécifications de conversion <code class="prettyprint lang-c">%<span class="nocode"><code style="color: crimson">g</code></span></code>, <code class="prettyprint lang-c">%<span class="nocode"><code style="color: crimson">f</code></span></code> et <code class="prettyprint lang-c">%<span class="nocode"><code style="color: crimson">e</code></span></code>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+const float exF1 = 987.6543, exF2 = 9.87e6; 
+
+int main(void) {
+  printf("exF1 %%g: %g \t %%f: %f \t %%e: %e\n", exF1, exF1, exF1);
+  printf("exF2 %%g: %g \t %%f: %f \t %%e: %e\n", exF2, exF2, exF2);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On obtient sur le moniteur l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+exF1 %g: 987.654    %f: 987.654297        %e: 9.876543e+02
+exF2 %g: 9.87e+06   %f: 9870000.000000    %e: 9.870000e+06
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> La pseudo‑constante <code class="prettyprint lang-c">INFINITY</code> (cf. supra. <a class="supra" href="Cc3-5_typesFlottants.html#pseudoConstMath"></a>) est respectivement affichée et saisie via les fonctions <code class="prettyprint lang-c">printf</code> et <code class="prettyprint lang-c">scanf</code> sous l'<strong>abréviation</strong> <code class="prettyprint lang-c">inf</code> ou <code class="prettyprint lang-c">INF</code>.  </p>
+
+<p> Quant à la pseudo‑constante <code class="prettyprint lang-c">NAN</code>, elle est affichée et saisie <strong>comme son identificateur</strong>. </p>  
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4> Paramètres optionnels </h4>  
+
+
+<div class="important">
+<p> Les spécifications de conversions des valeurs décimales sont <strong class="defin">paramétrables</strong> par un <strong>préfixe</strong> potentiellement constitué de <strong class="specialDR">4 sous-spécifications optionnelles</strong>, codées dans l'ordre entre le symbole <code class="prettyprint lang-c">%</code> et le <strong style="color: crimson">caractère-code</strong> de spécification du tableau ci‑dessus. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces sous-spécifications permettent de formater la valeur décimale à traiter dans un <strong class="defin">champ</strong> de <strong>n caractères</strong> qui peuvent être des espaces, des signes, des chiffres et des séparateurs (décimal et exponentiel). </p>
+
+<p> Certaines sous-spécifications sont <strong>également applicables</strong> aux spécifications de conversion des <strong class="defin">valeurs entières</strong> <code class="prettyprint lang-c">%<span class="nocode"><code style="color: crimson">d</code></span></code>, <code class="prettyprint lang-c">%<span class="nocode"><code style="color: crimson">u</code></span></code></code> et <code class="prettyprint lang-c">%<span class="nocode"><code style="color: crimson">x</code></span></code>. </p>
+
+<p> Leur syntaxe de codage est décrite dans le tableau ci‑dessous. </p>
+</div><!-- complement -->
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Nº d'ordre </th>
+    <th> Syntaxe   </th> 
+    <th> Formatage </th> 
+  </tr>
+  <tr>
+    <td> 1 </td>
+
+    <td style="text-align: center;"> <code class="prettyprint lang-c"><span class="nocode"><strong>symbole(s)</strong></span></code> <br> <em style="font-size: 80%">1 à 4</em> </td>
+
+    <td> 
+      <ul>
+        <li> <code class="prettyprint lang-c">-</code> <strong>justification à gauche</strong> de la valeur (sinon, justification à droite) </li>
+
+        <li> <code class="prettyprint lang-c">+</code> <strong>signage systématique</strong> de la valeur (sinon, les signes « <code>+</code> » sont omis)  </li>
+
+        <li> <code class="prettyprint lang-c"> </code><em> (un espace)</em> <strong>espace</strong> à la place du signe « <code>+</code> » si la valeur est positive <br> (spécification ignorée si le symbole <code class="prettyprint lang-c">+</code> est codé) </li>
+
+        <li> <code class="prettyprint lang-c"><span class="nocode"><code>#</code></span></code> <strong>formatage alternatif</strong> (cf. remarque <em class="bold">A)</em> infra) </li>
+
+        <li> <code class="prettyprint lang-c"><span class="nocode"><code>0</code></span></code> <strong>caractères</strong> « <code>0</code> » comblant les espaces vides initiaux du champ de formatage (à gauche de la valeur) </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td> 2 </td>
+
+    <td style="text-align: center;"> <code class="prettyprint lang-c"><span class="nocode"><strong>i</strong></span></code>  <em>ou</em>  <code class="prettyprint lang-c">*</code> <br> <em style="font-size: 80%"><strong>i</strong> : entier positif</em> </td>
+
+    <td> <div style="padding-left: 0.8em;"><strong>largeur minimale</strong> – en nombre de caractères – du <strong class="defin">champ</strong> de formatage (sinon ajustement automatique) <br>
+      <div style="margin-top: 0.5em; font-size: 90%"><code class="prettyprint lang-c">*</code> : valeur spécifiée par un <strong>argument variable</strong>, cf. remarque <em class="bold">B)</em> infra </div> </div>
+    </td>
+  </tr>
+  <tr>
+    <td> 3 </td>
+
+    <td style="text-align: center;"> <code class="prettyprint lang-c">.<span class="nocode"><strong>j</strong></span></code>  <em>ou</em>  <code class="prettyprint lang-c">.*</code><br> <em style="font-size: 80%"><strong>j</strong> : entier positif</em> </td>
+
+    <td> <div style="padding-left: 0.8em;"><strong>nombre</strong> de <strong class="defin">décimales</strong> traitées (valeur par défaut : <em class=" bold">0</em>) <br>
+      <div style="margin-top: 0.5em; font-size: 90%"><code class="prettyprint lang-c">*</code> : valeur spécifiée par un <strong>argument variable</strong>, cf. remarque <em class="bold">B)</em> infra </div> </div> 
+    </td>
+  </tr>
+  <tr>
+    <td> 4 </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c"><span class="nocode"><strong>lettre</strong></span></code> </td>
+
+    <td> <div style="padding-left: 0.8em;"><code class="prettyprint lang-c">L</code> <strong class="warning">obligatoire</strong> (et non pas <code>l</code>) si la valeur est de type <code class="prettyprint lang-c">long double</code> <br>
+      <div style="margin-top: 0.5em; font-size: 90%"> par défaut, les spécifications de conversion opèrent pour le type <code class="prettyprint lang-c">double</code>, qui est aussi le type par défaut des expressions à valeurs décimales </div> </div> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<div class="exemples">
+<p class="exemple"> Le programme <strong>C</strong> ci‑dessous montre une possible présentation d'un <strong>tableau de valeurs</strong> (juste quelques unes, par soucis de concision) d'une <strong>fonction mathématique</strong>, ici <var>f</var>(<var>x</var>) = <var>e</var><sup>1/<var>x</var></sup>.</p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+
+int main(void) {
+  printf("   x   |   exp(1/x) \n");
+  for (float x = -0.1; x < 0.11; x += 0.05) {
+      if (fabs(x) > 0.0001) {
+        printf(" %+5.2f | %+.3e \n", x, exp(1/x));
+      }
+      else {
+        printf(" %- 5.0f | not a number\n", round(x+0.0001));
+      }
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On obtient sur le moniteur l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+   x   |   exp(1/x) 
+ -0.10 | +4.540e-05 
+ -0.05 | +2.061e-09 
+  0    | not a number
+ +0.05 | +4.852e+08 
+ +0.10 | +2.203e+04 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où l'on observe que, pour la colonne des « <code>x</code> » : </p>
+
+<ul>
+  <li> la spécification <code class="prettyprint lang-c"><span class="nocode"><code>%+5.2f</code></span></code> affiche les valeurs (à l'exception du « <code>0</code> ») dans un champ de <strong>5 caractères</strong> avec <strong>signage systématique</strong> et <strong>2 décimales</strong> pour un format à <strong>virgule fixe</strong> ;  </li>
+
+  <li> la spécification <code class="prettyprint lang-c"><span class="nocode"><code>%- 5.0f</code></span></code> affiche la valeur « <code>0</code> » dans un champ de <strong>5 caractères</strong> mais en <strong>justification à gauche</strong>, avec un caractère <strong>espace</strong> à la place du signe « <code>+</code> » et <strong>aucune décimale</strong>, toujours pour un format à <strong>virgule fixe</strong> ;  </li>
+</ul>
+
+<p> et pour la colonne des « <code>exp(1/x)</code> » : </p>
+
+<ul>
+  <li> la spécification <code class="prettyprint lang-c"><span class="nocode"><code>%+.3e</code></span></code> affiche les valeurs avec <strong>signage systématique</strong> et <strong>3 décimales</strong> pour un format à <strong>virgule flottante</strong>.  </li>
+</ul>
+</div><!-- exemples -->
+
+<div class="remarques "><p class="remarques"></p>
+
+<p> La syntaxe des <strong class="specialDR">spécifications de conversion</strong> présente de <strong class="title">nombreuses particularités</strong> qu'il est difficile de décrire en exhaustivité. En particulier : </p>
+
+<ol class="littered">
+  <li> Dans la sous-spécification nº 1, le symbole <code class="prettyprint lang-c">#</code>  code un <strong>formatage alternatif</strong> pour certaines spécifications.  </li>
+
+  <div class="exemples">
+  <p class="exemple"> L'instruction ci‑dessous permet de comparer l'affichage produit en formatage normal et alternatif pour une spécification de conversion <code class="prettyprint lang-c"><span class="nocode"><code>%g</code></span></code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  printf("%g  %#g \n", 2e10, 2e10);
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> Sur le moniteur, on obtient l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+2e+10  2.00000e+10 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> où l'on observe qu'en formatage alternatif (<code>%#g</code>), la partie décimale n'est pas omise même si elle est nulle. </p>
+
+  </div><!-- exemples -->
+
+
+  <li> Dans la sous-spécification nº 2 et 3, le symbole <code class="prettyprint lang-c">*</code>  permet de spécifier la valeur attendue par un <strong>paramètre variable</strong> (et non pas une constante littérale) de type <code class="prettyprint lang-c">int</code> – paramètre qui codé dans la liste des arguments de la fonction <strong>juste avant</strong> celui dont la valeur est traitée.  </li>
+
+  <div class="exemples">
+  <p class="exemple"> Le programme <strong>C</strong> ci‑dessous affiche les <strong>puissances de 10</strong> jusqu'à l'exposant <code>n_max</code> qui est une constante déclarée de type <code class="prettyprint lang-c">int</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+const int n_max = 4; 
+
+int main(void) {
+  for (int n = 0; n <= n_max; n++) {
+    printf(" %*.0f \n", n_max + 1, pow(10.0, n));
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> On obtient sur le moniteur les valeurs en <strong>colonne justifiée à droite</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+     1 
+    10 
+   100 
+  1000 
+ 10000
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> car, dans la spécification de conversion <code class="prettyprint lang-c"><span class="nocode"><code>%*.0f</code></span></code>, la largeur du champ dans lequel s'inscrit la valeur à afficher est spécifiée par le symbole <code class="prettyprint lang-c"><span class="nocode"><code>*</code></span></code> qui renvoie à l'argument <code class="prettyprint lang-c">n_max + 1</code> codé juste avant. </p> 
+  </div><!-- exemple -->
+</ol>
+
+<p> Pour plus de détails sur ces particularités, on peut consulter les pages web consacrées aux fonctions <code class="prettyprint lang-c">printf</code> <a class="external" href="https://en.cppreference.com/w/c/io/fprintf" target="_BLANK">C</a> et <code class="prettyprint lang-c">scanf</code> <a class="external" href="https://en.cppreference.com/w/c/io/fscanf" target="_BLANK">C</a> sur un site comme <em class="mark">cppreference</em>. </p>
+</div><!-- remarques -->
+
+<div class="remarques">
+<p class="remarque"> Sur un PC <em class="mark">Windows</em> avec la chaîne de compilation <em class="mark">Mingw‑w64</em>, la <strong class="title">sous-spécification</strong> nº 4 codée <code class="prettyprint lang-c">L</code> n'est <strong class="warning">pas opérationnelle</strong>, car elle est implémentée par une ancienne bibliothèque du logiciel d'exécution (<em class="english">run‑time</em>) qui ne prend pas en charge le type <code class="prettyprint lang-c">long double</code>. Dès lors, le programme n'a pas la capacité d'afficher ou de lire les données de ce type <a class="external" href="https://stackoverflow.com/questions/1764350/conversion-specifier-of-long-double-in-c" target="_BLANK">F</a>.  </p>
+
+<p> À l'heure actuelle, les solutions pour résoudre ce problème ne sont pas simples, elles dépendent de la version du compilateur. On peut : </p>
+  <ul>
+    <li> tenter de <strong>changer les options de compilations</strong> <a class="external" href="http://mingw-users.1079350.n2.nabble.com/How-to-printf-long-doubles-td1650580.html" target="_BLANK">F</a> ; </li>
+
+    <li> ponctuellement <strong>changer d'implémentation</strong>, par exemple en optant pour un environnement de programmation en ligne comme <strong class="OnlineGDB">OnlineGDB</strong> <a class="external" href="https://www.onlinegdb.com/" target="_BLANK"></a>. </li>
+  </ul>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="encodageFlottants"> Encodage des données de types flottants </h2>
+
+
+<div class="expert">
+<p> La représentation en mémoire des nombres décimaux est bien plus <strong>complexe</strong> que celle des entiers. Pour comprendre le principe de l'<strong class="title">encodage</strong> dans un <strong class="title">format binaire</strong> des valeurs de <strong class="defin">types flottants</strong>, il est utile de connaître préalablement les algorithmes élémentaires : </p>
+
+<ul>
+	<li> de <strong class="title">formatage</strong> d'un nombre décimal en <strong>notation scientifique</strong>, </li>
+
+	<li> de <strong class="title">conversion en base</strong> <strong class="specialG">2</strong> d'un nombre décimal. </li>
+</ul>
+
+<p> Ces algorithmes sont exposés ci‑après. </p>
+
+
+<!-- expert -->
+<h4 id="complementNotationScientifique"> Formatage en notation scientifique des nombres décimaux </h4>
+
+
+<div class="complement">
+<p> Rappelons que dans la <strong class="title">notation scientifique</strong> d'un nombre décimal de la forme <em class="bold">±<strong class="specialMg">m</strong> × 10<sup><strong class="specialLB">n</strong></sup></em> (cf. supra <a class="supra" href="Cc3-5_typesFlottants.html#notationScientifique"></a>), la <strong class="specialMg">mantisse</strong> doit avoir une <strong class="defin">partie entière</strong> réduite à <strong>un seul chiffre</strong> et être <strong>non nulle</strong>. 
+</p>
+
+<p> Autrement dit, en notation scientifique, la mantisse <strong class="specialMg">m</strong> est forcément comprise entre <em class="bold">1,0…</em> et <em class="bold">9,9999…</em>  – valeur maximale qui tend vers <em class="bold">10</em>, la <strong class="specialG">base</strong> <strong>de numération</strong>. Cette mise en forme est rendue possible en compensant la mantisse par le facteur exponentiel  <em class="bold">10<sup><strong class="specialLB">n</strong></sup></em>. </p>
+</div><!-- complement -->
+
+
+<p> Pour <strong class="title">formater</strong> en notation scientifique un nombre décimal écrit de la forme <em class="bold"><strong class="specialMg">x</strong>,<strong class="specialMg">y</strong> × 10<sup><strong class="specialLB">n</strong></sup></em> où <strong class="specialMg">x</strong>, <strong class="specialMg">y</strong> et <strong class="specialLB">n</strong> sont trois chaînes numériques quelconques, l'algorithme est le suivant : </p>
+
+<ul>
+	<li> si <em class="bold"><strong class="specialMg">x</strong> ⩾ 10</em>, on divise <em class="bold"><strong class="specialMg">x</strong>,<strong class="specialMg">y</strong></em> par 10 autant de fois que <strong class="specialMg">x</strong> compte de chiffres en plus de celui des unités et on incrémente d'autant l'exposant <strong class="specialLB">n</strong> ; </li>
+
+  <div class="exemples">
+  <p class="exemple"> Le nombre 123,45 × 10<sup>67</sup> s'écrit 1,2345 × 10<sup>69</sup> en notation scientifique. </p>
+  </div><!-- exemple -->
+
+	<li> si <em class="bold"><strong class="specialMg">x</strong> = 0</em>, on multiplie <em class="bold"><strong class="specialMg">x</strong>,<strong class="specialMg">y</strong></em> par 10 autant de fois qu'il faut pour obtenir un chiffre des unités non nul et on décrémente d'autant l'exposant <strong class="specialLB">n</strong>.  </li>
+
+  <div class="exemples">
+  <p class="exemple"> Le nombre 0,00123 × 10<sup>45</sup> devient 1,2345 × 10<sup>42</sup> en notation scientifique. </p>
+  </div><!-- exemple -->
+</ul>
+
+
+<!-- expert -->
+<h4> Conversion en base 2 d'un nombre décimal </h4>
+
+
+<div class="complement">
+<p> Pour <strong class="title">convertir</strong> en base <strong class="specialG">2</strong> un nombre décimal quelconque écrit de la forme <em class="bold"><strong class="specialMg">x</strong>,<strong class="specialMg">y</strong> × 10<sup><strong class="specialLB">n</strong></sup></em> où <strong class="specialMg">x</strong>, <strong class="specialMg">y</strong> et <strong class="specialLB">n</strong> sont trois chaînes numériques quelconques, il faut commencer par <strong class="defin">annuler l'exposant</strong> (c'est‑à‑dire appliquer le procédé inverse à celui exposé supra <a class="supra" href="Cc3-5_typesFlottants.html#complementNotationScientifique"></a>). </p>
+</div><!-- complement -->
+
+<ul>
+	<li> Si <em class="bold"><strong class="specialLB">n</strong> > 0</em>, on multiplie <em class="bold"><strong class="specialMg">x</strong>,<strong class="specialMg">y</strong></em> par 10 autant de fois que <strong class="specialLB">n</strong> et on décrémente d'autant <strong class="specialLB">n</strong> (qui devient nul). </li>
+
+  <div class="exemples">
+  <p class="exemple"> Le nombre 6,543 × 10<sup>2</sup> s'écrit 654,3 × 10<sup>0</sup> soit  simplement 654,3 puisque le facteur exponentiel 10<sup>0</sup> vaut 1. </p>
+  </div><!-- exemple -->
+
+	<li> Si <em class="bold"><strong class="specialLB">n</strong> < 0</em>, on divise <strong class="specialMg">x</strong>,<strong class="specialMg">y</strong> par 10 autant de fois que la valeur absolue de <strong class="specialLB">n</strong> et on incrémente d'autant <strong class="specialLB">n</strong> (qui devient nul). </li>
+
+  <div class="exemples">
+  <p class="exemple"> Le nombre 9,87 × 10<sup>−3</sup> devient 0,00987 × 10<sup>0</sup> soit simplement 0,00987 puisque le facteur exponentiel 10<sup>0</sup> vaut 1. </p>
+  </div><!-- exemple -->
+</ul>
+
+<div class="complement">
+<p> Une fois qu'un nombre décimal est formaté sans exposant, c'est‑à‑dire de la forme <em class="bold"><strong class="specialMg">x</strong>,<strong class="specialMg">y</strong></em>, sa <strong class="title">conversion</strong> en <strong>base</strong> <strong class="specialG">2</strong> s'obtient en procédant séparément pour sa partie entière <strong class="specialMg">x</strong> et sa partie décimale <em class="bold">0,<strong class="specialMg">y</strong></em>. </p>
+</div><!-- complement -->
+
+<p class="square"> La conversion en base 2 de la <strong class="title">partie entière</strong> <strong class="specialMg">x</strong> s'effectue comme avec n'importe quel entier par <strong class="defin">divisions euclidiennes</strong> successives par <strong class="specialG">2</strong> (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#algorithmeConversion" target="_BLANK"></a>). </p>
+
+<p> Les <strong class="specialLG">bits</strong> <strong>d<sub>k</sub></strong> obtenus constituent les coefficients d'une <strong>somme discrète pondérée</strong> par les <strong class="specialLB">poids</strong> de la forme <em class="bold">2<sup><var>k</var></sup></em> où <strong>k</strong> est le rang du bit. </p>
+	
+<p class="square"> La conversion en base 2 de la <strong class="title">partie décimale</strong> <em class="bold">0,<strong class="specialMg">y</strong></em> s'effectue via un algorithme « réciproque » de <strong class="defin">multiplications-soustractions</strong> successives sur des valeurs purement décimales notées <strong>F<sub>k</sub></strong> en commençant, pour <em class="bold"><var>k</var> = −1</em>, par <em class="bold"><var>F</var><sub>−1</sub> = 0,<strong class="specialMg">y</strong></em>. À chaque itération : </p>
+
+<div style="display: inline-block;">
+<img class="top-right" src="../img/mouleMultiplicationSoustraction.png" width="300px">
+<ul>
+	<li> on opère <em class="bold"><var>F<sub>k</sub></var> × 2</em> puis : </li>
+
+  <ul>
+    <li> si <em class="bold">2.<var>F<sub>k</sub></var> ⩾ 1</em>, alors <em class="bold"><var>F</var><sub><var>k</var>−1</sub> = 2.<var>F<sub>k</sub></var> − <span style="color: springgreen; text-shadow: 0.05em 0.05em black">1</span></em> et on obtient <em class="bold"><var>d<sub>k</sub></var> = <span style="color: springgreen; text-shadow: 0.05em 0.05em black">1</span></em> ; </li>
+
+    <li> sinon, <em class="bold"><var>F</var><sub><var>k</var>−1</sub> = 2.<var>F<sub>k</sub></var> − <span style="color: springgreen; text-shadow: 0.05em 0.05em black">0</span> = 2.<var>F<sub>k</sub></var></em> et on obtient <em class="bold"><var>d<sub>k</sub></var> = <span style="color: springgreen; text-shadow: 0.05em 0.05em black">0</span></em> ; </li>
+  </ul>
+		
+  <li> et ce, en principe, jusqu'à avoir <em class="bold"><var>F</var><sub><var>k</var></sub> = <span style="background: lightpink; padding-right: 0.2em; padding-left: 0.2em; border-radius: 5px;">0</span></em> (en principe, car l'algorithme n'a le plus souvent pas de fin – de même qu'une division euclidienne ne s'achève presque jamais si on la prolonge dans le domaine décimal). On doit donc y mettre un terme en acceptant une <strong>erreur d'encodage</strong> après un nombre d'itérations suffisant pour atteindre une précision acceptable. </li>
+</ul>
+</div><!-- display -->
+
+<p style="margin-top: 0.5em"> Les <strong class="specialLG">bits</strong> <strong>d<sub>k</sub></strong> obtenus : </p>
+
+<ul>
+	<li> constituent, comme pour un entier, les coefficients d'une <strong>somme discrète pondérée</strong> par les <strong class="specialLB">poids</strong> de la forme <em class="bold">2<sup><var>k</var></sup></em> où <strong>k</strong> est le rang du bit ; </li>
+
+   <li> mais, en attribuant aux bits des <strong class="specialV">rangs négatifs</strong> en commençant à <em class="bold">−1</em> pour le bit immédiatement à droite du séparateur décimal, les <strong class="specialLB">poids</strong> sont <strong>fractionnaires</strong>, ils valent respectivement <em class="bold">2<sup>−1</sup> = 0,5</em> puis  <em class="bold">2<sup>−2</sup> = 0,25</em> puis <em class="bold">2<sup>−3</sup> = 0,125</em>, etc. </li>
+</ul>
+
+<div class="exemples" style="display: inline-block;">
+<p class="exemple"> Convertissons le nombre décimal <em class="bold">14,8125</em> :  </p>
+
+<ul>
+	<li> on a vu au chapitre C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#algorithmeConversion" target="_BLANK"></a> comment procéder pour sa partie entière <em class="bold"><var>x</var> = 14</em> ; son écriture binaire est <em class="bold">1110</em><sub>(2)</sub> ; </li>
+
+	<li> pour la partie décimale <em class="bold">0,<var>y</var> = 0,8125</em> on procède comme ci‑dessous, avec : </li>
+
+  <ul>
+    <li> à droite la succession algorithmique des multiplications-soustractions posées en cascade ; </li>
+
+    <li> et à gauche la mise en équation de ces opérations, qui permet de reconstituer la valeur 0,8125 comme une somme pondérée de puissances négatives de 2. </li>
+  </ul>
+
+  <img class="top-left" src="../img/exConvBinaireDecimal.png">
+</ul>
+    
+<p> En définitive, le nombre décimal <em class="bold">14,8125</em> s'écrit en binaire <em class="bold">1110,1101</em><sub>(2)</sub>. </p>    
+</div><!-- exemple -->
+
+<!-- expert -->
+<h4> Formatage normalisé de l'écriture en base 2 d'un nombre décimal </h4>
+
+
+<div class="complement">
+<p> À partir de l'écriture en base 2 d'un nombre décimal, il ne reste plus qu'à lui donner un <strong class="title">format normalisé</strong> pour obtenir les éléments fondamentaux de son code binaire. Comme pour la notation scientifique, ce format requiert une <strong class="defin">partie entière</strong>  réduite à <strong>un seul bit</strong> et <strong>non nulle</strong>, c'est‑à‑dire une mantisse de la forme : <br>
+<span class="inline">
+  <em class="bold">1,<strong class="specialMg">f</strong></em><sub> (2)</sub> 
+</span> <br>
+où <strong class="specialMg">f</strong> est la <strong class="specialMg">partie fractionnaire</strong> (ou <strong class="specialMg">décimale</strong>) de la mantisse – encore appelée <strong class="specialMg">significande</strong>. </p>
+</div><!-- complement --> 
+
+<p> Pour cela, il suffit d'adjoindre à l'écriture du nombre un <strong class="defin">facteur exponentiel</strong> de la forme <em class="bold">2<sup><strong class="specialLB">p</strong></sup></em> et de procéder comme exposé supra <a class="supra" href="Cc3-5_typesFlottants.html#complementNotationScientifique"></a>. Autant de fois que nécessaire, on déplace le séparateur décimal d'un rang : </p>
+
+<ul>
+	<li> vers la droite en divisant le nombre par 2, donc en incrémentant de 1 l'exposant <strong class="specialLB">p</strong> pour compenser ; </li> 
+
+	<li> vers la gauche en multipliant le nombre par 2, donc en décrémentant de 1 l'exposant <strong class="specialLB">p</strong> pour compenser.</li>
+</ul>
+
+<div class="exemples">
+<p class="exemple"> En reprenant l'exemple du nombre décimal <em class="bold">14,8125 = 1110,1101</em><sub>(2)</sub>, ce dernier s'écrit en base 2 de façon normalisée :  <br>
+<span class="inline">
+  <em class="bold">1,1101101<sub><span style="font-weight: normal">(2)</span></sub> × 2<sup>3</sup></em>
+</span> <br>
+après déplacement de la virgule vers la gauche de 3 rangs. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> L'exposant <strong class="specialLB">p</strong>, qui peut être positif ou négatif, reste pour le moment exprimé en base 10. On va voir ci‑après qu'il n'est pas converti en binaire par la méthode du complément à 2, mais d'une manière différente (notion d'exposant décalé). </p>
+</div><!-- remarque -->
+</div><!-- expert -->
+
+
+
+<h3> Champs de bits des types flottants </h3>
+
+
+
+<div class="important"> 
+<p> Conformément à la norme <em class="sigle">IEEE 754‑1985</em>/<em class="sigle">IEC</em> 60559:1989 <a class="external" href="https://fr.wikipedia.org/wiki/IEEE_754" target="_BLANK">W</a>, tout <strong class="specialG">type flottant</strong> standard des langages <strong>C/C++</strong> est encodé dans un <strong class="title">format binaire</strong> composé de <strong>3 champs de bits</strong> : le <strong class="specialO">signe</strong> (un seul bit), l'<strong class="specialLB">exposant décalé</strong> et le <strong class="specialMg">significande</strong> </p>
+</div><!-- important -->
+
+<div class="complementExpert">	
+<p> Pour exploiter au mieux la taille d'implémentation qui leur est donnée, les types flottants ne diffèrent les uns des autres que par les <strong class="title">largeurs des champs</strong> : </p>
+
+<ul>
+  <li> de l'<strong class="specialLB">exposant décalé</strong> – largeur que l'on notera <strong>r</strong> ; </li>
+
+  <li> et du <strong class="specialMg">significande</strong> – largeur que l'on notera <strong>w</strong>. </li>
+</ul>
+</div><!-- complementExpert -->
+
+
+<h4 id="largeursChamps"> Largeurs des champs </h4>
+
+
+<div class="complement">
+<p> Sur la plupart architectures d'ordinateurs, on a les <strong class="title">largeurs de champs</strong> – et les <strong class="defin">caractéristiques</strong> qui en découlent – indiquées dans le tableau ci‑dessous. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+	<tr>
+		<th> Type <br> flottant </th> 
+		<th> Taille <br> (octets) </th>
+    <th> Exposant <br> décalé </th>
+    <th> Étendue d'exposant <br> <span style="font-weight: normal">(en base 10)</span> </th>
+		<th> Significande </th>
+		<th> Précision <br> relative </th>
+	</tr>
+	<tr>
+		<td> <code class="prettyprint lang-c">float</code> </td>
+		<td style="text-align: center"> 4 </td>
+		<td style="text-align: center"> 8 bits </td>
+		<td style="text-align: center"> ±38</td>
+		<td style="text-align: center"> 23 bits </td>
+		<td style="text-align: center"> 10<sup>−7</sup> </td>
+	</tr>
+	<tr>
+		<td> <code class="prettyprint lang-c">double</code> </td>
+		<td style="text-align: center"> 8 </td>
+		<td style="text-align: center"> 11 bits </td>
+		<td style="text-align: center"> ±308</td>
+		<td style="text-align: center"> 52 bits </td>
+		<td style="text-align: center"> 10<sup>−16</sup> </td>
+	</tr>
+	<tr>
+		<td> <code class="prettyprint lang-c">long double</code> </td>
+		<td style="text-align: center"> 12/16 </td>
+		<td style="text-align: center"> 15 bits </td>
+		<td style="text-align: center"> ±4932</td>
+		<td style="text-align: center"> 63 + 1 bits </td>
+		<td style="text-align: center"> 10<sup>−19</sup> </td>
+	</tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> La <strong class="title">répartition des bits</strong> des 3 champs sur les octets d'encodage obéit aux règles suivantes : </p>
+
+<ul> 
+  <li> le <strong>bit</strong> de <strong class="specialO">signe</strong> est placé au <strong>plus haut rang</strong> du format ; </li>
+
+  <li> au rang immédiatement inférieur du bit de signe se trouve le bit de poids fort de l'<strong class="specialLB">exposant décalé</strong> ; </li>
+
+  <li> le bit de poids faible du <strong class="specialMg">significande</strong> est placé au <strong>plus bas rang</strong> du format (0). </li>
+</ul>
+
+<p id="remarquesLongDouble"> De plus, conformément au format à <strong>précision étendue</strong> dit <em class="mark">x86</em> <a class="external" href="https://en.wikipedia.org/wiki/Extended_precision" target="_BLANK">W</a>, le type <code class="prettyprint lang-c">long double</code> présente <strong>deux particularités</strong> : </p>
+
+<ul>
+  <li> certains octets ne sont pas utilisés ; ils constituent ce qu'on appelle une <strong>marge</strong> dans le format (en anglais, <em class="english">padding</em>) ; </li>
+
+  <li> le <strong class="specialMg">significande</strong> comprend  à son plus haut rang un <strong>bit supplémentaire</strong> (bit 63) qui code la partie entière de la mantisse (<em class="english">integer part</em>), afin d'optimiser la vitesse d'exécution des algorithmes de calcul des opérations sur les valeurs de types flottants.  </li>
+</ul>
+</div><!-- expert -->
+
+<div class="exemples" style="display: block">
+<p class="exemple"> Dans le cas du <strong class="specialG">type</strong> <code class="prettyprint lang-c">float</code>, la <strong class="title">répartition des bits</strong> est illustrée par la figure ci‑dessous. </p> 
+  <img class="top-left" src="../img/floatFormat.png" width="100%">
+</div><!-- exemple -->
+
+
+
+<h3 id="encodageChamps"> Décodage des champs </h3>
+
+
+
+<p> Donné à titre d'<strong class="title">exemple</strong>, le décodage du format binaire du <strong class="specialG">type standard</strong> <code class="prettyprint lang-c">float</code> permet de bien comprendre le <strong>principe général d'encodage</strong> des types flottants <a class="external" href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format" target="_BLANK">W</a>. </p>
+
+
+<h4> Le bit de signe </h4>
+
+
+<div class="complement">
+<p> Le <strong class="specialO">bit de signe</strong>, ici noté usuellement <strong class="specialO">s</strong> code le <strong>signe de la valeur</strong> avec la <strong class="pros">même convention</strong> que pour les <strong>entiers</strong> : </p>
+<ul>
+  <li> <code style="color: orange">0</code> pour un <strong>nombre positif</strong>, </li>
+
+  <li> <code style="color: orange">1</code> pour un <strong>nombre négatif</strong>.</li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Toute valeur <strong>z</strong> encodée dans un type flottant peut donc s'exprimer par le produit : <br>
+<span class="inline"> 
+  <span class="framed" style="border : solid 2px orange; margin-top: 0em">
+  <strong>z</strong> = (−1)<sup><strong class="specialO">s</strong></sup> . |<var>z</var>|</span>    
+</span> </p>
+</div><!-- expert -->
+
+<p> En conséquence, toute valeur encodée possède une valeur de signe opposé, y compris la valeur <strong>zéro</strong>. Par la suite, il suffit d'étudier l'encodage des valeurs positives. </p>
+
+
+
+<h4> L'exposant décalé </h4>
+
+
+<div class="complement" style="display: inline-block;">
+
+<img class="top-right" src="../img/formatExposant.png" width="400px">  
+
+<p> Le champ de l'<strong class="specialLB">exposant décalé</strong> (en anglais, <em class="english">biaised exponent</em> <a class="external" href="https://en.wikipedia.org/wiki/Exponent_bias" target="_BLANK">W</a>) encode en <strong class="defin">binaire naturel</strong>, de droite à gauche sur <strong>r</strong> bits, un nombre <strong>entier positif</strong> ou nul, qu'on note ici <strong class="specialLB">q</strong>. </p>
+
+<p> Les valeurs de <strong class="specialLB">q</strong> vont donc de <em class="bold">0</em> à <em class="bold">2<sup><strong>r</strong></sup> − 1</em>.  </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans le type <code class="prettyprint lang-c">float</code>, on a <strong>r</strong> = <em class="bold">8 bits</em> donc l'exposant décalé  <strong class="specialLB">q</strong> va de <em class="bold">0</em> à 2<sup>8</sup> − 1 = <em class="bold">255</em>. </p>
+</div><!-- exemple -->
+
+<div class="complement">
+<p> La relation entre <strong class="specialLB">q</strong> et l'<strong class="specialLB">exposant normal</strong>, noté ici <strong class="specialLB">p</strong>, est : </br>
+<span class="inline">
+  <span class="framed" style="border : solid 2px lightblue;">
+    <strong class="specialLB">p</strong> = <strong class="specialLB">q</strong> − <strong>q</strong><sub><em class="bold">med</em></sub>
+  </span>  
+  avec   <strong>q</strong><sub><em class="bold">med</em></sub> = 2<sup><strong>r</strong> − 1</sup> − 1
+</span> <br>
+où <strong>q</strong><sub><em class="bold">med</em></sub> représente le <strong>milieu de l'étendue</strong> des valeurs de <strong class="specialLB">q</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans le type <code class="prettyprint lang-c">float</code> on a <strong>q</strong><sub><em class="bold">med</em></sub> = 2<sup>7</sup> − 1 = 127. </p>
+</div><!-- exemple -->
+
+
+
+<div class="expert">
+<p class="square"> Le décalage médian des valeurs d'exposant permet d'encoder les <strong>valeurs négatives</strong> de <strong class="specialLB">p</strong> sans recourir à un bit de signe dans le champ de l'exposant et de simplifier les algorithmes de calcul des opérations sur les valeurs décimales. Pour l'encodage d'une <strong>valeur décimale</strong> <strong class="specialG">normalisée</strong> notée <strong>z</strong> :  </p>
+
+<ul>
+  <li> si <strong class="specialLB">q</strong> < <strong>q</strong><sub><em class="bold">med</em></sub> alors <strong class="specialLB">p</strong> < <em class="bold">0</em> ; </li>
+
+  <li> si <strong class="specialLB">q</strong> = <strong>q</strong><sub><em class="bold">med</em></sub> alors <strong class="specialLB">p</strong> = <em class="bold">0</em> ; </li>
+
+  <li> si <strong class="specialLB">q</strong> > <strong>q</strong><sub><em class="bold">med</em></sub> alors <strong class="specialLB">p</strong> > <em class="bold">0</em> ; </li>
+</ul>
+
+<p> et dans tous les cas, on a
+  <span class="framed" style="border : solid 2px lightblue;">
+    |<strong>z</strong>| = <strong class="specialMg">m</strong> × <em class="bold">2</em><sup><strong class="specialLB">p</strong></sup></span>   
+où <strong class="specialMg">m</strong> est la <strong class="specialMg">mantisse</strong> de la valeur décimale encodée <strong>z</strong>. </p>
+
+
+<p class="square" id="valeursSpecialesExposant"> De plus, les <strong>valeurs extrêmes</strong> de <strong class="specialLB">q</strong> sont réservées :  </p>
+
+<ul>
+	<li> <code style="color: deepskyblue">00…00</code> pour les  <strong>valeurs</strong> dites <strong class="specialSG">dénormalisées</strong>, qui sont de très petites valeurs et qui comprennent les deux <strong>zéros</strong> <em class="bold">±0</em> – cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/valeursDenormalisees"></a> ;  </li>
+
+	<li> <code style="color: deepskyblue">11…11</code> pour les deux « <strong class="specialR">infinis</strong> » (<em class="bold">±∞</em>) et les  <strong>valeurs</strong> dites <strong class="specialM"><em class="sigle">NAN</em></strong> (<em class="english">not a number</em>) – cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/valeursSpeciales"></a>.  </li>
+</ul>
+
+<p> Les valeurs de <strong class="specialLB">q</strong> laissées pour l'encodage des <strong>valeurs</strong> <strong class="specialG">normalisées</strong> vont donc de <strong>q</strong><sub><em class="bold">min</em></sub> = 1 à <strong>q</strong><sub><em class="bold">max</em></sub> = 2<sup><strong>r</strong></sup> − 2. </p>
+
+<div class="exemples">
+<p class="exemple"> Dans le type <code class="prettyprint lang-c">float</code>, pour l'encodage des <strong>valeurs</strong> <strong class="specialG">normalisées</strong> :  </p>
+<ul>
+	<li> <strong>q</strong><sub><em class="bold">min</em></sub> = <em class="bold">1</em> (encodé <code style="color: deepskyblue">00000001</code>) correspond à l'exposant normal <strong>p</strong><sub><em class="bold">min</em></sub> = 1 − 127 = <em class="bold">−126</em> ; <br>
+
+	sachant que 2<sup>−126</sup> ≃ 1,2 × 10<sup>−38</sup>, on retrouve ici la valeur usuelle de la pseudo‑constante <code class="prettyprint lang-c">FLT_MIN</code> ; </li>
+
+	<li> <strong>q</strong><sub><em class="bold">max</em></sub> = <em class="bold">254</em> (encodé <code style="color: deepskyblue">11111110</code>) correspond à l'exposant normal <strong>p</strong><sub><em class="bold">max</em></sub> = 254 − 126 = <em class="bold">+126</em> ; <br>
+
+	sachant que 2<sup>+126</sup> ≃ 8,5 × 10<sup>+37</sup>, on retrouve ici la <strong>moitié</strong> de la valeur usuelle de la pseudo‑constante <code class="prettyprint lang-c">FLT_MAX</code> (<em>moitié</em> car il reste à multiplier <strong>p</strong><sub><em class="bold">max</em></sub> par la valeur maximale de la mantisse, qui tend vers 2, pour retrouver <code class="prettyprint lang-c">FLT_MAX</code>). </li>
+</ul>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h4 id="significande"> Le significande </h4>
+
+
+<div class="complement" style="display: inline-block;">
+
+<img class="top-right" src="../img/formatSignificande.png" width="400px">
+
+<p> Le champ du <strong class="specialMg">significande</strong> encode en <strong class="specialV">binaire décimal</strong>, de gauche à droite sur <strong>w</strong> bits, la <strong class="defin">partie fractionnaire</strong> (ou <strong class="defin">décimale</strong>) notée <strong class="specialMg">f</strong> de la <strong class="specialMg">mantisse</strong> de la valeur décimale encodée. </p>	
+
+<p> Ses bits, qu'on note ici <strong>f<sub>k</sub></strong> ont  des <strong class="specialV">rangs négatifs</strong> <strong>k</strong> décroissants de <em class="bold">−1</em> à <strong>−w</strong>. Ils sont associés à des poids <em class="bold">2<sup><var>k</var></sup></em> qui forment des <strong class="specialV">puissances fractionnaires</strong> de <strong class="specialG">2</strong>, à savoir 2<sup>−1</sup> = 1/2 puis 2<sup>−2</sup> = 1/4 puis 2<sup>−2</sup> = 1/8 etc.  </p>
+</ul>
+</div><!-- complement -->
+
+
+<p class="square"> Comme pour les entiers encodés en binaire naturel, la <strong>valeur décimale</strong> <strong class="specialMg">f</strong> (en <strong>base 10</strong>) du significande peut être calculée par la <strong class="specialMg">somme des valeurs des bits multipliés par leurs poids</strong> : <br>
+<span class="inline">
+  <span class="framed" style="border : solid 2px magenta;"><strong>f</strong> = <var>f</var><sub>−1</sub> × 2<sup>−1</sup> + <var>f</var><sub>−2</sub> × 2<sup>−2</sup> + … + <var>f</var><sub>−<var>w</var></sub> × 2<sup>−<var>w</var></sup></span>
+</span> <br>
+Elle va de <strong>f</strong><sub><em class="bold">min</em></sub> = <em class="bold">0</em> (encodée <code style="color: magenta">00…00</code>) à <strong>f</strong><sub><em class="bold">max</em></sub> = <em class="bold">0,999999…</em> (encodée <code style="color: magenta">1 … 1</code>) selon la précision octroyée par la largeur <strong>w</strong> du champ du significande. </p>
+
+<div class="exemples">
+<p class="exemple"> Dans le type <code class="prettyprint lang-c">float</code> (<strong>w</strong> = 23 bits), on a : <br>
+<span class="inline">
+  <strong>f</strong><sub><em class="bold">max</em></sub> ≃ 0,99999988
+</span> </p>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<p class="square"> Le <strong class="specialV">poids</strong> <em class="bold">2<sup><var>−w</var></sup></em> du <strong>dernier bit</strong> du significande détermine la <strong class="title">précision du type flottant</strong>. Il donne l'écart entre deux valeurs successives de <strong class="specialMg">f</strong>, et correspond donc à la <strong class="defin">pseudo‑constante</strong> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_EPSILON</code>. </p>
+
+<div class="exemples">
+<p class="exemple"> Pour le type <code class="prettyprint lang-c">float</code> (<strong>w</strong> = 23 bits), la <strong class="title">précision</strong> est donnée par la <strong class="defin">pseudo‑constante</strong> : <br>
+<span class="inline">
+  <code>FLT_EPSILON</code> = 2<sup>−23</sup> ≃ 1,2 × 10<sup>−7</sup>
+</span> </p>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3> Décodage des valeurs décimales </h3>
+
+
+
+<div class="expert">
+<h4> Détermination de la mantisse </h4>
+
+
+<p> À partir de la valeur <strong class="specialMg">f</strong> encodée dans le champ du <strong class="specialMg">significande</strong>, on obtient la valeur <strong class="specialMg">m</strong> de la <strong class="specialMg">mantisse</strong> d'un nombre décimal encodé dans un type flottant standard, sachant que cette dernière est toujours de la forme : </p>  
+<ul>
+	<li> <em class="bold">1,…</em><sub> (2)</sub> pour les <strong>valeurs</strong> <strong class="specialG">normalisées</strong> ; on a donc 
+  <span class="framed" style="border : solid 2px magenta;">
+    <strong class="specialMg">m</strong> = <em class="bold">1</em> + <strong class="specialMg">f</strong>
+  </span>  
+  </li>
+
+	<li> <em class="bold">0,…</em><sub> (2)</sub> pour les <strong>valeurs</strong> <strong class="specialSG">dénormalisées</strong> ; on a donc
+  <span class="framed" style="border : solid 2px magenta;">
+    <strong class="specialMg">m</strong> = <strong class="specialMg">f</strong>
+  </span>
+  </li>
+</ul>
+
+<p> Comme la distinction entre les valeurs normalisées et dénormalisées est encodée par l'exposant décalé (cf. supra <a class="supra" href="Cc3-5_typesFlottants.html#valeursSpecialesExposant"></a>), le bit unique de la partie entière de la mantisse n'a pas besoin d'être encodé pour le calcul de <strong class="specialMg">m</strong>. On dit que ce bit est « <strong>caché</strong> » <a class="external" href="https://en.wikipedia.org/wiki/Significand#Significands_and_the_hidden_bit" target="_BLANK">W</a> (sauf pour le type <code class="prettyprint lang-c">long double</code> – cf. supra <a class="supra" href="Cc3-5_typesFlottants.html#remarquesLongDouble"></a>). </p>
+
+</div><!-- expert -->
+
+
+<h4> Décodage des valeurs normalisées  </h4>
+
+
+<p> En synthétisant tous les éléments précédents, on obtient la <strong>valeur</strong> en base 10 d'un <strong class="specialG">nombre décimal normalisé</strong> <strong>z</strong> dans un type flottant standard par la formule : <br>
+<span class="inline">
+  <span class="framed"><strong>z</strong> = (−1)<sup><var>s</var></sup> × (1 + <var>f</var><sub>−1</sub> × 2<sup>−1</sup> + … + <var>f</var><sub><var>−w</var></sub> × 2<sup><var>−w</var></sup>) × 2<sup><var>p</var></sup></span>   avec   <var>p</var> = <var>q</var> − <var>q</var><sub>med</sub>
+</span> </p>
+
+<div class="exemples"> 
+<p class="exemple" style="display: block;">  Considérons le nombre décimal <strong>z</strong> encodé dans le type <code class="prettyprint lang-c">float</code> par les 4 octets de la figure ci‑dessous : </p>
+
+<img class="top-left" src="../img/exempleCodeFloat.png" width="100%">
+
+<p> On extrait les éléments : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+   <td class="calc" colspan="2"> •  bit de signe <span class="framed" style="border : solid 2px orange;"><strong class="specialO">s</strong> = <em class="bold" style="color: orange">0</em></span> </td>
+  </tr>
+  <tr>
+   <td class="calc" colspan="2" style="line-height: 200%""> •  exposant  <strong class="specialLB">q</strong> = 10000010<sub> (2)</sub> = 128 + 2 = 130   donc   <span class="framed" style="border : solid 2px deepskyblue;"><strong class="specialLB">p</strong> = 130 − 127 = <em class="bold" style="color: deepskyblue">3</em></span> </td>
+  </tr>
+  <tr> 
+   <td class="calc"  style="min-width: 6em; width: 6em"> •  significande </td>
+   <td class="calc">  <strong class="specialMg">f</strong>  =  0,1101101<sub> (2)</sub>  =  2<sup>−1</sup> + 2<sup>−2</sup> + 2<sup>−4</sup> + 2<sup>−5</sup> + 2<sup>−7</sup> </td>
+  </tr>
+  <tr>
+   <td class="calc"></td>
+   <td class="calc">  <strong class="specialMg">f</strong>  =  0,5 + 0,25 + 0,0625 + 0,03125 + 0,0078125</td>
+  </tr>
+  <tr>
+   <td class="calc"></td>
+   <td class="calc" style="line-height: 200%"><span class="framed" style="border : solid 2px magenta;"><strong class="specialMg">f</strong>  =  <em class="bold" style="color: magenta">0,8515625</em></span></td>
+ </tr>
+</table>
+</div><!-- overflow -->
+
+<p> puis on obtient  <strong>z</strong> = (−1)<sup><em class="bold" style="color: orange">0</em></sup> × (1 + <em class="bold" style="color: magenta">0,8515625</em>) × 2<sup><em class="bold" style="color: deepskyblue">3</em></sup> = <em class="bold">14,8125</em>. </p>
+
+</div><!-- exemple -->
+
+
+
+<div class="expert">
+<h4 id="valeursDenormalisees"> Décodage des valeurs dénormalisées </h4>
+
+
+<div class="complement">
+<p> Dans tout type flottant standard, les <strong class="specialSG">valeurs dénormalisées</strong> sont encodées sur les <strong>mêmes champs</strong> que les valeurs normalisées, mais avec une <strong>interprétation différente</strong> : </p>
+
+<ul>
+  <li> un <strong>exposant décalé</strong> <strong class="specialLB">q</strong> = <em class="bold">0</em> et un <strong class="specialT">exposant dénormalisé</strong> fixe <span class="framed" style="border : solid 2px turquoise;"><strong class="specialT">p<sub style="font-style: normal">den</sub></strong> = − <strong>q</strong><sub><em class="bold">med</em></sub> <em class="bold">+ 1</em></span> (et non pas −<var>q</var><sub>med</sub>) ; 
+  <div class="expert"> 
+  	autrement dit, <strong class="specialT">p<sub style="font-style: normal">den</sub></strong> = <strong>p</strong><sub><em class="bold">min</em></sub> (minimum de l'exposant normal), et ce afin d'assurer la continuité des domaines normalisés et dénormalisés ; 
+  </div><!-- expert -->
+  </li>
+
+  <li> une <strong class="specialMg">mantisse</strong> à <strong>partie entière nulle</strong>, c'est‑à‑dire telle que <span class="framed" style="border : solid 2px magenta"><strong class="specialMg">m</strong> = <strong class="specialMg">f</strong></span> (et non pas 1 + f). </li>
+</ul>
+
+<p> Si le <strong class="specialMg">significande</strong> est <strong>nul</strong> (<code style="color:magenta">00…00</code>), la valeur dénormalisée encodée vaut <em class="bold">±0</em> selon la valeur du bit de signe. </p>
+</div><!-- complement -->
+
+<div style="display: inline-block;">
+
+<img class="top-right" src="../img/underflowGap.png" width="500px"> 
+
+<p class="square"> En « sacrifiant » une valeur d'exposant (<var>p</var> = −<var>q</var><sub>med</sub>) mais en permettant à la mantisse de prendre des valeurs très petites (jusqu'à 2<sup>−<var>w</var></sup>), cette interprétation permet de <strong class="defin">combler partiellement l'intervalle</strong> entre la plus petite valeur normalisée <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_MIN</code> et les valeurs <em class="bold">±0</em>, dit <strong class="cons">underflow gap</strong> (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/debordements"></a>). </p>
+</div><!-- display -->
+
+<div class="exemples">
+<p class="exemple"> Dans le type <code class="prettyprint lang-c">float</code> où on a usuellement : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">FLT_MIN</code> = 2<sup>−126</sup> ≃ 1,17549435 × 10<sup>−38</sup>
+</span> <br>
+les <strong>valeurs</strong> <strong class="specialSG">dénormalisées</strong> encodables s'échelonnent :  </p>
+
+<ul>
+  <li> de ≃ 0,99999988 × 2<sup>−126</sup> ≃ 1,17549420 × 10<sup>−38</sup> (presque <code class="prettyprint lang-c">FLT_MIN</code>) lorsque le significande est codé <code style="color:magenta">11…11</code> ; </li>
+
+  <li> à <code class="prettyprint lang-c">FLT_TRUE_MIN</code> = 2<sup>−23</sup> × 2<sup>−126</sup> = 2<sup>−149</sup> ≃ 1,4 × 10<sup>−45</sup> lorsque le significande est codé <code style="color:magenta">00…01</code>. </li>
+</ul>
+</div><!-- exemple -->
+
+<p class="square"> Toutefois, la précision d'encodage des valeurs dénormalisées est moindre que celles des valeurs normalisées. L'<strong class="title">écart relatif</strong> entre deux valeurs successives n'est <strong class="warning">pas constant</strong>, il croit exponentiellement tandis que les valeurs diminuent, pour atteindre 100 % au voisinage de <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_TRUE_MIN</code>. La pseudo‑constante <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_EPSILON</code> n'est donc <strong class="warning">pas représentative</strong> des <strong>valeurs</strong> <strong class="specialSG">dénormalisées</strong>. </p>
+
+<div class="exemples">
+<p class="exemple"> Dans le type <code class="prettyprint lang-c">float</code>, la valeur immédiatement supérieure à <code class="prettyprint lang-c">FLT_TRUE_MIN</code> vaut environ 2,8 × 10<sup>−45</sup>, soit le double de <code class="prettyprint lang-c">FLT_TRUE_MIN</code>. </p>
+</div><!-- exemple -->
+
+
+<h4 id="valeursSpeciales"> Encodage de valeurs spéciales </h4>
+
+
+<div class="complement">
+<p> Les types flottants standards des langages <em class="mark">C/C++</em> réservent la valeur <code style="color: deepskyblue">11…11</code> du champ d'<strong class="specialLB">exposant décalé</strong> pour coder diverses <strong class="defin">valeurs spéciales</strong> : les « <strong class="specialR">infinis</strong> » et les <strong class="specialM"><em class="sigle">NAN</em> </strong>. </p>
+</div><!-- complement -->
+
+<p class="square"> Une <strong class="defin">valeur spéciale</strong> dite « <strong class="specialR">infinie</strong> » (symbole mathématique <em class="bold" style="color:orangered">∞</em>) est encodée par son champ du <strong class="specialMg">significande</strong> <strong>égal</strong> à <code style="color: magenta">00…00</code>. La valeur du <strong class="specialO">bit de signe</strong> <code style="color: orange">0</code> ou <code style="color: orange">1</code> permet de distinguer respectivement « <em class="bold" style="color: orange">+</em>∞ » et « <em class="bold" style="color: orange">−</em>∞ ». </p>
+
+
+
+<p class="square"> Une <strong class="defin">valeur spéciale</strong> dite « <strong class="specialM"><em class="sigle">NAN</em></strong> » (pour <em class="english">not a number</em> <a class="external" href="https://fr.wikipedia.org/wiki/NaN" target="_BLANK">W</a>) est encodée par son champ du <strong class="specialMg">significande</strong> <strong>différent</strong> de <code style="color: magenta">00…00</code> ; mais ce dernier n'est employé que pour distinguer <strong>deux sortes</strong> de <strong class="specialM"><em class="sigle">NAN</em></strong>. Avec la plupart des implémentations : </p>
+
+<ul>
+  <li> de <code style="color: magenta">00…01</code> à <code style="color: magenta">01…11</code>, il s'agit d'un <strong class="specialM"><em class="sigle">NAN</em></strong> dit <strong>avertisseur</strong> – abrégé <strong>s</strong><strong  class="specialM"><em class="sigle">NAN</em></strong> (« <strong >s</strong> » pour <em class="english">signaling</em>) ; </li> 
+
+  <li> de <code style="color: magenta">10…00</code> à <code style="color: magenta">11…11</code>, il s'agit d'un <strong class="specialM"><em class="sigle">NAN</em></strong> dit <strong>silencieux</strong> – abrégé <strong>q</strong><strong  class="specialM"><em class="sigle">NAN</em></strong> (« <strong>q</strong> » pour <em class="english">quiet</em>) ; </li> 
+</ul>
+
+<p> sachant qu'un <strong>s</strong><strong  class="specialM"><em class="sigle">NAN</em></strong> déclenche une <strong class="warning">condition d'exception</strong> lors de l'exécution du programme, contrairement à un <strong>q</strong><strong  class="specialM"><em class="sigle">NAN</em></strong>. </p>
+
+<div class="remarques">
+<p class="remarque"> Pour un <strong class="specialM"><em class="sigle">NAN</em></strong>, la valeur du <strong class="specialO">bit de signe</strong> <code style="color: orange">0</code> ou <code style="color: orange">1</code> n'a <strong>pas d'interprétation</strong>. </p>
+
+<p> De même, la valeur du champ du <strong class="specialMg">significande</strong> n'a pas d'interprétation hormis pour la distinction entre les deux sortes de <strong class="specialM"><em class="sigle">NAN</em></strong>, que le <strong>bit de plus haut rang</strong> suffit à assurer (<code style="color: magenta">0</code> pour un <strong>s</strong><strong  class="specialM"><em class="sigle">NAN</em></strong>, <code style="color: magenta">1</code> pour un <strong>q</strong><strong  class="specialM"><em class="sigle">NAN</em></strong>). </p>
+</div><!-- remarque -->
+
+
+<h4> Tableau récapitulatif pour le type <code class="prettyprint lang-c">float</code></h4>
+
+
+<p> Par soucis de simplicité, le <strong class="specialO">bit de signe</strong> n'est <strong>pas pris en compte</strong>. Les valeurs encodées sont donc indiquées au signe ± près. </p> 
+
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+	<tr>
+    <th style="width: 7em; min-width: 7em; max-width: 7em">
+      Catégorie <br> de valeurs
+    </th>
+
+		<th style="width: 5em; min-width: 5em; max-width: 5em"> exposant <br> décalé 	</th>
+
+		<th style="width: 5em; min-width: 5em; max-width: 5em"> facteur <br> exponentiel  </th>
+
+		<th style="width: 6em; min-width: 6em; max-width: 6em"> significande  </th>
+
+		<th style="width: 6em; min-width: 6em; max-width: 6em"> mantisse <br>
+      <strong class="specialMg">m</strong> </th>
+
+		<th style="width: 6em; min-width: 6em; max-width: 6em"> valeurs <br> encodées </th>
+	</tr>
+	<tr>
+    <td rowspan="2"> <strong class="specialSG">dénormalisées</strong> </td>
+		<td rowspan="2" style="text-align: right; padding-right: 1.5em;">
+      <code style="color: deepskyblue">00…00</code>  </td>
+		<td rowspan="2" style="text-align: center"> 2<sup>−126</sup> </td>
+    <td style="text-align: right; padding-right: 1.5em;"> <code style="color: magenta">00…00</code> </td>
+    <td style="text-align: center"> 0 </td>
+    <td style="text-align: center"> 0 </td>
+	</tr>
+  <tr>
+    <td style="text-align: right; padding-right: 1.5em;">de <code style="color: magenta">00…01</code> <br> à <code style="color: magenta">11…11</code> </td>
+    <td style="text-align: right; padding-right: 1.5em;"> ≃ 0,00000012 <br> à 0,99999988 </td>
+    <td style="text-align: right; padding-right: 1.5em;"> ≃ 1,4 × 10<sup>−45</sup> <br> à 1,1 × 10<sup>−38</sup> </td>
+  </tr>
+  <tr>
+    <td> <strong class="specialG">normalisées</strong> </td>
+    <td style="text-align: right; padding-right: 1.5em;">de <code style="color: deepskyblue">00…01</code> <br> à <code style="color: deepskyblue">11…10</code> </td>
+    <td style="text-align: right; padding-right: 1.5em;"> de 2<sup>−126</sup> <br> à 2<sup>+126</sup> </td>
+    <td style="text-align: right; padding-right: 1.5em;">de <code style="color: magenta">00…01</code> <br> à <code style="color: magenta">11…11</code> </td>
+    <td style="text-align: right; padding-right: 1.5em;"> ≃ 1,00000000 <br> à 1,99999988 </td>
+    <td style="text-align: right; padding-right: 1.5em;"> ≃ 1,1 × 10<sup>−38</sup> <br> à 3,4 × 10<sup>+38</sup> </td>
+  </tr>
+  <tr>
+    <td rowspan="3"> <strong class="defin">spéciales</strong> </td>
+    <td rowspan="3" style="text-align: right; padding-right: 1.5em;">
+      <code style="color: deepskyblue">00…00</code>  </td>
+    <td rowspan="3" style="text-align: center"> <em style="font-size: 80%">pas <br> d'interprétation</em> </td>
+    <td style="text-align: right; padding-right: 1.5em;"> <code style="color: magenta">00…00</code> </td>
+    <td rowspan="3" style="text-align: center"> <em style="font-size: 80%">pas <br> d'interprétation</em> </td>
+    <td style="text-align: center"> <strong class="specialR">∞</strong> </td>
+  </tr>
+  <tr>
+    <td style="text-align: right; padding-right: 1.5em;">de <code style="color: magenta">00…01</code> <br> à <code style="color: magenta">01…11</code> </td>
+    <td style="text-align: center"> <strong>s</strong><strong  class="specialM"><em class="sigle">NAN</em></strong> </td>
+  </tr>
+  <tr>
+    <td style="text-align: right; padding-right: 1.5em;">de <code style="color: magenta">10…00</code> <br> à <code style="color: magenta">11…11</code> </td>
+    <td style="text-align: center"> <strong>q</strong><strong  class="specialM"><em class="sigle">NAN</em></strong> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+</div><!-- expert L1500 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Opérations sur les données de types flottants </h2>
+
+
+<p> À l'exception des opérateurs booléens bits à bits et des opérateurs de décalages de bits, tous les <strong class="title">opérateurs</strong> des langages <em class="mark">C</em> et <em class="mark">C++</em> s'appliquent aux expressions à valeurs de types flottants. Toutefois, leur emploi requiert de la part du codeur une <strong class="warning">vigilance</strong> sur trois aspects : les <strong>débordements</strong>, les <strong>opérations non définies</strong> et les <strong>comparaisons</strong>. </p>
+
+<p> Par ailleurs, les <strong class="title">modules de mathématiques</strong> des bibliothèques standards des langages <em class="mark">C</em> et <em class="mark">C++</em> mettent à disposition du codeur non seulement des fonctions mathématiques usuelles, mais aussi des <strong>fonctions spécifiques</strong> pour manipuler les données de types flottants. Il importe d'en connaître l'existence et de savoir où trouver leurs particularités. </p>
+
+
+
+<h3 id="debordements"> Débordements </h3>
+
+
+
+<p> On a vu au chapitre C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#debordements" target="_BLANK"></a> que, durant l'exécution d'un programme codé en <em class="mark">C</em> ou <em class="mark">C++</em>, quand une expression à <strong class="defin">valeurs entières</strong> dépasse l'étendue de son type (<em class="english">integer overflow</em> – aussi bien par le haut que par le bas), le <strong class="title">débordement</strong> est traité par rebouclage en <strong>arithmétique cyclique</strong> et sans <strong class="pros">sans arrêt du processus exécution</strong>. </p>
+
+<div class="important">
+<p> Les <strong class="title">débordements</strong> d'une expression à valeurs de <strong class="title">type flottant</strong> sont également traités <strong class="pros">sans arrêt du processus d'exécution</strong>, mais par <strong class="defin">éléments absorbants</strong> et en distinguant <strong>deux cas</strong>, selon que le débordement opère <strong>par le bas</strong> (<em class="english">floating point underflow</em>) ou <strong>par le haut</strong> (<em class="english">floating point overflow</em>). </p>
+</div><!-- important -->
+
+<div class="complement" style="display: block">
+<p> En raisonnant en valeurs absolues : </p>
+
+<img class="top-left" src="../img/floatOverflow.png" width="100%">
+
+<ul>
+  <li> tout débordement <strong class="title">par le bas</strong>, c'est‑à‑dire toute évaluation <strong class="cons">inférieure à</strong> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_TRUE_MIN</code> (ou à <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_MIN</code> si les valeurs dénormalisées ne sont pas implémentées) fait prendre à l'expression la <strong class="cons">valeur</strong> <code class="prettyprint lang-c">0.0</code> ;    </li>
+ 
+  <li> tout débordement <strong class="title">par le haut</strong>, c'est‑à‑dire toute évaluation supérieure à <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_MAX</code> fait prendre à l'expression la valeur <strong class="specialR">infini</strong> du même signe que la limite dépassée. </li>  
+  </ul>
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Propriétés des valeurs ±<strong class="specialR">∞</strong> </h4>
+
+
+<p> Les <strong>valeurs</strong> ±<strong class="specialR">∞</strong> obéissent à des <strong class="title">règles de calcul spécifiques</strong>. Ces règles sont consignées dans le tableau ci‑dessous, où <strong>a</strong> désigne une expression de type flottant prenant une <strong>valeur numérique quelconque</strong> <strong class="specialG">normalisée</strong> ou <strong class="specialSG">dénormalisée</strong>, mais <em>pas infinie</em> ou  <em>non définie</em>. On raisonne en valeurs absolues (avec des opérandes signés, le signe du résultat est en général conforme aux règles usuelles de calcul). </p>
+
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr> 
+    <th colspan="2"> opérations algébriques  </th> 
+    <th colspan="2"> comparaisons </th>
+  </tr>
+
+  <tr>
+    <td style="text-align: left"> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> + <span class="nocode"><strong>a</strong></span></code> → <strong class="specialR">∞</strong> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> + <span class="nocode"><strong class="specialR">∞</strong></span></code> → <strong class="specialR">∞</strong> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> > <span class="nocode"><strong>a</strong></span></span></code> → <code>1</code> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> > <span class="nocode"><strong class="specialR">∞</strong></span></code> → <code>0</code> </td>
+  </tr>
+
+  <tr>
+    <td style="text-align: left"> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> - <span class="nocode"><strong>a</strong></span></code> → <strong class="specialR">∞</strong> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> - <span class="nocode"><strong class="specialR">∞</strong></span></code> → <strong class="specialM"><em class="sigle">NAN</em></strong> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> < <span class="nocode"><strong>a</strong></span></span></code> → <code>0</code> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> < <span class="nocode"><strong class="specialR">∞</strong></span></code> → <code>0</code> </td>
+  </tr>
+
+  <tr>
+    <td style="text-align: left"> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> * <span class="nocode"><strong>a</strong></span></code> → <strong class="specialR">∞</strong> <br>
+
+    <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> * 0</code> → <strong class="specialM"><em class="sigle">NAN</em></strong> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> * <span class="nocode"><strong class="specialR">∞</strong></span></code> → <strong class="specialR">∞</strong> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> == <span class="nocode"><strong>a</strong></span></span></code> → <code>0</code> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> == <span class="nocode"><strong class="specialR">∞</strong></span></code> → <code>1</code> </td>
+  </tr>
+
+  <tr>
+    <td style="text-align: left"> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> / <span class="nocode"><strong>a</strong></span></code> → <strong class="specialR">∞</strong> <br>
+    
+    <code class="prettyprint lang-c"><strong>a</strong></span> / <span class="nocode"><strong class="specialR">∞</strong></span></code> → <code>0.0</code> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> / <span class="nocode"><strong class="specialR">∞</strong></span></code> → <strong class="specialM"><em class="sigle">NAN</em></strong> <br>
+    
+    <code class="prettyprint lang-c">0 / <span class="nocode"><strong class="specialR">∞</strong></span></code> → <strong class="specialM"><em class="sigle">NAN</em></strong> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> != <span class="nocode"><strong>a</strong></span></span></code> → <code>1</code> </td>
+
+    <td> <code class="prettyprint lang-c"><span class="nocode"><strong class="specialR">∞</strong></span> != <span class="nocode"><strong class="specialR">∞</strong></span></code> → <code>0</code> </td>
+  </tr>      
+</table>
+</div><!-- overflow -->
+</div><!-- expert --> 
+
+
+
+<h3> Gestion des opérations non définies </h3>
+
+
+<div class="important"> 
+<p> Contrairement à une expression à valeurs entières (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#divisionPar0" target="_BLANK"></a>), une <strong>expression</strong> à valeurs de <strong class="defin">type flottant</strong> dont l'évaluation durant l'exécution d'un programme retourne une <strong class="title">valeur non définie</strong> – en l'occurrence, un <strong class="specialM"><em class="sigle">NAN</em></strong> (<strong>not a number</strong> <a class="external" href="https://fr.wikipedia.org/wiki/NaN" target="_BLANK"></a>) – ne provoque <strong class="cons">pas d'arrêt de l'exécution</strong>. </p>  
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Comme les valeurs <strong>valeurs</strong> ±<strong class="specialR">∞</strong>, les <strong class="specialM"><em class="sigle">NAN</em></strong> obéissent à des <strong class="title">règles de calcul spécifiques</strong>. Elles sont assez simples : </p>
+
+<ul>
+  <li> un <strong class="specialM"><em class="sigle">NAN</em></strong> se comporte comme un <strong class="defin">élément absorbant</strong> pour <strong class="warning">tous</strong> <strong>les opérateurs algébriques</strong> ; autrement dit, quelle que soit la valeur d'une expression <strong>a</strong> de type flottant (même <strong class="specialR">∞</strong> ou <strong class="specialM"><em class="sigle">NAN</em></strong> elle-même), on a : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM"><em class="sigle">NAN</em></strong></span> + <span class="nocode"><strong>a</strong></span></code> → <strong class="specialM"><em class="sigle">NAN</em></strong>    
+
+    <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM"><em class="sigle">NAN</em></strong></span> + <span class="nocode"><strong>a</strong></span></code> → <strong class="specialM"><em class="sigle">NAN</em></strong>    
+
+    <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM"><em class="sigle">NAN</em></strong></span> * <span class="nocode"><strong>a</strong></span></code> → <strong class="specialM"><em class="sigle">NAN</em></strong>    etc.
+  </span> </li>
+
+  <li> <strong>toute comparaison</strong> avec <strong class="specialM"><em class="sigle">NAN</em></strong> rend la valeur <code>0</code>, c'est‑à‑dire <strong>faux</strong>, même une expression de la forme <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM"><em class="sigle">NAN</em></strong></span> == <span class="nocode"><strong class="specialM"><em class="sigle">NAN</em></strong></span></code> sauf, bien entendu, une expression de la forme <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM"><em class="sigle">NAN</em></strong></span> != <span class="nocode"><strong class="specialM"><em class="sigle">NAN</em></strong></span></code> qui rend toujours la valeur <code>1</code>. </li>
+</ul>
+</div><!-- complementExpert -->
+
+
+<p> Quant à la propagation des <strong class="specialM"><em class="sigle">NAN</em></strong> selon leurs sortes <strong>s</strong><strong class="specialM"><em class="sigle">NAN</em></strong> et <strong>q</strong><strong class="specialM"><em class="sigle">NAN</em></strong>, elle est assez complexe et ne sera pas abordée ici. Pour en savoir plus, on pourra consulter cette référence <a class="external" href="https://www.agner.org/optimize/nan_propagation.pdf" target="_BLANK"></a>. </p>
+
+
+<h3 id="comparaisonFlottants"> Opérations de comparaison </h3>
+
+
+<div class="important">
+<p> Contrairement à une expression à valeurs entières, une <strong>expression</strong> à valeurs de <strong class="defin">type flottant</strong> <strong class="warning">ne doit pas</strong> être employée comme <strong class="title">opérande</strong> des <strong>opérateurs</strong> <code class="prettyprint lang-c">==</code> et <code class="prettyprint lang-c">!=</code>, même si syntaxiquement, rien n'interdit de coder de tels tests. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En effet, les <strong>erreurs d'encodage</strong> dans les types flottants sont très fréquentes (cf. supra <a class="supra" href="Cc3-5_typesFlottants.html#principeFlottants"></a>) et <strong class="warning">biaisent</strong> l'évaluation des expressions de test d'égalité : même quand les deux valeurs comparées devraient être égales, il suffit que leurs significandes respectifs différent sur le bit de poids faible pour que le test d'égalité prenne la valeur booléenne <code class="prettyprint lang-c">0</code>, c'est‑à‑dire <strong>faux</strong>. </p>
+
+<p> De même, les tests de différence sont très souvent évalués <code class="prettyprint lang-c">1</code>, c'est‑à‑dire <strong>vrai</strong>.  </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> L'<strong class="title">expression</strong> <code class="prettyprint lang-c">(0.1 + 0.2) == 0.3</code> (encodée par défaut dans le type <code class="prettyprint lang-c">double</code>) prend la valeur booléenne <code>0</code> (<strong>faux</strong>), car : </p>
+<ul>
+  <li> la constante littérale <code class="prettyprint lang-c">0.1</code> est encodée comme 0,1000000000000000055… </li>
+
+  <li> la constante littérale <code class="prettyprint lang-c">0.2</code> est encodée comme 0,2000000000000000111… </li>
+
+  <li> la constante littérale <code class="prettyprint lang-c">0.3</code> est encodée comme 0,2999999999999999889… avec un significande valant <code>0x<span  style="color: magenta">3333333333333</span></code> ;  </li>
+
+
+  <li> mais l'expression <code class="prettyprint lang-c">0.1 + 0.2</code> prend la valeur 0,3000000000000000444… avec un significande valant <code>0x<span style="color: magenta">3333333333334</span></code> ! </li>
+</ul>
+
+<p> Entre les expressions <code class="prettyprint lang-c">0.1 + 0.2</code> et <code class="prettyprint lang-c">0.3</code>, la seule différence d'encodage du <strong>bit de poids faible</strong> du <strong class="specialMg">significande</strong> suffit pour <strong class="warning">invalider</strong> le <strong class="title">test d'égalité</strong>, alors qu'elle n'induit qu'un <strong>écart relatif infime</strong> entre leurs valeurs.  </p>
+</div><!-- exemple -->
+
+<div class="expert">
+<h4> Méthode de codage des tests d'égalité des expressions décimales </h4>
+
+
+<div class="complement">
+<p> Pour coder un <strong class="title">test d'égalité</strong> entre deux <strong>expressions</strong> <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong>b</strong></span></code> de <strong class="title">types flottants</strong>, il est donc <strong class="warning">vivement recommandé</strong> de coder un test de <strong class="defin">différence relative minime</strong> de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">fabs((<span class="nocode"><strong>a</strong></span> - <span class="nocode"><strong>b</strong></span>) / a) <= <span class="nocode"><strong>k</strong></span> * <span class="nocode"><strong>type</strong></span>_EPSILON </code>
+</span> <br>
+où : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">fabs</code> est la fonction <strong>valeur absolue</strong> sur les valeurs de types flottants ; </li>
+
+  <li> <code class="prettyprint lang-c"><span class="nocode"><strong>type</strong></span>_EPSILON</code> est la pseudo‑constante de <strong class="defin">résolution</strong> (cf. supra <a class="supra" href="Cc3-5_typesFlottants.html#caracteristiques"></a>) du <strong>type le moins précis</strong> de ceux des deux expressions <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong>b</strong></span></code> ; </li>
+
+  <li> <code class="prettyprint lang-c"><span class="nocode"><strong>k</strong></span></code> est un <strong class="defin">coefficient de précision</strong>, à choisir d'autant plus grand que l'égalité testée est approximative – la valeur <em class="bold">10</em> étant a priori recommandée. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Cette méthode n'est valable que pour tester l'égalité de <strong>valeurs</strong> <strong class="specialG">normalisées</strong> et <strong class="specialSG">non nulles</strong>. </p>
+
+<p> Pour tester une égalité au voisinage de <code class="prettyprint lang-c">0.0</code> (donc avec des <strong>valeurs</strong> <strong class="specialSG">dénormalisées</strong>), il est recommandé de coder une expression de <strong class="defin">différence absolue</strong> et avoir conscience du risque d'<strong>underflow</strong> (cf. supra <a class="supra" href="Cc3-5_typesFlottants.html#debordements"></a>). </p>
+</div><!-- remarque -->
+
+
+<div class="exemples">
+<p class="exemple"> À titre pédagogique, le programme en <em class="mark">C</em> ci‑dessous compare <strong>deux méthodes</strong> – égalité directe (non recommandée) et différence relative minime (recommandée) – pour tester l'égalité des valeurs respectives de deux variables <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> de type <code class="prettyprint lang-c">float</code>, <strong>supposées égales</strong> mais en fait calculées de deux manières distinctes, avec des erreurs d'encodages différentes. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+#include &lt;float.h&gt;
+
+int main(void) {
+    float a = 0.0;
+    printf("      a     |      b     | a == b | |(a - b)/a| <= 10 * ESP\n");
+    for (int i = 1; i < 10; i++) {
+      a += 0.1;
+      float b = i / 10.0;
+      printf(" %.8f | %.8f | %3d    | %13d  \n", a, b, a == b, fabs((a - b)/a) <= 10 * FLT_EPSILON);
+    }
+    return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On obtient sur le moniteur l'affichage : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+      a     |      b     | a == b | |(a - b)/a| <= 10 * ESP
+ 0.10000000 | 0.10000000 |   1    |             1  
+ 0.20000000 | 0.20000000 |   1    |             1  
+ 0.30000001 | 0.30000001 |   1    |             1  
+ 0.40000001 | 0.40000001 |   1    |             1  
+ 0.50000000 | 0.50000000 |   1    |             1  
+ 0.60000002 | 0.60000002 |   1    |             1  
+ 0.70000005 | 0.69999999 |   0    |             1  
+ 0.80000007 | 0.80000001 |   0    |             1  
+ 0.90000010 | 0.89999998 |   0    |             1  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où l'on observe que : </p>
+
+<ul>
+  <li> le test d'<strong class="title">égalité</strong> direct n'est <strong class="warning">pas toujours</strong> évalué <strong>vrai</strong> (ce qui est logique car les valeurs ne sont pas identiques) ; </li>
+
+  <li> alors que le test de <strong class="title">différence relative minime</strong> est <strong class="pros">fiable</strong>, la différence entre les deux valeurs ne s'exprimant qu'au 7<sup>e</sup> chiffre significatif. </li>
+</ul>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+
+<h3> Fonctions sur les valeurs de types flottants</h3>
+
+
+<h4> Fonctions mathématiques </h4>
+
+
+<p> On a vu au chapitre C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a> que les bibliothèques standards des langages <strong>C</strong> et <strong>C++</strong> mettent à disposition du codeur de nombreuses <strong class="title">fonctions mathématiques</strong> qui opèrent sur des valeurs de <strong class="defin">types flottants</strong>, notamment dans le fichier d'en‑tête <code class="filename">math.h</code> <a class="external" href="https://en.cppreference.com/w/c/numeric/math" target="_BLANK">C</a> (<code class="prettyprint lang-c">cmath</code> pour le <strong>C++</strong>). </p>
+
+<div class="complement">
+<p> Toutefois, quelques <strong class="defin">précautions</strong> s'imposent au regard du <strong class="title">typage des arguments</strong> que ces fonctions prennent, même si la plupart sont en fait définies par des <strong>macro-commandes génériques</strong> qui s'adaptent aux différents types flottants standards du langage. À titre d'exemples, on peut citer : </p>
+
+<ul>
+  <li> la fonction <strong>valeur absolue</strong>, qui a pour identificateur générique <code class="prettyprint lang-c">fabs</code> <a class="external" href="https://en.cppreference.com/w/c/numeric/math/fabs" target="_BLANK">C</a> (et non pas <code>abs</code>, qui ne prend que des arguments de type <code class="prettyprint lang-c">int</code>) ;  </li>
+
+  <li> la fonction <strong>puissance</strong>, qui a pour identificateur générique <code class="prettyprint lang-c">pow</code> <a class="external" href="https://en.cppreference.com/w/c/numeric/math/pow" target="_BLANK">C</a> et qui nécessite l'ajout de la directive <code class="prettyprint lang-c">#include &lt;tgmath.h&gt;</code> pour pouvoir être opérationnelle sur des données de type <code class="prettyprint lang-c">long double</code>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<p> Il est donc <strong class="warning">vivement recommandé</strong> de <strong>consulter les pages</strong> que des sites comme <em class="mark">cppreference</em> consacrent à ces fonctions avant de les employer, car il est difficile pour un codeur débutant de savoir (ou même, quand on a un peu d'expérience, de se souvenir) de toutes leurs particularités. </p>
+
+
+<h4> Fonctions de test et de manipulation </h4>
+
+
+<div class="complement">
+<p> En plus des fonctions mathématiques usuelles, le fichier <code class="filename">math.h</code> donne accès à nombreuses <strong class="title">fonctions</strong> qui permettent de <strong class="title">manipuler</strong> ou de <strong class="title">tester</strong> <strong>différents aspects</strong> d'une valeur de <strong class="defin">type flottant</strong>. À titre d'exemples, on peut citer : </p>
+
+<ul>
+  <li> la fonction <code class="prettyprint lang-c">isfinite</code> <a class="external" href="https://en.cppreference.com/w/c/numeric/math/isfinite" target="_BLANK">C</a> qui retourne <code>1</code> si la valeur passée en argument est <strong>finie</strong> (c'est‑à‑dire ni ∞, ni un <em class="sigle">NAN</em>), sinon <code>0</code> ; </li>
+
+  <li> la fonction <code class="prettyprint lang-c">isnormal</code> <a class="external" href="https://en.cppreference.com/w/c/numeric/math/isfinite" target="_BLANK">C</a> qui retourne <code>1</code> si la valeur passée en argument est <strong class="specialG">normalisée</strong>, sinon <code>0</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<p> Encore une fois, il est opportun de <strong>consulter</strong> un site comme <em class="mark">cppreference</em> <a class="external" href="https://en.cppreference.com/w/" target="_BLANK">C</a> lorsque l'on souhaite coder une manipulation particulière sur des données décimales, car une fonction idoine peut déjà exister et il serait dommage de ne pas en profiter, plutôt que perdre (beaucoup) de temps à la réinventer, et souvent dans une version moins fiable et moins portable… </p>
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

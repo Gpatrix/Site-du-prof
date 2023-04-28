@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="IX"
+  data-pageState="OK"
+  data-pageheadtitle="Caractères larges"
+  data-pagefulltitle="Les types de caractères larges"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<!-- relecture déc. 2022 sauf partie 3 (mais OK) -->
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/emoticones.png" width="500px" style="padding-top: 0.8em;">
+<p class="square"> On a vu au chapitre C3‑VIII <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/Cc3-8_typesCaracteresEtendus.html" target="_BLANK"></a> que les <strong class="title">extensions</strong> du <strong class="specialLB">jeu <em class="sigle">ASCII</em> restreint</strong> via des pages de code est <strong class="cons">malcommode</strong>. En effet, pour prendre en charge l'ensemble des caractères utilisés par les <strong>langues asiatiques</strong> ou même certains <strong>textes multilingues</strong> (par exemple, avec la combinaison français‑russe), ou encore un grand nombre de <strong>symboles graphiques</strong> (émoticônes), on serait contraint de coder fréquemment des instructions de changement de page de code. </p>
+</div><!-- display -->
+
+<div style="display: inline-block"> 
+  <img class="top-right" src="../img/logoUnicode.png" width="150px" style="padding-top: 0.2em;">
+<p> En 1991, à l'initiative d'une association à but non lucratif appelée <strong class="defin">Consortium Unicode</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Consortium_Unicode" target="_BLANK">W</a>, le <strong class="title">standard Unicode</strong> a été crée pour constituer le <strong class="specialLB">jeu universel des caractères</strong> dit <strong class="specialLB"><em class="sigle">UCS </em></strong> (<em class="english">universal coded character set</em>). Soutenu par les grandes entreprises du secteur (<em class="mark">Apple</em>, <em class="mark">Xerox</em>, <em class="mark">Microsoft</em>, <em class="mark">IBM</em>…), ce standard a fait l'objet d'une <strong>norme internationale</strong> <em class="bold"><em class="sigle">ISO/IEC 10646</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/ISO/CEI_10646" target="_BLANK">W</a> qui a introduit <strong class="specialLB">plusieurs formats d'encodage</strong> nommés <strong class="specialLB"><em class="sigle">UTF</em></strong> (<em class="english">Unicode transformation format</em>), chacun étant bien adapté à divers contextes informatiques. En particulier, le format <em class="bold"><em class="sigle">UTF‑8</em></em> s'est depuis largement imposé, notamment pour le codage des caractères des <strong>pages web</strong> et pour les entrées‑sorties dans les les système d'exploitation <strong>Linux</strong> ainsi que dans de <strong>nombreux logiciels</strong>.  </p>
+</div><!-- expert -->
+
+<p class="square"> Bien sûr, des langages de programmation généralistes comme <strong class="title">C</strong> et <strong class="title">C++</strong> ont évolué pour permettre au codeur de manipuler <strong class="defin">toutes les valeurs de caractères</strong> <strong class="title">Unicode</strong>. Mais en contre‑partie, les techniques de programmation sont <strong class="warning">plus complexes</strong> que pour les caractères <strong><em class="sigle">ASCII</em></strong>, et elles dépendent du <strong class="specialLB">format d'encodage</strong> adopté : </p>
+
+<ul>
+	<li> si le format est à <strong class="specialLB">taille fixe</strong> comme <strong><em class="sigle">UTF‑32</em></strong>, les valeurs de caractères peuvent être manipulées comme des données de <strong>types</strong> <strong class="specialG">caractères larges</strong> ;  </li>
+
+	<li> mais si le format est à <strong class="specialLB">taille variable</strong> comme <strong><em class="sigle">UTF‑8</em></strong> ou <strong><em class="sigle">UTF‑16</em></strong>, les valeurs de caractères ne peuvent être manipulées qu'au sein de <strong class="specialO">chaînes de caractères</strong> (simples ou larges), via des algorithmes d'<strong class="specialG">encodage multibyte</strong>, qui seront abordés seulement au chapitre C5‑VI <a class="next" href="../C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html" target="_BLANK"></a>. </li>
+</ul>
+
+<p class="square"> Ce cours, qui ne constitue qu'une <strong>introduction</strong> aux <strong class="defin">caractères larges</strong>, se donne les <strong class="title">objectifs</strong> suivants : </p> 
+
+<ul>
+	<li> introduire préalablement le <strong class="specialLB">standard Unicode</strong> – son <strong>catalogue</strong> et son <strong>espace de codage</strong> ; </li>
+
+	<li> présenter les trois <strong class="specialLB">formats d'encodage</strong>  <em class="bold"><em class="sigle">UTF‑32</em></em>, <em class="bold"><em class="sigle">UTF‑16</em></em> et <em class="bold"><em class="sigle">UTF‑8</em></em>, en détaillant leurs principes, avantages et inconvénients ; </li>
+
+	<li> et enfin d'aborder les <strong class="specialG">types</strong> de <strong class="specialLB">caractères larges</strong>, en exposant essentiellement : </li>
+  
+  <ul>
+  	<li> la <strong class="defin">syntaxe de codage</strong> des <strong>valeurs de caractères</strong> ; </li>
+
+  	<li> les <strong class="defin">opérations</strong> que l'on peut effectuer sur ces <strong>valeurs</strong>, sachant qu'elles sont très similaires à celles sur les valeur de caractères simples (cf. chap. C3‑VIII <a class="previous" href="../C3-numeration/Cc3-8_typesCaracteres.html#manipCaracteres" target="_BLANK"></a>). </li>
+  </ul>
+</ul>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le standard <em class="mark">Unicode</em> </h2>
+
+
+
+<p> Le <strong class="title">standard Unicode</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Unicode" target="_BLANK">W</a> comporte <strong class="specialLB">3 aspects</strong> : </p>
+
+<ul>
+  <li> le <strong>jeu universel des caractères</strong> (<strong><em class="sigle">UCS</em></strong>), </li>
+
+  <li> l'<strong>espace de codage</strong> – ou de <strong>numérotation</strong> – des caractères, </li>
+
+  <li> les différents <strong>formats d'encodage</strong> en mémoire des caractères (<strong><em class="sigle">UTF‑32</em></strong>, <strong><em class="sigle">UTF‑16</em></strong> et <strong><em class="sigle">UTF‑8</em></strong>). </li>
+</ul>
+
+<p> Les formats d'encodage étant très techniques, ils seront présentés dans la section suivante qui leur est dédiée. </p> 
+
+
+
+<h3 id="UCS"> Le jeu universel des caractère </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">jeu universel des caractères</strong> – ou <strong><em class="sigle">UCS</em></strong> pour <strong>universal coded character set</strong> <a class="external" href="https://en.wikipedia.org/wiki/Universal_Coded_Character_Set" target="_BLANK">W</a>, abrégé « abusivement » par le nom du standard lui‑même <strong class="title">Unicode</strong> – est un <strong class="defin">catalogue informatique</strong> qui répertorie déjà <strong class="pros">plus de 144 milles caractères</strong> (<em class="mark">Unicode</em> version 14.0.0 – 2021 <a class="external" href="http://www.unicode.org/versions/Unicode14.0.0/" target="_BLANK"></a>). </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong class="title">universalité</strong> n'est pas un vain mot. L'<strong><em class="sigle">UCS</em></strong> a pour vocation de cataloguer : </p>
+
+<ul>
+  <li> <strong class="pros">tous</strong> les <strong class="defin">caractères « lettres »</strong> au sens large (c'est‑à‑dire, aussi les idéogrammes) permettant d'écrire <strong class="pros">toutes les langues</strong> du monde, qu'elles soient <strong>contemporaines</strong> ou <strong>anciennes</strong> ;  </li>
+
+  <li> <strong class="pros">tous</strong> les <strong class="defin">symboles</strong> <strong>mathématiques</strong>, <strong>graphiques</strong>, <strong>musicaux</strong>, <strong>émoticônes</strong>, etc. qui sont reconnus par la norme <em class="mark">Unicode</em> (il y a chaque année de nouvelles entrées) ; </li>
+
+  <li> <strong class="pros">tous</strong> les <strong class="defin">caractères de contrôle</strong> non pourvus de glyphe mais employés par les systèmes numériques (saut de tabulation, de ligne, etc.). </li>
+</ul>
+</div><!-- complement -->
+
+
+<p> Pour <strong class="title">consulter l'<em class="sigle">UCS</em></strong> et y rechercher un caractère particulier, que ce soit pour une <strong class="defin">opération de « copier/coller »</strong> ou pour obtenir ses <strong>caractéristiques</strong> (point de code, codes <em class="sigle">UTF</em>, etc.), plusieurs moyens existent : </p>  
+<ul>
+  <li> Il existe des <strong class="specialLB">pages au format <code>pdf</code></strong>, classifiées par <strong>familles de langues</strong> ou d'<strong>alphabets</strong>, au lien suivant <a class="external" href="https://www.unicode.org/charts/" target="_BLANK"></a>. </li>
+
+  <li> Il existe également des <strong class="specialLB">pages web dynamiques</strong> comme par exemple celle‑ci qui constitue un véritable <strong class="pros">catalogue en ligne</strong>,  <a class="external" href="https://unicode-table.com/fr/" target="_BLANK"></a>. </li>
+
+  <li> On peut aussi recourir à la <strong class="specialLB">table des caractères</strong> du <strong>système d'exploitation</strong> d'un poste de travail. Cet utilitaire permet d'avoir une bonne vue d'ensemble des différents blocs de classification et possède des fonctions de recherche (cf. la capture d'écran de celle de <em class="mark">Linux Mint</em> ci‑dessous).  </li>
+
+  <img class="top-left" src="../img/tableCaracteres.png" style="max-width: 800px">
+</ul>
+
+
+<h4 id="codePoint"> Définition d'un caractère – notion de point de code </h4>
+
+
+<div class="important">
+<p> Dans l'<em class="bold"><em class="sigle">UCS</em></em>, <strong class="title">chaque caractère</strong> (cf. l'exemple en figure ci‑dessous <a class="external" href="https://unicode-table.com/fr/1F609/" target="_BLANK"></a>) est <strong>défini</strong> par : </p>
+<div style="display: inline-block">
+  <img class="top-right" src="../img/winkingFace1.png" width="300px" style="padding-top: 0.0em;">
+<ul>
+	<li> son <strong class="defin">nom officiel</strong> dans les principales langues du monde ; </li>
+
+	<li> son <strong class="specialV">point de code</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Point_de_code" target="_BLANK">W</a>, c'est‑à‑dire son <strong>numéro d'ordre</strong> dans le jeu, noté sous <strong>forme hexadécimale</strong> et préfixé par <span class="framedSmall" style="background: white"><em class="boldV">U+</em></span> ; </li>
+
+	<li> son <strong class="specialY">glyphe</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Glyphe" target="_BLANK">W</a> ou, s'il s'agit d'un caractère de contrôle, l'<strong class="specialM">action</strong> qu'il accomplit.  </li>
+</ul>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block">
+  <img class="top-right" src="../img/winkingFace3.png" width="300px" style="padding-top: 0.0em;">
+<p> Le <strong class="specialY">glyphe</strong> d'un caractère <strong>peut différer</strong> selon la police employée pour l'affichage ou l'impression (cf. ci‑contre différents styles de glyphe du caractères <em class="mark">Winking face</em>). Il peut être source de <strong class="cons">confusion</strong> entre des caractères différents mais qui se ressemblent (cf. les exemples infra). </p>
+
+<p> En revanche, le <strong class="defin">nom</strong> et surtout son <strong class="specialV">point de code</strong> d'un caractère sont l'un et l'autre <strong class="title">uniques</strong> ; ils permettent d'<strong class="pros">identifier le caractère sans ambiguïté</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemples"> Pour souligner l'importance de l'<strong class="title">unicité</strong> du <strong class="specialV">point de code</strong> d'un caractère, observons qu'en typographie, il faut <strong class="warning">ne pas confondre</strong> : </p>
+<ul>
+	<li> « <em class="bold">-</em> » appelé <strong class="defin">trait d'union - signe moins</strong> (en anglais, <em class="english">hyphen‑minus</em>) dont le <strong class="specialV">point de code</strong> est <em class="boldV">U+002D</em> ; outre sa fonction de trait d'union dans les textes, c'est aussi le symbole « moins » qui est employé en programmation comme opérateur de soustraction ; </li>
+
+  <div class="expert">
+  <li> « <em class="bold">‑</em> » appelé <strong class="defin">trait d'union insécable</strong> (en anglais, <em class="english">non‑breaking hyphen</em>), dont le <strong class="specialV">point de code</strong> est <em class="boldV">U+2011</em> ; contrairement au trait d'union usuel (dont il a pratiquement la même apparence dans les polices de caractères proportionnelles), il interdit aux logiciels de traitement de textes et aux navigateurs de pages web de séparer par un saut de ligne les deux mots qu'il relie ;  </li>
+  </div><!-- expert -->
+
+	<li> « <em class="bold">−</em> » appelé <strong class="defin">signe moins</strong> (en anglais, <em class="english">minus sign</em>), de <strong class="specialV">point de code</strong> <em class="boldV">U+2212</em> ; c'est le symbole « moins » qui est employé en édition mathématique ; il est plus fin et plus large que le trait d'union, mais un œil inexpérimenté pourrait ne pas percevoir cette différence. </li>
+  
+  <div class="expert">
+  <li> « <em class="bold">–</em> » appelé <strong class="defin">tiret demi‑cadratin</strong>  ou <strong class="defin">tiret moyen</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Tiret" target="_BLANK">W</a> (en anglais, <em class="english">En dash</em>), de <strong class="specialV">point de code</strong> <em class="boldV">U+2013</em> ; c'est le symbole de ponctuation qui est très employé en typographie française, notamment les répliques dans les dialogues ou pour délimiter les proposition incises <a class="external" href="https://fr.wikipedia.org/wiki/Proposition_incise" target="_BLANK">W</a> dans un texte. </li>
+  </div><!-- expert -->
+</ul>
+<p> On voit bien à travers ces exemples le <strong class="cons">risque élevé de confusion</strong> pour un débutant qui se contenterait d'identifier les caractères par leur glyphe ou par une lecture approximative de leur nom. </p>
+</div><!-- exemples -->
+
+
+
+<h3> L'espace de codage </h3>
+
+
+
+<div class="important">
+<p> Le standard <strong class="defin">Unicode</strong> se réserve un <strong class="title">espace de codage</strong> qui va des <strong class="specialV">points de code</strong> <em class="boldV">U+000000</em> à <em class="boldV">U+10FFFF</em>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cet espace compte donc <strong class="defin">plus d'un million</strong> de <strong class="specialV">points de code</strong>, ce qui semble a priori <strong class="pros">très largement suffisant</strong> pour tous les besoins actuels et à venir, puisqu'à l'heure actuelle, il y a <strong>moins de 150&#8239;000 caractères</strong> dans l'<strong><em class="sigle">UCS</em></strong> – cf. supra <a class="supra" href="Cc3-9_typesCaracteresEtendus.html#UCS"></a>. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="specialV">points de codes</strong> ne sont <strong class="warning">pas</strong> des <strong>codes informatiques</strong> à proprement parler, ce sont <strong class="cons">seulement des numéros</strong>. Néanmoins, ils constituent une base pertinente pour les différents formats d'encodage – en particulier pour l'<strong><em class="sigle">UTF‑32</em></strong>, cf. infra <a class="infra" href="Cc3-9_typesCaracteresEtendus.html#formatUTF-32"></a>. </p>
+</div><!-- remarque -->
+
+
+<h4 id="plansUnicode"> Division en plans </h4>
+
+
+<div class="important">
+<p> L'<strong class="title">espace de codage</strong> est divisé en <strong class="specialLB">17 plans</strong>, chacun comptant <strong>65&#8239;536 points de code</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Table_des_caractères_Unicode" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<ul>
+  <li> Le <strong class="specialLB">plan 0</strong>, appelé <strong class="defin">plan multilingue de base</strong> – ou <strong class="defin"><em class="sigle">BMP</em></strong> pour <strong>basic multilingual plane</strong> <a class="external" href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane" target="_BLANK">W</a> – va des points codes <em class="bold" style="color: darkviolet">U+000000</em> à <em class="bold" style="color: darkviolet">U+00FFFF</em>. Chaque caractère de ce plan peut donc être encodé <strong class="pros">sur seulement deux octets</strong>. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Sur la figure ci‑dessous (source <em>Wikipedia</em> <a class="external" href="https://en.wikipedia.org/wiki/Plane_(Unicode)#/media/File:Roadmap_to_Unicode_BMP.svg" target="_BLANK">W</a>), chaque carré numéroté (en hexadécimal) représente un <strong>sous‑ensemble de 256 points de code</strong>, dont le premier, colorié en noir (n° <strong><em class="sigle">00</em></strong>) contient les blocs dit <strong class="defin">Latin de base</strong> et <strong class="defin">Supplément Latin‑1</strong>. Ils correspondent au <strong>jeu <em class="sigle">ASCII</em> restreint</strong> et l'extension <strong><em class="sigle">ISO/CEI 8859‑1</em></strong> (cf. chap. C3‑VIII <a class="previous" href="Cc3-8_typesCaracteres.html#jeuxEtendusASCII" target="_BLANK"></a>). </div>
+
+  <div class="nobullet"> Les 256 carrés forment donc bien 256 × 256 = 65&#8239;536 points de code. </div>
+    <img class="top-right" src="../img/UnicodeBMP.png" width="500px" style="padding-top: 0.5em;">
+
+  <ul>
+    <li> Le <strong class="specialLB"><em class="sigle">BMP</em></strong> regroupe la totalité de de tous les caractères de <strong class="pros">presque toutes les langues contemporaines</strong>, à l'exception des trois principales langues asiatiques – <em>chinois</em>, <em>japonais</em> et <em>coréen</em>, formant le <strong>groupe <em class="sigle">CJK</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/CJK_characters" target="_BLANK">W</a> – qui ne sont que <strong class="cons">partiellement incluses</strong> (tout en y occupant la majorité du plan – cf. les carrés de couleur saumon <span style="color: coral">■</span>). </li>
+
+    <li> Le <strong class="specialLB"><em class="sigle">BMP</em></strong> comporte également de <strong>très nombreux symboles</strong> (numéros, flèches, symboles mathématiques, pictogrammes, etc. – cf. les carrés de couleur magenta <span style="color: magenta">■</span>). </li>
+  </ul>
+  </div><!-- expert -->
+
+  <li> Le <strong class="	specialLB">plan 1</strong>, dit <strong class="defin">plan multilingue supplémentaire</strong> – ou <strong class="defin"><em class="sigle">SMP</em></strong> pour <strong>supplementary multilingual plane</strong> <a class="external" href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Multilingual_Plane" target="_BLANK">W</a> – va des points codes <em class="bold" style="color: darkviolet">U+010000</em> à <em class="bold" style="color: darkviolet">U+01FFFF</em>. Il regroupe les caractères des <strong>langues anciennes</strong>, ainsi que des <strong>symboles d'usage contemporain</strong> (dominos, cartes à jouer, émoticônes, etc.) </li>
+
+  <li> Les <strong class="specialLB">plans 2 & 3</strong> sont respectivement dits : </li>
+  <ul>
+    <li> <strong class="defin">plan sinographique complémentaire</strong> – ou <strong><em class="sigle">SIP</em></strong> pour <strong>supplementary ideographic plane</strong> – il va des points codes <em class="bold" style="color: darkviolet">U+020000</em> à <em class="bold" style="color: darkviolet">U+02FFFF</em> ;  </li>
+  
+    <li> <strong class="defin">plan sinographique ternaire</strong> – ou <strong><em class="sigle">TIP</em></strong> pour <strong>tertiary ideographic plane</strong> – il va des points codes <em class="bold" style="color: darkviolet">U+030000</em> à <em class="bold" style="color: darkviolet">U+03FFFF</em> ; </li>
+  </ul>
+  <div class="nobullet"> Ces deux plans sont consacrés aux <strong>autres caractères</strong> des langues du groupe <strong><em class="sigle">CJK</em></strong> qui, faute de place, ne rentrent <strong class="cons">pas dans le <em class="sigle">BMP</em></strong>. </div>
+
+  <li> Les <strong class="specialLB">plans 4 à 16</strong> sont soit <strong>non affectés</strong>, soit <strong>spéciaux</strong>, soit <strong>privés</strong>. </li>
+
+  <img class="top-left" src="../img/UnicodePlanes.png">
+</ul>
+</div><!-- complement -->
+
+
+<h4> Division d'un plan en blocs Unicode</h4>
+
+
+<div class="important">
+<p> À l'exception des plans d'usage privé (nº 15 & 16), tout plan de l'<strong><em class="sigle">UCS</em></strong> se divise lui‑même en <strong class="title">blocs</strong> dits <strong class="title">Unicode</strong> pour <strong class="pros">faciliter le repérage</strong> des caractères. </p>
+
+<p> Un tel <strong class="title">bloc Unicode</strong> <a class="external" href="https://en.wikipedia.org/wiki/Unicode_block" target="_BLANK">W</a> est un <strong class="defin">ensemble de points de codes successifs</strong> identifié par un <strong>nom</strong> et formant un <strong class="pros">tout cohérent</strong> au regard d'un usage spécifique – typiquement, un jeu de caractères alphabétiques particulier (grec, cyrillique, etc.).  </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemples"> Au début du <strong><em class="sigle">BMP</em></strong>, on trouve les <strong class="title">blocs Unicode</strong> suivants :  </p>
+<ul>
+  <li> <strong class="specialLB">Commandes CO et Latin de base</strong> <a class="external" href="https://unicode-table.com/fr/blocks/basic-latin/" target="_BLANK"></a> (codes U+0000 à U+007F), équivalent au <strong>jeu <em class="sigle">ASCII</em> restreint</strong> ; </li>
+
+  <li> <strong class="specialLB">Commandes C1 et supplément Latin‑1</strong> <a class="external" href="https://unicode-table.com/fr/blocks/latin-1-supplement/" target="_BLANK"></a> (codes U+0080 à U+00FF), équivalent à la partie étendue du <strong>jeu <em class="sigle">ISO‑8859‑1</em></strong> ; </li>
+
+  <li> <strong class="specialLB">Latin étendu A</strong> <a class="external" href="https://unicode-table.com/fr/blocks/latin-extended-a/" target="_BLANK"></a> (codes U+0100 à U+017F) et <strong class="specialLB">Latin étendu B</strong> <a class="external" href="https://unicode-table.com/fr/blocks/latin-extended-b/" target="_BLANK"></a> (codes U+0180 à U+024F) viennent compléter le bloc précédent pour couvrir l'<strong>alphabet latin</strong>  – on y trouve notamment les ligatures « <em class="bold">Œ</em> » et « <em class="bold">œ</em> » ; </li>
+
+  <li> <strong class="specialLB">Supplément pour l'alphabet phonétique international</strong> <a class="external" href="https://unicode-table.com/fr/blocks/ipa-extensions/" target="_BLANK"></a> (codes U+0250 à U+02AF) ; </li>
+
+  <li> etc. </li>
+</ul>
+
+</div><!-- complement -->
+
+
+
+<div class="expert">
+<p> La <strong class="title">taille d'un bloc Unicode</strong> n'est <strong class="defin">pas uniforme</strong>, elle varie de quelques dizaines à plusieurs dizaines de milliers, en fonction des regroupements fonctionnels d'attribution des points de code. </p>
+
+<p> La <strong class="title">liste exhaustive</strong> des <strong>blocs Unicodes</strong> peut être trouvée notamment ici <a class="external" href="https://unicode-table.com/fr/blocks/" target="_BLANK"></a> ou là <a class="external" href="https://en.wikipedia.org/wiki/Unicode_block#List_of_blocks" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="formatsUnicode"> Les formats d'encodage associés au standard <em class="mark">Unicode</em> </h2>
+
+
+
+<div class="important">
+<p> Les formats <strong class="title"><em class="sigle">UTF</em></strong> – pour <strong class="title">Unicode transformation format</strong> – sont des <strong>formats d'encodage</strong> qui <strong class="defin">transforment</strong> des <strong>points de code</strong> du jeu universel des caractères en de véritables <strong class="defin">codes machines</strong> pour le stockage en mémoire des valeurs de caractères. </p>
+
+<p> Il existe à l'heure actuelle <strong class="title">trois principaux formats</strong> – <strong class="specialLB"><em class="sigle">UTF‑8</em></strong>, <strong class="specialLB"><em class="sigle">UTF‑16</em></strong> et <strong class="specialLB"><em class="sigle">UTF‑32</em></strong> – dont le nombre indiqué en suffixe précise la <strong>largeur en bits</strong> de l'<strong class="specialLG">unité d'encodage</strong> en mémoire du format. </p>
+</div><!-- important -->
+
+<!-- 
+<div class="complement">
+<p> Autres formats: UCS‑2, UCS‑4, UTF‑7 </p>
+</div>
+-->
+
+
+
+<h3 id="formatUTF-32"> Le format UTF‑32 </h3>
+
+
+
+<div class="important">
+<p> Le format <strong class="title"><em class="sigle">UTF‑32</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/UTF-32" target="_BLANK">W</a> est à <strong class="defin">taille fixe</strong> : chaque <strong>caractère</strong> est encodé sur <strong class="pros">une et une seule</strong> <strong class="specialLG">unité d'encodage</strong> constituée d'un mot binaire de <strong>32 bits</strong> (4 octets). </p>
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/principeUTF-32.png" width="450px" style="padding-top: 0.0em;">
+<p> Le <strong class="defin">principe d'encodage</strong> de ce format est <strong class="pros">le plus simple</strong>  qui soit : l'unité d'encodage d'un caractère est directement son <strong class="specialV">point de code</strong> dans l'<strong><em class="sigle">UCS</em></strong>, exprimé sur <strong>8 digits hexadécimaux</strong> (8 × 4 = 32 bits) – cf. la figure ci‑contre. </p>
+</div><!-- display --> 
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Ainsi, l'<strong class="title">émoticône</strong> 😉 nommé <em class="english">Winking face</em> <a class="external" href="https://unicode-table.com/fr/1F609/" target="_BLANK"></a> dont le <strong class="specialV">point de code</strong> est <em class="boldV">U+0001F609</em> est directement encodé <code class="cmd">00 01 F6 09</code> au format <strong class="defin"><em class="sigle">UTF‑32</em></strong>.  </p>
+</div><!-- exemple -->
+
+<div class="complement">
+<p> La <strong class="pros">simplicité</strong> du format <strong class="title"><em class="sigle">UTF‑32</em></strong> se paye par <strong class="warning">coût mémoire très élevé</strong>. Ainsi, pour un texte en langue européenne encodable en <strong><em class="sigle">ASCII</em> étendu</strong> (un octet par caractère), l'espace mémoire nécessaire devient <strong class="cons">4 fois supérieur</strong> s'il est encodé en <em class="bold"><em class="sigle">UTF‑32</em></em>. Il en résulte que ce format est finalement <strong class="defin">très peu employé</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Pour mesurer l'ampleur du <strong class="title">coût mémoire du format <em class="sigle">UTF‑32</em></strong>, comparons l'encodage d'une <strong>chaîne de caractère de style C</strong> (avec un caractère <strong><em class="sigle">NUL</em></strong> ajouté à la fin), comme par exemple <code class="prettyprint lang-c">"OK"</code> : </p>
+<ul>
+  <li> au format <strong class="pros"><em class="sigle">ASCII</em></strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre style="font-size: 70%;">
+   O        K        \0
+-------- -------- -------- 
+01001111 01001011 00000000
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> au format <strong class="cons"><em class="sigle">UTF‑32</em></strong> :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre style="font-size: 70%;">
+               O                                  K                                \0
+-------------------------------- --------------------------------- ---------------------------------
+00000000000000000000000001001111 000000000000000000000000001001011 000000000000000000000000000000000
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ul>
+
+</div><!-- exemple -->
+
+<div class="expert">
+<p> Plus généralement, rappelons que l'on peut coder environ <strong>4 milliards de valeurs</strong> sur 32 bits (cf. chap. III‑2 <a class="previous" href="../C3-numeration/Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>) alors que l'<strong><em class="sigle">UCS</em></strong> lui‑même ne compte qu'environ <strong>1 millions de points de code</strong>. Parmi ces points de code, <strong>seulement cent mille</strong> environ sont affectés à des caractères. Le format <strong><em class="sigle">UTF‑32</em></strong> est donc très largement <strong class="cons">surdimensionné</strong>. </p>
+
+<p> En règle générale, le format <strong class="title"><em class="sigle">UTF‑32</em></strong> n'est donc envisagé que pour coder des <strong>fichiers de textes</strong> en <strong class="defin">langues asiatique</strong> ou <strong class="defin">anciennes</strong> comportant une grande majorité de caractères qui nécessitent chacun 4 octets d'encodage, quel que soit le format. </p>
+</div><!-- expert -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> On pourrait penser pouvoir <strong class="title">économiser un octet</strong>, puisqu'un format sur 24 bits (3 octets) serait en principe suffisant pour encoder le dernier point de code <em class="boldV">U+10FFFF</em>. Néanmoins, ce format ne serait <strong class="cons">pas compatible</strong> avec les <strong class="warning">contraintes d'alignement</strong> (cf. chap. C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#typesTailles" target="_BLANK"></a>) des unités d'encodage sur la plupart des architectures de machines. </li>
+
+	<li> Avec le format <strong><em class="sigle">UTF‑32</em></strong>, le code de chaque caractères du <strong>plan</strong> <strong class="defin"><em class="sigle">BMP</em></strong> commence par <strong class="cons">deux voire trois octets nuls</strong>. Or dans un processus de lecture de bas niveau (octet par octet), les <strong class="title">octets nuls</strong> se confondent avec le <strong>caractère <em class="sigle">NUL</em></strong> du jeu <strong><em class="sigle">ASCII</em></strong> qui est souvent employé (notamment en langage <strong>C</strong>) pour marquer les <strong class="specialO">fins de chaîne</strong>. C'est un <strong class="cons">autre inconvénient</strong> du format <strong><em class="sigle">UTF‑32</em></strong>, car sans précautions particulières, une telle confusion peut faire échouer des algorithmes de lecture de bas niveau. </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="formatUTF-16"> Le format UTF‑16 </h3>
+
+
+
+<div class="important">
+<p> Le format <strong class="title"><em class="sigle">UTF‑16</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/UTF-16" target="_BLANK">W</a> est à <strong class="defin">taille variable</strong> : </p>
+
+<ul>
+  <li> chaque <strong>caractère</strong> est encodé sur <strong>1 ou 2</strong> <strong class="specialLG">unité(s) d'encodage</strong>, selon le <strong>plan</strong> de l'<em class="bold"><em class="sigle">UCS</em></em> auquel il appartient ; </li>
+
+  <li> chaque <strong class="specialLG">unité d'encodage</strong> étant formée d'un <strong>mot de 16 bits</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le format <strong class="title"><em class="sigle">UTF‑16</em></strong> est notamment adopté pour l'encodage des caractères par : </p>
+<ul>
+  <li> les <strong><em class="sigle">UEFI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/UEFI" target="_BLANK">W</a> – <strong>unified extensible firmware interface</strong>, c'est‑à‑dire les interfaces de firmware des cartes‑mères des postes de travail ;   </li>
+
+  <li> les système d'exploitation <strong>Microsoft Windows</strong> ; </li>
+
+  <li> divers standards de <strong>langages de programmation</strong> (<em class="mark">Java</em>, <em class="mark">JavaScript</em>, etc.) et certains environnements de programmation (<em class="mark">Qt</em>…).</li>
+</ul>
+
+<p> En revanche, <strong class="title"><em class="sigle">UTF‑16</em></strong> n'est quasiment <strong class="defin">pas employé pour les pages web</strong> car statistiquement, il est <strong class="cons">moins efficace</strong> que le format <strong class="specialLB"><em class="sigle">UTF‑8</em></strong> en termes de coût mémoire global et de vitesse d'affichage des pages. </p>
+</div><!-- complement -->
+
+
+<p> Sans entrer dans les détails, le <strong class="title">principe général d'encodage</strong> des caractères en <strong class="title"><em class="sigle">UTF‑16</em></strong> est le suivant : </p>
+
+<ul>
+  <div style="display: inline-block">
+    <img class="top-right" src="../img/principeUTF-16-1.png" width="350px" style="padding-top: 0.0em;">
+  <li> Les caractères du <strong class="specialLB"><em class="sigle">BMP</em></strong> (cf. supra <a class="supra" href="Cc3-9_typesCaracteresEtendus.html#plansUnicode"></a>) sont tous identifiés par un point de code exprimé sur <strong>4 digits hexadécimaux</strong> (4 × 4 = 32 bits). Ils sont donc encodés <strong class="pros">directement</strong> sur <strong class="specialLG">un seul mot</strong> de 16 bits (2 octets). </li>
+  </div><!-- display -->
+
+  <div class="exemples">
+  <p class="exemple"> La <strong class="title">lettre « <em class="bold">Œ</em> »</strong> (<em class="mark">ligature capitale O E</em> <a class="external" href="https://unicode-table.com/fr/0152/" target="_BLANK"></a>) dont le <strong class="specialV">point de code</strong> est <em class="boldV">U+0152</em> est directement encodé <code class="cmd">01 52</code> au format <strong class="defin"><em class="sigle">UTF‑16</em></strong>.  </p>
+  </div><!-- exemple -->
+  
+  <li> Les caractères des <strong class="specialLB">autres plans</strong> sont encodés de façon <strong class="warning">plus complexe</strong> sur <strong class="specialLG">deux mots</strong> de 16 bits en utilisant les <strong>2048 points de code réservés du <em class="sigle">BMP</em></strong> <em class="boldV">U+D800</em> à <em class="boldV">U+DFF</em> appelées <strong class="specialLGr">paires de substitution</strong> – en anglais <strong>surrogate pairs</strong> <a class="external" href="https://en.wikipedia.org/wiki/UTF-16#U+D800_to_U+DFFF" target="_BLANK">W</a>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Pour comprendre le <strong class="title">principe d'encodage en <em class="sigle">UTF‑16</em></strong> d'un point de code <strong>hors du <em class="sigle">BMP</em></strong>, il n'est pas possible d'en rester à une décomposition en digits hexadécimaux ; il faut mener l'<strong class="defin">analyse au niveau binaire</strong>. </div>
+
+  <div class="nobullet"> En premier lieu, on peut faire les observations suivantes : </div>
+  <ul>
+    <li> Les <strong class="specialV">points de code</strong> <strong class="defin">hors du <em class="sigle">BMP</em></strong> s'échelonnent de <em class="boldV">U+10000</em> à <em class="boldV">U+1F0000</em>. Ils s'expriment sur 6 digits hexadécimaux, mais le <strong>digit de poids fort</strong> est <strong class="cons">très peu exploité</strong> (il ne prend que les valeurs <em class="bold">0</em> ou <em class="bold">1</em>, jamais 2, 3, etc.). </li>
+
+    <li> Donc, en soustrayant à tous les points de code la valeur <em class="bold">0x10000</em>, on les ramène dans l'intervalle allant de <em class="bold">0x00000</em> à <em class="bold">0xFFFFF</em>, avec à la clef <strong class="defin">un digit en moins</strong>. Il ne reste donc plus que <strong class="specialMg">5 digits hexadécimaux</strong> à encoder, soit 5 × 4 = <strong>20 bits</strong>, sachant qu'on dispose de deux mots de 16 bits, soit <strong>32 bits</strong>. Cela fait <strong class="pros">12 bits supplémentaires</strong> que l'on peut exploiter. </li>
+  </ul>
+
+  <div class="nobullet"> Avec ces 12 bits, on produit <em class="remark">localement</em> un <strong class="defin">encodage auto‑indexé</strong>, en affectant à chacune des deux unités d'encodage – qui sont des <strong class="specialLG">mots de 16 bits</strong> – un <strong>motif initial distinctif</strong> (on peut parler de <em>préfixes binaires</em>) de <strong>6 bits</strong> : </div>
+  <ul>
+    <li> <code class="cmd"><span style="color: dimgrey;">11011</span><span style="color: darkorange;">0</span></code> pour le mot de <strong class="specialO">haut rang</strong> ;  </li>
+
+    <li> <code class="cmd"><span style="color: dimgrey;">11011</span><span style="color: darkturquoise;">1</span></code> pour le mot de <strong class="specialT">bas rang</strong>.  </li>
+  </ul>
+
+  <div class="nobullet"> Ensuite, on procède à la <strong class="defin">recopie des 20 bits</strong> du <strong class="specialV">point de code</strong> <strong class="specialMg">ramené sur 5 digits</strong>, dans l'ordre de leur rang, sur les <strong>10 bits vacants</strong> de chacun des deux mots du code <strong><em class="sigle">UTF‑16</em></strong>, conformément à la figure ci‑dessous. </div>
+
+  <img class="top-left" src="../img/principeUTF-16-2.png">
+
+  <div class="nobullet"> Les deux <strong>préfixes binaires</strong> permettent de déterminer immédiatement – dès sa lecture – si un mot est de haut rang ou de bas rang dans un code <strong><em class="sigle">UTF‑16</em></strong>, sans avoir besoin de lire un mot voisin. C'est le principe de l'<strong class="defin">auto‑indexage</strong>, même s'il n'est que très partiel ici. En revanche, il est <strong class="warning">indispensable</strong> qu'un tel mot <strong class="warning">ne corresponde pas</strong> au code <strong><em class="sigle">UTF‑16</em></strong> sur <strong>2 octets</strong> d'un caractère du <strong><em class="sigle">BMP</em></strong>, sinon la confusion serait fatale. </div>
+
+  <div class="nobullet"> Et c'est pourquoi, dans le <strong><em class="sigle">BMP</em></strong>, tous les <strong class="specialV">points de code</strong> : </div>
+  <ul>
+    <li> allant de <em class="boldV">U+<span style="color: dimgrey;">D</span><span style="color: darkorange;">800</span></em> (<code><span style="color: dimgrey;">1101 1</span><span style="color: darkorange;">000 0000 0000</span></code>) à <em class="boldV">U+<span style="color: dimgrey;">D</span><span style="color: darkorange;">BFF</span></em> (<code><span style="color: dimgrey;">1101 1</span><span style="color: darkorange;">011 1111 1111</span></code>), </li>
+
+    <li> et de <em class="boldV">U+<span style="color: dimgrey;">D</span><span style="color: darkturquoise;">C00</span></em> (<code><span style="color: dimgrey;">1101 1</span><span style="color: darkturquoise;">100 0000 0000</span></code>) à <em class="boldV">U+<span style="color: dimgrey;">D</span><span style="color: darkturquoise;">FFF</span></em> (<code><span style="color: dimgrey;">1101 1</span><span style="color: darkturquoise;">111 1111 1111</span></code>), </li>
+  </ul>
+  
+  <div style="display: inline-block">
+    <img class="top-right" src="../img/UTF-16surrogates.png" width="500px" style="padding-top: 0.2em;">
+  <div class="nobullet"> sont <strong class="warning">réservés</strong> et donc <strong class="defin">non affectés à des caractères</strong> – on parle de « <strong>non‑caractères</strong> ». On appelle ces points de code respectivement des <strong class="specialLGr">mots de substitution</strong> <strong class="specialO">haut</strong> et <strong class="specialT">bas</strong> – en anglais, <strong>high</strong> and <strong>low surrogates</strong>. On parle également de <strong class="specialLGr">paires de substitution</strong> car dans un fichier encodé en <strong><em class="sigle">UTF‑16</em></strong>, ces mots <strong class="warning">ne peuvent aller l'un sans l'autre</strong>.  </div>
+  </div><!-- display -->
+
+
+  <div class="exemples">
+  <p class="exemple"> Considérons encore le cas de l'<strong class="title">émoticône</strong> 😉 nommé <em class="english">Winking face</em> <a class="external" href="https://unicode-table.com/fr/1F609/" target="_BLANK"></a> qui appartient au <strong class="defin">plan <em class="sigle">SMP</em></strong>. Son encodage au <strong class="defin">format <em class="sigle">UTF‑16</em></strong> est <code class="cmd">D8 3D DE 09</code> conformément au schéma ci‑dessous. </p>
+  
+  <img class="top-left" src="../img/UTF-16exemple.png" style="max-width: 800px">
+  
+  <p> Il est formé de deux mots de 16 bits qui sont les <strong class="specialLGr">paires de substitutions</strong> <code class="cmd">0x<span style="color: dimgrey;">D</span><span style="color: darkorange;">83D</span></code> et <code class="cmd">0x<span style="color: dimgrey;">D</span><span style="color: darkturquoise;">E09</span></code>. </p>
+  </div><!-- exemple -->
+  
+  </div><!-- expert -->
+</ul>
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Un débutant pourrait être surpris par le fait que réserver <strong>2048 points de code</strong> – les <strong class="specialLGr">paires de substitution</strong> – soit <strong class="pros">suffisant</strong> pour l'encodage des <strong class="defin">dizaines de milliers de caractères</strong> <strong>hors du <em class="sigle">BMP</em></strong>. Mais il ne faut pas perdre de vue que ces points de code ne sont pas utilisés directement comme des codes. C'est bien entendu par la <strong class="defin">combinatoire des paires</strong> (1024 × 1024) que l'encodage au format <strong class="title"><em class="sigle">UTF‑16</em></strong> permet de couvrir tous besoins actuels et futurs. </li>
+
+  <li> Comme pour le format <strong><em class="sigle">UTF‑32</em></strong>, le format <strong class="title"><em class="sigle">UTF‑16</em></strong> peut poser des <strong class="warning">problèmes</strong> aux algorithmes de <strong>lecture de bas niveau</strong> (octet par octet) par confusion entre le marqueur de fin de chaîne – le caractère <strong><em class="sigle">NUL</em></strong> – et les <strong>octets nuls</strong> dans les codes de certains caractères. </li>
+</ol>
+</div><!-- remarque -->
+
+
+
+<h3 id="formatUTF-8"> Le format UTF‑8 </h3>
+
+
+
+<div class="important">
+<p> Le format <strong class="title"><em class="sigle">UTF‑8</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/UTF-8" target="_BLANK">W</a> est à <strong class="defin">taille variable</strong> : </p>
+
+<ul>
+  <li> chaque <strong>caractère</strong> est encodé sur <strong>1 à 4</strong> <strong class="specialLG">unité(s) d'encodage</strong>, selon la largeur de son <strong class="specialV">point de code</strong> en termes de nombre de bits à encoder ; </li>
+
+  <li> chaque <strong class="specialLG">unité d'encodage</strong> étant formée d'un <strong>mot de 8 bits</strong>, c'est‑à‑dire <strong>un octet</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le format <strong class="title"><em class="sigle">UTF‑8</em></strong> est très <strong class="defin">largement adopté</strong> – et de plus en plus – dans de nombreux contextes de l'informatique, parce qu'il <strong class="pros">optimise le coût mémoire</strong> de stockage des fichiers contenant du texte, quelle que soit sa nature (documents, code, etc.) : </p>
+<ul>
+  <li> <strong>pages web</strong> – et donc, logiciels <strong>navigateurs</strong> ;    </li>
+
+  <li> <strong>fichiers bureautiques</strong> au format <strong>OpenDocument</strong> <a class="external" href="https://fr.wikipedia.org/wiki/OpenDocument" target="_BLANK">W</a> ;  </li>
+
+  <li> <strong>systèmes d'exploitation</strong> comme <em class="mark">Unix</em>, <em class="mark">Linux</em>, <em class="mark">Android </em>… </li>
+
+  <li> nombreux <strong>langages de programmation</strong> et <strong><em class="sigle">IDE</em></strong> – notamment, <em class="mark">C/C++</em>, <em class="mark">Python</em>, <em class="mark">Arduino</em>… </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert" id="encodageUTF-8">
+<p> L'<strong class="title">encodage</strong> au format <strong><em class="sigle">UTF‑8</em></strong> recourt à l'<strong class="defin">auto‑indexation</strong> systématique des <strong class="specialLG">unités d'encodage</strong> par des <strong class="defin">motifs initiaux</strong> sur leurs <strong>bits de hauts rangs</strong>. Ces motifs sont différents selon le nombre d'unités d'encodage nécessaire à l'encodage : </p>
+
+<ul>
+  <li> Si le caractère est encodé sur <strong>un seul octet</strong>, ce dernier prend le <strong>motif initial</strong> <code class="cmd" style="color: yellowgreen;">0</code> sur son bit de haut rang (<var>d</var><sub>7</sub>). </li>
+
+  <li> Sinon : </li>
+  <ul>
+    <li> Le <strong>motif initial</strong> de l'<strong class="specialR">octet de tête</strong> – c'est‑à‑dire de haut rang (<em class="english">leading byte</em>) – un <strong>motif initial</strong> formé de <strong>n</strong> bits à <code class="cmd" style="color: red;">1</code>, autant que le nombre d'octets du code du caractère, suivi d'un <code style="color: red;">0</code>. </li>
+
+    <div class="nobullet"> Donc : <code class="cmd" style="color: red;">110</code> pour un caractère codé sur <strong>2 octets</strong>, <code class="cmd" style="color: red;">1110</code> pour un caractère codé sur <strong>3 octets</strong>, etc. </div>
+  
+    <li> Le <strong>motif initial</strong> des <strong class="specialY">octets de suite</strong> (<em class="english">trailing bytes</em>) est <code class="cmd" style="color: goldenrod;">10</code>. </li>
+  </ul> 
+</ul>
+
+<p> Tous les autres bits de l'octet de tête et des octets de suite forment l'<strong class="specialLB">espace d'encodage</strong> disponible. Le tableau ci‑dessous récapitule ces différents éléments. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em; font-size: 90%">
+  <tr> 
+    <th> Plans <br> <em class="sigle">UCS</em> </th> 
+    <th> Points <br> de code </th>
+    <th> N<sup style="font-size: 70%">bre</sup> <br> octets </th>
+    <th> Format des octets </th>
+    <th> Espace d'encodage <br> (bits •) </th>
+  </tr>
+  <tr>
+    <td rowspan="3"> <em class="bold">0</em> <br> <strong><em class="sigle">(BMP)</em></strong> </td>
+    <td style="padding-right: 1em; text-align: right">
+      <em class="boldV">U+0000</em><br> à <em class="boldV">U+007F</em></td>
+    <td style="text-align: center;"> 1 </td>
+    <td style="padding-left: 0.5em;">
+      <span class="framed" style="border-color: yellowgreen"><code><span style="color: yellowgreen;">0</span>••• ••••</code></span>  (idem que l'<em class="sigle">ASCII</em> restreint)
+      </td>
+    <td style="text-align: center;"> 7 bits <br> <em>128 valeurs</em> </td>
+  </tr>
+  <tr>
+    <td style="padding-right: 1em; text-align: right">
+      <em class="boldV">U+0080</em><br> à <em class="boldV">U+07FF</em></td>
+    <td style="text-align: center;"> 2 </td>
+    <td style="padding-left: 0.5em; line-height: 1.6em;">
+      <span class="framed" style="border-color: red"><code><span style="color: red;">110</span>• ••••</code></span>  <em>octet de tête</em> <br>
+      <span class="framed" style="border-color: goldenrod"><code><span style="color: goldenrod;">10</span>•• ••••</code></span>  <em>octet de suite</em>
+    </td>
+    <td style="text-align: center;"> 5 + 6 = 11 bits <br> <em>2&#8239;048 valeurs</em> </td>
+  </tr>
+  <tr>
+    <td style="padding-right: 1em; text-align: right">
+      <em class="boldV">U+0800</em><br> à <em class="boldV">U+FFFF</em></td>
+    <td style="text-align: center;"> 3 </td>
+    <td style="padding-left: 0.5em; line-height: 1.6em;">
+      <span class="framed" style="border-color: red"><code><span style="color: red;">1110</span> ••••</code></span>  <em>octet de tête</em> <br>
+      <span class="framed" style="border-color: goldenrod"><code><span style="color: goldenrod;">10</span>•• ••••</code></span>  <span class="framed" style="border-color: goldenrod"><code><span style="color: goldenrod;">10</span>•• ••••</code></span>  <em>octets de suite</em>
+    </td>
+    <td style="text-align: center;"> 4 + 6×2 = 16 bits <br> <em>65&#8239;536 valeurs</em> </td> 
+  </tr>
+  <tr>
+    <td> ⩾ <em class="bold">1</em> </td>
+    <td style="padding-right: 1em; text-align: right">
+      <em class="boldV">U+010000</em><br> à <em class="boldV">U+10FFFF</em></td>
+    <td style="text-align: center;"> 4 </td>
+    <td style="padding-left: 0.5em; line-height: 1.6em;">
+      <span class="framed" style="border-color: red"><code><span style="color: red;">1111 0</span>•••</code></span>  <em>octet de tête</em> <br>
+      <span class="framed" style="border-color: goldenrod"><code><span style="color: goldenrod;">10</span>•• ••••</code></span>  <span class="framed" style="border-color: goldenrod"><code><span style="color: goldenrod;">10</span>•• ••••</code></span>  <span class="framed" style="border-color: goldenrod"><code><span style="color: goldenrod;">10</span>•• ••••</code></span>
+    </td>
+    <td style="text-align: center;"> 3 + 6×3 = 21 bits <br> <em>plus de 2 × 10<sup>6</sup> valeurs</em> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<p style="margin-top: 1em;"> Ensuite, le <strong class="title">principe d'encodage</strong> des bits est le suivant : </p>
+
+<ul>
+	<li> retranscrit en binaire naturel, les valeurs des bits du <strong class="specialV">point de code</strong> du caractère sont affectées aux bits de l'<strong class="specialLB">espace d'encodage</strong> à partir du rang 0 et <strong>dans l'ordre croissant des rangs</strong> ; </li>
+
+	<li> les bits de hauts rangs <strong>non employés</strong> sont mis à <code class="cmd" style="color: dimgray;">0</code>. </li>
+</ul>
+
+
+
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+  <li> Le <strong class="title">symbole « & »</strong> (<em class="english">ampersand</em> <a class="external" href="https://unicode-table.com/fr/0026/" target="_BLANK"></a>) de <strong class="specialV">point de code</strong> <em class="boldV">U+0026</em> (donc compris entre U+0000 et U+007F) est <strong class="pros">directement</strong> encodé en <strong class="defin"><em class="sigle">UTF‑8</em></strong> sur <strong>un seul octet</strong> <code class="cmd">26</code>. </li>
+
+    <img class="top-right" src="../img/UTF-8exemple2.png" height="200px">
+  <li> La <strong class="title">lettre « Œ »</strong> (<em class="english">latin capital ligature O E</em> <a class="external" href="https://unicode-table.com/fr/20AC/" target="_BLANK"></a>) de <strong class="specialV">point de code</strong> <em class="boldV">U+0152</em> (donc compris entre U+0080 et U+07FF) est encodé en <strong class="defin"><em class="sigle">UTF‑8</em></strong> sur les <strong>2 octets</strong> <code class="cmd">C5 92</code>, conformément au schéma ci‑dessous. </li>
+
+  
+
+    <img class="top-right" src="../img/UTF-8exemple3.png" height="200px">
+  <li> Le <strong class="title">symbole « € »</strong> (<em class="english">euro sign</em> <a class="external" href="https://unicode-table.com/fr/20AC/" target="_BLANK"></a>) de <strong class="specialV">point de code</strong> <em class="boldV">U+20AC</em> (donc compris entre U+0800 et U+FFFF) est encodé en <strong class="defin"><em class="sigle">UTF‑8</em></strong> sur les <strong>3 octets</strong> <code class="cmd">E2 82 AC</code>, conformément au schéma ci‑dessous. </li>
+
+  <li> L'<strong class="title">émoticône</strong> 😉 (<em class="english">winking face</em> <a class="external" href="https://unicode-table.com/fr/20AC/" target="_BLANK"></a>) de <strong class="specialV">point de code</strong> <em class="boldV">U+1F609</em> (donc compris entre U+010000 et U+10FFFF) est encodé en <strong class="defin"><em class="sigle">UTF‑8</em></strong> sur les <strong>4 octets</strong> <code class="cmd">F0 9F 98 89</code>, conformément au schéma ci‑dessous. </li>
+
+  <img class="top-left" src="../img/UTF-8exemple4.png" style="max-width: 800px">
+</ol>
+</div><!-- exemples -->
+
+
+<div class="remarques"><p class="remarques"></p>
+
+<ol class="littered">
+	<li> Un intérêt essentiel du format <strong class="title"><em class="sigle">UTF‑8</em></strong> est son <strong class="defin">identité d'encodage</strong> avec le format <strong><em class="sigle">ASCII</em> restreint</strong>, qui offre une parfaite <strong class="pros">rétrocompatibilité</strong> de tous les fichiers codés dans ce format ancien.  </li>
+
+	<li> De plus, grâce au choix judicieux des motifs initiaux, <strong class="pros">aucun caractère</strong> ne peut inclure dans son code un <strong>octet nul</strong> à part bien sûr le caractère <strong><em class="sigle">NUL</em></strong> lui‑même qui a le code <code>0x0</code>. Ce dernier peut donc garder sa fonction usuelle de <strong>caractère de fin de chaîne</strong> qui déclenche la terminaison des processus de lecture de bas niveau. </li>
+
+  <li> Le choix des <strong class="title">motifs initiaux</strong> est judicieux à plus d'un titre. En particulier, il <strong class="pros">facilite le tri</strong> par ordre lexicographique (<em class="english">collation</em> – cf. chap. C5‑VI <a class="next" href="../C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html#fonctionComparaison" target="_BLANK"></a>) : si l'<strong class="specialR">octet de tête</strong> d'un caractère est supérieur à celui d'un autre, alors cette relation d'ordre vaut aussi entre leurs <strong class="specialV">points de code</strong> respectifs. </li>
+
+	<li> Même en réquisitionnant des bits pour l'auto‑indexation des octets, l'<strong class="title">espace d'encodage</strong> de l'<strong class="title"><em class="sigle">UTF‑8</em></strong> reste <strong class="pros">beaucoup plus grand</strong> que l'ensemble des points de code du standard <em class="mark">Unicode</em>. Cela garantie la possibilité de prendre en charge de nouveaux caractères dans le futur. </li>
+
+	<li> Sur seulement deux octets, le format <strong class="title"><em class="sigle">UTF‑8</em></strong> permet de coder <strong class="cons">beaucoup moins</strong> de caractères (environ 2&#8239;000) que le format <em class="bold"><em class="sigle">UTF‑16</em></em> (environ 65&#8239;000). Mais globalement, sauf pour les fichiers en langues asiatiques, le format <strong class="title"><em class="sigle">UTF‑8</em></strong> est <strong class="pros">quand même plus efficace</strong>. En effet, dans la majorité des fichiers source (documents, code, etc.), les caractères dont le point de code est supérieur à U+07FF – donc nécessitant 3 octets d'encodage – sont statistiquement rares. Leur prise en charge ne compromet pas l'économie d'un octet obtenue sur les caractères très fréquents – ceux du jeu <strong><em class="sigle">ASCII</em> restreint</strong>. </li>
+</ol>
+
+</div><!-- remarques -->
+</div><!-- expert -->
+
+
+<h3 id="boutisme"> Conventions de boutisme </h3>
+
+
+
+<p> Les <strong class="title">conventions de boutismes</strong> ont été évoquées dans le <strong>contexte général</strong> des systèmes informatiques au chapitre C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#boutisme" target="_BLANK"></a>. Elles existent également pour l'<strong class="defin">encodage des caractères larges</strong> (puisqu'ils sont encodés sur plusieurs octets chacun) – et tout particulièrement dans les <strong>formats</strong> <strong class="specialLB"><em class="sigle">UTF‑16</em></strong> et <strong class="specialLB"><em class="sigle">UTF‑32</em></strong>. </p>
+
+
+<div class="important">
+<p> Il est possible de <strong class="defin">signaler la convention de boutisme</strong> d'un flux de caractères – chaîne ou fichier – par l'ajout préliminaire au <strong>début</strong> du flux d'un <strong>caractère spécial</strong> appelé <strong class="title">byte order mark</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Indicateur_d'ordre_des_octets" target="_BLANK">W</a> ou <strong class="title"><em class="sigle">BOM</em></strong>). </p>
+
+<p> En <strong class="specialLB"><em class="sigle">UTF‑16</em></strong> comme en <strong class="specialLB"><em class="sigle">UTF‑32</em></strong>, le <strong class="title"><em class="sigle">BOM</em></strong> est signalé par le <strong class="specialV">point de code</strong> <em class="boldV">U+FEFF</em> <a class="external" href="https://unicode-table.com/fr/FEFF/" target="_BLANK"></a>, quelle que soit la convention adoptée. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Inclus dans le <strong><em class="sigle">BMP</em></strong>, le <strong class="specialV">point de code</strong> <em class="boldV">U+FEFF</em> est défini comme un <strong class="defin">espace insécable sans chasse</strong>, autrement dit un <strong>glyphe vide</strong> de <strong>largeur nulle</strong> – et donc <strong class="pros">visuellement indétectable</strong> – derrière lequel aucun saut de ligne ne peut être automatiquement inséré lors d'une mise en page. </p>
+
+
+<p> C'est l'application effective de la <strong class="defin">convention de boutisme</strong> sur le <strong><em class="sigle">BOM</em></strong> qui permet aux logiciels traitant le flux de caractères de <strong class="title">détecter la convention</strong> – et c'est pourquoi on le qualifie de <strong class="pros">nombre magique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nombre_magique_(programmation)" target="_BLANK">W</a>. </p>
+</div><!-- complement -->
+
+<ul>
+  <li> Avec le principe d'encodage du format <strong class="specialLB"><em class="sigle">UTF‑16</em></strong> exposé supra <a class="supra" href="Cc3-9_typesCaracteresEtendus.html#formatUTF-16"></a>, le <strong class="title"><em class="sigle">BOM</em></strong> apparaît comme la séquence ordonnée d'octets :  </li> 
+  <ul>
+    <li> <code class="cmd">FF FE</code> en convention <strong class="defin">petit‑boutisme</strong> – et le format est alors désigné <strong class="specialLB"><em class="sigle">UTF‑16LE</em></strong> (<em class="english">little endian</em>) ; </li>
+  
+    <li> <code class="cmd">FE FF</code> en convention <strong class="defin">gros‑boutisme</strong> – et le format est alors désigné <strong class="specialLB"><em class="sigle">UTF‑16BE</em></strong> (<em class="english">big endian</em>). </li>
+  </ul>
+  
+ 
+  <li> Avec le principe d'encodage du format <strong class="specialLB"><em class="sigle">UTF‑32</em></strong> exposé supra <a class="supra" href="Cc3-9_typesCaracteresEtendus.html#formatUTF-16"></a>, le <strong class="title"><em class="sigle">BOM</em></strong> apparaît comme la séquence ordonnée d'octets :  </li> 
+  <ul>
+    <li> <code class="cmd">FF FE 00 00</code> en convention <strong class="defin">petit‑boutisme</strong> – et le format est alors désigné <strong class="specialLB"><em class="sigle">UTF‑32LE</em></strong> ; </li>
+  
+    <li> <code class="cmd">00 00 FE FF</code> en convention <strong class="defin">gros‑boutisme</strong> – et le format est alors désigné <strong class="specialLB"><em class="sigle">UTF‑16BE</em></strong>. </li>
+  </ul>
+</ul>
+
+<div class="expert">
+<p> Selon le standard <strong>Unicode</strong>, en l'<strong class="title">absence de <em class="sigle">BOM</em></strong> dans un flux de caractères, c'est la convention <strong class="specialLB">gros‑boutisme</strong> est censée s'appliquer <strong class="warning">par défaut</strong>. Toutefois, certains système d'exploitation ne respectent pas cette règle. Ainsi, c'est le format <strong class="specialLB"><em class="sigle">UTF‑16LE</em></strong> qui est utilisé par défaut sous <em class="mark">Windows</em>. </p>
+
+<p> Soulignons qu'avec le format <strong class="specialLB"><em class="sigle">UTF‑16</em></strong> tout particulièrement, une <strong class="warning">erreur d'évaluation</strong> de la <strong class="defin">convention de boutisme</strong> n'est <strong class="cons">pas détectable</strong> automatiquement par une simple analyse binaire. En effet, le format <strong class="specialLB"><em class="sigle">UTF‑16</em></strong> n'est <strong class="cons">pas globalement auto‑indexé</strong> : les codes de caractères avec leurs octets présentés en ordre inverse sont ceux d'autres caractères. </p>
+
+<div class="exemples">
+<p class="exemple"> Considérons tout simplement la <strong class="title">lettre « A »</strong>. Son code au format <strong class="specialLB"><em class="sigle">UTF‑16LE</em></strong> est le mot de 16 bits <code class="cmd">0041</code> (exprimé en hexadécimal).  </p>
+
+<p> Toutefois, si on procède <strong class="warning">inversion de l'ordre des deux octets</strong>, ce mot devient <code class="cmd">4100</code> et correspond au code de l'idéogramme « <em class="bold">䄀</em> » qui signifie « catastrophe » ! </p>
+</div><!-- exemple -->
+
+<p> À la lumière de cet exemple trivial, on voit tout l'<strong class="pros">intérêt</strong> que présente le <strong class="title"><em class="sigle">BOM</em></strong> pour éviter les confusions dans un flux de caractères encodé au format <strong class="specialLB"><em class="sigle">UTF‑16</em></strong>. </p>
+
+
+<!-- expert -->
+<h4> Cas du format UTF‑8 </h4>
+ 
+
+
+<p> L'<strong class="specialLG">unité d'encodage</strong> en <strong class="title"><em class="sigle">UTF‑8</em></strong> étant d'<strong>un seul octet</strong>, la notion de convention de boutisme n'a en principe <strong class="warning">pas de sens</strong> dans ce format. </p>
+
+<p> De plus, le format <strong class="title"><em class="sigle">UTF‑8</em></strong> est intégralement <strong class="pros">auto‑indexé</strong>. Grâce aux motifs binaires initiaux, il est facile de <strong class="defin">déterminer la convention de boutisme</strong> adoptée dès que cela devient nécessaire, c'est‑à‑dire lors de la lecture du premier caractère encodé sur au moins deux octets. En lisant son premier octet :  </p> 
+<ul>
+  <li> s'il s'agit d'un <strong>octet de tête</strong>, c'est la convention <strong class="specialLB">petit‑boutiste</strong> qui est adoptée ; </li>
+
+  <li> et s'il s'agit d'un <strong>octet de suite</strong>, c'est la convention <strong class="specialLB">gros‑boutiste</strong>. </li>
+</ul>
+
+
+<div class="complement">
+<p> Néanmoins, certains <strong class="defin">logiciels</strong> – par exemple, l'éditeur de code de l'<strong><em class="sigle">IDE</em> Microsoft VisualStudio</strong> – placent un caractère <strong class="title"><em class="sigle">BOM</em></strong> au début de tout fichier encodé en <strong class="specialLB"><em class="sigle">UTF‑8</em></strong>, dans l'intention de signaler l'emploi de ce format qui n'est natif sur les systèmes d'exploitation <em class="mark">Microsoft Windows</em>. </p>
+
+<p> En <strong class="specialLB"><em class="sigle">UTF‑8</em></strong>, le <strong class="title"><em class="sigle">BOM</em></strong> possède le code <code class="cmd">EF BB BF</code>. </p>
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les types de caractères larges </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<p> Pour gérer des données de <strong class="specialG">type caractère</strong> prenant des valeurs dans tous le catalogue <strong>Unicode</strong> – donc potentiellement encodées sur <strong class="defin">plusieurs octets</strong> – les langages <strong>C</strong> et <strong>C++</strong> mettent à disposition du codeur <strong>trois types</strong> de <strong class="title">caractères larges</strong> (en anglais, <em class="english">wide characters</em>) : <code class="prettyprint lang-c">wchar_t</code>, <code class="prettyprint lang-c">char16_t</code> et <code class="prettyprint lang-c">char32_t</code>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>	Ces types sont intégrés dans le <strong class="pros">noyau</strong> du langage <strong class="title">C++</strong> depuis la <strong>norme C++11</strong>. </p>
+
+<p> En langage <strong class="title">C</strong>, ils ont été introduits par des fichiers d'en‑tête de la <strong>bibliothèque standard</strong> :  </p>
+<ul>
+  <li> <code class="prettyprint lang-c">wchar_t</code> est déclaré dans les fichiers <code class="filename">stddef.h</code> et <code class="filename">wchar.h</code> ; </li>
+
+  <ul>
+  	<li> sa <strong class="defin">taille</strong> vaut <strong>2 ou 4 octets</strong>, selon l'implémentation ; </li>
+
+  	<li> c'est un type <strong class="cons">ancien</strong>, maintenu pour des questions de compatibilité, mais qu'il est préférable de <strong class="warning">ne plus utiliser</strong>, en privilégiant les types à taille spécifiée décrits ci‑dessous ; </li>
+  </ul>
+
+  <li> <code class="prettyprint lang-c">char16_t</code> et <code class="prettyprint lang-c">char32_t</code> sont déclarés dans le fichier <code class="filename">uchar.h</code> ; </li>
+
+  <ul>
+  	<li> leur <strong class="defin">taille</strong> est spécifiée en <strong>nombre de bits</strong> par leur identificateur, quelle que soit l'implémentation (exactement comme les types <code>int8_t</code>, <code>int16_t</code>) ; </li>
+
+  	<li> ils sont conçus pour constituer les <strong class="specialLG">unités d'encodage</strong> des caractères, respectivement dans les <strong>formats</strong> <strong class="defin"><em class="sigle">UTF‑16</em></strong> et <strong class="defin"><em class="sigle">UTF‑32</em></strong>. </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p class="square"> De plus, la <strong>norme</strong> <strong class="title">C++20</strong> a introduit le <strong>type</strong> <code class="prettyprint lang-c">char8_t</code> pour compléter la série (cf. sa présence dans la liste des mots‑clef du langage <a class="external" href="https://en.cppreference.com/w/cpp/keyword/char8_t" target="_BLANK">C++</a>). Il ne s'agit pas à proprement parler d'un type de caractère large, puisqu'il a les mêmes caractéristiques que <code class="prettyprint lang-c">unsigned char</code>, mais on peut l'assimiler comme tel en raison de l'usage qui en est fait pour constituer les <strong class="specialLG">unités d'encodage</strong> du <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong>. </p>
+
+<p class="square"> Notons par ailleurs qu'en langage <strong class="title">C</strong>, il reste possible d'employer simplement le <strong>type</strong> <code class="prettyprint lang-c">char</code> pour mémoriser les <strong>octets</strong> des caractères encodés au <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong> dans la mesure où ce type possède bien <strong>256 valeurs</strong>. Le fait que, le plus souvent la moitié de ces valeurs soient <strong>négatives</strong> (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#remarquesTypes" target="_BLANK"></a>) n'est pas un problème rédhibitoire. Toutefois, il importe de <strong class="warning">ne jamais perdre de vue cet aspect</strong> dans les algorithmes programmés, en particulier lorsqu'on opère des tests de comparaison numérique sur les codes des caractères. Il suffit en principe d'opérer une <strong class="defin">conversion</strong> dans le type <code class="prettyprint lang-c">unsigned char</code> lorsque cela est nécessaire. </p>
+
+<div class="exemples">
+<p class="exemple"> Le programme académique ci‑dessous emploie une <strong class="title">chaîne de caractères</strong> <code class="prettyprint lang-c">u8"Ça"</code> encodée au <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong>. Elle est déclarée comme un pointeur (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#C-style_string" target="_BLANK"></a>) dans le <strong>type</strong> <code class="prettyprint lang-c">signed char*</code>  pour montrer le fait qu'un type d'encodage signé ne pose <strong class="pros">pas de problème</strong>.  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+signed char * text = u8"Ça";
+
+int main(void) {
+    printf("\"%s\" : ", text);
+    while (*text) printf("0x%hhX ", *text++);
+    return 0;
+}  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> L'instruction de la ligne nº6 affiche la chaîne. Quand à la ligne nº7, elle affiche successivement le <strong>code hexadécimal</strong> respectif de chaque <strong class="specialLG">octet d'encodage</strong> des caractères de cette chaîne (c'est‑à‑dire tels qu'ils sont mémorisés) via la spécification de conversion <code class="prettyprint lang-c">%hhX</code>, donc dans le type <code class="prettyprint lang-c">unsigned char</code>. Avec <strong class="OnlineGDB">OnlineGDB</strong>, on obtient la sortie attendue : </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+"Ça" : 0xC3 0x87 0x61  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, on peut vérifier qu'au format <strong class="defin"><em class="sigle">UTF‑8</em></strong>: </p>
+<ul>
+  <li> la majuscule « <em class="bold">Ç</em> » (point de code U+00C7 <a class="external" href="https://unicode-table.com/fr/00C7/" target="_BLANK"></a>) a bien le code <code class="cmd">C3 87</code> ;  </li>
+
+  <li> la minuscule « <em class="bold">a</em> » (point de code U+0061 <a class="external" href="https://unicode-table.com/fr/0061/" target="_BLANK"></a>) a bien le code <code class="cmd">61</code>. </li>
+</ul>
+</div><!-- exemple -->
+
+<p> On verra ainsi au chapitre C5‑VI <a class="next" href="../C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html#fonctionsChaines" target="_BLANK"></a> que les <strong class="title">fonctions</strong> de la bibliothèque standard du langage <strong class="title">C</strong> qui opèrent sur les <strong>chaînes de style C</strong> ont leurs arguments formels le plus souvent déclarés dans le <strong>type</strong> <code class="prettyprint lang-c">char*</code>. Néanmoins, elles sont <strong class="pros">opérationnelles</strong> pour des chaînes de caractères encodées au <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong>.  </p>
+</div><!-- expert -->
+
+
+
+<h3 id="valCarEtendus"> Codage des valeurs de types caractères larges </h3>
+
+
+
+<div class="important">
+<p> Dans un <strong>programme source</strong> en langages <strong>C</strong> et <strong>C++</strong>, on <strong class="title">code</strong> des <strong class="defin">valeurs de caractères larges</strong> : </p>
+
+<ul>
+  <li> avec la <strong class="pros">même syntaxe</strong> que celle des <strong>caractères simples</strong>, pour mémoire (cf. chap. C3‑VIII <a class="previous" href="../C3-numeration/Cc3-8_typesCaracteres.html#valeurCarImprimable" target="_BLANK"></a>) : </li>
+  <ul>
+    <li> avec des <strong class="specialO">guillemets simples</strong> <code class="prettyprint lang-c">''</code>,</li>
+
+    <li> et entre les guillemets, soit par <strong>syntaxe automorphe</strong> <a class="external" href="Cc3-9_typesCaracteresEtendus.html" target="_BLANK"></a>, soit par <strong>séquences d'échappement</strong>. </li>
+  </ul>
+
+  <li> mais en employant un <strong class="defin">préfixe d'encodage</strong> : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">L</code>, <code class="prettyprint lang-c">u</code> ou <code class="prettyprint lang-c">U</code> respectivement pour les types <code class="prettyprint lang-c">wchar_t</code>, <code class="prettyprint lang-c">char16_t</code> et <code class="prettyprint lang-c">char32_t</code>.
+  </span> </li>
+</ul>
+</div><!-- important -->
+
+
+
+<h4 id="syntaxeAutomorphe"> Syntaxe automorphe </h4>
+
+
+<div class="complement">
+<p> Dans un éditeur de code, pour permettre la <strong class="title">syntaxe automorphe</strong> de <strong class="defin">toutes les valeurs de caractères imprimables</strong> de l'<strong><em class="sigle">UCS</em></strong> – c'est‑à‑dire directement par les <strong class="specialM">glyphes</strong> des caractères, qui peuvent être générés par les <strong>touches du clavier</strong> ou par copier‑coller depuis une <strong>table des caractères</strong> – il est <strong class="pros">recommandé</strong> de choisir le <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong> pour le <strong>fichier source</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+  <li> sous <strong class="Codeblocks">Code::Blocks</strong>, on passe par le menu <code>Settings/Editor…</code> et l'onglet <code>Encoding settings</code> (cocher l'option <code>As default encoding</code> si les fichiers ont un format d'encodage initial différent) ; </li>
+
+  <li> sous <strong class="Sublime">Sublime Text</strong>, ce choix est en général celui <strong>par défaut</strong> (cf. la valeur de l'attribut <code>default_encoding</code> dans le fichier de préférence du répertoire <code>Default</code> ouvert via le menu <code>Preferences/Settings</code>) ; sinon, il faut coder ce choix dans le fichier de préférence du répertoire <code>User</code>.  </li>
+</ul>
+</div><!-- exemples -->
+
+
+<h4 id="syntaxeAlternative"> Syntaxe alternative par séquences d'échappement </h4>
+
+
+<div class="complement">
+<p> Pour les <strong>caractères non imprimables</strong>, ou même si la syntaxe automorphe n'est pas opérationnelle sur l'éditeur de code, une <strong class="title">syntaxe alternative</strong> permet de coder <strong class="pros">n'importe quelle valeur de caractère</strong> de l'<strong><em class="sigle">UCS</em></strong> à partir du point de code <em class="boldV">U+A0</em> ; il suffit d'employer une <strong class="defin">séquence d'échappement</strong> de la forme : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">\u<span class="nocode"><strong class="specialO">xxxx</strong></span></code> où <strong class="specialO">xxxx</strong> est le <strong>point de code</strong> à <strong>4 digits</strong> hexadécimaux du caractère si ce dernier est <strong>dans le <strong class="specialLB"><em class="sigle">BMP</em></strong></strong> (<em class="english">basic multilingual plane</em> – cf. supra <a class="supra" href="Cc3-9_typesCaracteresEtendus.html#plansUnicode"></a>); </li>
+
+  <li> <code class="prettyprint lang-c">\U<span class="nocode"><strong class="specialO">xxxxxxxx</strong></span></code> où <strong class="specialO">xxxxxxxx</strong> est le <strong>point de code</strong> à <strong>8 digits</strong> hexadécimaux du caractère si ce dernier est dans un <strong class="specialLB">autre plan</strong> de l'<strong><em class="sigle">UCS</em></strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarques"> On rappelle (cf. chap. C3‑XIII <a class="previous" href="../C3-numeration/Cc3-8_typesCaracteres.html#syntaxeGeneraleSeqEchap" target="_BLANK"></a>) que les <strong class="title">valeurs de caractères</strong> des points de code <em class="boldV">U+00</em> à <em class="boldV">U+FF</em> (inclus) sont quant à elles codables avec une <strong class="defin">séquence d'échappement</strong> préfixée  par <code class="prettyprint lang-c">\x</code> ou <code class="prettyprint lang-c">\X</code> comme pour les caractères simples. </p>
+</div><!-- remarques -->
+
+
+
+
+
+<div class="exemples"><p class="exemples"> </p>
+<p> Tous les exemples ci‑après peuvent être <strong class="pros">testés</strong> en langage <strong>C</strong> dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong> en utilisant le programme générique suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;uchar.h&gt;
+
+<span class="nocode"><strong class="specialG">type</strong></span> c = <span class="nocode"><strong>préfixe</strong></span>'<span class="nocode"><strong class="specialO">glyphe</strong> ou <strong class="specialO">séquence d'échappement</strong></span>';
+
+int main(void) {
+  printf("%x\n", c);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où : </p>
+
+<ul>
+  <li> la <strong>déclaration</strong> (ligne nº 4) est à adapter au cas par cas de chaque exemple ; </li>
+
+  <li> l'instruction d'<strong>affichage</strong> (ligne nº 7) affiche le <strong class="defin">code hexadécimal</strong> du caractère dans le <strong class="defin">format</strong> codé par le <strong>préfixe</strong> dans sa déclaration ; cela permet ainsi de vérifier que la déclaration du caractère a été interprétée correctement par le compilateur. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> <em>(L'affichage du glyphe du caractère est plus complexe à obtenir en tant que caractère individuel. Mais on verra au chapitre C5‑VI qu'un tel affichage est très simple au sein d'une chaîne de caractères codée au format <em class="bold"><em class="sigle">UTF‑8</em></em>.)</em> </div>
+  </div><!-- expert -->
+</ul>
+
+
+<ol class="numbered">
+  <li> La <strong class="title">lettre « A »</strong> de l'<strong class="specialLB">alphabet latin</strong> (point de code U+41 <a class="external" href="https://unicode-table.com/fr/0041/" target="_BLANK"></a>) : </li>
+
+  <ul>
+    <li> se code <code class="prettyprint lang-c">U'A'</code> ou <code class="prettyprint lang-c">U'\x41'</code> dans le type <code class="prettyprint lang-c">char32_t</code> ; </li>
+
+    <li> se code <code class="prettyprint lang-c">u'A'</code> ou <code class="prettyprint lang-c">u'\x41'</code> dans le type <code class="prettyprint lang-c">char16_t</code> ; </li>
+
+    <li> se code <code class="prettyprint lang-c">'A'</code> ou <code class="prettyprint lang-c">'\x41'</code> dans le type <code class="prettyprint lang-c">char</code> (comme n'importe quel caractère du jeu <em class="sigle">ASCII</em> restreint) ; </li>
+  </ul>
+
+  <li> La <strong class="title">lettre « Ω »</strong> de l'<strong class="specialLB">alphabet grec</strong>  (<em>oméga</em> – point de code U+3A9 <a class="external" href="https://unicode-table.com/fr/03A9/" target="_BLANK"></a>) : </li>
+
+  <ul>
+    <li> se code <code class="prettyprint lang-c">U'Ω'</code> ou <code class="prettyprint lang-c">U'\u03A9'</code> dans le type <code class="prettyprint lang-c">char32_t</code> ; </li>
+
+    <li> se code <code class="prettyprint lang-c">u'Ω'</code> ou <code class="prettyprint lang-c">u'\u03A9'</code> dans le type <code class="prettyprint lang-c">char16_t</code> ; </li>
+
+    <li> mais ne peut <strong class="warning">pas</strong> se coder dans le type <code class="prettyprint lang-c">char</code> puisque son point de code est supérieur à U+7F (il faudrait 2 unités d'encodage) ; </li>
+  </ul>
+
+  <li> l'<strong class="title">émoticône</strong> 😉 (<em class="english">winking face</em> – point de code U+1F609 <a class="external" href="https://unicode-table.com/fr/1F609/" target="_BLANK"></a>) : </li>
+
+  <ul>
+    <li> se code <code class="prettyprint lang-c">U'😉'</code> ou <code class="prettyprint lang-c">U'\U0001F609'</code> dans le type <code class="prettyprint lang-c">char32_t</code> (attention, elle ne peut être saisie par son glyphe que si la police de l'éditeur de code inclut ce caractère ou si le système d'exploitation procède à une substitution équivalente de police en cas d'absence) ;  </li>
+
+    <li> mais ne peut <strong class="warning">pas</strong> se coder : </li>
+    <ul>
+      <li> ni dans le type <code class="prettyprint lang-c">char</code> puisque son point de code est supérieur à U+7F (il faudrait 4 unités d'encodage),</li>
+
+      <li> ni dans le type <code class="prettyprint lang-c">char16_t</code> puisque son point de code est supérieur à U+FFFF (il faudrait 2 unités d'encodage).</li>
+    </ul>
+  </ul>
+</ol>
+
+</div><!-- exemples -->
+
+
+
+<h3> Manipulation des données de types caractères larges </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">manipulation des données</strong> de types <strong class="defin">caractères larges</strong> obéit aux <strong class="pros">mêmes principes généraux</strong> que la manipulation de données de type <strong>caractère simples</strong> (cf. chap. C3‑VIII <a class="previous" href="../C3-numeration/Cc3-8_typesCaracteres.html#manipCaracteres" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En effet : </p>
+<ul>
+  <li> puisque les <strong class="defin">types caractères</strong> – simples ou larges – sont fondamentalement des <strong>types entiers</strong>, on peut les manipuler comme tels, avec les <strong>opérateurs généraux</strong> ; toutefois, seules certaines opérations sont <strong class="title">pertinentes</strong> en termes de valeurs de caractères (affectation, différence, comparaisons, etc.) ; </li>
+
+  <li> pour des opérations plus techniques, le fichier d'en‑tête <code class="filename">wctype.h</code> de la bibliothèque standard du langage <strong>C</strong> (<code class="filename">cwctype</code> pour le <strong>C++</strong>), fournit des <strong class="pros">fonctions analogues</strong> à celles déclarées dans le fichier <code class="filename">ctype</code>, mais pour des données de type <code class="prettyprint lang-c">wchar_t</code> <a class="external" href="https://en.cppreference.com/w/c/string/wide" target="_BLANK">C</a>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert"> 
+<p> En fait, les fonctions déclarées dans le fichier <code class="filename">wctype.h</code> opèrent sur des données de type <code class="prettyprint lang-c">wint_t</code> (<em class="english">wide integer type</em> <a class="external" href="http://www.cplusplus.com/reference/cwchar/wint_t/" target="_BLANK"></a>). </p>
+<ul>
+  <li> Dans la pratique, il s'agit d'une <strong class="defin">extension</strong> sur <strong>32 bits</strong> du type <code class="prettyprint lang-c">wchar_t</code> qui, rappelons‑le, est parfois limité à 16 bits. En particulier, il permet d'inclure le caractère spécial <strong><em class="sigle">WEOF</em></strong> (<em class="english">wide end‑‑file</em>) qui est très employé dans le traitement des flux de données de types caractères larges. </li>
+
+  <li> De ce fait, les fonctions sont opérationnelles aussi pour les données de type <code class="prettyprint lang-c">char32_t</code> (et aussi de type <code class="prettyprint lang-c">char16_t</code>, bien entendu).</li>
+</ul>
+</div><!-- expert -->
+
+<div class="exemples"><p class=exemples></p>
+<p> Les exemples ci‑après peuvent être testés dans l'environnement <strong class="OnlineGDB">OnlineGDB</strong> en utilisant le programme générique suivant :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;uchar.h&gt;
+#include &lt;wctype.h&gt;
+#include &lt;locale.h&gt;
+
+int main(void) {
+  setlocale(LC_ALL, "en_US.utf8");
+  printf("%X\n", <span class="nocode"><strong>expression d'appel à tester</strong></span>);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ----------> </p>
+
+
+<div class="expert">
+<p> <em>(Ici, il est nécessaire de modifier certaines variables d'environnement locales durant l'exécution du programme – cf. l'instruction en ligne nº 7, avec la directive d'inclusion requise en ligne nº 4. Avec OnlineGDB, on doit affecter à la variable <code>LC_ALL</code> la valeur <code>"en_US.utf8"</code> parce que cette locale est bien installée sur le serveur d'exécution, mais sur un PC Linux, on pourrait très bien aussi lui donner la valeur <code>"fr_FR.utf8"</code>.)</em> </p>
+</div><!-- expert -->
+
+<ol class="numbered">
+  <li> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">iswcntrl</code> <a class="external" href="https://en.cppreference.com/w/c/string/wide/iswcntrl" target="_BLANK">C</a> (<em class="english">is wide control</em>) <strong>teste</strong> si son argument est un <strong class="defin">caractère de contrôle</strong>. </li>
+  <ul>
+    <li>  L'expression d'appel <code class="prettyprint lang-c">iswcntrl(u'€')</code> retourne la valeur <code class="cmd">0</code> – nulle, donc équivalente à <strong class="defin">faux</strong> au sens booléen – ce qui est <strong class="pros">correct</strong> parce que le symbole monétaire « <em class="bold">€</em> » n'est <strong>pas un caractère de contrôle</strong>. </li>
+
+    <li> Et a contrario, l'expression <code class="prettyprint lang-c">iswcntrl(u'\t')</code> est évaluée <code class="cmd">2</code>, donc <strong class="defin">vrai</strong>, ce qui est une fois de plus <strong class="pros">correct</strong> puisque la séquence d'échappement <code>\t</code> code le caractère de contrôle <strong><em class="sigle">HT</em></strong> (saut de tabulation horizontale). </li>
+  </ul>
+  
+  <li> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">iswupper</code> <a class="external" href="https://en.cppreference.com/w/c/string/wide/iswupper" target="_BLANK">C</a> (<em class="english">is wide upper</em>) <strong>teste</strong> si son argument est une <strong class="defin">lettre majuscule</strong>. </li>
+  <ul>
+    <li> L'expression d'appel <code class="prettyprint lang-c">iswupper(u'Ç')</code> retourne la valeur <code class="cmd">1</code> – non nulle, donc équivalente à <strong class="defin">vrai</strong> au sens booléen, ce qui est <strong class="pros">correct</strong> puisque la lettre « <em class="bold">Ç</em> » est bien une <strong>majuscule</strong>. </li>
+
+    <li> Et a contrario, l'expression <code class="prettyprint lang-c">iswupper(u'ç')</code> est évaluée <code class="cmd">0</code>, donc <strong class="defin">faux</strong>, ce qui est une fois de plus <strong class="pros">correct</strong> puisque la lettre « <em class="bold">ç</em> » n'est <strong class="warning">pas</strong> <strong>une majuscule</strong>. </li>
+  </ul>
+  
+  <li> La <strong class="title">fonction</strong> <code class="prettyprint lang-c">towlower</code> <a class="external" href="https://en.cppreference.com/w/c/string/wide/towlower" target="_BLANK">C</a> (<em class="english">to wide lower</em>) <strong>retourne</strong> le <strong>code</strong> de la <strong class="defin">lettre minuscule correspondante</strong> à l'argument si ce dernier prend la valeur d'une lettre majuscule ayant une minuscule. Sinon, il retourne simplement le code l'argument. </li>
+  <ul>
+    <li> L'expression d'appel <code class="prettyprint lang-c">towlower(u'Ç')</code> retourne la <strong class="defin">valeur</strong> <code class="cmd">E7</code> qui <strong class="pros">est bien</strong> le code <strong><em class="sigle">UTF‑16</em></strong> de la lettre <strong class="defin">minuscule</strong> « <em class="bold">ç</em> » <a class="external" href="https://unicode-table.com/fr/00E7/" target="_BLANK">C</a>. </li>
+
+    <li> L'expression d'appel <code class="prettyprint lang-c">towlower(u'€')</code> retourne la <strong class="defin">valeur</strong> <code class="cmd">20AC</code> qui est le code <strong><em class="sigle">UTF‑16</em></strong> du symbole « <em class="bold">€</em> » <a class="external" href="https://unicode-table.com/fr/20AC/" target="_BLANK">C</a> puisque ce dernier n'est <strong class="warning">pas</strong> <strong>une lettre</strong>, et donc ne peut être « converti » en minuscule. </li>
+  </ul>
+</ol>
+</div><!-- exemples -->
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>
+
+

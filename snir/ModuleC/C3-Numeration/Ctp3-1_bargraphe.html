@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="TP"
+	data-modulepartnumber="3"
+	data-pagenumber="1"
+	data-pageState="OK"
+	data-pageheadtitle="Bargraphe"
+	data-pagefulltitle="Bargraphe à led"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont : </p>
+
+<ul>
+	<li> de manipuler des <strong>variables</strong> de <strong class="defin">types entiers</strong> et de type <code class="prettyprint lang-c">byte</code>, et de comprendre la différence d'emploi de ces deux types ; </li>
+
+	<li> de découvrir la pratique des <strong class="defin">entrées analogiques</strong>. </li>
+</ul>
+
+<p> Les exercices sont aussi l'occasion de <strong class="pros">consolider</strong> les <strong>éléments de langage</strong> mis en œuvre aux TP précédents, en particulier les techniques de codage pour obtenir des <strong>programmes réactifs</strong>. </p>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ce sujet de TP, il est recommandé d'avoir étudié les <strong>chapitres</strong> <strong class="warning">C3‑I ‑II ‑III ‑VI</strong> <strong>&</strong> <strong class="warning">‑VII</strong>. Des renvois aux principaux éléments de cours requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Spécifications matérielles générales </h3>
+
+
+<div style="display: inline-auto;">
+
+<img class="top-right" src="../img/Ctp3-1_bargraphe.png" width="400px">
+
+<p>	Les deux exercices sont à traiter dans l'environnement de <strong>simulation en ligne</strong> <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK"></a>, en implémentant préalablement le <strong class="title">montage électronique</strong> en figure ci‑contre, qui comprend : </p>
+
+<ul>
+	<li> une <strong>carte</strong>  <strong class="Arduino">Arduino Uno</strong> ; </li>
+
+	<li> une <strong>platine d'essai</strong> (<em class="english">breadboard</em>) de taille moyenne, dont les rails « <em class="bold">+</em> » et « <em class="bold">−</em> » sont respectivement reliés aux broches <em class="bold" style="color:red">5V</em></em> et <em class="bold">GND</em> de la carte ; </li>
+
+	<li> une série de <strong>8 led</strong> (en partant de la droite, <strong class="specialY">5 jaunes</strong> puis <strong class="specialDR">3 rouges</strong>) telles que : </li>
+	<ul>
+		<li> les anodes sont respectivement reliées aux <strong>broches nº 2 à 9</strong> du port numérique de la carte ; ces broches doivent donc être configurées dans les programmes comme des <strong>sorties</strong> <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#OUTPUT" target="_BLANK"></a> ; </li> 
+
+		<li> les cathodes sont reliées au rail « <em class="bold">−</em> » de la platine, chacune via une <strong>résistance de limitation</strong> de courant de <em class="bold">220 Ω</em> ; </li>
+	</ul>
+
+	<li> un <strong class="specialLB">potentiomètre</strong> (résistance variable) <a class="external" href="https://fr.wikipedia.org/wiki/Potentiomètre" target="_BLANK">W</a> à bouton tournant, de résistance totale <em class="bold">10 kΩ</em>, alimenté en tension par les rails « <em class="bold">+</em> » et « <em class="bold">−</em> » de la platine, et dont le <strong class="specialO">curseur</strong> (contact mobile) est relié directement à l'<strong>entrée analogique nº A0</strong> de la carte. </li>
+</ul>
+</div><!-- display -->
+
+
+
+<h3 class="nocount"> Spécifications logicielles générales </h3>
+
+
+
+<p> L'<strong>exercice 1</strong> consiste à allumer de droite à gauche, en <em>temps réel</em> un nombre de led <em>proportionnel</em> à la position du bouton tournant du potentiomètre, pour simuler un <strong class="title">bargraphe</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bargraphe" target="_BLANK">W</a>. </p>
+
+<p> L'<strong>exercice 2</strong> reprend la spécification de l'exercice 1 en ajoutant la <strong class="title">persistance temporaire</strong> de la dernière <strong class="specialDR">led rouge</strong> allumée la plus à gauche pour signaler tout pic de tension « élevée » sur la broche du curseur du potentiomètre. </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important"; style="margin-left: 0em;">
+<p> Il est recommandé de traiter les exercices <strong class="pros">dans l'ordre</strong>. </p>
+
+<p> Dans un <strong class="title">nouveau circuit</strong> sous <strong class="Tinkercad">Tinkercad</strong> : </p>
+<ul>
+	<li> <strong class="specialLB">effectuer le câblage</strong> de la partie matérielle ;</li>
+
+	<li> <strong class="specialLB">vérifier le câblage</strong> par des branchements directs temporaires, typiquement en reliant l'anode de chaque led au potentiel de référence <em class="bold" style="color:red">5V</em> de la carte.  </li>
+</ul>
+
+<p> Sur le poste de travail, créer un <strong class="title">répertoire de TP</strong> nommé avec la référence du sujet, typiquement <code class="filename">C3_TP1</code>. </p>
+
+<p> Puis,	avec un <strong class="title">éditeur de code</strong> (<em class="mark">Sublime Text</em>, <em class="mark">Atom</em>…) : </p>
+
+<ul>
+	<li> <strong class="specialLB">Coder</strong> les programmes demandés en respectant les <strong class="pros">règles de bonnes pratiques</strong> (cf. chap. C2‑IX <a class="cours" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#nomsExplicites" target="_BLANK"></a>).  </li>
+
+	<li> <strong class="specialLB">Enregistrer</strong> le programme de <strong>chaque exercice</strong> dans un <strong class="pros">fichier distinct</strong> nommé <code class="filename">Ctp31_ex<strong class="defin" style="padding-left: 0.1em; padding-right: 0.1em">n</strong>.ino</code>, où <strong class="defin">n</strong> est le nº de l'exercice. </li>
+</ul>
+
+<p> Pour <strong class="title">tester le bon fonctionnement</strong> de chaque programme, procéder par <strong>copier‑coller </strong>dans la fenêtre d'édition de <strong class="Tinkercad">Tinkercad</strong>. En cas de <strong class="defin">modifications ponctuelles</strong> de mise au point, ne pas oublier d'effectuer un <strong>copier‑coller inverse</strong> dans l'éditeur de code et d'enregistrer les modifications. </p>
+
+<p>	Répondre aux <strong class="title">questions supplémentaires</strong> sur feuille ou cahier. </p>
+</div><!-- important -->
+
+
+<h4> Consignes de codage </h4>
+
+
+<div class="consignes" style="margin-left: 0em;"><p class="consignes"></p>
+<p> <strong class="title">Déclarer les constantes globales</strong> de type <code class="prettyprint lang-c">int8_t</code> : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">firstLEDpin</code> et <code class="prettyprint lang-c">lastLEDpin</code> pour désigner les <strong>numéros de broches</strong> respectifs de la <strong>première</strong> <strong class="specialY">led</strong> et de la <strong>dernière</strong> <strong class="specialDR">led</strong> du bargraphe ; </li>
+
+	<li> <code class="prettyprint lang-c">numberOfLED</code> pour mémoriser le <strong>nombre de led</strong> du bargraphe (en utilisant les identificateurs des constantes précédentes) ; </li>
+
+	<li> <code class="prettyprint lang-c">potentiometerPin</code> pour désigner le <strong>numéro de broche</strong> du <strong class="specialLB">potentiomètre</strong>. </li>
+</ul>
+
+<p style="margin-top: 1em"> <strong class="title">Coder la fonction</strong> <code class="prettyprint lang-c">setup</code> pour configurer et initialiser toutes les sorties utilisées du port numérique de la carte. </p>
+</div><!-- consignes -->
+
+
+
+
+
+<ol class="exercice">
+	<li id="exo1"> Implémenter dans la fonction <code class="prettyprint lang-c">loop</code> le programme temps‑réel d'<strong class="title">animation du bargraphe</strong> en suivant l'algorithme en <strong class="defin">quatre étapes</strong> décrit ci‑dessous : <br>
+
+	<ol class="questions">
+		<li> Lire la <strong>valeur analogique</strong> sur la broche reliée au <strong class="specialO">curseur</strong> du <strong class="specialLB">potentiomètre</strong> (cf. chap. C3‑VII <a class="cours" href="Cc3-7_entreesSortiesAnalogiques.html#analogRead" target="_BLANK"></a>) et la mémoriser dans une variable entière nommée <code class="prettyprint lang-c">potentiometerValue</code>, en choisissant le type plus approprié. </li>
+    
+    	
+		<li> <img class="top-right" src="../img/potentiometreGradue.png" width="250px">
+			Calculer et mémoriser le <strong>nombre de led à allumer</strong> sur le bargraphe dans une variable entière nommée <code class="prettyprint lang-c">numberOfLitLED</code>, en choisissant le type plus approprié. Dans un premier temps, on pourra utiliser la fonction <code class="prettyprint lang-c">map</code> (cf. chap. C2‑VII <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMathArduino" target="_BLANK"></a>). </li>
+    
+    <div class="expert">
+		<div class="nobullet"> * Dans un deuxième temps, on cherchera une <strong>alternative à la fonction</strong> <code class="prettyprint lang-c">map</code>, afin d'obtenir une <strong class="pros">meilleure répartition</strong> sur la course du potentiomètre pour l'allumage successif des led, spécifiée en figure ci‑contre par les valeurs seuils de la variable <code class="prettyprint lang-c">potentiometerValue</code> (cf. l'exercice 5 de la feuille C3 <a class="previous" href="Cexo3_numeration.html#exo5" target="_BLANK"></a>). </div> 
+    </div><!-- expert -->
+    	
+		<li> <img class="top-right" src="../img/ctp31_bargraphe1.png" width="420px">
+		Dans une <strong class="title">version</strong> <code>v1</code> du programme, à l'aide d'une <strong>boucle</strong> <code class="prettyprint lang-c">for</code> avec une variable d'itération <code class="prettyprint lang-c">ledPin</code> parcourant tous les numéros de broches, <strong>allumer ou éteindre les led</strong> en tenant compte de la valeur de <code class="prettyprint lang-c">numberOfLitLED</code>. Dans cette boucle, on codera la condition à exprimer sur <code class="prettyprint lang-c">ledPin</code> pour déterminer s'il faut la mettre au niveau logique <em>HAUT</em> ou <strong>BAS</strong> en raisonnant sur la figure ci‑contre (on peut notamment déterminer le décalage pour la première led par rapport à la valeur de son numéro de broche). </li>
+
+    <li> Dans une <strong class="title">version</strong> <code>v2</code> du programme : </li>
+		<ul>
+			<li> déclarer <strong>variable d'état</strong> <code class="cmd">ledStates</code> de type <code class="type">byte</code> et de valeur initiale <code class="prettyprint lang-c">0b00000000</code> (cf. chap. C3‑III <a class="cours" href="Cc3-3_typesBooleens.html#typesByteWord" target="_BLANK"></a>). On va faire en sorte que chacun de ses bits encode par <code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code> la valeur logique de l'état d'une led du bargraphe, selon qu'elle doit être respectivement éteinte ou allumée. </li>
+			
+			<div style="display: inline-block;">
+				<img class="top-right" src="../img/ctp31_bargraphe2.png" width="500px" style="padding-top:0.5em">
+			<li> 
+			À l'aide d'une <strong>boucle</strong> <code class="prettyprint lang-c">for</code> avec une variable d'itération <code class="prettyprint lang-c">bitRank</code> parcourant les bits de <code class="prettyprint lang-c">ledStates</code>, et en utilisant la <strong>fonction</strong> <code class="prettyprint lang-c">bitSet</code> (cf. chap. C3‑III <a class="cours" href="Cc3-3_typesBooleens.html#bitWrite" target="_BLANK"></a>), mettre à <code class="prettyprint lang-c">1</code> tous les bits de rang strictement inférieur à la valeur de <code class="prettyprint lang-c">numberOfLitLED</code>. </li>
+			</div><!-- display -->
+
+			<div class="nobullet"> * <em class="remark">Remarque</em> : Avec la <strong>fonction mathématique</strong> <code class="prettyprint lang-c">pow</code> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a>), on peut calculer directement la valeur de <code class="prettyprint lang-c">ledStates</code> en fonction de celle de <code class="prettyprint lang-c">numberOfLitLED</code>. On peut alors se passer de la boucle <code class="prettyprint lang-c">for</code> supra. </div>
+
+			<div style="display: inline-block;">
+				<img class="top-right" src="../img/ctp31_bargraphe3.png" width="500px" style="padding-top:0.5em">
+			<li> À l'aide d'une <strong>boucle</strong> <code class="prettyprint lang-c">for</code> avec une variable d'itération <code class="prettyprint lang-c">ledPin</code> parcourant tous les numéros de broches, <strong>allumer ou éteindre les led</strong> en codant dans le deuxième argument de la fonction <code class="prettyprint lang-c">digitalWrite</code> la valeur du bit de <code class="prettyprint lang-c">ledStates</code> correspondant à la valeur de <code class="prettyprint lang-c">ledPin</code>, et lue grâce à la <strong>fonction</strong> <code class="prettyprint lang-c">bitRead</code> (cf. chap. C3‑III <a class="cours" href="Cc3-3_typesBooleens.html#bitRead" target="_BLANK"></a>). </li>
+			</div><!-- display -->
+		</ul>
+	</ol><!-- questions exo1 -->
+
+
+
+	<li id="exo2"> <em class="bold">*</em>
+		  <img class="top-right" src="../img/bargraphExample.jpg" width="200px">
+		Modifier le programme de l'exercice précédent pour qu'il affiche les <strong class="title">pics de tension élevée</strong>, c'est‑à‑dire que si une ou plusieurs <strong class="specialDR">led rouges</strong> s'allument, celle de plus haut rang reste allumée durant au moins <strong>une seconde</strong> même si, entre‑temps, le niveau de tension sur le curseur du potentiomètre diminue (cf. l'image ci‑contre et la vidéo de fonctionnement d'un égaliseur <em>Hi‑Fi</em> au lien suivant <a class="external" href="https://www.youtube.com/watch?v=lG32Frzvwlk?&t=7m33s" target="_BLANK">Y</a>). </li>
+
+
+		<div class="nobullet" style="margin-left: 1.5em"> Pour implémenter cette fonctionnalité, il suffit de coder <strong class="defin">quelques traitements supplémentaires</strong> entre les étapes <em class="bold">c)</em> et <em class="bold">d)</em> de l'algorithme précédent. On peut par exemple :  <br> 
+
+	<ul>
+		<li> créer une variable entière nommée <code class="prettyprint lang-c">maxNumberOfLitLED</code> pour mémoriser à tout instant le <strong>nombre maximal de led</strong> qui ont été allumées depuis le dernier pic de tension ; </li>
+
+		<li> utiliser une variable nommée <code class="prettyprint lang-c">previousMillis</code> pour mémoriser la valeur rendue par la fonction <code class="prettyprint lang-c">millis</code> lors du dernier pic de tension et une constante nommée <code class="prettyprint lang-c">persistenceDuration</code> (à déclarer de type entier non signé) qui définit en millisecondes la <strong>durée de persistance d'allumage</strong> de la <strong class="specialDR">led rouge</strong> allumée de plus haut rang ; </li>
+
+		<li> modifier la valeur de <code class="prettyprint lang-c">maxNumberOfLitLED</code> seulement si la variable <code class="prettyprint lang-c">numberOfLitLED</code> prend une valeur supérieure ou égale au numéro de la <strong>première</strong> <strong class="specialDR">led rouge</strong> et supérieure à la dernière valeur de <code class="prettyprint lang-c">maxNumberOfLitLED</code>… </li>
+	</ul>	</div>
+
+</ol>
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

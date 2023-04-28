@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="2"
+  data-pagenumber="1"
+  data-pageState="OK"
+  data-pageheadtitle="DHCP - DNS"
+  data-pagefulltitle="Serveur DHCP  –  service DNS"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">objectifs principaux</strong> de ce sujet de travaux pratiques sont : </p>
+<ul>
+  <li> de comprendre les principes de la <strong class="specialLB">configuration dynamique</strong> des interfaces réseau en <strong>IPv4</strong> au sein d'un <strong><em class="sigle">LAN</em></strong> : </li>
+  <ul>
+    <li> en mettant en place un <strong>serveur <em class="sigle">DHCP</em></strong> dans un <strong>premier segment</strong> de <strong><em class="sigle">LAN</em></strong> ;</li>
+
+    <li> en activant la fonction de <strong>relais <em class="sigle">DHCP</em></strong> sur une interface de routeur pour apporter le service d'adressage dynamique dans un <strong>autre segment</strong> du <strong><em class="sigle">LAN</em></strong> ; </li>
+  </ul>
+
+  <li> de comprendre les principes de l'<strong>adressage symbolique</strong> en simulant un <strong class="specialLB">service <em class="sigle">DNS</em></strong> via un <strong>réseau distant</strong>. </li>
+</ul> 
+
+<p> Un <strong class="title">objectif secondaire</strong> est de commencer l'apprentissage de la <strong>configuration d'un routeur</strong> à l'aide d'instructions saisies dans une <strong class="specialLB">interface de commandes en ligne</strong> – en anglais, <em class="english">command line interface</em> ou <strong><em class="sigle">CLI</em></strong>. </p>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié les <strong>chapitres R2‑I</strong> et <strong>R1‑II</strong> du cours. Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Environnement </h3>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ciscoPacketTracerLogo.png" width="80px">
+<p>	Tous les exercices sont à traiter dans l'<strong class="title">environnement de simulation</strong> <strong class="Cisco">Cisco Packet Tracer</strong>. Ce logiciel gratuit doit être préalablement <strong>téléchargé</strong> et <strong>installé</strong> sur le poste travail (cf. chap. R1‑II <a class="cours" href="../R1-Generalites/Rc1-2_architecture.html#CPT" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer les manipulations sur ordinateur en veillant à <strong class="pros">enregistrer au fur et à mesure le travail</strong> dans <strong class="defin">un fichier distinct</strong> pour <strong>chaque exercice</strong>. Il est recommandé de nommer ces fichiers de la forme <code class="filename">R2tp1exo<span class="nocode"><strong class="defin">n</strong></span>.pkt</code> où <strong class="defin">n</strong> est le numéro d'exercice. </p>
+
+<p> Les <strong>exercices</strong> étant conçus <strong class="defin">en continuité l'un après l'autre</strong>, il est vivement recommandé de partir d'une <strong class="title">sauvegarde du fichier</strong> <code class="filename">.pkt</code> de  l'exercice <strong>n</strong> pour traiter l'exercice <strong>n</strong><em class="bold"> + 1</em>. </p>
+
+<p> Quant aux questions qui attendent une réponse littérale, il est conseillé d'y répondre sur cahier ou fichier de texte. </p>
+</div><!-- important -->
+
+
+<ol class="exercice">
+
+<li style="margin-top: 2em;"> <em class="bold">Mise en place et paramétrage d'un serveur <em class="sigle">DHCP</em> dans un <em class="sigle">LAN</em></em> </li>
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/R2tp1exo1.png" width="500px" style="padding-top: 0.5em">
+	<ol class="questions">
+		<li> Dans la <strong>vue « logique »</strong> de l'espace de travail, constituer la <strong class="title">topologie matérielle</strong> de réseau représentée en figure ci‑contre. Il est pour le moment constitué d'<strong>un seul segment</strong> désigné <strong><em class="sigle">LAN0</em></strong> et défini par l'<strong>adresse IPv4</strong> de réseau <code class="cmd">192.168.0.0/24</code>. </li>
+
+    <div class="nobullet"> Le <strong class="specialLB">serveur <em class="sigle">DHCP</em></strong> est un serveur générique (<em class="sigle">PT</em> pour <em class="mark">Packet Tracer</em>) sur lequel on va activer le <strong>service <em class="sigle">DHCP</em></strong>. </div>
+    
+    <li> Cliquer sur l'icône du <strong class="title">serveur <em class="sigle">DHCP</em></strong> et dans l'<strong>onglet</strong> <code>Config</code>, définir pour la configuration de son interface réseau <em class="mark">FastEthernet</em> :  </li>
+    <ul>
+      <li> l'<strong>adresse</strong> <strong class="specialO">statique</strong> <code class="cmd">192.168.0.2/24</code> ; </li>
+
+      <li> dans une perspective d'extension ultérieure (exercices 2 et 3 infra), l'adresse <code class="cmd">192.168.0.1</code> pour la <strong>passerelle par défaut</strong> et l'adresse <code class="cmd">212.34.56.254</code> pour le <strong>serveur <em class="sigle">DNS</em></strong> (résolveur primaire). </li>
+    </ul>
+
+    <div class="nobullet"> Dans l'onglet <code>Services</code> : </div>
+    <ul>
+      <li> <strong>désactiver</strong> tous les services activés par défaut (<em class="sigle">HTTP</em>, <em class="sigle">NTP</em>, <em class="sigle">FTP</em>…) ; </li>
+
+      <li> <strong>activer</strong> le <strong class="defin">service <em class="sigle">DHCP</em></strong>  en modifiant la <strong class="specialG">plage d'adresses dynamiques</strong>  nommée <code>serverPool</code> pour <em class="bold">50</em> utilisateurs en partant de l'adresse <code class="cmd">192.168.0.100</code> (cliquer sur le bouton <span class="boutonGris">Save</span> pour valider) ; </li>
+
+      <div class="nobullet"> pour ces configurations dynamiques, renseigner également les <strong class="pros">mêmes adresses <em class="sigle">IP</em></strong> respectives que supra pour la <strong>passerelle par défaut</strong>  et le <strong>serveur <em class="sigle">DNS</em></strong>. </div>
+    </ul>
+
+    <li> Sur <strong>chaque</strong> <strong class="title">PC</strong>, paramétrer l'interface réseau <em class="mark">FastEthernet</em> en choisissant l'<strong class="defin">option <em class="sigle">DHCP</em></strong> pour la configuration <strong>IPv4</strong>. </li>
+
+    <div class="nobullet"> Pour l'imprimante, choisir au contraire une <strong class="specialLB">configuration statique</strong> avec l'<strong>adresse </strong> <code class="cmd">192.168.0.254</code>. </div>
+
+    <div class="nobullet"> À l'aide de <strong><em class="sigle">PDU</em> simples</strong>, vérifier que toutes les machines peuvent communiquer entre elles dans le segment. </div>
+
+    <li> On va maintenant observer le déroulement du <strong class="title">protocole <em class="sigle">DHCP</em></strong>. En mode simulation, penser à décocher les protocoles non pertinents pour la suite (cf. TP R1‑2 <a class="previous" href="../R1-Generalites/Rtp1-2_architectures.html#exo1qC" target="_BLANK"></a>). </li>
+
+    <div class="nobullet"> Préalablement, sur l'<strong>un seul</strong> des <strong class="title">PC</strong> : </div>
+    <ul>
+      <li> basculer momentanément en configuration statique, revenir en configuration dynamique, puis mettre son interface réseau <em class="mark">FastEthernet</em> <strong class="warning">hors service</strong> ;  </li>
+
+      <li> activer le mode <span class="touche" style="border-radius: 1em">Simulation</span> du logiciel ; </li>
+
+      <li> remettre cette interface <strong class="defin">en service</strong> et <strong>observer les échanges de <em class="sigle">PDU</em></strong> sur le réseau. </li>
+    </ul>
+    
+		<div> En examinant le <strong>contenu des <em class="sigle">PDU</em></strong>, reconstituer le <strong class="title">déroulement du protocole <em class="sigle">DHCP</em></strong> (cf. chap. R2‑II <a class="cours" href="Rc2-2_dhcp.html#principeDHCP" target="_BLANK"></a>). </div>
+		<ul>
+			<li> De quel type de <strong>transaction</strong> s'agit‑il ? En principe, <strong>combien de messages <em class="sigle">DHCP</em></strong> doivent être échangés entre le client et le serveur ? </li>
+
+			<li> Pour chaque <strong>message <em class="sigle">DHCP</em></strong>, indiquer respectivement l'<strong>adresse <em class="sigle">IP</em></strong> d'<strong>émission</strong> et de <strong>réception</strong>. Dans quelle partie du <strong><em class="sigle">PDU</em></strong> les trouve‑t‑on ? </li>
+
+			<li> Dans quels champs du 2<sup>e</sup> message <em class="sigle">DHCP</em> les quatre éléments essentiels de la <strong>configuration <em class="sigle">IP</em> dynamique</strong> du client (adresse pour l'interface et son masque associé, adresse de la passerelle par défaut, adresse de résolveur primaire <em class="sigle">DNS</em>) proposées par le serveur sont‑elles renseignées (cf. chap. R2‑II <a class="cours" href="Rc2-2_dhcp.html#messageDHCP" target="_BLANK"></a> et  <a class="cours" href="Rc2-2_dhcp.html#optionsDHCP" target="_BLANK"></a>) ? Détailler ces champs du message.  </li>
+		</ul>
+
+    <li> En conclusion, le <strong>protocole <em class="sigle">DHCP</em></strong> est‑il <strong class="pros">bien simulé</strong> ? <strong>Tous ses aspects</strong> sont‑ils modélisés ? </li>
+	</ol><!-- questions (exo 1) -->
+	</div><!-- display -->
+
+
+
+
+
+
+
+
+
+
+<li id="relaisDHCP"> <em class="bold">Mise place d'un relais <em class="sigle">DHCP</em> pour un nouveau segment</em> </li>
+
+
+<img class="top-left" src="../img/R2tp1exo2.png" width="400px" style="max-width: 800px;">
+
+<div class="nobullet"> Sauvegarder le fichier <code class="filename">R2tp1exo1.pkt</code> puis l'enregistrer sous <code class="filename">R2tp1exo2.pkt</code>. </div>
+
+  <ol class="questions">
+    <li> Dans la <strong>vue « logique »</strong> de l'espace de travail, étendre la <strong class="title">topologie matérielle</strong> déjà définie à l'exercice 1 en ajoutant un nouveau segment nommé <strong><em class="sigle">LAN1</em></strong> et défini par l'<strong>adresse IPv4</strong> de réseau <code class="cmd">192.168.1.0/27</code> (32 adresses), conformément à la figure ci‑dessus. </li>
+    
+    <li> Dans l'onglet des services du <strong class="specialLB">serveur <em class="sigle">DHCP</em></strong> du <strong><em class="sigle">LAN0</em></strong>, ajouter pour le <strong class="title"><em class="sigle">LAN1</em></strong> une <strong class="specialG">nouvelle plage d'adresses dynamique</strong> désignée <code>serverPool1</code> : </li>
+    <ul>
+    	<li> avec <strong>15 adresses <em class="sigle">IP</em></strong>, en partant de l'adresse <code class="cmd">192.168.1.10</code> ; </li>
+
+    	<li> en attribuant l'adresse <code class="cmd">192.168.1.1</code> pour la <strong>passerelle par défaut</strong> et la même adresse de <strong>résolveur <em class="sigle">DNS</em></strong> que pour le segment <strong><em class="sigle">LAN0</em></strong> ; </li>
+    </ul>
+
+    <li> Cliquer sur l'icône du <strong class="title">routeur</strong> et paramétrer ses deux interfaces réseau <em class="mark">FastEthernet</em> en leur attribuant respectivement les <strong>adresses <em class="sigle">IP</em></strong> et les <strong>masques</strong> associés des <strong>passerelles par défaut</strong> définies pour les <strong class="specialG">plages d'adresses dynamiques</strong> du <strong>serveur <em class="sigle">DHCP</em></strong>.  </li>
+
+    <li> Sur <strong>chaque</strong> <strong class="title">PC</strong> du <strong><em class="sigle">LAN1</em></strong>, paramétrer l'interface réseau <em class="mark">FastEthernet</em> en choisissant l'<strong class="defin">option <em class="sigle">DHCP</em></strong> puis cliquer sur le bouton d'accélaration du temps ⏩ (<em class="english">fast forward time</em>). </li>
+    <ul>
+      <li> Observer minutieusement les <strong>configurations <em class="sigle">IP</em></strong> obtenues par ces PC. Sont‑elles conformes aux plages dynamiques définies dans le <strong>serveur <em class="sigle">DHCP</em></strong> ? À quoi correspondent‑elles (cf. chap. R2‑II <a class="cours" href="Rc2-2_dhcp.html#APIPA" target="_BLANK"></a>) ?</li>
+
+      <li> À l'aide de <strong><em class="sigle">PDU</em> simples</strong>, déterminer avec quels hôtes du réseau ces PC peuvent quand même communiquer. </li>
+    </ul>
+
+    <li> Sur <strong>un seul</strong> <strong class="title">PC</strong>, <strong class="warning">désactiver</strong> puis <strong class="defin">réactiver</strong> l'<strong>interface réseau</strong> en mode <span class="touche" style="border-radius: 1em">Simulation</span>. </li>
+
+    <div class="nobullet"> Observer les <strong>messages <em class="sigle">DHCP</em></strong> générés par ce PC et déterminer où se situe le <strong class="cons">point de blocage</strong> qui empêche les messages d'atteindre le <strong>serveur <em class="sigle">DHCP</em></strong> (cf. chap. R2‑II <a class="cours" href="Rc2-2_dhcp.html#APIPA" target="_BLANK"></a>). </div>
+
+    <li> Dans la fenêtre de paramétrage du routeur, sélectionner l'<strong>onglet</strong> <code class="cmd">CLI</code> (<em class="english">command line interface</em>). Configurer en <strong class="title">agent relais <em class="sigle">DHCP</em></strong> <a class="cours" href="Rc2-2_dhcp.html#relaisDHCP" target="_BLANK"></a> l'interface réseau qui joue le rôle de <strong class="defin">passerelle pour le <em class="sigle">LAN1</em></strong> (ne pas confondre avec l'interface réseau du premier segment). Pour ce faire, on pourra s'aider du mémento ci‑dessous : </li>
+
+    <!---------- ne pas indenter ---------->
+<pre class="displayDark" style="font-size: 70%">
+<span class="codeComment">!!!!!!!!!!!!  CISCO PACKET TRACER ROUTER CONFIGURATION IN CLI   !!!!!!!!!!!!!</span>
+
+enable                        <span class="codeComment">! enable administration permissions</span>
+show ip interface fa 0/0      <span class="codeComment">! display ip config. of FastEthernet 0/0 interface</span>
+configure terminal            <span class="codeComment">! enter configuration mode (1 cmd per line)</span>
+interface fa 0/0              <span class="codeComment">! select FastEthernet 0/0 interface</span>
+ip helper-address x.x.x.x     <span class="codeComment">! configure interface in DHCP relay agent</span>
+no ip helper-address x.x.x.x  <span class="codeComment">! cancel DHCP relay agent config.</span>
+exit                          <span class="codeComment">! exit mode</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <div class="nobullet"> <strong class="pros">Vérifier</strong> alors à l'aide de <strong><em class="sigle">PDU</em> simples</strong> que tous les hôtes du réseau peuvent alors communiquer mutuellement d'un segment à l'autre. </div>
+
+    <!-- https://www.it-connect.fr/chapitres/configurer-un-agent-relais-dhcp-sous-cisco/ -->
+    
+    	<img class="top-right" src="../img/R2tp1sauvConfigRouteur.png" width="400px">
+    <li> <em class="remark">Avant de dupliquer le fichier</em> <code class="filename">.pkt</code> de cet exercice pour traiter l'exercice suivant, dans l'onglet <code>Config</code> du <strong>routeur</strong>, <strong class="warning">sauvegarder son paramétrage global</strong> (<em class="english">global settings</em>) dans dans la <strong class="defin">mémoire non‑volatile</strong> (<strong><em class="sigle">NVRAM</em></strong>).  </li>
+
+
+  </ol><!-- questions (exo 2) -->
+
+
+
+
+
+
+
+
+
+
+
+
+  <li> <em class="bold">Simulation d'un service <em class="sigle">DNS</em> via un réseau distant</em> </li>
+  
+  <div class="nobullet"> Sauvegarder le fichier <code class="filename">R2tp1exo2.pkt</code> puis l'enregistrer sous <code class="filename">R2tp1exo3.pkt</code>. </div>
+
+  <div class="nobullet">
+  <p> On souhaite simuler le <strong class="title">service <em class="sigle">DNS</em></strong> assuré par le <strong class="defin">résolveur</strong> d'un <strong><em class="sigle">FAI</em></strong> (cf. chap. R2‑I <a class="cours" href="Rc2-1_dns_url.html#resolveurs" target="_BLANK"></a>). Néanmoins, on ne modélisera pas tout le système des serveurs de noms de domaine : on intégrera les enregistrements directement dans le résolveur, en qualifiant ce dernier de « <strong>serveur <em class="sigle">DNS</em></strong> ». On considérera également que ce serveur est directement relié à l'Internet par un simple <strong>routeur</strong> associé à une <strong>adresse <em class="sigle">IP</em> routable</strong>, sans présumer de la technologie de liaison nécessairement plus complexe employée dans la pratique. </p>
+  
+  <p> Dans le réseau du <em class="sigle">FAI</em>, on ajoutera un <strong>serveur web</strong> accessible via le nom de domaine <code class="filename">www.fai.com</code> pour <strong class="pros">montrer le bon fonctionnement</strong> du <strong>service <em class="sigle">DNS</em></strong>. </p>
+
+  <p> Avec le logiciel <strong class="Cisco">Cisco Packet Tracer</strong>, on peut <strong class="title">simuler l'Internet</strong> par un composant générique nommé « <code>cloud‑PT</code> » modélisé par un routeur doté de multiples ports. On fait le choix d'une connexion par <strong>modem <em class="sigle">DSL</em></strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#reseauRTC" target="_BLANK"></a>) relié au routeur-passerelle de l'exercice précédent, en lui ajoutant une interface <em class="mark">FastEthernet</em> configurée avec une <strong>adresse <em class="sigle">IP</em> publique</strong> <code class="cmd">80.10.10.10</code>. En quelque sorte, l'association du modem et du routeur-passerelle modélisent à eux deux une <strong class="defin">box d'abonné</strong> à l'Internet. </p>
+
+  <p> Sur la figure ci‑dessous, la zone jaune modélise donc de façon très simpliste un <strong class="title">réseau de transport</strong> auquel on attribue l'adresse <code class="cmd">80.0.0.0/8</code>. </p>
+  
+    <img class="top-left" src="../img/R2tp1exo3.png">
+  </div><!-- nobullet -->
+	
+  <div style="display: inline-block;"> 
+    
+  <ol class="questions">
+
+    <li> Dans la <strong>vue « logique »</strong> de l'espace de travail, compléter la <strong class="title">topologie matérielle</strong> de l'exercice 2 pour aboutir à celle de la figure ci-dessus, sachant que : </li>
+      <img class="top-right" src="../img/configDSL.png" width="500px"> 
+    <ul>
+    	<li> il faut <strong class="defin">ajouter un module</strong> <em class="mark">FastEthernet</em> <code>NM-1FE2W</code> au routeur-passerelle de la <strong>box</strong> pour pouvoir le raccorder au modem ; </li>
+
+      <li> comme tout <strong><em class="sigle">DCE</em></strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#categoriesMachines" target="_BLANK"></a>), le <strong>modem <em class="sigle">DSL</em></strong> lui‑même n'a <strong class="pros">pas besoin d'être paramétré</strong> ; </li>
+
+      <li> pour le composant <code>Cloud‑PT</code>, il suffit simplement de configurer une <strong class="defin">connexion <em class="sigle">DSL</em></strong> en ajoutant une liaison entre le modem relié à la box et l'interface <em class="mark">FastEthernet</em> du routeur-passerelle <code>rt FAI</code> du réseau local du <strong><em class="sigle">FAI</em></strong> (cf. la capture d'écran ci‑contre).  </li>
+    </ul>
+
+    <div class="nobullet">  (<em class="remark">Rappel</em> : avant de mettre un routeur hors‑tension, penser à <strong class="warning">sauvegarder sa configuration</strong> en <strong><em class="sigle">NVRAM</em></strong>.) </div>
+    
+    <li> Paramétrer le <strong class="specialLB">routeur-passerelle</strong> de la <strong class="title">box</strong> en utilisant les fenêtres de dialogues et <strong class="pros">en observant les commandes en ligne</strong> équivalentes affichées dans le cadre en bas de la fenêtre, sachant qu'il faut : </li>
+    <ul>
+      <li> configurer son <strong>interface réseau</strong> <em class="mark">FastEthernet</em> reliée au modem avec l'<strong>adresse <em class="sigle">IP</em></strong> et le <strong>masque</strong> spécifiés sur la figure topologique du réseau ;  </li>
+
+      <li> ajouter la <strong>route statique</strong> vers le réseau local du <strong><em class="sigle">FAI</em></strong> (cf. R1‑TP2 <a class="previous" href="../R1-Generalites/Rtp1-2_architectures.html#routesStatiques" target="_BLANK"></a>). </li>
+    </ul>
+    <div class="nobullet"> Le fait d'observer les commandes en lignes équivalente permet de se familiariser avec cette manière de paramétrer les équipements réseaux, avant une mise en pratique à la question suivante. </div>
+
+    <li> Paramétrer le <strong class="title">routeur-passerelle</strong> <code class="cmd">rt FAI</code> en utilisant maintenant exclusivement le <strong class="specialLB">terminal  de commandes en ligne</strong> (<strong><em class="sigle">CLI</em></strong>), sachant qu'il faut : </li>
+    <ul>
+      <li> configurer ses deux <strong>interfaces réseau</strong> avec les <strong>adresses <em class="sigle">IP</em></strong> et les <strong>masques</strong> respectivement spécifiés sur la figure topologique du réseau ;  </li>
+
+      <li> ajouter les <strong>routes statiques</strong> vers les deux segments du <strong><em class="sigle">LAN</em></strong> de l'abonné définis aux exercices 2 & 3 (le fait que ces réseaux soient privés – donc, en principe non routables depuis l'Internet – n'est pas pris en compte par le logiciel de simulation). </li>
+    </ul>
+
+    <li> Paramétrer le <strong class="title">serveur <em class="sigle">DNS</em></strong> du <strong><em class="sigle">FAI</em></strong>, sachant qu'il faut : </li>
+    <ul>
+      <li> attribuer à son <strong>interface réseau</strong> <em class="mark">FastEthernet</em> l'<strong>adresse <em class="sigle">IP</em></strong> et le <strong>masque</strong> spécifiés sur la figure topologique du réseau, sans oublier de renseigner l'adresse de sa <strong>passerelle</strong> par défaut ; </li>
+
+      <li> désactiver tous les services sauf le <strong class="defin">service <strong><em class="sigle">DNS</em></strong></strong> pour lequel on ajoutera l'<strong>enregistrement du nom de domaine</strong> (<em class="english">A record</em> – cf. chap. R2‑I <a class="cours" href="Rc2-1_dns_url.html#RR" target="_BLANK"></a>) <code class="filename">www.fai.com</code> associé à l'<strong>adresse <em class="sigle">IP</em></strong> <code class="cmd">212.34.56.253</code> du serveur web défini ci‑après.  </li>
+      </ul>
+    </ul>
+    
+    <li> Procéder de même pour <strong class="title">serveur web</strong> du <strong><em class="sigle">FAI</em></strong> sachant que là, il faut activer le <strong class="defin">service <em class="sigle">HTTP</em></strong>. </li>
+
+    <div class="nobullet"> Modifier la page d'accueil <code class="filename">index.html</code> du site web codé par défaut pour afficher le texte : "<em class="bold">Welcome to your ISP home page!</em>" ; </div>
+
+
+    <li> Procéder aux <strong class="title">vérifications</strong> de bon fonctionnement du réseau :  </li>
+    <ul>
+	    <li> À l'aide de <strong><em class="sigle">PDU</em> simples</strong>, vérifier que toutes les hôtes du réseau peuvent communiquer entre eux (faire plusieurs tentatives successives en cas d'échec initial.) </li>
+	    
+	    <li> Sur l'<strong>un</strong> des <strong class="title">PC</strong> du <strong><em class="sigle">LAN1</em></strong>, ouvrir un <strong class="specialLB">navigateur</strong> et saisir l'<strong><em class="sigle">URL</em></strong> <code class="filename">www.fai.com</code> dans la barre d'adresse. Vérifier que la page d'accueil attendue s'affiche. </li>
+
+	    <li> Recommencer la manipulation précédente en mode <span class="touche" style="border-radius: 1em">Simulation</span> et observer les <strong>échanges de <em class="sigle">PDU</em></strong> des différents protocoles des couches hautes mis en jeux. À quoi servent ici les <strong><em class="sigle">PDU</em></strong> du <strong class="specialO">protocole <em class="sigle">TCP</em></strong> (cf. chap. R1‑IV <a class="cours" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/Rc1-4_protocoles.html#TCP" target="_BLANK"></a>) ? </li>
+	  </ul>  
+    
+  </ol><!-- questions (exo 3) -->
+  </div><!-- display -->
+
+  
+  
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

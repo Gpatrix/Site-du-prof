@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="2"
+  data-pagenumber="4"
+  data-pageState="OK"
+  data-pageheadtitle="Client NTP"
+  data-pagefulltitle="Client NTP"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">objectifs</strong> principaux de ce sujet de travaux pratiques sont : </p>
+<ul>
+  <li>  d'<strong>apprendre</strong> à <strong class="defin">synchroniser sur l'<em class="sigle">UTC</em></strong> – le « temps Internet » – une <strong class="Arduino">carte Arduino</strong> ;  </li>
+
+  <li> de <strong>comprendre</strong> ainsi les principes de la mise en œuvre programmée d'un <strong class="defin">client <em class="sigle">NTP</em></strong> ; </li>
+
+  <li> d'<strong>analyser</strong> le contenu d'un <strong class="defin">message <em class="sigle">NTP</em></strong> envoyé par un serveur de temps suite à une requête de synchronisation, et ce faisant de vérifier les éléments exposés dans le cours (chap. R2‑VI <a class="cours" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/ModuleR/Rc2-6_serviceTemps.html#messageNTP" target="_BLANK"></a>). </li>
+</ul>
+
+<p> Des <strong class="specialLB">objectifs secondaires</strong> sont : </p>
+<ul>
+  <li> d'exploiter les <strong>compétences de codage</strong> acquises en langages <strong>C/C++</strong> (notamment les fonctions de manipulation de mots binaires) et de comprendre à quel point elles sont utiles pour l'exploitation des protocoles réseaux ;  </li>
+
+  <li> de découvrir certaines <strong>bibliothèques de fonctions spécialisées</strong> pour les cartes à microcontrôleur de type <em class="mark">Arduino</em>. </li>
+</ul>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir bien étudié le <strong class="warning">chapitre R2‑VI</strong> du cours. Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+
+<h3 class="nocount"> Environnement et matériel </h3>
+
+
+
+<p>	Les manipulations demandées sont à accomplir sur un <strong class="specialO">réseau local</strong> utilisant la pile de protocole <em class="sigle">TCP/IP</em>, raccordé à l'<strong>Internet</strong>. On requiert le matériel ci‑dessous : </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/R2tp4_clientNTP.png" width="500px" style="padding-top: 0.2em">
+<ul>
+  <li> une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong> ou <strong class="Arduino">Mega</strong>, équipée d'un module d'extension <strong class="Arduino">shield Ethernet 2</strong> ; cette association est l'architecture matérielle retenue pour implémenter le <strong>client <em class="sigle">NTP</em></strong> ;    </li>
+
+  <li> un <strong class="title">poste de travail</strong> (typiquement, un PC) qui servira : </li>
+  <ul>
+  	<li> de <strong>terminal de programmation</strong> de la carte via le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> ; </li>
+
+  	<li> de <strong>client <em class="sigle">ICMP</em></strong> pour tester la visibilité de la carte sur le réseau ; </li>
+
+  	<li> d'<strong>horloge Internet</strong> via une page web pour vérifier la bonne synchronisation de la carte avec le temps universel coordonné. </li>
+  </ul>
+</ul>
+</div><!-- display -->
+
+<p> Ces deux machines doivent être l'une et l'autre <strong class="specialO">raccordées au réseau local</strong> – typiquement, via un <strong>switch</strong> comme sur la figure ci‑dessus – et se voir attribuer chacune une <strong>adresse <em class="sigle">IP</em></strong> sur le <strong class="defin">même segment</strong> pour pouvoir communiquer – ce qui est assuré avec la présence d'un serveur <strong><em class="sigle">DHCP</em></strong> sur le réseau local et la configuration appropriée des machines (cf. chap R2‑II <a class="cours" href="Rc2-2_dhcp.html" target="_BLANK"></a>). Évidemment, il faut connaître la <strong>plage d'adresses <em class="sigle">IP</em> dynamiques</strong> paramétrée par l'administrateur du réseau pour pouvoir identifier les machines lors d'un scan du réseau. </p>
+
+
+
+
+	
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer les <strong class="title">manipulations</strong> <strong class="warning">dans l'ordre</strong> indiqué et le <strong class="title">codage des fonctions</strong> demandées en respectant les spécifications indiquées.  </p>
+
+<p> Dans une perspective de consolidation des connaissances, il est recommandé de bien <strong class="pros">comprendre</strong> le <strong class="title">codage des fonctions</strong> employées pour la mise en œuvre ou l'étude du <strong>protocole <em class="sigle">NTP</em></strong>.   </p>
+</div><!-- important -->
+
+
+
+<h4 style="padding-top: 1em"> Exercices </h4>
+
+
+<ol class="exercice">
+
+  <li id="exo1" style="margin-top: 2em;"> <em class="bold"> Travail préparatoire </em> </li>
+
+  <ol class="questions">
+      <img class="top-right" src="../img/ArduinoICSP.png" width="200px" style="padding-top: 1em">
+    <li> <strong class="warning">Avant</strong> d'assembler le <strong>shield Ethernet</strong> sur la <strong class="Arduino">carte Arduino</strong>, relever l'<strong class="title">adresse <em class="sigle">MAC</em></strong> inscrite sur l'étiquette collée sur la face inférieure du shield. </li>
+       
+    <li> <strong class="title">Assembler</strong> le <strong>shield Ethernet</strong> sur la <strong class="Arduino">carte Arduino</strong> avec soin, <strong class="warning">sans forcer</strong>, en faisant bien coïncider toutes les broches mâles/femelles correspondantes, y compris celles au centre de la carte, formant le connecteur <strong><em class="sigle">ICSP</em></strong> <a class="external" href="https://qastack.fr/arduino/40098/icsp-pin-what-is-it-actually" target="_BLANK"></a> (cf. la partie entourée en orange sur la figure ci‑contre). </li>
+
+    <li> Sur le poste de travail, avec le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong>, <strong class="title">ouvrir le code source</strong> du programme de test du système fourni via ce lien <a class="cours" href="../prog/R2tp4_NTP/testEthernetshield_elv.ino" target="_BLANK"></a> : </li>
+    <ul>
+    	<li> Coder les octets de l'<strong>adresse <em class="sigle">MAC</em></strong> du <em class="mark">shield Ethernet</em>. </li>
+
+      <div class="nobullet"> Autrement dit, dans les valeurs provisoires du tableau <code>shieldMacAddress</code>, remplacer les lettres <code>HH</code> par les digits hexadécimaux relevés à la question <em class="bold">a)</em>. </div> 
+
+    	<li> Coder le <strong>numéro de broche</strong> de sélection – celui désigné par le sigle <em class="sigle">SS</em>, pour <em class="english">slave select</em> – du <em class="mark">shield Ethernet</em> sur le bus <strong><em class="sigle">SPI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serial_Peripheral_Interface" target="_BLANK">W</a> utilisé les communications entre la carte <em class="mark">Arduino</em> et le port <em class="mark">Ethernet</em> du shield (cf. la page de référence <a class="external" href="https://www.arduino.cc/en/Reference/Ethernet" target="_BLANK">A</a>). </li>
+
+      <li> <strong>Enregistrer</strong> le programme ainsi modifié dans un répertoire homonyme lui‑même placé dans votre répertoire de <em class="sigle">TP</em>. </li>
+
+      <div class="nobullet"> Autrement dit, dans la valeur d'initialisation de la constante, remplacer la lettre <code>N</code> par le numéro de broche indiqué sur la page de référence. </div>
+    </ul> 
+
+    <div class="nobullet"> De plus, vérifier que les <strong class="title">modules de bibliothèque</strong> requis par le programme (<code class="filename">SPI</code> et <code class="filename">Ethernet</code>) sont disponibles dans l'<strong class="Arduino"><em class="sigle">IDE</em></strong>, sinon procéder à leur installation (menu <em>Croquis/Inclure une bibliothèque…</em>). </div>
+
+    <li> <strong class="title">Mettre sous tension</strong> la <strong class="Arduino">carte Arduino</strong> et <strong class="title">raccorder</strong> le <strong>shield Ethernet</strong> au réseau local. </li>
+
+    <div class="nobullet"> <strong class="title">Téléverser</strong> le programme dans la carte et attendre que sa <strong class="specialLG">led intégrée</strong> <strong>clignote</strong> avec une période de 1 s (la led est visible sur le <em class="mark">shield</em> juste à côté du connecteur <em class="sigle">RJ45</em>). </div> 
+
+    <li> Sur le poste de travail : </li>
+    <ul>
+      <li> Ouvrir le <strong>moniteur série</strong> intégré à l'<strong class="Arduini"><em class="sigle">IDE</em> Arduino</strong> en réglant la même vitesse de transmission que celle codée dans le programme. </li>
+      
+      <div class="nobullet"> Dans la fenêtre d'affichage du moniteur série, relever les <strong class="title">informations de connexion</strong> – <strong>adresse <em class="sigle">IP</em></strong>, passerelle par défaut, etc.). </div>
+    
+      <li> À l'aide d'un logiciel de <strong>scan réseau</strong> (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#scannerReseau" target="_BLANK"></a>), <strong class="title">vérifier</strong> que la carte est détectée et retrouver son <strong>adresse <em class="sigle">IP</em></strong>. </li>
+
+      <div class="nobullet"> Par ailleurs, l'état des ports logiciels de la carte est‑il renseigné ? Pourquoi ? </div>    
+       
+      <li> Dans un <strong>terminal</strong> de commandes en ligne, <strong class="title">vérifier</strong> que cette adresse répond à la <strong>commande</strong> <code>ping</code>. </li>
+    </ul>
+  </ol><!-- questions exo I-->
+
+
+
+
+
+
+
+
+  <li id="exo2" style="margin-top: 2em;"> <em class="bold"> Mise en place et configuration d'un client <em class="sigle">NTP</em></em> </li>
+
+  <ol class="questions">
+		<li> Sur le poste de travail, <strong class="title">télécharger le programme de client <em class="sigle">NTP</em></strong> fourni via ce lien <a class="cours" href="../prog/R2tp4_NTP/megaNTPclient_elv.zip" target="_BLANK"></a>. Dans votre répertoire de <em class="sigle">TP</em>, <strong>extraire l'archive</strong> puis ouvrir le fichier <code class="filename">.ino</code> avec le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong>. </li>
+
+    <div class="nobullet"> Comme à l'exercice précédent : </div>
+		<ul>
+			<li> dans le fichier principal <code class="filename">megaNTPclient_elv.ino</code>, coder les octets de l'<strong>adresse <em class="sigle">MAC</em></strong> du <em class="mark">shield Ethernet</em> ; </li>
+
+			<li> dans le fichier auxiliaire d'implémentation <code class="filename">NTPethernetClient.cpp</code>, coder le <strong>numéro de broche</strong> de sélection du <em class="mark">shield Ethernet</em> sur le <strong>bus <em class="sigle">SPI</em></strong>. </li>
+		</ul> 
+
+    <div class="nobullet"> De plus, vérifier que les <strong class="title">modules de bibliothèque</strong> supplémentaire requis par le programme (<code class="filename">Time</code> <a class="external" href="https://www.arduino.cc/reference/en/libraries/time/" target="_BLANK">A</a> et <code class="filename">Timezone</code> <a class="external" href="https://www.arduino.cc/reference/en/libraries/timezone/" target="_BLANK">A</a>) sont installés dans l'<strong class="Arduino"><em class="sigle">IDE</em></strong>, sinon procéder à leur installation (menu <em>Croquis/Inclure une bibliothèque…</em>). </div>
+    
+    <li> <strong class="title">Coder</strong> dans le fichier principal <code class="filename">megaNTPclient_elv.ino</code> les <strong>deux règles de changement d'heure <em class="sigle">DST</em></strong> pour la zone horaire de la France métropolitaine (cf. le cours  pour la détermination des dates <a class="cours" href="Rc2-6_serviceTemps.html#DST" target="_BLANK"></a> et pour la syntaxe de codage des règles <a class="cours" href="Rc2-6_serviceTemps.html#ArduinoTimezone" target="_BLANK"></a>).  </li>
+    
+    <li> <strong class="title">Coder</strong> dans le fichier auxiliaire d'implémentation <code class="filename">megaNTPethernetClient.cpp</code> : </li>
+
+    <ul>
+      <li> la <strong>valeur</strong> de la pseudo‑constante <code class="cmd">UNIX_EPOCH</code> (cf. cours <a class="cours" href="Rc2-6_serviceTemps.html#Posix" target="_BLANK"></a>) ; </li>
+
+      <li> les valeurs respectives des pseudo‑constantes définissant les <strong>numéros de port</strong> du <strong>serveur <em class="sigle">NTP</em></strong> (cf. cours <a class="cours" href="Rc2-6_serviceTemps.html#messageNTP" target="_BLANK"></a>) et du <strong>client <em class="sigle">UDP</em></strong> (<em class="english">local port</em> – cf. <a class="external" href="https://docstore.mik.ua/orelly/networking_2ndEd/fire/ch22_05.htm" target="_BLANK"></a>). </li>
+    </ul> 
+
+    <div class="nobullet"> De plus, dans le fichier auxiliaire d'en‑tête <code class="filename">megaNTPethernetClient.h</code>, coder la <strong>taille</strong> en octets du message <strong><em class="sigle">NTP</em></strong> (valeur <code>XX</code> de la pseudo‑constante <code>NTP_HEADER_SIZE</code> – cf. cours <a class="cours" href="Rc2-6_serviceTemps.html#messageNTP" target="_BLANK"></a>). </div>
+
+    <li> <strong class="title">Téléverser le programme</strong> dans la carte <em class="mark">Arduino</em>, <strong>vérifier le bon fonctionnement</strong> en ouvrant le moniteur série (régler la bonne vitesse de transmission). </li>
+
+    <div class="nobullet"> <strong class="title">Comparer</strong> la date et l'heure affichées par la carte <em class="mark">Arduino</em> avec celui d'une <strong>page web d'horloge</strong> comme celle de ce lien <a class="external" href="https://time.is/fr/Paris" target="_BLANK"></a>. </div>
+  </ol><!-- questions (exo 2) -->
+
+
+
+
+
+
+
+
+
+  <li id="exo3" style="margin-top: 2em;"> <em class="bold"> Décodage d'une message <em class="sigle">NTP</em></em> </li>
+
+  <ol class="questions">
+    <li> Sur le poste de travail, <strong class="title">télécharger le programme de décodage de message <em class="sigle">NTP</em></strong> fourni via ce lien <a class="cours" href="../prog/R2tp4_NTP/megaNTPstudy_elv.zip" target="_BLANK"></a>. Dans votre répertoire de <em class="sigle">TP</em>, <strong>extraire l'archive</strong> puis y <strong class="title">recopier les fichiers auxiliaires</strong> <code class="filename">megaNTPethernetClient.h</code> et <code class="filename">megaNTPethernetClient.cpp</code> complétés à l'exercice précédent. </li>
+
+    <div class="nobullet"> Ouvrir alors le fichier <code class="filename">megaNTPstudy_elv.ino</code>  avec le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> et <strong class="title">modifier</strong> en y codant les mêmes changements qu'à l'exercice précédent : les deux <strong>règles</strong> de changement d'heure, l'<strong>adresse <em class="sigle">MAC</em></strong> de la carte, etc. </div>
+
+    <li> En étudiant attentivement la constitution d'un <strong class="specialG">message <em class="sigle">NTP</em></strong> (cf. cours <a class="cours" href="Rc2-6_serviceTemps.html#messageNTP" target="_BLANK"></a>), et en employant les opérateurs de manipulation de bits (cf. chap. C3‑III <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-3_typesBooleens.html#bitwizeOperators" target="_BLANK">C</a>), compléter le <strong class="title">codage des fonctions</strong> dans le fichier auxiliaire d'implémentation <code class="filename">NTPstudy.cpp</code> : </li>
+    <ul>
+      <li> la fonction <code class="prettyprint lang-c">decodeVN</code> qui retourne la valeur du <strong>champ</strong> <code class="cmd">VN</code> (<em class="mark">version number</em>) ; </li>
+
+      <li> la fonction <code class="prettyprint lang-c">decodeMode</code> qui retourne la valeur du <strong>champ</strong> <code class="cmd">mode</code> ; </li>
+
+      <li> la fonction <code class="prettyprint lang-c">decodeStratum</code> qui retourne la valeur du <strong>champ</strong> <code class="cmd">stratum</code> ; </li>
+
+      <li> la fonction <code class="prettyprint lang-c">decodePoll</code> qui retourne la <strong class="defin">durée en secondes</strong> de l'intervalle entre deux requêtes, codée en logarithme à base 2 dans le <strong>champ</strong> <code class="cmd">poll</code> ; </li>
+
+      <li> la fonction <code class="prettyprint lang-c">decodePrecision</code> qui retourne la <strong class="defin">précision en fraction de seconde</strong> du serveur, codée en logarithme à base 2 dans le <strong>champ</strong> <code class="cmd">precision</code>. </li>
+    </ul>
+
+    <div class="nobullet"> On pourra s'inspirer du code de la fonction <code class="prettyprint lang-c">decodeLI</code> qui retourne la valeur du <strong>champ</strong> <code class="cmd">LI</code> (<em class="mark">leap indicator</em>), défini dans le fichier <code class="filename">NTPethernetClient.cpp</code>. </div>
+
+    <li> Toujours dans le fichier <code class="filename">NTPstudy.cpp</code>, en s'inspirant du code de la fonction <code class="prettyprint lang-c">decodeIPaddress</code>, compléter celui de la <strong class="title">fonction</strong> <code>decodeString</code> qui retourne la <strong>chaîne de caractères</strong> codée dans le champ <code class="cmd">reference id. / kiss of death</code>. </li>
+
+    <li> <strong class="title">Téléverser le programme</strong> dans la carte <em class="mark">Arduino</em> et <strong>vérifier son bon fonctionnement</strong> (chaque champ décodé du message <strong><em class="sigle">NTP</em></strong> doit avoir une valeur conforme à ce qui est <strong class="pros">attendu</strong>). </li>
+    
+    <li> Laisser le programme fonctionner durant quelques minutes et observer les <strong class="title">caractéristiques des serveurs de temps</strong> répondant aux requêtes, notamment le <strong>stratum</strong> et la <strong>précision</strong>, ainsi que le <strong>numéro de version</strong> du protocole <strong><em class="sigle">NTP</em></strong>.  </li>
+
+    <li> Dans le fichier principal <code class="filename">megaNTPstudy_elv.ino</code>, remplacer le <strong>nom de domaine</strong> du serveur de temps par celui d'un pool de serveurs qui optimise les temps de requêtes <strong class="defin">en France métropolitaine</strong> (cf. cours <a class="cours" href="Rc2-6_serviceTemps.html#poolNTP" target="_BLANK"></a>). </li>
+
+    <div class="nobullet"> Recompiler et téléverser le programme ainsi modifié et observer à nouveau  les <strong class="title">caractéristiques des serveurs de temps</strong> répondant aux requêtes. </div>
+    </ul></li>
+    
+    <li> Comment peut‑on <strong class="title">vérifier</strong> que l'<strong>adresse <em class="sigle">IP</em></strong> affichée est bien celle d'un <strong>serveur de temps</strong> ? </li>
+
+    <li> * <strong class="title">Modifier le codage</strong> de la fonction <code class="prettyprint lang-c">dateAndTimeString</code> pour obtenir un affichage conforme à la <strong>norme <em class="sigle">ISO 8601</em></strong> (cf. cours <a class="cours" href="Rc2-6_serviceTemps.html#iso8601" target="_BLANK"></a>). Pour cela, il peut être nécessaire de <strong class="defin">changer les arguments</strong> de la fonction, donc aussi son <strong>prototype</strong> et ses <strong>instructions d'appel</strong>, voire de coder d'autres <strong class="defin">fonctions complémentaires</strong>. </li>
+
+    <div class="nobullet"> Pour finir, recharger le programme et <strong class="title">vérifier</strong> que l'affichage est conforme aux attentes. </div>
+    </ul>
+  </ol><!-- questions (exo 3) -->
+
+  
+  
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

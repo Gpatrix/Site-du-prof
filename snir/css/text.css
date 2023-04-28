@@ -1,0 +1,488 @@
+sup{
+	font-size: 70%;
+}
+
+.blue{
+	color:dodgerblue;
+}
+
+.green{
+	color:green;
+}
+
+.red{
+	color:red;
+}
+
+.bkg-white{
+	background: white;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+}
+
+.bkg-yellow{
+	background: yellow;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+}
+
+
+span.inline{
+	line-height: 1.5em;
+	margin-left: 1em;
+}
+
+
+span.version{
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+	font-weight: 600;
+	text-shadow: 0.03em 0.03em black;
+}
+
+
+
+span.framed{
+	border: solid 2px yellowgreen;
+	border-radius: 3px;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	padding-bottom: 0.1em;
+	padding-top: 0.0em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	font-size: 95%;
+}
+
+span.framedSmall{
+	border: solid 2px black;
+	border-radius: 5px;
+	padding-left: 0.1em;
+	padding-right: 0.1em;
+	padding-bottom: 0em;
+	padding-top: 0em;
+	margin-top: 0.0em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	font-size: 90%
+}
+
+span.framedFull{
+	border: none;
+	background: white;
+	border-radius: 3px;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+	padding-bottom: 0.05em;
+	padding-top: 0.0em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	margin-bottom: 0.2em;
+}
+
+span.partie{
+	background: black;
+	border-radius: 0.2em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	padding: 0.1em 0.2em 0.00em 0.2em;
+	color: white;
+	font-weight: 600;
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+	font-size: 85%; 
+}
+
+span.touche{
+	background: white;
+	border: solid 1px black;
+	border-radius: 0.3em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	padding: 0.0em 0.2em 0.05em 0.2em;
+	color: black;
+	font-weight: normal;
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+	font-size: 85%; 
+}
+
+span.digitDisplay{
+	font-weight: bold;
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+}
+
+span.boutonGris, span.Rouge, span.Vert, span.Bleu, span.Orange, span.Gris, span.Noir{
+	background: lightgray;
+	border: solid 1px dimgray;
+	border-radius: 0em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	padding: 0.0em 0.2em 0.05em 0.2em;
+	color: black;
+	font-weight: normal;
+	font-family: source code pro, consolas;
+	font-size: 85%; 
+}
+
+span.Rouge, span.Vert, span.Bleu, span.Orange, span.Gris, span.Noir{
+	background: red;
+	padding: 0.0em 0.5em 0.05em 0.5em;
+	border: none;
+	color: white;
+	font-weight: normal;
+	font-size: 85%; 
+}
+
+span.Vert{
+	background: #2db360;
+}
+
+span.Bleu{
+	background: #1e90ff;
+}
+
+span.Orange{
+	background: #ffa500;
+}
+
+span.Gris{
+	background: #808080;
+}
+
+span.Noir{
+	background: #202020;
+}
+
+
+span.option{
+	padding-left:0.1em;
+	padding-right:0.1em;
+	color: darkgrey; 
+	font-style: normal;
+}
+
+span.color{
+	font-family: arial black;
+	font-size : 90%;
+	-webkit-text-stroke: 1px black;
+  font-weight: 800;
+}
+
+
+strong{
+	font-family: caladea, cambria, bookman, georgia;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.inv{
+	padding-left: 0.2em;
+  padding-right: 0.2em;
+  border-radius : 0.2em;
+	background: red;
+	color: white;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.defin{
+	color: yellowgreen;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.warning{
+	color: red;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.title{
+	color: #0066FF;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialV{
+	color: darkviolet;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialPV{
+	color: mediumvioletred;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialLP{
+	color: lightpink;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialO{
+	color: orange;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialDO{
+	color: #f09000;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialT{
+	color: darkturquoise;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialTQ{
+	color: turquoise;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialMg{ /* magenta */
+	color: magenta;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialM{ /* marron */
+	color: peru;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialMR{ /* marron red */
+	color: firebrick;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialG{ /* green */
+	color: #2db360;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialMG{ /* medium green */
+	color: limegreen;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+
+.specialLG{ /* light green */
+	color: chartreuse;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialSG{ /* spring green */
+	color: springgreen;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialAM{ /* spring green */
+	color: aquamarine;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialDG{ /* dark green */
+	color: darkgreen;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialR{ /* red */
+	color: orangered;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+
+.specialDR{ /* dark red */
+	color: crimson;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialPR{ /* blue */
+	color: #FF6060;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialDB{ /* dark blue */
+	color: blue;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialLB{ /* light blue */
+	color: deepskyblue;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialPB{ /* pale blue */
+	color: #8080ff;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialSB{ /* blue grey */
+	color: steelblue;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialBG{ /* blue grey */
+	color: lightsteelblue;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialY{ /* yellow */
+	color: goldenrod;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialLY{ /* yellow */
+	color: yellow;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialJ{ /* Jules Ferry */
+	color: #F0D015;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialN{ /* noir */
+	color: black;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em darkgrey;
+}
+
+.specialGr{ 
+	color: slategrey;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialLGr{ 
+	color: silver;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.specialDGr{ 
+	color: dimgray;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.pros{
+	color: hotpink;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.cons{
+	color: gray;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Arduino{
+	color: #00979C;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Mint{
+	color: #69b53f;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Cinnamon{
+	color: #DC682E;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Raspberry{
+	color: #BC1142;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Codeblocks{
+	color: #B9B840;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Tinkercad{
+	color: #FD7B43;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Sublime{
+	color: #FF9800;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.OnlineGDB{
+	color: #4A68C8;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+
+.php{
+	color: #777bb3;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em black;
+}
+
+.Cisco{
+	color: #15495E;
+	font-size : 100%;
+	text-shadow: 0.05em 0.05em white;
+}
+
+em.remark{
+	font-style: normal;
+	text-decoration: underline;
+}
+em.sigle{
+	font-size: 80%;
+	font-style: normal;
+	text-transform: uppercase;
+}
+em.mark{
+	font-style: oblique;
+}
+em.bold{
+	font-weight: 600;
+	font-style: normal;
+}
+
+em.boldV{
+	font-weight: 600;
+	font-style: normal;
+	color: darkviolet;
+}
+
+
+

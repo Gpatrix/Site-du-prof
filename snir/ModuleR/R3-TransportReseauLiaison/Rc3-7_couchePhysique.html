@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="3"
+	data-pagenumber="VII"
+	data-pageState="chantier"
+	data-pageheadtitle="Couche physique"
+	data-pagefulltitle="La couche physique"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+
+
+<p class="square">   </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/couchePhysique2.png" width="300px" style="margin-top: 0em">
+
+<p>	<a class="external" href="https://en.wikipedia.org/wiki/Physical_layer" target="_BLANK">W</a> </p>
+
+<p> Cours provisoire de transmission (doc. de SI modifié) <a class="external" href="../doc/transmission_cours_SI.pdf" target="_BLANK"></a> </p>
+
+<p> Cours à ouvrir avec un lecteur de PDF (<em>Acrobat</em>, <em>Foxit</em>…) pour voir les annotations <a class="external" href="../doc/CouchePhysique&#32;-&#32;cours_21p.pdf" target="_BLANK"></a> </p>
+
+<p> Approfondissement <a class="external" href="https://www.i2m.univ-amu.fr/perso/cherni.a/Pub/Cours_A_Cherni.pdf" target="_BLANK"></a></p>
+
+</div><!-- display -->
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Généralités sur les liaisons informatiques </h2>
+
+
+
+<h3> Liaison série <em>versus</em> parallèle </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/SerialParallelTransmission.png" width="400px" style="margin-top: 0.2em">
+<p> On parle de <strong class="title">liaison série</strong> <a class="external" href="https://en.wikipedia.org/wiki/Serial_communication" target="_BLANK">W</a> lorsque les <strong class="defin">données binaires</strong> sont <strong class="defin">transmises l'une après l'autre</strong> sur le médium . </p>
+
+<p> Par opposition, on parle de <strong class="title">liaison parallèle</strong> <a class="external" href="https://en.wikipedia.org/wiki/Parallel_communication" target="_BLANK">W</a> lorsque <strong>plusieurs données binaires</strong> formant un <strong>mot</strong> – typiquement, un, deux, quatre, ou huit octets – sont <strong class="defin">transmises simultanément</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/cableParallele.png" width="300px" style="margin-top: 0em">
+<p> A priori intéressante en termes de performances en débit, la <strong class="title">technologie des liaisons parallèles</strong> souffre de <strong class="cons">trop d'inconvénients</strong> (encombrement, complexité des connecteurs, coût, limites de longueur) pour pouvoir être employée dans les réseaux informatiques. </p>	
+
+<p> En fait, la technologie des liaisons parallèles a été un temps utilisée pour certaines liaisons entre un poste de travail et ses périphériques (typiquement, une imprimante). Toutefois, depuis plus d'une décennie, elle a <strong class="defin">totalement été remplacée</strong> par celle des <strong>liaisons séries</strong>. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarques"> Les <strong class="title">liaisons parallèles</strong> restent employées dans les <strong>architectures matérielles à petite échelle</strong> : sur les cartes mères des ordinateurs (bus <em class="sigle">CPU</em> mémoire) et dans les circuits intégrés, ainsi que pour certains dispositifs électroniques embarqués (afficheur à led, écran, caméra). </p>
+</div><!-- exemple -->
+
+
+
+<h3> Liaison synchrone <em>versus</em> asynchrone </h3>
+
+
+
+<div class="important">
+<div  style="display: inline-block;"> 	
+	<img class="top-right" src="../img/synchroTransmission.png" width="400px" style="margin-top: 0.2em">
+<p> On parle de <strong class="title">liaison synchrone</strong> <a class="external" href="https://en.wikipedia.org/wiki/Synchronous_serial_communication" target="_BLANK">W</a> entre des machines lorsque ces dernières cadencent les transmissions de données avec le <strong class="defin">même signal d'horloge</strong>.  </p>
+</div><!-- display -->
+
+<div  style="display: inline-block;"> 	
+	<img class="top-right" src="../img/asynchroTransmission.png" width="400px" style="margin-top: 0.2em">
+<p> Par opposition, on parle de <strong class="title">liaison asynchrone</strong> <a class="external" href="https://en.wikipedia.org/wiki/Asynchronous_serial_communication" target="_BLANK">W</a> entre des machines lorsque ces dernières cadencent les transmissions de données avec <strong class="defin">chacune leur propre signal d'horloge</strong>. </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement">
+<p class="square"> Pour mettre en œuvre une <strong class="title">liaison synchrone</strong>, il est indispensable de <strong class="defin">partager un signal d'horloge sur le médium</strong>. Typiquement, ce signal est <strong>généré par la machine maître</strong> (celle qui initie la transmission) et véhiculé sur un <strong>conducteur dédié</strong> – fil noté par exemple <strong><em class="sigle">SCK</em></strong> pour <strong>serial clock</strong>. </p>
+
+<p> La mobilisation d'un conducteur dédié est évidemment un <strong class="cons">inconvénient</strong> en terme de . En règle générale, les liaisons synchrones sont mises en œuvre sur de <strong>faibles distances</strong> (quelques mètres). </p>
+
+<p class="square"> Pour mettre en œuvre une <strong class="title">liaison asynchrone</strong>, les machines doivent obligatoirement régler leur horloge à la <strong class="defin">même fréquence</strong>, sinon il y aurait immédiatement un engorgement à la réception sur la machine adoptant la fréquence la plus faible. </p>
+
+
+<p> Toutefois, les <strong class="cons">imperfections</strong> dans les circuits électriques oscillants qui génèrent les signaux d'horloge font qu'en pratique, il existe toujours une petite différence de fréquence entre deux horloges distinctes. Il en résulte à la longue un <strong class="cons">décalage temporel</strong> qui doit être régulièrement corrigé par des <strong class="defin">étapes de synchronisation</strong> – typiquement, l'émission d'un <strong>bit de start</strong>. Ces étapes sont évidemment un <strong class="cons">inconvénient</strong> en termes de débit. </p>
+</div><!-- complement -->
+
+
+<h3> Rappels de théorie du signal  </h3>
+
+
+<div class="important">
+<p> Mathématiquement, tout <strong class="title">signal périodique</strong> de <strong>fréquence</strong> <strong class="specialLB">f</strong>, peut se décomposer en une <strong class="defin">somme</strong> – éventuellement <strong>infinie</strong> – de <strong class="defin">composantes sinusoïdales</strong>. C'est ce qu'on appelle une <strong>décomposition en série de Fourier</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Série_de_Fourier" target="_BLANK"></a>. Dans une telle décomposition : </p>
+<ul>
+	<li> la <strong class="specialLB">fréquence f du signal</strong> est qualifiée de <strong class="defin">fondamentale</strong> – ou <strong>harmonique de rang 1</strong> – car elle est la composante de plus grande amplitude ;  </li>
+
+	<li> les <strong class="specialLB">fréquences des autres composantes</strong> sont des <strong>multiples de</strong> <strong class="specialLB">f</strong> et sont appelées <strong class="defin">harmoniques de rang n</strong> – <strong class="defin">n</strong> étant le coefficient multiplicatif les reliant à <strong class="specialLB">f</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans les <strong>réseaux de distribution électrique</strong> en tension alternative, les <strong class="title">harmoniques</strong> de rang supérieur à 1 sont <strong class="cons">nuisibles</strong> et doivent parfois être filtrées. </p>
+
+<p> Mais dans les liaisons de données des <strong>réseaux informatiques</strong>, au contraire, les <strong class="title">harmoniques</strong> sont <strong class="defin">nécessaires</strong> à la qualité des signaux. </p>
+
+<div  style="display: inline-block;"> 	
+	<img class="top-right" src="../img/signauxFourier.png" width="350px" style="margin-top: 0.2em">	
+<p> Dans le cas d'un <strong class="title">signal carré</strong> – constituant typique d'un signal numérique de données – avec un front montant à l'origine, la <strong>décomposition en série de Fourier</strong> est une <strong class="defin">somme infinie d'harmoniques impaires</strong> et d'amplitudes décroissantes avec la fréquence (cf. la figure ci‑contre). </p>
+
+<p> Pour une bonne qualité de signal, on peut considérer que les <strong class="specialLB">harmoniques de rang 3 et 5</strong> sont <strong class="warning">indispensables</strong>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p> Dans le cas d'un <strong class="title">signal numérique de données</strong>, typiquement non périodique et mais constitué d'une <strong>succession de fronts montants et descendants</strong>, la <strong class="defin">décomposition en série de Fourier</strong> est <strong class="cons">beaucoup plus complexe</strong> : l'amplitude des harmoniques varie dans le temps. </p>
+
+<p> Néanmoins, on peut identifier comme <strong class="specialLB">fréquence fondamentale</strong> celle correspondant au <strong>débit de transmission</strong>. </p>
+
+
+
+<h3> Caractéristiques des conducteurs électriques  </h3>
+
+
+
+<h2> La liaison série </h2>
+
+
+
+
+<h3> Principes généraux </h3>
+
+
+<h3> Éléments de synchronisation </h3>
+
+
+
+<h3> Contrôle de parité </h3>
+
+
+
+<h3> Implémentations </h3>
+
+
+<h4> UART </h4>
+
+
+<h4> Liaison RS232 </h4>
+
+<p> <a class="external" href="https://www.youtube.com/watch?v=5uD1B_RAlbw" target="_BLANK">Y</a> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> L'encodage binaire </h2>
+
+
+<h3> Encodage binaire direct dit TTL </h3>
+
+
+<h3> Encodages NRZ </h3>
+
+
+<h3> Encodages Manchester </h3>
+
+
+<h3> Encodage de Miller </h3>
+
+
+
+
+
+
+
+
+
+
+<h2> La modulation </h2>
+
+
+
+<h3> Modulation d'amplitude (ASK) </h3>
+
+
+
+<h3> Modulation de phase (PSK) </h3>
+
+
+<h3> Modulation de fréquence (FSK) </h3>
+
+
+<h3> Modulations combinées </h3>
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

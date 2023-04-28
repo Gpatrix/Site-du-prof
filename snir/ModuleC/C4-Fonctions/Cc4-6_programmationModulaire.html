@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="4"
+  data-pagenumber="VI"
+  data-pageState="travaux"
+  data-pageheadtitle="Prog. modulaire"
+  data-pagefulltitle="La programmation modulaire"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="exergue">
+<p class="square"> Le concept de <strong class="title">programmation modulaire</strong> a été maintes fois évoqués dans les chapitres de ce module de formation – et dès le tout premier (cf. chap. C1‑I <a class="previous" href="../C1-generalites/Cc1-1_langagesGeneralites.html#modularite" target="_BLANK"></a>). L'<strong class="defin">enjeu principal</strong> n'est pas seulement de pouvoir <strong>répartir le code</strong> d'un programme sur plusieurs fichiers pour mieux le maîtriser. Il est aussi de produire autant que possibles des <strong class="title">modules</strong> qui soient des <strong class="pros">composants logiciels réutilisables</strong> pour toutes sortes de programmes. </p>
+
+<p> C'est d'ailleurs dans cette perspective que les langages <strong>C</strong> et <strong>C++</strong> sont construits : autour d'un <strong class="defin">noyau assez réduit</strong>, ils acceptent un <strong>nombre illimité</strong> de <strong class="title">modules de bibliothèque</strong> d'objets et de fonctions – et en particulier l'ensemble qui forme ce qu'on appelle <strong>la bibliothèque standard</strong> du langage, à laquelle le chapitre suivant (cf. chap. C4‑VII <a class="next" href="Cc4-7_bibliothequesStandards.html" target="_BLANK"></a>) est en grande partie consacré. </p>
+
+<p class="square"> En <strong>C</strong> et <strong>C++</strong>, le codeur est en mesure de <strong>produire ses propres</strong> <strong class="title">modules de bibliothèque</strong>. Et il peut les regrouper dans des <strong class="defin">répertoires</strong> identifiés par l'environnement de programmation – c'est‑à‑dire <strong>ciblés par une variable de chemin</strong> – afin de ne pas avoir à spécifier dans les directives d'inclusion un chemin spécifique. Le codeur peut également : </p>
+
+<ul>
+	<li> mettre en œuvre une <strong class="defin">compilation séparée</strong> des modules, c'est‑à‑dire <strong class="pros">indépendante</strong> de celle des programmes qui les utilisent ; </li>
+
+	<li> utiliser les fichiers d'en‑tête comme des <strong class="defin">fichiers d'interface</strong> pour d'autres codeurs, en ne leur fournissant <strong class="warning">pas</strong> <strong>les fichiers sources</strong> d'implémentation des modules, mais <strong class="pros">seulement</strong> leurs <strong>fichiers objets</strong> déjà compilés. </li>
+</ul>
+
+
+<p> Comme pour la programmation multi‑fichiers (cf. chap. C4‑V <a class="previous" href="Cc4-5_programmationMultifichiers.html" target="_BLANK"></a>), la <strong class="title">création d'un module bibliothèque</strong> présente des <strong class="specialLB">aspects techniques</strong> qui sont <strong>spécifiques à l'environnement de programmation</strong>. Même si le principe général est le même, la procédure n'est pas la même sous <strong class="Codeblocks">Code::Blocks</strong>, <strong class="specialLB">VS‑Code</strong> ou <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. </p>
+
+
+<p>	Mais surtout, au delà de la procédure technologique, il y a la <strong class="title">dimension méthodologique</strong> dans la mesure où, en plus de la <strong>« logique d'objets »</strong> avec laquelle on procède pour coder un module, il faut d'imaginer une <strong class="pros">implémentation la plus générale possible</strong>, afin de maximiser les opportunités de réutilisation du module. </p>
+
+<p class="square"> Il s'agit donc encore une fois d'un <strong class="warning">sujet complexe</strong> qu'il n'est pas possible de traiter ici en profondeur. L'<strong class="title">objectif</strong> de ce chapitre est simplement de proposer une <strong>initiation à la programmation modulaire</strong> en adoptant une plan similaire à celui du chapitre précédent : </p>
+
+<ul>
+	<li> donner une <strong class="specialLB">perspective générale</strong> avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::Blocks</strong> ; </li>
+
+	<li> puis à traiter un <strong class="specialLB">exemple détaillé</strong> avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong>. </li>
+</ul>
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+<h2> Création d'un module de bibliothèque <em class="mark">C</em> ou <em class="mark">C++</em> </h2>
+
+
+
+<h3> Principe général  –  Notion de bibliothèque statique</h3>
+
+
+
+<div class="complement">
+<p> En règle générale, la <strong class="title">décision</strong> de créer un <strong class="title">nouveau module</strong> de bibliothèque est prise :  </p>
+
+<ul>
+	<li> que lorsque certaines <strong class="specialLB">fonctions</strong> opérant sur un <strong>même type de variables</strong> (ou une même classe d'objets) sont <strong class="defin">nécessaires dans plusieurs programmes</strong> ; </li>
+
+	<li> et qu'il n'existe <strong class="cons">pas d'implémentation existante</strong> de ces fonctions dans la bibliothèque standard ou dans un module déjà développé par la communauté libre – donc, <strong>sans droits d'utilisation</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Il serait <strong class="cons">contre‑productif</strong> de coder un nouveau module pour implémenter les fonctions arithmétiques calculant le <strong>plus petit commun multiple</strong> et le <strong>plus grand commun diviseur</strong> de deux nombres entiers, car ces fonctions <strong class="pros">existent déjà</strong> dans le module nommée <code class="filename">numeric</code> de la bibliothèque standard du <strong>C++</strong> <a class="external" href="https://en.cppreference.com/w/cpp/header/numeric" target="_BLANK">C++</a> : ce sont les fonctions <code class="prettyprint lang-c">gcd</code> (<em class="english">greatest common divisor</em> et <code class="prettyprint lang-c">lcm</code> (<em class="english">least common multiple</em>). </p>
+</div><!-- exemple -->
+
+
+<div class="important" style="display: inline-block;">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, le principe général d'<strong class="title">organisation du module</strong> reprend celui de la programmation multi‑fichiers, avec une décomposition du code source en <strong>deux fichiers</strong> : </p>
+  <img class="top-right" src="../img/libraryModule1.png" width="400px">
+<ul>
+	<li> un <strong class="specialSG">fichier d'en‑tête</strong>, usuellement d'extension <code class="filename">.h</code> qui regroupe toute la <strong class="specialSG">partie déclarative publique</strong> du module : <strong>directives de définition</strong> (pseudo‑constantes et pseudo‑fonctions), déclarations de <strong>types</strong> (ou classes en <strong>C++</strong>), de <strong>constantes</strong>,  <strong>prototypes</strong> de fonctions ; </li>
+
+	<li> un <strong class="specialG">fichier d'implémentation</strong>, usuellement d'extension <code class="filename">.c</code> ou <code class="filename">.cpp</code>, qui comporte une directive d'inclusion du fichier d'en‑tête et qui <strong>définit toutes les fonctions</strong> qui y sont déclarées ; il peut aussi contenir des <strong class="specialG">déclarations privées</strong> avec en particulier des <strong class="specialLB">variables statiques</strong>… </li>
+</ul>
+<p> En revanche, ni le <strong class="specialSG">fichier d'en‑tête</strong> ni le <strong class="specialG">fichier d'implémentation</strong> du module de bibliothèque ne doivent contenir de <strong class="warning"> directive d'inclusion du fichier d'en‑tête principal</strong> du programme utilisateur ou de tout autre module spécifique au programme. Sinon le module ne serait pas indépendant de ce dernier, donc pas vraiment modulaire. </p>
+</div><!-- important -->
+
+<p> De plus, <strong class="defin">dans un module</strong>, parmi les fonctions définies ne figure <strong class="warning">jamais</strong> de <strong>fonction principale</strong> <code class="prettyprint lang-c">main</code>. </p>
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/libraryModule2.png" width="250px">
+<p> Dans la pratique, il est tout à fait possible de concevoir des <strong class="title">modules plus complexes</strong>, comportant <strong class="defin">plus de deux fichiers</strong>. En particulier, il n'est pas rare qu'un module utilise lui‑même d'<strong>autres modules de bibliothèque</strong>, par le biais d'autant de directives d'inclusion dans son fichier d'en‑tête (cf. figure ci‑contre). </p>
+
+<p> C'est par exemple le cas du <strong>module</strong> <strong class="Arduino">Arduino</strong> <code class="filename">Timezone</code> pour la gestion automatique de l'heure d'été dans les différentes zones horaires (cf. chap. R2‑VI <a class="previous" href="../../moduleR/R2-Applications/Rc2-6_serviceTemps.html#ArduinoTimezone" target="_BLANK">R</a>). Il utilise le <strong>module</strong> <code class="filename">Time</code> qui implémente toutes les fonctions de base de la gestion du temps calendaire sur une carte à microcontrôleur. </p>
+</div><!-- expert -->
+
+
+
+<h3> Compilation séparée d'un module de bibliothèque </h3>
+
+
+
+<div class="complement">
+<p> Par défaut, la <strong class="defin">compilation d'un module</strong> produit un <strong>fichier objet</strong> dit de <strong class="title">bibliothèque statique</strong>. Le terme « statique » exprime le fait que l'emploi de fonctions de ce module dans un programme nécessite l'<strong class="">incorporation préalable et définitive</strong> dans le code exécutable du programme lors de l'édition de lien (cf. chap. C4‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C4-Fonctions/Cc4-4_programmationMultifichiers.html#editionLiens" target="_BLANK"></a>). </p>
+
+<p> Mais on peut également produire un <strong>fichier objet</strong> dit de <strong class="title">bibliothèque partagée</strong> ou <strong class="title">dynamique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bibliothèque_logicielle" target="_BLANK">W</a>. Dans ce cas, l'emploi d'une fonction de ce module dans un programme est traité par l'édition de liens par l'ajout d'un <strong>simple lien</strong> vers ce fichier dans le code exécutable du programme. C'est seulement lors de l'exécution de lien que le code de la fonction est « dynamiquement » chargé en mémoire avec le programme.</p>
+</div><!-- complement -->
+
+
+<p> Un module de bibliothèque peut être compilé <strong class="pro">indépendamment de tout programme</strong> susceptible de l'utiliser. Sa compilation ne produit pas un programme exécutable, mais seulement un <strong class="specialT">fichier objet</strong> (d'extension <code class="filenamen">.o</code>) et un <strong>fichier d'archive</strong> de bibliothèque statique (d'extension <code  class="filename">.a</code> ou <code  class="filename">.lib</code>).  </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/staticLibraryIcon.png" width="100px">
+<p> Pour effectuer une telle compilation dans l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::Blocks</strong>, lors de la procédure de création d'un nouveau projet, il ne faut pas sélectionner l'option <code>Console application</code> mais <code class="filename">Static library</code>. Après avoir codé les deux <strong class="specialG">fichiers sources</strong>  dans le <strong>répertoire de projet</strong>, il suffit de cliquer sur le bouton <code>Build</code> <span class="specialY">⚙</span> (compilation).  En l'absence d'erreur, on constate alors la création des sous‑répertoires <code class="filename">obj</code> et <code class="filename">bin</code> et à l'intérieur, la présence d'un fichier, respectivement d'extension <code class="filename">.o</code> et <code class="filename">.a</code>. </p>
+</div><!-- display -->
+
+<p> Une fois que la compilation est effectuée, le module peut être <strong class="title">exploité dans n'importe quel programme</strong> sans nécessairement fournir son fichier d'implémentation <code class="filename">.c</code> ou <code class="filename">.cpp</code>. En revanche : </p>
+
+<ul>
+	<li> le <strong class="specialSG">fichier d'en‑tête</strong> <code class="filename">.h</code> reste <strong class="warning">indispensable</strong> lors de la <strong>compilation</strong>, pour que le compilateur puisse traiter l'inclusion du module dans un programme via une directive <code class="prettyprint lang-c">#include</code> ; </li>
+
+	<li> les fichiers <code class="filename">.o</code> et <code class="filename">.a</code> sont évidemment <strong class="defin">nécessaires</strong> pour l'<strong>édition de lien</strong> du programme. </li>	
+</ul>	
+
+<p> Le programme bénéficiera alors d'une <strong class="pros">compilation plus rapide </strong> que si l'on avait incorporé les fichiers sources du module dans le répertoire de projet du programme, puisque le <strong class="specialG">fichier d'implémentation</strong> du module est <strong>déjà compilé</strong>. </p>
+
+
+
+<h3> Emploi du module de bibliothèque </h3>
+
+
+
+<p> Pour <strong class="title">exploiter un module de bibliothèque</strong> dans un programme, ajouter au programme une <strong>directive d'inclusion</strong> comme on le ferait pour tout module de la bibliothèque <strong class="warning">ne suffit pas</strong>, même en spécifiant le chemin relatif du répertoire du module à partir du répertoire du programme.  </p>
+
+
+<p> En effet, la chaîne de compilation ne s'achève pas comme prévu :  </p>
+
+<ul>
+	<li> certes, la <strong>compilation</strong> en elle‑même se déroule correctement,</li>
+
+	<li> en revanche, <strong class="warning">l'édition de lien échoue</strong> – on obtient un message d'erreur mentionnant le programme <code class="cmd">ld</code> car ce dernier ne sait pas où trouver le <strong class="specialT">fichier objet</strong> <code class="filename">.o</code> et le fichier d'archive <code class="filename">.a</code> du module. </li>
+</ul>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/linkerSettings.png" width="500px">
+<p> Avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::Blocks</strong>, il suffit de  <strong>spécifier l'emplacement</strong> du fichier d'archive <code class="filename">.a</code>. Deux possibilités existent : </p>
+
+<ul>
+	<li> soit par le menu <code>Project</code>, avec la commande <code>Build options…</code> ; l'information renseignée est alors <strong>spécifique au programme</strong> sur lequel on travaille ; </li>
+
+	<li> soit par le menu <code>Settings</code>, avec la commande <code>Compiler…</code> ; l'information renseignée est alors <strong>valable pour tous les programmes</strong> compilés avec <strong class="Codeblocks">Code::Blocks</strong>. </li>
+</ul>
+
+<p> Quelle que soit la méthode choisie, dans la fenêtre de dialogue, il faut choisir l'onglet <code>Linker settings</code> et dans le cadre <code>Link libraries</code>, ajouter le chemin spécifiant l'emplacement des fichiers du module à l'aide du bouton <code>Add</code> (cf. figure ci‑contre). </p>
+</div><!-- display -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Création d'un module de bibliothèque <em class="mark">Arduino</em> </h2>
+
+
+
+<h3> Rappels sur les spécificités de l'IDE <em class="mark">Arduino</em> </h3>
+
+
+<div class="complement">
+<p> Rappelons que par défaut, avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong>, les <strong class="specialT">fichiers objets</strong> et le <strong class="specialBG">fichier exécutable</strong> générés par la chaîne de compilation sont stockés dans un <strong>répertoire temporaire</strong>, donc non pérenne (cf. chap. C4‑V <a class="previous" href="Cc4-5_programmationMultifichiers.html#consignesArduino" target="_BLANK"></a>). </p>
+
+<p> Ainsi, on ne met <strong class="warning">pas</strong> en œuvre une compilation séparée comme avec un environnement de programmation généraliste. </p> 
+</div><!-- complement -->
+
+<div class="expert">
+<p> On peut trouver des <strong class="title">explications rationnelles</strong> à ce choix des concepteurs d'<strong class="Arduino">Arduino</strong>.  </p>	
+<ul>
+	<li> Les <strong>programmes</strong> pour microcontrôleurs étant forcément « <strong>petits</strong> » (en comparaison de ceux que l'on peut exécuter sur un ordinateur), on ne peut espérer qu'un <strong class="cons">faible gain de temps</strong> en ne recompilant pas certaines parties du code . En ces termes, la compilation séparée systématique ne se justifie pas. </li>
+
+	<li> Tout l'univers <em class="mark">Arduino</em> (tant les aspects matériels que logiciels) repose sur une philosophie <strong class="pros">open‑source</strong> ; en toute logique, l'<strong><em class="sigle">IDE</em></strong> impose aux développeurs la <strong>publicité des fichiers sources</strong> s'ils veulent partager un programme ou un module. Obtenir le code objet d'un module pour pouvoir garder privé le code source n'est donc pas un objectif. </li>
+</ul> 
+
+<p> Toutefois, même si l'on ne peut donc pas compiler seul un module de bibliothèque, cela ne diminue en rien l'intérêt de la programmation modulaire en termes d'<strong>organisation du code</strong> en <strong class="pros">composants logiciels réutilisables</strong>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="ajoutModuleArduino"> Méthodes d'ajout d'un module de bibliothèque à l'IDE Arduino</h3>
+
+
+
+<p> Dans l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong>, il existe <strong>plusieurs moyens</strong> pour <strong class="title">ajouter un nouveau module bibliothèque</strong> <a class="external" href="https://www.arduino.cc/en/Guide/Libraries" target="_BLANK">A</a>. Tout dépend de la provenance du module. </p>
+
+<p class="square"> S'il s'agit d'un <strong class="specialLB">module déjà répertorié</strong> par la communauté des développeurs <em class="mark">Arduino</em>, en particulier s'il est distribué par un fournisseur de composants (<em class="mark">Adafruit</em>, <em class="mark">Seeed</em>, <em class="mark">Grove</em>, etc.), l'idéal est d'employer le <strong class="defin">gestionnaire de bibliothèques</strong> intégré dans l'<strong><em class="sigle">IDE</em></strong> <em class="mark">Arduino</em>. </p>
+
+<p> Les <strong class="specialLB">modules les plus usuels</strong> (<code>SD</code>, <code>Servo</code>, etc.) sont <strong class="pros">déjà inclus</strong> dans un <strong>répertoire principal de bibliothèques</strong> du dossier d'installation de l'<strong><em class="sigle">IDE</em></strong> –  typiquement sur un PC <em class="mark">Windows</em> : <br>
+<span class="inline"> 
+  <code class="filename">C:\Program Files (x86)\Arduino\libraries</code>
+</span>	<br>
+et sur machine <em class="mark">Linux</em> : <br>
+<span class="inline"> 
+  <code class="filename">/opt/arduino-<span class="nocode"><em>version</em></span>/libraries</code>
+</span>	</p>
+
+
+<p> Si un <strong class="specialLB">module</strong> n'est <strong class="specialLB">pas encore inclus</strong>, la manière la plus usuelle de le faire consiste à passer la commande <code>Gérer les bibliothèques</code> dans le menu <code>Outils</code>. Cette commande ouvre une fenêtre qui liste dans l'<strong>ordre alphabétique</strong> l'ensemble des <strong class="defin">modules répertoriés</strong> par l'<strong><em class="sigle">IDE</em></strong>. </p>
+  <img class="top-left" src="../img/ArduinoLibraryManager.png" style="max-width: 800px">
+<p> Les modules <strong class="warning">très nombreux</strong>, il est <strong class="pros">recommandé</strong> d'utiliser la <strong>barre de recherche</strong>. </p>
+
+
+
+<div class="expert">
+<p> Par ailleurs, il faut savoir que certains modules sont répartis dans les <strong>répertoires spécifiques</strong> aux différents microcontrôleurs cibles de la compilation, qui sont compatibles avec l'<strong><em class="sigle">IDE</em></strong> <em class="mark">Arduino</em>. </p>
+</div><!-- expert -->
+
+<p class="square"> S'il s'agit d'un <strong class="specialLB">module non répertorié</strong> dont on dispose des <strong class="specialG">fichiers sources</strong> (de conception personnelle ou fourni par un tiers), il faut commencer par les enregistrer dans <strong>répertoire homonyme</strong>. Ensuite, deux solutions sont possibles, aboutissant au même résultat : </p>
+
+<ul>
+	<li> soit compresser le répertoire du module au format <code class="filename">zip</code> et lancer la commande : <br>
+	<span class="inline"> 
+	  <code>Ajouter la bibliothèque .ZIP…</code>
+	</span>	<br>
+	du <strong>menu</strong> <code>Croquis/Inclure une bibliothèque…</code> ; </li>
+
+	<li> soit copier directement le répertoire du module dans un <strong>répertoire « utilisateur »</strong> pour les bibliothèques, qui est par défaut inclus dans le répertoire général des programmes (« croquis ») de l'utilisateur de l'<strong><em class="sigle">IDE</em></strong> <em class="mark">Arduino</em>, </em>typiquement pour un PC <em class="mark">Windows</em> : <br>
+	<span class="inline"> 
+		<code class="filename">C:\Users\User\Documents\Arduino\librairies</code> 
+	</span> <br>
+  et sur machine <em class="mark">Linux</em> : <br>
+	<span class="inline"> 
+		<code class="filename">/home/<span class="nocode"><em>user‑name</em></span>/Arduino/libraries</code> 
+	</span> <br>
+  sachant que le chemin de ce répertoire étant modifiable dans la fenêtre <em>Préférences</em> à laquelle on accède via le menu <em>Fichiers</em>.	</li>
+</ul>
+
+<p> <em class="remark">Attention</em>. Il est <strong class="cons">déconseillé</strong> d'installer directement des modules dans le <strong>répertoire principal des bibliothèques</strong>, car ce dernier est <strong class="warning">entièrement effacé</strong> et réécrit lors d'une <strong>mise à jour</strong> de l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong>. On risque donc de perdre tous les modules non standards. </p>
+
+<p class="square"> Dans tous les cas, on peut ensuite <strong class="title">vérifier</strong> que le module est <strong class="pros">bien inclus</strong> dans la liste des bibliothèques identifiées de l'<em class="sigle">IDE</em> <em class="mark">Arduino</em>. Cette liste s'affiche affiche dans le sous‑menu : <br>
+<span class="inline"> 
+	<code class="filename">Croquis/inclure une bibliothèque</code> 
+</span> </p>
+
+<p> On peut alors utiliser ce module via une directive <code class="prettyprint lang-c">#include</code> en utilisant la syntaxe entre les chevrons <code class="prettyprint lang-c">&lt; &gt;</code> pour spécifier le chemin d'accès au module. </p> 
+
+<div class="expert">
+<p> Par ailleurs, il faut savoir qu'au cours d'une compilation modulaire, l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong> recherche tout module de bibliothèque dans les divers répertoires mentionnés supra et sélectionne le premier trouvé, par <strong class="defin">ordre de priorité</strong> : </p>
+
+<ul>
+	<li> d'abord dans le <strong>répertoire des bibliothèques « utilisateur »</strong>, </li>
+
+	<li> ensuite dans les <strong>répertoires spécifiques</strong> aux microcontrôleurs cibles de la compilation, </li>
+
+
+	<li> enfin dans le <strong>répertoire principal de bibliothèques</strong>  de l'<em class="sigle">IDE</em> <em class="mark">Arduino</em></li>
+</ul>
+</div><!-- expert -->
+
+
+<h3> Fichiers complémentaires </h3>
+
+
+<div class="important">
+<p>  Lorsqu'on souhaite <strong class="defin">diffuser un module de bibliothèque personnel</strong> au sein de la <strong>communauté</strong> <strong class="Arduino">Arduino</strong>, alors en plus des fichiers sources <code class="filename">.h</code> et <code class="filename">.cpp</code>, il est recommandé d'ajouter dans le répertoire du module des <strong class="title">fichiers complémentaires</strong> pour faciliter la prise en main et l'utilisation du module par autrui : </p>
+<ul>
+	<li> un <strong class="pros">fichier d'aide</strong> – typiquement nommé <code class="filename">readme.txt</code> ; </li>
+
+	<li> un <strong class="specialO">fichier de coloration syntaxique</strong> – impérativement nommé <code class="filename">keywords.txt</code> ; </li>
+
+	<li> des <strong class="specialG">fichiers sources</strong> <code class="filename">.ino</code> de programmes simples d'<strong>exemples d'application</strong>, chacun placé dans un <strong class="defin">répertoire homonyme</strong>  – tous ces répertoires étant à regrouper dans un répertoire <code class="filename">examples</code>. </li>
+</ul>
+</div><!-- important --> 
+
+<p> Un exemple complet d'illustration est donné infra <a class="infra" href="Cc4-6_programmationModulaire.html#DigitalSignals"></a>. </p>
+
+
+<h4> Fichier d'aide </h4>
+
+
+<div class="complement">
+<p>  Rappelons que les <strong class="defin">commentaires</strong> ajoutés au code pour le rendre facilement compréhensible doivent rester <strong class="pros">succins</strong>, afin de ne pas gêner sa lecture (cf. chap. C2‑IX <a class="previous" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#commentaires" target="_BLANK"></a>). </p>
+
+<p> Pour fournir des <strong class="defin">explications détaillées</strong> sur le module, en particulier sur les principes d'utilisation des fonctions, il est d'usage d'ajouter un <strong class="title">fichier d'aide</strong> au <strong>format texte</strong> (simple, non mis en forme) qu'on nomme usuellement <code class="filename">readme.txt</code>. </p>
+</div><!-- complement --> 
+
+<div class="expert">
+<p> En principe, ce fichier n'a <strong>pas de limites de taille</strong>. S'il est volumineux, il est évidemment recommandé de le structurer en <strong class="defin">plusieurs parties</strong> avec des <strong>titres hiérarchisés</strong> mis en forme « à la main » pour faciliter sa lecture. </p>
+</div><!-- expert -->
+
+
+<h4> Fichier de coloration syntaxique </h4>
+
+
+<div class="complement">
+<p> Ajouté dans le répertoire de module, un <strong class="title">fichier</strong> nommé <code class="filename">keywords.txt</code> permet de spécifie la <strong class="title">coloration syntaxique</strong> à appliquer dans la fenêtre d'édition de code de l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong> pour des <strong class="defin">identificateurs sélectionnés</strong> parmi ceux introduits par le codeur dans les <strong class="specialG">fichiers sources</strong>. </p>
+
+<p> Ce fichier doit être présenté sous la forme d'une <strong>suite de lignes</strong> commençant chacune par un <strong class="defin">identificateur</strong> du module suivi un caractère de <strong>tabulation horizontale</strong> puis : </p>
+<ul>
+	<li> <code class="displayWhite">KEYWORD1</code> pour être affiché en <code style="color: orange;">orange</code> (couleur appliquée pour les <em>types</em> par l'<strong><em class="sigle">IDE</em></strong>) ;  </li>
+
+	<li> <code  class="displayWhite">KEYWORD2</code> pour être affiché en <code style="color: brown;">marron</code> (couleur appliquée pour les <em>fonctions</em> par l'<strong><em class="sigle">IDE</em></strong>).</li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Exemples d'application </h4>
+
+
+<div class="complement">
+<p> Pour bien expliquer l'usage d'un module de bibliothèque, <strong class="pros">rien ne vaut un bon exemple</strong>. Il suffit donc de coder un voire plusieurs <strong class="title">programmes d'application directe du module </strong> et placer leur code source (fichiers <code class="filename">.ino</code>) dans un <strong>répertoire homonyme</strong>, lui‑même placé dans un répertoire nommé <code class="filename">examples</code> inclus dans le répertoire du module. </p>
+
+<p> Dans l'<strong><em class="sigle">IDE</em></strong> <strong class="Arduino">Arduino</strong>, une fois le module installé, ces fichiers seront directement accessibles via le <strong>menu</strong> <code>Fichiers/Exemples</code>, à condition d'avoir . </p>
+</div><!-- complement -->
+
+
+
+<h3 id="DigitalSignals"> Exemple de module personnel <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="exemples">
+<p> Reprenons l'exemple du programme <code class="filename">multiSpeedBlink</code> développé au chapitre C4‑V <a class="previous" href="Cc4-5_programmationMultifichiers.html#DigitalSignals" target="_BLANK"></a>. 
+Il comprend un <strong>module</strong> de <strong class="defin">détection des fronts montants</strong> d'un signal sur une broche du port numérique de carte <em class="mark">Arduino</em>. </p>
+
+<p> Ce module peut être conçu pour devenir un <strong class="title">module de bibliothèque</strong>. En effet : </p>
+<ul>
+	<li> il <strong>ne dépend pas des autres modules</strong> du programme ; </li>
+
+	<li> il comprend une fonction <code class="cmd">risingEdge</code> ayant un <strong>usage très fréquent</strong>.</li>
+</ul>
+
+<p> Dans une perspective de <strong class="pros">réutilisation</strong> la plus large possible, on peut l'enrichir avec : </p>
+
+<ul>
+	<li> une fonction <code class="cmd">fallingEdge</code> de <strong>détection des fronts descendants</strong>, </li>
+
+	<li> une fonction <code class="cmd">edge</code> de <strong>détection de fronts</strong> (indifféremment montants ou descendants), </li>
+
+	<li> deux fonctions <code class="cmd">isLow</code> et <code class="cmd">isHigh</code> de détection de niveaux logiques (respectivement bas et haut). </li>
+</ul>
+
+<p>	Dans ce module, on dispose alors de <strong class="pros">toutes les fonctions utiles</strong> pour gérer des <strong>signaux logiques</strong> sur le port numérique d'une <strong class="Arduino">carte Arduino</strong>. </p>
+
+<p> Le <strong>répertoire de module</strong> compressé au format <code class="filename">ZIP</code> peut être téléchargé au lien suivant <a class="cours" href="../prog/LogicalSignals.zip" target="_BLANK"></a>. </p>
+</div><!-- exemples -->
+
+
+<h4> Fichier d'en‑tête <code class="filename">LogicalSignals.h</code></h4>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;Arduino.h&gt;
+
+// Main type to be uses
+struct LogicalSignal {
+  uint8_t pin;  // pin number to be declared as INPUT our INPUT_PULLUP
+  byte levels;  // current level on bit rank 0, previous level on bit rank 1
+};
+
+// All function prototypes
+void updateSignal(LogicalSignal & signal);  // to be called once in loop function
+bool isLow (LogicalSignal signal);          
+bool isHigh (LogicalSignal signal);         
+bool risingEdge (LogicalSignal signal);
+bool fallingEdge (LogicalSignal signal);
+bool edge (LogicalSignal signal);
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<h4 id="fichierImplementation"> Fichier d'implémentation <code class="filename">LogicalSignals.cpp</code></h4>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include "LogicalSignals.h"
+
+void updateSignal(LogicalSignal & signal) {
+  signal.levels <<= 1;        // record previous level on bit rank 1
+  // copy current level on bit rank 0 and clear all bits ranging over rank 1
+  signal.levels = ((digitalRead(signal.pin) | signal.levels) & 0b11);
+}
+
+bool isLow (LogicalSignal signal) {
+  return ((signal.levels & 0b01) == 0);
+}
+
+bool isHigh (LogicalSignal signal) {
+  return ((signal.levels & 0b01) == 1);
+}
+
+bool risingEdge (LogicalSignal signal) {
+  return (signal.levels == 0b01);
+}
+
+bool fallingEdge (LogicalSignal signal) {
+  return (signal.levels == 0b10);
+}
+
+bool edge (LogicalSignal signal) {
+  return (signal.levels == 0b01 || signal.levels == 0b10);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<h4> Exemple d'application <code class="filename">ledButtonSimpleCommand.ino</code></h4>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;LogicalSignals.h&gt;
+
+#define LED_PIN    2
+#define BUTTON_PIN 4
+
+LogicalSignal button = {BUTTON_PIN, 0b00}; // LOW level expected initially
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(BUTTON_PIN, INPUT); // positive logic
+}
+
+void loop() {
+  updateSignal(button);
+  if (risingEdge(button)) {
+    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<h4> Fichier de coloration syntaxique <code class="filename">keywords.txt</code> </h4>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="border: solid 1px dimgray;
+                                 padding-top: 0.2em; padding-bottom: 0.2em">
+LogicalSignal	KEYWORD1
+updateSignal	KEYWORD2
+isLow        	KEYWORD2
+isHigh       	KEYWORD2
+risingEdge   	KEYWORD2
+fallingEdge  	KEYWORD2
+edge         	KEYWORD2
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<h4> Fichier d'aide <code class="filename">readme.txt</code> </h4>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite" style="border: solid 1px dimgray;
+                                 padding-top: 0.2em; padding-bottom: 0.2em">
+Arduino library module "LogicialSignals"
+
+Designed to manage logical signals on the digital port of Arduino boards
+- detect both logical levels (HIGH or LOW)
+- detect all kind of edges   (rising, falling or both)
+
+To detect something happening on a digital pin, you need to:
+- declare a structured variable of type LogicialSignal, 
+  (specifiing the pin number and the initial level expected on the pin)
+  example: LogicalSignal button = {BUTTON_PIN, 0b00}; // LOW initial level expected
+
+- to call the update function at each iteration of loop function
+  example: updateSignal(button);
+
+- to call a detection function whenever needed
+  example: if (risingEdge(button))   // etc.  
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

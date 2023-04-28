@@ -1,0 +1,184 @@
+ul{
+	margin-top: 0.0%;
+	margin-bottom: 0.8%;
+}
+
+
+ul.square{
+	list-style: square;
+}
+
+
+ol.exercice{
+	counter-reset: exolist;
+	padding-left: 0.0em;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	margin-top: 2em;
+	margin-bottom: 0.5em;
+}
+
+ol.exercice > li {
+  list-style: none;
+  position: relative;
+  margin-top: 2em;
+	margin-bottom: 0.5em;
+	margin-left: 1.5em;
+}
+
+ol.exercice > li:before {
+  counter-increment: exolist;
+  content: counter(exolist) ".Â ";
+  position: absolute;
+  left: -1.8em;
+  font-weight: 600;
+}
+
+ol.questions{
+	counter-reset: questlist;
+	margin-left: 0.5em;
+}
+
+ol.questions > li {
+  list-style: none;
+  position: relative;
+  margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+ol.questions > li:before {
+  counter-increment: questlist;
+  content: counter(questlist, lower-alpha) ")Â ";
+  position: absolute;
+  left: -1.4em;
+  font-weight: 600;
+}
+
+
+ol.cours{
+	list-style: upper-roman;
+	font-weight: 600;
+}
+
+ol.remarques{
+	counter-reset: remlist;
+	margin-left: 0.5em;
+}
+
+ul.remarques{
+	margin-top : 0.8em;
+}
+
+ol.remarques > li {
+  list-style: none;
+  position: relative;
+  padding-top: 0em;
+  margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+ol.remarques > li:before {
+  counter-increment: remlist;
+  content: counter(remlist, upper-alpha) ")Â ";
+  position: absolute;
+  left: -1.6em;
+  font-weight: 600;
+}
+
+ol.littered{
+	counter-reset: litterlist;
+	margin-left: 0.5em;
+}
+
+
+ol.littered > li {
+  list-style: none;
+  position: relative;
+  padding-top: 0em;
+  margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+ol.littered > li:before {
+  counter-increment: litterlist;
+  content: counter(litterlist, upper-alpha) ")Â ";
+  position: absolute;
+  left: -1.6em;
+  font-weight: 600;
+}
+
+ol.exemples{
+	counter-reset: exlist;
+	margin-left: 0.5em;
+}
+
+ol.exemples > li {
+  list-style: none;
+  position: relative;
+  padding-top: 0em;
+	margin-bottom: 0.5em;
+}
+
+ol.exemples > li:before {
+  counter-increment: exlist;
+  content: counter(exlist, decimal) ")Â ";
+  position: absolute;
+  left: -1.6em;
+  font-weight: 600;
+}
+
+ol.numbered{
+	counter-reset: nblist;
+	margin-left: 0.5em;
+}
+
+ol.numbered > li {
+  list-style: none;
+  position: relative;
+  padding-top: 0em;
+	margin-bottom: 0.5em;
+}
+
+ol.numbered > li:before {
+  counter-increment: nblist;
+  content: counter(nblist, decimal) ")Â ";
+  position: absolute;
+  left: -1.6em;
+  font-weight: 600;
+}
+
+ol.lower{
+  counter-reset: lowerlist;
+  margin-left: 0.5em;
+  margin-top: 0em;
+}
+
+ol.lower > li {
+  list-style: none;
+  position: relative;
+  padding-top: 0em;
+  margin-bottom: 0.5em;
+}
+
+ol.lower > li:before {
+  counter-increment: lowerlist;
+  content: counter(lowerlist, lower-alpha) ")Â ";
+  position: absolute;
+  left: -1.6em;
+}
+
+
+li{
+	margin-bottom: 0.8%;
+}
+
+li:not(:first-child) {
+	margin-top: 0.8%;
+}
+
+li:first-child {
+	margin-top: 0.4%;
+}
+
+
+

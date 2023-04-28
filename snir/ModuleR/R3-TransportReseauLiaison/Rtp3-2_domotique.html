@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="R"
+  data-pagetype="TP"
+  data-modulepartnumber="3"
+  data-pagenumber="2"
+  data-pageState="OK"
+  data-pageheadtitle="Domotique"
+  data-pagefulltitle="Contrôle d'un réseau domotique Jeedom EnOcean"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> L'<strong>objectif principal</strong> de ce sujet de travaux pratiques est de découvrir la <strong class="title">technologie domotique</strong> sans‑fil <strong class="specialLB">EnOcean</strong> et la box <strong class="specialLB">Jeedom</strong>, par la mise en place d'un petit réseau domotique <strong><em class="sigle">WPAN</em></strong> (cf. cours, chap. R3‑V <a class="cours" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportLiaisonReseau/Rc3-5_technologiesWPAN.html" target="_BLANK"></a>). </p>
+
+
+ 
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il est recommandé d'avoir étudié les <strong>chapitres R3‑IV</strong> et <strong>R3‑V</strong> du cours. Des renvois aux principaux éléments de cours ou à des pages web d'information générale sont donnés au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Environnement </h3>
+
+
+<p> Les manipulations demandées sont à accomplir sur un <strong class="title">réseau local</strong> (<strong class="title"><em class="sigle">LAN</em></strong>) utilisant la pile de protocole <strong><em class="sigle">TCP/IP</em></strong>, raccordé à l'<strong>Internet</strong>, de préférence <strong class="warning">sans serveur proxy pédagogique</strong>. En effet, un tel serveur pose des problèmes d'accès à divers composants logiciels de l'application <strong class="defin">Jeedom</strong>. </p>
+
+
+<h3 class="nocount" id="miseEnSituation"> Équipement </h3>
+
+
+<p> Les manipulations demandées requièrent le <strong class="title">matériel</strong> listé ci‑dessous. </p>
+
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/Rtp32_archi.png" width="400px" style="padding-top: 0.5em">
+  <li> Pour jouer le rôle de <strong class="specialLB">box domotique Jeedom</strong>, on emploie un <strong>nano‑ordinateur</strong> <strong class="Raspberry">Raspberry Pi 3</strong> ou <strong class="Raspberry">Pi 4</strong> : </li>
+  <ul>
+    <li> avec une carte <strong>MicroSD</strong> sur laquelle est éventuellement déjà installé un <strong>système d'exploitation</strong> de type <strong class="Raspberry">Raspberry Pi OS 64 bits lite</strong> (sans bureau) ; </li>
+
+    <!--
+     – en effet, la version <strong>Bullseye</strong> plus récente des <strong class="cons">problèmes d'intégration</strong> de la <strong>passerelle EnOcean</strong> ; -->
+
+    <li> dont l'<strong>adresse <em class="sigle">IP</em></strong> est connue, pour pouvoir s'y connecter avec un poste de travail sur le même réseau. On rappelle qu'en cas de configuration <strong><em class="sigle">DHCP</em></strong>, il est utile de connaître préalablement l'<strong>adresse <em class="sigle">MAC</em></strong> de la carte pour pouvoir déterminer son adresse <strong><em class="sigle">IP</em></strong> en scannant le réseau.</li>   
+  </ul>
+
+  <li> On utilise <strong class="specialLB">poste de travail</strong> (typiquement, un PC) comme <strong>terminal de commande</strong> pour l'installation du système et du logiciel de la box, puis son utilisation via un <strong>navigateur web</strong>. </li>
+
+  <div class="nobullet"> Les deux machines doivent donc être l'une et l'autre <strong class="defin">raccordées au même réseau</strong> et se voir attribuer une <strong>adresse <em class="sigle">IP</em></strong> sur le <strong class="defin">même segment</strong> pour pouvoir communiquer. </div>
+  </div><!-- display -->
+
+  <li> Autour de la box, on met en œuvre ensemble d'<strong class="specialLB">équipements domotiques</strong> certifiés <strong class="specialG">EnOcean</strong> : </li>
+    <img class="top-left" src="../img/Rtp32_equipementEnOcean.png" height="120px">
+  <ul>
+  	<li> un <strong>contrôleur‑passerelle</strong> <em class="mark">USB300DC O2Line</em> <a class="external" href="http://bit.ly/2eVzXZ27" target="_BLANK"></a> – il s'agit d'un dongle <em class="sigle">USB</em> émetteur‑récepteur <em class="mark">EnOcean</em> 868 MHz) à brancher sur la carte <em class="mark">Raspberry Pi</em> ; </li>
+
+      
+  	<li> une <strong>prise électrique commandable</strong> <em class="mark">smart plug NodOn</em> <a class="external" href="https://nodon.fr/nodon/prise-intelligente-metering-enocean/" target="_BLANK"></a> ; </li>
+
+    <li> un <strong>capteur d'ouverture</strong> <em class="mark">door/window sensor NodOn</em> <a class="external" href="https://nodon.fr/nodon/detecteur-douverture-portes-et-fenetres-enocean/" target="_BLANK"></a> ; </li>
+
+    <li> une <strong>prise électrique commandable</strong> <em class="mark">micro smart plug NodOn</em> <a class="external" href="https://nodon.fr/nodon/micro-smart-plug-enocean/" target="_BLANK"></a> ; </li>
+
+  	<li> une <strong>télécommande 4 boutons</strong> <em class="mark">soft remote NodOn</em>  <a class="external" href="https://nodon.fr/nodon/la-telecommande-soft-remote-enocean/" target="_BLANK"></a>. </li>
+  </ul>
+</ul>
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Effectuer toutes les manipulations demandées en veillant au <strong class="warning">respect des consignes</strong>, dans l'ordre, sans oublier d'étape. En cas de doute sur un branchement ou une manipulation, ne pas hésiter à solliciter l'enseignant. Au fur et à mesure, penser à <strong class="specialG">sauvegarder</strong> les modifications.</p>
+<!--
+<p> Rédiger un <strong class="title">rapport d'activité</strong> qui récapitule les étapes du travail accompli avec un niveau suffisant de détails technique pour permettre à un technicien peu expérimenté de réussir les mêmes procédures. On veillera à bien mettre en évidence la démarche suivie.</p>
+-->
+</div><!-- important -->
+
+
+<ol class="exercice">
+
+  <li id="exo1" style="margin-top: 2em;"> <em class="bold">Préparation du réseau et du nano‑ordinateur</em> </li>
+
+  <ol class="questions">
+    <li> Raccorder le <strong class="title">poste de travail</strong> à la <strong>box <em class="sigle">FAI</em></strong> via le switch. Laisser son interface réseau en <strong><em class="sigle">DHCP</em></strong> mais <strong class="defin">supprimer</strong> tout recours à un <strong>serveur mandataire</strong> (<em class="english">proxy server</em>). </li>
+
+
+		<li> Si la carte <strong class="Raspberry">Raspberry Pi</strong> dispose pas d'une carte <strong>MicroSD</strong> avec le système d'exploitation <strong>Raspberry Pi OS</strong> recommandé supra, procéder à l'installation de ce système sur la carte – cf. la procédure donnée dans le sujet de TP R2‑2 <a class="previous" href="../R2-Applications/Rtp2-2_serveurWeb.html#prepaServeur" target="_BLANK"></a>. </li>
+    
+    <!-- 
+    <div class="nobullet"> Pour conférer au futur système une <strong>adresse <em class="sigle">IP</em> statique</strong>, il est recommandé de paramétrer dès à présent le fichier <code class="filename">/etc/dhcpcd.conf</code> (demander à l'enseignant la valeur <strong class="warning">x</strong> à choisir pour éviter les conflit d'adresse <em class="sigle">IP</em> avec d'autres systèmes en service).  </div>
+    -->
+    
+    <li> Monter la carte <strong>MicroSD</strong> sur la carte <strong class="Raspberry">Raspberry Pi</strong>, raccorder cette dernière au switch puis la mettre sous tension et attendre le chargement complet du système avant d'ouvrir une <strong class="title">connexion distante</strong> <code class="cmd">ssh</code> depuis le poste de travail.  </li>
+
+    <li> Procéder au <strong class="title">paramétrage du système d'exploitation</strong> – cf. la procédure donnée dans le sujet de TP R2‑2 <a class="previous" href="../R2-Applications/Rtp2-2_serveurWeb.html#prepaServeur" target="_BLANK"></a> : </li>
+
+    <ul>
+      <!-- 
+      <li> changement du <strong>mot de passe</strong> (demander à l'enseignant lequel choisir et le noter dans un fichier), </li>
+      -->
+
+      <li> réglage de la <strong>date</strong>, </li>
+    
+      <li> réglage des <strong>paramètres régionaux</strong>, </li>
+
+      <li> <strong>mise à jour</strong> du système et redémarrage,</li>
+    </ul>
+
+    <div class="nobullet"> sachant que la mise à jour peut prendre <strong class="cons">plus de 10 minutes</strong>. </div>
+
+  </ol><!-- questions - exo1 -->
+
+
+
+
+
+
+
+
+
+
+  <li id="exo2" style="margin-top: 2em;"> <em class="bold">Installation et paramétrage du logiciel de box domotique</em> </li>
+  
+  <ol class="questions">
+    <li> Toujours en connexion distante </strong><code class="cmd">ssh</code> depuis le poste de travail, installer l'<strong class="title">application Jeedom</strong> en suivant les indications du cours, <strong>chap. R3‑V</strong> <a class="cours" href="Rc3-5_technologiesWPAN.html#boxJeedom" target="_BLANK"></a>. </li>
+
+    <div class="nobullet"> Attention, cette opération est <strong class="cons">longue</strong>, elle peut prendre plusieurs dizaines de minutes voire plus d'une heure selon de débit de la connexion et le nombre de box qui sont installés simultanément dans le cadre de la séance de travaux pratiques. </div>
+
+    <li> Via un <strong>navigateur</strong> sur le poste de travail, <strong class="title">se connecter</strong> à la <strong>box Jeedom</strong> en saisissant son <strong>adresse <em class="sigle">IP</em></strong> comme <strong><em class="sigle">URL</em></strong>. Utiliser les identifiants par défaut (<code>admin/admin</code>). </li>
+    
+    <ul>
+      <li> Changer le <strong>mot de passe</strong> avec celui indiqué par votre enseignant. Avec identifiant associé, le noter dans un fichier pour le retrouver en cas d'oubli ultérieur. </li>
+    
+      <li> Appeler l'enseignant pour la connexion au <strong>compte Jeedom Market</strong>. </li>
+    </ul>
+    
+    
+    <div class="nobullet"> Explorer les différents menus. Dans le sous‑menu <span class="Noir">Configuration/Général</span>, renseigner les <strong>coordonnées géographiques</strong> et l'adresse de l'installation de la box (adresse de l'établissement scolaire). </div> 
+
+    <!--
+    <li> Selon l'architecture du <em class="sigle">LAN</em>, dans le sous‑menu <span class="Noir">Configuration/Réseau</span>, renseigner la configuration du <strong class="title">serveur proxy</strong> si le réseau en possède un. </li>  
+
+    <div class="remarques">
+      <p class="remarque"> Le cas échéant, il peut également être nécessaire de renseigner cette configuration dans le système <em class="mark">Debian</em> lui‑même (créer un fichier <code class="filename">proxy.sh</code> dans le répertoire <code>/etc/profile.d</code> <a class="external" href="https://doc.ubuntu-fr.org/proxy_terminal" target="_BLANK"></a>). </p>
+    </div> -->
+  </ol><!-- questions (exo 2) -->
+    
+
+
+
+
+
+
+
+
+  <li id="exo3" style="margin-top: 2em;"> <em class="bold">Installation des équipements domotiques </em> </li>
+
+  <ol class="questions" id="declarationObjets">
+    <li> Via le menu <span class="Noir">Outils</span>, <strong class="title">déclarer les objets</strong> <code>Maison</code>, <code>Rez‑de‑chaussée</code>, <code>Cuisine</code>, <code>Placard</code>, <code>Escalier</code>, <code>Étage</code>, <code>Chambre</code>, avec les <strong>liens de parentés</strong> pour prendre en compte le fait que : </li>
+    <ul>
+      <li> la chambre est à l'étage, </li>
+
+      <li> les autres pièces sont au rez‑de‑chaussée,</li>
+
+      <li> et le placard est dans la cuisine. </li>
+    </ul> 
+
+    <img class="top-left" src="../img/R3tp2_objets.png">
+
+    <div class="nobullet"> <em>Ces éléments ne seront pas tous utilisés par la suite, mais le but est d'apprendre à créer une structure arborescente conforme à la constitution d'une habitation.</em> </div>
+    
+    <li> Mettre en place le <strong class="title">contrôleur‑passerelle</strong> <strong class="title">EnOcean</strong> en suivant les étapes décrites ci‑dessous. </li>
+    <ul>
+      <div style="display: inline-block;"> 
+        <img class="top-right" src="../img/JeedomPluginEnOcean.png" width="100px" style="padding-top: 0.5em">
+      <li> Via le menu <span class="Noir">Plugin/Gestion des plugins/Market</span>, installer le <strong>plugin EnOcean</strong> (il est déjà payé avec le compte <em class="english">Market</em> sélectionné par l'enseignant). Ouvrir la <strong>page web</strong> de paramétrage du plugin via le lien proposé par l'application. </li>
+      </div><!-- display -->
+
+      <div style="display: inline-block;"> 
+        <img class="top-right" src="../img/EnOcean_USB300.png" width="200px" style="padding-top: 0.5em">
+      <li> Brancher le <strong>contrôleur‑passerelle</strong> <em class="mark">USB300DC</em> sur un port <strong><em class="sigle">USB 2.O</em></strong> de la carte <em class="mark">Raspberry Pi</em>. Normalement, sa <strong class="specialSG">led verte</strong> doit s'allumer et rester fixe. </li>
+      </div><!-- display -->
+
+         
+      <li> Dans la page web de <strong>paramétrage du plugin</strong> <span class="Noir">EnOcean (openenocean) - stable</span> : </li>
+
+    <ul style="list-style: circle;">
+      <li> dans l'encart <code>État</code>, cliquer sur le bouton <code>Activer</code> ; d'autres encart – notamment <code>Configuration</code> – doivent alors apparaître ; </li>
+
+      <li> dans l'encart <code>Configuration</code>, sélectionner pour le <strong>port EnOcean</strong> celui qui est spécifiquement reconnu par le système, typiquement : <br> 
+      <span class="inline">
+        <span class="Noir">EnOcean_GmbH EnOcean_USB_300_DC (/dev/tty/USB0)</span>
+      </span> <br> 
+      puis cliquer sur le bouton <span class="Vert">🗸Sauvegarder</span> ; </li>
+
+      <li> dans l'encart <code>Dépendances</code>, <strong class="warning">seulement</strong> si le statut est <span class="Rouge">NOK</span>, cliquer sur le bouton <span class="Orange">Relancer</span> (cette opération peut prendre plusieurs minutes) ; </li>
+
+      <li> dans l'encart <code>Démon</code>, vérifier que la <code>configuration</code> et le <code>statut</code> sont tous les deux <span class="Vert">OK</span> ; </li>
+      <ul style="list-style: circle">
+      	<li> si seul le <code>statut</code> est <span class="Rouge">NOK</span>, cliquer sur le bouton <code>(Re)Démarrer</code> <span class="Vert">▶</span> ;</li>
+
+      	<li> si la <code>configuration</code> est <span class="Rouge">NOK</span>, vérifier que la configuration est conforme et sauvegardée comme demandé supra ; si tel est le cas, relancer l'installation des dépendances. </li>
+      </ul><!-- circles -->
+
+      <div class="nobullet"> Le démon doit être placé en <code>Gestion automatique</code>, c'est‑à‑dire avec le bouton <span class="Rouge">🗙Désactiver</span> <strong>visible</strong>. </div>
+    </ul>
+  </ul>  
+    
+    
+  <li id="inclusionZwave"> Inclure les <strong class="title">équipements domotiques</strong> dans le réseau <strong>EnOcean</strong>. </li>
+
+
+    <ul>
+    	<li> via le menu <span class="Noir">Plugin / Gestion des plugins / Protocoles domotiques</span>, sélectionner la page web d'utilisation du protocole <strong>EnOcean</strong>. </li>
+
+    	<img class="top-left" src="../img/Rtp32_EnOcean.png" style="max-width: 800px">
+
+      <li> L'inclusion dans le <strong><em class="sigle">WPAN</em> EnOcean</strong> d'un équipement compatible obéit au processus décrit ci‑dessous pour une <strong class="specialLB">prise électrique commandable</strong>. </li>
+
+      <div style="display: inline-block;"> 
+        <img class="top-right" src="../img/EnOcean_smartPlug_3.png" width="200px" style="padding-top: 0.5em">
+      <ul style="list-style: circle;">
+        <li> Brancher la prise électrique commandable <strong>smart plug</strong> dans une prise murale et vérifier préalablement que son <strong class="specialSG">bouton lumineux ON/OFF</strong> est opérationnel. Sur cette prise, brancher une <strong>veilleuse</strong> fournie avec son capteur de luminosité obturé (pour qu'elle s'allume en permanence si elle est alimentée). </li>
+      
+        <li> Dans la page web du protocole <strong>EnOcean</strong>, cliquer sur le bouton <code>Mode Inclusion</code>. </li>
+
+        <li> Appuyer alors au moins <strong>2 secondes</strong> sur le <strong class="specialSG">bouton lumineux ON/OFF</strong> de la prise. Ce dernier doit alors devenir <strong class="specialR">rouge</strong> fixe puis clignoter en <strong class="specialSG">vert</strong> trois fois avant de reprendre son état initial. </li>
+
+        <li> La page page web du protocole <strong>EnOcean</strong> doit alors réagir et faire apparaître une vignette de la prise dans la rubrique <span class="Noir">Mes équipements EnOcean</span>. </li>
+      
+      	<li> Cliquer sur cette vignette pour paramétrer l'équipement. Le nommer <code>prise lumière</code>, l'associer à l'objet parent <code>Placard</code> et à la catégorie <code>Lumière</code>. Cocher les cases <code>Activer</code> et <code>Visible</code>, pour que l'équipement soit représenté par un <strong>widget</strong> dans le <span class="Noir">Dashboard</span>. Cliquer sur le bouton <span class="Vert">🗸Sauvegarder</span>. </li>
+
+        <div class="nobullet"> Sur cette même page, cliquer sur l'onglet <span class="Noir">Commandes</span>. Cliquer sur le bouton <span class="Gris">Tester</span> des commandes <code>On</code>, <code>Etat</code>, <code>Off</code>, <code>Etat</code> et vérifier que la prise répond correctement à ces commandes. </div>
+      </ul><!-- circles -->
+      </div><!-- display -->
+
+
+      
+      <li> Recommencer la même procédure pour les <strong class="specialLB">autres équipements</strong> listés dans la section <em>Mise en situation</em> supra <a class="supra" href="Rtp3-2_domotique.html#miseEnSituation"></a>, sachant que : </li>
+       <ul style="list-style: circle">
+        <li> le <strong>capteur d'ouverture</strong> est à associer à l'objet <code>placard</code> (lui attribuer le nom <code>capteur porte</code>) et à la catégorie <code>Lumière</code> ;  </li>
+      
+        <li> la deuxième <strong>prise commandée</strong>  et la <strong>télécommande</strong> sont à associer à l'objet <code>Maison</code> et à la catégorie <code>Chauffage</code>. </li>
+      </ul><!-- circles -->
+      
+      <div class="nobullet"> Pour chaque équipement, il faut : </div> 
+
+      <ul style="list-style: circle">
+        <li> consulter son mode d'emploi pour identifier le <strong>bouton</strong> sur lequel appuyer lors de la <strong>procédure d'inclusion</strong>.  </li>
+        
+        <li> vérifier les différentes <strong>commandes</strong> compte tenu du type d'équipement. </li>
+      </ul><!-- circles -->
+  </ol><!-- questions (exo 2) -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <li id="exo4" style="margin-top: 2em;"> <em class="bold">Codage de scénarios de commande</em> </li>
+
+  <ol class="questions">
+    <li> Découverte du <strong class="title">Dashboard</strong>. </li>
+    <ul>
+      <div style="display: inline-block;"> 
+          <img class="top-right" src="../img/Rtp32_widgetsEnOcean.png" width="400px" style="padding-top: 0.5em">
+      <li> Dans le menu <span class="Noir">Accueil/Dashboard</span>, passer en mode édition (bouton « stylo » à droite), répartir et agrandir suffisamment les <strong>widgets</strong> qui représentent chaque équipement pour pouvoir visualiser l'intégralité de leur contenu.  </li>
+      </div><!-- display -->
+      
+      <li> Vérifier que l'équipement <code>prise lumière</code> répond bien aux commandes <em>on/off</em> en cliquant sur son icône <code>État</code>.</li>
+
+      <li> Vérifier que l'icône associé à l'état de l'équipement <code>capteur porte</code> est conforme à l'éloignement de l'aimant par rapport au corps du capteur. </li>    
+    </ul>
+
+    <li> Grâce à un <strong class="title">premier scénario de fonctionnement</strong>, on souhaite utiliser l'équipement <code>prise lumière</code> pour commander l'éclairage du placard afin qu'il <strong>s'allume automatiquement</strong> lorsque la porte est ouverte (comme dans un réfrigérateur) – état détecté par l'équipement <code>capteur porte</code>. </li>
+
+    <ul>
+      <li> Dans le menu <span class="Noir">Outils/Scénarios</span>, ajouter un <strong>nouveau scénario</strong> :  </li>
+      <ul style="list-style: circle">
+        <li> l'associer au groupe <code>Éclairage</code> et à l'objet <code>Placard</code> et cocher la case <code>Visible</code> pour qu'il apparaisse dans le <code>Dashboard</code> ; </li>
+
+        <li> choisir son mode de déclenchement <code>Provoqué</code> par un événement lié au changement d'état du <code>capteur porte</code> (cliquer sur le bouton <code>Choisir une commande</code>…) ;  </li>
+
+        <li> cliquer sur le bouton <span class="Gris">Ajouter bloc</span> pour programmer le scénario sous la forme d'une condition logique <code>SI/ALORS/SINON</code> (cliquer sur les boutons contextuels et choisir les expressions proposées conformément à la spécification supra) ;  </li>
+
+        <li> cliquer sur le bouton <span class="Orange">Exécuter</span> puis vérifier le bon fonctionnement du scénario en approchant et éloignant l'aimant du capteur d'ouverture (le wall plug doit respectivement s'éteindre et s'allumer).  </li>
+
+        <li> cliquer sur le bouton <span class="Vert">🗸Sauvegarder</span>. </li>
+      </ul><!-- circles -->
+
+      <li> Revenir à la page du <code>dashboard</code> et vérifier que le scénario dispose d'un <strong>widget</strong>. Observer le déroulement du scénario, puis l'effet de son activation ou désactivation. </li>
+    </ul>
+
+    <li> Grâce à un <strong class="title">deuxième scénario de fonctionnement</strong>, on souhaite commander <strong>un ventilateur</strong> branché sur une prise commandée en <strong>fonctionnement intermittent</strong>. </li>
+    <ul>
+      <li> Dans un contexte réel, on adopterait par exemple une mise en marche de 5 minutes toutes les heures. Mais dans le cadre de cet exercice, pour faciliter la vérification du bon déroulement du scénario, on paramétrera un fonctionnement d'<strong>1 minute</strong> <strong>toutes les 2 minutes</strong>. </li>
+    
+      <li> On conditionnera également la mise en marche au fait que le bouton nº 1 de la <strong>télécommande</strong> est appuyé (appui bistable). En cas d'appui (signal au niveau haut), le ventilateur doit se mettre immédiatement en marche intermittente. En cas de nouvel appui (signal au niveau bas), le ventilateur doit s'arrêter immédiatement et ne plus se remettre en marche tant que le bouton n'est pas appuyé à nouveau  </li>
+    </ul>
+    
+    <div class="nobullet"> Suivre une procédure analogue à la précédente, mais cette fois en choisissant l'option <code>Les deux</code>, c'est‑à‑dire un <strong>scénario programmé et déclenché</strong>.</code> </div> 
+    <ul>
+      <li> Cliquer sur le bouton <span class="Gris">Programmation</span> et choisir un mode <code>récurrent</code> toutes les 5 minutes, puis remplacer la valeur <code>5</code> par <code>2</code> dans le champ de programmation – codé avec une syntaxe <em class="mark">Linux cron</em> <a class="external" href="https://fr.wikipedia.org/wiki/Cron" target="_BLANK">W</a>.  </li>
+    
+      <li> Cliquer sur le bouton <span class="Gris">Déclencheur</span> pour définir l'élément déclencheur selon le même principe qu'au scénario précédent.  </li>
+    </ul>
+
+    <div class="nobullet"> Ensuite, cliquer sur le bouton <span class="Gris">Ajouter bloc</span> pour programmer le scénario, sachant que parmi les blocs disponibles, on trouve le bloc <code>DANS</code> qui permet de commander une <strong>action différée</strong>. </div>
+  </ol><!-- questions (exo 4) --> 
+
+
+
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

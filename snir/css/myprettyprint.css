@@ -1,0 +1,146 @@
+/* http://practicalseries.com/1001-webdevelopment/21-00-codefrag.html#js--000000 */
+/* For the future, Try https://highlightjs.org/ */
+
+code.prettyprint {
+  white-space: nowrap;
+  border-radius: 4px;
+  background: white;
+  font-family: Source code pro, Noto Mono, Consolas, monospace;
+  font-weight: 500;
+  font-size: 85%;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+}
+
+.nocode {
+  font-family: caladea, cambria, bookman, georgia;
+  color: black;
+  font-style: normal;
+}
+
+pre.prettyprint {
+  overflow-x: auto;
+  width: 97%;
+  margin-left: 1em;
+  margin-right : 0.2em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  border: solid 1px dimgray;
+  background: #E0E0E0;
+  padding-left: 0.2em;
+  font-size: 80%;
+  font-weight: 500;
+  font-family: Source code pro, Noto Mono, Consolas, monospace;
+  line-height: 1.1em;
+}
+
+.prettyprint ol.linenums > li {
+  list-style-type: decimal;
+  color: dimgray;
+  margin-bottom: 0.0em;
+  margin-top: 0.0em;
+  margin-left: 0.8em;
+  padding-left: 0.3em;
+  border-left: solid;
+  border-width: 1px;
+  border-color: gray;
+}
+
+/* Alternate shading for lines */
+.prettyprint ol.linenums li:nth-child(odd) {
+  background: #E7E7E7;
+/* use for different formatting for every other linenum */
+}
+
+.prettyprint ol.linenums li:nth-child(even) {
+  background: #F0F0F0;
+/* use for different formatting for every other linenum */
+}
+
+/* Plain text */
+  .pln {
+    color: black;
+    font-weight: 550;
+  }
+
+@media screen, print, projection {
+
+/* String content */
+  .str {
+    color: #F07000; /* darker than darkorange */
+    font-weight: 550;
+  }
+/* Keyword */
+  .kwd {
+    color: red;
+    font-weight: 700;
+  }
+/* Comment */
+  .com {
+    color: gray;
+    font-style: italic;
+  }
+/* Type name */
+  .typ {
+    color: green;
+    font-style: italic;
+    font-weight: 700;
+  }
+/* Literal value */
+  .lit {
+    color: green;
+    font-weight: 600;
+  }
+/* Punctuation */
+  .pun {
+    color: blue;
+    font-weight: 700;
+  }
+/* Lisp open bracket */
+  .opn {
+    color: blue;
+    font-weight: 700;
+  }
+/* Lisp close bracket */
+  .clo {
+    color: blue;
+    font-weight: 700;
+  }
+/* Mark-up tag name (HTML) */
+  .tag {
+    color: blue; /* sublime: #F92655 */
+  }
+/* Mark-up attribute name (HTML) */
+  .atn {
+    color: green; /* sublime: #A6E22D */
+  }
+/* Markup attribute value (HTML) */
+  .atv {
+    color: sienna; /* sublime: #E6DB74 */
+  }
+/* Declaration */
+  .dec {
+    color: #333333;
+  }
+/* Variable name */
+  .var {
+    color: #8A008A;
+    font-style: normal;
+  }
+/* Function name */
+  .fun {
+    color: #F07000;
+  }
+/* ?? */
+  .xsl {
+    color: violet;
+  } 
+/* source ?? */
+  .src {
+    color: pink;
+  }  
+}
+
+
+
+

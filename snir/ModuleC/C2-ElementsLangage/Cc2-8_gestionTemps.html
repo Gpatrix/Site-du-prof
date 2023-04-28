@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="VIII"
+  data-pageState="OK"
+  data-pageheadtitle="Exploitation temps"
+  data-pagefulltitle="Arduino : exploitation du temps processeur"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<!-- petit chapitre, peut‑être à restructurer ??? 
+
+Ajouter une partie sur le temps processeur en C/C++
+  - type clock_t, fonction clock() de la bibliothèque time.h
+  - fonction pause, sleep et usleep de la bibliothèque unistd.h (Linux) ou windows.h (Windows)
+Fusionner les 2 parties Arduino (elles n'ont pas beaucoup de sections)  
+
+Argument contre : pas d'exercices dans les TP
+Sinon, à incorporer dans une partie sur les interactions système
+-->
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/dateAndTimeDisplay.png" width="300px" style="padding-top: 0.5em">
+<p class="square"> Le <strong class="title">temps</strong> est une <strong>composante essentielle</strong> en programmation. Tout logiciel doit prend en compte des aspects temporels, ne serait-ce que pour détecter un double‑clic. C'est tout particulièrement le cas des <strong class="defin">programmes de contrôle‑commande</strong> de systèmes : ils doivent cadencer certaines <strong>actions</strong> avec des <strong class="specialLB">durées spécifiées</strong>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/symboleOrdi.png" width="150px" style="padding-top: 1.2em">
+<p class="square"> Pour les programmes sur <strong class="title">ordinateur</strong>, le langage <strong>C</strong> met à disposition du codeur le <strong class="defin">module</strong> <code class="prettyprint lang-c">time</code> de la bibliothèque standard (fichier d'en‑tête <code class="filename">time.h</code> <a class="external" href="https://en.cppreference.com/w/c/chrono" target="_BLANK"></a>, <code class="prettyprint lang-c">ctime</code> pour le <em class="mark">C++</em>). Ce module comprend de <strong>nombreuses fonctions</strong>, qui permettent notamment d'accéder aux <strong class="title">variables d'horloge</strong> : </p>
+</div><!-- display -->
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/processorTime.png" width="200px" style="padding-top: 0.2em">
+  <li> Celles du <strong>processeur</strong> (éventuellement généré par un circuit oscillant externe) donnent ce qu'on appelle le <strong class="specialLB">temps processeur</strong>, défini par un nombre de « tics » d'horloge écoulé entre deux instants considérés. Sachant la période d'oscillation, on peut calculer des valeurs de <strong class="pros">durées très précises</strong>. </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/calendarTime.png" width="150px" style="padding-top: 0.2em">
+  <li> Celles du <strong>système d'exploitation</strong> donnent ce qu'on appelle le <strong class="specialLB">temps calendaire</strong>, défini par le nombre de secondes écoulées depuis une date de référence – on parle de <strong>timestamp</strong>. Et il peut être formulé aussi en <em>heures‑minutes‑secondes</em> et <em>jour‑mois‑année</em> pour un <strong class="pros">usage pratique</strong>. </li>
+  </div><!-- display -->
+</ul>
+
+ <p> Bien entendu, on peut mémoriser ces variables d'horloge et d'effectuer toutes sortes de <strong>calculs</strong>. Ces aspects seront étudiés ultérieurement (notamment dans le module de formation aux réseaux  – cf. chap. R2‑VIII <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R2-Applications/Rc2-8\serviceTemps.html#timeLib" target="_BLANK">R</a>). Ils requièrent d'avoir déjà vu les <strong>structures de données hétérogènes</strong>, lesquelles sont abordées seulement dans la partie <span class="partie">C5</span> du cours. </p>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ArduinoShieldRTC.png" width="300px" style="padding-top: 1.2em">
+<p class="square"> Sur une <strong class="title">carte à microcontrôleur</strong>, même si elle est équipée d'un <strong class="defin">module <em class="sigle">RTC</em></strong> (<em class="english">real‑time clock</em>) – ou encore d'un module de connexion réseau pour obtenir le <strong class="specialLB">temps Internet</strong> – les possibilités sont un peu moindres. S'il y a bien une <strong>horloge processeur</strong>, il n'y a pas de système d'exploitation, donc <strong class="cons">pas de temps calendaire</strong>. Il faut donc le « simuler » dans le programme, ce qui est possible via l'utilisation d'une bibliothèque de fonctions appropriée, comme celle dont le fichier d'en‑tête est <code class="filename">Time.h</code> <a class="external" href="https://playground.arduino.cc/Code/Time/" target="_BLANK">A</a> du framework <strong class="Arduino">Arduino</strong>, dont l'identificateur se code avec une <strong>majuscule initiale</strong> (donc, à ne pas confondre avec celui de la bibliothèque standard du langage <strong>C</strong>, mentionné supra). </p>
+ </div><!-- display -->
+
+<p> Néanmoins, même <strong>sans module <em class="sigle">RTC</em></strong> ni <em>temps Internet</em>, dans le cas des <strong>cartes</strong> <strong class="Arduino">Arduino</strong>, on dispose déjà de quelques <strong class="title">fonctions basiques</strong> de <strong>haut niveau</strong> pour gérer les aspects temporels : </p>
+<ul> 
+  <li> les fonctions <code class="prettyprint lang-c">delay</code> et <code class="prettyprint lang-c">delayMicrosecond</code> de <strong class="defin">mise en pause</strong> de l'exécution du programme ; </li>
+
+  <li> les fonctions <code class="prettyprint lang-c">millis</code> et <code class="prettyprint lang-c">micros</code> de <strong class="defin">mesure du temps écoulé</strong> depuis le début de l'exécution du programme. </li>
+</ul>
+
+<p class="square"> L'<strong class="title">objectif</strong> de ce chapitre est de passer en revue ces <strong class="specialLB">quatre fonctions</strong> dont l'usage est absolument indispensable pour la programmation des <strong>cartes</strong> <strong class="Arduino">Arduino</strong> et compatibles. </p>
+
+<div class="expert">
+<p> Quant à leur <strong>code source</strong>, il est consultable dans le <strong>fichier</strong> <strong class="Arduino">Arduino</strong> <code class="filename">wiring.c</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/wiring.c" target="_BLANK">G</a>. Toutefois, il est <strong class="warning">complexe</strong> et difficile à comprendre, même pour un étudiant motivé, car il fait appel à des macro‑définitions spécifiques au microcontrôleur employé (notamment <code class="filename">avr/interrup.h</code> <a class="external" href="https://www.nongnu.org/avr-libc/user-manual/group__avr__interrupts.html" target="_BLANK"></a> pour un microcontrôleur à cœur <em class="sigle">AVR</em>). </p> 
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Pauses d'exécution </h2>
+
+
+
+<h3 id="delay"> Syntaxe </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> On code une <strong class="title">pause d'exécution</strong> <strong>du programme</strong> par une <strong>instruction</strong> d'appel d'une des deux <strong>fonctions</strong> <strong class="Arduino">Arduino</strong>, de la forme : </p>
+  <img class="top-right" src="../img/sablier.png" width="55px">
+<ul>
+  <li> <code class="prettyprint lang-c">delay(<span class="nocode"><strong class="specialT">millisecondes</strong></span>);</code>   <a class="external" href="https://www.arduino.cc/reference/en/language/functions/time/delay/" target="_BLANK">A</a> </li>
+
+  <li> <code class="prettyprint lang-c">delayMicroseconds(<span class="nocode"><strong class="specialMg">microsecondes</strong></span>);</code>   <a class="external" href="https://www.arduino.cc/reference/en/language/functions/time/delaymicroseconds/" target="_BLANK">A</a> </li>
+</ul>
+
+<p> où la <strong class="defin">durée de pause</strong> est spécifiée par une <strong>expression à valeurs entières</strong> de type <code class="prettyprint lang-c">unsigned long</code> (allant de 0 à environ 4,3 milliards), respectivement en <strong class="specialT">millisecondes</strong> (<em class="bold">ms</em>) et <strong class="specialMg">microsecondes</strong> (<em class="bold">µs</em>). </p>
+
+<p> Ces fonctions sont de type <code class="prettyprint lang-c">void</code> : elles ne retournent <strong>aucune valeur</strong>. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/delay.png" width="350px">
+<p> En d'autres termes, lors du <strong class="title">traitement d'un appel</strong> de l'une de ces fonctions, l'<strong>instruction suivante</strong> n'est exécutée qu'<strong class="defin">après expiration de la pause</strong> programmée. </p>
+
+<p> Durant cette pause, <strong class="warning">aucune autre instruction</strong> du programme ne peut donc être exécutée. L'exécution de ce dernier est comme « suspendue ». </p>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> Lors d'une pause programmée par un appel d'une des deux fonctions ci‑dessus, le <strong class="title">microcontrôleur</strong> lui‑même n'est <strong class="warning">pas mis en pause</strong>. En effet, il <strong class="pros">reste réceptif</strong> aux <strong class="specialV">interruptions</strong> : celles déclenchée par un signal <strong>reset</strong>, par un événement survenant sur une <strong>liaison série</strong> du microcontrôleur, ou celles codées par le programmeur (le codage des interruptions n'est pas abordé dans ce module de formation). </p>
+</div><!-- remarques -->
+
+
+
+<h3 id="blinkDelay"> Exemples d'application </h3>
+
+
+
+<div class="exemples">
+<ol class="numbered">
+  <li> Dans un programme de démonstration classique de <strong>clignotement</strong> (en anglais, <em class="english">blink</em>) de la <strong class="specialO">led intégrée</strong> à une <strong>carte</strong> <strong class="Arduino">Arduino</strong>, on code <strong class="title">deux pauses</strong> : cf. les lignes nº 9 et 11. </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin = LED_BUILTIN; 
+const unsigned blinkHalfPeriod = 1000; // = 1 s
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(ledPin, LOW);
+  delay(blinkHalfPeriod); // pause 1 sec
+  digitalWrite(ledPin, HIGH);
+  delay(blinkHalfPeriod); // pause 1 sec
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div style="display:inline-block;">
+    <img class="top-right" src="../img/blinkDelay.png" width="550px">
+  <div class="nobullet"> La <strong class="title">durée</strong> des deux pauses est de <strong>1000 ms</strong> chacune, c'est‑à‑dire <strong>une seconde</strong>. Elle est codée dans une constante nommée <code class="prettyprint lang-c">blinkHalfPeriod</code> car elle correspond à la <strong>demi‑période</strong> de clignotement. </div>
+  </div><!-- display -->
+
+  <div class="nobullet"> On génère donc sur la sortie <code class="prettyprint lang-c">LED_BUILTIN</code> un <strong class="specialG">signal carré</strong> (rapport cyclique <em class="bold">α = 50 %</em>) de période <em class="bold"><var>T</var> = 2 s</em>. (cf. le chronogramme ci‑dessus). </div>
+
+  <div class="nobullet"><em class="remark">Remarque</em> : chaque <strong>itération de la fonction</strong> <code class="prettyprint lang-c">loop</code> dure exactement une <strong class="warning">période T de clignotement</strong>. </div>
+  
+ 
+  <li id="delayTinkercad"> Dans un <strong>programme</strong> <strong class="Arduino">Arduino</strong> qui ne comporte <strong>aucune pause</strong> ni instruction longue à traiter, le temps d'itération de la fonction <code class="prettyprint lang-c">loop</code> est extrêmement court (quelques microsecondes). Dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong> sur un <strong>ordinateur peu performant</strong>, il se produit alors un <strong class="warning">trop grand nombre d'itérations par seconde</strong> pour que l'exécution se déroule en temps réel sur la page web : on observe une <strong class="cons">simulation ralentie</strong>, le chronomètre affichant de temps en temps des millièmes de secondes. </li>
+
+  <div class="nobullet"> Pour <strong class="pros">« fluidifier » la simulation</strong>, une solution simple consiste à ajouter en dernière instruction de la fonction <code class="prettyprint lang-c">loop</code> une <strong class="title">pause artificielle</strong> de <strong>quelques millisecondes</strong>. </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:50">
+  delay(10); // for a quicker Tinkercad simulation
+} // end of loop
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol>
+</div><!-- exemples -->
+
+
+
+<h3 id="reactivite"> Inconvénient </h3>
+
+
+
+<div class="important">
+<p> Très simple d'emploi, les fonctions <code class="prettyprint lang-c">delay</code> et <code class="prettyprint lang-c">delayMicrosecond</code> présentent néanmoins un <strong class="title">inconvénient majeur</strong> : elles <strong class="warning">impactent la réactivité</strong> du programme, au sens où ce dernier peut ne plus être en mesure de détecter l'occurrence de certains événements. </p>
+
+<p> L'impact est d'<strong class="cons">autant plus sévère</strong> que la durée de <strong>pause</strong> est <strong>longue</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complementExpert">
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/machineControlPanel.png" width="300px">
+<p> En règle générale, le <strong class="title">manque de réactivité</strong> d'un programme pose un problème s'il pilote un <strong class="defin">système temps réel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_temps_réel" target="_BLANK">W</a>, au sens où il doit <strong>prendre en compte sans délai des événements</strong> qui peuvent survenir à tout instant de façon <strong>non prévisible</strong> : appui sur un bouton, déclenchement d'un capteur, variation d'une consigne, etc. Au maximum, la durée d'exécution de la fonction <code class="prettyprint lang-c">loop</code> ne doit pas dépasser <strong class="defin">environ 20 ms</strong>. Et sur certains systèmes soumis à des contraintes de sécurité élevée (véhicules, machines‑outils, etc.), cette valeur peut être bien plus réduite. </p>
+
+<p> Sinon, lorsqu'un <strong class="title">événement important</strong> se produit alors que le <strong>microcontrôleur</strong> est <strong>en pause</strong>, il n'est pas <strong class="cons">pas immédiatement détecté</strong>, voire <strong class="warning">pas du tout</strong> si la durée de cet événement est inférieure à celle de la pause ! Un tel manque de réactivité est en général <strong class="warning">inacceptable</strong> au regard du cahier des charges du système. </p>
+</div><!-- display -->
+</div><!-- complementExpert -->
+
+<div class="exemples">
+<p class="exemple"> Dans l'exemple du programme de <strong class="title">clignotement</strong> supra utilisant la fonction <code class="prettyprint lang-c">delay</code>, les deux pauses font 1 seconde chacune et la durée d'une itération de la fonction <code class="prettyprint lang-c">loop</code> durent donc <strong class="warning">2 secondes</strong> ! Si l'on voulait employer un <strong>bouton‑poussoir</strong> pour commander la marche ou l'arrêt du clignotement, un appui ne serait détecté à coup sûr que s'il durait plus d'une seconde, ce qui n'est <strong class="cons">pas satisfaisant</strong> en termes d'ergonomie. L'utilisateur serait obligé d'appuyer éventuellement plusieurs fois sur le bouton pour que sa décision soit prise en compte. </p>
+
+<p> Heureusement, il existe d'<strong class="pros">autres solutions algorithmiques</strong> pour coder la durée d'une action : elles utilisent les fonctions de <strong>mesure du temps écoulé</strong>. </p>
+</div><!-- exemple --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Mesure du temps écoulé </h2>
+
+
+
+<h3 id="millis"> Syntaxe </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> Pour déterminer le <strong class="title">temps écoulé</strong> <strong>depuis</strong> l'<strong class="defin">instant zéro</strong> d'exécution du programme, on code des <strong>expressions</strong> appelant des <strong>fonctions</strong> <strong class="Arduino">Arduino</strong> de la forme : </p>
+  <img class="top-right" src="../img/chrono.png" width="70px">
+<ul>
+  <li> <code class="prettyprint lang-c">millis()</code> pour obtenir une valeur exprimée en <strong class="specialT">millisecondes</strong> (<em class="bold">ms</em>) <a class="external" href="https://www.arduino.cc/reference/en/language/functions/time/millis/" target="_BLANK">A</a> ; </li>
+
+  <li> <code class="prettyprint lang-c">micros()</code> pour obtenir une valeur exprimée en <strong class="specialMg">microsecondes</strong> (<em class="bold">µs</em>) <a class="external" href="https://www.arduino.cc/reference/en/language/functions/time/micros/" target="_BLANK">A</a>.</li>
+</ul>
+<p> Les fonctions <code class="prettyprint lang-c">millis</code> et <code class="prettyprint lang-c">micros</code> sont <strong>sans argument</strong>. Elles retournent l'une comme l'autre des <strong>valeurs de type</strong> <code class="prettyprint lang-c">unsigned long</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/millis.png" width="400px">
+<p> L'<strong class="title">instant zéro</strong> du programme est celui du début d'excution de son <strong>point d'entrée</strong> (première instruction codée dans la fonction <code class="prettyprint lang-c">setup</code> – cf. chap. C2‑I <a class="previous" href="Cc2-1_squeletteCode.html#casArduino" target="_BLANK"></a>) après la <strong>dernière (ré‑)initialisation</strong>. </p>
+
+<p> Tout <strong class="title">appel</strong> d'une fonction <code class="prettyprint lang-c">millis</code> ou <code class="prettyprint lang-c">micros</code> agit en quelque sorte comme la <strong class="defin">consultation d'un chronomètre</strong>. S'il est codé dans la fonction <code class="prettyprint lang-c">loop</code>, chaque évaluation d'un tel appel retourne donc une <strong>valeur supérieure à la précédente</strong>, qui témoigne de l'écoulement unidirectionnel et irréversible du temps. </p>
+</div><!-- display -->
+
+<p> Au cours de l'exécution du programme, il est bien évidemment « <strong class="warning">impossible d'arrêter</strong> <strong>ce chronomètre</strong> ». Techniquement, on ne peut tout simplement pas coder une modification de la valeur retournée par <code class="prettyprint lang-c">millis</code> ou <code class="prettyprint lang-c">micros</code> puisque, comme pour toute fonction, la valeur retournée n'est <strong>pas une l‑value</strong> (cf. chap. C2‑IV <a class="previous" href="Cc2-4_manipulationDonnees.html#syntaxeAffectation" target="_BLANK"></a>). La seule chose que l'on puisse faire, c'est « <strong class="defin">remettre à zéro</strong> <strong>le chronomètre</strong> » en réinitialisant le programme (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#interfaceMaterielle" target="_BLANK"></a>). </p> 
+
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/millisMinus.png" width="400px">
+<p> En revanche, il est tout à fait possible de <strong class="defin">mémoriser la valeur</strong> retournée par la fonction <code class="prettyprint lang-c">millis</code> (ou <code class="prettyprint lang-c">micros</code>) dans une variable spécialement déclarée de type <code class="prettyprint lang-c">unsigned long</code>, typiquement nommée <code class="cmd" style="color:indianred;">previousMillis</code>. Il suffit simplement de coder une affectation comme : <br>
+<span class="inline">
+ <code class="cmd"><span style="color:indianred;">previousMillis</span> <span style="color: blue">=</span> millis<span style="color: blue">();</span></code>
+</span></br>
+ce qui revient par analogie à appuyer sur le bouton de <strong>temps intermédiaire</strong> du chronomètre. </p>
+
+<p> Par la suite, on peut alors calculer la différence : <br>
+<span class="inline">
+ <code class="cmd">millis<span style="color: blue">() - </span><span style="color:indianred;">previousMillis</span></code>
+</span></br>
+pour <strong class="title">déterminer le temps écoulé</strong> depuis la <strong>dernière mémorisation</strong> de la valeur de <code class="prettyprint lang-c">millis</code> stockée dans <code class="prettyprint lang-c"><span style="color:indianred;">previousMillis</span></code>. </p>
+</div><!-- dîsplay -->
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Dans le framework <strong class="Arduino">Arduino</strong>, les valeurs de <strong>type</strong> <code class="prettyprint lang-c">unsigned long</code> s'étendent de <em class="bold">0</em> à <em class="bold">4&#8239;294&#8239;967&#8239;295</em> donc : </p>
+
+<ul>
+  <li> la <strong>valeur retournée</strong> par la fonction <code class="prettyprint lang-c">millis</code> <strong class="warning">repart à O</strong> au bout de <strong class="specialT">49 jours et 17 heures</strong> environ ; </li>
+
+  <li> la <strong>valeur retournée</strong> par la fonction <code class="prettyprint lang-c">micros</code> <strong class="warning">repart à 0</strong> au bout de <strong class="specialO">1 heure, 11 minutes et 35 secondes</strong> environ. </li>
+</ul>
+
+<p> On verra néanmoins que ces <strong class="title">rebouclages par débordement d'entier</strong> (<em class="english">integer overflow</em>) ne posent <strong class="pros">pas de problème</strong> lorsque l'on effectue des tests de différence comme ci‑après (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#applicationMillis" target="_BLANK"></a>). </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="blinkReactif"> Exemple d'application </h3>
+
+
+
+<div class="exemples" style="display: block">
+<p> Reprenons à partir de la ligne nº 8 le programme de <strong>clignotement</strong> de la led intégrée proposé supra. Pour coder une <strong class="title">version réactive</strong>, c'est‑à‑dire <strong class="pros">sans recourir à la fonction</strong> <code class="prettyprint lang-c">delay</code> : </p>
+
+<ol class="numbered">
+<li> On commence par déclarer une <strong>variable globale</strong> qu'on nomme <code style="color:indianred; background: white">previousMillis</code>. De façon <strong class="warning">un peu plus complexe</strong> que supra, cette variable sera : </li>
+  <ul>
+    <li> d'être <strong>initialisée</strong> à la valeur retournée par la fonction <code class="prettyprint lang-c">millis</code> juste avant la première itération de la fonction <code class="prettyprint lang-c">loop</code> ; </li>
+
+    <li> puis <strong>périodiquement incrémentée</strong> de la valeur de constante <code style="color:orange; background: white">blinkHalfPeriod</code> à chaque <strong class="specialG">changement d'état de la led</strong> pour servir de référence temporelle au clignotement. </li>
+  </ul>
+
+
+<li> Ensuite, au début de la fonction <code class="prettyprint lang-c">loop</code>, on teste la différence : <br>
+<span class="inline">
+  <code style="background: white; border: solid magenta 2px; padding-left: 0.5em; padding-right: 0.5em" >millis<span style="color:blue; font-weight: bold">() -</span> <span style="color:indianred">previousMillis</span></code>
+</span> <br>
+car à chaque nouvelle itération de <code class="prettyprint lang-c">loop</code>, la valeur retournée par la fonction<code class="prettyprint lang-c">millis</code> augmente alors que <code style="color:indianred; background: white">previousMillis</code> garde la même valeur, donc la différence s'accroît. </li>
+
+
+<li> Si cette différence est <strong>égale – voire supérieure –</strong> à la demi‑période de clignotement <code style="color:orange; background: white">blinkHalfPeriod</code>, alors on effectue : </li>
+
+<ul>
+  <li> l'<strong>incrémentation</strong> de <code style="color:indianred; background: white">previousMillis</code> pour définir la nouvelle référence temporelle : <br>
+<span class="inline">
+  <code style="background: white; padding-left: 0.5em; padding-right: 0.5em"><span style="color:indianred">previousMillis</span> <span style="color:blue; font-weight: bold">+=</span> <span style="color:orange">blinkHalfPeriod</span><span style="color:blue; font-weight: bold">;</span></code>
+</span> </li>
+
+  <li> l'<strong>inversion de niveau logique</strong> de la sortie <code class="prettyprint lang-c">ledPin</code>  (déclarée égale à <code class="prettyprint lang-c">LED_BUILTIN</code>) :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c">digitalWrite(ledPin, !digitalRead(ledPin));</code>
+</span> <br>
+qui provoque un <strong class="specialG">changement d'état de la led</strong> </li>
+
+</ul>
+
+<p> D'où le code ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin = LED_BUILTIN;  
+const unsigned blinkHalfPeriod = 1000; // = 1 s
+  
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+  
+unsigned long previousMillis = millis();
+
+void loop() {
+  if (millis() - previousMillis >= blinkHalfPeriod) {
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(ledPin, !digitalRead(ledPin));
+  }
+  delay(10); // only for a quicker Tinkercad simulation
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> par lequel on obtient le <strong class="pros">même chronogramme</strong> qu'avec la solution non réactive présentée supra <a class="supra" href="Cc2-8_gestionTemps.html#blinkDelay"></a> : </p>
+
+<img class="top-left" src="../img/blinkMillis.png" style="max-width: 800px">
+
+<p> À titre de comparaison, la <strong>durée d'exécution</strong> d'une itération de la <strong>fonction</strong> <code class="prettyprint lang-c">loop</code> est maintenant <strong class="pros">très courte</strong> (quelques microsecondes si l'on supprime l'instruction de la ligne nº 15 spécifique pour la simulation avec <em class="mark">Tinkercad</em>). Ainsi, toute instruction rajoutée dans cette fonction serait être traitée dans les meilleurs délais. </p>
+</div><!-- exemples -->
+
+
+
+<div class="remarques"><p class="remarques"></p> 
+
+<ol class="remarques">
+  <li> La <strong class="title">déclaration</strong> de la variable <code style="color:indianred; background: white">previousMillis</code> n'est <strong class="warning">pas codée</strong> : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+unsigned long previousMillis = 0; // initial offset not taken into account
+</pre>
+<!---------- ne pas indenter ---------->
+
+  mais <strong class="defin">codée</strong> : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+ unsigned long previousMillis = millis();
+</pre>
+<!---------- ne pas indenter ---------->
+
+  En effet, il peut s'être déjà écoulé plusieurs millisecondes depuis le début du programme, nécessaires à l'exécution des instructions de la fonction <code class="prettyprint lang-c">setup</code> (en particulier si le moniteur série est employé). On initialise donc la variable <code style="color:indianred; background: white">previousMillis</code> avec la valeur courante retournée par la fonction <code class="prettyprint lang-c">millis</code> pour que la durée du temps bas de la première période de clignotement ne soit <strong class="pros">pas anormalement courte</strong> au premier cycle. </li>
+
+  <li> La <strong class="title">mise à jour</strong> de la variable <code style="color:indianred; background: white">previousMillis</code> n'est <strong class="warning">pas codée</strong> : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:11">
+    previousMillis = millis();  // may be subject to drifting
+</pre>
+<!---------- ne pas indenter ---------->
+
+  mais <strong class="defin">codée</strong> : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:11">
+    previousMillis += blinkHalfPeriod;
+</pre>
+<!---------- ne pas indenter ---------->
+
+  (c'est‑à‑dire <code style="font-size: 90%">previousMillis = previousMillis + blinkHalfPeriod</code>) car il se peut qu'au moment du test, la différence : <br>
+  <span class="inline">
+    <code style="background: white; border: solid magenta 2px; padding-left: 0.2em; padding-right: 0.2em">millis() - <span style="color:indianred">previousMillis</span></code>
+  </span> <br>
+  soit supérieure de quelques millisecondes à la valeur de la constante <code style="color:orange; background: white">blinkHalfPeriod</code>, en particulier si la fonction <code class="prettyprint lang-c">loop</code> comprend des instructions chronophages. Le fait d'incrémenter <code style="color:indianred; background: white">previousMillis</code> de la valeur constante <code style="color:orange; background: white">blinkHalfPeriod</code> garantit l'<strong class="pros">absence de dérive</strong> dans le temps du signal de clignotement, que l'on souhaite le plus périodique possible. </li>
+
+  <li> L'<strong class="title">instruction de clignotement</strong> : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:12">
+    digitalWrite(ledPin, !digitalRead(ledPin));
+</pre>
+<!---------- ne pas indenter ---------->
+  concise le codage comme expliqué au chap. C2‑VII <a class="previous" href="Cc2-7_entreesSortiesBooleennes.html#remarquesFronts" target="_BLANK"></a> (remarque <em class="bold">B</em>). </li>
+</ol>
+
+</div><!-- remarques -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

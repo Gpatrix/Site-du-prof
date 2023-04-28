@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="V"
+  data-pageState="OK"
+  data-pageheadtitle="Structures contrôle"
+  data-pagefulltitle="Les structures de contrôle"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="exergue">
+
+
+<div style="display: inline-block;">
+
+<img class="top-right" src="../img/structure_blocs.png" width="400px" style="margin-top:1.2em">
+
+<p class="square"> En l'absence de mots‑clefs spécifiques, le <strong class="title">flux d'exécution</strong> d'un programme procède de façon <strong>séquentielle</strong> (ou « linéaire »), c'est‑à‑dire : </p>
+<div class="inline" style="text-indent:-1.3em; padding-left: 1em; text-align: left;">
+  ▸&ensp;<strong class="specialM">bloc</strong> <strong class="defin">après</strong> <strong class="specialM">bloc</strong>,
+</div>
+<p> et, dans chaque bloc : </p>
+<div class="inline" style="text-indent:-1.3em; padding-left: 1em; text-align: left;">
+  ▸&ensp;<strong class="specialGr">instruction</strong> <strong class="defin">après</strong> <strong class="specialGr">instruction</strong>,
+</div>
+<p> en suivant l'<strong class="defin">ordre d'inscription</strong> des <strong class="specialM">blocs</strong> et des <strong class="specialGr">instructions</strong> dans le code source. </p>
+
+</div>
+
+<p> Une <strong class="title">structure de contrôle</strong> du flux d'exécution est une <strong class="defin">instruction composée</strong> avec des <strong class="warning">mots‑clefs spécifiques</strong> qui <strong>modifient cet ordre</strong>. Le plus souvent, elle procède en évaluant une <strong class="specialG">expression logique</strong> qui <strong>conditionne</strong> : </p>
+
+<ul>
+  <li>une <strong class="specialLB">bifurcation</strong> <strong>simple</strong> ou <strong>multiple</strong>, via les mots‑clefs
+   <code class="prettyprint lang-c">if<span class="nocode">…</span> else</code>,
+   <code class="prettyprint lang-c">switch<span class="nocode">…</span> case</code>
+    ou <code class="prettyprint lang-c">goto</code>,</li>
+
+  <li> ou des <strong class="specialLB">répétitions</strong> – on dit aussi une <strong class="specialLB">boucle</strong> – via les mots‑clefs
+   <code class="prettyprint lang-c">while</code>,
+   <code class="prettyprint lang-c">do<span class="nocode">…</span> while</code>
+   ou <code class="prettyprint lang-c">for</code>.</li>
+</ul>
+
+<p> Il va sans dire que les <strong class="title">structures de contrôle</strong> sont essentielles pour la <strong>programmation structurée</strong>. Comme cela a déjà été évoqué au chapitre C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#progStructuree" target="_BLANK"></a>, elles permettent de « <strong class="pros">factoriser</strong> » des instructions qui sinon devraient être <strong class="cons">répétées</strong> plusieurs fois dans le code source, avec tous les inconvénients – temps de saisie, lourdeur de stockage et pour la lecture, risques d'erreurs – que comporteraient une programmation purement séquentielle. </p>
+
+<p class="square"> Pour un codeur débutant, il est donc absolument nécessaire de <strong class="pros">bien connaître</strong> les structures de contrôle du langage étudié, pour pouvoir les utiliser dès que possible. L'<strong class="title">objectif</strong> de ce chapitre est d'en faire une <strong class="defin">présentation exhaustive</strong>, avec suffisamment de <strong class="defin">détails</strong> pour permettre d'en acquérir une <strong class="pros">bonne maîtrise</strong>. </p>
+
+<p>  Après quelques <strong class="specialLB">remarques préliminaires</strong> sur certains <strong>aspects syntaxiques communs</strong>, <strong class="title">toutes les structures de contrôle</strong> des langages <strong>C</strong> et <strong>C++</strong> sont présentées dans l'ordre suivant : </p>
+
+<ul>
+  <li> la <strong class="specialLB">bifurcation simple</strong> <code class="prettyprint lang-c">if <span class="nocode">…</span> else</code> ; </li>
+
+  <li> la <strong class="specialLB">bifurcation multiple</strong> <code class="prettyprint lang-c">switch <span class="nocode">…</span> case <span class="nocode">…</span> break</code> ; </li>
+
+  <li> les <strong class="specialLB">répétitions</strong> <code class="prettyprint lang-c">while</code> et <code class="prettyprint lang-c">do <span class="nocode">…</span> while</code> ; </li>
+
+  <li> la <strong class="specialLB">répétition</strong> <code class="prettyprint lang-c">for</code> 
+    dont la syntaxe est à la fois <strong class="pros">puissante</strong> et <strong class="warning">complexe</strong> ; </li>
+
+  <li> le <strong class="specialLB">saut inconditionnel</strong> <code class="prettyprint lang-c">goto</code> dont l'usage est <strong class="warning">vivement déconseillé</strong> pour un débutant, mais dont il faut néanmoins connaître l'existence. </li>
+</ul>
+
+<p> Toutes ces structures de contrôle sont systématiquement décrites comme dans la figure ci‑dessus par leur <strong>syntaxe générique</strong> et un <strong>algorigramme</strong> correspondant <a class="external" href="https://fr.wikipedia.org/wiki/Organigramme_de_programmation" target="_BLANK">W</a>. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="remarquesPrel"> Remarques préliminaires  </h2>
+
+
+<h3> Délimiteurs d'expression </h3>
+
+<div class="important">
+<p> Dans une structure de contrôle, il est <strong class="warning">obligatoires</strong> de délimiter par des <strong class="title">parenthèses</strong> <code class="prettyprint lang-c">()</code> l'<strong class="specialG">expression</strong> qui conditionne la structure. </p>
+
+<p> L'<strong class="cons">omission</strong> de ces parenthèses provoque inévitablement une <strong class="warning">erreur de compilation</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Le code ci‑dessous n'est <strong class="cons">pas compilable</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if a != 0 { <span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Pour <strong class="pros">corriger l'erreur</strong>, il faut coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a != 0) { <span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+<h3 id="delimateurs"> Délimiteurs de blocs </h3>
+
+
+<div class="complement">
+<p> Dans une structure de contrôle, les <strong class="title">accolades</strong> <code class="prettyprint lang-c">{}</code> qui délimitent tout <strong class="specialM">bloc</strong> sont <strong class="defin">facultatives</strong> si le <strong class="specialM">bloc</strong> est constitué d'<strong>une seule instruction</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p>  Mais en règle générale de bonnes pratiques, l'<strong class="cons">omission des accolades</strong> est <strong class="warning">déconseillée</strong> car cela constitue une <strong>source d'erreurs</strong> en cas d'éventuels ajouts d'instruction(s). </p>
+</div><!-- important -->
+
+<div class="exemples"><p class="exemple"></p>
+<p class="square"> L'instruction <code class="prettyprint lang-c">if</code> ci‑dessous codée <strong class="title">sans accolades</strong> est <strong>compilable</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a != 0)
+    b = 1;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Mais</em> si par la suite on veut <strong>ajouter une deuxième instruction</strong> <code class="prettyprint lang-c">c = 2;</code> à exécuter dans le cas où la variable <code class="prettyprint lang-c">a</code> est non nulle, et que l'on code <strong class="cons">sans y prendre garde</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a != 0)
+    b = 1;
+    c = 2;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> ou même : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a != 0)
+    b = 1; c = 2;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors l'instruction <code class="prettyprint lang-c">c = 2;</code> sera exécutée <strong class="cons">dans tous les cas</strong>, <strong class="warning">même</strong> si la variable <code class="prettyprint lang-c">a</code> est <strong class="warning">nulle</strong> ! </p>
+
+<p class="square"> En revanche, si dès le départ, on avait codé l'instruction <code class="prettyprint lang-c">if</code> <strong class="title">avec des accolades</strong> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a != 0) {
+    b = 1;
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> alors l'ajout de l'instruction <code class="prettyprint lang-c">c = 2;</code> à la suite de <code class="prettyprint lang-c">b = 1;</code> l'aurait « spontanément » placée <strong>dans le bloc</strong> de l'instruction <code class="prettyprint lang-c">if</code>, <strong class="pros">grâce aux accolades</strong>, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a != 0) {
+    b = 1;
+    c = 2;
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> et avec, alors, une <strong class="pros">exécution conforme</strong> à celle attendue. </p>
+</div><!-- exemples -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="testIf"> L'instruction de bifurcation simple <code class="prettyprint lang-c">if</code> </h2>
+
+
+<h3> Syntaxe minimale </h3>
+
+
+<div class="important" style="display: inline-block;">
+<p>  Une <strong>instruction structurée</strong> de la forme <code class="prettyprint lang-c">if (<span class="nocode"><strong style="color: green">expression</strong></span>) {<span class="nocode"><strong style="color:brown">bloc</strong></span>}</code> code une <strong class="title">bifurcation conditionnelle</strong> du flux d'exécution. Elle sous‑tend une <strong>alternative</strong> en fonction de la <strong>condition</strong> codée par l'<strong class="specialG">expression</strong> : </p>
+
+<img class="top-right" src="../img/structure_if.png" width="500px">
+
+<ul>
+  <li> <strong class="specialLB">si</strong> cette condition est <strong style="color: green">vraie</strong> : </li>
+
+  <ul>
+    <li> la machine <strong class="defin">exécute</strong> le <strong class="specialM">bloc</strong>  d'instructions ; </li>
+
+    <li> puis passe à l'<strong>instruction suivante</strong> (après le bloc) ; </li>
+  </ul>
+
+
+  <li> <strong class="specialLB">sinon</strong> – donc si la condition est <strong style="color: red">fausse</strong> – la machine « <strong class="warning">saute </strong> » le <strong class="specialM">bloc</strong> pour passer directement à l'<strong>instruction suivante</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complementExpert" id="operateurConversion">
+<p> Dans cette syntaxe, les <strong class="title">parenthèses</strong> <code class="prettyprint lang-c">()</code> délimitant l'<strong class="specialG">expression</strong> codent un <strong class="defin">opérateur de conversion</strong> de la <strong>valeur numérique</strong> de l'<strong class="specialG">expression</strong> en <strong>valeur booléenne</strong>, avec le critère que : </p>
+
+<ul>
+  <li> si l'<strong class="specialG">expression</strong> prend une valeur <em>numérique</em> <strong>nulle</strong>, alors <code class="prettyprint lang-c">(<span class="nocode"><strong style="color: green">expression</strong></span>)</code> prend la <em class="remark">valeur <em>booléenne</em> <code>0</code></em> – autrement dit la condition est <strong style="color: red">fausse</strong> ; </li>
+
+  <li> si l'<strong class="specialG">expression</strong> prend une valeur <em>numérique</em> <strong>non nulle</strong>, alors <code class="prettyprint lang-c">(<span class="nocode"><strong style="color: green">expression</strong></span>)</code> prend la <em class="remark">valeur <em>booléenne</em> <code>1</code></em> – autrement dit la condition est <strong style="color: green">vraie</strong>. </li>
+</ul>
+<p> Par la suite, on pourra considérer simplement qu'une <strong class="specialG">expression</strong> est évaluée <strong style="color: red">fausse</strong> ou <strong style="color: green">vraie</strong> selon qu'elle est respectivement <strong>nulle ou non</strong>. </p>
+</div>
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">a</code> est une <strong>variable entière</strong> déjà déclarée, la bifurcation codée de façon « abrégée » : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a) { <span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> est équivalente à : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a != 0) { <span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> cette forme « complète » étant préférable, car <strong class="pros">plus lisible</strong>. </p>
+
+<div class="expert">
+<p class="square"> Néanmoins, la forme « abrégée » est souvent utilisée lorsque la variable qui doit être considérée comme étant <strong>à valeurs binaires</strong> est déclarée avec un <strong class="pros">identificateur explicite</strong>, typiquement de la forme <code class="prettyprint lang-c">is<span class="nocode">…</span></code>. </p>
+
+<p> Ainsi, après avoir déclaré une variable <code class="prettyprint lang-c">isWindowOpen</code> pour mémoriser si une fenêtre est fermée ou non, une instruction comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (isWindowOpen) { <span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> est <strong class="pros">bien lisible</strong>, alors que sa forme « complète » : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (isWindowOpen != 0) { <span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- expert -->
+
+<p> rend l'expression de bifurcation <strong class="cons">inutilement compliquée</strong>. </p>
+</div><!-- exemples -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="remarques">
+  <li> En <em class="mark">C/C++</em>, contrairement à d'autres langages comme <em class="mark">Delphi</em> ou <em class="mark">ST</em>, il n'y a <strong>jamais</strong> de <strong class="title">mot‑clef</strong> <code class="grey">then</code>. Il est <strong class="pros">implicite</strong> car inutile pour la syntaxe (on le qualifie de <em>sucre syntaxique</em> <a class="external" href="https://fr.wikipedia.org/wiki/Sucre_syntaxique" target="_BLANK">W</a>, ce dont les langages <em class="mark">C/C++</em> sont volontairement expurgés). </li>
+
+  <li> Dans la syntaxe minimale ci‑dessus, l'<strong class="title">alternative</strong> à l'exécution du bloc – c'est‑à‑dire le fait de passer à l'instruction que le suit – est <strong>implicite</strong> (ici, il n'y a <strong>pas</strong> de mot‑clef <code class="prettyprint lang-c">else</code> ; si on en code un, il faut aussi ajouter une instruction ou un bloc spécifique, ce qu'on va voir infra dans la syntaxe complète). </li>
+
+  <li> Une <strong class="warning">erreur classique</strong> consiste à <strong class="cons">confondre</strong> l'<strong>opérateur d'égalité</strong> <code class="prettyprint lang-c">==</code> avec celui d'<strong>affectation</strong> <code class="prettyprint lang-c">=</code>. Lorsque ce dernier est utilisé par mégarde à la place du premier dans la condition de test d'une bifurcation, le code est compilable mais engendre une <strong class="warning">exécution inattendue</strong> !</li>
+
+  <p class="exemple" id="erreurEgal"> La <strong class="title">bifurcation</strong> a priori <strong class="cons">mal codée</strong> :  </p>
+
+  <!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (a = 0) { // Error! It should be (a == 0)
+    <span class="nocode"><strong style="color: brown">bloc</strong></span>
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <p> n'engendre <strong class="warning">aucun scénario</strong> incluant l'exécution du <strong style="color: brown">bloc</strong>, quelle que soit la valeur de la variable <code class="prettyprint lang-c">a</code> avant l'exécution de cette instruction. En effet, l’évaluation de l'<strong class="cons">expression d'affectation</strong> <code class="prettyprint lang-c">a = 0</code> (cf. chap. C2‑IV  <a class="previous" href="Cc2-4_manipulationDonnees.html#evaluationAffectation" target="_BLANK"></a>) : </p>
+
+  <ul>
+    <li> affecte à la variable <code class="prettyprint lang-c">a</code> la valeur <code class="prettyprint lang-c">0</code> ; </li>
+
+    <li> et prend cette même valeur <code class="prettyprint lang-c">0</code>, équivalente à la valeur logique <code class="prettyprint lang-c">false</code>.</li>
+  </ul>
+
+  <p> La condition de bifurcation étant <strong>toujours fausse</strong>, le <strong style="color: brown">bloc</strong> n'est <strong class="warning">jamais exécuté</strong> ! </p>
+
+  <p> De façon analogue, si la condition était codée <code class="prettyprint lang-c">if (a = 1)</code> (ou n'importe quelle autre valeur non nulle), elle serait <strong>toujours évaluée vraie</strong>, donc le <strong style="color: brown">bloc</strong> serait toujours exécuté, quelle que soit la valeur prise par la variable <code class="prettyprint lang-c">a</code> avant l'exécution de cette instruction. </p>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="ifComplet"> Syntaxe complète </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/structure_if_else.png" width="500px">
+<p> Dans une <strong>bifurcation</strong> <code class="prettyprint lang-c">if</code>, il est possible d'<strong class="title">expliciter l'alternative</strong> : </p>
+
+<ul>
+  <li> en codant le mot‑clef <code class="prettyprint lang-c">else</code> après le <strong class="specialM">1<sup>er</sup> bloc</strong> d'instructions, </li>
+
+  <li> en faisant suivre ce mot‑clef  d'un <strong class="specialM">2<sup>e</sup> bloc</strong> d'instructions,</li>
+</ul>
+<p> ce <strong class="specialM">2<sup>e</sup> bloc</strong> étant exécuté <strong class="specialLB">si</strong> l'<strong class="specialG">expression</strong> est évaluée <strong style="color: red">fausse</strong>, avant que le flux d'exécution passe à l'<strong>instruction suivante</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples" id="anneeBissextile">
+<p class="exemple"> Une <strong>année</strong> est dite <strong class="title">bissextile</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Année_bissextile" target="_BLANK">W</a> (en anglais, <em class="english">leap year</em>) si son numéro est <strong class="defin">divisible par 4</strong> mais <strong class="warning">pas</strong> <strong class="defin">par 100</strong>, <strong>ou</strong> s'il est <strong class="defin">divisible par 400</strong>. </p>
+
+<p>  En déclarant préalablement une variable entière <code class="prettyprint lang-c">year</code> pour stocker le numéro de l'année, et une variable booléenne <code class="prettyprint lang-c">leapYear</code>, on peut coder le critère ci‑dessus par la <strong class="title">bifurcation</strong> <code class="prettyprint lang-c">if</code> suivante : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+    leapYear = true;
+  }
+  else {
+    leapYear = false;
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Remarque</em> : si <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> sont respectivement deux <strong>données entières</strong>, une expression de la forme <code class="prettyprint lang-c">a % b == 0</code> est <strong class="specialG">vraie</strong> si et seulement si la valeur de <code class="prettyprint lang-c">a</code> est <strong class="defin">divisible</strong> par celle de <code class="prettyprint lang-c">b</code> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#modulo" target="_BLANK"></a>). </p>
+</div><!-- exemple -->
+
+<div class="expert">
+<h4> Imbrication de bifurcations </h4>
+
+
+<div class="complement">
+<p> Les <strong class="specialGr">instructions</strong> dans chaque <strong class="specialM">bloc</strong> peuvent elles‑mêmes être <strong>structurées</strong>. On peut donc enchaîner un <code class="prettyprint lang-c">if</code> à la suite d'un <code class="prettyprint lang-c">else</code> pour coder une <strong class="title">bifurcation à multiples embranchements</strong>, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+if (<span class="nocode"><strong style="color: green">expression 1</strong></span>) {
+  <span class="nocode"><strong style="color: brown">bloc 1</strong></span>
+}
+else if (<span class="nocode"><strong style="color: green">expression 2</strong></span>) {
+  <span class="nocode"><strong style="color: brown">bloc 2</strong></span>
+}
+else {
+  <span class="nocode"><strong style="color: brown">bloc 3</strong></span>
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En principe, il n'y a <strong class="defin">pas de limites syntaxiques de complexité</strong> aux <strong class="title">imbrications de bifurcations</strong> (on coder autant de niveaux d'imbrication que l'on souhaite). Néanmoins, il faut tenir compte des <strong>exigences de lisibilité</strong> et tâcher de ne pas coder des imbrications qui seraient trop complexes pour être facilement comprises. </p>
+</div><!-- complement -->
+
+
+<!-- expert -->
+<h4 id="expressionAbregee"> Syntaxe conditionnelle au sein d'une expression </h4>
+
+
+
+<div class="complement">
+<p> L'<strong class="title">opérateur conditionnel</strong> <code class="prettyprint lang-c">? :</code> permet de coder une <strong>bifurcation simple</strong> <strong class="defin">au sein d'une expression</strong>. Toutefois, pour des questions de lisibilité, il est <strong class="warning">déconseillé</strong> de l'employer tant qu'une instruction <code class="prettyprint lang-c">if</code> est codable à la place. </p>
+
+<p> C'est surtout pour coder des <strong>macro‑définitions</strong> que l'opérateur <code class="prettyprint lang-c">? :</code> est <strong class="pros">commode</strong> et adapté. C'est donc lors de l'étude de ces dernières qu'il sera présenté (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#operateurConditionnel" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="switchCases"> L'instruction de bifurcation multiple <code class="prettyprint lang-c">switch</code> </h2>
+
+
+<h3> Syntaxe de base </h3>
+
+
+<div class="important" style="display: inline-block;">
+<p> Une <strong>instruction structurée</strong> de la forme <code class="prettyprint lang-c">switch (<span class="nocode"><strong style="color:green">expression</strong></span>) {<span class="nocode"><strong style="color:brown">bloc général</strong></span>}</code> permet de coder une <strong class="title">bifurcation à multiples embranchements</strong> du flux d'exécution, et non plus seulement deux comme avec une instruction structurée <code>if… else</code>. </p>
+<img class="top-left" src="../img/structure_switch1.png" style="max-width: 800px">
+</div><!-- important -->
+
+<div class="complement">
+<p> Elle obéit aux règles de syntaxe suivantes : </p>
+
+<ul>
+  <li> l'<strong class="specialG">expression</strong> est <strong>obligatoirement</strong> de <strong class="defin">type entier</strong> (catégorie qui inclut  les types de <strong class="defin">caractères</strong> – cf. chap. C3‑I <a class="next" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typesLangC" target="_BLANK"></a>) ou <strong class="defin">énuméré</strong> (cf. chap. C3‑I <a class="next" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typesEnumeres" target="_BLANK"></a>) ; </li>
+
+  <li> le <strong class="specialM">bloc général</strong> est structuré par une <strong>série d'</strong><strong class="title">étiquettes de cas</strong> de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">case <span class="nocode"><strong style="color:green">valeur</strong></span> :</code>
+  </span> <br>
+  où <strong class="specialG">valeur</strong> est : </li>
+  <ul>
+    <li> en langage <strong>C</strong>, une <strong class="defin">expression constante entière</strong> (cf. chap. C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#expressionConstanteEntiere" target="_BLANK"></a>) ; </li>
+
+    <li> en langage <strong>C++</strong>, une <strong class="defin">expression constante</strong> (cf. chap. C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#expressionConstante" target="_BLANK"></a>) de <strong class="defin">type entier</strong> ;  </li>
+  </ul>
+
+  <div class="nobullet"> et sachant que, quel que soit le langage employé, on peut composer l'expression <strong class="specialG">valeur</strong> avec des identificateurs de <strong class="specialT">constantes entières</strong> listées dans la déclaration d'un <strong class="defin">type énuméré</strong> ;  </div>
+
+  <li> chaque étiquette de cas est suivie d'une <strong>séquence d'instructions</strong> qu'il n'est a priori <strong class="pros">pas nécessaire</strong> d'encapsuler dans des accolades <code>{}</code> comme un bloc ; elles seront <strong class="defin">exécutées dans le cas</strong> où l'<strong class="specialG">expression</strong> prend, au moment de son évaluation, la <strong class="specialG">valeur</strong> codée ;  </li>
+
+  <li> l'instruction facultative de <strong class="title">saut inconditionnel</strong> <code class="prettyprint lang-c">break;</code> placée juste après la <strong class="specialGr">dernière instruction</strong> de la séquence impose à l'exécution de sortir de l'instruction structurée <code class="prettyprint lang-c">switch</code> pour traiter son <strong>instruction suivante</strong> ; elle garantit qu'<strong class="warning">aucun des cas suivants</strong> ne sera examiné (et a fortiori, que leurs séquences d'instructions respectives ne seront exécutées) ; </li>
+
+  <li> l'<strong class="title">étiquette facultative</strong> <code class="prettyprint lang-c">default</code> placée en dernier, permet de faire exécuter  une <strong>séquence d'instructions</strong> dans <strong class="defin">tous les autres cas</strong>, c'est‑à‑dire les cas non couverts par les autres étiquettes ; elle est à une structure <code class="prettyprint lang-c">switch</code> ce que le mot‑clef <code class="prettyprint lang-c">else</code> est à une structure <code class="prettyprint lang-c">if</code> ;  </li>
+
+  <div class="nobullet"> en l'absence d'étiquette <code class="prettyprint lang-c">default</code>, si l'<strong class="specialG">expression</strong> ne prend aucune des <strong class="specialG">valeurs</strong> codées, l'exécution passe à l'<strong>instruction suivante</strong> sans qu'aucune d'instruction ait été exécuté. </div>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Pour coder un programme de <strong class="title">calculatrice rudimentaire</strong> où l'utilisateur peut saisir en ligne une <strong>opération arithmétique simple</strong> et obtenir le résultat, on peut coder le <strong class="defin">test de l'opérateur</strong> avec une <strong class="title">bifurcation multiple</strong> <code class="prettyprint lang-c">switch</code> comme ci‑dessous :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  int a, b;      // operands
+  char oper; 
+  printf("Operation: ");
+  scanf("%d %c %d", &a, &oper, &b);
+  switch (oper) {
+    case '+' : 
+      printf("> %d", a + b);
+    break;
+    case '-' :  
+      printf("> %d", a - b);
+    break;
+    case '*' :  
+      printf("> %d", a * b);
+    break;
+    case '/' :  
+      printf("> %d", a / b);
+    break;
+    default : 
+      printf("Unknown operation!");
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<div class="remarques" id="remarqueExpressionConstante">
+<p class="remarque"> Selon le langage employé <strong>C</strong> ou <strong>C++</strong>, il y a une <strong class="warning">nuance subtile</strong> sur la contrainte syntaxique à laquelle doit répondre l'expression <strong class="specialG">valeur</strong> d'une <strong class="title">étiquette de cas</strong> dans une structure <code class="prettyprint lang-c">switch</code>. </p>  
+<ul>
+  <li> En langage <strong>C</strong>, on ne peut <strong class="warning">pas</strong> composer cette expression avec des identificateurs de <strong>constantes déclarées</strong>. </li>
+
+  <div class="nobullet"> Par exemple, une étiquette comme <code class="prettyprint lang-c" style="background: lightgrey;">case maxValue + 2 :</code> n'est <strong class="warning">pas compilable</strong>, parce qu'elle utilise un <strong>identificateur de donnée</strong> (et même s'il s'agit d'une constante). </div>
+
+  <div class="nobullet"> Toutefois, on peut remédier à cette limite en employant des <strong>pseudo‑constantes</strong> à la place des constantes déclarées (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#pseudoConstantes" target="_BLANK"></a>). </div>
+
+  <li> En langage <strong>C++</strong>, au contraire, on <strong class="pros">peut</strong> composer l'expression <code class="prettyprint lang-c">case maxValue + 2 :</code> car les identificateurs de <strong>constantes déclarées</strong> sont <strong class="defin">autorisés</strong>. </li>
+
+  <div class="nobullet"> En revanche, l'expression <strong class="specialG">valeur</strong> doit quand même être une <strong class="defin">expression constante</strong>, ce qui <strong class="warning">interdit</strong> le recours aux identificateurs de <strong>variables</strong>, aux appels de <strong>fonctions</strong>, etc. </div>
+</ul>
+</div><!-- remarques -->
+
+
+<div class="expert">
+<h4> Encapsulation des séquences d'instructions dans des blocs </h4>
+
+
+<div class="complement">
+<p> On a vu qu'en principe, la <strong class="title">syntaxe générale</strong> de la structure <code class="prettyprint lang-c">switch</code> <strong>ne requiert pas</strong> l'<strong class="defin">encapsulation dans un bloc</strong> <code class="prettyprint lang-c">{}</code> des instructions d'un cas. </p>
+
+<p> D'une certaine manière, une étiquette <code class="prettyprint lang-c">case <span class="nocode"><strong style="color: green;">valeur</strong></span> :</code> et son instructions <code class="prettyprint lang-c">break;</code> correspondante agissent comme des <strong>délimiteurs</strong> de la séquence d'instructions d'un cas. </p>
+</div><!-- complement -->
+
+
+<!-- ajouter une figure -->
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/structure_switchBloc.png" width="300px">
+<p> Toutefois, si l'on souhaite coder une <strong>déclaration de données</strong> dans la séquence d'instructions d'un cas, une <strong class="title">encapsulation dans un bloc</strong> <code class="prettyprint lang-c">{}</code></strong> est <strong class="defin">nécessaire</strong>. </p>
+
+<p> Sinon le compilateur est en <strong class="cons">difficulté pour définir</strong> la <strong>portée de la donnée</strong> (cf. chap. C4‑II <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C4-Fonctions/Cc4-2_porteesDonnees.html#porteeDonnee" target="_BLANK"></a>) et émet alors un <strong class="warning">avertissement</strong>. </p>
+</div><!-- important -->
+</div><!-- expert -->
+
+
+
+<h3> Cas à clauses multiples </h3>
+
+
+
+<div class="complement" style="display: inline-block;">
+<p>  On peut coder un <strong class="title">embranchement</strong> vers <strong>une même séquence d'instructions</strong> pour <strong class="title">plusieurs</strong> <strong class="specialG">valeurs</strong> que pourraient prendre l'<strong class="specialG">expression</strong> conditionnant une instruction structurée <code class="prettyprint lang-c">switch</code>. </p>
+
+<img class="top-left" src="../img/structure_switch2.png" style="max-width: 800px">
+
+<p> Il suffit pour cela faire précéder cette <strong>séquence d'instructions</strong> d'une <strong class="defin">série d'étiquettes de cas</strong>  comme illustré ci‑dessus : la <strong>séquence nº 1</strong></strong> sera alors exécutée si l'<strong class="specialG">expression</strong> prend, lors de son évaluation, la <strong class="specialG">valeur 1</strong> <strong class="title">ou</strong> la <strong class="specialG">valeur 2</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples" id="casClausesMultiples">
+<p class="exemple"> Ayant déterminé supra dans la variable booléenne <code class="prettyprint lang-c">leapYear</code> si une année est bissextile <a class="supra" href="Cc2-5_structuresControle.html#anneeBissextile" target="_PARENT"></a>, et en déclarant préalablement une variable entière <code class="prettyprint lang-c">month</code> pour stocker le numéro du mois, on peut déterminer le <strong class="defin">nombre de jours du mois</strong> dans une variable entière <code class="prettyprint lang-c">daysInMonth</code> en codant la <strong class="title">bifurcation multiple</strong> ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  switch (month) {
+    case 2 :                // february
+      if (leapYear) {
+        daysInMonth = 29;
+      }
+      else {
+        daysInMonth = 28;
+      }
+      break;
+    case 4 : case 6 : case 9 : case 11 :
+      daysInMonth = 30;
+      break;
+    case 1 : case 3 : case 5 : case 7 : case 8 : case 10 : case 12 :
+      daysInMonth = 31;
+      break;
+    default :
+      daysInMonth = 0; // error code if month value is out of range
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<h4> Codage d'un cas englobant intervalle de valeurs </h4>
+
+
+<div class="important">
+<p> Depuis la norme <em class="mark">C99</em>, il est possible de coder un <strong>cas</strong> de bifurcation <code class="prettyprint lang-c">switch</code>  qui englobe un <strong class="title">intervalle de valeurs entières consécutives</strong> de la forme <em class="bold">{<strong class="specialG">valeur 1</strong>, … , <strong class="specialG">valeur 2</strong>}</em> (avec bien sûr <strong class="specialG">valeur 1</strong> < <strong class="specialG">valeur 2</strong>). Il suffit d'employer la syntaxe suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">case <span class="nocode"><strong class="specialG">valeur 1</strong></span> ... <span class="nocode"><strong class="specialG">valeur 2</strong></span> : </code>
+</span> <br>
+en veillant bien à coder un <strong>espace de part et d'autre</strong> du séparateur <code class="prettyprint lang-c">...</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cette syntaxe permet d'éviter le codage fastidieux de successions de cas identiques.  </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+  <li> Dans le code précédent pour déterminer le <strong class="defin">nombre de jours d'un mois</strong>, la ligne nº 32 peut être remplacée par :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:32">
+    case 1 : case 3 : case 5 : case 7 ... 8 : case 10 : case 12 :
+                                 /* ^^^^^^^ */
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <li> Pour tester la <strong class="title">catégorie d'un caractère</strong> saisis par un utilisateur, on peut par exemple coder : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:25">
+    switch (typedChar) {
+      case '0' ... '9' : // any digits
+      break;
+      case 'A' ... 'Z' : // any upper‑case letter
+      break;
+      case 'a' ... 'z' : // any lower‑case letter
+      break;
+      // etc.
+    }
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="expert">
+  <p> <em class="remark">Remarque</em> : on verra au chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#fonctionsTest" target="_BLANK"></a> qu'il existe aussi des <strong>fonctions spécifiques</strong> pour effectuer de tels tests. </p>
+  </div><!-- expert -->
+</ol>
+
+</div><!-- exemple -->
+
+
+
+<!-- 
+<div class="remarques">
+<p class="remarque"> En langages <strong>C/C++</strong>, il est <strong class="warning">impossible</strong> de <strong>spécifier un cas</strong> pour un <strong class="title">intervalle de valeurs</strong> compris entre deux bornes inférieure et supérieure, comme on peut le faire en langage <em class="mark">ST</em>.  </p>
+
+<p> Pour coder une telle spécification, il faut recourir à une instruction <code class="prettyprint lang-c">if</code> avec une <strong class="specialG">expression composée</strong> de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">if (<span class="nocode"><strong style="color:green">valeur 1</strong></span> < a && a < <span class="nocode"><strong style="color:green">valeur 2</strong></span>) <span class="nocode">…</span></code>
+</span> </p>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> L'instruction de répétition <code class="prettyprint lang-c">while</code> </h2>
+
+
+<h3 id="boucleWhile"> Syntaxes de base </h3>
+
+
+<p> Il existe <strong class="title">deux syntaxes</strong> pour coder les boucles de répétition <code class="prettyprint lang-c">while</code>. </p>
+
+
+<h4> La boucle <code class="prettyprint lang-c">while</code> </h4>
+
+
+<div class="important" style="display: inline-block;" >
+<p> Une <strong>instruction structurée</strong> de la forme <code class="prettyprint lang-c">while (<span class="nocode"><strong style="color:green">expression</strong></span>) {<span class="nocode"><strong style="color:brown">bloc</strong></span>}</code> permet de coder la <strong class="title">répétition conditionnelle</strong> de l'exécution d'un <strong class="specialM">bloc</strong> d'instructions : </p>
+
+<img class="top-right" src="../img/structure_while.png" width="500px">
+
+<ul>
+  <li> <strong>tant que</strong> l'<strong class="specialG">expression</strong> est <strong style="color:green">vraie</strong>, le <strong class="specialM">bloc</strong> est exécuté ;  </li>
+
+  <li> <strong>sinon</strong>, si l'<strong class="specialG">expression</strong> est <strong style="color:red">fausse</strong>, l'exécution passe à l'<strong>instruction suivante</strong> sans exécuter le <strong class="specialM">bloc</strong> ; </li>
+
+  <li> l'<strong>évaluation</strong> de l'<strong class="specialG">expression</strong> est renouvelée <strong class="title">avant</strong> <strong>chaque exécution</strong> éventuelle du <strong class="specialM">bloc</strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complementExpert" id="operateurConversionWhile">
+<p> Comme pour une bifurcation <code class="prettyprint lang-c">if</code>, les <strong class="title">parenthèses</strong> <code class="prettyprint lang-c">()</code> délimitant l'<strong class="specialG">expression</strong> jouent le rôle d'<strong class="defin">opérateur de conversion</strong> en <strong>valeur booléenne</strong> (cf. supra <a class="supra" href="Cc2-5_structuresControle.html#operateurConversion"></a>). </p>
+</div>
+
+<div class="exemples" id="exempleWhile">
+<p class="exemple"> Le programme ci‑dessous <strong class="title">réitère</strong> le message « Hello, World! » <strong class="title">tant que</strong> l'utilisateur ne s'y oppose pas. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  char typedChar = 0;
+  while (typedChar != '0') {  // NB: '0' == 48 (ASCII code)
+    printf("Hello, World!\n");
+    printf("Type the '0' key if you want to stop,\n");
+    printf("or any other key to continue... ");
+    scanf(" %c", &typedChar);
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div>
+
+
+<div class="remarques"><p class="remarques"></p>
+
+<ol class="remarques">
+  <li> Dans le code supra, il faut <strong class="warning">ne pas confondre</strong> le <strong>caractère nul</strong> (<code>0</code>) qui est la valeur d'initialisation de la variable <code class="prettyprint lang-c">typeChar</code> et le <strong>chiffre zéro</strong> (la valeur de caractère codée <code>'0'</code> avec les guillemets simples, dont la valeur entière est <code>48</code> – son code <em class="sigle">ASCII</em>, cf. chap. C3‑VIII <a class="next" href="../C3-Numeration/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK"></a>). </li>
+
+  <li> Lors du traitement d'une boucle <code class="prettyprint lang-c">while</code>, le <strong class="specialM">bloc</strong> n'est <strong class="warning">jamais</strong> exécuté si l'<strong class="specialG">expression</strong> de condition de répétition est <strong>d'emblée évaluée</strong> <strong style="color:red">fausse</strong>. </li>
+
+  <div class="nobullet"> (Mais ce scénario d'exécution ne se produit pas dans l'exemple supra, car comme expliqué juste avant, <code class="prettyprint lang-c">typeChar</code> est initialisé avec la valeur <code>0</code>  et non pas <code>'0'</code> lors de la première évaluation de la condition d'exécution du bloc de la boucle.) </div>
+
+  <li> Contrairement à d'autres langages comme <em class="mark">Delphi</em> ou <em class="mark">ST</em>, le <strong class="title">mot‑clef</strong> <code class="grey">do</code> est <strong class="pros">implicite</strong> en <strong>C/C++</strong> dans cette première forme syntaxique de la boucle <code class="prettyprint lang-c">while</code>. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<h4 id="doWhile"> La boucle <code class="prettyprint lang-c">do <span class="nocode">…</span> while</code> </h4>
+
+
+<div class="important" style="display: inline-block;">
+<p> Si l'on souhaite que l'<strong>évaluation</strong> de l'<strong class="specialG">expression</strong> soit effectuée <strong class="title">après</strong> chaque nouvelle exécution du <strong class="specialM">bloc</strong> d'instructions – autrement dit, que ce dernier soit exécuté <strong class="defin">au moins une fois</strong>, quelle que soit la valeur de l'<strong class="specialG">expression</strong> – il suffit de : </p>
+
+<img class="top-right" src="../img/structure_do_while.png" width="500px">
+
+<ul>
+  <li> coder le mot‑clef <code class="prettyprint lang-c">do</code> <strong>avant</strong> le <strong class="specialM">bloc</strong>, </li>
+
+  <li> coder la condition : <br>
+    <span class="inline">
+      <code class="prettyprint lang-c">while (<span class="nocode"><strong style="color:green">expression</strong></span>);</code>
+    </span> <br>
+    <strong>après</strong> le  <strong class="specialM">bloc</strong>, </li>
+</ul>
+
+<p> le principe de traitement étant le même que pour une boucle <code class="prettyprint lang-c">while</code>, hormis la postériorité de l'évaluation de l'<strong class="specialG">expression</strong> à l'exécution du <strong class="specialM">bloc</strong> d'instructions. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Le programme ci‑dessous opère le même affichage que celui supra <a class="supra" href="Cc2-5_structuresControle.html#exempleWhile"></a>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  char typedChar = 0;
+  do {
+    printf("Hello, World!\n");
+    printf("Type the '0' key if you want to stop,\n");
+    printf("or any other key to continue... ");
+    scanf(" %c", &typedChar);
+  }
+  while (typedChar != '0');  // NB: '0' == 48 (ASCII code)
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="remarques">
+  <li> Dans la syntaxe de la structure <code class="prettyprint lang-c">do<span class="nocode">…</span> while</code>, <strong class="title">bien noter</strong> le <strong>séparateur final</strong> <code class="prettyprint lang-c">;</code> que l'on ne trouve <em>jamais à la fin des autres structures de contrôle</em> en langages <strong>C/C++</strong> dès lors qu'elles se terminent pas une accolade fermante <code class="prettyprint lang-c">}</code> de bloc. </li>
+
+  <li> La structure de contrôle <code class="prettyprint lang-c">do<span class="nocode">…</span> while</code> est équivalente à celle codée <code>repeat… until</code> en langage <em class="mark">Delphi</em> ou <em class="mark">ST</em>. </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="finAnticipee"> Bifurcations de fin anticipée </h3>
+
+
+
+<div class="important">
+<p> Une <strong>boucle</strong> <code class="prettyprint lang-c">while</code> ou <code class="prettyprint lang-c">do<span class="nocode">…</span> while</code> peut être complexifiée grâce à une (voire plusieurs) instruction(s) facultative(s) de <strong class="title">saut inconditionnel</strong> <code class="prettyprint lang-c">break;</code> et <code class="prettyprint lang-c">continue;</code>. L'un comme l'autre se codent en étant simplement suivi d'un séparateur <code class="prettyprint lang-c">;</code> pour constituer une <strong>instruction</strong>.</p>
+
+<p> Pour qu'un tel saut ne soit <strong class="specialLB">pas systématique</strong> (sinon les instructions suivantes jusqu'à la fin du bloc d'instructions de la boucle seraient inutiles, car jamais exécutées), il est impératif de le coder <strong>sous condition</strong> – c'est‑à‑dire, par exemple, dans une bifurcation <code class="prettyprint lang-c">if</code> suivie d'une <strong class="specialLG">expression</strong> secondaire – dans le <strong class="specialM">bloc</strong>. </p>
+</div><!-- important -->
+
+
+<h4 id="break"> Le mot‑clef <code class="prettyprint lang-c">break</code> </h4>
+
+
+<div class="important">
+<p> Le mot‑clef <code class="prettyprint lang-c">break</code> commande une <strong class="title">fin anticipé de la</strong> <strong class="warning">boucle</strong>. </p>
+</div><!-- important -->
+
+<img class="top-left" src="../img/structure_break.png" style="max-width: 800px">
+
+<div class="complement">
+<p> Si l'<strong class="specialLG">expression</strong> secondaire qui conditionne ici la <strong>fin anticipée</strong> de la boucle <code class="prettyprint lang-c">while</code> est évaluée <strong style="color:green">vraie</strong>, alors la machine passe directement à l'<strong>instruction suivante</strong> codée immédiatement après la boucle, sans exécuter les <strong class="specialGr">instructions restantes</strong>  jusqu'à la fin du <strong class="specialM">bloc</strong> ni réévaluer l'<strong class="specialG">expression</strong> principale de répétition. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Dans un programme de <strong class="title">jeu de devinette</strong> d'un nombre dans un intervalle, on peut spécifier que la valeur <code class="prettyprint lang-c">0</code> permet au joueur de <strong>quitter la partie</strong> de façon anticipée. On pourra alors coder cette fonctionnalité à l'aide d'une instruction <code class="prettyprint lang-c">break;</code> dans la boucle de jeu, comme ci‑dessous en ligne n° 21. </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:15">
+  while (attempt <= maxAttempt) {
+    printf("You have %d attempt(s) left\n", maxAttempt - attempt);
+    printf("Try to guess the hidden number between 1 and %d: ", maxNumber);
+    scanf("%d", &typedNumber);
+    if (typedNumber == 0) {
+      printf("What a pity! Maybe next time...\n\n");
+      break;
+    }
+    else // ...
+
+  }
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple-->
+
+
+<h4> Le mot‑clef <code class="prettyprint lang-c">continue</code> </h4>
+
+
+<div class="important">
+<p> Le mot‑clef <code class="prettyprint lang-c">continue</code> commande une <strong class="title">fin anticipé</strong> de l'exécution du <strong class="specialM">bloc</strong> d'instructions. </p>
+</div><!-- important -->
+
+<img class="top-left" src="../img/structure_continue.png" style="max-width: 800px">
+
+<div class="complement">
+<p> Si l'<strong class="specialLG">expression</strong> qui conditionne la <strong>fin anticipée</strong> du <strong class="specialM">bloc</strong> est évaluée <strong class="defin">vraie</strong>, la machine  repasse directement à l'évaluation de l'<strong class="specialG">expression</strong> qui conditionne  <strong>répétition de la boucle</strong>, sans exécuter les <strong style="color:dimgray">instructions</strong> restantes jusqu'à la fin du <strong class="specialM">bloc</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Toujours dans le programme du <strong class="title">jeu de devinette</strong> d'un nombre (cf. supra <a class="supra" href="Cc2-5_structuresControle.html#break"></a>), on peut choisir d'être <strong class="pros">indulgent</strong> avec le joueur s'il saisit une <strong class="cons">valeur supérieure</strong> à la <strong>borne supérieure</strong> de l'intervalle proposé et de recommencer la saisie sans incrémenter le compteur de tentatives. On codera cette possibilité  à l'aide d'une instruction <code class="prettyprint lang-c">continue;</code> dans la boucle de jeu, comme ci‑dessous en ligne n° 25. </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:23">
+    else if (typedNumber > maxNumber) {
+      printf("Don't be silly!\n\n");
+      continue;
+    }
+    else // ...
+
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple-->
+
+
+<h3 id="boucleInfinie"> Boucle « infinie » </h3>
+
+
+
+<div class="important">
+<p> Une <strong>boucle</strong> codée de la forme <code class="prettyprint lang-c">while (1) {<span class="nocode"><strong style="color:brown">bloc</strong></span>}</code> provoque a priori la <strong>répétition « <strong class="title">infinie</strong> »</strong> du <strong class="specialM">bloc</strong> d'instructions, car la condition de répétition <code class="prettyprint lang-c">1</code> est constamment évaluée <strong style="color:green">vraie</strong>. Elle ne devient <strong class="warning">jamais</strong> <strong>fausse</strong> lors de l'exécution du programme. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On peut néanmoins coder une <strong class="title">sortie</strong> d'une boucle « infinie » en insérant dans son <strong class="specialM">bloc</strong> d'instructions une bifurcation avec une instruction de <strong>fin anticipée</strong> de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">if<span class="nocode">…</span> break;</code>
+</span> </p>
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ul style="margin-top: 1em">
+  <li> Si une boucle « infinie » ne comporte <strong>aucune bifurcation conditionnelle de fin anticipée</strong>, <strong class="warning">les instructions successives à cette boucle ne sont jamais exécutées</strong> – elles sont donc <strong class="cons">strictement inutiles</strong>. </li>
+
+  <div class="nobullet"> Dans un tel cas, la répétition est a priori sans limite interne au programme. On ne peut y mettre fin que par une <strong class="specialV">interruption externe</strong> du <strong class="title">processus d'exécution du programme</strong>, c'est‑à‑dire : </div>
+  <ul>
+    <li> sur un ordinateur, par une commande de <strong>fin de tâche</strong> (typiquement, la fermeture de la fenêtre de la console d'exécution) ; </li>
+
+    <li> sur une carte à microcontrôleur, par un signal de <strong>réinitialisation</strong> (<em class="english">reset</em>). </li>
+  </ul>
+
+  <li> Le <strong>codage d'une boucle « <strong class="title">infinie</strong> »</strong> est réservé aux <strong class="defin">programmes fonctionnant sans arrêt</strong> (automates de machines, vidéo-surveillance, etc.). </li>
+
+  <div class="nobullet"> En revanche, il peut arriver qu'une boucle soit « infinie » parce que la condition de fin ne se produit jamais ; on a alors affaire à une <strong>erreur de codage</strong> qui engendre un « <strong>bug</strong> » d'exécution. </div>
+</ul>
+</div><!-- remarques -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="boucleFor"> L'instruction de répétition <code class="prettyprint lang-c">for</code> </h2>
+
+
+<p> En informatique, on appelle <strong class="title">itération</strong> <strong>une exécution</strong> d'instruction (ou de bloc d'instructions) dans un <strong class="defin">processus répétitif</strong> : on parle de première itération, deuxième itération, etc. </p>
+
+
+<p> Pour imposer un <strong>nombre déterminé</strong> d'itérations d'un <strong class="specialM">bloc</strong>, on pourrait implémenter un compteur dans une boucle <code class="prettyprint lang-c">while</code>. Toutefois, il est préférable d'employer l'instruction structurée <code class="prettyprint lang-c">for</code> qui est précisément conçue dans ce but. </p>
+
+
+
+<h3 id="syntaxeFor"> Syntaxe de base </h3>
+
+
+
+<div class="important" style="display: inline-block; ">
+<p> En langages <em class="mark">C/C++</em>, l'<strong>instruction structurée</strong> <code class="prettyprint lang-c">for</code> obéit à une <strong class="pros">syntaxe très souple</strong> construite autour d'une <strong class="specialLG">variable d'itération</strong>, de préférence <strong>entière</strong>. </p>
+
+<p> Les <strong class="title">possibilités de codage</strong> d'une boucle <code class="prettyprint lang-c">for</code> sont <strong class="pros">très nombreuses</strong>. Un <strong>exemple typique</strong> très simple est proposé dans l'algorigramme de la figure ci‑dessous. </p>
+
+<img class="top-left" src="../img/structure_for.png">
+</div><!-- important -->
+
+<div class="complement">
+<p> L'élément de code entre parenthèses <code class="prettyprint lang-c">()</code> de la boucle consiste en <strong class="title">3 expressions</strong> séparées par le <strong>symbole</strong> <code class="prettyprint lang-c">;</code> comme des instructions, mais sans pour autant constituer un bloc séquentiel comme ailleurs dans le code. </p>
+
+<ol class="numbered">
+  <li> L'expression d'<strong style="color:gold; text-shadow: 0.05em 0.05em black;">initialisation</strong> n'est évaluée qu'<strong class="title">une seule fois</strong>, au début du traitement de la boucle. </li>
+
+  <div class="nobullet"> On y code l'affectation à la <strong class="specialLG">variable d'itération</strong> d'une <strong>valeur initiale</strong>. Il est <strong class="pros">recommandé</strong> que cette initialisation soit <strong>déclarative</strong>, pour que la variable d'itération soit locale à la boucle. </div>
+
+  <li> L'expression de <strong class="specialG">condition</strong> est évaluée <strong class="title">avant</strong> <strong>chaque nouvelle itération</strong> de la boucle. </li>
+
+  <div class="nobullet"> On y code une <strong>expression logique</strong> sur la <strong class="specialLG">variable d'itération</strong> : </div>
+
+  <ul>
+    <li> si la <strong class="specialG">condition</strong> est <strong style="color:green">vraie</strong>, alors le <strong class="specialM">bloc</strong> d'instructions est exécuté ;</li>
+
+    <li> si la <strong class="specialG">condition</strong> est <strong style="color:red">fausse</strong>, alors la boucle prend <strong>fin</strong> et l'exécution passe à l'<strong>instruction suivante</strong> ;</li>
+  </ul>
+
+  <li> L'expression de <strong class="specialO">modification</strong> est évaluée <strong class="title">après</strong> <strong>chaque nouvelle itération</strong> de la boucle. </li>
+
+  <div class="nobullet"> On y code une <strong>affectation</strong> sur <strong class="specialLG">variable d'itération</strong> qui spécifie implicitement un <strong class="specialV">pas d'itération</strong>, c'est‑à‑dire la <strong>différence entre deux valeurs successives</strong> de la <strong class="specialLG">variable d'itération</strong>. Ce pas est en général constant (positif ou négatif), mais rien n'interdit qu'il soit variable. </div>
+</ol>
+</div><!-- complement -->
+
+
+
+<h3> Intérêt </h3>
+
+
+
+<div class="complement">
+<p> L'<strong class="title">intérêt</strong> de la boucle <code class="prettyprint lang-c">for</code> est : </p>
+
+<ul>
+  <li> bien entendu, de pouvoir spécifier un <strong class="specialLB">nombre déterminé d'itérations</strong> (alors que dans une boucle <code class="prettyprint lang-c">while</code>, on spécifie seulement une <em>condition de répétition</em>) ; </li>
+
+  <li> mais aussi et surtout, de disposer dans la boucle de la <strong>valeur courante</strong> de la <strong class="specialLG">variable d'itération</strong> pour mettre en œuvre des instructions <strong class="specialLB">en fonction de cette valeur</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Les <strong>trois exemples</strong> ci‑après donnent un tout petit aperçu des possibilités de codages de boucles itératives. </p>
+<ol class="exemples">
+  <li> La boucle <code class="prettyprint lang-c">for (int i = 1; i <= 10; ++i)</code> code <strong>10 itérations</strong>. </li>
+
+  <div class="nobullet"> La variable d'itération <code class="prettyprint lang-c">i</code> prend toutes les valeurs entières de <code class="prettyprint lang-c">1</code> à <code class="prettyprint lang-c">10</code> ; <br>
+
+  le <strong class="specialV">pas d'itération</strong> vaut <code>+1</code>. </div>
+
+  <li> La boucle <code class="prettyprint lang-c">for (int i = 11; i > 0; i -= 2)</code> code <strong>6 itérations</strong>. </li>
+
+  <div class="nobullet"> La variable d'itération <code class="prettyprint lang-c">i</code> prend toutes les valeurs impaires de <code class="prettyprint lang-c">11</code> à <code class="prettyprint lang-c">1</code> ; <br>
+
+  le <strong class="specialV">pas d'itération</strong> vaut <code>-2</code>. </div>
+
+  <li> La boucle <code class="prettyprint lang-c">for (int i = 2; i <= 32; i *= 2) </code> code <strong>5 itérations</strong>. </li>
+
+  <div class="nobullet"> La variable d'itération <code class="prettyprint lang-c">i</code> prend successivement les valeurs 
+    <code class="prettyprint lang-c">2</code>,
+    <code class="prettyprint lang-c">4</code>,
+    <code class="prettyprint lang-c">8</code>,
+    <code class="prettyprint lang-c">16</code>,
+    <code class="prettyprint lang-c">32</code> ; <br>
+
+  le <strong class="specialV">pas d'itération</strong> est croissant (il double à chaque itération). </div>
+</ol>
+</div><!-- exemples -->
+
+
+
+<h3 id="syntaxeAvanceeFor"> Syntaxe avancée </h3>
+
+
+<div class="expert">
+<h4> Emploi de l'opérateur séquentiel </h4>
+
+
+<div class="complement">
+<p> Les <strong>3 expressions</strong> spécifiant les conditions de répétition d'une boucle : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">for(<span class="nocode"><strong style="color:gold; text-shadow: 0.05em 0.05em black;">initialisation</strong></span>;
+    <span class="nocode"><strong style="color:green;">condition</strong></span>;
+    <span class="nocode"><strong class="specialO">modification</strong></span>)
+   </code>
+</span> <br>
+peuvent être enrichies à l'aide de l'<strong class="title">opérateur séquentiel</strong> <code class="prettyprint lang-c">,</code> (cf. chap. C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#operateurSequentiel" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> La boucle : <br>
+<span class="inline">
+    <code class="prettyprint lang-c">for (int i = 1, j = 10; i <= j; i++, j--)</code>
+</span> <br>
+code <strong>5 itérations</strong> au cours desquelles : </p>
+<ul>
+  <li> la variable <code class="prettyprint lang-c">i</code> prend toutes les valeurs entières de <code class="prettyprint lang-c">1</code> à <code class="prettyprint lang-c">5</code> ; </li>
+
+  <li> la variable <code class="prettyprint lang-c">j</code> prend toutes les valeurs entières de <code class="prettyprint lang-c">10</code> à <code class="prettyprint lang-c">6</code>. </li>
+</ul>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+<h4> Bifurcations de fin anticipée </h4>
+
+
+<div class="complement">
+<p> Dans une boucle <code class="prettyprint lang-c">for</code>, il est possible d'employer les mots‑clefs  <code class="prettyprint lang-c">break</code> et <code class="prettyprint lang-c">continue</code> pour coder des <strong class="title">bifurcations de fin anticipée</strong> de <strong>boucle</strong> ou d'<strong>itération</strong> comme dans une boucle <code class="prettyprint lang-c">while</code> (cf. supra <a class="supra" href="Cc2-5_structuresControle.html#finAnticipee"></a>). </p>
+</div><!-- complement -->
+
+
+<h4> Boucle « infinie » </h4>
+
+
+<div class="important">
+<p> L'<strong>instruction structurée</strong> <code class="prettyprint lang-c">for(;;) {<span class="nocode"><strong style="color:brown">bloc</strong></span>}</code></code> qu'on lit <strong class="defin">forever</strong>, code une <strong>boucle « <strong class="title">infinie</strong> »</strong> comme <code class="prettyprint lang-c">while (1) {<span class="nocode"><strong style="color:brown">bloc</strong></span>}</code></code> (cf. supra <a class="supra" href="Cc2-5_structuresControle.html#boucleInfinie"></a>). </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple">  C'est dans le bloc d'une boucle <code class="prettyprint lang-c">for(;;)</code> qu'est encapsulé l'appel de la fonction <code class="prettyprint lang-c">loop</code> dans le fichier <code class="filename">main.cpp</code> généré par le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em> </strong>lors de la compilation d'un fichier d'extension <code class="filename">.ino</code> <a class="previous" href="Cc2-1_squeletteCode.html#fonctionnementArduino" target="_BLANK"></a>. </p>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Remarques </h4>
+
+<div class="remarques">
+<ol class="remarques">
+  <li> S'il y a une<strong class="title"> incompatibilité</strong> entre l'<strong>initialisation</strong> et la <strong>condition de répétition</strong>, comme par exemple, dans le code : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">for (int i = 10; i <= 1; --i) {<span class="nocode"><strong style="color:brown">bloc</strong></span>}</code>
+  </span> <br>
+  le compilateur <strong class="warning">ne détecte aucune erreur</strong> ni n'émet d'avertissement. Il n'empêche que le <strong class="specialM">bloc</strong> de cette boucle n'est jamais exécuté ! </li>
+
+  <li> En langages <em class="mark">C/C++</em>, rien n'interdit de <strong>modifier la</strong> <strong class="specialLG">variable d'incrémentation</strong> <strong class="cons">dans le <strong class="specialM">bloc</strong> de la boucle</strong>. Toutefois, une telle pratique est <strong class="warning">vivement déconseillée</strong>, car : </li>
+  <ul>
+    <li> elle présente des risques de <strong>comportements non prévus par le codeur</strong> lors de l'exécution ; </li>
+
+    <li> elle nuit fortement à la <strong>lisibilité</strong> du programme. </li>
+  </ul>  
+</ol>
+</div><!-- remarques -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> L'instruction de saut inconditionnel <code class="prettyprint lang-c">goto</code> </h2>
+
+
+<h3> Syntaxe de base </h3>
+
+
+<div class="important" style="display: inline-block;">
+<p> Une <strong>instruction</strong> de la forme <code class="prettyprint lang-c">goto <span class="nocode"><strong style="color:mediumorchid">identificateur</strong></span>;</code> code une <strong class="title">bifurcation inconditionnelle</strong> du flux d'exécution vers une <strong style="color:gray">étiquette</strong> (en anglais, <strong style="color:gray">label</strong>) de la forme <code class="prettyprint lang-c"><span class="nocode"><strong style="color:mediumorchid">identificateur</strong></span>:</code> qui doit être dans le <strong>même fichier source</strong>. </p>
+
+<img class="top-right" src="../img/structure_goto.png" width="600px">
+
+<ul>
+  <li> Le <strong class="title">saut</strong> se produit quel que soit l'emplacement
+     de l'<strong style="color:gray">étiquette</strong></strong>, <strong>avant</strong> ou <strong>après</strong> l'instruction <code class="prettyprint lang-c">goto</code>. </li>
+
+  <li> Ensuite, l'exécution <strong>reprend le flux</strong> a priori séquentiel qui suit l'<strong style="color:gray">étiquette</strong>. </li>
+</ul>
+<p> L'<strong class="specialPV" style="color:mediumorchid">identificateur</strong> n'a pas besoin d'être préalablement déclaré (il ne s'agit ni d'une donnée, ni d'une fonction). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En règle générale, un saut n'est <strong class="warning">jamais</strong> <strong>codé sans condition</strong> comme dans le schéma ci‑contre, sinon l'<strong>instruction A</strong> et ses suivantes codées jusqu'à l'<strong style="color:gray">étiquette</strong> ne sont a priori <strong class="cons">jamais exécutées</strong>. </p>
+
+<p> L'instruction <code class="prettyprint lang-c">goto</code> doit donc <strong class="defin">toujours</strong> être <strong>encapsulée dans une bifurcation</strong> <code class="prettyprint lang-c">if</code> ou autre…   </p>
+</div><!-- complement -->
+
+
+<h4> Bonne pratique </h4>
+
+
+<div class="complement">
+<p> La <strong class="pros">lisibilité</strong> d'un programme est potentiellement <strong class="cons">impactée</strong> par toute <strong class="title">bifurcation inconditionnelle</strong> dont l'<strong>étiquette</strong> n'est <strong class="specialO">pas voisine</strong> de l'instruction de <strong>saut</strong>. </p>
+
+<p> Le recours fréquent à ce type d'instructions <strong>si peu structurées</strong> peut transformer le code un véritable « sac de nœuds » avec des <strong class="warning">branches mortes</strong> et un <strong class="warning">comportement difficilement prévisible</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> En conséquence, l'usage du mot‑clef <code class="prettyprint lang-c">goto</code> est <strong>à éviter</strong> et doit rester aussi <strong class="warning">exceptionnel</strong> que possible. </p>
+</div><!-- important -->
+
+
+
+<h3> Intérêt et limite </h3>
+
+
+
+<div class="complement">
+<p> Malgré sa très mauvaise réputation (qui n'est pas usurpée), le saut inconditionnel <code class="prettyprint lang-c">goto</code> présente des <strong class="title">intérêts</strong>, ce qui explique pourquoi il est quand même parfois employé, y compris dans des contextes industriels. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> On souhaite coder une <strong>sortie anticipée</strong> dans une <strong class="title">boucle de répétition à structures multiples</strong>, typique lorsqu'on travaille sur des objets à plusieurs dimensions. Ainsi, avec <strong>deux boucles</strong> <code class="prettyprint lang-c">for</code> <strong>imbriquées</strong> l'une dans l'autre, il faut a priori implémenter deux instructions <code  class="prettyprint lang-c">break</code>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+for (int i = 1; i <= 10; i++) {
+  for (int j = 1; j <= 12; j++) {
+    <span class="nocode"><em>instruction</em></span>;
+    ⋮
+    if (<span class="nocode"><em>condition de fin</em></span>) break;
+  }
+  if (<span class="nocode"><em>condition de fin</em></span>) break;
+}
+<span class="nocode"><em>instruction suivante</em></span>;
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Le fait de devoir coder <strong class="warning">deux fois</strong> la même <strong>condition de fin</strong> n'est pas satisfaisant. Une instruction <code  class="prettyprint lang-c">goto</code> peut s'y substitué avec un net avantage en termes de lisibilité, comme illustré ci‑dessous. </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+for (int i = 1; i <= 10; i++) {
+  for (int j = 1; j <= 12; j++) {
+    <span class="nocode"><em>instruction</em></span>;
+    ⋮
+    if (<span class="nocode"><em>condition de fin</em></span>) goto exitFor;
+  }
+}
+exitFor :
+<span class="nocode"><em>instruction suivante</em></span>;
+
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> L'intérêt du saut inconditionnel <code class="prettyprint lang-c">goto</code> dans l'exemple donné ci‑dessus doit toutefois être <strong class="cons">relativisé</strong>. En effet, on peut aussi coder une sortie anticipée de n'importe quelle boucle par une <strong>instruction</strong> <code class="prettyprint lang-c">return</code> dès lors qu'on encapsule la boucle dans une <strong class="title">fonction</strong> (notion de code qui sera étudiée dans la partie <span class="partie">C4</span> du cours). Une telle solution présente en plus l'avantage décisif de développer des programmes <strong>modulaires</strong> ; elle est donc privilégiée. </p>
+</div><!-- remarques -->
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

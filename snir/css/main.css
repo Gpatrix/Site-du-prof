@@ -1,0 +1,96 @@
+html {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+body {
+	box-sizing: border-box;
+	height: inherit;
+	width: inherit;
+	display : flex;
+	flex-direction: column;
+	justify-content: stretch;
+	align-content: stretch;
+
+	margin: inherit;
+	padding: 0.5em;
+	text-align: justify;
+
+	background-color: lightyellow;
+	font-family: carlito, calibri,  verdana, trebuchet, arial;
+}
+
+
+header {
+	display: inline-block;
+	text-align: center;
+
+	background-color: lightgray;
+}
+
+
+section {
+	height: 100%;
+
+	margin-top: 0.5em;
+	padding : 0.5em;
+
+	background-color: #F0F0F0;
+}
+
+
+a {
+	box-sizing: border-box;
+	display: inline-flex;
+	vertical-align: middle;
+	width: 100%;
+
+	margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 0em;
+	padding: 0.2em;
+
+
+	background-color: white;
+	border: solid 2px #0066FF;
+	border-radius: 4px;
+
+	font-family: carlito, calibri, verdana, trebuchet, arial;
+	font-weight: bold;
+	text-decoration: none;
+	color: black;
+}
+
+a:hover{
+	background-color: lightgray;
+}
+
+h1 {
+	vertical-align: middle;
+	margin-top: auto;
+	margin-bottom: auto; 
+	padding-top :0em; 
+	padding-bottom :0em;
+  
+	font-weight: 700;
+	color: black;
+}
+
+img.logo {
+	width: 2.5em;
+	float: left; 
+
+	margin-right: 0.5em; 
+	margin-left: 0.5em; 
+	margin-top: 0.3em; 
+	margin-bottom: 0.3em; 
+}
+
+strong{
+	font-weight: bold;
+	font-style: italic;
+	text-shadow: 0.05em 0.05em black;
+}
+

@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="5"
+  data-pagenumber="V"
+  data-pageState="OK"
+  data-pageheadtitle="Structures"
+  data-pagefulltitle="Les structures de données hétérogènes"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<!-- offsetof -->
+
+
+<div class="exergue">
+
+<p class="square"> Aux chapitre C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html" target="_BLANK"></a>, on a vu qu'un <strong class="specialLB">tableau</strong> est une <strong>donnée structurée</strong> dite <strong class="defin">homogène</strong> au sens où toutes les valeurs regroupées dans une telle structure partage le <strong class="cons">même type</strong>. </p>
+
+
+<p> A contrario, on parle de <strong class="title">structure hétérogène</strong> pour qualifier une donnée qui <strong>agrège</strong> des valeurs de <strong class="specialG">types potentiellement différents</strong> – et on parle alors de <strong class="defin">champ</strong> (en anglais, <strong>field</strong>) pour qualifier chaque valeur ainsi agrégée. </p>
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/structExUser.png" width="200px" style="padding-top: 0em">
+<p> Par exemple</em>, pour caractériser un <strong>utilisateur</strong> lors de l'exécution d'un programme, on peut vouloir regrouper dans une <strong class="specialLB">même donnée</strong> son <strong>nom</strong> (une chaîne de caractères), son <strong>prénom</strong> (idem), son <strong>âge</strong> (un entier), son numéro de téléphone (un tableau d'entiers), etc. </p>
+</div><!-- display -->
+
+
+<div class="expert">
+<p> Bien évidemment, le <strong class="specialG">type</strong> de chaque <strong class="title">champ</strong> doit être <strong class="defin">codé individuellement</strong>, aussi il n'est envisageable d'agréger des champs qu'<strong class="cons">en petit nombre</strong> contrairement à ce que l'on peut faire avec un tableau. Le plus souvent, on définit des structures de moins d'une dizaine de champs. </p>
+
+<p> En revanche, tout <strong class="title">champ</strong> peut être <strong class="pros">lui‑même structuré</strong>, ce qui permet d'élaborer des structures de données complexes <strong>incluant des tableaux</strong>. </p>
+</div><!-- expert -->
+
+<p class="square">  Dans la plupart des langages de programmation généralistes, une <strong class="title">structure hétérogène</strong> se déclare ou s'identifie avec le mot‑clef <code>record</code> – traduit en français par <strong class="defin">enregistrement</strong>. </p>
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/typesStructUnion.png" width="450px" style="padding-top: 0em">
+<p>  En <strong>C</strong> et <strong>C++</strong>, cette notion se décline en <strong class="title">deux « familles » de types</strong> qui procèdent respectivement : </p>
+
+<ul>
+  <li> par <strong class="specialLB">juxtaposition</strong> de champs (<em class="english">sequentially allocated fields</em>), avec le <strong>mot‑clef</strong> <code class="prettyprint lang-c">struct</code> ;  </li>
+
+  <li> par <strong class="specialLB">superposition</strong> de champs (<em class="english">overlapping fields</em>), avec le <strong>mot‑clef</strong> <code class="prettyprint lang-c">union</code>.  </li>
+</ul>
+</div><!-- display -->
+
+<p class="square"> Complémentaires des tableaux, les <strong class="title">enregistrements par juxtaposition</strong> (type <code class="prettyprint lang-c">struct</code>) sont des <strong>structures de données</strong> <strong class="pros">très usitées</strong> en programmation. A fortiori, elles constituent le modèle de structuration des attributs d'une <strong class="specialG">classe</strong> dans le contexte de la <strong class="specialV">programmation orientée objet</strong>. Par conséquent, tout codeur débutant doit en maîtriser les bases avant d'aborder ce paradigme incontournable (cf. chap. C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#POO" target="_BLANK"></a>). </p>
+
+<p> Dans cet <strong class="title">objectif</strong>, ce chapitre de cours aborde successivement les <strong>trois parties</strong> suivantes : </p>
+
+<ul>
+  <li> la <strong class="specialLB">déclaration</strong> des <strong class="specialG">types</strong> <code class="prettyprint lang-c">struct</code> et de leurs <strong class="defin">données</strong> ; </li>
+
+  <li> l'<strong class="specialLB">identification</strong> des <strong class="defin">données</strong> de type <code class="prettyprint lang-c">struct</code> ; </li>
+
+  <li> la <strong class="specialLB">manipulation</strong> des <strong class="defin">données</strong> de type <code class="prettyprint lang-c">struct</code>. </li>
+</ul>
+
+<p> Quant aux <strong class="title">enregistrements par superposition</strong> (type <code class="prettyprint lang-c">union</code>), que peu de langages offrent, ils sont certes d'<strong class="cons">usage moins courant</strong> que ceux par juxtaposition, mais ne doivent pas pour autant être ignorés car ils permettent une utilisation optimale de la mémoire et une <strong class="pros">polyvalence de formats</strong> des données. Ils font l'objet de la <strong>quatrième partie</strong> de ce chapitre.</p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="enregistrements"> Déclaration d'enregistrements par juxtaposition – type <code>struct</code> </h2>
+
+
+<p> En langages <strong>C</strong> et <strong>C++</strong>, la <strong class="title">déclaration</strong> d'un <strong class="specialLB">enregistrement par juxtaposition</strong> <a class="external" href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)" target="_BLANK">W</a> présente des <strong class="pros">points communs</strong> avec celle d'une <strong>énumération</strong> (cf. chap. C3‑IV <a class="previous" href="../C3-Numeration/Cc3-4_typesEnumeres.html#declaration" target="_BLANK"></a>) : </p>
+
+<ul>
+  <li> on peut procéder par <strong class="specialG">type anonyme</strong> <strong>ou</strong> <strong class="specialG">nommé</strong> ;  </li>
+
+  <li> on emploie le <strong>mot‑clef</strong> <code class="prettyprint lang-c">struct</code> selon les mêmes principes que le mot‑clef <code>enum</code> (cf. chap. C3‑IV <a class="previous" href="../C3-Numeration/Cc3-4_typesEnumeres.html" target="_BLANK"></a>). </li>
+</ul>
+
+
+
+
+<h3 id="declarationStruct"> Déclaration d'un type <code class="prettyprint lang-c">struct</code> nommé </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, la <strong class="title">déclaration</strong> d'un <strong class="specialG">type nommé</strong> d'<strong class="title">enregistrement par juxtaposition</strong> de <strong>n</strong> <strong class="specialLB">champs</strong> procède par la forme syntaxique suivante : </p>
+
+<div class="inline" style="background: white; padding-left: 0.5em; max-width: 12em">
+<code class="prettyprint lang-c">struct <span class="nocode"><strong class="specialG">nom du type</strong></span> { <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ 1</span></strong></span>; <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ 2</span></strong></span>; <br>
+  <span class="nocode">…</span> <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ n</span></strong></span>; <br>
+}; </code>
+</div><!-- inline -->
+
+<p> Il s'agit d'un <strong class="specialG">type dérivé</strong>. </p>
+
+<p> Par amalgame avec la notion de <strong>classe</strong> en programmation orientée objet, on emploie parfois le terme de <strong class="defin">membre</strong> pour désigner tout <strong class="specialLB">champ</strong> d'un type <code class="prettyprint lang-c">struct</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Sur cette forme syntaxique, on peut apporter les précisions suivantes : </p> 
+<ul>
+  <li> Le <strong class="specialG">nom du type</strong> est l'<strong class="defin">identificateur</strong> choisi par le codeur pour désigner le nouveau type structuré déclaré. </li>
+
+  <div class="nobullet"> En observance des règles de <strong class="pros">bonnes pratiques</strong> (cf. chap. C2-IX <a class="previous" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#typographie" target="_BLANK"></a>), comme pour tout nom de type défini par le codeur, on emploie une <strong>majuscule initiale</strong>. </div>
+
+  <li> Chaque <strong>déclaration de</strong> <strong class="specialLB">champ</strong> reprend la syntaxe générale d'une <strong class="defin">déclaration de variable</strong> (cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>) mais <strong>sans initialisation</strong>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Ces <strong class="specialLB">champs</strong> sont destinés à contenir des données (le plus souvent variables, mais éventuellement constantes) de <strong>types hétérogènes</strong> quels qu'ils soient, c'est‑à‑dire : </div>
+  <ul>
+    <li> <strong>élémentaires</strong> (booléens, caractères, entiers, décimaux…),  </li>
+
+    <li> <strong>dérivés</strong> (pointeurs, références, tableaux, énumérés, enregistrements…), </li>
+
+    <li> et même des <strong class="specialV">champ de bits</strong> selon une syntaxe particulière détaillée infra <a class="infra" href="Cc5-5_structuresHeterogenes.html#champsBits"></a>. </li>
+  </ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Lorsque des <strong class="title">champs consécutifs</strong> sont de <strong>types identiques</strong>, ils peuvent être <strong class="defin">codés séquentiellement</strong> (comme pour des déclarations de données – cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationSequentielle" target="_BLANK"></a>), c'est‑à‑dire de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong style="color: green">descripteur de type</strong> <strong class="specialLB">champ x</strong></span>, <span class="nocode"><strong class="specialLB">champ x+1</strong></span>, <span class="nocode"><strong>…</strong></span>; </code>
+</span> <br>
+Néanmoins, cette pratique n'est pas recommandée de façon générale car elle est réputée <strong class="cons">moins lisible</strong> que celle qui consiste usuellement à consacrer <strong class="pros">une ligne par champs</strong>. </p>
+</div><!-- remarques -->
+
+<div class="exemples" id="exempleTypeDate">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="100px" style="padding-top: 0em">  
+<p class="exemple"> Pour mémoriser des <strong class="title">dates calendaires</strong> dans un format habituel – <strong>jour</strong>, <strong>mois</strong>, <strong>année</strong> – on peut déclarer préalablement le <strong class="specialG">type structuré</strong> <code class="prettyprint lang-c">Date</code> ci‑dessous, composé de <strong class="specialLB">3 champs</strong> <code class="prettyprint lang-c">day</code>, <code class="prettyprint lang-c">month</code> et <code class="prettyprint lang-c">year</code> :  </p> 
+</div><!-- display -->
+
+<div style="width: 100%; margin-bottom: 0.5em; display: inline-flex; justify-content: space-between; align-items: flex-start; align-content: flex-start">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdint.h&gt;
+
+struct Date {
+  int8_t day;   // 1 to 31
+  int8_t month; // 1 to 12
+  int16_t year; 
+};
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <img src="../img/structDate0.png" style="max-width: 180px; padding-left: 1em;padding-top: 0.4em; flex-basis: auto;" > 
+</div><!-- display -->
+
+
+
+
+
+
+<p> Par rapport à un <em>tableau</em> de trois éléments comme <code>int16_t[3]</code>, l'emploi d'un <strong class="specialG">type structuré</strong> celui déclaré comme ci‑dessus présente <strong class="defin">deux avantages</strong> : </p>
+<ul>
+  <li> être <strong class="pros">plus économe en mémoire</strong>, puisque les espaces réservés au numéros de jour et de mois sont chacun codés avec le plus petit type élémentaire du langage (<code class="prettyprint lang-c">int8_t</code>) ; </li>
+
+  <li> donner des <strong class="pros">noms explicites</strong> aux composantes de la données, plutôt que de simples numéros d'ordre d'éléments du tableau, ce qui rendra <strong>plus lisible</strong> le codage des manipulations de ces champs. </li>
+</ul>
+
+<div class="expert">
+<p style="margin-top: 1em"><em class="remark">Remarques</em>.</p>
+
+<ol class="littered" style="margin-top: 0em">
+  <li> Tous les champs du <strong>type</strong> <code class="prettyprint lang-c">Date</code> sont déclarés dans un <strong class="title">type signé</strong> bien que les valeurs qu'ils contiennent soient a priori positives. Rappelons que ce choix est motivé par des considérations de <strong class="pros">sécurité</strong> au regard des opérations qui pourraient être codées sur ces valeurs, notamment les <strong>comparaisons</strong> (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#infsup" target="_BLANK"></a>) et les boucles de <strong>décrémentation à zéro</strong> (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#overflowFor" target="_BLANK"></a>). </li>
+
+
+  <li> La <strong class="title">taille</strong> du type structuré <code class="prettyprint lang-c">Date</code> est a priori de <strong class="pros">seulement</strong> <strong>4 octets</strong>, car les deux champs <code class="prettyprint lang-c">day</code> et <code class="prettyprint lang-c">month</code>, de type <code class="prettyprint lang-c">int8_t</code> (1 octet chacun), complètent idéalement le champ <code class="prettyprint lang-c">year</code> de type <code class="prettyprint lang-c">int16_t</code> (2 octets) pour former un mot mémoire de 4 octets complet sur une architecture à 32 bits. </li>
+
+  <li> Le <strong>champ</strong> <code class="prettyprint lang-c">year</code> ne peut <strong class="warning">pas</strong> être encodé sur seulement <strong>8 bits</strong> puisque les valeurs d'années dépassent 255. On choisit donc le <strong>type</strong> <code class="prettyprint lang-c">int16_t</code> qui encode des valeurs jusqu'à 32&#x202F;767, ce qui est largement suffisant. </li>
+
+  <li> Pour illustrer la remarque générale supra, puisque les deux champs consécutifs <code class="prettyprint lang-c">day</code> et <code class="prettyprint lang-c">month</code> sont de <strong>même type</strong>, on aurait pu opter pour une <strong class="title">déclaration séquentielle</strong> comme ci‑dessous (ligne nº 4) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:3">
+struct Date {
+  int8_t day, month; 
+  int16_t year; 
+};
+</pre>
+<!---------- ne pas indenter ---------->
+</ol>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<div class="expert">
+<h4> Déclaration via le mot‑clef <code class="prettyprint lang-c">typedef</code> </h4>
+
+
+<div class="complement">
+<p> Comme pour un type énuméré (cf. chap. C3‑IV <a class="previous" href="../C3-Numeration/Cc3-4_typesEnumeres.html#typedef" target="_BLANK"></a>), même si une déclaration de type <code class="prettyprint lang-c">struct</code> n'est pas anonyme, il est <strong class="pros">préférable</strong> de le déclarer comme un <strong class="title">type synonyme</strong>, c'est‑à‑dire via le <strong>mot‑clef</strong> <code class="prettyprint lang-c">typedef</code>, avec la forme syntaxique : </p>
+<div class="inline" style="background: white; padding-left: 0.5em; max-width: 12em">
+<code class="prettyprint lang-c">typedef struct { <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ 1</span></strong></span>; <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ 2</span></strong></span>; <br>
+  <span class="nocode">…</span> <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ n</span></strong></span>; <br>
+} <span class="nocode"><strong class="specialG">nom du type</strong></span>; </code>
+</div><!-- inline -->  
+<p> où le <strong class="specialG">nom du type</strong></span> est codé <strong class="warning">à la fin</strong> de la déclaration (et non pas après le mot‑clef <code class="prettyprint lang-c">struct</code>) pour obtenir respectivement la taille et la contrainte d'alignement du type déclaré. </p>
+</div><!-- complement -->
+
+<p> En effet, seule cette forme permet par la suite d'appliquer les opérateurs <code class="prettyprint lang-c">sizeof</code> et <code class="prettyprint lang-c">_Alignof</code> (<code class="prettyprint lang-c">alignof</code> en <strong>C++</strong>) à l'identificateur du type <code class="prettyprint lang-c">struct</code> déclaré. </p>
+
+
+<!-- expert -->
+<h4 id="attributionAdresses"> Stockage en mémoire – contraintes d'alignement</h4>
+
+
+<div class="complement">
+<p> Dans la plupart des implémentations, les valeurs des champs d'une donnée déclarée de type <code class="prettyprint lang-c">struct</code> seront <strong class="title">stockées en mémoire</strong> <strong>les unes à la suite des autres</strong> <strong class="defin">dans l'ordre de la déclaration des champs</strong>. </p>
+
+<p> L'<strong class="title">opérateur d'adresse</strong> <code class="prettyprint lang-c">&</code> peut s'appliquer aux identificateurs de champs d'une donnée déclarée de type <code class="prettyprint lang-c">struct</code> – <strong class="warning">sauf</strong> pour les <strong class="specialV">champs de bits</strong>. </p>
+</div><!-- complement -->
+
+
+<p> Néanmoins, comme pour des données de types élémentaires, des <strong class="warning">contraintes d'alignement</strong> peuvent exister, selon le compilateur employé et l'architecture de la machine cible (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#contraintesAlignement" target="_BLANK"></a>). Pour y satisfaire, des <strong class="defin">octets intercalaires</strong> (<em class="english">padding bytes</em>) sont très souvent <strong>insérés entre les champs</strong> par le compilateur et alors, la taille du type est supérieure à la somme de celles de ses champs. </p>
+
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="100px" style="padding-top: 0em">  
+<p class="exemple"> Reprenons le cas du <strong class="specialG">type structuré synonyme</strong> <code class="prettyprint lang-c">Date</code> déclaré à l'exemple précédent (cf. supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#exempleTypeDate"></a>). </p>
+
+<p> On va observer la <strong class="title">taille</strong> en mémoire de ce type en fonction de l'<strong>ordre de déclaration</strong> de ses champs. On fait l'hypothèse d'une  machine cible à <strong>architecture 32 ou 64 bits</strong> et d'un compilateur de la famille <strong><strong>GCC</strong></strong> – typiquement, c'est ce qu'on a avec <strong class="OnlineGDB">OnlineGDB</strong>. </p>
+</div><!-- display -->
+
+<ol class="numbered">
+  <li> Avec le code ci‑dessous , on obtient bien une taille de <strong>4 octets</strong>, avec un stockage en mémoire schématisé par la figure à droite. </li>
+
+  <div style="width: 100%; display: inline-flex; justify-content: space-between; align-items: flex-start; align-content: flex-start">
+  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1" style="max-width: 70%; flex-basis: auto;" >
+#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+
+typedef struct {
+  int8_t day;   // 1 to 31
+  int8_t month; // 1 to 12
+  int16_t year; 
+} Date;  
+
+int main() {
+  printf("%zu\n", sizeof(Date));
+}     
+</pre>
+<!---------- ne pas indenter ---------->
+  <img src="../img/structDate1.png" style="max-width: 200px; padding-left: 1em;padding-top: 0.4em; flex-basis: auto;" > 
+  </div><!-- display -->
+
+
+  <li> Mais en remplaçant la déclaration ci‑dessus par les lignes ci‑dessous – codées dans un <strong class="warning">ordre inadéquat</strong> pour les besoins de la démonstration – on obtient alors une taille de <strong>6 octets</strong>, avec <strong class="cons">deux octets intercalaires</strong> (<em class="english">padding bytes</em>) comme illustré sur la figure à droite : </li>
+
+  <div style="width: 100%; display: inline-flex; justify-content: space-between; align-items: flex-start; align-content: flex-start">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4" style="max-width: 70%; flex-basis: auto;" >
+typedef struct {
+  int8_t day;   // 1 to 31
+  int16_t year; // misplaced!
+  int8_t month; // 1 to 12
+} Date;      
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <img src="../img/structDate2.png" style="max-width: 200px; padding-left: 1em;padding-top: 0.4em; flex-basis: auto;" > 
+  </div><!-- display -->
+</ol>
+<p> En revanche, dans un programme pour <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>, le type <code class="prettyprint lang-c">Date</code> garderait la <strong class="defin">même taille</strong> de <strong>4 octets</strong> quel que soit l'ordre de déclaration de ses champs, puisqu'il n'y a <strong class="pros">aucune contrainte d'alignement</strong> sur une architecture à <strong>8 bits</strong>. </p>
+</div><!-- exemple -->
+
+
+<!-- expert -->
+<h4> Complexité potentielle des types structurés </h4>
+
+
+<p>  En langages <strong>C</strong> et <strong>C++</strong>, par <strong class="defin">composition</strong> de <strong>types dérivés</strong>, on peut construire des <strong class="title">types très complexes</strong> : des structures de structures, de tableaux, etc. y compris des <strong class="specialO">structures récursives</strong> comme les <em>listes chaînées</em>, par le biais de pointeurs (un champ pointant sur une structure de même type). </p>
+
+<p> Comme presque toujours, il n'existe dans la norme <strong class="title">pas de limites</strong> (mais seulement des minima) – ni de complexité, ni de taille – dans la construction d'un type <code class="prettyprint lang-c">struct</code>. Mais bien entendu, ces aspects dépendent de l'implémentation, et on est forcément limité par la capacité mémoire de la machine cible (cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#size_t" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+
+
+
+<h3> Déclaration d'une donnée d'un type <code class="prettyprint lang-c">struct</code> déclaré </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C</strong>, la <strong class="title">déclaration d'une donnée</strong> – constante ou variable – d'un type structuré d'<strong class="specialLB">enregistrement par juxtaposition</strong> préalablement déclaré (mais pas en synonyme) procède selon la forme syntaxique : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode" style="color : gray; font-style: normal;">[</span>const<span class="nocode" style="color : gray; font-style: normal;">]</span> struct
+  <span class="nocode"><strong class="specialG">nom du type</strong></span>
+  <span class="nocode"><strong class="specialN">identificateur</strong></span>
+  <span class="nocode" style="color : gray; font-style: normal;">[</span> = {<span class="nocode"><strong class="specialLG">liste d'expressions</strong></span>}
+  <span class="nocode" style="color : gray; font-style: normal;">]</span> ; </code>
+</span></p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Sur cette forme syntaxique, on peut apporter les précisions suivantes : </p>
+<ul>
+  <li> L'éventuel modificateur <code class="prettyprint lang-c">const</code> code le fait qu'il s'agit d'une <strong>constante</strong> (comme pour toute déclaration de donnée). </li>
+
+  <li> Le <strong>mot‑clef</strong> <code class="prettyprint lang-c">struct</code> doit être <strong class="warning">obligatoirement rappelé</strong> – alors qu'il est <strong class="defin">facultatif</strong> en <strong class="title">C++</strong> (comme le mot‑clef <code>enum</code> avec un type énuméré – cf. chap. C3‑IV <a class="previous" href="../C3-Numeration/Cc3-4_typesEnumeres.html#declarationDonnee" target="_BLANK"></a>). </li>
+
+  <div class="expert">
+  <div class="nobullet"> <em class="remark">Mais attention</em>, le <strong>mot‑clef</strong> <code class="prettyprint lang-c">struct</code> doit être <strong class="warning">omis</strong> dans la déclaration d'une donnée structurée si son type a été déclaré comme <strong class="specialG">synonyme</strong> via le mot‑clef <code class="prettyprint lang-c">typedef</code>. </div>
+  </div><!-- expert -->
+
+  <li> Le <strong class="specialG">nom du type</strong> est un identificateur de type <code class="prettyprint lang-c">struct</code> <strong>déjà déclaré</strong>. </li>
+
+  <li> L'<strong class="specialN">identificateur</strong> est le nom de la variable ici déclarée.  </li>
+
+  <li> La <strong class="specialLG">liste d'expressions</strong> (optionnelle ou partielle s'il s'agit d'une variable) code les <strong class="defin">valeurs initiales</strong> des <strong class="specialLB">champs</strong> de la donnée, dans l'ordre de leurs déclarations respectives dans le type.  </li>
+  
+  <div class="expert">
+  <div class="nobullet"> En langage <strong>C</strong> et si la donnée est de <strong class="specialO">classe statique</strong>, comme pour une donnée scalaire, les expressions d'initialisation doivent être des <strong class="defin">expressions constantes</strong> – cf. chap. C2‑III <a class="previous" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>. </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples" id="exemplesDate">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="100px" style="padding-top: 0em">  
+<p class="exemple"> Après la déclaration du <strong class="specialG">type structuré</strong> <code class="prettyprint lang">Date</code> (non synonyme) de l'exemple initial <a class="supra" href="Cc5-5_structuresHeterogenes.html#exempleTypeDate"></a>, on peut coder la <strong class="title">déclaration de diverses données</strong> de ce type, comme les trois dates proposées dans le code ci‑dessous : </p>
+
+</div><!-- display -->
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+const struct Date productionDate = {27, 3, 2019};  
+struct       Date lastCheckDate  = {15, 9, 2019};         
+struct       Date nextCheckDate  = {15, 3, 2020};         
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> On aurait aussi pu <strong>coder de façon séquentielle</strong> la déclaration des deux variables <code class="prettyprint lang-c">lastCheckDate</code> et <code class="prettyprint lang-c">nextCheckDate</code>, comme ci‑dessous (lignes nº 11 & 12) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+const struct Date productionDate = {27, 3, 2019};  
+struct       Date lastCheckDate  = {15, 9, 2019},         
+                  nextCheckDate  = {15, 3, 2020};         
+</pre>
+</div><!-- expert -->
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->  
+
+
+<div class="remarques">
+<p class="remarques"> Comme pour un type énuméré, on peut adopter d'<strong class="title">autres formes</strong> de <strong>déclaration</strong>. </p>
+
+<ol class="littered">
+  <li> On peut <strong class="specialLB">enchaîner</strong> la déclaration d'une donnée à la suite de celle de son type dans la même instruction, comme dans l'exemple ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+struct Date {
+  int8_t day;   // 1 to 31
+  int8_t month; // 1 to 12
+  int16_t year; 
+} const productionDate = {27, 3, 2019};                
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> On peut également procéder par <strong class="specialLB">typage anonyme</strong>, c'est‑à‑dire <strong>en omettant le nom du type</strong> après le mot‑clef <code class="prettyprint lang-c">struct</code> comme dans l'exemple ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+struct {
+  int8_t day;   // 1 to 31
+  int8_t month; // 1 to 12
+  int16_t year; 
+} const productionDate = {27, 3, 2019};                
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Toutefois, cette façon de coder n'est <strong class="cons">pas recommandée</strong>, en particulier parce qu'elle ne permet pas de déclarer d'autres données du même type ailleurs dans le programme. </div>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h4 id="initialisationSequentielle"> Initialisation séquentielle des champs d'une donnée de type <code class="prettyprint lang-c">struct</code> </h4>
+
+
+<div class="complement">
+<p> Comme pour une variable de type <em>tableau</em> (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#initialisationTableau" target="_BLANK"></a>), on peut coder l'<strong class="title">initialisation séquentielle</strong> des <strong>champs</strong> d'une donnée de type <code class="prettyprint lang-c">struct</code> sous la forme d'une <strong class="specialLB">liste d'expressions</strong> évaluables. Toutefois : </p>
+
+<ul>
+  <li> cela est possible <strong cladefin>seulement dans le cadre d'une déclaration</strong> ; en effet, même si on peut coder des affectations globales sur des données de type <code class="prettyprint lang-c">struct</code> (contrairement aux données de type <em>tableau</em>), on ne peut pas former des « constantes littérales » d'un tel type ;  </li>
+
+  <li> l'initialisation peut être <strong class="defin">partielle</strong> – dans ce cas, les champs non initialisés prennent la <strong>valeur</strong> <code class="prettyprint lang-c">0</code> <strong>par défaut</strong> si <strong class="pros">au moins un</strong> champ est initialisé. </li>
+</ul>
+</div><!-- complement -->
+
+<p> Et en l'<strong class="title">absence totale d'initialisation</strong>, comme pour toute variable déclarée, les champs prennent une <strong>valeur par défaut</strong> en fonction de la <strong class="defin">classe d'allocation</strong> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeAllocation" target="_BLANK"></a>) : </p>
+
+<ul>
+  <li> la valeur <strong>nulle</strong> pour une variable de <strong class="specialO">classe statique</strong>, </li>
+
+  <li> une valeur <strong>indéterminée</strong> (a priori différente à chaque champ) pour une variable de <strong class="specialO">classe automatique</strong>. </li>
+</ul>
+
+<p> Il est donc préférable de procéder à leur <strong class="pros">initialisation complète</strong> autant que possible. </p>
+
+<div class="expert">
+<p> On verra par la suite qu'il existe aussi une <strong class="title">syntaxe alternative</strong> pour initialiser les valeurs des champs d'une variable de type <code class="prettyprint lang-c">struct</code> de façon <strong class="defin">sélective</strong> et dans un ordre quelconque, en utilisant les identificateurs des champs <a class="infra" href="Cc5-5_structuresHeterogenes.html#initialisationSelective"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="champsBits"> Déclaration de champs de bits </h3>
+
+
+
+<div class="important">
+<p> Dans un <strong class="specialG">type</strong> <code class="prettyprint lang-c">struct</code>, un <strong class="title">champ de bits</strong> est un champ dont la <strong>taille mémoire</strong> est définie <strong class="pros">au bit près</strong>. Un tel champ se déclare via la forme syntaxique suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialG">descripteur de type entier</strong>  <strong class="specialN">nom du champ</strong></span> : 
+  <span class="nocode"><strong class="specialLB">largeur du champ</strong></span>;</code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Sur cette forme syntaxique, on peut apporter les précisions suivantes. </p> 
+<ul>
+  <li> Le <strong class="specialG">descripteur de type entier</strong> définit la <strong class="specialMg">largeur enveloppe</strong> et le <strong class="specialV">format d'encodage</strong> (signé ou non) dans lesquels sont encodées les <strong>valeurs</strong> du champ (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#formatEncodage" target="_BLANK"></a>). </li>
+
+  <div class="nobullet"> Ce descripteur doit correspondre à un type ayant une <strong>largeur</strong> <strong class="pros">au moins aussi grande</strong> que celle du champ, définie par l'<strong>expression entière</strong> (cf. ci‑dessous). </div>
+  
+  <li> Le <strong class="specialN">nom du champ</strong> est l'<strong class="defin">identificateur</strong> désignant le champ (comme pour tout autre champ). </li>
+
+  <li> La <strong class="specialLB">largeur du champ</strong> code la <strong class="warning">valeur strictement positive</strong> du <strong class="defin">nombre de bits</strong> du champ. Elle doit être :   </li>
+  <ul>
+    <li> en langage <strong>C</strong>, une <strong class="defin">expression constante entière</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstanteEntiere" target="_BLANK"></a>) ; </li>
+
+    <li> en langage <strong>C++</strong>, une <strong class="defin">expression constante</strong> (cf. chap. C2‑II <a class="previous" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressionConstante" target="_BLANK"></a>) de <strong class="specialG">type entier</strong>. </li>
+  </ul>
+  
+  <div class="expert">
+  <div class="nobullet"> À ce sujet, cf. la remarque faite au chap. C2‑V <a class="previous" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#remarqueExpressionConstante" target="_BLANK"></a>. </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Par principe, <strong>tout</strong> <strong class="title">champ de bit</strong> est réputé <strong class="warning">sans adresse</strong>, car il peut commencer en « milieu » d'octet. Toute expression dans laquelle l'<strong>opérateur d'adresse</strong> <code class="prettyprint lang-c">&</code> est appliqué à un champ de bit est donc <strong class="warning">rejetée</strong> par le compilateur. </p>
+
+<p> De même, les <strong>opérateurs</strong> <code class="prettyprint lang-c">sizeof</code> et <code class="prettyprint lang-c">_Alignof</code> (<code class="prettyprint lang-c">alignof</code> en <strong>C++</strong>) ne sont <strong class="warning">pas applicables</strong> à un <strong class="title">champ de bits</strong>. </p>
+</div><!-- expert -->
+
+
+<div class="remarques">
+<p class="remarque"> L'emploi des <strong class="title">champs de bits</strong> peut poser des <strong class="warning">problèmes de portabilité</strong>, l'encodage des valeurs des champs étant susceptible de varier d'une implémentation à une autre – en particulier l'<strong>ordre des bits</strong>, qui peut procéder en convention <em class="english">big endian</em> ou <em class="english">little endian</em> (cf. chap. C3‑IX <a class="previous" href="../C3-Numeration/Cc3-9_typesCaracteresEtendus.html#boutisme" target="_BLANK"></a>). Mais <strong class="defin">en règle générale</strong> : </p>
+
+<ul>
+  <li> la <strong>taille maximale</strong> d'un champ est celle du <strong class="specialG">type</strong> <code class="prettyprint lang-c">long long</code>, c'est‑à‑dire 64 bits ; </li>
+
+  <li> le <strong>format d'encodage</strong> des valeurs d'un champ dans ses bits est le même que celui des <strong class="specialG">types entiers</strong> – c'est‑à‑dire, quelle que soit l'implémentation, le <em>binaire naturel</em> pour les champs non signés et le <em>complément à deux</em> pour les champs signés (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#formatEncodage" target="_BLANK"></a>) ;  </li>
+
+  <li> lorsqu'un <strong>champ de 1 bit</strong> est déclaré de <strong>type</strong> <strong class="specialG">signé</strong>, ses deux seules valeurs possibles sont <code class="prettyprint lang-c">0</code> et <code  class="prettyprint lang-c">-1</code> ! </li>
+</ul>
+</div><!-- remarques -->
+
+
+<div class="exemples" id="exempleSignal">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/buttonSignal.png" width="350px" style="padding-top: 0em">  
+<p class="exemple"> Au chapitre C4‑V <a class="previous" href="../C4-Fonctions/Cc4-5_programmationMultifichiers.html#DigitalSignals" target="_BLANK"></a>, pour <strong class="title">gérer les signaux logiques</strong> reçus en entrée (boutons‑poussoirs, capteurs <em class="sigle">TOR</em>, etc.) sur les broches du port numérique d'une <strong class="Arduino">carte  Arduino</strong> – notamment, pour actualiser les valeurs des niveaux logiques, détecter les fronts montants et descendants, etc. – on a codé un module de bibliothèque. Dans son fichier d'en‑tête <code class="filename">LogicalSignals.h</code>, on a déclaré le <strong class="specialG">type structuré</strong> <code class="prettyprint lang-c">LogicalSignal</code> :   </p>
+</div><!-- display -->
+
+<div style="width: 100%; margin-bottom: 0.5em; display: inline-flex; justify-content: space-between; align-items: flex-start; align-content: flex-start">
+  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:3" style="max-width: 70%; flex-basis: auto;" >
+typedef struct {
+  uint8_t pin; // pin number on the board
+  byte levels; // only bit 0 and 1 used
+} LogicalSignal;    
+</pre>
+<!---------- ne pas indenter ---------->
+  <img src="../img/structSignal1.png" style="max-width: 200px; padding-left: 1em;padding-top: 0.4em; flex-basis: auto;" > 
+</div><!-- display -->
+
+<p> Ce type est composé des <strong class="specialLB">2 champs</strong> occupant 1 octet chacun, soit au total <strong>2 octets</strong> : </p>
+
+<ul>
+  <li> le <strong>champ</strong> <code class="prettyprint lang-c">pin</code> code le numéro de broche de la carte sur laquelle les signaux logiques sont reçus ; </li>
+  
+  <div style="display: inline-block;">
+   <img class="top-right" src="../img/structSignal1b.png" width="300px">
+  <div class="nobullet"> or, même pour une <strong>carte</strong> <strong class="Arduino">Arduino Mega</strong>, on n'a que 54 broches d'entrées-sorties numériques, donc le champ <code class="prettyprint lang-c">pin</code> ne requiert en fait que <strong>6 bits</strong> (2<sup>6</sup> = 64 numéros codables) ; </div>
+
+  <li> quant au <strong>champ</strong> <code class="prettyprint lang-c">levels</code>, il code sur ses <strong>bits</strong> de <strong>rangs</strong> <code>0</code> et <code>1</code> les niveaux logiques respectivement <strong>actuel</strong> et <strong>précédent</strong> lus sur la broche ; les autres bits sont <strong class="cons">inusités</strong>. </li>
+  </div><!-- display -->
+</ul>
+
+
+
+<p class="square"> En utilisant des <strong class="title">champs de bits</strong> comme ci‑dessous, on peut donc réduire à <strong class="pros">1 seul octet</strong> la taille occupée en mémoire par les données de ce type : </p>
+
+<div style="width: 100%; margin-bottom: 0.5em; display: inline-flex; justify-content: space-between; align-items: flex-start; align-content: flex-start">
+  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:3" style="max-width: 70%; flex-basis: auto;" >
+typedef struct {
+  uint8_t pin : 6;
+  uint8_t currentLevel  : 1;
+  uint8_t previousLevel : 1;
+} LogicalSignal;    
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <img src="../img/structSignal2.png" style="max-width: 220px; padding-left: 1em;padding-top: 0.4em; flex-basis: auto;" > 
+</div><!-- display -->
+
+<div class="expert">
+<p> Par ailleurs, cette solution apporte un <strong class="pros">surcroît de lisibilité</strong> pour les champs dédiés à l'enregistrement des niveaux logiques, car ils ont maintenant des <strong class="pros">noms explicites</strong>, contrairement à de simples rangs de bits. On
+verra infra que le codage des fonctions comme <code class="prettyprint lang-c">updateSignal</code> ou <code class="prettyprint lang-c">risingEdge</code> prennent des formes très usuelles (similaires à celles présentées au chap. C2‑VIII <a class="previous" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html" target="_BLANK"></a>, plus intuitive qu'avec l'emploi d'opérations bit‑à‑bit <a class="infra" href="Cc5-5_structuresHeterogenes.html#transmissionReference"></a>). </p> 
+
+<p style="margin-top: 1em"> <em class="remark">Remarque</em>. Il est ici indispensable <strong class="pros">dimensionner au plus juste</strong> les <strong class="title">champs</strong> du type <code class="prettyprint lang-c">LogicalSignal</code>. En effet, si tel n'était pas le cas, cela <strong class="warning">impacterait</strong> la <strong>taille</strong> et la <strong>contrainte d'alignement</strong> sur une machine à architecture <strong>32 bits</strong>. </p>
+
+<p> Par exemple, sur une <strong>carte</strong> <strong class="Arduino">Arduino Due,</strong> en codant ces champs de type <code class="prettyprint lang-c">unsigned</code> (donc implicitement <code class="prettyprint lang-c">int</code>), on aurait une taille et une contrainte d'alignement de <strong class="cons">4 octets</strong>, ce qui ôterait presque tout intérêt au recours à une structure à champs de bits. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4 id="champsBitsVacants"> Intercalage de champs de bits de rembourrage </h4>
+
+
+<p> Comme on l'a vu supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#declarationStruct"></a>, la <strong class="title">taille mémoire</strong> requise pour une donnée déclarée de type <code class="prettyprint lang-c">struct</code> dépend de l'<strong>implémentation</strong>, avec d'éventuelles <strong class="warning">contraintes d'alignement</strong>. </p>
+
+<div class="complement">
+<p> Néanmoins, en tenant compte de ces contraintes, on peut <strong class="pros">optimiser la répartition des champs</strong> sur les octets alloués par le compilateur. En particulier, on peut éviter que les valeurs de <strong>deux champs consécutifs</strong> soient <strong class="cons">à cheval sur un même octet</strong> en insérant entre eux un <strong class="title">champ anonyme</strong> de <strong class="title">bits de rembourrage</strong> (en anglais, <em class="english">bit stuffing field</em>). </p>
+
+<p> On peut ajouter <strong class="pros">autant</strong> de champs de rembourrage <strong class="pros">que nécessaire</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exempleFoobar">
+<p class="exemple"> Considérons de façon académique le <strong class="specialLB">type structuré</strong> <code class="prettyprint lang-c">FooBar</code> <a class="external" href="https://fr.wikipedia.org/wiki/Variable_métasyntaxique#En_anglais" target="_BLANK">W</a> constitué de <strong class="title">deux champs de 12 bits</strong> <code class="prettyprint lang-c">foo</code> et <code class="prettyprint lang-c">bar</code>, chacun de type <code class="prettyprint lang-c">unsigned</code>. </p>
+
+<p> Ces deux champs totalisent <strong>24 bits</strong> (soit seulement 3 octets), mais sur un PC à architecture 32 ou 64 bits, la taille du type <code class="prettyprint lang-c">FooBar</code> sera de <strong>4 octets</strong> (soit 32 bits). On peut le vérifier en exécutant sur <strong class="OnlineGDB">OnlineGDB</strong> le programme ci‑dessous. Ce dernier utilise une fonction <code class="prettyprint lang-c">scanByte</code> qui met en œuvre un pointeur incrémental <code class="prettyprint lang-c">p</code> de type <code class="prettyprint lang-c">byte *</code> pour scanner octet par octet l'espace mémoire alloué à une variable. Elle est appelée à la ligne nº 22.</p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+ 
+typedef struct {
+  unsigned foo : 12;
+  unsigned bar : 12;
+} FooBar;
+
+/* utilities to scan memory */
+typedef unsigned char byte;
+
+void scanBytes(byte * startByte, size_t nbOfBytes) {
+  for (byte * p = startByte; p < startByte + nbOfBytes; p++) {
+    printf ("%p %02X\n", p, *p);
+  }
+}
+
+int main(void) {
+  FooBar fooBar = {0xCBA, 0xFED};
+  printf("size: %zu bytes, \t align: %zu bytes\n", 
+          sizeof(fooBar), _Alignof(fooBar));
+  scanBytes((byte*) &fooBar, sizeof(fooBar));
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<div style="width: 100%; margin-bottom: 0.5em; display: inline-flex; justify-content: space-between; align-items: flex-start; align-content: flex-start">
+
+<div>
+<p> On obtient une sortie typiquement comme (les adresses changent d'une exécution à l'autre) : </p>
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+size: 4 bytes,   align: 4 bytes
+0x7ffcb4569714 BA
+0x7ffcb4569715 DC
+0x7ffcb4569716 FE
+0x7ffcb4569717 00
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où l'on voit que les valeurs des champs <code class="prettyprint lang-c">foo</code> et <code class="prettyprint lang-c">bar</code> (respectivement <code>0xCBA</code> et <code>0xFED</code>) sont <strong class="cons">à cheval</strong> sur <strong>le 2<sup>e</sup> octet</strong> alloué à la donnée <code>fooBar</code>. </p>
+</div>
+
+  <img src="../img/structFooBar1.png" style="max-width: 250px; padding-left: 1em;padding-top: 0.4em; flex-basis: auto;" > 
+</div><!-- display -->
+
+
+<p> Quant au <strong>4<sup>e</sup> octet</strong>, il est <strong class="cons">laissé vacant</strong> pour satisfaire à la contrainte d'alignement imposée par l'architecture de la machine cible. Il constitue encore une fois ce qu'on appelle un <strong class="defin">octet intercalaire</strong> (<em class="english">padding byte</em> – cf. chap. C3‑I <a class="previous" href="../C3-Numeration/Cc3-1_typesGeneralites.html#contraintesAlignement" target="_BLANK"></a>). </p>
+
+
+<p class="square"> Pour <strong class="pros">optimiser l'usage de l'espace mémoire</strong> alloué à <code class="prettyprint lang-c">fooBar</code>, on peut insérer dans la déclaration du type <code class="prettyprint lang-c">FooBar</code> un <strong class="title">champ supplémentaire</strong> de <strong class="specialM">4 bits de rembourrage</strong> entre les deux champs <code class="prettyprint lang-c">foo</code> et <code class="prettyprint lang-c">bar</code>, avec la déclaration ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:4">
+typedef struct {
+  unsigned foo : 12;
+  unsigned     :  4; // bit stuffing
+  unsigned bar : 12;
+} FooBar;
+</pre>
+<!---------- ne pas indenter ---------->
+ 
+<div style="width: 100%; margin-bottom: 0.5em; display: inline-flex; justify-content: space-between; align-items: flex-start; align-content: flex-start">
+
+<div>
+<p> On obtient alors une sortie typiquement comme :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+size: 4 bytes,   align: 4 bytes
+0x7ffd07036b84 BA
+0x7ffd07036b85 0C
+0x7ffd07036b86 ED
+0x7ffd07036b87 0F
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où l'on voit que les valeurs des champs <code class="prettyprint lang-c">foo</code> et <code class="prettyprint lang-c">bar</code> ne sont plus à cheval sur <strong>le 2<sup>e</sup> octet</strong>, grâce aux <strong class="specialM">4 bits de rembourrage</strong>.  </p> 
+</div>
+
+  <img src="../img/structFooBar2.png" style="max-width: 250px; padding-left: 1em;padding-top: 0.4em; flex-basis: auto;" >
+
+</div><!-- display -->
+
+<p> Par rapport à la déclaration initiale du type <code class="prettyprint lang-c">FooBar</code>, cette deuxième solution présente l'<strong class="pros">avantage</strong> de permettre un <strong>accès aux valeurs des champs</strong> <strong class="defin">par pointeurs</strong> – ce qui, dans le cas général, n'est pas possible pour des champs de bits. Cette possibilité vient du fait que maintenant, les champs sont indexés sur des <strong>octets distincts</strong>. On peut donc accéder à ces champs via un pointeur correctement dimensionné, comme dans le programme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct {
+  unsigned foo : 12;
+  unsigned     :  4; // bit stuffing
+  unsigned bar : 12;
+} FooBar;
+ 
+/* utilities to scan memory */
+typedef unsigned short word16_t;
+
+void scanWord16(word16_t * startWord, size_t nbOfWords) {
+  for (word16_t * p = startWord; p < startWord + nbOfWords; p++) {
+    printf ("%p %04X\n", p, *p);
+  }
+}  
+
+int main (void) {
+  FooBar fooBar = {0xCBA, 0xFED};
+  scanWord16((word16_t*) &fooBar, 2);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> qui produit une sortie typiquement comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0x7ffcfa67e2d4 0CBA
+0x7ffcfa67e2d6 0FED
+</pre> 
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarques"> On aurait obtenu la même <strong class="pros">répartition optimisée</strong> des champs <code class="prettyprint lang-c">foo</code> et <code class="prettyprint lang-c">bar</code> sur l'espace mémoire alloué à la donnée <code class="prettyprint lang-c">fooBar</code> en choisissant mieux le <strong class="specialV">type enveloppe</strong> des <strong>champs</strong>. En effet, sur une architecture à 32 ou 64 bits, le type <code class="prettyprint lang-c">unsigned</code> est encodé sur <strong>32 bits</strong>, ce qui est <strong class="cons">surdimensionné</strong> pour des champs de <strong>12 bits</strong>. Il est préférable de choisir le type <code class="prettyprint lang-c">unsigned short</code>, qui est encodé sur <strong>16 bits</strong>, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+typedef struct {
+  unsigned short foo : 12;
+  unsigned short bar : 12;
+} FooBar;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> De plus, cette solution présente l'avantage de conférer au type <code class="prettyprint lang-c">FooBar</code> une <strong>contrainte d'alignement</strong> de <strong class="pros">seulement 2 octets</strong>. </p>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Identification des données de type <code>struct</code>  </h2>
+
+
+
+<h3 id="identificationValeur"> Identification de la valeur d'une donnée de type <code  class="prettyprint lang-c">struct</code> </h3>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, la <strong class="title">valeur « globale »</strong> d'une donnée déclarée de type <code class="prettyprint lang-c">struct</code> est <strong class="pros">directement accessible</strong> par son <strong class="specialN">identificateur</strong>. </p>
+
+<p> Dans le code source d'un programme, un tel identificateur a le statut d'une <strong class="specialM">l‑value</strong> : il est donc <strong class="pros">possible</strong> d'opérer sur lui une <strong class="defin">affectation</strong> – cf. infra <a class="infra" href="Cc5-5_structuresHeterogenes.html#affectationStruct"></a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cette possibilité constitue un <strong class="pros">avantage notable</strong> par rapport aux données de type <em>tableau</em> dont les identificateurs sont, rappelons‑le, presque toujours convertis en pointeurs (cf. chap. C5‑III <a class="previous" href="Cc5-3_tableauxDeclarations.html#decayArray" target="_BLANK"></a>). En particulier, cela autorise aussi le <strong class="defin">passage d'argument</strong> ou le <strong class="defin">retour de valeur</strong> d'une <strong class="defin">fonction</strong> de <strong>données déclarées</strong> de types <code class="prettyprint lang-c">struct</code>. </p>  
+
+<p> En revanche, comme pour les tableaux, il n'est <strong class="warning">pas possible</strong> : </p>
+<ul>
+  <li> de former des <strong>constantes littérales</strong> de types <code class="prettyprint lang-c">struct</code> ; </li>
+
+  <li> de coder des <strong>opérations élémentaires</strong> (addition, etc.) sur de telles valeurs, tout simplement parce que ces opérations ne peuvent pas être définies dans un cas général. </li>
+</ul>
+
+<p> Pour <strong class="title">manipuler</strong> les données de types <code class="prettyprint lang-c">struct</code>, il est donc nécessaire de passer par leurs <strong class="specialLB">champs</strong>, donc de pouvoir identifier ces derniers.  </p>
+</div><!-- complement -->
+
+
+<h4 id="accessOperator"> Identification des valeurs des champs d'une donnée de type <code class="prettyprint lang-c">struct</code> </h4>
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, on accède à la <strong class="defin">valeur d'un champ</strong> d'une donnée déclarée de type <code class="prettyprint lang-c">struct</code> en concaténant l'<strong class="specialN">identificateur de la donnée</strong> et l'<strong class="specialLB">identificateur du champ</strong> avec l'<strong class="title">opérateur de sélection</strong> ou d'<strong class="title">accès</strong> (en anglais, <em class="english">member access operator</em>). Cet opérateur est codé par le symbole <code class="prettyprint lang-c">.</code> <a class="external" href="https://en.cppreference.com/w/c/language/operator_member_access" target="_BLANK">C</a>. </p>
+
+<p> La forme syntaxique de l'<strong class="title">expression d'identification</strong> du champ d'une donnée de type <code class="prettyprint lang-c">struct</code> est donc la suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialN">identificateur de la donnée</strong></span>.<span class="nocode"><strong class="specialLB">identificateur du champ</strong></span></code>
+</span> </p>
+<p> Une telle expression forme une <strong class="specialM">l‑value</strong> si le type du champ le permet – et donc en particulier, <strong class="warning">pas</strong> s'il s'agit d'un <strong>tableau</strong>. Lorsqu'un <strong class="specialLB">champ</strong> est de <strong>type élémentaire</strong>, il est donc <strong class="pros">manipulable comme n'importe quelle donnée</strong> de ce type via son expression d'identification. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans le tableau de classification des opérateurs du langage <strong>C</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>), l'<strong class="title">opérateur de sélection</strong> <code class="prettyprint lang-c">.</code> possède : </p>
+<ul>
+  <li> le <strong class="defin">rang 1</strong> de <strong>priorité</strong>, </li>
+
+  <li>  le sens d'associativité de <strong class="defin">gauche à droite</strong>. </li>
+</ul>
+
+<p> Ces aspects sont essentiels pour comprendre et coder correctement des <strong>expressions</strong> où l'<strong class="title">opérateur de sélection</strong> est <strong>composé</strong> : </p>
+
+<ul>
+  <li> avec <strong>lui‑même</strong>, si le champ d'une donnée de type <code class="prettyprint lang-c">struct</code> est lui‑même d'un type d'<em>enregistrement structuré</em> ; </li>
+
+  <li> avec l'<strong>opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code> si le champ d'une donnée est de type <em>tableau</em> ;  </li>
+
+  <li> avec l'<strong>opérateur de déréférencement</strong> <code class="prettyprint lang-c">*</code> si le champ d'une donnée est un <em>pointeur</em>, etc. </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="70px" style="padding-top: 0em"> 
+<p class="exemple"> Considérons la <strong class="title">donnée</strong> <code class="prettyprint lang-c">productionDate</code> déclarée supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#exemplesDate"></a> de <strong>type structuré</strong> <code class="prettyprint lang-c">Date</code> déclaré comme un synonyme. On identifie ses <strong class="specialLB">champs</strong> <code class="prettyprint lang-c">day</code>, <code  class="prettyprint lang-c">month</code> et <code  class="prettyprint lang-c">year</code> respectivement par les <strong>expressions</strong> : </p>
+</div><!-- display -->
+<ul>
+  <li> <code class="prettyprint lang-c">productionDate.day</code> </li>
+
+  <li> <code class="prettyprint lang-c">productionDate.month</code> </li>
+
+  <li> <code class="prettyprint lang-c">productionDate.year</code> </li>
+</ul>
+
+<p> On peut donc les employer dans un programme comme par exemple dans le test ci‑dessous : </br>
+<span class="inline">
+  <code class="prettyprint lang-c">if (productionDate.year < 2019) <span class="nocode">…</span></code>
+</span></p>
+</div><!-- exemple -->
+
+
+
+<h3 id="initialisationSelective"> Initialisation sélective des champs d'une donnée de type <code class="prettyprint lang-c">struct</code></h3>
+
+
+
+<div class="complement">
+<p> L'<strong>identification sélective</strong> des champs d'une donnée de type <code class="prettyprint lang-c">struct</code> permet de coder dans sa déclaration l'<strong class="title">initialisation ciblée</strong> de <strong>tel ou tel</strong> <strong class="specialLB">champ</strong>, en alternative au procédé séquentiel d'initialisation anonyme exposé supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#initialisationSequentielle"></a>. </p>
+
+<p> Dans la <strong class="specialLG">liste des expressions</strong> <strong>d'initialisation</strong>, on peut coder n'importe quelle expression de cette liste via la forme syntaxique : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">.<span class="nocode"><strong class="specialLB">identificateur de champ</strong></span> = <span class="nocode"><strong>expression</strong></span></code>
+</span> <br>
+où l'<strong>expression</strong> donne la valeur initiale à affecter au champ. Mais, attention à l'<strong class="warning">ordre</strong> de codage de ces initialisations : </p>
+
+<ul>
+  <li> si <strong>tous les champs</strong> sont ainsi <strong class="defin">initialisés de façon sélective</strong>, l'ordre des expressions est <strong class="pros">libre</strong> ;  </li>
+
+  <li> dans le cas contraire, il faut <strong class="warning">respecter</strong> l'<strong>ordre des champs</strong> dans la déclaration du type. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="70px" style="padding-top: 0em"> 
+<p class="exemple"> Dans l'exemple précédent, la déclaration de la <strong class="title">donnée</strong> <code class="prettyprint lang-c">productionDate</code> <a class="supra" href="Cc5-5_structuresHeterogenes.html#exemplesDate"></a> peut donc aussi être codée : </p>
+</div>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:11">
+const Date productionDate = {.year = 2019, .day = 27, .month = 3};  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> ou encore – même si c'est <strong class="cons">bien moins lisible</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:11">
+const Date productionDate = {27, 3, .year = 2019};  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En revanche, il n'est <strong class="warning">pas possible</strong> de coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:11">
+productionDate = {.year = 2019, 27, 3}; // WRONG ORDER!  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, exécutée avec <strong class="OnlineGDB">OnlineGDB</strong>, le compilateur <strong>GCC</strong> émet deux avertissements : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark" style="color: yellow;">
+main.c:10:44: warning: excess elements in struct initializer 
+main.c:10:48: warning: excess elements in struct initializer 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> et si l'on code dans la fonction <code class="prettyprint lang-c">main</code> l'instruction d'affichage ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:14">
+  printf("%02u/%02u/%u\n", productionDate.day, productionDate.month, productionDate.year);
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On obtient en sortie standard une date dont les champs <code class="prettyprint lang-c">day</code> et <code class="prettyprint lang-c">month</code> ont été affectés d'une valeur <code class="prettyprint lang-c">0</code> :</p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+00/00/2019
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> ce qui est évidemment <strong class="warning">problématique</strong>. </p>
+</div><!-- exemple --> 
+
+
+
+<h3> Accès à une donnée de type <code class="prettyprint lang-c">struct</code> et de ses champs par pointeur </h3>
+
+
+<div class="important">
+<p> Une donnée déclarée de type <code class="prettyprint lang-c">struct</code> est, comme toutes les autres, également accessible par son <strong class="title">adresse</strong>, via l'<strong class="specialLB">opérateur d'adresse</strong> <code class="prettyprint lang-c">&</code> (cf. chap. C5‑I <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/Cc5-2_pointeursGeneralites.html#operateurAdresse" target="_BLANK"></a>) appliqué à son <strong class="specialN">identificateur</strong>. </p>
+</div><!-- complement -->
+
+<div class="complement">
+<p> On rappelle qu'une expression de la forme <code class="prettyprint lang-c">&<span class="nocode"><strong class="specialN">identificateur</strong></span></code> constitue un <strong class="title">pointeur</strong> qui : </p>
+
+<ul>
+  <li> obéit à une <strong class="defin">arithmétique spécifique</strong> tenant compte de la taille du type de la donnée (cf. chap. C5‑I <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/Cc5-2_pointeursGeneralites.html#arithmetique" target="_BLANK"></a>) ; </li>
+
+  <li> peut être <strong>affecté à un autre pointeur</strong> pour effectuer cibler la donnée ; c'est typiquement la technique de la transmission d'argument par adresse (cf. infra <a class="infra" href="Cc5-5_structuresHeterogenes.html#transmissionAdresse"></a>). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+  <div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="70px" style="padding-top: 0em">
+<p class="exemple"> Dans l'exemple précédent <a class="supra" href="Cc5-5_structuresHeterogenes.html#exemplesDate"></a>, après la déclaration de la <strong>donnée</strong> <code class="prettyprint lang-c">lastCkeckDate</code> de type <code class="prettyprint lang-c">Date</code>, on peut déclarer un <strong class="title">pointeur</strong> sur elle comme ci‑dessous : </p> 
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+Date * p_date = &lastCheckdate;
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<h4 id="dereferencementStructurel"> Identification des champs par pointeur </h4>
+
+
+<div class="complement">
+<p> Il est <strong class="warning">déconseillé</strong> de vouloir <strong>accéder aux adresses des <strong class="specialLB">champs</strong> de la donnée</strong> en présupposant leurs positions en mémoire : en effet, cet aspect dépend de l'implémentation. Pour effectuer une telle opération, il est bien plus fiable de <strong>déréférencer</strong> un <strong class="specialT">pointeur sur la donnée</strong> puis appliquer l'opérateur de sélection, conformément à la syntaxe ci‑dessous : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">(*<span class="nocode"><strong class="specialT">pointeur sur la donnée structurée</strong></span>).<span class="nocode"><strong class="specialLB">identificateur de champ</strong></span></code>
+</span> <br>
+en remarquant que les <strong>parenthèses</strong> sont ici <strong class="warning">obligatoire</strong>, car l'opérateur de déréférencement est moins prioritaire que l'opérateur de sélection. </p>
+</div><!-- complement -->
+
+
+<div class="important">
+<p> Cette technique d'identification par <strong>déréférencement d'un pointeur</strong> étant d'<strong class="pros">usage très courant</strong>, le langage <strong>C</strong> met à disposition du codeur un <strong>opérateur spécifique</strong> dit de <strong class="title">déréférencement structurel</strong> codé <code class="prettyprint lang-c">-></code>, trivialement nommé « opérateur flèche » (en anglais, <em class="english">arrow operator</em>) qui effectue la composition d'opérations ci‑dessus via la syntaxe : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">pointeur sur la donnée structurée</strong></span> ->
+  <span class="nocode"><strong>identificateur du champ</strong></span></code>
+</span> </p>
+</div><!-- important -->
+
+<p> Comme l'opérateur de sélection, l'<strong class="title">opérateur « flèche »</strong> <code class="prettyprint lang-c">-></code> possède (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>) : </p>
+<ul>
+  <li> le <strong class="defin">rang 1</strong> de priorité, </li>
+
+  <li> le sens d'associativité de <strong class="defin">gauche à droite</strong>.</li>
+</ul>
+
+<div class="exemples" id="exemplePointeur">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="100px" style="padding-top: 0em">
+<p class="exemple"> On souhaite définir des <strong>dates d'échéances trimestrielles</strong> pour le <strong>remboursement d'un crédit</strong>, fixée au 5 du premier mois de chaque trimestre. Dans le programme ci‑dessous (cf. la ligne nº 12), on déclare donc un tableau <code class="prettyprint lang-c">dueDate</code> de 4 éléments d'un type <code class="prettyprint lang-c">struct</code> synonyme <code class="prettyprint lang-c">Date</code> issu d'un exemple précédent. </p> 
+</div><!-- display -->
+
+<p class="square"> Dans une première version de la fonction <code class="prettyprint lang-c">main</code> du programme, on code dans une boucle <code class="prettyprint lang-c">for</code> de façon usuelle – c'est‑à‑dire avec l'<strong>opérateur d'indexation</strong> <code class="prettyprint lang-c">[]</code> et l'<strong>opérateur de sélection</strong> <code class="prettyprint lang-c">.</code> – l'<strong class="title">affectation</strong> et l'affichage des valeurs des champs des éléments de ce tableau. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+#define nbOfElements(array) (sizeof(array)/sizeof(array[0])) 
+
+typedef struct {
+  int8_t day;   // 1 to 31
+  int8_t month; // 1 to 12
+  int16_t year; 
+} Date;  
+
+Date paymentDate[4]; 
+
+int main() {
+  for (int k = 0; k < nbOfElements(paymentDate); k++) {
+    paymentDate[k].day = 5;
+    paymentDate[k].month = 3 * k + 1;
+    paymentDate[k].year = 2022;
+    printf("%02u/%02u/%u\n", paymentDate[k].day, paymentDate[k].month, paymentDate[k].year);
+  }
+} 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p class="square"> En ayant recours à un <strong class="title">pointeur</strong> initialisé sur le <strong>premier élément du tableau</strong> (cf. ci‑dessous la ligne nº 15), et en utilisant l'<strong class="title">opérateur « flèche »</strong>, la fonction <code class="prettyprint lang-c">main</code> du programme ci‑dessus peut se coder comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:14">
+int main() {
+  Date * const p_firstPaymentDate = &paymentDate[0];
+  for (Date * p = p_firstPaymentDate; p < p_firstPaymentDate + nbOfElements(paymentDate); p++) {
+    p -> day = 5;
+    p -> month = 3 * (p - p_firstPaymentDate) + 1;
+    p -> year = 2022;
+    printf("%02u/%02u/%u\n", p -> day, p -> month, p -> year);
+  }
+}   
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Cette solution de codage présente une <strong class="pros">bonne lisibilité</strong> sauf à la ligne nº 18 pour déterminer le numéro d'itération de la boucle, ce qui nécessite une opération de décalage <code class="prettyprint lang-c">p - p_firstPaymentDate</code>.  </p>
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="manipStruct"> Manipulation des données de type <code>struct</code> </h2>
+
+
+<div class="expert">
+<p> Comme cela a été évoqué supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#identificationValeur"></a>, en langages <strong>C</strong> et <strong>C++</strong>, l'<strong class="specialN">identificateur</strong> d'une donnée déclarée de type <code class="prettyprint lang-c">struct</code> donne directement accès à sa <strong class="defin">valeur</strong> et constitue de ce fait une <strong class="specialM">l‑value</strong>. Il peut donc faire l'objet de <strong class="title">certaines opérations globales</strong> : </p>
+
+<ul>
+  <li> une <strong class="defin">affectation</strong>,</li>
+
+  <li> une <strong class="defin">transmission d'argument</strong> de fonction par valeur, </li>
+
+  <li> un <strong class="defin">retour de valeur</strong> par une fonction. </li>
+</ul>
+
+<p> Et par ailleurs, comme pour toute donnée, il est aussi possible d'opérer sur une donnée déclarée de type <code class="prettyprint lang-c">struct</code> via des <strong class="specialLB">pointeurs</strong> ou des <strong class="specialLB">références</strong>, en particulier pour les <strong class="defin">transmissions d'argument</strong> de fonction. Cette approche est d'autant plus <strong class="pros">recommandée</strong> que la structure est complexe et lourde. </p>
+
+<p> En revanche, on verra que d'autres opérations, notamment les <strong class="defin">comparaisons</strong> et les <strong class="defin">conversions</strong>, ne sont <strong class="cons">pas codables de façon globale</strong>. Elles doivent être mises en œuvre au niveau des <strong class="specialLB">champs</strong> ou via des <strong class="specialLB">pointeurs</strong> – et avec beaucoup de <strong class="warning">précautions</strong>. </p>
+</div><!-- expert -->
+
+
+<h3 id="affectationStruct"> Affectation d'une donnée de type <code class="prettyprint lang-c">struct</code> </h3>
+
+
+<div class="important">
+<p> Dans le bloc de définition d'une fonction (<code class="prettyprint lang-c">main</code> ou autre), on peut coder une <strong class="title">expression d'affectation</strong> via la forme syntaxique générale : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">l‑value</strong></span> = <span class="nocode"><strong class="specialMg">r‑value</strong></span></code>
+</span> <br>
+où : </p>
+<ul>
+  <li> la <strong class="specialM">l‑value</strong> est un <strong class="specialN">identificateur</strong> de <strong>variable</strong> déclarée de type <code class="prettyprint lang-c">struct</code> (ou une expression qui déréférence un pointeur sur une telle variable) </li>
+
+  <li> la <strong class="specialMg">r‑value</strong> est une <strong>expression</strong> dont la valeur est de <strong class="defin">même type</strong> que la variable affectée. </li>
+</ul>
+<p> En effet, on rappelle qu'<strong class="warning">aucune conversion implicite</strong> n'est opérée sur des valeurs de <strong class="specialG">types dérivés</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Précisions que dans une affectation sur une donnée de type <code class="prettyprint lang-c">struct</code>, la <strong class="specialMg">r‑value</strong> peut être :   </p>
+<ul>
+  <li> l'<strong>identificateur d'une donnée déclarée</strong> – c'est le cas le plus usuel ;  </li>
+
+  <li> un <strong>appel de fonction</strong> qui rend une valeur du même type <code class="prettyprint lang-c">struct</code> ;  </li>
+
+  <li> ou encore un <strong>déréférencement d'un pointeur</strong> sur une donnée du même type <code class="prettyprint lang-c">struct</code>.</li>
+</ul>
+
+<p> En revanche, la <strong class="specialMg">r‑value</strong> ne peut <strong class="warning">pas</strong> être codée comme une <strong>liste de valeurs</strong> de champs comme dans le cas d'une initialisation. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+  <div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="100px" style="padding-top: 0em">
+<p class="exemple"> Suite à la déclaration de <strong class="title">données</strong> de type <code class="prettyprint lang-c">struct</code> synonyme <code class="prettyprint lang-c">Date</code> supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#exemplePointeur"></a>, on peut coder dans le corps d'une fonction une instruction d'<strong class="title">affectation</strong> directe comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">lastCheckDate = nextCheckDate;</code>
+</span> </p>
+</div><!-- display -->
+
+<p> Et suite à la déclaration d'un pointeur <code class="prettyprint lang-c">p_date</code> de type <code class="prettyprint lang-c">Date*</code>, on peut aussi coder une <strong class="title">affectation</strong> comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">lastCheckDate = *p_date;</code>
+</span> <br>
+ou encore : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">*p_date = lastCheckDate;</code>
+</span> <br>
+si <code class="prettyprint lang-c">p_date</code> ne pointe pas sur une donnée constante. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> La <strong class="pros">possibilité</strong> de coder une <strong class="title">affectation globale</strong> sur une donnée de type <code class="prettyprint lang-c">struct</code> peut être employée pour contourner l'impossibilité d'une telle opération pour une donnée de type <strong class="title">tableau</strong>. Il suffit de procéder par <strong class="defin">encapsulation</strong>, en déclarant un type <code class="prettyprint lang-c">struct</code> ayant pour <strong>unique champ</strong> le type <em>tableau</em> en question. </p>
+
+<p> Une telle astuce ne présente <strong class="cons">pas d'intérêt systématique</strong>, dans la mesure où l'affectation à un tableau des valeurs d'un autre tableau s'opère très facilement par le biais d'une fonction (cf. chap C5‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C5-StructuresPointeurs/Cc5-4_tableauxManipulations.htlm#affectation" target="_BLANK"></a>). Néanmoins, elle peut permettre de gagner en <strong class="pros">rapidité d'exécution</strong> pour des <strong>tableaux de grandes tailles</strong>. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Transmission d'un argument de type <code class="prettyprint lang-c">struct</code> d'une fonction </h3>
+
+
+
+<p> Rappelons (cf. chap. C4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#transmissionValeur"></a>) que lors d'un <strong>appel de fonction</strong>, la <strong class="title">transmission</strong> d'un <strong class="specialO">argument effectif</strong> à son <strong class="specialT">argument formel</strong> correspondant : </p>
+
+<ul>
+  <li> sous‑tend fondamentalement une <strong class="defin">affectation</strong> – a minima, donner comme valeur initiale à l'argument formel la valeur de l'argument effectif au moment de l'appel ; </li>
+
+  <li> peut procéder de <strong>trois façons différentes</strong> – <strong class="specialLB">par valeur</strong> (transmission par défaut), <strong class="specialLB">par référence</strong>  et <strong class="specialLB">par adresse</strong>. </li>
+</ul>
+
+
+<h4> Transmission par valeur d'un argument de type <code class="prettyprint lang-c">struct</code></h4>
+
+
+<div class="important">
+<p> Dans le cas d'un argument de type <code class="prettyprint lang-c">struct</code>, la <strong class="title">transmission par valeur</strong> requiert la <strong>même condition essentielle</strong> que pour une <strong>affectation</strong> : que dans toute instruction d'<strong>appel</strong>, l'<strong class="specialO">argument effectif</strong> soit du <strong class="defin">même type</strong>  que celui de l'<strong class="specialT">argument formel</strong> dans l'<strong>en‑tête</strong> de la fonction. </p>
+
+<p> En termes de codage de la fonction elle‑même, il n'y a <strong class="pros">aucune particularité syntaxique</strong> par rapport à un autre type d'argument. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Et puisqu'il s'agit <strong class="title">transmission par valeur</strong>, rappelons que même si l'<strong class="specialO">argument effectif</strong> est un identificateur de variable déclarée, cette dernière n'est <strong class="defin">pas modifiée</strong> lors de l'exécution du code de fonction. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/buttonSignal.png" width="350px" style="padding-top: 0em">
+<p class="exemple"> Suite à la déclaration supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#exempleSignal"></a> du type <code class="prettyprint lang-c">struct</code> <code class="prettyprint lang-c">LogicalSignal</code> pour l'environnement <strong class="Arduino">Arduino</strong>, on peut aisément recoder (cf. chap. C4‑VI <a class="previous" href="../C4-Fonctions/Cc4-6_programmationModulaire.html#fichierImplementation" target="_BLANK"></a>) d'une manière bien <strong class="pros">plus lisible</strong> les fonctions de la bibliothèque <code class="filename">LogicalSignal</code>. Prenons le cas de la fonction <code class="prettyprint lang-c">risingEdge</code> qui retourne la valeur booléenne <code class="prettyprint lang-c">true</code> à l'occurrence d'un <strong class="title">front montant</strong> sur le signal de tension d'une broche d'entrée du port numérique de la carte : </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+bool risingEdge(LogicalSignal inputSignal) {
+  return (inputSignal.previousLevel == LOW && 
+          inputSignal.currentLevel  == HIGH);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Cette fonction ayant seulement besoin de <strong>lire</strong> les valeurs des champs de son argument, la <strong class="title">transmission par valeur</strong> <strong class="pros">suffit</strong>. </p>
+
+<p> Une <strong>expression d'appel</strong> de cette fonction se code dans difficulté aucune, par exemple : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">risingEdge(buttonSignal)</code>
+</span> <br>
+ou <code class="prettyprint lang-c">buttonSignal</code> est une variable de type <code class="prettyprint lang-c">LogicalSignal</code> préalablement déclarée. </p>
+</div><!-- exemple -->
+
+
+<h4 id="transmissionReference"> Transmission par référence (en <em class="mark">C++</em>) d'un argument de type <code class="prettyprint lang-c">struct</code></h4>
+
+
+<div class="important">
+<p> La <strong class="title">transmission par référence</strong> d'un argument de type <code class="prettyprint lang-c">struct</code> procède exactement <strong>comme pour n'importe quel autre type de données</strong> acceptant la déclaration d'une référence (cf. chap. 4‑I <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#transmissionReference" target="_BLANK"></a>). Rappelons qu'elle n'est possible qu'en <strong class="title">C++</strong>, et <strong class="warning">pas</strong> en <strong>C</strong>. </p> 
+
+<p> Comme pour la transmission par valeur, on a la même condition d'<strong class="defin">identité de type</strong> entre l'<strong class="specialO">argument effectif</strong> dans les expressions d'<strong>appel</strong> et l'<strong class="specialT">argument formel</strong> dans l'<strong>en‑tête</strong> de la fonction. </p> 
+</div><!-- important --> 
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/buttonSignal.png" width="350px" style="padding-top: 0em">
+<p class="exemple"> Suite à la déclaration supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#exempleSignal"></a> du type structuré <code class="prettyprint lang-c">LogicalSignal</code> pour l'environnement <strong class="Arduino">Arduino</strong>, on peut aussi recoder (cf. chap. C4‑VI <a class="previous" href="../C4-Fonctions/Cc4-6_programmationModulaire.html#fichierImplementation" target="_BLANK"></a>) d'une manière bien <strong class="pros">plus lisible</strong> la fonction <code class="prettyprint lang-c">updateSignal</code> qui effectue la <strong class="title">mise à jour</strong> des niveaux logiques de tension mémorisés sur une broche d'entrée du port numérique de la carte : </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+void updateSignal(LogicalSignal & inputSignal) {
+  inputSignal.previousLevel = inputSignal.currentLevel;
+  inputSignal.currentLevel  = digitalRead(signal.pin);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Appliqué à la variable <code class="prettyprint lang-c">buttonSignal</code> de type <code class="prettyprint lang-c">LogicalSignal</code> déclarée supra, une instruction d'<strong>appel</strong> d'une telle fonction se code simplement : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  updateSignal(buttonSignal); 
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+<h4 id="transmissionAdresse"> Transmission par adresse d'un argument de type <code class="prettyprint lang-c">struct</code></h4>
+
+
+<div class="important">
+<p> La <strong class="title">transmission par adresse</strong> d'un argument de type <code class="prettyprint lang-c">struct</code> procède exactement <strong>comme pour n'importe quel autre type</strong> de donnée, élémentaire ou dérivé (cf. chap. 5‑II <a class="previous" href="Cc5-2_pointeursApplications.html#transmissionAdresse" target="_BLANK"></a>). Elle opère en langages <strong>C</strong> et <strong>C++</strong>. </p> 
+
+<p> Pour coder une telle transmission, il suffit que l'<strong class="specialO">argument effectif</strong> d'<strong>appel</strong> soit un pointeur sur une <strong class="defin">variable de même type</strong> quecelui de l'<strong class="specialT">argument formel</strong> dans l'<strong>en‑tête</strong> de la fonction. </p> 
+</div><!-- important --> 
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/buttonSignal.png" width="350px" style="padding-top: 0em">
+<p class="exemple"> Reprenons le codage de la <strong>fonction</strong> <code class="prettyprint lang-c">updateSignal</code> proposée supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#transmissionReference"></a> pour illustrer la transmission par référence. Pour une <strong class="title">transmission par adresse</strong>, on peut utiliser l'<strong>opérateur « flèche »</strong> <code class="prettyprint lang-c">-></code> (cf. supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#dereferencementStructurel"></a>) qui améliore la lisibilité du code : </p>
+</div><!-- display -->
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+void updateSignal(LogicalSignal * p_inputSignal) {
+  p_inputSignal -> previousLevel = p_inputSignal -> currentLevel;
+  p_inputSignal -> currentLevel  = digitalRead(p_inputSignal -> pin);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Quant à un <strong>appel</strong> de cette fonction pour la variable <code class="prettyprint lang-c">buttonSignal</code> de type <code class="prettyprint lang-c">LogicalSignal</code>, il se code bien entendu en utilisant l'<strong>opérateur d'adresse</strong> <code class="prettyprint lang-c">&</code> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  updateSignal(&buttonSignal); 
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+<h3> Retour d'une valeur de type <code class="prettyprint lang-c">struct</code> par une fonction </h3>
+
+
+<div class="important">
+<p> Le codage d'une <strong class="title">fonction qui retourne des valeurs</strong> de type <code class="prettyprint lang-c">struct</code> suit le <strong class="defin">même principe</strong> qu'avec des valeurs de types élémentaires (cf. <a class="previous" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#corpsFonction" target="_BLANK"></a>). </p>
+
+<div class="expert">
+<p> En effet, contrairement aux valeurs de types <em>tableau</em>, il n'est pas nécessaire de passer la structure en argument de la fonction puisque les types <code class="prettyprint lang-c">struct</code> acceptent les affectations globales. </p> 
+</div><!-- expert -->
+
+<p> La <strong class="cons">seule « difficulté »</strong> vient du fait que l'<strong class="specialLB">expression de retour</strong>, codée après le mot‑clef <code class="prettyprint lang-c">return</code>, ne peut <strong class="warning">pas</strong> être formée par une <strong>liste de valeurs</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Mais cette <strong class="title">expression de retour</strong> peut être codée par :  </p>  
+<ul>
+  <li>  un <strong>identificateur d'une variable locale</strong> déclarée de type <code class="prettyprint lang-c">struct</code> dans le corps de la fonction ;  </li>
+
+  <li>  un <strong>appel de fonction</strong> qui elle‑même retourne une donnée de type <code class="prettyprint lang-c">struct</code> ; </li>
+
+  <li> un <strong>déréférencement de pointeur</strong> sur une donnée déjà déclarée de type <code class="prettyprint lang-c">struct</code>. </li>
+</ul>
+<p> sachant que ce type <code class="prettyprint lang-c">struct</code> doit dans tous les cas être identique à celui codé dans l'en‑tête de la fonction. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="70px" style="padding-top: 0em"> 
+<p class="exemple"> Suite à la déclaration supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#exemplePointeur"></a> du type structuré synonyme <code class="prettyprint lang-c">Date</code>, on code une fonction <code class="prettyprint lang-c">firstDayOfMonth</code> qui retourne comme valeur le 1<sup>er</sup> jour du mois d'une date passée comme argument de cette fonction : </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+Date firstDayOfMonth(Date givenDate) {
+  Date firstDay = {1, givenDate.month, givenDate.year};
+  return firstDay;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> (On rappelle que le mot‑clef <code class="prettyprint lang-c">struct</code> n'a pas besoin d'être employé ici car le type <code class="prettyprint lang-c">Date</code> a été déclaré via le mot‑clef <code class="prettyprint lang-c">typedef</code>.) </p>
+
+<p> On peut alors coder un <strong>appel</strong> de cette fonction pour effectuer une affectation globale, par exemple ainsi : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:30">
+  Date warningDay = firstDayOfMonth(nextCheckDate);
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+<h3> Comparaisons de valeurs de types <code class="prettyprint lang-c">struct</code></h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, <strong class="warning">aucune opération globale de comparaison</strong> ne peut être codée sur des identificateurs de données de types <code class="prettyprint lang-c">struct</code>. </p>
+
+<p> De telles opérations sont systématiquement rejetées comme des <strong class="warning">erreurs</strong> lors de la <strong>compilation</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il est assez facile de comprendre les raisons de cette limitation.  </p>  
+<ol class="numbered">
+  <li> Les opérateurs <code class="prettyprint lang-c"><</code> et <code class="prettyprint lang-c">></code> n'ont de sens que s'il existe une <strong class="defin">relation d'ordre total</strong> sur les données auxquels ils s'appliquent, ce qui n'est <strong class="warning">pas le cas</strong> des <strong>données non scalaires</strong>, comme les structures hétérogènes (de même que les tableaux). </li>
+
+  <li> les opérateurs <code class="prettyprint lang-c">==</code> et <code class="prettyprint lang-c">!=</code> procèdent par <strong>comparaison du contenu de la mémoire</strong> allouée aux données auxquelles ils s'appliquent. Or on a vu qu'une donnée de type <code class="prettyprint lang-c">struct</code> peut inclure des <strong class="specialV">octets intercalaires</strong> et/ou des <strong class="specialV">bits de bourrage</strong>, dont le <strong>contenu</strong> est parfois <strong class="warning">arbitraire</strong> et peut ainsi fausser la comparaison. </li>
+</ol>
+
+<p> Pour comparer des données de <strong>même type</strong> <code class="prettyprint lang-c">struct</code>, il faut donc <strong class="defin">procéder au niveau des champs</strong>. Dans le cas des opérateurs <code class="prettyprint lang-c"><</code> et <code class="prettyprint lang-c">></code>, il faut également définir un <strong class="defin">critère scalaire de comparaison</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ephemeride.png" width="70px" style="padding-top: 0em"> 
+<p class="exemples"> On présente ici le codage de deux fonctions spécifiques pour effectuer des comparaisons sur des <strong class="title">dates</strong> déclarées du <strong class="specialG">type structuré synonyme</strong> <code class="prettyprint lang-c">Date</code> proposé supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#exemplePointeur"></a>. </p>
+</div><!-- display -->
+
+<ol class="numbered">  
+  <li> Pour <strong class="title">tester l'égalité</strong> de deux données <code class="prettyprint lang-c">d1</code> et <code class="prettyprint lang-c">d2</code>, on peut coder la fonction <code class="prettyprint lang-c">areEqual</code> ci‑dessous qui vérifie si <strong>tous les</strong> <strong class="specialLB">champs</strong> de ses deux arguments sont <strong>respectivement égaux</strong> : </li>
+ 
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:40">
+bool areEqual(Date d1, Date d2) {
+  return (d1.day   == d2.day   &&
+          d1.month == d2.month &&
+          d1.year  == d2.year);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+ <li> Pour <strong class="title">tester l'antériorité</strong> d'une date <code class="prettyprint lang-c">d1</code> par rapport à une date <code class="prettyprint lang-c">d2</code>, on peut coder la fonction <code class="prettyprint lang-c">isAnterior</code> ci‑dessous. Elle teste l'<strong>infériorité </strong> des <strong class="specialLB">champs</strong> de <code class="prettyprint lang-c">d1</code> par rapport à ceux de <code class="prettyprint lang-c">d2</code> en procédant par <strong>poids décroissants</strong> (années, mois, jours) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:50">
+bool isAnterior(Date d1, Date d2) {
+  if      (d1.year < d2.year) return true;
+  else if (d1.year > d2.year) return false;
+  else //  d1.year = d2.year
+       if      (d1.month < d2.month) return true;
+       else if (d1.month > d2.month) return false;
+       else //  d1.month = d2.month
+            if     (d1.day <  d2.day)   return true;
+            else /* d1.day >= d2.day */ return false;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</ol>
+
+<div class="expert">
+<p> (On rappelle encore une fois pour ces deux exemples qu'ici, le mot‑clef <code class="prettyprint lang-c">struct</code> n'a pas besoin d'être employé dans les déclarations car le type <code class="prettyprint lang-c">Date</code> a été déclaré via le mot‑clef <code class="prettyprint lang-c">typedef</code>.) </p>
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+
+<h3> Conversions de types </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, deux données de <strong>types</strong> <code class="prettyprint lang-c">struct</code> <strong class="title">différents</strong> sont <strong class="warning">toujours incompatibles</strong>, même s'ils présentent exactement la même structure en terme de champs. Il est alors <strong class="warning">impossible</strong> de coder la moindre opération d'<strong>affectation</strong> entre elles. </p>
+
+<p> De plus, <strong class="warning">aucune conversion</strong> <strong>explicite</strong> globale n'est autorisée entre des données de type <code class="prettyprint lang-c">struct</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme pour les tableaux (cf. chap. 5‑IV <a class="previous" href="Cc5-4_tableauxManipulations.html#castTableaux" target="_BLANK"></a>), il serait en principe possible de coder des <strong class="title">conversions explicites</strong> par le biais de <strong class="specialLB">pointeurs</strong> parcourant l'espace mémoire alloué à des données de type <code class="prettyprint lang-c">struct</code>. Néanmoins, c'est une <strong class="warning">approche risquée</strong> dans la mesure où l'encodage de ces données peut varier d'une implémentation à l'autre et éventuellement pour une même implémentation, entre deux structures différentes. </p>
+
+<p> Mais dans la mesure où les champs des données de types <code class="prettyprint lang-C">struct</code> sont forcément déclarés individuellement et non pas par un procédé automatique, leur nombre n'excède jamais les capacités humaines de manipulation (contrairement aux éléments d'un tableau qui peuvent peuvent être déclarés en grands nombres et doivent alors être manipulés par des boucles). Il est donc toujours faisable de recourir à des <strong class="defin">affectations</strong> au niveau des <strong class="specialLB">champs</strong> de types élémentaires, éventuellement via des <strong class="defin">conversions</strong> <strong>implicites ou explicites</strong>. C'est l'<strong class="pros">approche recommandée</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/ledRGB.png" width="80px" style="padding-top: 0em"> 
+
+<p class="exemple"> Pour coder les <strong class="title">couleurs</strong> d'un <strong>pixel</strong> ou d'une <strong>led <em class="sigle">RGB</em></strong>, respectivement en <strong class="specialLB">synthèses additive</strong> et <strong class="specialLB">soustractive</strong> (cf. TP3‑2 <a class="TP" href="../C3-Numeration/Ctp3-2_ledsRGB.html" target="_BLANK"></a>), on peut par exemple déclarer  comme ci‑dessous les deux <strong class="specialG">types synonymes structurés</strong> <code class="prettyprint lang-c">RGBcode</code> et <code class="prettyprint lang-c">CMYcode</code> (on verra dans la partie consacrée aux structures par superposition pourquoi l'ordre des champs est inversé par rapport à celui du sigle <strong><em class="sigle">RGB</em></strong> <a class="infra" href="Cc5-5_structuresHeterogenes.html#unionRGB"></a>) : </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+typedef struct {
+  uint8_t blue, green, red;
+} RBGcode;
+
+typedef struct {
+  uint8_t yellow, magenta, cyan;
+} CMYcode;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p class="square"> Rappelons que pour une couleur donnée dans l'un de ces deux types ci‑dessus, on obtient sa <strong class="title">couleur complémentaire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couleur_complémentaire" target="_BLANK">W</a> par <strong class="defin">transcodage direct</strong> d'un type à l'autre. Par exemple, la couleur complémentaire du <strong class="specialR">rouge</strong> saturé, codé <em class="bold">(255, 0, 0)</em> en <strong><em class="sigle">RGB</em></strong>, est le <strong class="specialT" style="color: cyan;">cyan</strong> saturé, codé <em class="bold">(255, 0, 0)</em> en <strong><em class="sigle">CMY</em></strong>. </p>
+
+<p> Pour définir une <strong class="title">fonction de complémentation</strong> nommée <code class="prettyprint lang-c">complRGBtoCMY</code> qui prend comme argument une couleur de type <code class="prettyprint lang-c">RGBcode</code> et retourne sa couleur complémentaire de type <code class="prettyprint lang-c">CMYcode</code>, on ne peut <strong class="warning">pas</strong> procéder par une <strong>affectation directe</strong> comme ci‑dessous :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:30">
+CMYcode complRGBtoCMY(RGBcode rgbColor) {
+  return rgbColor;  // DOESN'T WORK! (imcompatible types)
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, le <strong class="specialG">type</strong> de la valeur de retour est <strong class="warning">différent</strong> de celui de l'argument (bien qu'identique en termes de structure) et <strong class="cons">aucune conversion</strong>, ni implicite ni explicite, n'est possible entre types <code class="prettyprint lang-c">struct</code>. </p>
+
+<p class="square"> Pour coder la <strong class="title">fonction</strong> <code class="prettyprint lang-c">complRGBtoCMY</code>, il n'y a donc pas d'autre choix que de déclarer une variable locale de type <code class="prettyprint lang-c">CMYcode</code> et de procéder à l'initialisation de chacun de ses <strong class="specialLB">champs</strong> par <strong>affectations</strong> des valeurs respectives de ceux de son argument, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:30">
+CMYcode complRGBtoCMY(RGBcode rgbColor) {
+  CMYcode cmyColor = {
+    .yellow  = rgbColor.blue,
+    .magenta = rgbColor.green, 
+    .cyan    = rgbColor.red
+  };
+  return cmyColor;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On peut alors coder l'initialisation d'une constante <code class="prettyprint lang-c">fullCyan</code> en utilisant cette fonction comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:21">
+  const CMYcode fullCyan = complRGBtoCMY(fullRed);
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="unions"> Les enregistrements par superposition – type <code>union</code> </h2>
+
+
+<h3> Principe de l'enregistrement par superposition </h3>
+
+
+<p> On a vu que dans un <strong>type</strong> <code class="prettyprint lang-c">struct</code>, plusieurs champs sont <strong>juxtaposés</strong> en mémoire pour permettre d'agréger dans une même donnée autant de valeurs de types différents – chacun champ ayant son espace mémoire réservé. </p>
+
+<div class="important">
+<p> Les langages <strong>C</strong> et <strong>C++</strong> fournissent également la possibilité de coder des types d'<strong class="title">enregistrement par superposition</strong> <a class="external" href="https://en.wikipedia.org/wiki/Union_type" target="_BLANK">W</a> via le <strong >mot‑clef</strong> <code class="prettyprint lang-c">union</code>. </p>
+
+<div class="display" style="display: inline-block">
+  <img class="top-right" src="../img/typeUnion.png" width="220px">
+<p> Dans ces types, chaque <strong class="specialLB">champ</strong> ne dispose pas de son propre espace mémoire ; il définit simplement une <strong class="specialV">taille</strong> et un <strong class="specialV">format d'interprétation</strong> <strong class="specialLB">spécifique</strong> du <strong>même contenu en mémoire</strong> – lequel est <strong>commun</strong> à tous les champs. </p> 
+
+<p> On peut donc considérer que les <strong class="specialLB">champs</strong> <strong class="defin">se superposent</strong>. En règle générale,  le champ <strong>le plus grand</strong> « dépasse » des autres et impose la <strong class="defin">taille</strong> du type <code class="prettyprint lang-c">union</code>, ainsi que sa <strong class="defin">contrainte d'alignement</strong>. </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Le plus souvent, on ne déclare des types structurés par superposition de <strong class="specialLB">deux champs</strong>, mais <strong class="pros">rien n'interdit</strong> d'en spécifier <strong>plus</strong>. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Le <strong class="title">stockage en mémoire</strong> des données de type <code class="prettyprint lang-c">union</code> est laissé à la <strong>liberté de l'implémentation</strong>. Cela peut poser des <strong class="cons">problèmes de portabilité</strong> lorsque l'on cherche à exploiter des correspondances entre les différents champs d'une telle structure. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Syntaxe de codage </h3>
+
+
+
+<div class="important">
+<p> Les <strong class="title">types</strong> <code class="prettyprint lang-c">union</code> et leurs <strong class="title">données</strong> obéissent à des <strong class="pros">règles syntaxiques similaire</strong> à celles qui s'appliquent aux types <code class="">struct</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En <strong class="title">règle générale</strong>, il suffit donc de se reporter aux <strong class="defin">formes syntaxiques</strong> exposées précédemment dans ce chapitres, et simplement <strong>remplacer le mot‑clef</strong> <code class="prettyprint lang-c">struct</code> par <code class="prettyprint lang-c">union</code>. </p>
+
+<p>  Ainsi, pour la <strong class="title">déclaration d'un type</strong> <code class="prettyprint lang-c">union</code>, la forme syntaxique de codage est : </p>
+<div class="inline" style="background: white; padding-left: 0.5em; max-width: 12em">
+<code class="prettyprint lang-c">typedef union { <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ 1</span></strong></span>; <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ 2</span></strong></span>; <br>
+  <span class="nocode">…</span> <br>
+  <span class="nocode"><strong>déclaration de <span class="specialLB">champ n</span></strong></span>; <br>
+} <span class="nocode"><strong class="specialG">nom du type</strong></span>; </code>
+</div><!-- inline -->
+</div><!-- complement -->
+
+<p> Néanmoins, les types <code class="prettyprint lang-c">union</code> présentent <strong class="warning">quelques spécificités</strong> qu'il faut connaître et qui sont détaillées ci‑après. </p>   
+
+
+
+<h4> Spécificités syntaxiques avec les types <code class="prettyprint lang-c">union</code> </h4>
+
+
+<div class="complement">
+<p> Toutes les <strong class="title">spécificités syntaxiques</strong> des <strong>types</strong> <code class="prettyprint lang-c">union</code> par rapport aux types <code>struct</code> sont liées à la <strong class="defin">différence fondamentale</strong> entre la <strong>superposition</strong> et la <strong>juxtaposition</strong> des champs :  </p>
+
+<ol class="numbered">
+  <li> L'<strong class="specialLB">initialisation</strong> d'une donnée de type <code class="prettyprint lang-c">union</code> ne doit porter que sur <strong class="warning">un seul des champs</strong>. Et donc forcément, elle doit procéder de façon <strong>sélective</strong> <a class="supra" href="Cc5-5_structuresHeterogenes.html#initialisationSelective"></a> c'est‑à‑dire, juste après la déclaration proprement dite, via la syntaxe : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c"><span class="nocode">…</span> = {.<span class="nocode"><strong>identificateur du champ initialisé</strong></span> = <span class="nocode"><strong>expression</strong></span>};</code>
+  </span>  </li>
+
+  <li> Toute déclaration de <strong class="specialLB">champs intercalaires</strong> de <strong>bits rembourrage</strong> (cf. supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#champsBitsVacants"></a> est possible <a class="supra" href="Cc5-5_structuresHeterogenes.html#champsBitsVacants"></a>, mais n'a <strong class="cons">pas de raison d'être</strong>, puisqu'il n'y a en fait qu'un seul champ de donnée. Une telle déclaration serait simplement <strong>ignorée par le compilateur</strong>. </li>
+
+  <li> Les <strong class="specialLB">adresses</strong> des champs d'une donnée déclarée de type <code class="prettyprint lang-c">union</code> sont <strong class="defin">toujours identiques</strong> à celle de la <strong>donnée elle‑même</strong>. </li>
+
+  <div class="nobullet"> En revanche, ces adresses ne constituent <strong class="warning">pas des pointeurs identiques</strong> : leur incrémentation induit un saut d'adresse de la taille du champ, conformément à l'arithmétique générale des pointeurs. Il est donc recommandé d'<strong class="pros">employer seulement</strong> l'<strong>adresse de la donnée</strong>. </div>
+</ol>
+</div><!-- complement -->
+
+
+
+<h3> Exemples </h3>
+
+
+<p> Les <strong class="title">deux exemples</strong> d'emploi de données de type <code class="prettyprint lang-c">union</code> restent <strong>académiques</strong> mais ne sont pas complètement abstraits. </p>
+
+
+<h4> Décomposition d'une donnée de type flottant </h4>
+
+
+<div class="exemples">
+<p class="square"> Au chapitre C5‑I <a class="previous" href="Cc5-1_pointeursGeneralites.html#exempleFloat" target="_BLANK"></a>, on a vu comment on pouvait, grâce à un pointeur, interpréter dans le format <code class="prettyprint lang-c">uint32_t</code> (binaire naturel sur 32 bits) le détail des bits encodant la valeur d'une donnée <code class="prettyprint lang-c">a</code> de <strong>type</strong> <code class="prettyprint lang-c">float</code>. </p>
+
+<p> Pour mémoire, l'encodage d'une donnée de type <code class="prettyprint lang-c">float</code> comporte <strong class="title">3 composantes</strong> qui codent respectivement le <strong class="specialO">signe</strong> (1 bit), l'<strong class="specialLB">exposant décalé</strong> (8 bits) et le <strong class="specialMg">significande</strong> ou partie fractionnaire de la mantisse (23 bits) – cf. chap. C3‑V <a class="previous" href="../C3-Numeration/Cc3-5_typesFlottants.html#encodageFloats" target="_BLANK"></a>). </p>
+
+<p> Ainsi, on avait obtenu pu afficher l'<strong>encodage binaire</strong> <code>Ox3F800000</code> de la valeur décimale <code class="prettyprint lang-c">1.0</code> affectée à une donnée de type <code class="prettyprint lang-c">float</code>.  </p>
+
+<p> Toutefois, pour retrouver les valeurs respectives des <strong class="title">3 composantes</strong> du format <code class="prettyprint lang-c">float</code>, un <strong class="warning">décodage</strong> reste à opérer puisque les champs de bits de ces composantes sont <strong class="cons">à cheval sur les octets de la mémoire</strong>. </p>
+
+<img class="top-left" src="../img/pointeurIntFloat.png">
+
+<p> Et en effet, la valeur <code>Ox3F800000</code> n'est <strong class="cons">pas simple à interpréter</strong>, même pour un codeur expérimenté. </p>
+
+
+<p class="square"> Eh bien, il est possible d'obtenir <strong class="pros">très facilement</strong> les valeurs de ces <strong class="title">3 composantes</strong> en déclarant un <strong>type</strong> <code class="prettyprint lang-c">union</code> constitué de <strong class="defin">deux champs superposés</strong> :  </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/unionStructuredFloat.png" width="300px"> 
+<ul>
+  <li> Le <strong class="specialG">premier champ</strong> est de <strong>type</strong> <code class="prettyprint lang-c">float</code> ; il permet de coder simplement la <strong>valeur décimale</strong> de la donnée via la syntaxe usuelle. </li>
+
+  <li> Le <strong class="specialV">deuxième champ</strong> est de <strong>type</strong> <code class="prettyprint lang-c">struct</code>. Il est constitué de <strong>3 champs de bits</strong> de format d'enveloppe <code class="prettyprint lang-c">uint32_t</code> de longueurs respectives <em class="bold">23</em> (<strong class="specialMg">significande</strong>), <em class="bold">8</em> (<strong class="specialLB">exposant décalé</strong>) et <em class="bold">1</em> (<strong class="specialO">signe</strong>). </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Ces 3 champs de bits doivent être déclarés dans cet ordre, puisque le bit de signe a le dernier rang (31) dans l'encodage du type <code class="prettyprint lang-c">float</code>.   </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- display -->
+
+<p> Dans le programme ci‑dessous, on définit donc (lignes nº 4 à 11) comme synonyme le <strong>type</strong> <code class="prettyprint lang-c">StructuredFloat</code> superposant comme indiqué ci‑dessus un <strong class="specialG">champ décimal</strong> <code class="prettyprint lang-c">decimal</code> et un <strong class="specialV">champ structuré</strong> <code class="prettyprint lang-c">field</code>. </p>
+
+ 
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+typedef union {
+  float decimal;
+  struct {
+    uint32_t mantissa : 23;
+    uint32_t exponent :  8;
+    uint32_t sign     :  1;
+  } field;
+} StructuredFloat;   
+
+int main() {
+  StructuredFloat a = {.decimal = 1.0};
+  printf("Decimal %g : sign %u, exponent %u, mantissa %X\n", 
+         a.decimal, a.field.sign, a.field.exponent, a.field.mantissa);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Dans la fonction <code class="prettyprint lang-c">main</code>, on déclare alors une donnée <code class="prettyprint lang-c">a</code> de type <code class="prettyprint lang-c">StructuredFloat</code> (lignes nº 14) en l'initialisant avec la <strong>valeur</strong> <code class="prettyprint lang-c">1.0</code> affectée à <strong class="specialG">champ</strong> <code class="prettyprint lang-c">decimal</code>. </p>
+
+<p> On peut alors obtenir directement les <strong class="title">3 composantes</strong> de son encodage binaire par sélection des champs de bits de son <strong class="specialV">champ</strong> <code class="prettyprint lang-c">field</code>. Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient en sortie standard l'affichage : </p>
+
+<!---------- ne pas indenter ---------->  
+<pre class="displayDark">
+Decimal 1 : sign 0, exponent 127, mantissa 0 
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> ce qui attendu puisque, mathématiquement, on a l'égalité : <br>
+<span class="inline">
+  <strong>a</strong>  =  (−1)<sup><em class="bold" style="color: orange">0</em></sup> × (1 + <em class="bold" style="color: magenta">0,0</em>) × 2<sup><em class="bold" style="color: deepskyblue">127</em> − 127</sup>  =  2<sup>0</sup>  =  <em class="bold">1,0</em>
+</span></p>
+
+</div><!-- exemple -->
+
+
+<h4 id="unionRGB"> Codage bivalent d'une couleur en synthèse additive </h4>
+
+
+<div class="exemples">
+<div style="display: inline-block">
+  <img class="top-right" src="../img/unionRGBcolor.png" width="250px" style="margin-top: 1em;">
+<p class="square"> Pour coder des <strong class="title">couleurs en synthèse additive</strong> d'une <strong class="pros">manière plus polyvalente</strong> que supra <a class="supra" href="Cc5-5_structuresHeterogenes.html#structRGBcode"></a>, on peut déclarer un <strong>type</strong> <code class="prettyprint lang-c">union</code> constitué de <strong class="defin">deux champs superposés</strong> nommés <code class="prettyprint lang-c">hexCode</code> et <code class="prettyprint lang-c">field</code> : </p>
+</div><!-- display -->
+
+  
+<ul>
+  <li> Le <strong class="specialG">premier champ</strong>, nommé <code class="prettyprint lang-c">hexcode</code>, est un <strong>champ de 24 bits</strong> déclaré sur une enveloppe en <code class="prettyprint lang-c">uint32_t</code> pour définir le <strong>code hexadécimal</strong> global de la couleur tel qu'on s'en sert pour l'affichage des pages web en langages <strong><em class="sigle">HTML/CSS</em></strong>. </li>
+
+  <div class="nobullet">Par exemple <code>0xFF0000</code> code le rouge saturé <a class="external" href="https://htmlcolorcodes.com/fr/noms-de-couleur/" target="_BLANK"></a>. </div>
+
+  <li> Le <strong class="specialV">deuxième champ</strong>, nommé <code class="prettyprint lang-c">field</code> est un <strong>tableau de 3 éléments</strong> de type <code class="prettyprint lang-c">uint8_t</code>, codant respectivement les valeurs des <strong>3 composantes <em class="sigle">RGB</em></strong> de la couleur. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Ces valeurs étant de <strong>même type</strong> (entier compris entre <code>0</code> et <code>255</code>), il est avantageux d'avoir recours à un <strong class="pros">tableau</strong> plutôt qu'un type <code class="prettyprint lang-c">struct</code> car on pourra par la suite coder des <strong>traitements itératifs</strong> (boucles), tout en gardant une <strong>identification sélective</strong> lisible par le biais d'un <strong>type énuméré</strong>. </div>
+  </div><!-- expert -->
+</ul>
+
+
+<p> Sachant que dans le code hexadécimal d'une couleur, la composante <strong class="specialR">rouge</strong> est codée sur l'<strong>octet de poids fort</strong> et la composante <strong class="title">bleu</strong> sur l'<strong>octet de poids faible</strong>, il est nécessaire d'<strong class="defin">inverser l'ordre de codage des composantes</strong> dans le tableau par rapport à celui du sigle <strong><em class="sigle">RGB</em></strong>. </p>
+
+
+<p class="square"> On code donc le programme suivant qui, pour illustrer l'usage de ce type, affiche le <strong>code hexadécimal</strong> et la <strong>décomposition décimale <em class="sigle">RGB</em></strong> de la couleur <strong style="color: gold; background: black"> gold </strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+enum ColorLights {BLUE, GREEN, RED};
+
+typedef union {
+  uint32_t hexCode : 24; 
+  uint8_t  field[3];
+} RGBcolor ;
+
+int main() {
+  RGBcolor gold = {.hexCode = 0xFFD700};
+  printf("Gold : hexcode %X (red %u, green %u, blue %u)\n", gold.hexCode,
+          gold.field[RED], gold.field[GREEN], gold.field[BLUE]);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Sur <strong class="OnlineGDB">OnlineGDB</strong>, on obtient en sortie standard l'affichage : </p>
+
+<!---------- ne pas indenter ---------->  
+<pre class="displayDark">
+Gold : hexcode FFD700 (red 255, green 215, blue 0)  
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+
+<h3> Applications logicielles des types <code class="prettyprint lang-c">union</code> </h3>
+
+
+
+<p> Dans la pratique, les types <code class="prettyprint lang-c">union</code> sont notamment utilisés pour <strong class="defin">structurer les données</strong> dans les <strong class="title">protocoles de communication</strong> entre machines ou échanges d'informations entre diverses couches logicielles. L'intérêt est, comme on l'a vu dans les exemples précédents, de disposer de <strong class="defin">deux interprétations des données</strong>, l'une de <strong>haut niveau</strong>, l'autre de <strong>bas niveau</strong>. </p>
+
+<p> En règle générale, ces applications sont très dépendantes de la machine sur laquelle elle s'exécutent. Leur <strong>code source</strong> est <strong class="cons">rarement portable</strong>. </p>
+
+<!-- exemples :
+  1) Class IPAddress en Arduino (cf. dans le fichier IPAddress.h du noyau Arduino)
+  https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/IPAddress.h
+
+  ligne nº29 :
+  class IPAddress : public Printable {
+  private:
+    union {
+      uint8_t bytes[4];  // IPv4 address
+      uint32_t dword;
+    } _address;
+
+  2) Adresses IPv6 en langage C
+  cf. /mnt/BLT/SOURCES/SNIR/C_prog/IPv6  
+-->
+
+
+
+<!--
+<pre class="prettyprint lang-c linenums:1">
+const int buttonPin = 2, ledPin = 4;
+
+LogicalSignal button = {buttonPin, LOW, LOW};   
+
+void setUp() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonPin, INPUT);
+}
+
+void loop() {
+  updateSignal(button);
+  if (risingEdge(button)) {
+    digitalWrite(LEDpin, !digitalRead(LEDpin));
+  }
+}
+
+bool risingEdge(LogicalSignal inputSignal) { 
+<span class="nocode">…</span>
+</pre>
+-->
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

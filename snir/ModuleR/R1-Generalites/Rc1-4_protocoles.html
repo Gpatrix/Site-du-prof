@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="1"
+	data-pagenumber="IV"
+	data-pageState="OK"
+	data-pageheadtitle="Protocoles"
+	data-pagefulltitle="Les protocoles de communication"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<div class="exergue" style="display:inline-block">
+  <img class="top-right" src="../img/TCP-IP_OSI-detail.jpg" width="500px" style="padding-top: 1.2em">
+<p class="square"> On rappelle (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#protocoles" target="_BLANK"></a>) qu'un <strong class="title">protocole</strong> de communication informatique est un <strong class="defin">algorithme</strong> implémenté dans un composant logiciel qui cadence les <strong>échanges de données</strong> entre deux ou plusieurs <strong>machines</strong> dans un contexte spécifique (dialogue client‑serveur, etc.). Par « machines », on entend non seulement les <strong>équipements matériels</strong> mais aussi l'ensemble des <strong>logiciels</strong> (circuits électroniques microprogrammés, système d'exploitation, applications) qui permettent aux machines de communiquer. </p>
+
+<p> On a également vu que dans les réseaux informatiques, les <strong>échanges de données</strong> entre machines sont <strong class="warning">trop complexes</strong> à mettre en œuvre pour pouvoir être conformés à <strong class="cons">un seul</strong> <strong>protocole</strong>. On implémente donc ce qu'on appelle des <strong class="title">piles de protocoles</strong>, c'est‑à‑dire plusieurs protocoles qui s'enchaînent pour mener de bout en bout les communications. Par exemple, la pile de protocole « <strong><em class="sigle">HTTP</em></strong> - <strong><em class="sigle">TCP/IP</em></strong> - <strong><em class="mark">Ethernet</em> <em class="sigle">802.3</em></strong> » est une solution minimale pour permettre à un logiciel navigateur installé sur un poste de travail hébergé dans un réseau local de lire des pages web stockées dans un serveur distant sur un réseau public. De plus, en arrière‑plan de ces protocoles essentiels en opèrent d'autres – <strong><em class="sigle">DNS</em></strong>, <strong><em class="sigle">DHCP</em></strong>… – pour faciliter l'usage des réseaux. </p>
+
+
+<p class="square"> Présentes dès l'origine des communications informatiques, les <strong>piles de protocoles</strong> n'ont cessé depuis de se <strong class="warning">complexifier</strong>, au point qu'il est devenu indispensable de disposer d'<strong class="defin">outils de représentation</strong> de leurs différentes « strates logicielles ». C'est ainsi qu'est apparue la notion de <strong class="title">modèle en couches</strong>, avec : </p>
+
+<ul>
+	<li> d'abord le <strong class="specialLB">modèle <em class="sigle">TCP/IP</em></strong> construit sur la base des <strong>protocoles existants</strong> du même nom ; </li>
+
+	<li> puis, le <strong class="specialLB">modèle <em class="sigle">OSI</em></strong> qui n'est basé sur aucun protocole existant mais se veut <strong>générique</strong>. </li>
+</ul>
+
+<p> Bien que <strong class="cons">simpliste</strong> et <strong class="cons">insuffisant</strong> pour décrire les aspects complexes de la technologie réelle et évolutive des protocoles, le <strong class="title">modèle <em class="sigle">OSI</em></strong> s'est quand même peu à peu imposé comme une « grille de lecture » de <strong class="pros">référence</strong> pour présenter les piles de protocoles. Par exemple, c'est bien ce <strong>modèle <em class="sigle">OSI</em></strong> (et non pas <em class="sigle">TCP/IP</em>) que le constructeur <strong class="Cisco">Cisco</strong> utilise comme outil de description dans son logiciel <strong class="Cisco">Packet Tracer</strong> (cf. TP R1‑1 <a class="TP" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/Rtp1-1_architectures.html" target="_BLANK"></a>). </p>
+
+
+
+<p class="square"> Ce chapitre a donc pour <strong class="title">principaux objectifs</strong> : </p>
+
+<ul>
+	<li> de décrire les principes généraux de la <strong class="specialLB">structuration en couches</strong> des <strong>piles de protocoles</strong> ;   </p></li>
+
+	<li> de dresser un <strong class="specialLB">panorama des protocoles</strong> de l'<strong>Internet</strong> ; </li>
+</ul>
+
+<p> et ce dans la perspective d'acquérir le <strong class="pros">recul</strong> nécessaire pour l'étude détaillée de chaque protocole qui sera proposée dans les parties suivantes de ce module de formation. En effet, <strong class="warning">aucun protocole n'est réellement indépendant des autres</strong> : </p>
+
+<ul>
+	<li> les protocoles de la <strong>couche la plus haute</strong> utilisent les <strong class="defin">services</strong> des protocoles des <strong>couches inférieures</strong> ; </li>
+
+	<li> les protocoles de ces <strong>couches inférieures</strong> ont très peu d'intérêt en eux‑mêmes, ils sont essentiellement conçus pour <strong class="defin">servir</strong> aux protocoles de la <strong>couche la plus haute</strong>. </li>
+</ul>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+<h2> La structuration logicielle en couches </h2>
+
+
+
+<h3 id="principes"> Principes généraux </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> De manière générale, les protocoles de communication sont structurés en plusieurs <strong class="title">couches logicielles</strong> (en anglais, <em class="english">software layers</em>) qu'on présente comme un <strong>empilage hiérarchique</strong> par <strong class="defin">niveaux d'abstraction</strong>, tels que : </p>
+	<img class="top-right" src="../img/pileProtocoles.png" width="300px">
+<ul>
+	<li> la couche de plus <strong class="defin">haut niveau</strong> est intégrée à l'<strong>application</strong> qui initie la communication (navigateur web, client de messagerie, serveur…) ;   </li>
+
+	<li> la couche de plus <strong class="defin">bas niveau</strong> met œuvre les <strong>signaux physiques</strong> sur le médium de transmission de données.   </li>
+</ul>
+<p> On parle de <strong class="title">pile de protocoles</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Pile_de_protocoles" target="_BLANK">W</a> (<em class="english">protocol stack</em>) pour désigner un tel ensemble de logiciels. </p>
+</div><!-- important -->
+
+
+
+
+<div class="complement">
+
+<p> Les <strong class="title">interactions</strong> entre les <strong>couches logicielles</strong> d'une pile de protocoles suivent le <strong class="defin">schéma bidimensionnel</strong> suivant : </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/protocoleNiveauN.png" width="600px">
+<ul>
+	<li> <strong class="specialLB">abstraitement</strong>, on considère qu'un protocole opère <strong class="defin">horizontalement</strong> dans <strong>une seule couche</strong>, entre deux machines communicantes – typiquement, un <em>client</em> et un <em>serveur</em> ;    </li>
+
+	<li> mais <strong class="specialLB">concrètement</strong>, un protocole fonctionne <strong class="defin">verticalement</strong>, c'est‑à‑dire en interagissant avec les <strong>couches immédiatement supérieure et inférieure</strong> via des commandes logicielles appelées <strong>primitives de service</strong> (au sens où ces couches voisines rendent ou demandent un service de communication). </li>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Si l'on considère chacune machine isolément, on peut parler de <strong class="title">couches « homologues »</strong>, pour désigner leurs couches de <strong>même niveau</strong>. </p>
+</div><!-- remarque -->
+
+
+<div class="expert">
+<p class="square"> Les <strong class="title">modèles en couche</strong> sont conçus pour qu'en principe, tout <strong class="defin">protocole</strong> appartient à une <strong>couche bien précise</strong>, tout en sachant qu'il peut bien évidemment y avoir plusieurs protocoles dans une même couche. </p>
+
+<div class="exemples">
+<p class="exemples"> Ainsi, il est communément admis que les nombreux <strong class="title">protocoles dits applicatifs</strong> <strong class="specialLB"><em class="sigle">HTTP</em></strong>, <strong class="specialLB"><em class="sigle">FTP</em></strong>, <strong class="specialLB"><em class="sigle">SMTP</em></strong>… appartiennent tous à la <strong>couche la plus haute</strong> (celle qui est en interaction avec l'utilisateur de la machine). </p>
+</div><!-- exemple -->
+
+
+<p class="square"> Mais pour <strong class="title">certains protocoles</strong>, il est <strong class="cons">difficile</strong> de concevoir qu'ils appartiennent à <strong>une seule couche</strong>. </p>
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> Le protocole <strong class="specialLB"><em class="sigle">ICMP</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol" target="_BLANK">W</a> (<em class="english">internet control message protocol</em>) qui permet de mettre en œuvre une commande <code>ping</code> <a class="external" href="https://fr.wikipedia.org/wiki/Ping_(logiciel)" target="_BLANK">W</a> peut sembler opérer <strong class="cons">au dessus</strong> du protocole <strong><em class="sigle">IP</em></strong>, de niveau 3 dans le modèle <em class="sigle">OSI</em>. C'est pourquoi certains auteurs le positionnent entre les niveaux 4 et 3 du modèle <em class="sigle">OSI</em> (cf. par exemple <a class="external" href="https://fr.wikipedia.org/wiki/Suite_des_protocoles_Internet#Couches_TCP/IP" target="_BLANK">W</a>). </li>
+
+	<div class="nobullet">	En réalité, il est plus pertinent de considérer qu'il est <strong>au même niveau</strong> que <em class="sigle">IP</em>. En effet, <strong><em class="sigle">ICMP</em></strong> est un protocole autonome, qui adopte le <em>même algorithme</em> qu'<em class="sigle">IP</em>, mais au lieu d'opérer sur un paquet issu de la couche <em>Transport</em>, il crée lui‑même un datagramme (avec une charge utile vide) pour l'adresse destinataire à tester. </div>
+
+	<li> Le protocole <strong class="specialLB"><em class="sigle">ARP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Address_Resolution_Protocol" target="_BLANK">W</a>(address resolution protocol) est considéré comme opérant <strong>entre les niveaux 3 et 2</strong> du modèle <em class="sigle">OSI</em>. </li>
+</ul>
+</div><!-- exemples -->
+</div><!-- expert -->
+
+
+<h4 id="principesComm"> Principes de la communication verticale </h4>
+
+
+<div class="important">
+<p> Au cours de la mise en œuvre d'un protocole entre <strong>deux machines communicantes</strong>, l'une <strong class="specialLB">émettrice</strong> et l'autre <strong class="specialLB">réceptrice</strong>, le protocole opère des <strong class="title">traitements logiciels</strong> sur des <strong>éléments de données</strong> (en anglais, <em class="english">data units</em>, abrégé <em class="bold"><em class="sigle">DU</em></em>). </p>
+
+<p> En adoptant un <strong class="title">point de vue vertical</strong>, ces traitements apparaissent « <strong class="defin">inverses</strong> » selon la machine considérée. Ils consistent en de l'<strong >encapsulation-décapsulation</strong> de données, de la <strong>segmentations-désegmentation</strong> en paquets, etc. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+<p> Ainsi, lors d'une transmission de données depuis une <strong>machine A</strong> <strong class="specialLB">émettrice</strong> à destination d'une <strong>machine B</strong> <strong class="specialLB">réceptrice</strong>, un <strong class="title">protocole</strong> de <strong class="specialY">niveau n</strong> d'<strong>encapsulation-décapsulation</strong> procède de la manière suivante : </p>
+
+
+<ul>
+	<li> Sur la <strong>machine A</strong>, le protocole de <strong>niveau n</strong> reçoit un <strong class="specialT">élément de donnée</strong> appelé <strong class="specialT"><em class="sigle">SDU</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Service_Data_Unit" target="_BLANK">W</a> (<em class="english">service data unit</em>) transmis par un autre protocole, de niveau <em class="bold" st><var>n</var> + 1</em>, via une primitive de service. On parle également de <strong class="specialT">charge utile</strong> (en anglais <em class="english">payload</em> <a class="external" href="https://en.wikipedia.org/wiki/Payload_(computing)" target="_BLANK">W</a>). </li>
+
+  <img class="top-right" src="../img/SDU_PDU.png" width="600px">
+
+	<div class="nobullet"> Le <strong>protocole de niveau n</strong> <strong class="defin">concatène</strong> à ce <strong class="specialT"><em class="sigle">SDU</em></strong> un <strong>en‑tête</strong> appelé de façon général <strong class="specialY"><em class="sigle">PCI</em></strong> (<em class="english">protocol control information</em>). Via une primitive de service, il transmet alors à un protocole de niveau <em class="bold"><var>n</var> − 1</em> cette concaténation « <strong class="specialY"><em class="sigle">PCI</em></strong> + <strong class="specialT"><em class="sigle">SDU</em></strong> » formant ce qu'on appelle un <strong class="specialO"><em class="sigle">PDU</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Protocol_Data_Unit" target="_BLANK">W</a> (<em class="english">protocol data unit</em>).  </div>
+
+	<li> Sur la <strong>machine B</strong>, ce même <strong class="specialO"><em class="sigle">PDU</em></strong> arrive en étant transmis par le protocole de niveau <em class="bold"><var>n</var> − 1</em> à celui de niveau <strong>n</strong>. </li>
+
+	<div class="nobullet"> Ce protocole de <strong>niveau n</strong> consiste ici effectuer le <strong class="defin">traitement inverse</strong> de celui accompli sur la machine émettrice, à savoir <strong>supprimer l'en‑tête</strong> <strong class="specialY"><em class="sigle">PCI</em></strong> ajouté sur la machine <strong>A</strong>, pour extraire le <strong class="specialT"><em class="sigle">SDU</em></strong>, afin de le transmettre en qualité de <strong class="specialT"><em class="sigle">PDU</em></strong> au protocole de niveau <em class="bold"><var>n</var> + 1</em>. </div>
+</ul>
+</div><!-- complement -->
+
+
+<!-- éventuellement ajouter un exemple (requête DHCP ?) -->
+
+
+<h4> Principe d'indépendance des couches </h4>
+
+
+<div class="important">
+<p> <strong class="title">En principe</strong>, les piles de protocoles sont conçues pour que <strong class="specialLB">chaque couche</strong> soit <strong class="title">indépendante</strong> des autres couches. Concrètement, cela signifie que, pour opérer, un <strong>protocole</strong> de <strong>niveau n</strong> ne doit <strong class="warning">pas</strong> avoir besoin d'<strong>extraire</strong> – et encore moins <strong class="cons">modifier</strong> – des données d'un <strong><em class="sigle">SDU</em></strong> transmis par un protocole de <strong>niveau</strong> <em class="bold"><var>n</var> + 1</em>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> <strong class="title">Dans la pratique</strong>, les concepteurs de protocoles ont parfois été contraints de <strong class="warning">déroger</strong> au <strong>principe d'indépendance</strong> pour répondre aux défits de la croissance très rapide de l'Internet. </p>
+</div><!-- complement -->
+
+<div class="exemples" id="NAT">
+<p class="exemple"> Ainsi en va‑t‑il des <strong class="title">techniques de <em class="sigle">NAT</em></strong> (<em class="english">network address translation</em>, cf. chap. R1‑III <a class="previous" href="Rc1-3_adressage.html#NAT" target="_BLANK"></a>) : au <strong class="specialO">niveau 3</strong>, pour router sur l'Internet un <strong>datagramme <em class="sigle">IP</em></strong> émis par une machine dotée d'une adresse privée, le routeur‑passerelle <strong class="cons">modifie</strong> le <strong>numéro de port logiciel</strong> qui étiquette le <em class="sigle">PDU</em> généré par le protocole du <strong class="specialY">niveau 4</strong> (<em class="sigle">UDP</em>, par exemple).  </p>	
+</div><!-- exemple -->
+
+
+<h3> Le « modèle » <em class="sigle">TCP/IP</em> </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/modeleTCPIP.png" width="200px"> 
+<p> La <strong class="title">pile de protocoles Internet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Suite_des_protocoles_Internet" target="_BLANK ">W</a> dite « <strong class="title"><em class="sigle">TCP/IP</em></strong> » peut être considérée aujourd'hui comme un <strong class="defin">modèle de référence simplifié</strong> à <strong>4 couches</strong> (cf. figure ci‑contre). </p>
+
+<p> Dans ce modèle, les <strong class="title">couches</strong> ne sont <strong class="warning">pas numérotées</strong> mais désignées par leur nom : <br>
+<span class="inline">
+	<strong>Application</strong>, <strong>Transport</strong>, <strong>Internet</strong> et <strong>Accès réseau</strong>
+</span> </p>
+
+<p> Quant aux protocoles <em class="bold"><em class="sigle">TCP</em></em> (<em class="english">transmission control protocol</em>) et <em class="bold"><em class="sigle">IP</em></em> (<em class="english">Internet protocol</em>), ils ne sont que les deux plus emblématiques de la pile. En fait, il y en a beaucoup d'autres (<em class="mark">Ethernet</em>, etc.). </p>
+</div>
+
+<div class="complement">
+<p> <strong class="title">Historiquement</strong>, cette pile de protocoles n'a <strong>pas été conçue comme un modèle</strong>, mais elle s'est imposée comme telle en raison de son <strong class="pros">indiscutable succès opérationnel</strong>. En effet : </p>
+
+<ul>
+	<li> le réseau <strong>Arpanet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/ARPANET" target="_BLANK">W</a> qui employait initialement le protocole <em class="sigle">NCP</em> <a class="external" href="https://fr.wikipedia.org/wiki/Network_Control_Protocol" target="_BLANK">W</a>, a fini par adopter en 1983 les protocoles <strong class="title"><em class="sigle">TCP</em></strong> et <strong class="title"><em class="sigle">IP</em></strong>, aboutissant à la première ébauche de l'Internet que l'on connaît aujourd'hui ; </li>
+
+	<li> parallèlement, de nombreux réseaux associés à des <strong>protocoles concurrents</strong> (<em class="sigle">RNIS</em>, <em class="sigle">X.25</em>…) ont fini par être <strong class="cons">complètement abandonnés</strong>, malgré leur ancienneté, en raison de leurs faibles performances, comparées à celles de <strong><em class="sigle">TCP/IP</em></strong>. </li>
+</ul>
+
+<p> Toutefois, <strong class="title"><em class="sigle">TCP/IP</em></strong> ne constitue <strong class="warning">pas</strong> un <strong class="defin">modèle</strong> au sens fort du terme – c'est‑à‑dire un outil de représentation générique, au même titre que le modèle <strong><em class="sigle">OSI</em></strong> – dans la mesure où il ne s'agit que d'une <strong>formalisation</strong> de l'agencement d'une pile de protocoles existante. </p>
+</div><!-- complement -->
+
+<p> Par ailleurs, le « modèle » <em class="bold"><em class="sigle">TCP/IP</em></em> n'est pas exempt de <strong class="warning">défauts</strong>. En particulier, sa couche la plus basse – Accès réseau – est très <strong class="cons">insuffisamment détaillée</strong>. Elle ne permet pas de révéler l'empilement des protocoles qui opèrent à son niveau. </p>
+
+
+
+<h3 id="modeleOSI"> Le modèle OSI </h3>
+
+
+
+<div class="important">
+<p> Le <strong class="title">modèle <em class="sigle">OSI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modèle_OSI" target="_BLANK ">W</a> (<em class="english">open systems interconnection</em>) est une <strong class="defin">norme internationale</strong> établie par l'<em class="sigle">ISO</em> pour la <strong class="defin">spécification</strong> de <strong>piles de protocoles</strong> des réseaux informatiques. </p>
+
+<p> Constitué de <strong class="title">7 couches</strong> (cf. figure ci‑dessous), il est aujourd'hui largement employé comme <strong class="pros">modèle de référence</strong> pour décrire la <strong>pile de protocoles de l'Internet</strong>.  </p>
+<img class="top-left" src="../img/modeleOSI.png" style="max-width: 1000px"> 
+</div><!-- important -->
+
+
+<div class="complementExpert">
+<p> Introduit dès les années 1970 alors que foisonnaient différentes piles de protocoles pour mettre en œuvre les communications dans les réseaux informatiques, le <strong class="title">modèle <em class="sigle">OSI</em></strong> est le fruit d'une <strong class="warning">histoire mouvementée</strong>. </p>
+<ul>
+	<li> Ne proposant <strong>aucune solution logicielle</strong> opérationnelle, il n'a <strong class="cons">pas acquis</strong> la <strong>crédibilité</strong> nécessaire pour jouer un rôle de spécification pour la pile de protocoles de l'Internet. </li>
+
+	<li> Ses <strong>couches hautes</strong> ont pu être considérées au début comme <strong class="cons">trop détaillées</strong> pour analyer le fonctionnement de nombreux protocoles. </li>
+
+	<li> Même l'introduction de la <strong>couche Liaison</strong> (niveau 2), inexistante dans le modèle <em class="sigle">TCP/IP</em>, n'a <strong class="cons">pas suffi</strong> pour détailler correctement les protocoles à l'œuvre dans la technologie <em class="mark">Ethernet</em>. </li>
+</ul>
+</div><!-- complementExpert -->
+
+<div class="expert">
+<p> <strong class="title">Dans l'idéal</strong>, le <strong>modèle <em class="sigle">OSI</em></strong> aurait pu être le point de départ d'une <strong class="defin">rétro‑conception</strong> de la pile de protocoles <strong><em class="sigle">TCP/IP</em></strong> pour en corriger certains défauts. Mais il n'a suscité l'adhésion, ni des concepteurs de <em class="sigle">TCP/IP</em>, ni des opérateurs de télécommunication de l'époque, qui ont privilégié d'autres solutions technologiques opérationnelles (comme <em class="mark">Transpac</em>) – alors que finalement, elles ont disparu. </p>
+
+<p> Le <strong class="title">modèle <em class="sigle">OSI</em></strong> est donc resté un outil de modélisation <strong class="cons">trop simple</strong> (un empilage de couches) dont les principes rigides (notamment l'indépendance des couches) ne permettent pas de détailler finement des techniques complexes comme le <strong><em class="sigle">NAT</em></strong> (cf. supra <a class="supra" href="Rc1-4_protocoles.html#NAT" target="_TOP"></a>) ou l'<em class="sigle">ITP</em> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Tunneling_Protocol" target="_BLANK">W</a> (<em class="english">Internet tunneling protocol</em>). </p>
+</div><!-- expert -->
+
+<p> Malgré ses défauts (simplisme, rigidité, etc.), il reste <strong class="pros">le moins mauvais modèle</strong> pour décrire la <strong>pile des protocoles de l'Internet</strong>, ce qui explique pourquoi il y est si souvent fait référence. </p> 
+
+<div class="remarques">
+<p class="remarque"> Certains spécialistes (notamment Andrew Tanenbaum <a class="external" href="https://fr.wikipedia.org/wiki/Andrew_Tanenbaum" target="_BLANK">W</a>) proposent un <strong class="title">modèle hybride</strong> entre le modèle <strong><em class="sigle">OSI</em></strong> et le modèle <strong><em class="sigle">TCP/IP</em></strong>. Essentiellement, ce modèle consiste à fusionner dans le modèle <em class="sigle">OSI</em> les couches 5, 6, et 7. </p>
+
+<p> Cette approche pouvait trouver un sens <strong class="cons">il y a une quinzaine d'années</strong>, lorsque les couches 5 et 6 étaient vides pour de nombreuses applications. Aujourd'hui, avec le recours massif aux protocoles de <strong>chiffrement</strong>, il est commode de disposer d'au moins d'une couche intermédiaire entre la couche <em>Application</em> et la couche <em>Transport</em> pour y situer ces protocoles.  </p>
+</div><!-- remarques -->
+
+
+<h4> Le modèle IEEE de la couche liaison</h4>
+
+
+<div class="complement">
+<p> Les <strong>protocoles</strong> de communication employés au niveau de la <strong class="title">couche liaison</strong> du modèle <strong><em class="sigle">OSI</em></strong> ont presque tous été normalisés par <strong><em class="sigle">IEEE</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Institute_of_Electrical_and_Electronics_Engineers" target="_BLANK">W</a> (<em class="english">Institute of electrical and electronics engineers</em> – cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#organismes" target="_BLANK"></a>). </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaison.png" width="200px">
+<p> Cet institut propose en fait un <strong class="title">modèle détaillé</strong> pour la <strong>couche Liaison</strong>, en distinguant : </p>
+  
+<ul>
+	<li> la <strong>sous‑couche</strong> <strong class="specialLB"><em class="sigle">LLC</em></strong>  <a class="external" href="https://en.wikipedia.org/wiki/Logical_link_control" target="_BLANK">W</a> (<em class="english">logical link control</em>) qui couvre le multiplexage entre les différents protocoles de niveau supérieur à prendre en charge ; </li>
+
+	<li> la <strong>sous‑couche</strong> <strong class="specialLB"><em class="sigle">MAC</em></strong>  <a class="external" href="https://en.wikipedia.org/wiki/Medium_access_control" target="_BLANK">W</a> (<em class="english">media access control</em>) qui couvre le découpage en trames, l'adressage, l'accès au support physique et le contrôle d'erreurs. </li>
+</ul>
+</div><!-- display -->
+
+<p> Mais par ailleurs, les <strong class="title">normes <em class="sigle">IEEE</em></strong> de <strong>technologies de liaisons</strong> (<em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>… – cf. infra <a class="infra" href="Rc1-4_protocoles.html#protocolesLiaison"></a>)  couvrent également de nombreux aspects de la <strong class="specialR">couche physique</strong>. Il est donc <strong class="cons">peu aisé</strong> d'établir des <strong>correspondances</strong> claires entre le modèle <strong><em class="sigle">IEEE</em></strong> et le modèle <strong><em class="sigle">OSI</em></strong>. </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="panorama"> Panorama des protocoles de l'Internet </h2>
+
+
+<p> Le but de cette section est de donner un <strong>aperçu global</strong> de la <strong class="title">pile de protocoles</strong> qui permet de mettre en œuvre les échanges de données sur les <strong class="defin">réseaux informatiques</strong> usuels. Qu'ils soient <strong>privés</strong> ou <strong>publics</strong>, ces réseaux ont presque tous fini par adopter la technologie logicielle dite <strong><em class="sigle">TCP/IP</em></strong> employée initialement sur l'Internet. </p>
+
+<p> Sans surprise, on adopte le <strong class="defin">modèle <em class="sigle">OSI</em></strong> pour décrire l'agencement de tous ces protocoles. </p>
+
+
+
+<h3 id="lowerVShigherLayers"> Distinction des couches hautes et basses </h3>
+
+
+
+<div class="complement"> 
+<p> Dans le modèle <em class="sigle">OSI</em> (cf. la figure supra <a class="supra" href="Rc1-4_protocoles.html#modeleOSI"></a>), il est d'usage de <strong class="title">distinguer</strong> les <strong>couches</strong> dites <strong class="specialLB">hautes</strong> et celles dites <strong class="specialLB">basses</strong>. Au delà des considérations hiérarchiques évoquées préalablement <a class="supra" href="Rc1-4_protocoles.html#principes"></a>, la frontière se justifie au sens où, dans un échange de données entre deux machines terminales <strong>A</strong> et <strong>B</strong> (ordinateurs, smartphones, imprimantes, etc.) : </p>
+
+<ul>
+	<li> les <strong class="specialLB">couches hautes</strong> sont opérées par des composants logiciels installés <strong >uniquement sur les machines terminales</strong> <strong>A</strong> et <strong>B</strong> ; d'un point de vue horizontal, on parle de <strong class="defin">communication de bout en bout</strong> (en anglais <em class="english">end‑to‑end layer</em>) ; </li>
+
+	<li> les <strong class="specialLB">couches basses</strong>  sont opérées par des composants logiciels installés sur les <strong>machines terminales A</strong> et <strong>B</strong> mais <strong>aussi</strong> sur les éventuels <strong>nœuds intermédiaires</strong> des réseaux par lesquels les données transitent (switchs, routeurs…) ; d'un point de vue horizontal, on peut alors parler de <strong class="defin">communication de proche en proche</strong>.  </li>
+</ul>
+</div><!-- complement -->
+
+	
+<p> La figure ci‑dessous illustre de façon simplifiée le <strong class="title">cheminement des données</strong> échangées entre <strong>deux applications</strong> (typiquement, un navigateur et un serveur web) exécutées respectivement sur deux machines hébergées dans des réseaux locaux différents. </p>
+  <img class="top-left" src="../img/comViaModeleOSI.png"> 
+<p> On peut ainsi visualiser que les <strong>switchs</strong> et les <strong>routeurs</strong> embarquent des logiciels de communication jusqu'au <strong>niveau 3</strong>, donc uniquement situés dans les <strong class="specialLB">couches basses</strong> du modèle <strong><em class="sigle">OSI</em></strong>. </p>
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">switchs</strong> dits <strong class="title">administrables</strong> (en anglais, <em class="english">managed</em>), qui permettent notamment de mettre en place des réseaux locaux virtuels (<em class="sigle">VLAN</em>), opèrent également au <strong class="specialO">niveau 3</strong> du modèle <strong><em class="sigle">OSI</em></strong>, comme les routeurs. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Protocoles de la couche <em>Application</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="200px">
+<p> La <strong>couche de niveau 7</strong> dite <strong class="title">Application</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couche_application" target="_BLANK">W</a> regroupe <strong class="defin">tous les protocoles de haut niveau</strong> directement mis en œuvre par les <strong>applications de communication</strong> (navigateur, client de messagerie, etc.) exécutées sur les machines terminales. </p>
+
+<p> Le plus souvent, ces applications opèrent selon un <strong>modèle client‑serveur</strong>. Les protocoles qu'elles emploient sont systématiquement rattachés à un ou plusieurs <strong>ports logiciels</strong> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#portLogiciel" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Les <strong class="title">protocoles les plus importants</strong> de la <strong>couche Application</strong> sont <strong class="pros">revus en détail</strong> dans les différents chapitres de la partie <span class="partie">R2</span> du module. </p>
+</div><!-- expert -->
+
+
+<h4 id="applicationsUtilisateurs"> Applications utilisateurs </h4>
+
+
+<div class="complement">
+<p> Les <strong class="title">principales applications de communication</strong> sont celles qui <strong class="defin">répondent aux besoins directs des utilisateurs</strong> des <strong>machines terminales</strong> (poste de travail, smartphone, etc.). Le tableau ci‑dessous recense les catégories d'applications <strong>les plus usuelles</strong> et les protocoles qu'elles mettent en œuvre. </p>
+</div><!-- complement -->	
+
+<div style="overflow-x: auto; margin: 0.5em;">
+<table style="margin: 0em; ">
+	<col style="min-width:20%; max-width:20%">
+	<col style="width:auto">
+	<col style="min-width:15%; max-width:15%">
+	<thead><tr>  
+    <th> Application  </th>
+    <th> Protocole(s) </th>
+    <th> Nº port(s) </th>
+  </tr></thead>
+  <tbody>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong class="specialLB">navigation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Navigateur_web" target="_BLANK">W</a> </td>
+
+  	<td> <strong><em class="sigle">HTTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol" target="_BLANK">W</a> (<em class="english">hyper-text transfer protocol</em>) </td>
+
+  	<td> 80 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong class="specialLB">messagerie</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Client_de_messagerie" target="_BLANK">W</a> </td>
+
+  	<td> <strong><em class="sigle">IMAP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Message_Access_Protocol" target="_BLANK">W</a> (<em class="english">Internet message access protocol</em>) – courrier entrant <br>
+
+  	<strong><em class="sigle">SMTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol" target="_BLANK">W</a>(<em class="english">simple mail transfer protocol</em>) – courrier sortant </td>
+
+  	<td> 143 <br> 25</td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong  class="specialLB">partage de ressources</strong> <a class="external" href="https://en.wikipedia.org/wiki/Shared_resource" target="_BLANK">W</a> </td>
+
+  	<td> <strong><em class="sigle">SMB</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Server_Message_Block" target="_BLANK">W</a> (<em class="english">server message block</em>) <br>
+    <strong><em class="sigle">NFS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Network_File_System" target="_BLANK">W</a> (<em class="english">network file system</em>)
+
+  	</td>
+
+  	<td> 445  <br> 2049 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong  class="specialLB">transfert de fichiers</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transfert_de_fichier" target="_BLANK">W</a> </td>
+
+  	<td> <strong><em class="sigle">FTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/File_Transfer_Protocol" target="_BLANK">W</a> (<em class="english">file transfer protocol</em>) </td>
+
+  	<td> 20 (écoute) <br> 21 (données) </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong class="specialLB">terminal distant</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Accès_à_distance" target="_BLANK">W</a> </td>
+
+  	<td> <strong>Telnet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Telnet" target="_BLANK">W</a> (<em class="english">terminal network</em>) <br>
+  	<strong><em class="sigle">SSH</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Secure_Shell" target="_BLANK">W</a> (<em class="english">secure shell</em>) 	
+
+  	<td> 23 <br> 22 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"><strong  class="specialLB">audio et video</strong> (dont <em class="mark">VoIP</em> <a class="external" href="https://fr.wikipedia.org/wiki/Voix_sur_IP" target="_BLANK">W</a>) </td>
+
+  	<td> <strong><em class="sigle">IAX</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Inter-Asterisk_eXchange" target="_BLANK">W</a> (<em class="english">inter‑asterisk exchange</em>) <br> 
+
+    <strong><em class="sigle">MGCP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Media_Gateway_Control_Protocol" target="_BLANK">W</a> (<em class="english">media gateway control protocol</em>)…
+  	</td>
+
+  	<td> 4569 <br> 2427 </td>
+  </tr>
+  </tbody>
+</table>
+</div><!-- overflow -->  
+
+
+<h4 id="servicesReseau"> Services réseau </h4>
+
+
+<div class="complement">
+<p> On trouve également dans la <strong>couche de niveau 7</strong> des <strong class="title">protocoles de service</strong> dont le rôle est de <strong class="defin">simplifier l'usage et la gestion des réseaux</strong>. Les plus connus sont listés dans le tableau ci‑dessous. </p>
+</div><!-- complement -->	
+
+
+<div style="overflow-x: auto; margin: 0.5em;">
+<table style="margin: 0em; ">
+	<col style="min-width:20%; max-width:20%">
+	<col style="width:auto">
+	<col style="min-width:15%; max-width:15%">
+	<thead><tr>  
+    <th> Application  </th>
+    <th> Protocole(s) </th>
+    <th> Nº port(s) </th>
+  </tr></thead>
+  <tbody>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong class="specialLB">adressage symbolique</strong> </td>
+
+  	<td> <strong><em class="sigle">DNS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domain_Name_System" target="_BLANK">W</a> (<em class="english">domain name system</em>) </td>
+
+  	<td> 53 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong class="specialLB"> configuration automatique </strong> </td>
+
+  	<td> <strong><em class="sigle">BOOTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bootstrap_Protocol" target="_BLANK">W</a> (<em class="english">bootstrap protocol</em>) <br>
+
+    <strong><em class="sigle">DHCP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" target="_BLANK">W</a> (<em class="english">dynamic host configuration protocol</em>)
+  	</td>
+
+  	<td> 67 (serveur) <br> 68 (client) </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong class="specialLB"> partage du temps <em class="sigle">UTC</em> </strong> </td>
+
+  	<td> <strong><em class="sigle">NTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Network_Time_Protocol" target="_BLANK">W</a> (<em class="english">network time protocol</em>) </td>
+
+  	<td> 123 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 1em"> <strong class="specialLB"> supervision  de réseau </strong> </td>
+
+  	<td> <strong><em class="sigle">SNMP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Simple_Network_Management_Protocol" target="_BLANK">W</a> (<em class="english">simple network management protocol</em>) </td>
+
+  	<td> 161 & 162 </td>
+  </tr>
+  </tbody>
+</table>
+</div><!-- overflow -->  
+
+<div class="remarques">
+<p class="remarque"> Le <strong class="title"><em class="sigle">DNS</em></strong> n'est <strong class="warning">pas seulement un protocole</strong>, c'est un <strong class="defin">système réparti</strong> sur l'ensemble de l'Internet qui met en jeu plusieurs protocoles et qui s'appuie sur de nombreux serveurs publics dédiés (cf. chap. R2‑I <a class="next" href="../R2-Applications/Rc2-1_dns_url.html" target="_BLANK"></a>). </p>
+</div><!-- remarque -->
+
+
+
+<h3> Protocoles de la couche <em>Présentation</em>  </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/couchePresentation.png" width="200px">
+<p> La <strong>couche de niveau 6</strong> dite <strong class="title">Présentation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couche_présentation" target="_BLANK">W</a> regroupe des protocoles de <strong class="defin">transcodage</strong>, de <strong class="defin">compression-décompression</strong> ou de <strong class="defin">chiffrement-déchiffrement</strong> des <strong class="defin">données</strong> issues ou à destination de la couche <em>Application</em>. </p>	
+</div><!-- important -->
+
+<p> Il est malaisé, dans le cadre de ce cours, de dresser un inventaire représentatif de ces protocoles. On se contente de donner <strong class="title">deux exemples emblématiques</strong>. </p>
+
+
+<h4 id="TLS"> Protocole de chiffrement‑déchiffrement TLS </h4>
+
+
+<div class="complement">
+<p> Le <strong class="specialLB">protocole de chiffrement-déchiffrement</strong> <strong class="title"><em class="sigle">TLS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transport_Layer_Security" target="_BLANK">W</a> (<em class="english">transport layer security</em>) agit comme une <strong class="defin">sur‑couche logicielle</strong> pour de nombreux <strong>protocoles applicatifs</strong>. Il les transforme en <strong class="defin">protocoles sécurisés</strong>, reconnaissables par l'ajout d'une <strong>lettre‑suffixe</strong> « <strong class="title"><em class="sigle">S</em></strong> » à leur sigle, comme initiale du qualificatif <strong>secure</strong>. </p>
+
+<p> Systématiquement, il opère une <strong>translation des ports utilisés</strong> par ces protocoles (cf. le tableau ci‑dessous qui donne quelques exemples).  </p>
+</div><!-- complement -->
+
+
+<table>
+  <tr>  
+    <th style="text-align: left; padding-left: 2em"> Protocole <br> initial  </th>
+    <th style="text-align: left; padding-left: 2em"> Nº port(s) <br> d'origine </th>
+    <th style="text-align: left; padding-left: 2em"> Protocole  <br> sécurisé </th>
+    <th style="text-align: left; padding-left: 2em"> Nº port(s) <br> sécurisé </th>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 2em"> <em class="sigle">HTTP</em> </td>
+  	<td style="padding-left: 2em"> 80 </td>
+  	<td style="padding-left: 2em"> <em class="sigle">HTTP<em class="bold">S</em></em> </td>
+  	<td style="padding-left: 2em"> 443 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 2em"> <em class="sigle">IMAP</em> </td>
+  	<td style="padding-left: 2em"> 143 </td>
+  	<td style="padding-left: 2em"> <em class="sigle">IMAP<em class="bold">S</em></em> </td>
+  	<td style="padding-left: 2em"> 993 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 2em"> <em class="sigle">SMTP</em> </td>
+  	<td style="padding-left: 2em"> 25 </td>
+  	<td style="padding-left: 2em"> <em class="sigle">SMTP<em class="bold">S</em></em> </td>
+  	<td style="padding-left: 2em"> 465 </td>
+  </tr>
+  <tr>
+  	<td style="text-align: left; padding-left: 2em"> <em class="sigle">FTP</em> </td>
+    <td style="padding-left: 2em"> 20 & 21 </td>
+  	<td style="padding-left: 2em"> <em class="sigle">FTP<em class="bold">S</em></em> </td>
+  	<td style="padding-left: 2em"> 990 & 989 </td>
+  </tr>
+</table>
+
+<div class="remarques">
+<p class="remarque"> Le protocole <strong class="title"><em class="sigle">TLS</em></strong> est parfois considéré comme faisant partie de la <strong class="specialG">couche Application</strong> ou de la <strong class="specialT">couche Session</strong>, par exemple, ici <a class="external" href="https://fr.wikipedia.org/wiki/Transport_Layer_Security#Réseau" target="_BLANK">W</a>. </p>
+
+<p> Mais si l'on consulte la version anglophone de cette page <a class="external" href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_BLANK">W</a>, on peut lire (03/10/2021) : 
+
+<div style="padding-left: 1em; padding-bottom: 0.5em;font-size: 80%;"> TLS and SSL do not fit neatly into any single layer of the OSI model or the TCP/IP model.<sup>[3][4]</sup> TLS runs "on top of some reliable transport protocol (e.g., TCP),"<sup>[5]</sup> which would imply that it is above the transport layer. It serves encryption to higher layers, which is normally the function of the presentation layer. However, applications generally use TLS as if it were a transport layer,<sup>[3][4]</sup> even though applications using TLS must actively control initiating TLS handshakes and handling of exchanged authentication certificates.<sup>[5]</sup>
+</div>
+
+<p> Sans chercher à trancher le débat de savoir dans quelle couche considérer le protocole <strong class="title"><em class="sigle">TLS</em></strong>, on peut simplement observer ici un aspect du <strong class="cons">simplisme du modèle <em class="sigle">OSI</em></strong> qui ne permet pas de décrire la complexité réelle des piles de protocoles usuels. </p>
+</div><!-- remarque -->
+
+
+<h4 id="mime"> Standard de transcodage MIME </h4>
+
+
+<div class="complement">
+<p> Le <strong class="specialLB">standard de transcodage</strong> <strong class="title"><em class="sigle">MIME</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Multipurpose_Internet_Mail_Extensions" target="_BLANK">W</a> (<em class="english">multipurpose Internet mail extensions</em>) est un système dont l'usage principal est d'étendre les données contenues dans les <strong>courriels</strong> à d'<strong class="defin">autres formats d'encodage de caractères</strong> que l'<em class="bold"><em class="sigle">ASCII</em></em> (cf. chap. C3‑VIII <a class="next" href="../../ModuleC/C3-Numeration/Cc3-8_typesCaracteres.html" target="_BLANK">C</a>). Il permet ainsi aux utilisateurs des clients de messagerie d'employer des <strong class="pros">jeux de caractères étendus</strong> (cf. chap. C3‑IX <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/Cc3-8_typesCaracteresEtendus.html" target="_BLANK">C</a>) pour rédiger leurs messages.  </p>
+
+<p> Ce transcodage est <strong>appliqué comme un protocole</strong> à la suite de <em class="bold"><em class="sigle">SMTP</em></em> qui, lui, ne prend en charge que le <strong class="cons">jeu de caractères <em class="sigle">ASCII</em> restreint</strong>. Il est également appliqué aux données issues du protocole <strong><em class="sigle">HTTP</em></strong>, notamment pour les pages de gestion de courriels dites <em class="english">webmail</em> <a class="external" href="https://fr.wikipedia.org/wiki/Messagerie_web" target="_BLANK">W</a>.  </p>
+</div><!-- complement -->
+
+
+
+<h3> Protocoles de la couche <em>Session</em>  </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheSession.png" width="200px">
+<p> La <strong>couche de niveau 5</strong> dite <strong class="title">Session</strong> <a class="external" href="https://en.wikipedia.org/wiki/Couche_session" target="_BLANK">W</a> regroupe des protocoles de <strong>gestion de haut niveau</strong> des <strong class="defin">mécanismes de connexion</strong> entre machines communicant de bout en bout, en complément de ceux de la couche <em>Présentation</em>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme pour la couche <em>Présentation</em>, il est difficile de dresser un inventaire représentatif des protocoles de la couche <strong>Session</strong>. À titre d'<strong class="title">exemples emblématiques</strong>, on peut citer : </p>
+<ul>
+	<li> le protocole <strong class="specialLB"><em class="sigle">PAP</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Password_Authentication_Protocol" target="_BLANK">W</a> (<em class="english">password authentication protocol</em>) qui apporte un service d'<strong>authentification par mot de passe</strong> ;  </li>
+
+	<li> le protocole <strong class="specialLB"><em class="sigle">L2TP</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Layer_2_Tunneling_Protocol" target="_BLANK">W</a> (<em class="english">layer 2 tunneling protocol</em>) qui met en place un <strong>tunnel de communication chiffré</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Tunnel_(réseau_informatique)" target="_BLANK">W</a> de haut niveau ; cette technologie logicielle est employée pour la mise en œuvre des <strong class="defin">réseaux privés virtuels</strong> (<em class="sigle">VPN</em> – cf. chap. R2‑II <a class="previous" href="Rc1-2_architecture.html#reseauVirtuel" target="_BLANK"></a>) ; </li>
+
+	<li> le protocole <strong class="specialLB"><em class="sigle">SOCKS</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/SOCKS" target="_BLANK">W</a> (acronyme de <em class="english">socket secured over credential-based kerberos</em>) qui permet d'interposer dans une communication client‑serveur l'intervention d'un logiciel <strong>pare‑feu</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Pare-feu_(informatique)" target="_BLANK">W</a> (<em class="english">firewall</em>) exécuté sur une machine tierce appelée <strong>serveur proxy</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Proxy" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="coucheTransport"> Protocoles de la couche <em>Transport</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheTransport.png" width="200px">
+<p> La <strong>couche de niveau 4</strong> dite <strong class="title">Transport</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couche_transport" target="_BLANK">W</a> regroupe les protocoles principalement chargés d'accomplir la <strong class="defin">segmentation-désegmentation</strong> des données en <strong><em class="sigle">PDU</em></strong> – usuellement appelés <strong>paquets</strong>, <strong>segments</strong> ou <strong>fragments</strong> – dans la perspective du <strong>multiplexage temporel</strong> des liaisons sur les réseaux (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#multiplexage" target="_BLANK"></a>). 
+
+<p> Ils apportent également des fonctionnalités pour : </p>
+<ul>
+	<li> la <strong class="defin">gestion des erreurs</strong>, notamment celles relatives à la défectuosité et à la perte de paquets ; </li>
+
+	<li> le <strong class="defin">contrôle de flux</strong>, c'est‑à‑dire au cadencement de l'envoi des paquets. </li>
+</ul>
+</div><!-- important --> 
+
+<div class="complement">
+<p> Les <strong class="title">deux protocoles</strong> les plus emblématiques de la <strong>couche Transport</strong> sont <strong class="specialLB"><em class="sigle">TCP</em></strong> et <strong class="specialLB"><em class="sigle">UDP</em></strong>, qui implémentent deux types de communication <strong class="warning">très différents</strong>, détaillés ci‑après.</p>
+
+<p> Au delà de leurs différences, ces deux protocoles ont comme <strong class="title">point commun</strong> d'ajouter à chaque (<strong><em class="sigle">SDU</em></strong>) un en‑tête (<strong><em class="sigle">PCI</em></strong>) comportant le <strong class="defin">numéro de port</strong> de l'<strong>application émettrice</strong> et de l'<strong>application réceptrice</strong> de ces données. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Les <strong class="title">protocoles</strong> de la <strong>couche Transport</strong> sont <strong class="pros">revus en détail</strong> au chapitre R3‑I <a class="next" href="../R3-TransportReseauLiaison/Rc3-1_coucheTransport.html" target="_BLANK"></a>. </p>	
+</div><!-- expert -->
+
+
+<h4 id="TCP"> Le protocole TCP </h4>
+
+
+<div class="important">
+<p> Le <strong>protocole</strong> <strong class="title"><em class="sigle">TCP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transmission_Control_Protocol" target="_BLANK">W</a> (<em class="english">transmission control protocol</em>) est un protocole de transmission bien adapté pour les <strong>données de grandes tailles</strong>, grâce à la <strong class="defin">segmentation-désegmentation</strong> qu'il met en œuvre. </p>
+
+<p> Opérant en <strong class="defin">mode connecté</strong> et procédant à diverses <strong class="defin">vérifications</strong>, il est réputé <strong class="pros">fiable</strong>. En contre‑partie, il peut être considéré comme <strong class="cons">lourd</strong> et <strong class="cons">lent</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Plus précisément, le protocole <strong class="title"><em class="sigle">TCP</em></strong> prend en charge, entre l'application émettrice et son homologue réceptrice : </p>
+<ul>
+	<li> l'<strong>établissement</strong> d'une <strong class="defin">connexion en circuit virtuel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Circuit_virtuel" target="_BLANK">W</a> durant tout le temps nécessaire à la transmission des données issues ou à destination de la couche supérieure ; les deux machines sont alors mobilisées par cette transmission, au sens où sur chacune d'elles s'exécute un <strong>processus dédié</strong> à cette transmission pour le compte des applications émettrice et réceptrice ; </li>
+
+	<li> l'<strong>émission-réception</strong> des données fragmentés en <strong class="defin">paquets numérotés</strong> – nommés aussi <strong class="defin">segments</strong> – avec <strong class="pros">vérification</strong> de leur <strong>intégrité</strong> (absence de défauts), de leur <strong>intégralité</strong> (absence de pertes) lors de la réception, et renouvellement partiel ou total du processus en cas d'erreur ; ces mécanismes justifient qu'il soit qualifié de <strong class="pros">protocole fiable</strong> ; </li>
+
+	<li> la <strong>fin de la connexion</strong> une fois que toutes les données ont été transmises. </li>
+</ul>
+
+<p> Mais bien évidemment, toutes ces fonctionnalités se payent en termes de durée d'exécution. À volumes de données comparables, il est <strong class="cons">bien plus lent</strong> que son « concurrent » <strong><em class="sigle">UDP</em></strong>. </p>
+</div><!-- complementExpert -->
+
+<p> Le protocole <strong class="title"><em class="sigle">TCP</em></strong> est donc particulièrement <strong class="pros">bien adapté </strong> aux transmissions de données qui exigent une <strong class="defin">absence totale d'erreurs</strong> (dans un fichier, un seul bit erroné peut être fatal), mais pour lesquelles il n'y a <strong class="defin">pas de fortes contraintes de délais</strong> : les messageries, les transferts de fichiers, les consultations de pages web statiques… et même pour les musiques et les vidéos, dans la mesure où les fichiers peuvent être chargés quelques instant avant d'être joués. </p>
+
+<p> En définitive, <strong class="title"><em class="sigle">TCP</em></strong> est le protocole de transport <strong class="pros">privilégié</strong> pour <strong>90 % du volume des données échangées sur l'Internet</strong>. </p>
+
+
+<h4 id="UDP"> Le protocole UDP </h4>
+
+
+<div class="important">
+<p> Le <strong>protocole</strong> <strong class="title"><em class="sigle">UDP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/User_Datagram_Protocol" target="_BLANK">W</a> (<em class="english">user datagram protocol</em>) est un protocole de transport de données dont les <strong><em class="sigle">PDU</em></strong>, de <strong class="defin">petite taille</strong> (jusqu'à environ 1500 octets), sont appelés appelés <strong class="title">datagrammes</strong>. Il opère <strong class="pros">sans segmentation</strong>. </p>
+
+<p>	Procédant à une simple vérification des en‑têtes par <strong>checksum</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Somme_de_contrôle" target="_BLANK">W</a> et opérant en <strong>mode non connecté</strong>, il réputé <strong class="cons">non fiable</strong>. En contre‑partie, il est <strong class="pros">léger</strong>, donc <strong class="pros">rapide</strong> à mettre en œuvre. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément, le protocole <strong class="title"><em class="sigle">UDP</em></strong> met en œuvre, entre l'application émettrice et son homologue réceptrice, des transmissions de données <strong class="defin">sans connexion préalable</strong> (contrairement à <strong><em class="sigle">TCP</em></strong>), donc <strong class="cons">sans garantie d'une bonne réception</strong>.  </p>
+</div><!-- complement -->
+
+
+
+<p> Le protocole <strong class="title"><em class="sigle">UDP</em></strong> est particulièrement <strong class="definpros">bien adapté</strong> à certaines <strong>applications</strong> et <strong>services</strong> : </p>
+
+<ul>
+	<li> qui sont <strong class="defin">peu gourmandes en volumes</strong> de données – <strong><em class="sigle">DNS</em></strong>, <strong><em class="sigle">DHCP</em></strong>, <strong><em class="sigle">NTP</em></strong> (partage du temps Internet), etc. ; </li>
+
+	<li> ou qui sont <strong class="warning">très contraintes</strong> en termes de <strong>délais</strong> (<em class="mark">VoIP</em>, vidéo en direct, etc.) pour lesquels des <strong>erreurs d'intégrité</strong> sont <strong class="pros">tolérables</strong> ; en effet, dans ces applications, la vitesse de transmission prime sur la résolution des images ou du son (des pixels erronés sur une image sont quasiment indétectables lors du visionnage d'un film). </li>
+</ul>
+
+<div class="remarques">
+<p class="remarque"> Un <strong class="title">datagramme</strong> peut néanmoins être <strong class="warning">fragmenté</strong> par un protocole de niveau inférieur, notamment <strong><em class="sigle">IP</em></strong>, pour respecter des contraintes de longueur maximale en vigueur sur le réseau. </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="coucheReseau"> Protocoles de la couche <em>Réseau</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheReseau.png" width="200px">
+<p> La <strong>couche de niveau 3</strong> dite <strong class="title">Réseau</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couche_réseau" target="_BLANK">W</a> regroupe les protocoles chargés du <strong class="defin">routage des paquets</strong> de données sur les réseaux de transport. Pour cela, elle procède à l'<strong class="defin">étiquetage</strong> des paquets avec les <strong>adresses logiques</strong> des interfaces respectivement émettrice et réceptrice de la communication. </p>
+</div><!-- important --> 
+
+<div class="complement">
+<p> Le <strong class="title">routage</strong> n'est pas établi à d'avance mais <strong class="defin">de proche en proche</strong> par les tables de routage stockées dans les machines du réseau (principalement les routeurs). Ce système réparti suppose l'<strong class="warning">adaptation</strong> des protocoles à <strong>toutes sortes d'architecture de réseaux</strong>, et en particulier au fait que ces architectures évoluent en permanence (connexions et déconnexions de machines). C'est pourquoi la couche réseau comprend aussi des protocoles qui assurent la <strong>mise à jour automatique des tables de routage</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Les <strong class="title">protocoles</strong> de la <strong>couche Réseau</strong> sont <strong class="pros">revus en détail</strong> au chapitre R3‑II <a class="next" href="../R3-TransportReseauLiaison/Rc3-2_coucheReseau.html" target="_BLANK"></a>. </p>	
+</div><!-- expert -->
+
+
+<h4 id="IP"> Le protocole IP </h4>
+
+
+<div class="important">
+<p> Le protocole emblématique dans la <strong>couche Réseau</strong> est <strong class="title"><em class="sigle">IP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Protocol" target="_BLANK">W</a> (<em class="english">Internet protocol</em>). Il coexiste actuellement en <strong>deux versions</strong> : <strong class="specialLB">IPv4</strong> et <strong class="specialLB">IPv6</strong> selon le format d'adresses employées (cf. chap. R1‑III <a class="previous" href="Rc1-3_adressage.html#IPv4" target="_BLANK"></a>). </p>
+</div><!-- important --> 
+
+<div class="complement">
+<p> Sans entrer dans les détails, le <strong>protocole</strong> <strong class="title"><em class="sigle">IP</em></strong> consiste : </p>
+<ul>
+	<li> <strong class="specialLB">sur la machine émettrice</strong>, à <strong class="defin">étiqueter chaque paquet</strong> (<em class="sigle">SDU</em>) issu de la couche transport par un <strong>en‑tête</strong> (<em class="sigle">PCI</em>) qui comporte l'<strong class="definpros">adresse <em class="sigle">IP</em></strong> de l'<strong>interface réseau émettrice</strong> et celle d'<strong>interface réseau destinataire</strong> ; </li>
+
+	<div class="expert">
+  <div class="nobullet"> ces informations sont issues du <strong>système d'exploitation</strong> de la machine (ou du programme de contrôle‑commande dans le cas d'une carte à microcontrôleur) et de l'<strong>application</strong> (navigateur, etc.) qui est à l'origine du paquet ; </div>
+  </div><!-- expert -->
+
+	<li> <strong class="specialLB">sur chaque routeur traversé</strong> par un paquet, à <strong class="defin">déterminer l'adresse <em class="sigle">IP</em> du routeur suivant</strong> à qui transmettre ce paquet pour l'acheminer à son destinataire (<em class="english">next hop</em> <a class="external" href="https://en.wikipedia.org/wiki/Hop_(networking)" target="_BLANK">W</a>). </li>
+
+  <div class="expert">
+  <div class="nobullet"> Une telle information est appelée <strong class="title">route</strong> et l'ensemble des routes renseignées dans un routeur constitue sa <strong class="title">table de routage</strong> – cf. chap. R1‑II <a class="previous" href="Rc1-2_architecture.html#routage" target="_BLANK"></a>. </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement --> 
+
+<div class="expert">
+<p> Comme <strong><em class="sigle">UDP</em></strong> (cf. supra <a class="supra" href="Rc1-4_protocoles.html#UDP"></a>), le protocole <strong class="title"><em class="sigle">IP</em></strong> opère en <strong class="defin">mode non connecté</strong> et est réputé <strong class="cons">non fiable</strong> : il ne procède à <strong>aucune vérification</strong> de la bonne réception des paquets par le destinataire. Mais cela ne pose <strong class="pros">pas problème</strong> dans la mesure où : </p>
+<ul>
+	<li> d'une part, les concepteurs d'applications peuvent choisir de recourir au protocole <strong><em class="sigle">TCP</em></strong> pour garantir une bonne qualité de service ; </li>
+
+	<li> préalablement à une transmission, un autre protocole de niveau 3 – <strong><em class="sigle">ICMP</em></em></strong> (cf. infra) –  permet de s'assurer qu'une adresse <em class="sigle">IP</em> destinataire est <strong>routable</strong>. </li>
+</ul>
+</div><!-- expert -->
+
+
+<h4 id="ICMP"> Autres protocoles de la couche <em>Réseau</em> </h4>
+
+
+<div class="important">
+<p> Parmi les autres protocoles de la <strong>couche Réseau</strong>, on peut citer <strong class="title"><em class="sigle">ICMP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Control_Message_Protocol" target="_BLANK">W</a> (<em class="english">Internet control message protocol</em>). Il s'agit d'un <strong>protocole de service</strong> à l'usage des applications pour, à partir d'une machine émettrice, de <strong class="defin">vérifier qu'une adresse est routable</strong> depuis cette machine.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le protocole <strong class="title"><em class="sigle">ICMP</em></strong> est notament utilisé dans la <strong>commande</strong> <code class="cmd">ping</code> qui permet de <strong class="defin">tester l'accessibilité par le réseau</strong> d'une <strong>adresse <em class="sigle">IP</em></strong> ou d'un <strong>nom de domaine</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> Sur un <strong class="specialLB">poste de travail Windows</strong> avec un accès à l'Internet, dans un terminal de commande en ligne, on peut par exemple saisir : <br>
+  <span class="inline">
+  	<code class="displayDark">> ping google.com</code>
+  </span> </li>
+  
+	<div class="nobullet"> Par défaut, le système d'exploitation génère automatiquement <strong class="defin">4 <em class="sigle">PDU</em> de requêtes <em class="sigle">ICMP</em></strong> sur l'adresse <strong><em class="sigle">IP</em></strong> d'un serveur web de <em class="mark">Google</em> donnant accès à la page d'accueil du moteur de recherche (cette adresse <em class="sigle">IP</em> étant déterminée par le <em class="sigle">DNS</em>). Sauf dysfonctionnement sur le réseau, on obtient en retour quelque chose comme :   </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+C:> ping google.com
+
+Envoi d’une requête 'ping' sur google.com [2a00:1450:4007:807::200e] avec 32 octets de données :
+Réponse de 2a00:1450:4007:807::200e : temps=17 ms
+Réponse de 2a00:1450:4007:807::200e : temps=18 ms
+Réponse de 2a00:1450:4007:807::200e : temps=17 ms
+Réponse de 2a00:1450:4007:807::200e : temps=17 ms
+
+Statistiques Ping pour 2a00:1450:4007:807::200e:
+    Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%),
+Durée approximative des boucles en millisecondes :
+    Minimum = 17ms, Maximum = 18ms, Moyenne = 17ms
+
+C:>     
+</pre>
+<!---------- ne pas indenter ---------->   
+  
+  <div class="nobullet"> On peut voir que le poste de travail a bien reçu <strong class="defin">4 <em class="sigle">PDU</em> d'acquittement <em class="sigle">ICMP</em></strong> dans des <strong class="pros">délais très brefs</strong> (moins de 0,02 s chacun) ; le domaine <code class="filename">google.com</code> est donc bien accessible via l'Internet depuis ce poste de travail.   </div>
+
+  <div class="nobullet"> <em class="remark">Remarque</em> : le système a opéré avec la pile de protocoles <strong>IPv6</strong>. </div>
+
+  <li> Sur un <strong class="specialLB">poste de travail Linux</strong>, le principe est le même mais le <strong class="defin">nombre de <em class="sigle">PDU</em> émis</strong> en requètes <strong><em class="sigle">ICMP</em></strong> est <strong class="warning">illimité</strong>. </li>
+  <ul>
+  	<li> pour y mettre fin, il suffit d'<strong>interrompre la commande</strong> par un <code>Ctrl C</code> (comme pour toute commande en ligne) ; </li>
+
+  	<li> pour spécifier un <strong>nombre déterminé de <em class="sigle">PDU</em></strong> – par exemple, 3 – il faut saisir l'option <code class="displayDark">-c 3</code> (<code>c</code> pour « <em class="english">count</em> ») avant l'adresse <em class="sigle">IP</em> ou le nom de domaine à tester. </li>
+  </ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ ping -c3 google.com
+PING google.com(par21s20-in-x0e.1e100.net (2a00:1450:4007:818::200e)) 56 data bytes
+64 octets de par21s20-in-x0e.1e100.net (2a00:1450:4007:818::200e) : icmp_seq=1 ttl=117 temps=18.8 ms
+64 octets de par21s20-in-x0e.1e100.net (2a00:1450:4007:818::200e) : icmp_seq=2 ttl=117 temps=18.7 ms
+64 octets de par21s20-in-x0e.1e100.net (2a00:1450:4007:818::200e) : icmp_seq=3 ttl=117 temps=18.8 ms
+
+--- statistiques ping google.com ---
+3 paquets transmis, 3 reçus, 0 % paquets perdus, temps 2003 ms
+rtt min/avg/max/mdev = 18.735/18.786/18.821/0.036 ms
+$    
+</pre>
+<!---------- ne pas indenter ---------->   
+
+
+   
+	<div class="expert">
+	<div class="nobullet"> La <strong class="title">présentation des résultats</strong> est <strong class="pros">la même</strong> à <strong>quelques détails</strong> près :  </div>
+	<ul>
+		<li> le nom de domaine <code class="filename">par21s20-in-x0e.1e100.net</code> auquel l'alias <code class="filename">google.com</code> est explicité (cf. chap. R2‑I <a class="next" href="../R2-Applications/Rc2-1_dns_url.html#alias" target="_BLANK"></a>) ; </li>
+
+		<li> le nom du protocole <strong><em class="sigle">ICMP</em></strong> est mentionné. </li>
+	</ul>
+	</div><!-- expert -->
+
+</ul>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<p> Le protocole <strong class="title"><em class="sigle">ICMP</em></strong> sert également à quantifier la <strong class="pros">fluidité des communications</strong> entre deux machines, en chronométrant le <strong>temps nécessaire</strong> pour obtenir un <strong><em class="sigle">PDU</em> d'acquittement</strong> à partir du moment où un <strong><em class="sigle">PDU</em></strong> de requête est émis. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="protocolesLiaison"> Protocoles de la couche <em>Liaison</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaison.png" width="200px">
+<p> La <strong>couche de niveau 2</strong> dite <strong class="title">Liaison</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couche_liaison_de_données" target="_BLANK">W</a> regroupe les protocoles qui permettent à deux voire plusieurs <strong>nœuds adjacents</strong> d'un réseau d'établir une <strong class="defin">liaison logique</strong> entre les <strong>interfaces réseau</strong> constituant ces nœuds. </p>
+
+<p> Comme toute couche dite <em>basse</em>, la <strong class="title">couche Liaison</strong> est implémentée de façon <strong class="defin">répartie</strong> sur <strong>tous les nœuds du réseau</strong> et opère <strong class="defin">de proche en proche</strong>. </p>
+
+<p> À ce niveau, on parle de <strong class="defin">trames</strong> pour désigner les <strong><em class="sigle">PDU</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">couche Liaison</strong> présente une grande <strong class="warning">difficulté d'étude</strong> car elle comprend certains <strong class="defin">protocoles transversaux</strong> – <strong>Ethernet</strong>, <strong>Wi‑Fi</strong>… – qui chevauchent aussi la <strong>couche Physique</strong>. </p>
+
+<p> De plus, il ne s'agit pas de simples protocoles, mais de <strong class="title">véritables technologies</strong> qui sont spécifiées, non pas par des <strong><em class="sigle">RFC</em></strong> émanant de l'<strong><em class="sigle">IETF</em></strong>, mais par l'<strong class="defin"><em class="sigle">IEEE</em></strong> (cf. chap. R1‑I <a class="previous" href="Rc1-1_notionsFondamentales.html#organismes" target="_BLANK"></a>). Elles sont regroupées dans des standards de cet organisme sous la <strong>référence commune <em class="bold">802</em></strong>. </p>
+
+<p> Et comme exposé supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/moduleR/R1-Generalites/modeleIEEE"></a>, l'<em class="bold"><em class="sigle">IEEE</em></em> décompose le <strong>niveau 2</strong> du modèle <strong><em class="sigle">OSI</em></strong> en <strong class="title">deux sous‑couches</strong> : <strong class="specialLB"><em class="sigle">LLC</em></strong> et <strong class="specialLB"><em class="sigle">MAC</em></strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Les <strong class="title">protocoles</strong> de la <strong>couche Réseau</strong> sont <strong class="pros">revus en détail</strong> aux chapitres R3‑III <a class="next" href="../R3-TransportReseauLiaison/Rc3-3_coucheLiaisonEthernet.html" target="_BLANK"></a> (<em class="mark">Ethernet</em> – norme <em class="sigle">802.3</em>), R3‑IV <a class="next" href="../R3-TransportReseauLiaison/Rc3-4_coucheLiaisonWifi.html" target="_BLANK"></a> (<em class="mark">Wi‑Fi</em> – norme <em class="sigle">802.11</em>) et R3‑V <a class="next" href="../R3-TransportReseauLiaison/Rc3-4_coucheLiaisonWifi.html" target="_BLANK"></a> (<em class="sigle">WPAN</em> – norme <em class="sigle">802.15</em>). </p>	
+</div><!-- expert -->
+
+
+<!-- protocoles transversaux HDLC -->
+
+
+<h4> La sous‑couche LLC </h4>
+
+
+<div class="important"> 
+<p> La <strong class="title">sous‑couche <em class="sigle">LLC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Logical_link_control" target="_BLANK">W</a> (<em class="english">logical link control</em>) est conçue comme une <strong class="defin">interface commune</strong> entre la <strong class="specialO">couche Réseau</strong> et les différentes implémentations de la <strong class="specialR">sous‑couche <em class="sigle">MAC</em></strong>, lesquelles sont spécifiques aux différentes technologies employées sur les liaisons (<em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>, etc.). 
+
+<p> Cette sous‑couche est définie dans le <strong>standard <em class="sigle">IEEE 802.2</em></strong>, devenu obsolète et remplacé par la norme <strong><em class="sigle">ISO/IEC 8802‑2:1998</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">sous‑couche <em class="sigle">LLC</em></strong> a pour principale fonction d'opérer le <strong class="defin">multiplexage‑démultiplexage</strong> sur la liaison afin d'optimiser l'accès au médium par les différents protocoles de la couche liaison. Elle est néanmoins <strong class="pros">optionnelle</strong> en technologie <strong>Ethernet</strong>. </p>
+
+<p>  La <strong class="title">sous‑couche <em class="sigle">LLC</em></strong> est également conçue pour effectuer du <strong class="defin">contrôle de flux</strong> et du <strong class="defin">contrôle d'erreurs</strong>. Toutefois, ces mécanismes ne sont <strong class="cons">pas exploités</strong> pour les <strong><em class="sigle">PDU</em></strong> issus du protocole <strong><em class="sigle">TCP</em></strong> ou des protocoles applicatifs qui prennent déjà en charge ces aspects (<strong><em class="sigle">DHCP</em></strong>, <strong><em class="sigle">DNS</em></strong>, etc.) ; sinon, ils feraient double emploi.  </p>
+
+<p> Par ailleurs, il faut noter que la <strong class="title">sous‑couche <em class="sigle">LLC</em></strong> n'a fait l'objet d'<strong class="cons">aucune évolution</strong> depuis 2003. Son groupe de travail au sein de l'<strong><em class="sigle">IEEE</em></strong> est « démantelé » (disbanded) <a class="external" href="https://www.ieee802.org/2/" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Néanmoins, au sein du <strong>modèle <em class="sigle">OSI</em></strong>, la sous‑couche <strong class="title"><em class="sigle">LLC</em></strong> garde un <strong class="pros">intérêt</strong>. Ainsi, on peut considérer que certains protocoles non définis par l'<em class="bold"><em class="sigle">IEEE</em></em> s'y inscrivent. À titre d'exemple, on peut citer <strong><em class="sigle">PPP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Point-to-Point_Protocol" target="_BLANK">W</a> (<em class="english">point‑to‑point protocol</em>) utilisé dans la boucle locale historique des <strong><em class="sigle">RTC</em></strong>, aujourd'hui exploitée pour la connexion entre les box d'abonnés et les points de raccordement du fournisseur d'accès. </p>
+</div><!-- expert -->
+
+
+<h4> La sous‑couche MAC </h4>
+
+
+<div class="important">
+<p> La <strong class="title">sous‑couche <em class="sigle">MAC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Medium_access_control" target="_BLANK">W</a> (<em class="english">medium access control</em>) est conçue comme une <strong class="defin">interface</strong> entre le <strong>niveau « logique »</strong> et le <strong>niveau physique</strong> des transmissions sur un médium entre deux machines (voire plus en cas de <em class="english">broadcast</em>). </p>
+
+<p> Elle présente des <strong class="defin">particularités</strong> pour chacune des <strong>technologies de liaison</strong> utilisées, lesquelles sont spécifiées dans un standard dédié : <strong><em class="sigle">802.3</em></strong> pour <strong>Ethernet</strong>, <strong><em class="sigle">802.11</em></strong> pour <strong>Wi‑Fi</strong>, etc. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">sous‑couche <em class="sigle">MAC</em></strong> remplit <strong>plusieurs fonctions</strong> :  </p>
+<ul>
+	<li> la <strong class="defin">fragmentation-défragmentation</strong> en <strong>trames</strong> des segments issus de la couche <em>Réseau</em> ; </li>
+
+	<li> l'<strong class="defin">étiquetage</strong> sur chaque trame de l'<strong>adresse physique</strong> dite <strong><em class="sigle">MAC</em></strong> (cf. chap. R1‑III <a class="previous" href="Rc1-3_adressage.html#adresseMAC" target="_BLANK"></a>) de l'interface émettrice et de l'interface destinataire ; </li>
+
+	<li> le <strong class="defin">filtrage</strong> assuré par les <strong>switchs</strong> des trames en fonction des <strong>adresses <em class="sigle">MAC</em></strong> pour les diffusions qui ne sont pas de type <em class="english">broadcast</em> (donc, en <em class="english">unicast</em>, transmission à la seule interface destinataire) ;  </li>
+
+	<li> le <strong class="defin">contrôle d'erreurs</strong> sur les trames reçues, par calcul d'une <strong>somme de contrôle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Somme_de_contrôle" target="_BLANK"></a> (<em class="english">checksum</em>) ; </li>
+
+	<li> l'<strong class="defin">accès au médium</strong>, avec en particulier la <strong>gestion des collisions</strong> dans le cas des technologies sans‑fils, où le médium est commun. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 class="ARP"> Le protocole ARP </h4>
+
+
+<div class="important">
+<p> Le <strong class="title">protocole <em class="sigle">ARP</em></strong> <a class="" href="https://fr.wikipedia.org/wiki/Address_Resolution_Protocol" target="_BLANK"></a> (<em class="english">address resolution protocol</em>) est un protocole <strong class="defin">indispensable au bon fonctionnement</strong> de la <strong>couche Liaison</strong>, même s'il n'en fait pas exclusivement partie – on peut considérer qu'il se situe à cheval avec la couche <em>Réseau</em>. </p>
+
+<p> Le <strong class="title">protocole <em class="sigle">ARP</em></strong> est mis en œuvre <strong>sur chaque nœud du réseau</strong> pour lui permettre de <strong class="defin">déterminer l'adresse <em class="sigle">MAC</em></strong> correspondante à une adresse <strong><em class="sigle">IP</em></strong> parmi ses <strong>nœuds voisins</strong> lorsqu'il doit lui envoyer une ou plusieurs trames encapsulant un datagramme issu de la couche <em>Réseau</em>. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> Chaque machine tient donc à jour <strong>pour chacune de ses interfaces</strong> une table de correspondance dite <strong class="title">table <em class="sigle">ARP</em></strong> qui est <strong class="defin">mise à jour au gré des besoins</strong> par le protocole <strong><em class="sigle">ARP</em></strong>. </p>
+
+<p> Sur un <strong>poste de travail</strong> <strong class="specialLB">Linux</strong> ou <strong class="specialLB">Windows</strong>, il est possible de consulter cette table via la commande : <br>
+  <span class="inline">
+  	<code class="displayDark">> arp -a</code> (<code>a</code> pour <em class="english">all</em>)
+  </span> </p>
+ <p> Par d'autres commandes, on peut éventuellement <strong>ajouter ou supprimer des entrées</strong> sur cette table. Pour plus de détails, il suffit de consulter l'aide en ligne ou le manuel de la commande <code>arp</code>. </p> 
+</div><!-- complement -->
+
+
+
+<h3> Protocoles de la couche <em>Physique</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/couchePhysique.png" width="200px">
+<p> La <strong>couche de niveau 1</strong> dite <strong class="title">Physique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Couche_physique" target="_BLANK">W</a> permet de <strong>générer‑réceptionner</strong> sur les différents médias des <strong class="defin">signaux en grandeurs physiques</strong> pour transmettre les <strong>bits</strong> constituant les trames issues de la couche <em>Liaison</em>. </p>
+
+<p> À ce niveau, il n'est pas pertinent de parler de protocoles mais plutôt de <strong class="specialLB">techniques d'encodage</strong> et de <strong class="specialLB">modulation</strong>. Pour des questions de <strong class="pros">rapidité</strong> et de <strong class="pros">fiabilité</strong>, ces techniques sont implémentées par des <strong>composants</strong> ou <strong>circuits électroniques spécialisés</strong> intégrés sur les interfaces réseau. </p>
+</div><!-- important --> 
+
+
+<div class="complement">
+<p> Les <strong class="title">techniques</strong> mises en œuvre dans la <strong>couche Physique</strong> sont très dépendantes non seulement de la <strong>nature du médium</strong> de transmission (conducteurs électriques, fibres optiques, champ électromagnétique…) mais aussi de la <strong>technologie générale de la liaison</strong> employée : <em>liaison xDSL</em> , <em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>, etc. </p>
+
+<p> Transversalement, un <strong class="title">paramètre essentiel</strong> est la <strong class="defin">longueur de la liaison</strong> qui, lorsqu'elle est grande, induit des problèmes d'<strong class="warning">affaiblissement du signal</strong> et détermine ainsi des choix technologiques. En particulier, pour les liaisons filaires à paires torsadées, on fait les choix suivants. </p>
+
+<ul>
+	<li> Jusqu'à <strong>quelques dizaines de mètre</strong>, on opère en <strong class="title">transmission en bande de base</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bande_de_base" target="_BLANK">W</a> – c'est‑à‑dire <strong class="pros">sans modulation</strong> ; néanmoins : </li>
+  <ul>
+  	<li> les <strong class="defin">niveaux de tension</strong> employés doivent parfois être <strong>moins élevés</strong> – par exemple, <em class="bold">±1 V</em> pour l'<em class="mark">Ethernet 100BASE‑TX</em> – que ceux usuellement employés dans les cartes électroniques (0 ‑ 5 V), et il faut recourir à des <strong class="defin">câbles blindés</strong> contre les perturbations électromagnétiques ;  </li>
+
+  	<li> des <strong class="defin">techniques d'encodage</strong> – <strong><em class="sigle">NRZ</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Non_Return_to_Zero" target="_BLANK">W</a> (<em class="english">non‑return‑to‑zero</em>), <strong>Manchester</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Codage_Manchester" target="_BLANK">W</a>, <strong>Miller</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Codage_Miller" target="_BLANK">W</a> permettent d'<strong class="pros">optimiser la fiabilité et les débits de transmission</strong>. </li>
+  </ul>
+	
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/modulationFSK.png" width="300px"> 
+	<li> Au delà, c'est‑à‑dire pour les <strong>liaisons à grande distance</strong> (entre bâtiments, boucle locale, etc.), il devient obligatoire d'utiliser des <strong class="title">techniques de modulation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modulation_du_signal" target="_BLANK">W</a> en portant le signal sur des bandes de fréquence adaptées. Coûteuses en traitements, les diverses techniques de modulation – <strong><em class="sigle">ASK</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Amplitude-shift_keying" target="_BLANK">W</a> (<em class="english">amplitude‑shift keying</em>), <strong><em class="sigle">PSK</em></strong> (phase‑shift keying) <a class="external" href="https://fr.wikipedia.org/wiki/Phase-shift_keying" target="_BLANK">W</a>, <strong><em class="sigle">FSK</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modulation_par_déplacement_de_fréquence" target="_BLANK">W</a> (<em class="mark">frequency‑shift keying</em>) –  et surtout leurs <strong>combinaisons</strong> permettent en contre‑partie d'<strong class="pros">augmenter les débits de transmission</strong> de façon considérable :  </li>
+	<ul>
+		<li>  par le codage de <strong>plusieurs bits</strong> sur un seul motif modulé ; </li>
+
+		<li>  par des techniques de <strong>multiplexage fréquentiel</strong> exploitant davantage la bande passante des conducteurs.  </li>
+	</ul>
+	</div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/modemVDSL2.png" width="300px">
+<p> Ainsi, les transmission sur la <strong>boucle locale</strong> dite <strong class="title"><em class="sigle">VDSL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/VDSL" target="_BLANK">W</a> opérées sur les liaisons historiques des <strong><em class="sigle">RTC</em></strong> (câbles dit « <em class="sigle">PTT</em> » constitués de 2 ou 4 paires de fils cuivre faiblement torsadées, dont une seule est utilisée dans la pratique) mettent en œuvre aujourd'hui des techniques de <strong class="defin">modulation quadratique d'amplitude et de phase</strong> ou <strong class="defin"><em class="sigle">QAM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modulation_d'amplitude_en_quadrature" target="_BLANK">W</a> et de multiplexage <strong class="defin"><em class="sigle">OFDM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Orthogonal_frequency-division_multiplexing" target="_BLANK">W</a> (<em class="english">orthogonal frequency‑division multiplexing</em>). Elles permettent d'atteindre des débits jusqu'à <strong class="pros">plus de 30 Mb/s</strong> ! Pour mesurer toute l'importance de ces techniques de traitement du signal, il faut se souvenir qu'avec les <strong>anciens modems analogiques</strong>, sur les mêmes supports physiques, le débit plafonnait à <strong class="cons">56 kb/s</strong>. </p>
+
+
+<p> Les <strong class="title">techniques</strong> de la <strong>couche Physique</strong> sont <strong class="pros">revues en détail</strong> au chapitre R3‑VII <a class="next" href="../R3-TransportReseauLiaison/Rc3-7_couchePhysique.html" target="_BLANK"></a>. </p>	
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<h2> Logiciels d'observation et d'analyse des protocoles </h2>
+
+<h3> Simulation des protocoles sur <em class="mark">Cisco Packet Tracer</em> </h3>
+
+<h3> Analyse de trames avec <em class="mark">Wireshark</em> </h3>
+-->
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

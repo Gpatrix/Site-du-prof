@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="IV"
+  data-pageState="OK"
+  data-pageheadtitle="Manipulation données"
+  data-pagefulltitle="La manipulation des données"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="exergue">
+
+<p class="square"> La <strong class="title">manipulation de données</strong> est le cœur de la programmation. Elle est principalement basée sur des <strong class="defin">opérateurs</strong> (<code>+ - *</code> etc.) définis dans le noyau du langage par des <strong>processus fondamentaux</strong> qui sont mis en œuvre par l'<strong>architecture matérielle</strong> de la machine programmée (mémoire, unité arithmétique et logique, etc.) et son <strong>système d'exploitation</strong>. </p>
+
+
+<p> En plus des opérateurs, les langages de programmation fournissent également des <strong class="title">bibliothèques de fonctions</strong>, notamment les fonctions mathématiques, pour effectuer des opérations plus complexes sur les données. </p>
+
+
+<p class="square"> En <strong>programmation</strong> dite <strong class="title">impérative</strong> de haut niveau (cf. chap C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#progImperative" target="_BLANK"></a>), donc en particulier avec les langages <strong>C</strong> et <strong>C++</strong>, on dispose d'une <strong class="defin">opération essentielle</strong> pour la manipulation des données : l'<strong class="title">affectation</strong><strong> d'une valeur à une donnée</strong>, avec la possibilité de coder ces valeurs par des <strong>expressions calculatoires</strong> qui seront évaluées par la machine lors de l'exécution. </p>
+
+<p class="square"> Ce chapitre est <strong class="warning">absolument essentiel</strong> dans l'acquisition des <strong>éléments de langage de base</strong>. Il a pour <strong class="title">objectifs</strong> : </p>
+
+<ul>
+  <li> de présenter en détail l'<strong>opérateur</strong> d'<strong class="specialLB">affectation</strong> en raison de la place primordiale qu'il tient, et aussi de sa <strong class="warning">complexité</strong> insoupsonnée (du moins, pour un débutant) ;  </li>
+
+  <li> de dresser un <strong>panorama</strong> des différents <strong class="specialLB">opérateurs élémentaires</strong> et <strong class="specialLB">structurels</strong>, sachant que tous ces opérateurs seront revus en détail dans les parties <span class="partie">C3</span> à <span class="partie">C5</span> du cours ; </li>
+
+  <div class="expert">
+  <div class="nobullet"> (Si la plupart des <strong class="specialLB">opérateurs élémentaires</strong> sont d'<strong class="defin">usage immédiat</strong> pour coder les premiers programmes, il n'en va pas de même pour les <strong class="specialLB">opérateurs structurels</strong>. Il s'agit donc simplement de <strong>prendre connaissance de leur existence</strong>. C'est seulement lors de la partie <span class="partie">C5</span> consacrée à l'étude des données structurées qu'ils deviendront nécessaires.) </div>
+  </div><!-- expert -->  
+
+  <li> d'introduire quelques <strong class="specialLB">fonctions mathématiques</strong> utiles pour le codage des premiers programmes, sachant que la notion de fonction sera pleinement étudiée dans la partie <span class="partie">C4</span> du module. </li>
+</ul>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="affectation"> Affectations de valeurs  </h2>
+
+
+<h3> Principe </h3>
+
+
+<div class="important">
+<p> Une <strong class="title">affectation</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Affectation_(informatique)" target="_BLANK">W</a> – en anglais <strong>assignment</strong> – consiste à <strong class="defin">attribuer</strong> une <strong class="specialMg">valeur</strong> à une <strong class="specialM">donnée</strong>, que cette dernière soit <strong>variable</strong> ou <strong>constante</strong>. </p>
+
+<p> Dans le cas d'une <strong>constante</strong>, l'affectation ne peut être codée que dans le cadre de sa <strong>déclaration</strong>. On parle alors spécifiquement d'<strong class="specialT">initialisation</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> L'<strong class="title">affectation</strong> est l'<strong>opération cruciale</strong> qui caractérise le paradigme de la <strong class="defin">programmation impérative</strong> car toute affectation d'une nouvelle valeur à une variable opère un <strong class="warning">changement irréversible</strong> dans les données du programme : </p>
+
+<ul>
+  <li> certes, cette nouvelle valeur est <strong class="pros">mémorisée</strong>, </li>
+
+  <li> cependant, l'ancienne valeur est <strong class="cons">définitivement perdue</strong> – on dit qu'elle est « <strong class="cons">écrasée</strong> ». </li>
+</ul>
+
+<div class="remarques">
+<p class="remarque"> Très commode, ce changement irreversible présente néanmoins l'inconvénient majeur de rendre <strong class="warning">impossible</strong> toute <strong>démonstration mathématique</strong> du <strong>bon fonctionnement</strong> d'un programme impératif. </p>
+
+<p> Cette impossibilité explique pourquoi les <strong class="title">langages fonctionnels</strong> – qui, eux, ne recourent pas à l'affectation – sont parfois préférés aux langages impératifs dans certaines applications qui nécessite une très grande sûreté de fonctionnement.  </p>
+</div><!-- remarque -->
+</div><!-- complementExpert -->
+
+<div class="complement">
+<p> En langages <strong class="title">C</strong> et <strong class="title">C++</strong>, l'affectation possède un <strong class="warning">mode opératoire complexe</strong> avec une <strong>particularité syntaxique</strong> qui ne manque pas de surprendre des codeurs débutants : le symbole <code class="prettyprint lang-c">=</code> code un <strong class="defin">opérateur</strong>, au même titre que tout autre opérateur comme l'addition, la soustraction, etc. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="syntaxeAffectation"> Syntaxe  –  notions de <strong>r‑value</strong> et <strong>l‑value</strong> </h3>
+
+
+
+<div class="important">
+<p> Une <strong class="title">affectation</strong> est une <strong class="defin">expression</strong> dont le <strong>schéma syntaxique</strong> est : <br>
+<span class="inline">
+  <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">l‑value</strong></span> = <span class="nocode"><strong class="specialMg">r‑value</strong></span></code>
+</span><br>  
+où les deux expressions <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">l‑value</strong></span></code> et <code class="prettyprint lang-c"><span class="nocode"><strong class="specialMg">r‑value</strong></span></code> doivent être distinguées car l'<strong class="title">opérateur d'affectation</strong> <code class="prettyprint lang-c">=</code> n'est <strong class="warning">pas commutatif</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complementExpert">
+<p> Dans ce schéma syntaxique, on peut apporter les précisions suivantes. </p>
+<ul>
+  <li> <strong class="specialM">l‑value</strong> (« <strong class="specialM">l</strong> » pour <em class="english">left</em>) est une <strong>expression</strong> <strong class="specialG">adressable</strong> dont la valeur est <strong class="specialT">mutable</strong>, c'est‑à‑dire dont l'évaluation détermine implicitement une <strong class="specialG">adresse</strong> <strong>en mémoire</strong> susceptible de changer au cours de l'exécution du programme. </li>
+
+  <div class="nobullet"> Typiquement, il s'agit d'un <strong class="defin">identificateur de variable</strong>. </div>
+
+  <li> <strong class="specialMg">r‑value</strong> (« <strong class="specialMg">r</strong> » pour <em class="english">right</em>) est une <strong>expression</strong> évaluable au moment de l'exécution, dont le <strong>type</strong> doit être <strong>compatible</strong> avec celui de <strong class="specialM">l‑value</strong> ; dans le cas contraire, selon le « degré » d'incompatibilité, leur compilateur peut soit juste émettre un <strong class="specialO">avertissement</strong>, soit identifier une <strong class="warning">erreur</strong> et abandonner la compilation. </li>
+
+  <li> L'<strong class="title">opérateur d'affectation</strong> possède des <strong>propriétés particulières</strong> (cf. infra <a class="infra" href="Cc2-4_manipulationDonnees.html#priorites"></a> pour plus de détails) : </li>
+  <ul>
+    <li> il a le <strong class="specialLB">rang de priorité</strong> <strong>le plus faible</strong> de tous les opérateurs, à l'exception de l'opérateur séquentiel ; </li>
+
+    <li> son <strong class="specialLB">associativité</strong> procède de <strong>droite à gauche</strong>. </li>
+  </ul>
+</ul>
+</div><!-- complementExpert -->
+
+<div class="exemples">
+<p class="exemple"> Pour fixer les idées, en supposant que <code class="prettyprint lang-c">a</code> est une <strong>variable entière préalablement déclarée</strong>, on peut coder une <strong class="title">affectation</strong> comme par exemple dans l'instruction :  <br>
+<span class="inline">
+  <code class="prettyprint lang-c">a = 5;</code>
+</span> 
+<p> En revanche, on ne peut <strong class="warning">pas</strong> coder une instruction comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c" style="background:lightgrey;">5 = a;</code>
+</span> <br>
+car <code class="prettyprint lang-c">5</code> n'ayant pas d'espace mémoire spécifiquement réservé, n'est <strong class="warning">pas une l‑value</strong> (on ne peut pas affecter une valeur à <code class="prettyprint lang-c">5</code>). </p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p> 
+<ol class="littered">
+  <li> Il faut <strong class="warning">ne pas confondre</strong> une <strong class="title">affectation</strong> avec une <strong class="specialG">initialisation</strong> au sein d'une déclaration de donnée, qui peut sembler similaire. En effet, une initialisation obéit à certaines <strong>règles spécifiques</strong> (cf. chap. C2‑III <a class="previous" href="Cc2-3_declarationDonnees.html#initialisation" target="_BLANK"></a>). </li>
+
+  <li> Aux yeux d'un débutant, la notion de <strong class="specialM">l‑value</strong> telle qu'elle est décrite supra pourrait sembler <strong class="warning">abstraite</strong> et inutilement complexe. Néanmoins, cette notion présente l'intérêt de s'appliquer à des expressions qui ne sont <strong>pas simplement</strong> des <strong class="defin">identificateurs de variable</strong>, mais aussi des <strong class="specialO">pointeurs</strong> où même des <strong class="specialO">expressions composées</strong> à base de pointeurs (cf. chap. C5‑II <a class="next" href="../C5-StructuresPointeurs/Cc5-2_pointeursApplications.html" target="_BLANK"></a>).  </li>
+</ol>
+</div><!-- remarque -->
+
+
+<h4 id="evaluationAffectation"> Évaluation d'une expression d'affectation </h4>
+
+
+<div class="complement">
+<p> L'<strong class="title">évaluation</strong> d'une <strong>expression d'affectation</strong>  de la forme <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">l‑value</strong></span> = <span class="nocode"><strong class="specialMg">r‑value</strong></span></code> consiste en : </p>
+<ul>
+  <li> l'évaluation de l'expression <strong class="specialMg">r‑value</strong> ; </li>
+
+  <li> l'évaluation de l'expression <strong class="specialM">l‑value</strong> ; </li>
+
+  <li> l'enregistrement de la valeur de <strong class="specialMg">r‑value</strong> dans l'espace mémoire alloué auquel la <strong class="specialM">l‑value</strong> s'adresse : </li>
+  <ul>
+    <li> via une éventuelle <strong class="specialV">conversion implicite</strong>  si le <strong>type</strong> de <strong class="specialM">l‑value</strong> n'est pas identique à celui de <strong class="specialMg">r‑value</strong> (cf. chap. C3‑VI <a class="next" href="../C3-Numeration/Cc3-6_conversionsTypes.html#conversionsImplicites" target="_BLANK"></a>) ; </li>
+
+    <li> par <strong class="warning">écrasement définitif</strong> de l'ancienne valeur mémorisée. </li>
+  </ul>
+</ul>
+<p> La <strong class="specialLB">valeur retournée</strong> par l'expression d'affectation est la <strong>nouvelle valeur</strong> affectée à <strong class="specialM">l‑value</strong>. </p>
+
+<div class="expert">
+<p> Quant au <strong class="specialG">type implicite</strong> (cf. chap. C3‑I <a class="next" href="../C3-Numeration/Cc3-1_typesGeneralites.html#typeExpression" target="_BLANK"></a>) de celle valeur retournée, il est <strong class="defin">identique</strong> à celui de l'espace mémoire – typiquement, la <strong>variable</strong> – auquel la <strong class="specialM">l‑value</strong> s'adresse, sans promotion implicite. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+  <li> L'instruction : <br>
+  <span class="inline">
+     <code class="prettyprint lang-c">newVoltage = 7.5;</code>
+  </span> <br>
+  se réduit à la plus simple forme d'affectation qui soit (une variable à laquelle on donne une nouvelle valeur numérique) : </li>
+
+  <ul>
+    <li> si <code class="prettyprint lang-c">newVoltage</code> est une variable déclarée dans un type décimal comme <code class="prettyprint lang-c">float</code> qui permet de stocker en intégralité à la valeur <code class="prettyprint lang-c">7.5</code>, l'éventuelle conversion implicite est sans conséquence ;  </li>
+
+    <li> en revanche, si <code class="prettyprint lang-c">newVoltage</code> est une variable déclarée dans un type entier, la valeur qui lui est affectée est <code class="prettyprint lang-c">7</code> par conversion implicite avec perte d'information.   </li>
+  </ul>
+
+  <div class="nobullet"> La valeur retournée par l'expression <code class="prettyprint lang-c">newVoltage = 7.5</code> (<code>7.5</code> dans le premier cas, <code>7</code> dans le deuxième) n'est pas exploitée. </div>
+
+
+  <li> L'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">newVoltage = nonimalVoltage / 2;</code>
+  </span> <br>
+  code une affectation à peine plus élaborée. La <strong class="specialMg">r‑value</strong> est l'expression <code class="prettyprint lang-c">nonimalVoltage / 2</code>. Son évaluation est effectuée en premier, la valeur obtenue étant ensuite affectée à la <strong class="specialM">l‑value</strong> <code class="prettyprint lang-c">newVoltage</code> selon le même processus que pour l'exemple précédent. </li>
+  </ul>
+
+
+  <li> L'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">newVoltage = previousVoltage = 12.0;</code>
+  </span> <br>
+  code <strong>deux affectations</strong> enchaînées de droite à gauche, conformément au sesn d'associativité de l'opérateur <code class="prettyprint lang-c">=</code> : </li>
+
+  <ul>
+    <li> d'abord l'affectation <code class="prettyprint lang-c">previousVoltage = 12.0</code> dont l'évaluation rend la valeur <code class="prettyprint lang-c">12.0</code> (si la variable <code class="prettyprint lang-c">previousVoltage</code> est déclarée de type décimal) ; </li>
+
+    <li> puis l'affectation à <code class="prettyprint lang-c">newVoltage</code> de cette valeur rendue <code class="prettyprint lang-c">12.0</code>. </li>
+  </ul>
+</ol>
+
+</div><!-- exemples -->
+ 
+
+
+<h4> Bonne pratique </h4>
+
+
+<div class="complement">
+<p> En général, l'« astuce » de codage de l'exemple <em class="bold">3)</em> supra n'apporte un gain significatif en lisibilité que pour des variables avec des <strong>identificateurs courts</strong>. Sinon, elle est <strong class="warning">à éviter</strong>, en vertu du principe : <br>
+<span class="inline">
+  « <strong>une</strong> <strong class="pros">affectation</strong>, <strong>une</strong> <strong class="pros">instruction</strong> (sur une <strong>ligne distincte</strong>). »
+</span> </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans l'exemple <em class="bold">3)</em> supra, il est préférable de coder : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  previousVoltage = 12.0;
+  newVoltage = previousVoltage;
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Notion générale de <em>l‑value</em> </h4>
+
+
+<div class="complement">
+<p> La notion de <strong class="specialM">l‑value</strong> telle que définie supra <a class="supra" href="Cc2-4_manipulationDonnees.html#syntaxeAffectation"></a> (une « <strong>expression</strong> <strong class="specialG">adressable</strong> » dont la valeur est <strong class="specialT">mutable</strong>) peut sembler inutilement complexe. En effet, dans tous les exemples donnés jusqu'à présent, elle se réduit juste à un <strong>identificateur de variable</strong>.  </p>
+
+<p> Mais la <strong class="specialM">l‑value</strong> peut être aussi une <strong class="defin">expression composée</strong>, notamment pour déterminer : </p>
+<ul>
+  <li> un <strong>élément de tableau</strong>, typiquement de la forme
+      <code class="prettyprint lang-c"><span class="nocode"><strong>nom de tableau</strong></span>[<span class="nocode"><strong>expression</strong></span>]</code> ;
+  </li>
+
+  <li> une <strong>variable pointée</strong>, typiquement de la forme 
+      <code class="prettyprint lang-c">*<span class="nocode"><strong>nom de variable</strong></span></code>.
+  </li>
+</ul>
+</div><!-- complement -->
+
+<p> Ces aspects seront revus en détails dans la partie <span class="partie">C5</span> du cours. </p>
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="operateurs"> Opérateurs </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+<div class="important">
+<p>  En programmation, un <strong class="title">opérateur</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Opérateur_(informatique)" target="_BLANK">W</a> – en anglais, <em class="english">operator</em> –  est une <strong class="defin">fonction</strong> <strong>d'usage très courant</strong> qui : </p>
+<ul>
+  <li> est <strong>intégrée au</strong> <strong class="defin">noyau du langage</strong> (et non pas dans un module de bibliothèque) ; </li>
+
+  <li> bénéficie le plus souvent d'une <strong class="defin">syntaxe symbolique</strong> facilitant le codage – et donc aussi la lecture – des expressions.</li>
+</ul>
+<p> On appelle <strong class="title">opérandes</strong> les <strong class="defin">expressions</strong> auxquelles un opérateur s'applique (le terme « <em>argument</em> » est préférentiellement employé pour les fonctions). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On dit d'un opérateur qu'il est <strong class="specialLB">unaire</strong>, <strong class="specialLB">binaire</strong> ou <strong class="specialLB">ternaire</strong> s'il admet respectivement <strong class="defin">1</strong>,  <strong class="defin">2</strong> ou <strong class="defin">3</strong> <strong>opérandes</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Faire la <strong class="title">somme</strong> de deux données numériques <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> est une opération tellement courante qu'il serait fastidieux de coder <code>sum(a, b)</code> pour cela. Comme en calcul algébrique, on code simplement : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">a + b</code>
+</span> </p>
+
+<p> L'opérateur <code class="prettyprint lang-c">+</code> employé ici est <strong>binaire</strong>. </p>
+</div><!-- exemple -->
+
+
+<div class="complementExpert">
+<p> Comme pour toute fonction, les <strong class="title">principales caractéristiques</strong> d'un opérateur sont : </p>
+
+<ul>
+  <li> son <strong class="specialLB">arité</strong>, c'est‑à‑dire son <strong>nombre d'opérandes</strong>,  </li>
+
+  <li> le <strong class="specialLB">type</strong> des valeurs qu'il accepte comme <strong>opérandes</strong>, </li>
+
+  <li> le <strong class="specialLB">type</strong> des valeurs qu'il <strong>rend</strong>. </li>
+</ul>
+
+
+<p> Mais en faisant partie d'un cercle limité de fonctions codées par une syntaxe privilégiée, un opérateur se caractérise aussi par d'<strong class="title">autres caractéristiques</strong> : </p>
+<ul>
+  <li> son <strong class="specialLB">rang de priorité</strong> au sein des expressions (par rapport aux autres opérateurs),</li>
+
+  <li> son <strong class="specialLB">sens d'associativité</strong> au sein des expressions par rapport aux opérateurs voisins de même rang de priorité,</li>
+</ul>
+<p> Tous ces aspects sont détaillés plus loin. </p>
+
+</div>
+
+
+
+<h3> Opérateurs particuliers </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C/C++</strong>, on recense <strong>trois</strong> <strong class="title">opérateurs particuliers</strong>, parce que <strong class="defin">très généraux</strong> au point qu'un débutant pourrait ne pas les percevoir comme tels, alors qu'ils sont bel et bien des opérateurs. Ce sont :  </p>
+
+<ul>
+  <li> les <strong class="specialLB">parenthèses</strong> <code class="prettyprint lang-c">()</code>, qui opèrent une <strong>élévation du rang de priorité</strong> d'évaluation de son opérande (cf. tableau infra <a class="infra" href="Cc2-4_manipulationDonnees.html#priorites" target="_BLANK"></a>), </li>
+
+  <li> l'<strong class="specialLB">opérateur séquentiel</strong> <code class="prettyprint lang-c">,</code> déjà présenté au chapitre C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#operteurSequentiel" target="_BLANK"></a>, </li>
+
+  <li> l'<strong class="specialLB">opérateur d'affectation</strong> <code class="prettyprint lang-c">=</code> déjà présenté supra <a class="supra" href="Cc2-4_manipulationDonnees.html#affectation"></a>. </li>
+</ul>
+</div><!-- important -->
+
+
+
+<h3 id="operators"> Opérateurs élémentaires </h3>
+
+
+
+<div class="important">
+<p> Comme tous les langages de programmation généralistes, <strong>C</strong> et <strong>C++</strong> disposent des <strong>opérateurs usuels</strong> de <strong class="defin">calcul numérique</strong>, qu'on peut qualifier d'<strong class="title">opérateurs élémentaires</strong>, parce qu'ils s'appliquent à des opérandes de <strong class="specialG">types élémentaires </strong>(cf. chap. C3‑I <a class="next" href="../C3-Numeration/Cc3-1_typesGeneralites.html" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">opérateurs élémentaires</strong> sont listés par familles dans le tableau ci‑dessous.  </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+  <tr>
+    <th> Famille </th>
+    <th> Opérandes  </th>
+    <th> Valeurs </th>
+    <th> Noms et symboles  </th> </tr>
+
+  <tr>
+    <td> <strong>booléens</strong> </td>
+    <td style="text-align: center;">  tous types</td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">int</code> </td>
+    <td style="padding-left: 1em;">
+        <code class="prettyprint lang-c">!</code>  <em>non</em> &ensp; &ensp;
+        <code class="prettyprint lang-c">&&</code>  <em>et</em> &ensp; &ensp;
+        <code class="prettyprint lang-c">||</code>  <em>ou</em>
+    </td>
+  </tr>
+  <tr>
+    <td> <strong>booléens</strong> <br> <strong>bits à bits</strong> </td>
+    <td style="text-align: center;"> types <br> entiers </td>
+    <td style="text-align: center;"> types <br> entiers </td>
+    <td style="padding-left: 1em;">
+        <code class="prettyprint lang-c">~</code>  <em>non</em> &ensp; &ensp;
+        <code class="prettyprint lang-c">&</code>  <em>et</em> &ensp; &ensp;
+        <code class="prettyprint lang-c">|</code>  <em>ou</em> <br>
+        <code class="prettyprint lang-c">^</code>  <em>ou exclusif</em>
+    </td>
+  </tr>
+  <tr>
+    <td> <strong>décalage <br> des bits</strong> </td>
+    <td style="text-align: center;"> types <br> entiers </td>
+    <td style="text-align: center;"> types <br> entiers </td>
+    <td style="padding-left: 1em;">
+        <code class="prettyprint lang-c">>> n</code>  <em>décalage</em> <strong>n</strong><em> rangs à droite</em> <br>
+        <code class="prettyprint lang-c"><< n</code>  <em>décalage</em> <strong>n</strong><em> rangs à gauche</em>
+    </td>
+  </tr>
+  <tr>
+    <td> <strong>comparaison</strong> </td>
+    <td style="text-align: center;"> tous <br> types </td>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">int</code> </td>
+    <td style="padding-left: 1em;">
+        <code class="prettyprint lang-c">==</code>  <em>égal</em> &ensp; &ensp;
+        <code class="prettyprint lang-c">!=</code>  <em>différent</em> <br>
+        <code class="prettyprint lang-c">> </code> 
+        <code class="prettyprint lang-c">>=</code>  <em>supérieur (ou égal)</em> <br>
+        <code class="prettyprint lang-c">< </code> 
+        <code class="prettyprint lang-c"><=</code>  <em>inférieur (ou égal)</em> <br>
+        <code class="prettyprint lang-c"><=></code>  <em>opérateur « 3 voies »</em> (en <em class="mark">C++</em>)
+    </td>
+  </tr>
+  <tr>
+    <td> <strong>arithmétique <br> algèbre</strong> </td>
+    <td style="text-align: center;"> tous <br> types </td>
+    <td style="text-align: center;"> au moins <br> <code class="prettyprint lang-c">int</code> ou <br> <code class="prettyprint lang-c">double</code>  </td>
+    <td style="padding-left: 1em;">
+        <code class="prettyprint lang-c">+</code>  <em>plus</em> &emsp;
+        <code class="prettyprint lang-c">-</code>  <em>moins</em>       <strong>unaires</strong> <br>
+        <code class="prettyprint lang-c">+</code>  <em>plus</em> &emsp;
+        <code class="prettyprint lang-c">-</code>  <em>moins</em>       <strong>binaires</strong> <br>
+        <code class="prettyprint lang-c">*</code>  <em>fois</em> &emsp;
+        <code class="prettyprint lang-c">/</code>  <em>division</em> &emsp;
+        <code class="prettyprint lang-c">%</code>  <em>modulo</em>
+    </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Certains opérateurs sont tellement <strong class="pros">usuels en calcul</strong> qu'ils ne sont plus à présenter (opérateurs algébriques, de comparaison…). Néanmoins, <strong>en programmation</strong>, ils sont <strong class="title">quelques particularités</strong> : <br>
+  <ul>
+    <li> il faut veiller à <strong class="warning">ne pas confondre</strong> l'<strong>opérateur</strong> <code class="prettyprint lang-c">-</code> <strong class="defin">unaire</strong> (pour former un nombre négatif) et l'<strong>opérateur</strong> <code class="prettyprint lang-c">-</code> <strong class="defin">binaire</strong> (la soustraction) ; on verra ci‑après qu'ils n'ont pas les mêmes propriétés (ordre de priorité, sens de l'associativité) ;  </li>
+
+    <li> il faut veiller à <strong class="warning">ne pas confondre</strong> l'opérateur de <strong>test d'égalité</strong> <code class="prettyprint lang-c">==</code> avec l'opérateur d'<strong>affectation</strong> <code class="prettyprint lang-c">=</code> ; une erreur classique consécutive à une telle confusion est donnée en exemple au chap. C2‑V <a class="next" href="Cc2-5_structuresControle.html#erreurEgal" target="_BLANK"></a></li>
+
+    <li> l'opérateur de <strong>comparaison trois voies</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Comparaison_trilatérale" target="_BLANK">W</a>, peu connu, tient une place à part dans sa famille, car il peut rendre une valeur négative (il est intégré à la norme <em class="mark">C++20</em> seulement). </li>
+  </ul></li>
+
+  <li> Les opérateurs de <strong class="title">décalages de bits</strong> ainsi aue l'opérateur <strong class="title">modulo</strong> <code class="prettyprint lang-c">%</code> – qui donne le <strong class="defin">reste</strong> de la division euclidienne – sont <strong>peu usités en calcul mental</strong> mais sont <strong class="warning">cruciaux en programmation</strong>. Ils seront approfondis dans la partie <span class="partie">C3</span> du cours. </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="operateursStructurels"> Opérateurs structurels </h3>
+
+
+<div class="complement">
+<p> En plus des opérateurs élémentaires ci‑dessus, les langages <strong>C</strong> et <strong>C++</strong> disposent d'<strong class="title">opérateurs structurels</strong>, c'est‑à‑dire pour mettre en œuvre des opérations sur les <strong class="defin">aspects structurels</strong> <strong>des programmes et des données</strong>. </p>
+
+<p> Ils sont listés dans le tableau ci‑dessous. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+  <tr>  <th> Symbole </th> <th> Désignation  </th> </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">(<span class="nocode"><strong>type</strong></span>)</code> </td>
+    <td> <em>transtypage</em> (ou <em class="english">cast</em>) </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">()</code> </td>
+    <td> <em>appel de fonction</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">[]</code> </td>
+    <td> <em>indexation de tableau ou de pointeur</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">.</code> </td>
+    <td> <em>sélection de champ de structures hétérogènes</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">-></code> </td>
+    <td> <em>déréférencement structurel de structures hétérogènes</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">*</code> </td>
+    <td> <em>déréférencement de pointeur</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">&</code> </td>
+    <td> <em>opérateur d'adresse de donnée</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">sizeof</code> </td>
+    <td> <em>opérateur de taille de donnée</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">_Alignof</code> <br> <code class="prettyprint lang-c">alignof</code> </td>
+    <td> <em>opérateur de contrainte d'alignement</em> </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> <code class="prettyprint lang-c">? :</code> </td>
+    <td> <em>opérateur conditionnel</em> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Pour un codeur débutant, cette <strong class="title">multitude d'opérateur</strong> constitue une <strong class="cons">vraie difficulté</strong>, d'autant plus que ces opérateurs utilisent des <strong class="warning">symboles déjà attribués</strong> <strong>à des opérateurs élémentaires</strong> ! En particulier, il faut <strong class="warning">ne pas confondre</strong> les <strong class="specialLB">parenthèses</strong> : </p>
+
+<ul>
+  <li> de l'opérateur d'<strong>élévation de rang de priorité</strong>, </li>
+
+  <li> d'un <strong>appel de fonction</strong>,</li>
+
+  <li> d'une <strong>conversion explicite</strong>…</li>
+</ul>
+
+<p> L'<strong class="title">objectif</strong> de présenter les opérateurs structurels dans ce chapitre n'est pas d'expliquer en détail le rôle de chacun, mais : </p>
+
+<ul>
+  <li> de prendre conscience de leur <strong>existence</strong> ; </li>
+
+  <li> d'inviter à d'être particulièrement vigilant au <strong>respect de la syntaxe</strong> des opérateurs élémentaires.</li>
+</ul>
+
+<p> En effet, une « petite » <strong class="warning">confusion</strong> peut passer <strong class="cons">inaperçue</strong> à la compilation parce qu'elle est syntaxiquement reconnue par le compilateur comme une expression valide, mais pour un autre opérateur que celui auquel le codeur pensait, avec à la clé un résultat d'exécution forcément <strong class="warning">différent</strong> de celui attendu. </p>
+</div><!-- remarque -->
+
+<div class="expert">
+<p> Les opérateurs structurels seront revus en détail dans le cadre spécifique de l'étude des fonctions et des structures de données (parties <span class="partie">C4</span> et <span class="partie">C5</span> du cours). </p>
+</div><!-- expert -->
+
+
+
+<h3 id="typesOperandes"> Types des opérandes </h3>
+
+
+<div class="important">
+<p> Syntaxiquement, les <strong class="title">opérandes</strong> auxquels s'appliquent les opérateurs sont des <strong class="defin">expressions</strong> avec certaines restrictions quant au <strong class="specialG">type</strong> des <strong>valeurs</strong> qu'elles peuvent prendre. </p>
+</div><!-- important -->
+
+
+<h4> Cas général </h4>
+
+
+<div class="complementExpert">
+<p> Dans le domaine des <strong>mathématiques</strong>, en règle générale, les opérateurs sont des lois internes sur des ensembles. Leurs <strong class="title">opérandes</strong> doivent donc être nécessairement de <strong class="specialG">même type</strong>, mais cela ne pose pas de problème parce que les grands ensembles de nombres sont inclus les uns dans les autres (en particulier, on a ℤ ⊂ ℝ). Par exemple, une opération telle que 2 × π ne choque personne même si 2 est entier et π réel, puisqu'on a 2 ∊ ℝ, donc l'opération est définie dans ℝ. </p>
+
+<p> En <strong>programmation</strong>, la question de l'<strong class="title">homogénéité</strong> des <strong>types</strong> d'une opération n'est <strong class="warning">pas si simple</strong>, car les ensembles de valeurs des différents types ne sont pas inclus les uns dans les autres. En particulier, pas toutes les valeurs du type <code class="prettyprint lang-c">int</code> ne sont codables dans le type <code class="prettyprint lang-c">float</code> – et réciproquement, bien évidemment. </p>
+
+<p> Ainsi, certains langages de programmation comme <strong>Ada</strong> imposent une <em>contrainte d'homogénéité stricte</em> au sein des opérations. Il faut alors recourir à une opération de conversion explicite (<em class="english">cast</em>) pour effectuer la moindre opération hétérogène comme une multiplication entre un entier et un décimal. </p>
+</div><!-- complementExpert -->
+
+<div class="important">
+<p> En langages <strong class="title">C</strong> et <strong class="title">C++</strong>, pour un <strong>codage simplifié des expressions</strong>, les <strong class="title">opérations hétérogènes</strong> sont <strong class="pros">acceptées</strong>, c'est‑à‑dire appliquées à des données de <strong class="specialG">types différents</strong>, en procédant à des <strong class="specialMg">conversions implicites</strong> de types.  </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Les <strong class="title">conversions</strong>, dont celles dites <em>implicites</em>, seront étudiées en détail au chap. C3‑VI <a class="next" href="../C3-Numeration/Cc3-6_conversionsTypes.html#conversionsImplicites" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+<div class="exemples">
+<p class="exemple">  En <em class="mark">C/C++</em>, une <strong>expression</strong> comme <code class="prettyprint lang-c">0.5 * 10</code> est <strong class="defin">compilable</strong>, alors qu'elle hétérogène. En effet, la constante littérale <code class="prettyprint lang-c">0.5</code> est de <strong class="specialG">type décimal</strong> et que la constante littérale <code class="prettyprint lang-c">10</code> est de <strong class="specialG">type entier</strong>. </p>
+<ul>
+  <li>  Lors de la compilation, pour garantir un résultat conforme aux règles usuelles de calcul, c'est évidemment la constante <code class="prettyprint lang-c">10</code> qui est <strong class="specialMg">ajustée dans un type décimal</strong> (et non pas <code>0.5</code> dans un type entier). </li>
+
+  <li> Le <strong class="specialN">résultat final</strong> <code class="cmd">5</code>, bien qu'entier dans ce cas particulier, est encodé dans un  <strong class="specialG">type décimal</strong>. </li>
+</ul>
+</div><!-- exemple -->
+
+
+<h4> Cas des opérateurs sur les bits </h4>
+
+
+<div class="complement">
+<p> La <strong class="warning">seule restriction de typage</strong> concerne les <strong class="title">opérateurs sur les bits</strong> (booléens et de décalage), qui sont spécifiquement réservés aux <strong class="defin">types entiers</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> L'expression <code class="prettyprint lang-c">0.2 << 1</code> n'est  pas compilable, parce que l'opérande <code class="prettyprint lang-c">0.2</code> n'est pas de type entier. </p>
+
+<p> En revanche, l'expression <code class="prettyprint lang-c">2 << 1</code> est  compilable et vaut <code class="prettyprint lang-c">4</code>. (cf. chap. C3‑III <a class="next" href="../C3-Numeration/Cc3-3_typesBooleens.html#bitShiftOperators" target="_BLANK"></a>). </p>
+</div><!-- exemples -->
+
+
+<h4> Cas des opérateurs booléens </h4>
+
+
+<div class="complement">
+<p> Quant aux <strong class="title">opérateurs booléens généraux</strong> (non bits à bits), ils peuvent être appliqués à des <strong>expressions</strong> à <strong class="defin">valeurs numériques</strong> et non pas booléennes, mais alors : </p>
+
+<ul>
+  <li> la valeur booléenne <code class="prettyprint lang-c">0</code> (équivalente à <code class="prettyprint lang-c">false</code>, c'est‑à‑dire, <strong>faux</strong>) est attribuée à <strong>toute valeur</strong> <strong class="warning">nulle</strong> ; </li>
+
+  <li> la valeur booléenne <code class="prettyprint lang-c">1</code> (équivalente à <code class="prettyprint lang-c">true</code>, c'est‑à‑dire, <strong>vrai</strong>) est attribuée à <strong>toute valeur</strong> <strong class="warning">non nulle</strong>. </li>
+</ul>
+
+<p> De plus, une expression composée avec des opérateurs <strong>booléens</strong> ou de <strong>comparaison</strong> ne peut prendre que les valeurs <code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code> selon qu'elle est évaluée respectivement fausse ou vraie. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"> </p>
+<ol class="numbered">
+  <li> Le code : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">if (newVoltage)</code>…
+  </span> <br>
+  est équivalent à : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">if (newVoltage != 0.0)</code>…
+  </span> <br>
+  cette deuxième variante étant <strong class="pros">préférable</strong> en termes de lisibilité, car elle explicite la condition « <em>si la tension est non nulle…</em> ». </li>
+
+  <li> L'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">ageAdmittance = (userAge > 18);</code>
+  </span> <br>
+  affecte à la variable <code class="prettyprint lang-c">ageAdmittance</code> la valeur booléenne <code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code> prise par l'expression : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">userAge > 18</code>
+  </span> <br>
+  laquelle dépend de la valeur entière prise par la variable <code>userAge</code> lors de l'exécution ; par exemple, si <code class="prettyprint lang-c">userAge</code> vaut <code class="prettyprint lang-c">16</code>, alors : <br>
+  <span class="inline">
+   <code class="prettyprint lang-c">userAge > 18</code>
+  </span> <br>
+  vaut <code class="prettyprint lang-c">0</code> (<em>faux</em>), donc <code class="prettyprint lang-c">ageAdmittance</code> vaut <code class="prettyprint lang-c">0</code> (<em>faux</em>). </li>
+</ol>
+</div><!-- exemples -->
+
+
+
+<h3 id="compoundOperators"> Opérateurs à affectation composée </h3>
+
+
+<div class="important">
+<p> Les langages <strong>C/C++</strong> fournissent également des <strong class="title">opérateurs composés</strong> (<em class="english">compound assignment operators</em>) qui, chacun, <strong class="defin">combine</strong> un <strong>opérateur élémentaire</strong> avec l'opérateur d'<strong>affectation</strong> <code class="prettyprint lang-c">=</code>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> S'ils peuvent s'apparenter à des « raccourcis syntaxiques », ils constituent des <strong class="title">opérateurs</strong> au même titre que les autres, avec un <strong>rang de priorité</strong> et un <strong>sens d'associativité</strong> spécifiques (cf. infra). </p>
+
+<p> Ces opérateurs sont <strong class="pros">particulièrement utiles</strong> pour coder des opérations de <strong class="defin">modifications</strong> de variables, surtout si ces dernières ont des <strong>identificateurs longs</strong>, d'autant plus qu'ils diminuent les risques d'éventuelles erreurs de saisies de ces identificateurs. </p>
+</div>
+
+
+<h4 id="incremUnitaire"> Incrémentation unitaire </h4>
+
+
+<div class="complement">
+<p> Si <code class="prettyprint lang-c">a</code> est l'identificateur d'une variable, ou plus généralement une <strong>expression</strong> qui est une <strong class="specialM">l‑value mutable</strong> (cf. supra <a class="supra" href="Cc2-4_manipulationDonnees.html#syntaxeAffectation"></a>), alors : </p>
+
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">++a</code> effectue une <strong class="title">incrémentation unitaire</strong> de <code class="prettyprint lang-c">a</code>, c'est‑à‑dire une <strong>augmentation de 1</strong>
+  <strong class="warning">juste avant</strong> l'évaluation de <code class="prettyprint lang-c">a</code> ; </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a++</code> procède de même mais <strong class="warning">juste après</strong> l'évaluation de <code class="prettyprint lang-c">a</code>. </li>
+</ul>
+
+<p> En <strong>préfixe</strong>, <code class="prettyprint lang-c">++</code> est l'opérateur de <strong class="defin">pré‑</strong><strong class="title">incrémentation</strong>. <br>
+
+En <strong>suffixe</strong>, <code class="prettyprint lang-c">++</code> est l'opérateur de <strong class="defin">post‑</strong><strong class="title">incrémentation</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">a</code> est l'identificateur d'une variable valant <code class="prettyprint lang-c">0</code>, alors l'instruction : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  printf("%d", a++); 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> affiche sur <code class="displayDark">0</code> sur le terminal d'exécution, alors que l'instruction : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  printf("%d", ++a); 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> affiche <code class="displayDark">1</code> sur le terminal d'exécution. </p> 
+
+<p> Dans les deux cas, la variable <code class="prettyprint lang-c">a</code> possède la <strong>valeur</strong> <code class="prettyprint lang-c">1</code> après exécution de l'instruction. </p>
+</div><!-- exemple -->
+
+
+<h4> Décrémentation unitaire </h4>
+
+
+<div class="complement">
+<p> Le principe exposé supra s'applique aussi à l'opérateur de <strong>soustraction</strong> <code class="prettyprint lang-c">-</code> pour former les <strong>opérateurs</strong> de <strong class="defin">pré‑</strong> et de <strong class="defin">post‑</strong><strong class="title">décrémentation unitaire</strong> :  </p>
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">--a</code> effectue une <strong>diminution de 1</strong> <strong class="warning">juste avant</strong> l'évaluation de <code class="prettyprint lang-c">a</code> ; etc. </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a--</code> effectue une <strong>diminution de 1</strong> <strong class="warning">juste après</strong> l'évaluation de <code class="prettyprint lang-c">a</code>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Incrémentations et décrémentations multiples </h4>
+
+
+<div class="important">
+<p> Plus généralement, on peut opérer une <strong class="title">incrémentation</strong> ou une <strong class="title">décrémentation</strong> <strong class="title">multiple</strong> d'une variable avec les <strong>opérateurs à affectation combinée</strong> dont les symboles sont respectivement <code class="prettyprint lang-c">+=</code> et <code class="prettyprint lang-c">-=</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Si <code class="prettyprint lang-c">a</code> est l'identificateur d'une variable, ou plus généralement une <strong>expression</strong> qui est une <strong class="specialM">l‑value mutable</strong>, et si <code class="prettyprint lang-c">b</code> est une expression à valeur numérique quelconque, alors : </p>
+
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">a += b</code> « abrège »
+    <code class="prettyprint lang-c">a = a + b</code>, </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a -= b</code> « abrège »
+    <code class="prettyprint lang-c">a = a - b</code>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">lastBatteryVoltage</code> est une variable valant <code class="prettyprint lang-c">10.0</code> et <code class="prettyprint lang-c">voltageDrop</code> une variable valant <code class="prettyprint lang-c">2.0</code>, alors l'instruction : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  lastBatteryVoltage += voltageDrop; 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> affecte à <code class="prettyprint lang-c">lastBatteryVoltage</code> la valeur <code class="prettyprint lang-c">8</code>. </p>
+
+<p> Sans recours à l'opérateur <code class="prettyprint lang-c">+=</code>, l'instruction aurait été plus longue : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  lastBatteryVoltage = lastBatteryVoltage + voltageDrop; 
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+
+<div class="remarques">
+<p class="remarque"> En langage <strong class="title">C</strong>, ni <code class="prettyprint lang-c">++a</code>, ni <code class="prettyprint lang-c">a++</code> ne sont des <strong>l‑value</strong>. </p>
+
+<p> Mais en langage <strong class="title">C++</strong> : </p>
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">++a</code> est elle‑même une <strong class="specialM">l‑value</strong>, alors que <code class="prettyprint lang-c">a++</code> ne l'est pas ; ainsi, l'instruction <code class="prettyprint lang-c">++a += b;</code> est compilable, mais pas <code class="prettyprint lang-c">a++ += b;</code> ;  </li>
+
+  <li> les instructions
+    <code class="prettyprint lang-c"><span class="nocode"><em>expr_1</em></span> +=
+      <span class="nocode"><em>expr_2</em></span>;</code> et
+    <code class="prettyprint lang-c"><span class="nocode"><em>expr_1</em></span> =
+      <span class="nocode"><em>expr_1</em></span> +
+      <span class="nocode"><em>expr_2</em></span>;</code>
+  ne sont pas tout à fait équivalentes ; en effet, si <strong>expr_1</strong> est elle‑même une expression de la forme <code class="prettyprint lang-c">++i</code>, elle est évaluée : </li>
+  <ul>
+    <li> <em>une seule fois</em> dans la forme abrégé, et alors la variable <code class="prettyprint lang-c">i</code> est augmentée de <code>1</code> ; </li>
+
+    <li>  <em>deux fois</em> dans la forme non abrégé, et alors la variable <code class="prettyprint lang-c">i</code> est augmentée de <code>2</code>.</li>
+  </ul>
+</ul>
+
+<p> Ces précisions sont importantes pour comprendre le codage de certaines routines dans la bibliothèque standard du langage <em class="mark">C</em>, mais elles ne doivent pas encombrer l'esprit des programmeurs débutants, à qui il est vivement <strong class="warning">déconseillé</strong> <strong>de coder de telles combinaisons d'opérateurs</strong>. </p>
+</div><!-- remarque -->
+
+
+
+<h4 id="compoundAssignmentOperators"> Autres opérateurs à affectation composée </h4>
+
+
+
+<div class="important">
+<p> Le principe de <strong class="title">composition</strong> d'un <strong>opérateur</strong> avec celui d'<strong class="title">affectation</strong>, exposé supra pour l'addition et la soustraction, <strong class="pros">s'applique aussi</strong> aux <strong>opérateurs suivants</strong> : </br>
+<span class="inline">
+  <code class="prettyprint lang-c">*</code>  
+  <code class="prettyprint lang-c">/</code>  
+  <code class="prettyprint lang-c">%</code>  
+  <code class="prettyprint lang-c">&</code>  
+  <code class="prettyprint lang-c">|</code>  
+  <code class="prettyprint lang-c">^</code>  
+  <code class="prettyprint lang-c">>></code>  
+  <code class="prettyprint lang-c"><<</code>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Si <code class="prettyprint lang-c">a</code> est l'identificateur d'une variable, ou plus généralement une expression qui est une <strong>l‑value</strong>, et si <code class="prettyprint lang-c">b</code> est une expression à valeur numérique quelconque, alors :  </p>
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">a *= b</code> « abrège »
+    <code class="prettyprint lang-c">a = a * b</code>, </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a /= b</code> « abrège »
+    <code class="prettyprint lang-c">a = a / b</code>, </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a %= b</code> « abrège »
+    <code class="prettyprint lang-c">a = a % b</code>, etc.</li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Pour les opérateurs booléens bits à bits et de décalages, des exemples sont donnés au chap. C3‑III <a class="next" href="../C3-Numeration/Cc3-3_typesBooleens.html#bitwizeCompoundOperators" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="priorites"> Rangs de priorité des opérateurs </h3>
+
+
+
+<div class="important">
+<p> Comme en mathématiques, il existe en programmation une <strong class="title">hiérarchie</strong> entre les opérateurs en termes de <strong class="defin">priorités d'exécution</strong> au sein d'une expression. </p>
+
+<p> De plus, pour <strong>changer l'ordre</strong> de traitement d'une expression, il suffit d'encapsuler la partie à traiter en priorité dans des <strong class="title">parenthèses</strong> supplémentaires <code class="prettyprint lang-c">()</code>. Ces dernières constituent un <strong>opérateur</strong> <strong class="specialV">hors catégorie</strong> en terme de priorité, c'est‑à‑dire de <strong>rang</strong> « <em class="bold">0</em> ».  </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Le tableau ci‑dessous donne le rang de priorité respectif de chaque opérateur du <strong>langage <em class="mark">C</em></strong>. Quant aux opérateurs spécifiques du langage <em class="mark">C++</em> (notamment ceux relatifs à la programmation orientée objet), ils seront abordés dans un autre module de formation. </p>
+
+<p> Pour une présentation plus complète, on peut consulter ces pages de référence <a class="external" href="https://en.cppreference.com/w/c/language/operator_precedence" target="_BLANK">C</a> <a class="external" href="https://en.cppreference.com/w/cpp/language/operator_precedence" target="_BLANK">C++</a>. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+  <tr>
+    <th>  1  </th>
+    <td style="padding-left: 1em;">
+        <code class="prettyprint lang-c"><span class="nocode"><strong>fonction</strong></span>()</code>  <code class="prettyprint lang-c">[]</code> &ensp;
+        <code class="prettyprint lang-c">.</code>  <code class="prettyprint lang-c">-></code> <br>
+        <code class="prettyprint lang-c">++</code>  <code class="prettyprint lang-c">--</code>  (suffixes)
+    </td>
+    <th> 6 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c"><</code>  <code class="prettyprint lang-c"><=</code> <br>
+      <code class="prettyprint lang-c">></code>  <code class="prettyprint lang-c">>=</code>
+    </td>
+    <th> 11 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">&&</code>
+    </td>
+  </tr>
+  <tr>
+    <th> 2 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">!</code>   <code class="prettyprint lang-c">~</code> &ensp;
+      <code class="prettyprint lang-c">++</code> <code class="prettyprint lang-c">--</code> (préfixes) &ensp;
+      <code class="prettyprint lang-c">+</code> <code class="prettyprint lang-c">-</code> (unaires)  <code class="prettyprint lang-c">*</code> (pointeur) &ensp;
+      <code class="prettyprint lang-c">&</code> (adresse)   <code class="prettyprint lang-c">(<span class="nocode"><strong>type</strong></span>)</code> (cast)<br>
+      <code class="prettyprint lang-c">sizeof</code>   <code class="prettyprint lang-c">_Alignof</code>   <code class="prettyprint lang-c">alignof</code>
+
+    </td>
+    <th> 7 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">==</code>   <code class="prettyprint lang-c">!=</code>
+
+    </td>
+    <th> 12 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">||</code>
+    </td>
+  </tr>
+  <tr>
+    <th> 3 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">*</code>   <code class="prettyprint lang-c">/</code>   <code class="prettyprint lang-c">%</code>
+    </td>
+    <th> 8 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">&</code>
+    </td>
+    <th> 13 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">? :</code>
+    </td>
+  </tr>
+  <tr>
+    <th> 4 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">+</code>   <code class="prettyprint lang-c">-</code>  (binaires)
+    </td>
+    <th> 9 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">^</code>
+    </td>
+    <th> 14 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">=</code>   <code class="prettyprint lang-c">+=</code>   <code class="prettyprint lang-c">-=</code> <br>
+      <code class="prettyprint lang-c">*=</code>   <code class="prettyprint lang-c">/=</code>   <code class="prettyprint lang-c">%=</code> <br>
+      <code class="prettyprint lang-c">&=</code>   <code class="prettyprint lang-c">|=</code>   <code class="prettyprint lang-c">^=</code> <br>
+      <code class="prettyprint lang-c">>>=</code>   <code class="prettyprint lang-c"><<=</code>
+    </td>
+  </tr>
+  <tr>
+    <th> 5 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">>></code> &ensp;
+      <code class="prettyprint lang-c"><<</code>
+    </td>
+    <th> 10 </th>
+    <td style="padding-left: 1em;">
+      <code class="prettyprint lang-c">|</code>
+    </td>
+    <th> 15 </th>
+    <td style="padding-left: 1em;">
+        <code class="prettyprint lang-c">,</code>
+    </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple">Comme en mathématiques, l'expression <code class="prettyprint lang-c">1 + 2 * 3</code> sera évaluée <code>7</code>. </p>
+
+<p> Pour y rendre l'addition prioritaire, il suffirait de coder <code class="prettyprint lang-c">(1 + 2) * 3</code> et on obtiendrait alors <code>9</code>.</p>
+</div><!-- exemple -->
+
+
+
+<h3> Sens de l'associativité des opérateurs </h3>
+
+
+
+<div class="complement">
+<p> En mathématiques, on dit d'un <strong>opérateur binaire</strong> qu'il est <strong class="title">associatif</strong> si l'on peut le <strong>composer plusieurs fois</strong> de suite et obtenir le <strong class="defin">même résultat numérique</strong> <strong>indépendament de l'ordre de composition</strong>. Ainsi, l'addition est associative, parce que la proposition : <br>
+<span class="inline">
+  (<var>a</var> + <var>b</var>) + <var>c</var>  =  <var>a</var> + (<var>b</var> + <var>c</var>)
+</span> <br>
+est toujours vraie, quelles que soient les valeurs de <var>a</var>, <var>b</var> et <var>c</var>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> En programmation, lorsque qu'une sous-expression est composée de <strong>plusieurs opérateurs</strong> de <strong class="specialLB">même rang de priorité</strong>, l'<strong class="title">ordre de traitement</strong> est <strong>par défaut</strong> et <strong>en principe</strong>, celui du sens de lecture des langues occidentales, c'est‑à‑dire <strong class="defin">de gauche à droite</strong> (<em class="bold">→</em>). </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> L'expression <code class="prettyprint lang-c">1 + 2 + 3</code> sera donc a priori évaluée comme <code class="prettyprint lang-c">(1 + 2) + 3</code>. </p>
+</div><!-- exemple -->
+
+
+<div class="expert">
+
+<div class="complement">
+<p> Mais cet l'<strong class="title">ordre de traitement</strong> peut <strong class="warning">varier selon le compilateur</strong>. C'est pourquoi il est recommandé de <strong class="pros">coder des parenthèses</strong> pour <strong>lever toute ambiguïté</strong>. </p>
+
+<p> Par ailleurs, conformément à la norme, <strong class="title">certains opérateurs</strong> sont toujours traités <strong class="defin">de droite à gauche</strong> (<em class="bold">←</em>) : </p>
+<ul>
+  <li> la plupart des opérateurs <strong>unaires</strong>, c'est‑à‑dire : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">!</code> &ensp;
+    <code class="prettyprint lang-c">~</code> &ensp;
+    <code class="prettyprint lang-c">-</code> &ensp;
+    <code class="prettyprint lang-c">++ --</code> (en préfixes)
+  </span> <br>
+  mais <strong class="warning">pas tous</strong>, et notamment pas <code class="prettyprint lang-c">++ --</code> (suffixes), ni l'opérateur séquentiel <code class="prettyprint lang-c">,</code> ; </li>
+
+  <li> tous les opérateurs d'<strong>affectation</strong>, c'est‑à‑dire : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">=</code> &ensp;
+    <code class="prettyprint lang-c">+=</code> &ensp;
+    <code class="prettyprint lang-c">-=</code> &ensp;
+    <code class="prettyprint lang-c">*=</code> &ensp;
+    <code class="prettyprint lang-c">/=</code> &ensp;
+    <code class="prettyprint lang-c">%=</code> etc.
+  </span> <br>
+  cet aspect étant essentiel pour comprendre comment sont opérés les enchaînements d'affectation comme <code class="prettyprint lang-c">a = b = 5;</code>. </li>
+</ul>
+
+<p> Pour une <strong>présentation détaillée</strong> du sens de l'associativité des opérateurs, on peut consulter les mêmes pages de référence que pour les rangs de priorité <a class="external" href="https://en.cppreference.com/w/c/language/operator_precedence" target="_BLANK">C</a> <a class="external" href="https://en.cppreference.com/w/cpp/language/operator_precedence" target="_BLANK">C++</a>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">a</code> est l'identificateur d'une variable valant <code>2</code>, alors l'expression <code class="prettyprint lang-c">- ++a</code> sera a priori évaluée <code>-3</code>. En effet, elle est équivalente à <code lass="prettyprint lang-c">-(++a)</code>, donc à l'exécution, la machine incrémente <code class="prettyprint lang-c">a</code> (ce qui donne <code>3</code>) avant d'inverser son signe. </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="effetBord"> Notion d'effet de bord </h3>
+
+
+
+<div class="important">
+<p> On dit d'une <strong>opération</strong> qu'elle est <strong class="title">à effet de bord</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Effet_de_bord_(informatique)" target="_BLANK">W</a> <strong>sur une expression</strong> – en anglais, on parle de <strong>side effect operation</strong> – si elle <strong class="defin">modifie le contexte</strong> <strong>d'évaluation</strong> de cette expression, c'est‑à‑dire qu'elle change la valeur d'au moins une des variables qui la constitue. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>  En langages <em class="mark">C</em> et <em class="mark">C++</em>, les <strong>opérateurs</strong> <strong class="title">à effet de bord</strong> sont l'<strong class="defin">affectation</strong> et plus généralement tous les <strong>opérateurs à</strong> <strong class="defin">affectation composée</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">++</code> &ensp;
+  <code class="prettyprint lang-c">--</code> &ensp;
+  <code class="prettyprint lang-c">+=</code> &ensp;
+  <code class="prettyprint lang-c">-=</code> &ensp;
+  <code class="prettyprint lang-c">*=</code> …
+</span> </p>
+
+<p> Ces opérateurs doivent être toujours <strong>employés</strong> <strong class="warning">avec précaution</strong>, en particulier dans des <strong>pseudo‑fonctions</strong> (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#sideEffectOnMacros" target="_BLANK"></a>), en ayant conscience de l'<strong class="title">effet de bord</strong> qu'ils occasionnent, pour éviter des erreurs d'exécution difficiles à anticiper par la suite, lorsque le code devient volumineux. </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="fonctionsMath"> Fonctions et constantes mathématiques </h2>
+
+
+
+<h3> Éléments des bibliothèques standards de <em class="mark">C</em> et <em class="mark">C++</em> </h3>
+
+
+
+<div class="important">
+<p> En langages <strong>C/C++</strong>, il n'existe <strong class="cons">pas d'opérateur d'exponentiation</strong> pour coder une expression mathématique de la forme <em class="bold"><var>a<sup>b</sup></var></em>. </p>
+
+<p> En revanche, toutes les <strong class="title">fonctions mathématiques usuelles</strong> sont définies dans un <strong>module</strong> de la <strong class="defin">bibliothèque standard</strong> du langage. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En langage <strong>C</strong>, on doit préalablement coder la <strong>directive</strong> <code class="prettyprint lang-c">#include &lt;math.h&gt;</code> (<code class="prettyprint lang-c">&lt;cmath&gt;</code> en <strong>C++</strong>) pour pouvoir exploiter ce module. </p>
+
+<p> De plus, sous <strong class="specialLB">Linux</strong>, pour être opérationnelle, la <strong>commande de compilation</strong> <code contextmenu="cmd">gcc</code> (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#GCC" target="_BLANK"></a>) requiert alors l'usage de l'<strong class="warning">option</strong> <code class="cmd">-lm</code> (pour <em class="english">library math</em>) saisie <strong class="warning">après le nom du fichier source</strong>, par exemple à la fin de la ligne de commande comme ci‑dessous : </p>
+<div class="inline">
+  <code class="displayDark"><span class="displayDarkGreen">gcc</span> <span class="nocode"><strong class="specialG">fichier source</strong></span>.c <span class="displayDarkRed">-o</span> <span class="nocode"><strong class="specialBG">fichier exécutable</strong></span> <span class="displayDarkRed">-lm</span></code>
+</div> 
+<div class="expert">
+<p> En effet, sous <strong class="specialLB">Linux</strong>, le <strong class="title">module mathématique</strong> est en fait compilé dans un <strong class="defin">fichier de bibliothèque partagée</strong> <strong class="warning">distinct</strong> de celui de la <strong>bibliothèque standard</strong> (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-4_chaineCompilation.html#" target="_BLANK"></a>). </p>  
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<p> Dans le <strong>module mathématique</strong>, on trouve notamment les <strong class="title">fonctions</strong> suivantes : </p>
+
+
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+  <tr>
+    <th> identificateur </th>
+    <th> description </th>
+  </tr>
+  <tr>
+    <td>
+      <code class="prettyprint lang-c">round</code> <br>
+      <code class="prettyprint lang-c">floor</code> &ensp;
+      <code class="prettyprint lang-c">ceil</code>
+    </td>
+    <td>
+      fonctions d'<strong>arrondi entier</strong> au plus près d'un décimal, <br>
+      par valeurs inférieurs (<em class="english">floor</em>), par valeurs supérieures (<em class="english">ceil</em>)
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="prettyprint lang-c">pow</code> &ensp;
+      <code class="prettyprint lang-c">sqrt</code>
+
+    </td>
+    <td>
+      fonctions <strong>puissance</strong> (<em class="english">power</em>) et <strong>racine carrée</strong> (<em class="english">square root</em>)
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="prettyprint lang-c">exp</code> <br>
+      <code class="prettyprint lang-c">log</code> &ensp;
+      <code class="prettyprint lang-c">log10</code> &ensp;
+    </td>
+    <td>
+      fonctions <strong>exponentielle</strong> <br>
+      et <strong>logarithmiques</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="prettyprint lang-c">sin</code> &ensp;
+      <code class="prettyprint lang-c">cos</code> &ensp;
+      <code class="prettyprint lang-c">tan</code> &ensp;
+    </td>
+    <td>
+      fonctions <strong>trigonométriques </strong>
+    </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<p> Pour connaître la <strong class="defin">liste exhaustive</strong> des fonctions déclarées dans le fichier <code class="filename">math.h</code>, on peut consulter ce lien <a class="external" href="https://en.cppreference.com/w/c/numeric/math" target="_BLANK">C</a>. </p>
+
+
+
+
+
+<div class="exemples">
+<p class="exemple"> L'expression mathématique <strong class="title"><var>a<sup>b</sup></var></strong> se code <code class="prettyprint lang-c">pow(<span class="nocode"><strong>a</strong></span>, <span class="nocode"><strong>b</strong></span>)</code> où <strong>a</strong> et <strong>b</strong> sont deux expressions à valeurs numériques (entières ou décimales, signées ou non). </p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered"> 
+  <li> Le <strong>module</strong> <code class="filename">cmath</code> (cf. <a class="external" href="https://en.cppreference.com/w/cpp/numeric/math" target="_BLANK">C++</a>) du langage <strong class="title">C++</strong> est <strong class="pros">plus fourni</strong> en fonctions mathématiques que celui du langage <strong>C</strong>. </li>
+
+  <li> Certaines <strong class="title">fonctions mathématiques très générales</strong> ne sont <strong class="warning">pas</strong> déclarées dans fichier <code class="grey">math.h</code> mais dans le <strong>fichier</strong> <code class="filename">stdlib.h</code> (en <em class="mark">C++</em>, <code class="filename">cstdlib</code>). C'est notamment le cas de <code class="prettyprint lang-c">abs</code> (valeur absolue) ou <code class="prettyprint lang-c">rand</code> (génération d'un nombre pseudo-aléatoire). Cette dernière est détaillée au chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#fonctionRand" target="_BLANK"></a>. </li>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h4 id="constMath"> Constantes mathématiques </h4>
+
+
+
+<div class="important">
+<p> <strong class="specialLB">Certaines implémentations</strong> définissent dans le fichier d'en-tête <code class=" filename">math.h</code> de la bibliothèque standard du langage <strong>C</strong> (<code class="filename">cmath</code> en <strong>C++</strong>) des <strong class="defin">pseudo‑constantes</strong> qui donnent une approximation décimale des <strong class="title">constantes mathématiques</strong> <strong>les plus usuelles</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On trouve notamment : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">M_PI</code>, <code class="prettyprint lang-c">M_PI_2</code> et <code class="prettyprint lang-c"> M_PI_4</code> respectivement pour <em class="bold">π</em>, <em class="bold">π/2</em> et <em class="bold">π/4</em> ; </li>
+
+  <li> <code class="prettyprint lang-c">M_E</code> pour le nombre <strong>e</strong> (dit nombre d'Euler ou constante de Neper <a class="external" href="https://fr.wikipedia.org/wiki/E_(nombre)" target="_BLANK">W</a>) ; </li>
+
+  <li> <code class="prettyprint lang-c">M_SQRT2</code> pour le nombre <em class="bold">√2</em>…</li> 
+</ul>
+
+<p> Le lien ci‑après donne la <strong class="defin">liste exhaustive</strong> de ces pseudo‑constantes pour les implémentations basées sur les chaînes de compilation <em class="sigle">GCC</em> <a class="external" href="https://www.gnu.org/software/libc/manual/html_node/Mathematical-Constants.html" target="_BLANK">C</a>. </p> 
+</div><!-- complement -->
+
+<div class="remarques"> 
+<p class="remarque"> Les <strong class="title">pseudo‑constantes mathématiques</strong> <code class="prettyprint lang-c">M_PI</code>, <code class="prettyprint lang-c">M_E</code>, etc. ne sont <strong class="warning">pas définies</strong> dans les implémentations du langage <strong>C</strong> basées sur les chaînes de compilation <strong>mingw</strong> pour les systèmes <strong class="specialLB">Windows</strong> – alors qu'elles le sont pour le langage <strong>C++</strong> ! </p>
+
+<p> Pour pallier cette lacune, rien n'interdit de coder soi‑même, par autant de <strong class="defin">directives au préprocesseur</strong>, les pseudo‑constantes requises par un programme. Par exemple, en langage <strong>C</strong>, on peut très bien ajouter la directive de compilation conditionnelle (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#compilCondi" target="_BLANK"></a> codée aux lignes nº 2 à 4 : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;math.h&gt;
+#ifndef M_PI
+#define M_PI 3.14159265358979323
+#endif
+
+// ...
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> Cela rend le programme <strong class="pros">portable</strong> aussi bien pour une machine cible <strong class="specialLB">Linux</strong> que <strong class="specialLB">Windows</strong>. </p>
+</div><!-- remarques --> 
+
+
+
+
+<h3 id="fonctionsMathArduino"> Éléments de la bibliothèque <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="important">
+<p> Comme expliqué au chapitre C2‑I <a class="previous" href="Cc2-1_squeletteCode.html#fonctionnementArduino" target="_BLANK"></a>, le module principal de la <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong> contient lui‑même des <strong class="title">directives d'inclusion</strong> de modules de la bibliothèque standard du langage <strong>C</strong>, notamment du fichier d'en-tête <code class="filename">math.h</code></em>. </p>
+
+<p> Il n'est donc <strong class="pros">pas nécessaire</strong> de coder à nouveau une telle directive dans un <strong>programme</strong> <strong class="Arduino">Arduino</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> De plus, le fichier <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> définit ou redéfinit un certain nombre de <strong class="title">pseudo‑fonctions</strong> (ou <strong>macro‑définitions</strong> – cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#pseudoFonction" target="_BLANK"></a>), notamment :
+</p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+  <tr>
+    <th> identificateur </th>
+    <th> description </th>
+  </tr>
+  <tr>
+    <td style="min-width: 6em; width: 6em;">
+      <code class="prettyprint lang-c">sq</code>
+    </td>
+    <td>
+      pseudo‑fonction <strong>carré</strong> (<em class="english">square</em>)
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="prettyprint lang-c">abs</code> &ensp;
+    </td>
+    <td>
+      pseudo‑fonction <strong>valeur absolue</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="prettyprint lang-c">min</code> &ensp;
+      <code class="prettyprint lang-c">max</code>
+    </td>
+    <td>
+      pseudo‑fonction binaires <strong>minimum</strong> <a class="external" href="https://www.arduino.cc/reference/tr/language/functions/math/min/" target="_BLANK">A</a> et <strong>maximum</strong> <a class="external" href="https://www.arduino.cc/reference/tr/language/functions/math/max/" target="_BLANK">A</a>
+    </td>
+  </tr>
+</table>
+
+<div class="expert"> 
+<table style="margin: 0em;">  
+  <tr>
+    <td style="min-width: 6em; width: 6em;">
+      <code class="prettyprint lang-c">map</code>
+    </td>
+    <td style="text-align: justify">
+      fonction de <strong>mise à l'échelle</strong> <a class="external" href="https://www.arduino.cc/reference/tr/language/functions/math/map/" target="_BLANK">A</a> (ce n'est pas une pseudo‑fonction)
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="prettyprint lang-c">constrain</code>
+    </td>
+    <td>
+      pseudo‑fonction de <strong>mise sous contrainte</strong> <a class="external" href="https://www.arduino.cc/reference/tr/language/functions/math/constrain/" target="_BLANK">A</a>
+    </td>
+  </tr>
+</table>
+</div><!-- expert -->
+</div><!-- overflow -->
+
+<p> ainsi que quelques <strong>pseudo‑constantes</strong>, notamment <code class="prettyprint lang-c">PI</code> (<em class="bold">π</em>) et <code class="prettyprint lang-c">EULER</code> (<strong>e</strong>). </p>
+</div><!-- complement -->
+
+<div class="expert" style="margin-top: 1em">
+<p> Parmi ces définitions, la fonction <code class="prettyprint lang-c">map</code> et la pseudo‑fonction <code class="prettyprint lang-c">constrain</code> sont <strong class="pros">particulièrement utiles</strong> :  </p>
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/fonctionMap.png" width="300px" style="padding-top:0.5em">
+  <li> un appel de la fonction <code class="prettyprint lang-c">map</code> de la forme : <br>
+    <span class="inline">
+      <code class="prettyprint lang-c">map(<span class="nocode"><strong class="specialMg">value</strong></span>, <span class="nocode"><strong class="specialMg" style="font-weight: 500">fromLow</strong></span>, <span class="nocode"><strong class="specialMg" style="font-weight: 500">fromHigh</strong></span>, <span class="nocode"><strong class="defin" style="font-weight: 500">toLow</strong></span>, <span class="nocode"><strong class="defin" style="font-weight: 500">toHigh</strong></span>)</code>
+    </span> <br>
+    prend des <strong>arguments</strong> tous de type <strong class="specialG">entier </strong> (<code class="prettyprint lang-c">long</code>) et <strong>retourne</strong> une <strong class="specialG">valeur entière</strong> (également de type <code class="prettyprint lang-c">long</code>)  <strong class="defin">proportionnellement située</strong> entre les bornes <strong class="defin" style="font-weight: 500">toLow</strong> et <strong class="defin" style="font-weight: 500">toHigh</strong> comme l'est <strong class="specialMg">value</strong> entre les bornes <strong class="specialMg" style="font-weight: 500">fromLow</strong> et <strong class="specialMg" style="font-weight: 500">fromHigh</strong> ; </li>
+    </div><!-- display -->
+
+    <div class="exemples"> 
+    <p class="exemple"> Pour <strong>ramener sur <em class="bold">20</em></strong> une <strong class="title">note scolaire</strong> de <em class="bold">10/15</em> et la stocker dans une variable entière déclarée <code class="prettyprint lang-c">noteSur20</code>, on pourrait coder l'instruction : <br>
+    <span class="inline">
+      <code class="prettyprint lang-c">noteSur20 = map(10, 0, 15, 0, 20);</code>  
+    </span> <br>
+    en prenant garde au fait que le résultat obtenu est <strong class="warning">forcément</strong> <strong class="specialG">entier</strong> (la variable <code class="prettyprint lang-c">noteSur20</code> prendrait ici la valeur <code>13</code> et non pas 13,3333 en théorie). </p>
+    </div><!-- exemple --> 
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/fonctionConstrain.png" width="300px" style="padding-top:0.5em">
+  <li> une invocation de la pseudo‑fonction <code class="prettyprint lang-c">constrain</code> de la forme : <br>
+    
+    <span class="inline">
+      <code class="prettyprint lang-c">constrain(<span class="nocode"><strong class="specialMg">value</strong></span>, <span class="nocode"><strong>min</strong></span>, <span class="nocode"><strong>max</strong></span>)</code>
+    </span> <br>
+      prend des <strong>arguments</strong> de <strong>tous types</strong> numériques (entiers, décimaux) et est <strong>remplacée</strong> par la <strong class="defin">valeur</strong> : </li>
+    <ul>
+      <li> <strong class="specialMg">value</strong>  si  <var>min</var> ⩽ <var>value</var> ⩽ <var>max</var>, </li>
+      <li> <strong>min</strong>  si  <var>value</var> < <var>min</var> , </li>
+      <li> <strong>max</strong>  si  <var>value</var> > <var>max</var>. </li>
+    </ul>
+  </div><!-- display -->
+
+  <div class="exemples"> 
+    <p class="exemple"> Si l'on multiplie une <strong class="title">note scolaire</strong> par un <strong>coefficient d'harmonisation</strong>, aucune valeur ne doit pour autant dépasser la valeur maximale (typiquement, 20/20).  La fonction <code class="prettyprint lang-c">constrain</code> peut servir à coder cette contrainte :   <br>
+    <span class="inline">
+      <code class="prettyprint lang-c">noteHarmonisee = constrain(noteSur20 * 1.2, 0, 20);</code>  
+    </span> <br>
+    sachant qu'ici, la valeur obtenue est de <strong class="pros">type décimal</strong>. Donc : </p>
+    <ul>
+      <li> si <code class="prettyprint lang-c">noteSur20</code> vaut <code class="prettyprint lang-c">13</code>, alors <code class="prettyprint lang-c">noteHarmonisee</code> prend la valeur <code class="prettyprint lang-c">15.6</code> (13 × 1,2) ; </li>
+
+       <li> si <code class="prettyprint lang-c">noteSur20</code> vaut <code class="prettyprint lang-c">18</code>, alors <code class="prettyprint lang-c">noteHarmonisee</code> prend seulement la valeur <code class="prettyprint lang-c">20</code> et non pas 21,6 (18 × 1,2) puisque 21,6 > 20.  </li>
+    </ul>
+    </div><!-- exemple --> 
+</ul>
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Pour utiliser la fonction <code class="prettyprint lang-c">map</code> et/ou la pseudo‑fonction <code class="prettyprint lang-c">constrain</code> <strong class="title">hors du framework</strong> <strong class="Arduino">Arduino</strong> – c'est‑à‑dire dans un programme en <strong>C</strong> ou en <strong>C++</strong> – il suffit de <strong>copier‑coller leur code</strong> au début du programme. On le trouve respectivement dans le fichier <code class="filename">WMath.cpp</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/WMath.cpp" target="_BLANK">G</a> (lignes n° 52 à 55) et <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> (ligne n° 95). </p> 
+</div><!-- remarque -->
+
+
+<h3 id="emploiFonctions"> Emploi des fonctions mathématiques </h3>
+
+
+
+<div class="important">
+<p> En programmation, une <strong class="title">fonction mathématique</strong> n'effectue <strong>aucune autre action</strong> que de <strong class="defin">retourner une valeur</strong> au moment de son <strong>appel</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>  Les fonctions mathématiques sont <strong class="title">usuellement employées</strong> dans : </p>
+
+<ul>
+  <li> des <strong class="specialLB">expressions logiques</strong> pour <strong>tester des valeurs</strong> calculées ; </li>
+
+  <div class="exemples">
+  <p class="exemple"> <code class="prettyprint lang-c">if (sin(alpha) > 0.5)</code>… ou <code class="prettyprint lang-c">alpha</code> est une donnée déclarée. </p>
+  </div><!-- exemple -->
+
+  <li> des <strong class="specialLB">affectations</strong> pour <strong>mémoriser des valeurs</strong> retournées. </li>
+
+  <div class="exemples">
+  <p class="exemple"> <code class="prettyprint lang-c">y = sin(alpha);</code> </p>
+  </div><!-- exemple -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Insistons sur le fait qu'un <strong class="title">appel</strong> de <strong>fonction mathématique</strong> <strong class="warning">ne peut constituer à lui seul une instruction</strong>. </p>
+
+
+<p> Par exemple, certains grands débutants codent parfois une instruction comme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">max(x, 10);</code>
+</span>   <br>
+sans comprendre qu'elle n'a <strong class="cons">aucun effet</strong> ! Lors de l'exécution, la machine aura beau déterminer le maximum entre la valeur courante de la variable <code class="prettyprint lang-c">x</code> et le nombre <code class="prettyprint lang-c">10</code>, ce maximum n'étant pas mémorisé dans une variable, il sera <strong class="warning">perdu</strong>. </p>
+
+<p> En revanche, il suffit de coder, par exemple : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">int y = max(x, 10);</code>
+</span>   <br>
+pour remédier au problème. La valeur retournée par l'appel de la fonction <code class="prettyprint lang-c">max</code> étant mémorisée dans la variable <code class="prettyprint lang-c">y</code>, on peut ensuite l'exploiter. </p>
+</div><!-- remarque -->
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

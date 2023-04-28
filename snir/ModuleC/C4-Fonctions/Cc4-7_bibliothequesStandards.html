@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="4"
+  data-pagenumber="VII"
+  data-pageState="OK"
+  data-pageheadtitle="Bibliothèques"
+  data-pagefulltitle="Les bibliothèques standards et autres"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<!--
+list of headers included while compiling (without producing output file)
+gcc -H -fsyntax-only
+-->
+
+
+
+
+
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/logoC2.png" width="100px" style="margin-top: 1.2em">
+<p class="square">  La <strong class="title">bibliothèque standard</strong> (au singulier) du <strong class="title">langage C</strong> désigne un <strong class="specialLB">ensemble de modules</strong> définissant des <strong>constantes</strong>, des <strong>types</strong> et des <strong>fonctions</strong> spécifiées par la <strong class="defin">norme</strong> du langage – on parle ici de « constantes » et de « fonctions » au sens large, car il peut aussi s'agir de <strong>pseudo-constantes</strong> et de <strong>macro-commandes</strong>. En principe, toute chaîne de compilation du langage <strong>C</strong> doit pouvoir traiter du code source employant les éléments définis dans la bibliothèque standard, quel que soit l'environnement de programmation et la machine cible, autrement dit avec une <strong class="pros">portabilité optimale</strong> (cf. chap. C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#portabilite" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/logoC++.png" width="100px" style="margin-top: 0.5em">
+<p> Et il en est de même du <strong class="title">langage C++</strong>, qui dispose aussi de sa <strong class="title">propre bibliothèque standard</strong>. Cette dernière inclut la quasi-totalité de la bibliothèque standard du langage <strong>C</strong> ainsi que <strong class="specialLB">plusieurs dizaines d'autres modules</strong> qui exploitent les éléments concepts de la <strong>programmation orientée objet</strong>.  </p>
+</div><!-- display -->
+
+<p class="square"> Par ailleurs, il existe une <strong>immense variété</strong> d'autres modules de <strong class="title">bibliothèques spécifiques</strong> à tel ou tel environnement : fonctions graphiques sur moniteur, manipulation de processus systèmes, protocoles de communication, etc. Ces modules ont une <strong class="cons">portabilité moindre</strong> que ceux de la bibliothèque standard, mais sont le plus souvent <strong class="pros">incontournables</strong> pour coder rapidement des <strong>fonctions complexes</strong>. Une partie de ces modules est librement accessible sur des sites de dépots comme <strong class="specialN">GitHub</strong> <a class="external" href="https://fr.wikipedia.org/wiki/GitHub" target="_BLANK">W</a> ; il serait donc dommage s'en priver. Ensuite, en partant de cette base, rien n'interdit d'en améliorer le codage. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/logoArduino.png" width="100px" style="margin-top: 0.5em">
+<p> En particulier, l'<strong>environnement</strong> <strong class="Arduino">Arduino</strong> est défini par une bibliothèque que l'on peut considérer comme « standard », dans la mesure où elle est <strong class="defin">indispensable</strong> à la compilation d'un source pour cartes <em class="mark">Arduino</em>, avec des spécificités pour telle ou telle famille de microcontrôleur embarqué. On parle du <strong class="title">noyau</strong> (<em class="mark">Arduino</em> <em class="english">core</em>) et ses fichiers source sont tous en libre accès. </p>
+</div><!-- display -->
+
+<p> De plus, il existe aussi une <strong>grande variété</strong> d'autres <strong class="title">modules spécifiques</strong> compatibles avec l'environnement <strong class="Arduino">Arduino</strong>. Ces modules ont été développés pour faciliter l'emploi de <strong>composants périphériques</strong> à une carte à microcontrôleur : boucliers multi-fonctions, écrans, capteurs en tous genres, actionneurs… </p>
+
+
+<p class="square"> Si l'on s'en tient aux seules bibliothèques standards, ces modules totalisent des <strong class="warning">centaines de fonctions</strong>. Au regard d'une telle diversité, il n'est pas question ici de les présenter en détail ; les sites de référence sont là pour ça. </p>
+
+<p> Ce chapitre a donc pour <strong class="title">objectif</strong> de fournir une <strong>brève description</strong> et un <strong>lien de documentation</strong> des principaux modules de la <strong class="specialLB">bibliothèque standard</strong> du langage <strong>C</strong> (et leur équivalent en <strong>C++</strong>). Certains modules ayant une importance toute particulières (par exemple, <code class="filename">stdio</code>), ils feront l'objet des chapitres de cours à part entière. </p>
+
+<p> Et pour l'environnement <strong class="Arduino">Arduino</strong>, après avoir rappelé le lien vers le <strong>site de référence</strong> des fonctions de base, on passe en revue les modules développés pour les <strong class="specialLB">composants périphériques</strong> les plus populaires. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+<h2> La bibliothèque standard des langages <em class="mark">C</em> et <em class="mark">C++</em> </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+<div class="important">
+<p> La <strong class="title">bibliothèque standard</strong> du langage <strong class="title">C</strong> – dite <strong class="title">ISO C library</strong> <a class="external" href="https://en.wikipedia.org/wiki/C_standard_library" target="_BLANK">W</a> – totalise <strong class="specialLB">plusieurs centaines de fonctions</strong>, réparties sur <strong>29 modules</strong>. </p>
+
+<p> Cela peut sembler volumineux pour un codeur débutant, mais en comparaison avec d'autres langages, cette bibliothèque est <strong class="defin">volontairement réduite</strong>, afin d'optimiser la <strong class="pros">portabilité</strong> du langage. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>  Tous les <strong class="title">fichiers sources</strong> des modules de la bibliothèque standard du langage <strong>C</strong> sont <strong class="pros">libres de droits</strong>. Néanmoins, leur code est souvent <strong class="cons">très complexe</strong> et il en existe <strong>différentes implémentations</strong> selon l'environnement de programmation et la distribution. </p>
+
+<p> C'est donc plutôt à l'aide de livres et de <strong class="defin">sites de référence</strong> – comme par exemple <strong>Cppreference.com</strong> <a class="external" href="https://en.cppreference.com/w/c/header" target="_BLANK">C</a> – que les codeurs consultent le contenu de ces modules et trouvent notamment les <strong>prototypes des fonctions</strong> qui sont à leur disposition. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans le <strong class="title">module</strong> <code class="filename">stdlib</code>, on trouve notamment les <strong class="defin">fonctions de conversion</strong> <code class="cmd">atoi</code> (<em class="sigle">ASCII</em> <em class="english">to int</em>), <code class="cmd">atol</code> (<em class="sigle">ASCII</em> <em class="english">to long</em>) et <code class="cmd">atoll</code> (<em class="sigle">ASCII</em> <em class="english">to long long</em>). </p>
+
+<p> Sur le site <strong>Cppreference.com</strong>, ces fonctions sont décrites dans une page web <a class="external" href="https://en.cppreference.com/w/c/string/byte/atoi" target="_BLANK">C</a> dont une capture d'écran partielle est reproduite ci‑dessous : </p>
+  <img class="top-left" src="../img/cppRef_atoi.png">
+<p> En plus des <strong class="defin">prototypes</strong> respectifs de fonctions, on trouve une brève mais précise <strong class="defin">description</strong> : </p>
+
+<ul>
+  <li> du <strong>traitement</strong> qu'elles opèrent – ici, la conversion d'une chaîne de caractères numériques en une valeur entière ; </li>
+
+  <li> de l'<strong>argument</strong> qu'elles prennent (rubrique « <span class="digitDisplay">Parameters</span> ») ; </li>
+
+  <li> de la <strong>valeur qu'elles rendent</strong> (rubrique « <span class="digitDisplay">Return value</span> »).</li>
+</ul>
+
+<p> Plus loin (mais non reproduit ci‑dessus) sont donnés des <strong class="defin">exemples</strong> directs d'application dans une <strong class="pros">fenêtre interactive</strong>. On peut donc <strong>modifier</strong> et <strong>tester</strong> l'exécution de code proposé en exemple pour en parfaire sa bonne compréhension. </p>
+</div><!-- exemple -->
+
+
+<h4> Cas du langage <em class="mark">C++</em> </h4>
+
+
+<div class="important">
+<p> Le langage <strong class="title">C++</strong> possède aussi une <strong class="title">bibliothèque standard</strong> qui comporte, depuis l'adoption de la norme <em class="mark">C++20</em>, <strong>75 modules</strong> <a class="external" href="https://en.wikipedia.org/wiki/C++_Standard_Library" target="_BLANK">W</a>. </p>
+
+<p>  En comparaison avec celle du langage <strong>C</strong>, la bibliothèque standard du <strong class="title">C++</strong> offre une bien <strong class="pros">plus grande variété</strong> de <strong class="specialLB">fonctions</strong>, <strong class="specialG">types</strong>, etc. tout en satisfaisant à l'exigence d'une <strong>bonne portabilité</strong>. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/MicrosoftLogo.png" width="100px" style="margin-top: 0.5em">
+<p> Parce que le langage <strong class="title">C++</strong> est beaucoup plus développé que le <em class="mark">C</em>, et qu'il est massivement utilisé pour produire de <strong>grands logiciels professionnels</strong> (<em class="sigle">CAO</em>, bureautique, comptabilité, etc. – cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#CppApplis" target="_BLANK"></a>), sa <strong class="title">bibliothèque standard</strong> représente un <strong class="warning">enjeu très important</strong>. C'est seulement en septembre 2019 que l'entreprise <strong>Microsoft</strong> a rendu publique son implémentation. </p>
+</div><!-- complement -->
+
+<div class="expert" style="display: inline-block;">
+  <img class="top-right" src="../img/ApacheFondLogo.png" width="200px" style="margin-top: 0.5em">
+<p> Il existe également l'implémentation de la <strong>fondation Apache</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Apache_Software_Foundation" target="_BLANK">W</a> dont les fichiers source sont en <strong class="pros">libre d'accès</strong>. Mais comme avec le langage <em class="mark">C</em>, pour prendre connaissance des prototypes des fonctions du <strong>C++</strong>, il préférable dans un premier temps de consulter les <strong class="defin">sites de référence</strong> en ligne, comme <strong>Cppreference.com</strong> <a class="external" href="https://en.cppreference.com/w/cpp/header" target="_BLANK">C++</a>. </p>
+</div><!-- exprt -->
+
+
+<h4> Compatibilité et spécificité des bibliothèques standards de <em class="mark">C</em> et <em class="mark">C++</em> </h4>
+
+
+<div class="complement">
+<p> On rappelle (cf. chap. C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#cPlusPlus" target="_BLANK"></a>) que dans un <strong class="title">programme en langage C</strong>, il est <strong class="warning">impossible</strong> <strong>d'inclure un fichier d'en‑tête</strong> de la bibliothèque standard du <strong>C++</strong>. (On est sûr de déclencher une erreur de compilation dès lors que ce fichier emploie des mots‑clefs spécifiques au <em class="mark">C++</em>.) </p>
+
+<p> En revanche, <strong class="title">l'inverse est faisable</strong> : par exemple, une directive comme <code class="prettyprint lang-c">#include &lt;ctype.h&gt;</code>  (fichier de la bibliothèque standard du <strong>C</strong> pour déterminer des types de caractères – cf. chap. C3‑VIII <a class="previous" href="../C3-Numeration/Cc3-8_typesCaracteres.html#ctype" target="_BLANK"></a>) est <strong class="defin">autorisée</strong> dans un programme compilé en <strong class="title">C++</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Toutefois, en <strong class="title">C++</strong>, les <strong>modules</strong> de la <strong>bibliothèque standard</strong> du langage <strong>C</strong> sont considérés comme <strong class="cons">obsolètes</strong> (en anglais, <em class="english">deprecated</em>). </p>
+
+<p> À la place, il est recommandé de <strong class="pros">privilégier</strong> le recours aux <strong class="title">modules correspondants du C++</strong>, sachant que le <strong>nom</strong> de leur <strong class="specialSG">fichier d'en‑tête</strong> :  </p>
+<ul>
+    <li> ne comporte <strong>pas d'extension</strong> <code class="filename">.h</code> ; </li>
+
+    <li> reprend exactement <strong>celui du langage C</strong> mais <strong>préfixé</strong> par la lettre <code class="filename">c</code>. </li>
+</ul>
+Ces modules sont conçu de façon plus satisfaisante au regard des exigences du <strong class="title">C++</strong>, notamment en matière de <strong class="pros">fiabilité</strong>. Ainsi, en principe, il n'y a pas de recours aux macro‑définitions, etc.
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Dans l'exemple donné ci‑dessus, on codera donc <strong class="pros">de préférence</strong> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">#include &lt;cctype&gt;</code>
+</span> </p>
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> Il faut <strong class="warning">ne pas confondre</strong> : </p>
+<ul>
+  <li> le module <code class="filename">cstdio</code> qui est l'adaptation en <strong class="title">C++</strong> du module d'entrées‑sorties standard <code class="filename">stdio</code> du langage <strong>C</strong> </li>
+
+  <li> avec le module <code class="filename">iostream</code> qui regroupe les <strong class="specialLB">fonctions d'entrées‑sorties standards</strong> en <strong class="title">C++</strong> – qui opèrent avec une <strong class="defin">syntaxe complètement différente</strong>.  </li>
+
+  <div class="nobullet"> Ce module est difficile à aborder dès la première année de formation, il risque d'occasionner des confusions chez les codeurs débutants. </div>
+</ul>
+</div><!-- remarque -->
+
+
+
+<h3> Quelques modules standards d'emploi fréquent </h3>
+
+
+
+<div class="complement">
+<p>	Les <strong class="title">tableaux synthétiques</strong> ci‑après sont <strong class="cons">non exhaustifs</strong> et n'ont nullement vocation à se substituer à ceux que l'on peut trouver sur les sites de référence. Leur principal intérêt est : </p>
+<ul>
+  <li> d'indiquer les <strong>noms des fichiers à inclure</strong> par des directives <code class="prettyprint lang-c">#include</code> ;  </li>
+
+  <li> de citer quelques fonctions qui pourront être utiles par la suite, notamment lors des travaux pratiques. </li>
+</ul>
+</div><!-- complement -->
+<div class="expert" style="display: inline-block;">
+<p> De plus, pour chaque module, l'indication de la <strong class="title">norme requise</strong> (2<sup>e</sup> colonne du tableau) n'est pas superflue : </p>
+
+<ul>
+	<li>  elle doit être respectée par le script de compilation pour permettre l'inclusion de ces modules (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#versionCompilateur" target="_BLANK"></a>) ;  </li>
+
+  <div class="nobullet"> <em class="remark">attention</em>, parfois l'exigence d'ultériorité de norme porte non pas sur le module tout entier mais seulement sur tel ou tel élément (fonction, type…) défini dans le module. </div>
+  
+	<li> un tiret « – » signifie que ce module existe depuis l'origine du langage et donc qu'en principe, <strong class="pros">n'importe quelle version</strong> du compilateur le prend en charge ;  </li>
+
+	<li> une astérisque « * » signifie qu'il s'agit d'un <strong>module optionnel</strong>, au sens où la norme n'impose pas aux implémentations d'inclure ce module . </li>
+</ul>
+
+</div><!-- expert -->
+
+
+<h4> Modules communs au <em class="mark">C</em> et au <em class="mark">C++</em> </h4>
+
+
+<table style="margin-top: 1em;">
+  <tr>  <th> Nom <br>  <em class="mark">C</em> / <em class="mark">C++</em> </th> 
+  			<th> Norme <br> requise </th> 
+  			<th> Types et/ou <br> fonctions codées </th>
+  </tr>
+  <tr>
+    <td> <code class="filename">stdlib.h</code> <br> <code class="filename">cstdlib</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        fonctions générales : <br>
+        <ul>
+        	<li> de <strong class="specialLB">contrôle d'exécution</strong> du <strong>programme</strong> (<code class="cmd">abort</code>, <code class="cmd">exit</code>…) </li>
+
+        	<li> d'<strong class="specialLB">allocation dynamique</strong> de <strong>mémoire</strong> (<code class="cmd">malloc</code>, <code class="cmd">free</code>…) </li>
+
+        	<li> de <strong class="specialLB">conversion</strong> des <strong>nombres</strong> en <strong>chaînes de caractères</strong> et réciproquement (<code class="cmd">atof</code>, <code class="cmd">atoi</code>…) </li>
+
+        	<li> de <strong>génération</strong> de <strong class="specialLB">nombres aléatoires</strong> (<code  class="cmd">rand</code>, <code  class="cmd">srand</code>…) </li>
+
+        	<li> de <strong class="specialLB">calcul numérique</strong> (<code  class="cmd">abs</code>, <code class="cmd">div</code>…) </li>
+        </ul> 
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">stdarg.h</code> <br> <code class="filename">cstdarg</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        types et fonctions pour le codage de <strong>fonctions</strong> à <strong class="specialLB"></strong>arguments variables</strong> (notamment la fonction <code  class="cmd">main</code>)
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">stdbool.h</code> <br> <code class="filename">cstdbool</code> </td>
+    <td style="text-align: center;">  <em>C99</em> <br> <em>C++11</em> </td>
+    <td style="padding-left: 1em;">
+        <strong class="specialLB">type booléen</strong> et <strong>constantes</strong> (<code  class="cmd">bool</code>, <code  class="cmd">true</code>, <code  class="cmd">false</code>…) <br>
+        <em class="remark">remarque</em> : <code class="filename">cstdbool</code> est <strong class="cons">inutile</strong> car <strong class="pros">déjà inclus</strong> dans le noyau du <strong>C++</strong>
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">stdint.h</code> <br> <code class="filename">cstdint</code> </td>
+    <td style="text-align: center;">  <em>C99</em> <br> <em>C++11</em> </td>
+    <td style="padding-left: 1em;">
+        <strong class="specialLB">types entiers</strong> de <strong>taille spécifiée</strong> (<code class="cmd">int_8t</code>, <code class="cmd">int_16t</code>…) 
+
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">limits.h</code> <br> <code class="filename">climits</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        fonctions donnant les <strong class="specialLB">valeurs extrêmes</strong> <strong>encodables</strong> dans les <strong>types entiers</strong> pour la machine cible (<code class="cmd">CHAR_MIN</code>, <code class="cmd">CHAR_MAX</code>…)
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">float.h</code> <br> <code class="filename">cfloat</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        fonctions donnant les <strong class="specialLB">valeurs caractéristiques</strong> <strong>d'encodage</strong> dans les <strong>types décimaux</strong> à virgule flottante pour la machine cible (<code class="cmd">FLT_MIN</code>, <code class="cmd">FLT_MAX</code>…)
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">math.h</code> <br> <code class="filename">cmath</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        <strong>constantes et fonctions</strong> <strong class="specialLB">mathématiques</strong> les plus usuelles (trigonométriques, exponentielles, logarithmique…)
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">complex.h</code> <br> <code class="filename">complex</code> </td>
+    <td style="text-align: center;">  <em>C99</em> <br> * </td>
+    <td style="padding-left: 1em;">
+        types, constantes et fonctions mathématiques opérant sur les <strong>nombres complexes</strong> (<code class="cmd">creal</code>, <code class="cmd">cimag</code>…)
+    </td>
+  </tr>
+    <tr>
+    <td> <code class="filename">time.h</code> <br> <code class="filename">ctime</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        types, constantes et fonctions opérant sur les <strong class="specialLB">données temporelles</strong> (<code class="cmd">tm</code>, <code class="cmd">time</code>, <code class="cmd">difftime</code>…)
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">ctype.h</code> <br> <code class="filename">cctype</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        fonctions d'<strong>évaluation</strong> et de <strong>manipulation</strong> de <strong class="specialLB">caractères</strong> (<code class="cmd">isalpha</code>, <code class="cmd">isdigit</code>, <code class="cmd">toupper</code>…)
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">string.h</code> <br> <code class="filename">cstring</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        fonctions d'<strong>évaluation</strong> et de <strong>manipulation</strong> de <strong class="specialLB">chaînes de caractères</strong> (<code class="cmd">strlen</code>, <code  class="cmd">strcat</code>…)
+    </td>
+  </tr>
+    <tr>
+    <td> <code class="filename">stdio.h</code> <br> <code class="filename">cstdio</code> </td>
+    <td style="text-align: center;">  – </td>
+    <td style="padding-left: 1em;">
+        fonctions d'<strong class="specialLB">entrées-sorties</strong> sur terminal standard, fichiers et chaînes de caractères (<code  class="cmd">printf</code>, <code class="cmd">scanf</code>… )
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+<h2> Les modules usuels du framework <em class="mark">Arduino</em> </h2>
+
+
+
+<h3> Le noyau <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="complement">
+<p> On rappelle que d'un point de vue logiciel, l'environnement <strong class="Arduino">Arduino</strong> est constitué d'un <strong class="title">noyau</strong> défini dans un ensemble de modules de bibliothèque donc le fichier d'en‑tête principal est nommé <code class="filename">Arduino.h</code> (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#fichiersSources" target="_BLANK"></a>). L'implémentation du noyau <strong>dépend du type de carte</strong> employé. Pour les cartes à cœur <strong><em class="sigle">AVR</em></strong>, les <strong class="defin">fichiers sources</strong> du noyau sont publiés ici <a class="external" href="https://github.com/arduino/ArduinoCore-avr/tree/master/cores/arduino" target="_BLANK">G</a>.</p>
+
+<p> Toutefois, comme pour les fichiers de bibliothèque standard des langages <strong>C</strong> et <strong>C++</strong>, il est préférable de consulter un site de référence – en premier lieu le <strong>site officiel</strong> d'<strong class="Arduino">Arduino</strong> <a class="external" href="https://www.arduino.cc/reference/en/" target="_BLANK">A</a>  pour prendre connaissance des détails de chaque élément de langage défini.  </p>
+</div><!-- complement -->
+
+
+<div class="exemples" style="display: inline-block;">
+  <img class="top-right" src="../img/ArduinoIsAscii.png" width="400px">
+<p class="exemple"> On trouve ainsi une page consacrée à la <strong>fonction</strong> <code class="cmd">isAscii</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/characters/isascii/" target="_BLANK">A</a> qui détermine si son argument, de type <code class="prettyprint lang-c">char</code>, est inclus dans le jeu <strong><em class="sigle">ASCII</em> restreint</strong>. </p>
+
+<div class="expert">
+<p class="remarque"> En règle générale, les pages de références <em class="mark">Arduino</em> sont <strong class="cons">moins précises</strong> que celles d'un site comme <code>cpprefecence.com</code>. En effet, la page ci‑dessus <strong class="warning">n'indique pas</strong> le <strong class="defin">type de la valeur retournée</strong> par la fonction <code class="cmd">isAscii</code>. Pour le savoir, il faut alors consulter le <strong>fichier source</strong> où cette fonction est déclarée : <code class="filename">WCharacter.h</code>. On y trouve notamment le prototype : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">inline boolean isAscii(int c) __attribute__((always_inline));</code>
+</span> <br>
+qui lève l'ambiguïté – la fonction retourne une valeur <strong class="defin">booléenne</strong>. Par ailleurs, on peut noter que l'<strong>argument</strong> pris par la fonction est en fait de type <code class="prettyprint lang-c">int</code> et non <strong class="warning">pas</strong> <code class="prettyprint lang-c">char</code> ! </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3> Les modules pour composants périphériques </h3>
+
+
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/ArduinoMotorShieldLD.png" width="400px">
+<p> Au delà de la diversité de toutes les cartes à microcontrôleur compatibles, le framework <strong class="Arduino">Arduino</strong> est devenu un véritable <strong class="title">écosystème technique</strong> avec le développement d'une grande variété : </p>
+
+<ul>
+	<li> d'extensions qu'on appelle <strong class="specialLB">boucliers</strong> (en anglais <em class="english">shields</em>) – cf. celui en photo ci‑contre, qui comporte l'électronique de puissance nécessaire pour commander <strong>deux moteurs à courant continu</strong> ; </li>
+
+	<li> de <strong class="specialLB">composants</strong> (capteurs, préactionneurs, accessoires de communication, etc.) montés sur cartes électroniques directement raccordables à la carte à microcontrôleur (via des conducteurs enfichables dits <em class="english">jumpers</em>). </li>
+</ul>
+
+<p> Pour permettre de coder très facilement la mise en œuvre du composant dans un programme, un ou plusieurs <strong class="title">modules de bibliothèque</strong> de <strong class="specialLB">fonctions</strong> sont développés et mis à disposition gratuitement.  </p>
+</div><!-- complement -->
+
+
+
+<h4> Quelques modules de bibliothèque de périphériques <em class="mark">Arduino</em> </h4>
+
+<div class="complement">
+<p> Les modules présentés dans le <strong class="title">tableau synthétique</strong> ci‑après ne constituent qu'une <strong>toute petite partie</strong> de l'écosystème <strong class="Arduino">Arduino</strong>. Là encore, toute recherche d'exhaustivité serait vaine. </p>
+</div><!-- complement -->
+
+<p> Pour chaque module, les colonnes du tableau indiquent respectivement :   </p>
+
+<ul>
+	<li> le <strong>nom du fichier</strong> d'en‑tête du module (à inclure), ainsi qu'un <strong>lien</strong> vers sa documentation ; </li>
+
+  <div class="expert">
+  <div class="nobullet"> <em class="remark">remarque</em> : bien que compilés en <strong>C++</strong>, ces fichiers sont nommés conformément aux conventions du langage <strong>C</strong> (avec l'extention <code class="filename">.h</code>) ; </div>
+  </div><!-- expert -->
+
+	<li> un logo qui indique si le module est <strong class="pros">inclus</strong> dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong> ; </li>
+
+	<li> une <strong>iconographie</strong> du composant ou du dispositif matériel auquel le module apporte une solution logicielle ;</li>
+
+	<li> un bref résumé des <strong class="specialLB">fonctionnalités</strong> que le module implémente. </li>
+</ul>
+
+<table style="margin-top: 1em;">
+  <tr>  <th> Nom  </th> 
+  			<th> <img src="../img/logoTinkercad.png" width="39px">  </th>
+  			<th> Composant  </th> 
+  			<th> Fonctionnalités </th>
+  </tr>
+  <tr>
+    <td> <code class="filename">SPI.h</code>  <a class="external" href="https://www.arduino.cc/en/Reference/SPI" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoSPIpins.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        exploitation du <strong class="specialLB">bus <em class="sigle">SPI</em></strong> (<em class="english">Serial Peripheral Interface</em> <a class="external" href="https://fr.wikipedia.org/wiki/Serial_Peripheral_Interface" target="_BLANK">W</a>) intégré à la carte à microcontrôleur pour communiquer avec un composant externe (capteur, écran, lecteur-enregistreur de carte, etc.)
+    </td>
+  </tr>
+  <tr>
+    <td> <code  class="filename">Wire.h</code> <a class="external" href="https://www.arduino.cc/en/Reference/Wire" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoI2Cpins.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        exploitation du <strong class="specialLB">bus <em class="sigle">I2C</em></strong> (<em class="english">Inter-Integrated Circuit</em> <a class="external" href="https://fr.wikipedia.org/wiki/I2C" target="_BLANK">W</a>) intégré à la carte à microcontrôleur pour communiquer avec un composant externe (capteur, écran, etc.)
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">Ethernet.h</code>  <a class="external" href="https://www.arduino.cc/en/Reference/Ethernet" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoEthernetShield2.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        exploitation d'une <strong class="specialLB">liaison <em>Ethernet</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Ethernet" target="_BLANK">W</a> via une extension ou un composant externe comportant une prise <strong><em class="sigle">RJ45</em></strong> et un circuit intégré dédié à son fonctionnement
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">WiFi.h</code> <a class="external" href="https://www.arduino.cc/en/Reference/WiFi" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoWifiShield1LD.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        exploitation d'une <strong class="specialLB">liaison <em>Wi‑Fi</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi-Fi" target="_BLANK">W</a> via une carte, une extension ou un composant externe comportant une antenne <em class="mark">Wi‑Fi</em> et un circuit intégré dédié à son fonctionnement
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">SD.h</code> <a class="external" href="https://www.arduino.cc/en/Reference/SD" target="_BLANK">A</a> <br> 
+    		 <code>SDfat.h</code>  <a class="external" href="https://github.com/greiman/SdFat" target="_BLANK">G</a>
+  </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoSDcardLD.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        lecture/écriture de données sur <strong class="specialLB">carte <em class="mark">SD</em></strong> ou <strong class="specialLB">microSD</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Carte_SD" target="_BLANK">W</a> via un une extension ou un composant externe comportant un lecteur/enregistreur de carte <br>
+        <em class="remark">Attention</em> : pour certains composants (chinois), employer le fichier <code>SDfat.h</code> et non pas <code>SD.h</code>
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">EEPROM.h</code> <a class="external" href="https://www.arduino.cc/en/Reference/EEPROM" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoEEPROM.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        lecture/écriture de données sur <strong class="specialLB">mémoire <em class="sigle">EEPROM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/EPROM_(informatique)" target="_BLANK">W</a> intégrée au microcontrôleur ou sur un composant externe comportant une puce de mémoire <em class="sigle">EEPROM</em>
+    </td>
+  </tr>
+  <tr>
+    <td> <code class="filename">RTC.h</code> <a class="external" href="https://www.arduino.cc/en/Reference/RTC" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;">  </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoRTCmodule.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        exploitation d'une <strong class="specialLB">horloge temps-réel</strong> (<em class="english">real time clock</em> <a class="external" href="https://en.wikipedia.org/wiki/Real-time_clock" target="_BLANK">W</a>) intégrée à la carte à microcontrôleur ou sur un composant externe dédié
+    </td>
+  </tr>
+  <tr>
+  <td> <code class="filename">DHT.h</code> <a class="external" href="https://github.com/adafruit/DHT-sensor-library" target="_BLANK">G</a>
+    </td>
+    <td style="text-align: center;"> </td>
+    <td style="text-align: center;"> <img src="../img/DHT22sensor.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        mesures de <strong class="specialLB">température et humidité</strong> avec un composant externe dédié comprenant un <strong>capteur <em class="sigle">DHT</em></strong> (<em class="english">digital temperature & humidity sensor</em> <a class="external" href="https://learn.adafruit.com/dht" target="_BLANK"></a>)
+    </td>
+  </tr>
+  <tr>
+  <td> <code class="filename">LiquidCrystal.h</code> <a class="external" href="https://www.arduino.cc/en/Reference/LiquidCrystal" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoLCDshield.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        affichage de caractères sur un <strong class="specialLB">écran <em class="sigle">LCD</em></strong> (<em class="english">liquid crystal display</em> <a class="external" href="https://fr.wikipedia.org/wiki/écran_à_cristaux_liquides" target="_BLANK">W</a>) porté par un bouclier ou un composant externe
+    </td>
+  </tr>
+  <tr>
+  <td> <code class="filename">Keypad.h</code> <a class="external" href="https://playground.arduino.cc/Code/Keypad" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/ArduinoKeypad.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        lecture de caractères saisis sur un <strong class="specialLB">pavé alpha-numérique</strong> (<em class="english">keypad</em> <a class="external" href="https://fr.wikipedia.org/wiki/EPROM_(informatique)" target="_BLANK">W</a>) porté par un composant externe  
+    </td>
+  </tr>
+  <tr>
+  <td> <code class="filename">Servo.h</code> <a class="external" href="https://www.arduino.cc/en/reference/servo" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/servomotor.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        commande en position angulaire ou en fréquence de rotation du rotor d'un <strong class="specialLB">servomoteur</strong> de modélisme <a class="external" href="https://fr.wikipedia.org/wiki/Servomoteur#Dans_le_cadre_du_modélisme" target="_BLANK">W</a>  
+    </td>
+  </tr>
+  <tr>
+  <td> <code class="filename">Stepper.h</code> <a class="external" href="https://www.arduino.cc/en/reference/stepper" target="_BLANK">A</a>
+    </td>
+    <td style="text-align: center;"> <img src="../img/logoTinkercadChecked.png" width="39px">  </td>
+    <td style="text-align: center;"> <img src="../img/stepperMotor.png" width="300px">  </td>
+    <td style="padding-left: 1em;">
+        commande en position angulaire ou en fréquence de rotation du rotor d'un <strong class="specialLB">moteur pas-à-pas</strong> de petite puissance associé à une carte électronique de puissance (module pilote) <a class="external" href="https://fr.wikipedia.org/wiki/Moteur_pas_à_pas" target="_BLANK">W</a>  
+    </td>
+  </tr>
+</table>
+ 
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

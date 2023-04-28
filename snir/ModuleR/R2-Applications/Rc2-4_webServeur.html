@@ -1,0 +1,2494 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="2"
+	data-pagenumber="IV"
+	data-pageState="OK"
+	data-pageheadtitle="Web serveur – BDD"
+	data-pagefulltitle="Le web côté serveur  –  Les bases de données"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+
+<p class="square"> Si l'<strong class="title">architecture web</strong> du <strong>côté client</strong> est relativement <strong class="pros">simple</strong> (une machine hébergeant un navigateur et quelques plugins – cf. chap. R2‑III <a class="previous" href="../../moduleR/R2-Applications/Rc2-3_webClient.html" target="_BLANK"></a>), il en va rarement de même du <strong class="title">côté serveur</strong>. À moins que l'on souhaite mettre en œuvre un site web constitué seulement de pages statiques, on recourt aujourd'hui à une <strong class="warning">technologie logicielle complexe</strong> qui s'appuie sur <strong>au moins</strong> <strong class="defin">deux niveaux de service</strong>, chacun spécialisé dans sa fonction : </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/webServerModel.png" width="500px" style="padding-top:0.5em">
+<ul>
+	<li> l'<strong class="specialLB">élaboration de pages web</strong> en fonction des demandes du client – service dont le codage nécessite l'emploi un <strong>langage de script</strong> (<em class="mark">php</em>, <em class="mark">Python</em>, <em class="mark">Javascript</em> avec <em class="mark">Node.js</em>, etc.) voire même un <strong>langage compilé</strong>) ;  </li>
+
+	<li> le <strong class="specialLB">stockage des informations</strong> (en particulier celles des clients) dans une <strong>base de données</strong> – dont l'exploitation passe par l'emploi d'un <strong>langage de requêtes</strong> spécifique (typiquement, <strong><em class="sigle">SQL</em></strong>). </li>
+</ul>
+</div><!-- display -->
+
+<p> En comptant le client, on parle alors d'<strong class="title">architecture 3 niveaux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Architecture_trois_tiers" target="_BLANK">W</a>, en anglais, <strong>architecture 3 tiers</strong>, qu'on utilise aussi en français par anglicisme (en effet, le terme anglais <em class="english">tier</em> – sans « s » – est un faux‑ami, il se traduit par <em>niveau</em> en français, et non pas « tiers »). </p>
+
+<div class="expert">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/archiNtiers.png" width="500px" style="padding-top: 1em">
+<p class="square"> Et encore, cette décomposition est <strong class="cons">insuffisante</strong> pour modéliser des <strong class="defin">applications web plus complexes</strong> – et néanmoins aujourd'hui très courantes – où peuvent intervenir notamment : </p>
+</div><!-- display -->
+<ul>
+	<li> des traitements spécifiques opérés par des <strong class="specialLB">logiciels « métiers »</strong> (<em class="english">business tier</em>) qui mettent en œuvre des <strong>traitements informatiques spécialisés</strong>  dans un domaine – par exemple, des calculs statistiques ; </li>
+
+	<li> des <strong class="specialLB">niveaux intermédiaires</strong> de <strong>stockages de données</strong> ou d'<strong>équilibrage de la charge</strong> des requêtes sur un pool de serveurs (<em class="english">load balancer</em>). </li>
+</ul>
+
+
+<p> On parle alors d'<strong class="title">architecture multi‑niveaux</strong> (en anglais, <strong>multitier</strong>) <a class="external" href="https://en.wikipedia.org/wiki/Multitier_architecture" target="_BLANK">W</a>, avec des schémas fonctionnels qui varient fortement d'une application à l'autre – cf. par exemple la figure ci‑dessus issue de la documentation <em class="mark">Azure</em> <a class="external" href="https://docs.microsoft.com/fr-fr/azure/architecture/guide/architecture-styles/n-tier" target="_BLANK"></a>, la solution commerciale en <em class="english">cloud computing</em> proposée par  l'entreprise <em class="mark">Microsoft</em>. </p>
+</div><!-- expert -->
+
+
+<p class="square"> Au regard de cette complexité technologique, ce chapitre se fixe pour objectif principal de donner une <strong class="title">vue d'ensemble</strong> de l'<strong class="defin">architecture web du côté du serveur</strong>. </p>
+
+<ul>
+	<li> On commencera par l'<strong class="specialLB">architecture générale du côté serveur</strong>, en détaillant les <strong>solutions matérielles</strong> les plus usuelles pour les différents niveaux de services.  </li>
+
+	<li> On étudiera ensuite les <strong class="specialLB">technologies logicielles</strong> des <strong>serveurs web</strong>, notamment le <strong>système d'exploitation</strong> qu'ils requièrent, et bien entendu les solutions pour mettre en œuvre un <strong>serveur <em class="sigle">HTTP</em></strong> . </li>
+
+	<div class="nobullet"> On détaillera également la notion de <strong class="defin">pile <em class="sigle">AMP</em></strong> pour <strong>émuler un serveur web</strong> sur un poste de travail, ce qui est <strong class="pros">très pratique</strong> et usuel dans le cadre du développement d'une application. </div>
+
+	<li> Puis on abordera les principaux <strong class="specialLB">langages de backend</strong> et leurs <strong class="specialLB">frameworks</strong> associés, qui sont employés pour coder les sites web dynamiques. On se focalisera principalement sur les langages <strong>php</strong> et <strong>Javascript</strong>. </li>
+
+	<li> On achèvera ce panorama technologique avec les <strong class="specialLB">bases de données</strong>, en se limitant aux <strong><em class="sigle">SGBDR</em></strong> – <strong>systèmes de gestion de base de donnée relationnelle</strong> – qui sont de loin les plus utilisés. </li>
+
+	<div class="expert">
+	<li> Enfin, on proposera un <strong class="specialLB">exemple académique</strong> d'<strong>application web</strong> reposant sur une <strong>architecture 3 niveaux</strong>.  L'intégralité de son <strong class="pros">code source</strong> est fourni et expliqué, afin qu'il soit possible de l'expérimenter, tant dans le cadre d'une séance de travaux pratiques (cf. TP R2‑2 <a class="TP" href="Rtp2-2_serveurWeb.html" target="_BLANK"></a>) que sur un poste de travail équipé d'une <strong>pile <em class="sigle">AMP</em></strong>. </li>	
+	</div><!-- expert -->	
+</ul>
+
+<div class="expert">
+<p> Sans exposer tous les aspects techniques de la programmation (ce qui nécessiterait un volume de cours beaucoup plus important), ce <strong class="title">panorama</strong> est néanmoins <strong class="pros">utile</strong> à plus d'un titre pour un futur technicien en informatique. Il doit permettre :   </p>
+<ul>
+	<li> de « démystifier »  le <strong class="defin">fonctionnement global</strong> d'une <strong>application web</strong> ; </li>
+
+	<li> de découvrir les différents aspects du <strong class="defin">développement web</strong> du <strong>côté serveur</strong> et pouvoir choisir sur quelle technologie ou quel langage investir ses efforts d'apprentissage. </li>
+</ul>
+<p> Car il est bien évident qu'il faudra <strong class="warning">plusieurs années de pratiques</strong> pour acquérir une bonne connaissance d'un <strong class="specialLB">langage de backend</strong> avec un <strong>framework</strong> associé, ou encore un <strong class="specialLB">système de gestion de bases de données</strong>. </p>
+</div><!-- expert -->
+
+<p> À titre complémentaire de cette introduction, on pourra visionner la <strong>vidéo</strong> de vulgarisation disponible au lien suivant <a class="external" href="https://www.youtube.com/watch?v=tpLAcLFn9-U" target="_BLANK">Y</a>. </p>
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Architecture générale et matérielle </h2>
+
+
+<h3> Architecture 3 niveaux </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/archi3tiers.png" width="500px">
+<p> On parle d'<strong class="title">architecture 3 niveaux</strong> (ou <strong>3 <em class="english">tiers</em></strong> par anglicisme) <a class="external" href="https://fr.wikipedia.org/wiki/Architecture_trois_tiers" target="_BLANK">W</a> pour caractériser le <strong>schéma de principe</strong> d'une <strong class="defin">application web</strong>, dans lequel : </p>
+<ul>
+	<li> un <strong class="specialLB">client web</strong> (logiciel navigateur ou autre) constitue le <strong class="title">1<sup>er</sup> niveau</strong>, à l'origine d'une <strong class="specialG">requête <em class="sigle">HTTP</em></strong> d'accès à une ressource distante sur le web ; </li>
+
+	<li> un <strong class="specialGr">serveur web</strong> constitue le <strong class="title">2<sup>e</sup> niveau</strong>, sur lequel s'exécute un voire plusieurs <strong>scripts</strong> pour coordonner les tâches du serveur afin de répondre aux requêtes du client, notamment <strong>préparer</strong> les ressources web demandées (c'est‑à‑dire collecter et assembler les données nécessaires), mais aussi <strong>enregistrer</strong> les données transmises par les clients ; </li>
+
+	<li> une base <strong class="specialDGr">base de données</strong> (<strong class="specialDgr"><em class="sigle">BDD</em></strong>) constitue le <strong class="title">3<sup>e</sup> niveau</strong>, qui stocke et fournit les <strong>informations</strong> nécessaires à la préparation des ressources demandées par le client. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> <em class="remark">Pour le client web</em>, les <strong class="specialN">2<sup>e</sup> et 3<sup>e</sup> niveaux</strong> ne sont pas discernables. Ils constituent ce qu'on appelle usuellement l'<strong class="title">architecture côté serveur</strong> ou <strong class="specialN">back end</strong> au sens général, par opposition au <strong class="specialLB">front end</strong> qui désigne l'architecture côté du client (cf. chap. R2‑III <a class="previous" href="../../moduleR/R2-Applications/Rc2-3_webClient.html" target="_BLANK"></a> et <a class="external" href="https://en.wikipedia.org/wiki/Front_end_and_back_end" target="_BLANK">W</a>) et que l'on appelle aussi <strong class="specialLB">couche de présentation</strong> (<em class="english">presentation layer</em>). </p>
+
+<p> Mais dès lors qu'on étudie en détail l'<strong class="title">architecture côté serveur</strong>, le vocabulaire technique s'enrichit : </p>
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/businessLayer.png" width="200px" style="padding-top: 0.0em">
+	<li> Pour désigner le <strong>2<sup>e</sup> niveau</strong>, on parle de <strong class="specialGr">couche logique</strong> (<em class="english">logic layer</em>) ou encore de <strong class="specialGr">couche métier</strong> (<em class="english">business layer</em>) <strong class="specialGr">middleware</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Middleware" target="_BLANK">W</a> en référence à sa position intermédiaire dans l'architecture globale. </li>
+
+	<div class="nobullet"> Ce niveau suppose forcément une <strong>structure matérielle</strong> (ou a minima, virtuelle) distincte de celle du client. </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/dataLayer.png" width="160px" style="padding-top: 0.0em">  
+	<li> Pour désigner spécifiquement le <strong>3<sup>e</sup> niveau</strong>, on parle de <strong class="specialDGr">couche données</strong> (<em class="english">data layer</em>) et on emploie aussi spécifiquement le terme <strong class="specialDGr">back end</strong> (ou encore <em class="english">backend</em> en un seul mot) au sens où, dans l'architecture, il s'agit du niveau le plus éloigné du client. </li>
+  </div><!-- display -->
+</ul>
+
+<div class="expert">
+<p> Par ailleurs, il est intentionnel que le <strong class="title">schéma de principe de l'architecture</strong> représenté supra fasse le plus possible <strong class="defin">abstraction de toute structure matérielle</strong>. En effet, les <strong class="specialN">2<sup>e</sup> et 3<sup>e</sup> niveaux</strong> peuvent très bien : </p>
+<ul>
+	<li> être réunis sur une <strong>même machine</strong> physique (et éventuellement avec recours à une machine virtuelle),   </li>
+
+	<li> ou encore déployés sur <strong>plus de deux machines</strong>, en particulier si l'application fait appel à plusieurs bases de données. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> Plus généralement, l'<strong class="title">architecture 3 niveaux</strong> schématisée ci‑dessus pour décrire une application web en général est une <strong class="cons">présentation simpliste</strong> d'une réalité diverse, dont la <strong>complexité</strong> est <strong>très variable</strong> selon l'application considérée.  </p>
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/archi2tiers.png" width="350px" style="padding-top: 0.5em">
+	<li> Dans les <strong class="defin">cas simples</strong>, le serveur web met simplement à disposition des <strong>fichiers</strong> de code <strong><em class="sigle">HTML/CSS/JS</em></strong> et d'autres fichiers (images, etc.) que le navigateur du client se charge de demander pour afficher. </li>
+
+  <div class="nobullet"> Du côté côté du serveur, un seul niveau suffit donc (typiquement, avec un langage de script intégré comme <strong><em class="mark">php</em></strong>) et on a alors en fait une <strong class="defin">architecture à 2 niveaux</strong> seulement. </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/archi3tiers3.png" width="500px" style="padding-top: 0.5em">
+	<li> Dans les <strong class="warning">cas complexes</strong>, par exemple lorsque le navigateur du client ouvre un fichier stocké sur le <em class="english">cloud</em> avec un <strong>logiciel en ligne</strong> (par exemple, un logiciel professionnel de fabrication), pour préparer la page web à transmettre au client, le serveur web chargé de la coordination doit collecter : </li>
+  <ul>
+  	<li> non seulement une multitude de données issues de <strong>différents domaines</strong> (compte client, données fournisseur, publicités…),  </li>
+  
+  	<li> mais aussi toutes les données pour exécuter le <strong>logiciel</strong>, lequel peut faire appel à divers autres composants logiciels (module de calculs, etc.) </li>
+  </ul>
+  
+  <div class="nobullet"> On peut alors identifier des <strong class="defin">chaînes de communication</strong> à la fois <strong>entre les niveaux</strong> et au <strong>sein même des niveaux</strong> (cf. la figure ci‑contre extraite de cette publication de recherche <a class="external" href="https://www.researchgate.net/publication/49612164_Implementation_of_an_online_scheduling_support_system_in_a_high_mix_manufacturing_firm" target="_BLANK"></a>).  </div>
+	</div><!-- display -->
+</ul>
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> <em class="remark">Attention</em>, le <strong class="title">terme « middleware »</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Middleware" target="_BLANK">W</a> possède un <strong>sens originel plus spécifique</strong> en informatique. Il désigne un logiciel dont le rôle est d'assurer la <strong class="defin">communication entre des applications</strong> utilisant des standards d'entrées‑sorties hétérogènes – ces applications s'exécutant a priori (mais pas forcément) sur une même machine. </li>
+
+  <div class="nobullet"> Ce terme est donc employé aussi en <strong class="title">architecture web</strong> pour désigner le <strong>2<sup>e</sup> niveau</strong> qui a effectivement pour rôle d'assurer la communication entre l'application du client et d'autres application (base de donnée, seveur d'applications…). </div>
+
+	<li> L'<strong class="title">architecture à trois niveaux</strong> – <em class="english">frontend</em>, <em class="english">middleware</em>, <em class="english">backend</em> – est parfois présentée comme telle <strong class="warning">exclusivement du côté du serveur</strong> (cf. le schéma ci‑dessous extraite de cette publication de recherche <a class="external" href="https://www.researchgate.net/publication/221147997_FlashCache_A_NAND_flash_memory_file_cache_for_low_power_web_servers" target="_BLANK"></a>). </li>
+	<img class="top-left" src="../img/Archi4niveaux.png" style="max-width: 800px">
+<p> Si l'on compte la couche du côté du client, on peut aussi considérer qu'on a en fait une architecture à <strong class="defin">4 niveaux</strong>. </p>
+</ol>
+</div><!-- remarques -->
+
+
+<!-- expert -->
+<h4> Architecture à <em>n</em> niveaux</h4> 
+
+
+<p> L'architecture d'un <strong>service web</strong> peut devenir <strong class="warning">encore plus complexe</strong> pour diverses raisons. Ainsi : </p>
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/loadBalancer.jpg" width="350px" style="padding-top: 0.5em">
+	<li> pour des <strong class="defin">ressources très demandées</strong>, <strong>plusieurs serveurs en parallèle</strong> sont nécessaires dans chaque niveau ; afin de leur distribuer les requêtes, et aussi pour garantir la <strong class="pros">continuité de service</strong> en cas de panne de l'un d'entre eux, on installe un « étage » logiciel appelé <strong class="specialLB">répartiteur de charge</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Équilibrage_de_charge_des_serveurs_Web" target="_BLANK">W</a> (<em class="english">load balancer</em>) ; ce logiciel peut être hébergé sur une machine virtuelle ou réelle (un serveur spécifique dédié à cette tâche de répartition) ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/archiNtiers5.png" width="600px">
+  <li> la préparation de la ressource demandée peut nécessiter l'exécution d'un <strong class="defin">logiciel métier</strong> <a class="external" href="https://en.wikipedia.org/wiki/Business_software" target="_BLANK">W</a> (<em class="english">business software</em>) qui constitue un niveau à lui tout seul (par exemple, un logiciel de comptabilité, de bureautique, de simulation, etc.) ; </li>
+
+	<li> les <strong>bases de données</strong> peuvent être structurées sur <strong>plusieurs niveaux</strong> ou encore nécessiter un niveau intermédiaire pour l'<strong class="defin">intégration</strong> des données dans la ressource demandée ou dans le logiciel métier.   </li>
+	</div><!-- display -->
+</ul>
+
+<p> On parle alors d'<strong class="title">architecture multi-niveaux</strong> ou à <strong>n</strong> niveaux <a class="external" href="https://en.wikipedia.org/wiki/Multitier_architecture" target="_BLANK">W</a> (en anglais, <em class="english">n-tier</em> ou <em class="english">multitier architecture</em>) – cf. la figure ci‑dessus. </p>
+</div><!-- expert -->
+
+
+
+<h3> Les machines serveurs web – généralités </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/serverLogo0.png" width="100px" style="padding-top: 0.5em;">
+<p> Un <strong class="title">serveur web</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serveur_web" target="_BLANK">W</a> est une <strong>machine</strong> sur laquelle s'exécutent des <strong>applications</strong> capables de <strong class="defin">répondre à des requêtes</strong> du <strong class="specialG">protocole <em class="sigle">HTTP</em></strong> pour mettre à disposition des ressources de type <strong>pages web</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Un serveur web peut être installé indifféremment dans un <strong>réseau public</strong> ou <strong>privé</strong>, et offrir un <strong>accès libre</strong> ou <strong>restreint</strong>, mais dans tous les cas, il doit surtout <strong class="defin">fonctionner sans interruption</strong>, et c'est cette particularité qui justifie l'adoption d'une <strong class="title">technologie spécifique</strong>, différente de celle des postes de travail. </p>
+
+<ul>
+	<li> Bien entendu, la <strong class="defin">continuité de service</strong> repose avant tout sur la <strong class="pros">fiabilité</strong> des <strong>composants matériels</strong> mis en œuvre. Mais elle dépend aussi de : </li>
+	<ul>
+		<li> certaines précautions de conception comme la <strong>modularité</strong> des unités de traitement et de stockage, et la <strong>redondance</strong> des modules ;  </li>
+	
+		<li> certaines fonctionnalités, comme la possibilité de <strong>montage et démontage</strong> <strong class="defin">à chaud</strong> des modules, c'est‑à‑dire sans mise hors service du système. </li>
+	</ul>
+
+	<li> Par ailleurs, la <strong class="defin">continuité de service</strong> induit que la nécessité que la technologie employée soit <strong class="pros">économe en énergie</strong> – cet aspect devenant crucial avec l'augmentation du <strong>facteur d'échelle</strong>. </li>
+  
+  <div class="expert">
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/networkConsole.png" width="400px" style="padding-top: 0.2em;">
+	<div class="nobullet"> En particulier, on <strong class="pros">réduit au minimum</strong> les <strong>dispositifs d'entrées‑sorties</strong> (interfaces pour claviers, écrans, etc.) car, en dehors des phases de mise en service et de maintenance, aucun technicien ne travaille directement sur un serveur. L'accès à son système se fait à distance via une <strong>console réseau</strong>, c'est‑à‑dire une autre machine qui, elle, est de type <em>poste de travail</em> et n'est a priori pas dévolue à un seul serveur, mais à tout un lot. </div>
+	</div><!-- display -->
+	</div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+
+<p> Il existe une <strong class="title">grande variété</strong> de <strong>technologies</strong> de serveurs web pour répondre à toutes sortes de cahier des charges. </p>
+<ul>
+	<li> Pour une application donnée, le choix de la technologie dépend essentiellement de la <strong class="warning">charge</strong> devant être supportée, c'est‑à‑dire le <strong>nombre de requêtes</strong> par unité de temps.  </li>
+
+	<li> Mais d'autres aspects comme l'<strong>encombrement</strong> ou les <strong>contraintes d'intégration</strong> peuvent intervenir dans des contextes particuliers, notamment pour les <strong class="defin">systèmes embarqués</strong>. </li>
+</ul>
+
+
+
+<h3 id="technoServeurs"> Serveurs web stationnaires usuels </h3>
+
+
+
+<div class="complement">
+<p> La <strong class="title">technologie matérielle</strong> des <strong>serveurs web stationnaires</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serveur_informatique" target="_BLANK">W</a> se décline usuellement en <strong class="specialLB">trois types de solutions</strong>, chacune respectivement bien adaptée à certains environnements d'intégration. Toutes ces technologies partagent l'implication d'un <strong>nombre significatif</strong> d'<strong class="defin">unités de stockages</strong> pour héberger les pages web et autres données (images, fichiers <code>pdf</code>, <code>mp3</code>, etc.) dont le volume peut être très important.  </p>
+</div><!-- complement -->
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/serveurTour.png" width="200px" style="padding-top: 0.5em;">
+	<li> Le <strong>serveur</strong> <strong class="specialLB">tour</strong> reprend la <strong class="defin">technologie polyvalente</strong> des postes de travail fixes avec, dans un boîtier vertical ventilé, une <strong>alimentation</strong>, une <strong>carte‑mère</strong> et une ou plusieurs <strong>interfaces réseau</strong>. <strong class="pros">Facile à installer ou déplacer</strong>, le serveur peut être posé au sol ou sur n'importe quel support plan (table, meuble, etc.). </li>
+  
+	<div class="nobullet"> On adopte cette solution pour les <strong>petites applications</strong> et les <strong>faibles charges</strong>, ne nécessitant qu'une ou deux machines (au delà, il faut envisager une solution plus modulaire comme ci‑dessous). </div>
+  </div><!-- display -->
+
+  
+	<li> Le <strong>serveur</strong> <strong class="specialLB">rack</strong> adopte une <strong class="defin">technologie modulaire</strong> à boîtier horizontal. </li>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/serveurRack2U.png" width="400px" style="padding-top: 0.5em;">
+	<ul>
+		<li> Il possède une <strong>largeur standard</strong> pour permettre son empilement avec d'autres équipements dans une coffret ou une armoire de type <strong>baie</strong>. </li>
+	
+		<li> La <strong>hauteur</strong> du boîtier est également standard et se compte en <strong>unités</strong> (1U, 2U, etc.). </li>
+	</ul>
+	
+	<div class="nobullet"> On retrouve essentiellement les mêmes composants que pour un serveur tour (alimentation, ventilation, carte‑mère, interfaces réseau, slots disques) mais avec des dispositions bien évidemment spécifiques pour les boîtiers horizontaux. </div>
+
+  <div class="nobullet"> Cette solution est adoptée pour des <strong>applications de taille moyenne</strong> qui nécessitent d'intégrer un <strong>assez grand nombre de serveurs</strong> et/ou de rapprocher le serveur d'autres équipements réseaux (switchs, routeurs) ayant également vocation à s'insérer dans une baie. </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/serveurLame.png" width="400px" style="padding-top: 0.5em;">
+	<li> Le <strong>serveur</strong> <strong class="specialLB">lame</strong> apporte une <strong class="defin">technologie ultra‑modulaire</strong> de <strong>cartes électroniques</strong> (cartes‑mères, interfaces réseau) et d'<strong>unités de stockages</strong> qui viennent s'insérer horizontalement ou verticalement dans un grand boîtier, lui‑même destiné à être monté dans une baie. </li>
+
+	<div class="nobullet">Dans un espace très restreint, on peut alors <strong class="pros">dimensionner à volonté</strong> le <strong>nombre de serveurs et de disques</strong> pour répondre au besoin, chaque module partageant l'alimentation et la ventilation du boîtier.  </div>
+
+  <div class="nobullet"> Cette solution est celle retenue pour les <strong>très grosses applications</strong> où les serveurs sont concentrés en très grand nombre dans des <strong>data centers</strong>. Elle peut aussi être adoptée pour des applications moyennes mais exigeant une très grande modularité.   </div>
+  </div><!-- display -->
+</ul>
+
+
+
+<h3> Serveurs web embarqués  </h3>
+
+
+
+<div class="complement">
+<p> La <strong class="title">technologie matérielle</strong> des <strong>serveurs web embarqués</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Serveur_web_embarqué" target="_BLANK">W</a> est évidemment <strong class="defin">beaucoup plus légère</strong> que celles des serveurs stationnaires. Précisons avant tout que le qualificatif <strong>« embarqué »</strong> ne signifie pas nécessairement qu'il s'agit d'un système mobile mais plutôt un système qui comprend un <strong class="defin">petit serveur web</strong>, lequel ne constitue pas la fonction première du système (typiquement, il peut s'agir d'une machine‑outil ou même d'un capteur autonome).  </p>
+
+<p> L'<strong class="specialLB">intérêt principal</strong> d'un <strong>serveur web embarqué</strong> est d'offrir à un système une <strong><em class="sigle">IHM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Interactions_homme-machine" target="_BLANK">W</a> (<em>interface homme‑machine</em>) à la fois <strong class="pros">conviviale</strong> et <strong class="pros">accessible à distance</strong>. Développée sous forme de <strong>pages web</strong> avec la technologie logicielle usuelle (<em class="sigle">HTML/CSS/JS</em>…), cette interface peut permettre de consulter ou de commander le système à l'aide d'un terminal informatique équipé d'un navigateur, et pourvu qu'on dispose de part et d'autre d'une connexion réseau.  </p>
+</div><!-- complement -->
+
+<p> Il existe une <strong class="title">très grande diversité</strong> des technologies de serveurs web embarqués. Les exemples donnés ci‑après ne constituent pas du tout une liste exhaustive. </p>
+
+<ul>
+	<div style="display: inline-block;">
+	  <img class="top-right" src="../img/moduleReseauAPI.png" width="100px" style="padding-top: 0.2em;">
+	<li> Un <strong>module réseau</strong> d'<strong class="specialLB">automate programmable industriel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Automate_programmable_industriel" target="_BLANK">W</a> (<em class="english">programmable logic controller</em> ou <em class="sigle">PLC</em>) comporte en général les composants nécessaires pour héberger des pages web. Ce module permet notamment d'assurer la <strong class="defin">supervision</strong> de l'automate (et donc du système qu'il commande) par un <strong><em class="sigle">SCADA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_de_contrôle_et_d'acquisition_de_données_(SCADA)" target="_BLANK">W</a> (<em class="english">supervisory control and data acquisition</em>), et ce via le protocole <strong><em class="sigle">HTTP</em></strong>. </li>
+	</div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/RaspberryPi.png" width="200px" style="padding-top: 0.5em;">
+	<li> Un <strong class="specialLB">nano‑ordinateur</strong> (carte <em class="mark">Raspberry Pi</em> ou autre) offre une <strong>solution</strong> <strong class="pros">économique</strong>, <strong class="pros">peu encombrante</strong> et <strong class="pros">polyvalente</strong> pour constituer un <strong class="defin">serveur web assez évolué</strong>. </li>
+	<ul>
+		<li> En effet, ce serveur peut être implémenté par un <strong>logiciel serveur <em class="sigle">HTTP</em></strong> classique (cf. infra <a class="infra" href="Rc2-4_webServeur.html#logicielsServeursHTTP"></a>), s'exécutant sur un système d'exploitation en même temps que d'autres applications, notamment un logiciel de <strong>base de données</strong>. On peut donc mettre en place une <strong>architecture à 3 niveaux</strong>, voire plus.   </li>
+
+		<li> Si la capacité de stockage de la mémoire embarquée ne suffit pas, rien n'interdit de raccorder au nano‑ordinateur un <strong>disque dur</strong> externe. </li>
+	</ul>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+	  <img class="top-right" src="../img/ArduinoEthernetShield.png" width="200px" style="padding-top: 0.5em;">
+	<li> <strong class="pros">Un peu plus économique</strong> encore (financièrement et aussi énergétiquement), un <strong class="specialLB">carte à microcontrôleur</strong> (<em class="mark">Arduino</em> ou autre) équipée d'une <strong>interface réseau</strong> (module <em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>, etc.) permet également d'implémenter un serveur web, mais évidemment <strong class="cons">assez rudimentaire</strong>. </li>
+
+  <div class="nobullet"> En effet, en l'<strong>absence de système d'exploitation</strong>, l'unique programme embarqué dans la carte doit lui‑même générer les réponses aux requêtes <strong><em class="sigle">HTTP</em></strong> qu'il reçoit. On ne peut donc envisager qu'une <strong>architecture à 2 niveaux</strong>, et ce dans les <strong class="cons">limites</strong> de <strong>capacité mémoire</strong> embarquée (typiquement, une carte micro‑<em class="sigle">SD</em>) et de <strong>vitesse de traitement</strong> de l'architecture du microcontrôleur. </div>
+
+	
+	<div class="nobullet"> C'est typiquement une solution pour les <strong>capteurs</strong> et les <strong>petits actionneurs</strong> en tous genres qu'on souhaite pouvoir consulter et contrôler à distance dans un système composite comme une maison connectée, etc.  </div>  
+  </div><!-- display -->
+
+	<li> Plus généralement, il existe <strong class="title">toutes sortes de technologies</strong> de petit serveur web, qu'elles soient polyvalentes ou propriétaires, dans des domaines comme la <strong>domotique</strong>, la <strong>surveillance</strong>, et plus généralement l'<strong>Internet des objets</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_des_objets" target="_BLANK">W</a> (<em class="english">Internet of things</em> ou <em class="mark">IoT</em>). </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Technologies logicielles des serveurs web </h2>
+
+
+
+<h3> Architecture logicielle globale des serveurs web </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/HTTPsoftwareArchitecture.png" width="200px" style="padding-top: 0.0em;">
+<p> En règle générale, le <strong>système d'exploitation d'un serveur</strong>, même avec une conception spécifique, n'intègre <strong class="cons">pas de service par défaut</strong> pour répondre à des <strong class="specialG">requêtes <em class="sigle">HTTP</em></strong>. </p>
+
+<p> Pour qu'il devienne un <strong class="title">server web</strong>, il faut préalablement installer et exécuter en tâche de fond un <strong>logiciel applicatif dédié</strong> qu'on appelle <strong class="defin">serveur <em class="sigle">HTTP</em></strong> (typiquement, <em class="mark">Apache</em>, <em class="mark">NGINX</em> ou autre…).  </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Par ailleurs, pour mettre en place une <strong>architecture à 3 niveaux</strong>, il faut aussi installer et exécuter en tâche de fond sur la machine d'<strong class="title">autres logiciels</strong>. </p>	
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/backendRuntimeEnv.png" width="400px" style="padding-top: 0.5em;">
+	<li> Il faut impérativement un <strong class="specialLB">environnement d'exécution de scripts</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_de_script" target="_BLANK">W</a> qui sont codés dans un <strong class="defin">langage de programmation généraliste</strong> dit de <strong>backend</strong> (<em class="mark">php</em>, <em class="mark">JavaScript</em>, <em class="mark">Python</em>, etc.). </li>
+
+	<div class="nobullet"> Ce langage doit permettre de coder à la fois les tâches de <strong>préparation des ressources</strong> demandées par le client, mais aussi d'orchestrer des échanges avec une <strong>base de données</strong>.  </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/3tierDBMS.png" width="350px" style="padding-top: 0.5em;">
+	<li> Il faut également installer un <strong class="specialLB">système de gestion de base de données</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_de_gestion_de_base_de_données" target="_BLANK">W</a> ou <strong class="specialLB"><em class="sigle">SGBD</em></strong> (en anglais, <em class="english">database management system</em> ou <strong><em class="sigle">DBMS</em></strong>), qui est le plus souvent installé et exécuté sur une <strong>machine serveur dédiée</strong>. </li>
+
+  <div class="nobullet"> Ce logiciel est spécialisé dans la <strong>manipulation des données</strong> (lecture, écriture, tri), il permet de répondre aux requêtes qui sont codées dans les scripts du serveur web. </div>
+	</div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Comme pour toutes les technologies du web, il existe aujourd'hui une <strong class="title">grande diversité des solutions logicielles</strong> pour implémenter les serveurs web. Sans que l'on puisse décréter que telle ou telle solution est meilleure qu'une autre, on peut néanmoins distinguer des <strong class="defin">tendances</strong> dans les usages à grande échelle, qui dessinent les <strong>technologies</strong> d'<strong class="pros">avenir</strong> et du <strong class="cons">passé</strong>. En avoir connaissance est utile à de futurs techniciens, pour investir judicieusement leurs efforts d'apprentissage. Toutes les sections suivantes du chapitre y sont consacrées. </p>
+</div><!-- expert -->
+
+
+
+<h3> Les systèmes d'exploitation des serveurs </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+		<img class="top-right" src="../img/serverOperatingSystem.png" width="150px" style="padding-top: 0.0em;">
+<p> Pour qu'une machine fasse fonction de <strong>serveur</strong>, on peut a priori s'appuyer sur <strong class="pros">n'importe quel</strong> <strong class="title">système d'exploitation</strong> usuel, pour peu qu'il soit compatible avec l'architecture physique (processeur, mémoire, etc.) de la machine. </p>
+</div><!-- important -->
+
+<div class="complement" style="padding-top: 0em">
+<p class="square"> Toutefois, les <strong>versions « grand public »</strong> des systèmes <strong class="title">Windows</strong> (<em class="mark">Microsoft</em>) et <strong>MacOS</strong> (<em class="mark">Apple</em>) ne disposent <strong class="warning">pas</strong> de mécanismes commodes pour la gestion des <strong class="defin">droits d'accès</strong> aux <strong>fichiers</strong>, gestion qui constitue un aspect primordial pour un serveur puisqu'il s'agit presque toujours d'une machine multi‑utilisateurs. </p>
+
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/logoWindowsServer.png" height="100px" style="padding-top: 1.2em;">
+	<img class="top-right" src="../img/logoMacOSserver.png" height="100px" style="padding-top: 1.2em;">
+<p> C'est pourquoi ces constructeurs proposent des <strong class="title">versions spécifiques pour serveurs</strong>, respectivement <strong class="specialLB">Windows Server</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Windows_Server" target="_BLANK">W</a> et <strong class="specialLB">MacOs Server</strong> <a class="external" href="https://fr.wikipedia.org/wiki/MacOS_Server" target="_BLANK">W</a>. Comme les versions grand public, elles sont <strong class="cons">payantes</strong>, typiquement sur la base d'un abonnement annuel associé à un <strong class="defin">contrat d'assistance</strong>. </p>
+</div><!-- display -->
+
+<div style="display:inline-block;">
+	<img class="top-right" src="../img/logoGNU_Linux.png" height="120px" style="padding-top: 1.2em;">
+<p class="square"> A contrario, toutes les distributions usuelles du système <strong class="title">GNU/Linux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Linux" target="_BLANK">W</a> (et encore une fois, sous couvert de compatibilité matérielle) sont adaptées à une machine de type serveur parce qu'elles incluent une gestion des <strong class="defin">droits d'accès</strong>. Cette gestion est héritée du système <em class="mark">Unix</em> qui a été conçu dès le départ pour un contexte multi‑utilisateurs. </p>
+
+<p> Parmi ces distributions, on en trouve <a class="external" href="https://fr.wikipedia.org/wiki/Distribution_Linux" target="_BLANK">W</a> : </p>
+</div><!-- display -->
+<ul>
+	<div style="display:inline-block;">
+		<img class="top-right" src="../img/logoUbuntu.png" height="70px" style="padding-top: 0.5em;">
+		<img class="top-right" src="../img/logoFedora.png" height="70px" style="padding-top: 0.5em;">
+		<img class="top-right" src="../img/logoDebian.png" height="70px" style="padding-top: 0.5em;">
+	<li> une bonne partie – <em class="mark">Debian</em>, <em class="mark">Fedora</em>, <em class="mark">Ubuntu</em>, <em class="mark">OpenSUSE</em>… – qui sont <strong class="pros">gratuites</strong> et dites <strong class="specialLB">communautaires</strong> parce que développées et soutenues par une communauté d'utilisateurs qui peuvent apporter une aide significative à travers les forums de l'Internet ;   </li>
+  </div><!-- display -->
+
+  <div style="display:inline-block;">
+  	<img class="top-right" src="../img/logoSUSEle.png" height="70px" style="padding-top: 0.5em;">
+		<img class="top-right" src="../img/logoRedHat.png" height="70px" style="padding-top: 0.5em;">
+	<li> les autres – <em class="mark">Red Hat Enterprise Linux</em>, <em class="mark">Ubuntu Long Term Support</em>, <em class="mark">SUSE Linux Enterprise</em>… – qui sont dites <strong class="specialLB">d'entreprise</strong> ; elles sont <strong class="cons">payantes</strong> mais elles incluent un <strong class="defin">contrat d'assistance</strong>.  </li>
+	</div><!-- display -->
+</ul>
+<p> Les distributions <strong class="title">Linux communautaires</strong> restent <strong class="pros">dominantes</strong> dans l'univers des <strong>serveurs web</strong> du fait de leur gratuité. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="logicielsServeursHTTP"> Les logiciels serveurs HTTP </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+		<img class="top-right" src="../img/HTTPserverSoftware.png" height="150px" style="padding-top: 0.3em;">
+<p> Un <strong class="title">logiciel serveur <em class="sigle">HTTP</em></strong> est une <strong>application</strong> s'exécutant en <strong>tâche de fond</strong> sur une machine, typiquement pour que cette dernière constitue un <strong class="Langage_de_définition_de_données">serveur web</strong>. </p>
+
+<p> La <strong>principale fonction</strong> de cette application est de générer les <strong class="defin">réponses</strong> aux requêtes émises par un client dans le cadre du <strong class="specialG">protocole <em class="sigle">HTTP</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans la variété des <strong class="title">logiciels serveurs <em class="sigle">HTTP</em></strong>, on trouve principalement, par ordre décroissant de fréquence d'emploi :  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoApache.png" height="80px" style="padding-top: 0.3em;">
+		<img class="top-right" src="../img/logoNGINX.png" height="80px" style="padding-top: 0.3em;">
+	<li> <strong>Apache HTTP Server</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Apache_HTTP_Server" target="_BLANK">W</a> et <strong>NGINX</strong> <a class="external" href="https://fr.wikipedia.org/wiki/NGINX" target="_BLANK">W</a> qui sont l'un et l'autre <strong class="pros">libres</strong> de droits et <strong class="pros">open‑source</strong>. </li>
+
+	<div class="nobullet"> Ils représentent à eux deux plus de <strong class="defin">80 % du marché des serveurs web</strong>. </div>
+  </div><!-- display --> 
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/logoIISmicrosoft.png" height="80px" style="padding-top: 0.0em;">
+	<li> <strong>IIS</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Information_Services" target="_BLANK">W</a> (<em class="mark">Internet Information Services</em>) qui est un logiciel propriétaire développé par <strong>Microsoft</strong> pour compléter ses systèmes d'exploitation <em class="mark">Windows Server</em>. </li>
+	</div><!-- display --> 
+</ul>
+</div><!-- complement -->
+
+<p> Avec une machine serveur à système d'exploitation <strong class="specialLB">Linux</strong> (cas le plus fréquent), l'<strong class="title">installation</strong> en ligne de commande (sur la machine ou depuis une connexion distante de type <code>ssh</code>) d'un logiciel <strong>serveur <em class="sigle">HTTP</em></strong> ne pose <strong class="pros">pas de difficulté</strong> particulière, la procédure étant le plus souvent bien documentée – cf. par exemple ce lien pour l'installation du logiciel <strong>Apache</strong> sur une distribution <em class="mark">Ubuntu</em> <a class="external" href="https://ubuntu.com/tutorials/install-and-configure-apache#1-overview" target="_BLANK"></a> et la mise en œuvre sur une carte <em class="mark">Raspberry Pi</em> au TP C2‑2 <a class="TP" href="Rtp2-2_serveurWeb.html" target="_BLANK"></a>. </p>
+
+
+
+<h3> Les piles virtuelles AMP pour le développement </h3>
+
+
+
+<div class="important">
+<p> Durant la phase de <strong class="title">développement d'une application web</strong> (codage, mise au point…), il n'est pas nécessaire de disposer d'une véritable architecture 3 tiers. Sur un poste de travail, il est toujours possible de recourir à la <strong>virtualisation</strong> d'une telle architecture, intégrant toute la <strong class="defin">pile des composants logiciels nécessaires</strong> : <strong>serveur <em class="sigle">HTTP</em></strong>, <strong>langage de backend</strong>, <strong><em class="sigle">SGBD</em></strong>. </p>
+
+<p> Ces piles sont désignées de façon générique par le sigle <strong class="title"><em class="sigle">AMP</em></strong> – en anglais, <strong><em class="sigle">AMP</em> <em class="english">stack</em></strong>, acronyme du triptyque  <strong>Apache</strong>, <strong>MySQL</strong> et <strong>php</strong> (cf. une liste des piles les plus courantes au lien suivant <a class="external" href="https://en.wikipedia.org/wiki/List_of_Apache–MySQL–PHP_packages" target="_BLANK">W</a>). </p>
+</div><!-- important -->
+
+
+<div class="complement" style="padding-top: 0em">
+<div class="expert">
+<p> D'une <strong>pile <em class="sigle">AMP</em></strong> à une autre, certains <strong class="title">composants logiciels</strong> peuvent être <strong class="defin">différents</strong> : </p>
+<ul>
+	<li> en particulier, le logiciel de <strong><em class="mark">SGBD</em></strong> peut être <em class="mark">MariaDB</em> ou <em class="mark">MongoDB</em> et non pas <em class="mark">MySQL</em> ;  </li>
+
+	<li> de même, on peut avoir un <strong>langage de backend</strong> comme <em class="mark">Perl</em> ou <em class="mark">Python</em> inclus dans la pile <strong class="pros">en plus</strong> de <em class="mark">php</em>. </li>
+</ul>
+</div><!-- expert -->
+
+<p> Lorsqu'une <strong class="title">pile <em class="sigle">AMP</em></strong> s'exécute sur un poste de travail, elle opère une <strong class="defin">machine virtuelle</strong> sur l'<strong class="defin">hôte local</strong> pour jouer le rôle de <strong>serveur <em class="sigle">HTPP</em></strong>, d'environnement d'exécution d'un <strong>langage backend</strong> et d'un <strong><em class="sigle">SGDB</em></strong>. </p>
+<ul>
+	<li> Sur cette machine virtuelle, elle crée une <strong class="defin">arborescence de dossiers</strong> avec, typiquement, un dossier nommé <code class="filename">www</code> dans lequel il est possible de déposer des <strong>fichiers de script</strong> pour implémenter une application web en développement.  </li>
+
+	<li> Pour <strong class="defin">tester l'application</strong>, il suffit d'employer un <strong>navigateur </strong>avec une <strong><em class="sigle">URL</em></strong> commençant par <code class="filename">localhost/</code>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="WampServer"> Pile AMP pour les postes de travail <em class="mark">Windows</em> </h4>
+
+
+<div class="complement">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/logoWampserver.png" height="80px" style="padding-top: 0.2em;">
+<p> Pour les postes de travail à système <strong class="specialLB">Windows</strong>, on peut par exemple installer le logiciel <strong class="specialMg">WampServer</strong> <a class="external" href="https://fr.wikipedia.org/wiki/WampServer" target="_BLANK">W</a>, en téléchargeant  son fichier d'installation (<em class="english">setup</em>) à ce lien <a class="external" href="https://www.wampserver.com/" target="_BLANK"></a>) puis en l'exécutant une fois le téléchargement terminé.  </p>
+</div><!-- display -->
+
+<p> Attention, cette installation nécessite quelques <strong class="warning">précautions préalables</strong>, en particulier la <strong>désactivation du serveur IIS</strong> (cf. supra <a class="supra" href="Rc2-4_webServeur.html#logicielsServeursHTTP"></a>) qui est installé par défaut sur les systèmes <em class="mark">Windows</em>. Pour cela, il suffit de taper dans la barre de recherche du système l'expression :  <br>
+<span class="inline">
+	<code class="cmd">Activer ou désactiver des fonctionnalités Windows</code>
+</span> <br>
+puis, après avoir cliqué sur ce raccourci, décocher l'option : <br>
+<span class="inline">
+	<code class="cmd">□ Instance principale web des Internet Information Services (IIS)</code>
+</span> </p>
+</div><!-- complement -->
+
+<p> Après l'installation, il faut <strong>cliquer sur l'icône</strong> de l'application <em class="mark">Wampserver</em> apparue sur le bureau, qui se lance implicitement en <strong class="defin">tâche de fond</strong>. À droite dans la <strong>barre de tâche</strong> apparaît alors une icône avec le logo de l'application à droite — dit <strong>tray icon</strong>. Lorsque sa <strong class="specialG">couleur verte</strong>, cela signifie que l'application est <strong class="pros">pleinement opérationnelle</strong>. </p>
+
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/WampserverMenu2.jpg" width="200px" style="padding-top: 0.2em;">
+<p> Ce <strong class="title">tray icon</strong> donne un accès convivial à une cascade de menus pour : </p>
+<ul>
+	<li> <strong>paramétrer</strong> les logiciels de la pile (<em class="mark">Apache</em>, <em class="mark">php</em>, <em class="mark">MySQL</em> et autres) ;  </li>
+
+	<li> alimenter les <strong>répertoires</strong> des fichiers, en particulier, <code class="filename">www directory</code> où sont usuellement placés les fichiers des applications web (code <em class="sigle">HTML</em>, <em class="mark">php</em>, etc.) ;  </li>
+
+	<li> ouvrir la <strong>page d'accueil</strong> par défaut du serveur web (<em class="english">Localhost</em>) dans le navigateur choisi par défaut. </li>
+</ul>
+</div><!-- display -->
+
+
+<h4 id="LAMP"> Pile AMP pour les postes de travail <em class="mark">Linux</em> </h4>
+
+
+<div class="complement">
+<p> Pour les postes de travail à système <strong class="specialLB">Linux</strong>, on peut bien sûr procéder à l'<strong>installation séparée</strong> des composants logiciels d'une pile <strong><em class="sigle">AMP</em></strong>, en respectant un ordre précis. </p>
+
+<p> On peut aussi installer un <strong>package intégré</strong> comme <strong class="title">lamp‑server</strong> <a class="external" href="https://fr.wikipedia.org/wiki/LAMP" target="_BLANK">W</a>, à condition qu'il soit adapté pour la distribution du système.  Dans le cas d'une distribution de type <strong>Ubuntu</strong> – notamment <strong class="Mint">Mint</strong> – on procède en ligne de commande simplement par :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> lamp-server^ <span class="displayDarkRed">-y</span>
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- complement -->
+
+<ul>
+	<li> Une fois que l'installation est terminée, on peut vérifier que le <strong class="defin">serveur <em class="mark">HTTP</em> Apache</strong> s'exécute bien en <strong>tâche de fond</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">systemctl status</span> apache2
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<div class="nobullet"> sachant qu'il sera dès lors <strong>lancé par défaut au démarrage</strong> du poste de travail. Comme tout service, via la commande <code>sudo systemctl</code>, il peut être à tout moment arrêté (<code>stop</code>), démarré (<code>start</code>) ou redémarré (<code>restart</code>). </div>
+
+	<li> On peut accéder à la <strong class="warning">page d'accueil</strong> par défaut du serveur dans un navigateur via la commande : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">xdg-open</span> http://localhost
+</pre>
+<!---------- ne pas indenter ----------> 
+
+	<div class="nobullet"> Quant au <strong>répertoire</strong> où il faut placer les fichiers des applications web à tester sur le serveur, il est par défaut accessible via le chemin : <br>
+	<span class="inline">
+		<code class="cmd">/var/www/html/</code>
+	</span> </div>
+
+	<div class="nobullet"> <em class="remark">Attention</em>, ce dossier et tout son contenu ont pour propriétaire l'utilisateur <code>root</code>. Sur le poste de travail, il doit donc être <strong class="warning">ouvert en tant que super‑utilisateur</strong> pour pouvoir être modifié. Pour éviter cette contrainte, il est évidemment possible d'en <strong class="defin">changer la propriété</strong> (et le groupe) par une commande de la forme : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo chown</span> <span class="displayDarkRed">-R</span> <span class="nocode"><strong class="specialLY">user-name</strong></span><span class="displayDarkBlue">:</span><span class="nocode"><strong class="specialLY">user-name</strong></span> /var/www/
+</pre>
+<!---------- ne pas indenter ----------> 
+
+</ul>
+
+
+<div class="expert">
+<h4> Installation sur une machine de type serveur</h4>
+
+<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoApache.png" width="180px" style="padding-top: 0.2em;">
+<p> L'installation d'un <strong class="title">logiciel serveur <em class="sigle">HTTP</em></strong> sur une machine de type <strong>serveur</strong> ne présente <strong class="pros">pas de différences significatives</strong> avec celle d'une <strong>pile <em class="sigle">AMP</em></strong> dans le cas le plus usuel où on a une machine à système <strong class="specialLB">Linux</strong> et s'il s'agit du logiciel <strong>Apache</strong>. Pour les détails,  on se reportera à la procédure décrite dans le sujet de travaux pratiques R2‑TP2 <a class="TP" href="Rtp2-2_serveurWeb.html#apache" target="_BLANK"></a>. </p>
+</div><!-- display -->
+
+
+<h4> Cas particulier de la plateforme <em class="mark">Node.js</em> </h4>
+
+
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/logoNodeJS.png" width="180px" style="padding-top: 0.2em;">
+<p> La plateforme de développement <strong class="specialG">Node.js</strong> (cf. infra <a class="infra" href="Rc2-4_webServeur.html#NodeJS"></a>) qui met en œuvre un environnement d'exécution du langage <strong>JavaScript</strong> inclut aussi un composant logiciel <strong>serveur <em class="sigle">HTTP</em></strong>. Moyennant quelques lignes de code dans le fichier de script principal de l'application, il est ainsi possible, sur un poste de travail, de tester directement  une application web codée en <strong class="defin">JavaScript côté serveur</strong>, même <strong class="pros">sans</strong> même avoir à recours à une <strong>pile <em class="sigle">AMP</em></strong>. </p>
+</div><!-- display -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les langages de <em>backend</em> et leurs frameworks </h2> 
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> Un <strong class="title">langage de script backend</strong> est un <strong>langage de programmation</strong> qui permet de <strong class="defin">coordonner les tâches du serveur web</strong> pour répondre aux requêtes d'un client web, notamment : </p>
+<img class="top-right" src="../img/scriptEnvironment.png" height="180px" style="padding-top: 1em;">
+<ul>
+	<li> <strong>préparer les pages web</strong> en code <strong><em class="sigle">HTML/CSS/JS</em></strong> à envoyer, à partir de fichiers existants ou composés sur mesure ; </li>
+
+	<li> <strong>transmettre et collecter des données</strong> stockées dans diverses bases de données… </li>
+</ul>
+<p> Pour être opérationnel, tout langage nécessite un <strong class="title">environnement d'exécution</strong> installé et opérant en <strong>tâche de fond</strong> sur le serveur. </p>	
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Là encore, il existe une <strong class="title">grande variété</strong> de <strong>langages de script backend</strong>, chacun ayant des <strong class="pros">points forts</strong> et des <strong class="cons">points faibles</strong>. Le <strong class="defin">choix</strong> dépend du contexte (problématique générale, culture d'entreprise, tendance…). Son apprentissage demande à tout technicien un <strong>investissement</strong> de <strong class="warning">plusieurs années</strong>, qui ne doit pas être engagé à la légère. </p>
+</div><!-- complement -->
+
+
+<h4> Notion de framework </h4>
+
+
+<div class="important">
+<p> Avec la sophistication des applications web, le <strong>codage des scripts</strong> de backend devient rapidement <strong class="warning">complexe</strong> et <strong class="cons">lourd</strong>, aussi les communautés informatiques ont développé des <strong class="title">frameworks</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Framework" target="_BLANK">W</a> pour le développement web. </p>
+
+<p> On désigne par ce terme anglais un <strong>ensemble structuré</strong> de <strong class="defin">bibliothèques de fonctions</strong> et d'autres éléments de code (types, constantes…) pour un langage donné. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>	Structuré pour une utilisation très modulaire, un <strong class="title">framework de développement web</strong> comprend en général des fonctions puissantes pour créer des <strong class="defin"><em class="sigle">API</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Interface_de_programmation" target="_BLANK">W</a>  – <strong class="defin">application programming interfaces</strong>. Ces dernières doivent ensuite permettre de :  </p>
+
+<ul>
+	<li> <strong>récupérer les données</strong> des requêtes et <strong>générer les réponses</strong> pour le <strong class="specialG">protocole <em class="sigle">HTTP</em></strong> ; </li>
+
+  <li> générer des requêtes et <strong>récupérer les données</strong> des réponses en <strong class="specialLG">langage <em class="sigle">SQL</em></strong> vers une base de données ; </li>
+ 
+	<li> <strong>transcoder des données</strong> entre <strong class="defin">différents formats</strong> (<code>csv</code>, <code>json</code>, <code>xml</code>, <code>html</code>, etc.) ;   </li> 
+
+	<li> et bien d'autres actions… </li>
+</ul>
+
+<div class="expert">
+<p> Comme usuellement en programmation modulaire, une <strong class="title">fonction</strong> dans un  <strong>framework</strong> est présentée au codeur par son <strong class="defin">prototype</strong> (nom, arguments, valeur retournée — cf. chap. C4‑I <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C4-Fonctions.html#prototype" target="_BLANK">C</a>) et forme elle‑même une <strong><em class="sigle">API</em></strong> (mais de moins haut niveau qu'une <em class="sigle">API</em> développée à l'aide de cette fonction). </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> Pour une <strong class="title">présentation plus détaillée</strong> des <strong>frameworks</strong>, on pourra consulter cette page web de la <em class="mark">Fondation Mozilla</em> <a class="external" href="https://developer.mozilla.org/fr/docs/Learn/Server-side/Premiers_pas/Web_frameworks" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+<div class="remarques" style="display: inline-block;">
+	<img class="top-right" src="../img/logoJoomla.png" height="70px" style="padding-top: 0.3em;">
+	<img class="top-right" src="../img/logoDrupal.png" height="70px" style="padding-top: 0.3em;">
+	<img class="top-right" src="../img/logoWordpress.png" height="70px" style="padding-top: 0.3em;">
+<p class="remarque"> Attention à <strong class="warning">ne pas confondre</strong> les <strong>frameworks</strong> avec ce qu'on appelle les <strong class="title"><em class="sigle">CMS</em></strong> – ou <strong class="title">content management system</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_de_gestion_de_contenu" target="_BLANK">W</a> – comme par exemple <em class="mark">WordPress</em> <a class="external" href="https://fr.wikipedia.org/wiki/WordPress" target="_BLANK">W</a>, <em class="mark">Drupal</em> <a class="external" href="https://fr.wikipedia.org/wiki/Drupal" target="_BLANK">W</a>, <em class="mark">Joomla!</em> <a class="external" href="https://fr.wikipedia.org/wiki/Joomla!" target="_BLANK">W</a>, etc. </p>
+
+<p> Un <strong class="title"><em class="sigle">CMS</em></strong>  définit de nombreux éléments préformatés de <strong class="defin">mise en forme des pages web côté client</strong>. Il permet ainsi d'<strong class="pros">élaborer rapidement des sites web</strong> à partir de kits de conception personnalisables pour créer des forums, des blogs, des sites de commerce en ligne, etc.  </p>
+</div><!-- remarque -->
+
+
+<h3 id="langagePHP"> Le langage <em class="mark">php</em> </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/logoPHP.png" width="120px" style="padding-top: 0.5em">
+<p> Créé en 1994, le <strong>langage</strong> <strong class="title">php</strong> <a class="external" href="https://fr.wikipedia.org/wiki/PHP" target="_BLANK">W</a> – <em class="english">hypertext preprocessor</em> – est historiquement le <strong class="defin">premier</strong> et encore aujourd'hui de très loin <strong class="defin">le plus utilisé</strong> des <strong>langages de backend</strong> (environ 80 % des sites web l'utilisent). </p>
+
+<p> <strong class="pros">Libre</strong> de droit et <strong class="pros">open‑source</strong>, l'<strong class="title">environnement d'exécution</strong> de <strong>php</strong> se greffe très facilement à la plupart des logiciels <strong>serveur <em class="sigle">HTTP</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div class="expert">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/logoZendEngine.png" width="220px" style="padding-top: 0.5em">
+<p> Comme bien d'autres, le langage <strong class="title">php</strong> est un langage mixte <strong class="defin">interprété/compilé</strong>. Il est basé sur le logiciel <strong class="specialLB">Zend Engine</strong> <a class="external" href="https://en.wikipedia.org/wiki/Zend_Engine" target="_BLANK">W</a> qui joue à la fois le rôle de <strong>compilateur</strong> en <em class="mark">bytecode</em> <a class="external" href="https://fr.wikipedia.org/wiki/Bytecode" target="_BLANK">W</a> et d'<strong>environnement d'exécution</strong>. </p>
+</div><!-- display -->
+
+<p> Avec une <strong class="defin">syntaxe</strong> et un <strong class="defin">typage</strong> inspirés du <strong>C</strong>, le langage <strong class="title">php</strong> dispose : </p>
+<ul>
+	<li> de tous les éléments de la <strong>programmation procédurale structurée</strong> (structures de contrôle, fonctions…) ;  </li>
+
+	<li> de la notion de classe, qui le rend apte à la <strong>programmation orientée objet</strong> ;  </li>
+
+	<li> d'un très grand nombre de <strong>bibliothèques de fonctions</strong> qui peuvent être incluses à volonté dans un fichier de code (comme en langage <em class="mark">C</em>) ; on peut ainsi mettre en œuvre une <strong>programmation modulaire</strong>. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<p> Pour les débutants, le <strong class="title">principal atout</strong> du langage <strong>php</strong> est de permettre l'<strong class="pros">insertion directe</strong> de <strong>code backend</strong> partout dans les <strong class="defin">fichiers <em class="sigle">HTML/CSS</em></strong> des pages web – grâce à la balise <code class="prettyprint lang-php">&lt;?php ?&gt;</code>. Cela évite de devoir coder sous forme de chaînes de caractères le code <strong><em class="sigle">HTML</em></strong> des pages web que le script est censé fournir ; il en résulte que certaines parties des fichiers <code class="filename">php</code> sont très semblables au code usuel qui implémente les pages web statiques. </p>
+
+
+
+<h4> Installation de l'environnement d'exécution de <em class="mark">php</em> </h4>
+
+
+<p> Rappelons que l'environnement d'exécution du langage <strong class="title">php</strong> est <strong class="defin">inclus dans toute pile <em class="sigle">AMP</em></strong>. Sur un <strong>poste de travail</strong>, <strong class="pros">aucune installation supplémentaire</strong> n'est donc requise. </p>
+
+<p> Pour une installation sur un <strong>serveur</strong>, on se reportera à la procédure décrite dans le sujet de travaux pratiques R2‑TP2 <a class="TP" href="Rtp2-2_serveurWeb.html#apache" target="_BLANK"></a>. </p>
+
+
+<h4 id="exemplePHP"> Exemple académique d'utilisation de <em class="mark">php</em> en backend </h4>
+
+
+<div class="exemples">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/changeBackground.png" width="80px" style="padding-top: 0.5em">	
+<p> À titre d'illustration purement académique, le <strong class="title">code <em class="mark">php</em></strong> ci‑dessous, enregistrée dans un fichier nommé <code class="filename">changeBackground.php</code>, crée une <strong>page web très simple</strong> avec <strong class="defin">deux balises de liens dynamiques</strong> permettant respectivement de <strong class="pros">choisir entre deux couleurs d'arrière‑plan</strong> (<span class="bkg-white">blanc</span> ou <span class="bkg-yellow">jaune</span>). </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Dynamic page PHP &lt;/title&gt;
+&lt;/head&gt;
+
+&lt;?php
+echo '&lt;body style="background:' . 
+      htmlspecialchars($_GET['bgcolor']) . '"&gt;';
+?&gt;
+
+&lt;h1&gt; Dynamic page example with PHP (server side scripting) &lt;/h1&gt;
+
+&lt;p&gt;
+  &lt;a href="./changeBackground.php?bgcolor=white"&gt;White&lt;/a&gt;
+    &lt;!-- 2 no-break-spaces here --&gt;
+  &lt;a href="./changeBackground.php?bgcolor=yellow"&gt;Yellow&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> L'emploi du langage <strong class="title">php</strong> apparaît seulement dans les lignes n° 8 à 11 qui codent une seule balise <code class="prettyprint lang-php">&lt;?php ?&gt;</code> :  </p>
+<ul>
+	<li> Cette balise construit l'<strong>objet</strong> <code class="prettyprint lang-php">body</code> de la page sous la forme d'une <strong>chaîne de caractère</strong> par <strong class="defin">concaténation</strong> de <strong>3 parties</strong>, sachant qu'en <strong>php</strong>, l'opérateur de concaténation est codé par le <strong>symbole</strong> <code class="prettyprint lang-php">.</code> (point).</li>
+
+	<li> L'<strong>attribut</strong> de style <em class="sigle">CSS</em> <code class="prettyprint lang-html">background</code> de cet objet est introduit dans la 2<sup>e</sup> partie de la chaîne : <br>
+  <span class="inline">
+  	<code class="prettyprint lang-php">htmlspecialchars($_GET['bgcolor'])</code>
+  </span> <br>
+  via la conversion en chaîne de caractères de la valeur de <strong>variable spéciale</strong> <code class="prettyprint lang-php">$_GET</code> à son <strong>index</strong> <code class="prettyprint lang-php">'bgcolor'</code>.  </li>
+
+  <div class="nobullet"> Cette variable <code class="prettyprint lang-php">$_GET</code> permet de <strong>récupérer les valeurs</strong> des variables transmises dans les <strong><em class="sigle">URL</em></strong> des requêtes adressées par le client au serveur. </div>
+
+  <div class="nobullet"> En l'occurrence, il s'agit de la <strong>variable</strong> <code class="prettyprint lang-html">bgcolor</code> qui prend respectivement les <strong>valeurs</strong> <code>white</code> et <code>yellow</code> dans les attributs <code class="prettyprint lang-php">href</code> des balises de <strong>liens</strong> <code class="prettyprint lang-php">&lt;a&gt; &lt;/a&gt;</code> codées aux lignes n° 14 & 16 (composante <em class="english">query</em> des <strong><em class="sigle">URL</em></strong>, cf. chap. R2‑I <a class="previous" href="Rc2-1_dns_url.html#URLquery" target="_BLANK"></a>). </div>
+</ul>
+
+ 
+<p> Avec seulement 22 lignes, ce code est <strong class="pros">presque aussi simple</strong> que celui proposé avec le langage <strong>JavaScript coté client</strong> (cf. chap. R2‑III <a class="previous" href="Rc2-3_webClient.html#exempleJSclient" target="_BLANK"></a>). Il peut être testé en plaçant son fichier directement dans le répertoire <code class="filename">www</code> d'une pile <strong><em class="sigle">AMP</em></strong> et en ouvrant un navigateur avec l'<strong><em class="sigle">URL</em></strong> : <br>
+<span class="inline">
+	<code class="filename">localhost/changeBackground.php?bgcolor=white</code>
+</span>	</p>
+
+<p style="margin-top: 1em" id="exPHPremarques"> <em class="remark">Remarques</em>. </p> 
+<ol class="littered" style="margin-top: 0em">
+	<li> Dans la pratique, pour des <strong class="title">fonctionnalités dynamiques simples</strong> comme ici, il ne fait aucun doute qu'on doit <strong class="defin">privilégier une solution côté client</strong> comme celle proposée avec <strong>JavaScript</strong>. Mais ici l'exemple est volontairement choisi pour sa simplicité, afin d'illustrer les mécanismes de communication entre le client et le serveur via des <strong><em class="sigle">URL</em></strong>. </li>
+
+	<li> Le code proposé ci‑dessus est certes efficace mais il <strong class="warning">manque de sûreté</strong>, puisqu'il injecte directement un champ d'<strong><em class="sigle">URL</em></strong> dans le code <strong><em class="sigle">HTML</em></strong> de la page web. Ainsi, il est possible de <strong class="cons">donner n'importe quelle couleur</strong> d'arrière‑plan à  
+		la page web, simplement en saisissant dans l'<strong><em class="sigle">URL</em></strong> une valeur non attendue pour le champ <code>bgcolor</code>, par exemple du <strong class="specialMg">magenta</strong> : <br>
+	<span class="inline">
+		<code class="filename">localhost/changeBackground.php?bgcolor=magenta</code>
+	</span>	</li>
+
+	<div class="nobullet"> Heureusement, il est facile d'empêcher une telle manipulation. On peut notamment coder une <strong>structure de contrôle intermédiaire</strong> pour l'affectation de l'attribut <code class="prettyprint lang-html">background</code> comme, par exemple :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:8">
+&lt;?php
+  if ($_GET['bgcolor'] == 'yellow')
+    echo "&lt;body style='background: yellow'&gt;";
+  else
+    echo "&lt;body style='background: white'&gt;";
+?&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<h4> Frameworks du langage <em class="mark">php</em> </h4>
+
+
+<p> Parce qu'il est massivement employé depuis plus de 20 ans, le langage <strong>php</strong> peut aujourd'hui s'appuyer sur de nombreux <strong class="title">frameworks</strong> pour le développement web – cf. la liste suivante <a class="external" href="https://fr.wikipedia.org/wiki/Liste_de_frameworks_PHP" target="_BLANK">W</a>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoLaravel.png" height="60px">
+	<img class="top-right" src="../img/logoSymfony.png" height="60px">
+	<img class="top-right" src="../img/logoZend.png" height="60px">
+	<img class="top-right" src="../img/logoCakePHP.png" height="60px">
+	<img class="top-right" src="../img/logoFuelPHP.png" height="60px">	
+<p> Parmi les plus populaires, on peut citer <strong>Laravel</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Laravel" target="_BLANK">W</a>, <strong>Symfony</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Symfony" target="_BLANK">W</a>, <strong>Zend Framework</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Zend_Framework" target="_BLANK">W</a> (à ne pas confondre avec <em class="mark">Zend Engine</em> – cf. supra), <strong>CakePHP</strong> <a class="external" href="https://fr.wikipedia.org/wiki/CakePHP" target="_BLANK">W</a>, <strong>FuelPHP</strong> <a class="external" href="https://fr.wikipedia.org/wiki/FuelPHP" target="_BLANK">W</a>…  </p>
+</div><!-- display -->
+
+
+<h3 id="NodeJS"> Le langage <em class="mark">JavaScript</em> </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/JSlogo.png" width="60px">
+<p> Inventé en 1996, le <strong>langage</strong> <strong class="title">JavaScript</strong> <a class="external" href="https://fr.wikipedia.org/wiki/JavaScript" target="_BLANK">W</a> est, on l'a vu, le principal langage de script pour le développement <em class="english">frontend</em> (côté client) – cf. chap. R2‑III <a class="previous" href="Rc2-3_webClient.html#moteurHTML" target="_BLANK"></a>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+<img class="top-right" src="../img/logoNodeJS.png" width="120px" style="padding-top: 0.0em">
+<p> Mais depuis 2009, il peut aussi être employé pour le <strong>backend</strong> grâce à la plateforme <strong class="specialG">Node.js</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Node.js" target="_BLANK">W</a> qui est <strong class="pros">libre</strong> de droit et <strong class="pros">open‑source</strong> :  </p>
+</div><!-- display -->
+<ul>
+	<li> elle est basée sur le <strong>moteur JavaScript V8</strong> <a class="external" href="https://fr.wikipedia.org/wiki/V8_(moteur_JavaScript)" target="_BLANK">W</a> du navigateur <em class="mark">Google Chrome</em> ;  </li>
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/logoNPM.png" width="80px" style="padding-top: 0.5em">
+	<li> elle est associée au <strong>gestionnaire de paquets</strong> <strong class="specialR">npm</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Npm" target="_BLANK">W</a> (<em class="english">node package manager</em>) qui la rend <strong class="pros">hyper‑modulaire</strong>. </li>
+	</div><!-- display -->
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Avec la plateforme <strong class="specialG">Node.js</strong>, le langage <strong class="title">JavaScript</strong> devient <strong class="pros">généraliste</strong>. Comme <em class="mark">php</em> : </p>
+<ul>
+	<li> il adopte une <strong class="defin">syntaxe</strong> très similaire à celle du langage <strong>C</strong>, en particulier pour les <strong>structures de contrôle</strong> et la <strong>ponctuation générale</strong> – avec néanmoins <strong class="warning">quelques subtiles différences</strong> ;  </li>
+
+	<li> <strong>multi‑paradigme</strong>, il est particulièrement bien adapté à la <strong class="defin">programmation orientée objet</strong> ; en particulier, il permet de décrire très facilement le <strong><em class="sigle">DOM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Document_Object_Model" target="_BLANK"></a> ou <strong>document object model</strong> d'une page web.  </li>
+</ul>
+<p> Employer <strong>JavaScript</strong> pour le codage <strong class="defin">coté serveur</strong> présente alors l'intérêt évident d'adopter le <strong class="pros">même langage</strong> de script que du <strong>coté client</strong>. Cela facilite le travail des codeurs qui, avec un seul langage, peuvent maîtriser l'ensemble de l'architecture d'une application. (On appelle <strong>développeur fullstack</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Développeur_full_stack" target="_BLANK"></a> un codeur disposant de cette compétence.)  </p>
+</div><!-- complement -->
+
+
+<h4 id="installationNode"> Installation de la plateforme <em class="mark">Node.js</em> </h4>
+
+
+<p> Dans le cadre du <strong>développement web</strong> sur un <strong>poste de travail</strong>, pour pouvoir tester localement des applications codées en <strong class="defin">JavaScript côté serveur</strong>, une procédure d'<strong class="title">installation</strong> de la plateforme <strong class="specialG">Node.js</strong> est préalablement nécessaire. En effet, elle n'est <strong class="warning">pas incluse</strong> dans les <strong>piles <em class="sigle">AMP</em></strong>. </p>
+
+<p> De plus, cette installation peut être effectuée <strong class="pros">indépendamment de toute pile <em class="sigle">AMP</em></strong>. </p>
+<ul>
+	<li> Avec un système <strong class="specialLB">Windows</strong>, on procède comme toujours en téléchargeant un <strong>installateur</strong> (<em class="english">setup</em>) <a class="external" href="https://nodejs.org/en/download/" target="_BLANK"></a> puis en suivant la procédure pas à pas. Cet installateur <strong class="pros">inclut</strong> le gestionnaire de paquet <strong class="specialLR">npm</strong>, qui n'a donc pas besoin d'être installé séparément. </li>
+
+	<li> Avec un système <strong class="specialLB">Linux</strong>, on procède dans un <strong>terminal</strong> de commandes en fonction de la distribution (cf. cette page officielle <a class="external" href="https://nodejs.org/en/download/package-manager/" target="_BLANK"></a>). </li>
+
+	<div class="nobullet"> Toutefois, la présence d'un <strong class="cons">serveur proxy</strong> peut compliquer la tâche. Avec une distribution basée sur <strong>Ubuntu</strong> (c'est le cas de <strong class="Mint">Mint</strong>), pour obtenir la <strong class="pros">dernière version</strong> de <strong class="specialG">Node.js</strong> et de <strong class="specialR">npm</strong>, il est recommandé de passer par l'installation du paquet <strong>nvm</strong> (<em class="english">node version manager</em>), comme ci‑dessous : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">curl</span> <span class="displayDarkRed">-o-</span> https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">bash</span>
+<span class="displayDarkGreen">source</span> ~/.bashrc
+<span class="displayDarkGreen">nvm list-remote</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+ 
+	<div class="nobullet"> Il ne reste alors plus qu'à choisir la <strong>dernière version stable</strong> et saisir une commande comme par exemple :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">nvm install</span> v16.13.1
+</pre>
+<!---------- ne pas indenter ----------> 
+</ul>	
+
+<p> Une fois l'installation effectuée, quel que soit le système, on peut consulter les <strong>numéros de versions</strong> en saisissant dans un <strong>terminal</strong> la commande : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">node</span> <span class="displayDarkRed">-v</span> <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">npm</span> <span class="displayDarkRed">-v</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p>	On peut également <strong class="title">vérifier</strong> que l'<strong class="defin">environnement d'exécution</strong> est opérationnel en saisissant la <strong>commande</strong> <code class="cmd">node</code>. Le terminal devient alors un interpréteur de commandes <strong class="defin">JavaScript</strong>, comme le montre par exemple la sortie d'exécution ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ node
+Welcome to Node.js v16.13.1.
+Type ".help" for more information.
+> console.log("Hello World!")
+Hello World!
+<span style="color:#606060">undefined</span>
+> 
+(To exit, press Ctrl+C again or Ctrl+D or type .exit)
+> 
+$
+</pre>
+<!---------- ne pas indenter ----------> 
+
+
+<h4 id="exempleJS"> Exemple académique d'utilisation de <em class="mark">JavaScript</em> en backend </h4>
+
+
+<div class="exemples">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/changeBackground.png" width="80px" style="padding-top: 0.5em">	
+<p> À titre d'illustration purement académique, et dans la continuité de l'exemple proposé pour le langage <em class="mark">php</em> (cf. supra <a class="supra" href="Rc2-4_webServeur.html#exemplePHP"></a>), le <strong class="title">code <em class="mark">JavaScript</em></strong> ci‑dessous, enregistrée dans un fichier nommé <code class="filename">changeBackground.js</code>, crée la même<strong> page web très simple</strong> avec <strong class="defin">deux balises de liens dynamiques</strong> permettant respectivement de <strong class="specialLB">choisir entre deux couleurs d'arrière‑plan</strong> (<span class="bkg-white">blanc</span> ou <span class="bkg-yellow">jaune</span>). </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-js linenums:1">
+var http = require("http"); 
+var url = require("url");
+var querystring = require("querystring"); 
+ 
+var callback = function(request, result) { 
+  result.writeHead(200, {"Content-Type": "text/html"}); 
+  var query = querystring.parse(url.parse(request.url).query);  
+  result.write(
+    "&lt;!DOCTYPE html&gt;" + 
+    "&lt;html&gt;" +
+    "&lt;head&gt;" +
+       "&lt;meta charset='utf-8'&gt;" + 
+       "&lt;title&gt;Dynamic page server JS &lt;/title&gt;" +
+    "&lt;/head&gt;" +
+    "&lt;body style='background:" + query['bgcolor'] +"'&gt;" +
+    "&lt;h1&gt; Dynamic page example with server side JS &lt;/h1&gt;" +
+    "&lt;p&gt;&lt;a href='./changeBackground.js?bgcolor=white'&gt;White&lt;/a&gt;" + 
+    "   " + 
+    "   &lt;a href='./changeBackground.js?bgcolor=yellow'&gt;Yellow&lt;/a&gt;&lt;/p&gt;" +
+    "&lt;/body&gt;" +
+    "&lt;/html&gt;"
+  );
+  result.end();
+} 
+ 
+var serveur = http.createServer(callback); 
+serveur.listen(8080); // port number
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<div class="expert">
+<p> Avant de décrire en détail ce code, remarquons que sa <strong class="title">structure</strong> est <strong class="warning">très différente</strong> de celle du code en langage <em class="mark">php</em> pour la même page web. Il consiste essentiellement en la définition, à partir de la ligne n° 5, d'une <strong class="defin">fonction de callback</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fonction_de_rappel" target="_BLANK">W</a>, qui est destinée à être appelée à chaque fois que le serveur reçoit une requête <strong><em class="sigle">HTTP</em></strong> – le rôle de cette fonction étant de générer la <strong class="specialG">réponse <em class="sigle">HTTP</em></strong> (cf. chap. R2‑III <a class="previous" href="Rc2-3_webClient.html#HTTPresponse" target="_BLANK"></a>). </p>
+
+<p> Voyons maintenant comment est codée cette <strong class="title">fonction de callback</strong> : </p>
+<ul>
+	<li> En ligne n° 6, l'appel de la <strong>méthode</strong> <code class="cmd">writeHead</code> génère la <strong class="defin">ligne initiale</strong> de la <strong>réponse <em class="sigle">HTTP</em></strong>, avec le code de statut <code>200</code> (succès) et le type de contenu <code>text/html</code> du corps de la réponse. </li>
+
+	<li> En ligne n° 7, l'appel de la <strong>méthode</strong> <code class="cmd">parse</code> permet la <strong class="defin">récupération des données</strong> contenues dans la requête (composantes <em class="english">query</em>) et leur sauvegarde dans une variable nommée <code>query</code>, implicitement de type <em>tableau</em>. </li>
+
+  <li> En lignes n° 8 à 21, l'appel de la <strong>méthode</strong> <code class="cmd">write</code> génère le <strong class="defin">code <em class="sigle">HTML</em> de la page web</strong> sous la forme de <strong>concaténations</strong> successives de <strong class="specialO">chaînes de caractères</strong> – opérations codées par le <strong>symbole</strong> <code class="prettyprint lang-js">+</code>. </li>
+  <ul>
+  	<li> Dans la <strong>balise</strong> <code class="cmd" style="color: darkorange;">&lt;body&gt;&lt;/body&gt;</code> vient s'insérer la valeur de l'attribut de style <code>background</code> de l'<strong>objet</strong> <code>body</code> sous la forme du champ <code>bgcolor</code> extrait de la variable <code>query</code> (ligne n° 15). </li>
+  
+  	<li> Et comme dans le code en <em class="mark">php</em>, la valeur de ce <strong>champ</strong> <code>bgcolor</code> apparaît dans la partie requête des <strong><em class="sigle">URL</em></strong> codées pour les attributs <strong>href</strong> respectives des balises <code class="cmd" style="color: darkorange;">&lt;a&gt;&lt;/a&gt;</code> (lignes n° 17 et 19). </li>
+  </ul>
+</ul>
+
+<p class="square"> Grâce aux lignes n° 26 et 27 du code ci‑dessus, on le peut <strong class="title">tester</strong> même <strong class="pros">sans disposer d'un serveur web</strong> ni d'une pile <em class="sigle">AMP</em> (mais à condition d'avoir installé sur le poste de travail la plateforme <strong class="specialG">Node.js</strong> – cf. supra <a class="supra" href="Rc2-4_webServeur.html#installationNode"></a>). Il suffit alors simplement : </p>
+<ul>
+	<li> de saisir dans un <strong>terminal</strong> de commandes en ligne : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">node</span> changeBackground.js
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<li> puis, dans <strong>navigateur</strong>,  d'ouvrir l'<strong><em class="sigle">URL</em></strong> <code class="filename">http://localhost:8080</code>. </li>
+</ul>
+
+<p> De plus, en cas de <strong class="title">modification</strong> du fichier de <strong>code</strong> <code class="filename">.js</code>, il est nécessaire de <strong class="defin">relancer la commande</strong> <code class="displayDarkGreen">node</code> (après une annulation par <code><em>Ctrl</em>-C</code>) avant de <strong>recharger la page</strong> dans le navigateur.</p>
+
+<p style="margin-top: 1em"> <em class="remark">Remarques</em>.</p> 
+<ol class="littered" style="margin-top: 0em">
+	<li> Là encore, pour des fonctionnalités dynamiques aussi simples, la solution avec <strong class="defin">JavaScript côté client</strong> proposée au chap. R2‑III <a class="previous" href="Rc2-3_webClient.html#exempleJSclient" target="_BLANK"></a> est évidemment <strong class="pros">bien plus efficace</strong>. La motivation d'une solution côté serveur reste ici purement pédagogique. </li>
+
+	<li> Comme pour la solution codée en <strong>php</strong> (cf. supra <a class="supra" href="Rc2-4_webServeur.html#exPHPremarques" ></a>), il est <strong class="warning">déconseillé</strong> d'injecter directement la valeur d'un champ d'<strong><em class="sigle">URL</em></strong> dans le code <strong><em class="sigle">HTML</em></strong> de la page (cf. ligne n° 15 . Il est préférable d'opérer par une <strong>variable intermédiaire</strong> et une <strong>structure de contrôle</strong> en ajoutant sous la ligne n° 7 les deux lignes de code ci‑dessous : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-js linenums:8">
+  var backgroundColor = "white";
+  if (query['bgcolor'] == "yellow") backgroundColor = "yellow";
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> et de remplacer l'ancienne ligne n° 15 par :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-js linenums:17">
+    "&lt;body style='background:" + backgroundColor +"'&gt;" +
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ol>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h4> Frameworks du langage <em class="mark">JavaScript</em> coté serveur </h4>
+
+
+<p> Rappelons que <strong class="defin">JavaScript</strong> est avant tout le principal langage de script pour le codage des pages web <strong>côté client</strong>, et ainsi en va‑t‑il de ses <em class="english">frameworks</em> les plus populaires (<em class="mark">Angular</em>, <em class="mark">React</em>, etc.) </p>
+
+<p> Mais également, de nombreux <strong class="title">frameworks</strong> ont également été développés pour <strong class="defin">JavaScript</strong> lorsqu'il est employé <strong>côté serveur</strong>. On peut en particulier citer <em class="mark">Express.js</em> <a class="external" href="https://en.wikipedia.org/wiki/Express.js" target="_BLANK"></a>, <em class="mark">Next.js</em> <a class="external" href="https://en.wikipedia.org/wiki/Next.js" target="_BLANK"></a> et <em class="mark">Meteor</em> <a class="external" href="https://en.wikipedia.org/wiki/Meteor_(web_framework)" target="_BLANK"></a>. </p>
+
+
+
+<h3 id="CandCpp"> Les langages <em class="mark">C/C++</em> (pour sites web embarqués) </h3>
+
+
+<div class="important">
+<p> Pour coder un <strong>site web embarqué</strong> sur une <strong class="defin">carte à microcontrôleur</strong>, il n'y a pas d'autre alternative que d'utiliser le langage de programmation du microcontrôleur – à savoir <strong>presque toujours</strong> <strong class="title">C</strong> ou <strong class="title">C++</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces langages ont été présentés en détail au chap. C1‑II <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-2_langagesCetCpp.html" target="_BLANK">C</a>. Quelques points restent ici à souligner. </p>
+
+<ul>
+	<li> <strong class="title">C</strong> et <strong class="title">C++</strong> sont des langages <strong class="defin">généralistes</strong>. Ils  permettent donc de coder n'importe quelle application, y compris une application web. Mais ils ne sont <strong class="cons">pas optimisés</strong> pour cela (surtout <em class="mark">C</em>) et dans la pratique, on privilégie plutôt d'autres langages (<em class="mark">Python</em>, <em class="mark">Ruby</em>, <em class="mark">Perl</em>, etc.). On trouve néanmoins <strong>quelques frameworks</strong> de développement web ont été créés pour <strong class="defin">C++</strong>.  </li>
+
+	<li> <strong class="title">C</strong> et <strong class="title">C++</strong> sont des langages <strong class="defin">compilés</strong>, ce qui confère à leurs programme une grande <strong class="pros">rapidité d'exécution</strong> et ce dans un <strong class="pros">environnement minimal</strong> (aucune machine virtuelle n'est requise, ni interpréteur s'exécutant en tâche de fond).  </li>
+</ul>
+</div><!-- complement --> 
+
+<div class="exemples">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/changeBackground.png" width="80px" style="padding-top: 0em">	
+<p class="exemple"> Il s'agit encore d'une illustration purement académique, en continuité avec les exemples proposés supra pour <em class="mark">php</em> <a class="supra" href="Rc2-4_webServeur.html#exemplePHP"></a> et <em class="mark">JavaScript</em> <a class="supra" href="Rc2-4_webServeur.html#exempleJS"></a>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/ArduinoEthernetShield.png" width="200px" style="padding-top: 0em">	
+<p> Le <strong class="title">code C++</strong> ci‑dessous, enregistré dans un fichier nommé <code class="filename">changeBackground.ino</code> est conçu pour être embarqué sur une <strong class="Arduino">carte Arduino</em></strong> équipé d'un <strong>shield Ethernet</strong>. Il en fait un serveur de la même <strong>page web très simple</strong> avec <strong class="defin">deux balises de liens dynamiques</strong> permettant respectivement de <strong class="title">choisir entre deux couleurs d'arrière‑plan</strong> (<span class="bkg-white">blanc</span> ou <span class="bkg-yellow">jaune</span>). </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;SPI.h&gt;
+#include &lt;Ethernet.h&gt;
+
+const int spiEthernetPin = 10; // pin number on board
+
+byte mac[] = {0x90, 0xA2, 0xDA, 0x0D, 0x15, 0x43};
+
+EthernetServer server(80);
+
+const char pageHead[] = R"=====(
+&lt;!DOCTYPE html&gt;
+  &lt;html lang='fr'&gt;
+  &lt;head&gt;
+    &lt;meta charset='utf-8'&gt;
+    &lt;title&gt;Dynamic page Arduino&lt;/title&gt;
+  &lt;/head&gt;
+)=====";
+
+const char pageTail[] = R"=====(
+&lt;h1&gt; Dynamic page example embedded on Arduino board &lt;/h1&gt;
+&lt;p&gt;&lt;a href='./?bgcolor=white'&gt;White&lt;/a&gt;
+     &lt;!-- 2 non‑break spaces here as inter-margin --&gt;
+   &lt;a href='./?bgcolor=yellow'&gt;Yellow&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+)=====";
+
+
+void setup() {
+  Ethernet.init(spiEthernetPin);
+  Ethernet.begin(mac);
+  // Serial.begin(115200); // only for debug
+}
+
+void loop() {
+  EthernetClient client = server.available();
+  if (client) {
+    String clientRequest = "";
+    while (client.connected() && client.available()) {
+      // read request characters 1 by 1
+      char c = client.read();  
+      clientRequest += c;   
+      // Serial.write(c);   // only for debug
+
+      // only the first line of the request is needed
+      if (c == '\n') { 
+        // send response to the client
+        client.println("HTTP/1.1 200 OK");
+        client.println("Content-Type: text/html");
+        client.println(); // blank line (\n\r)
+
+        // start of response body
+        client.println(pageHead);
+        if (clientRequest.indexOf("bgcolor=yellow") > 0) {
+          client.print("&lt;body style='background: yellow'&gt;");
+        }
+        else {
+          client.print("&lt;body style='background: white'&gt;");
+        }
+        client.print(pageTail);
+        // end of response body
+
+        delay(1); // give the web browser time to receive the data
+        client.stop();
+        break;
+      }
+    }
+  } 
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Évidemment, ce <strong class="title">code C++</strong> est <strong class="cons">beaucoup plus long</strong> que dans les exemples précédents, puisque le système embarqué doit <strong>tout prendre en charge</strong> (connexion au réseau, etc.) sans s'appuyer sur un système d'exploitation. Néanmoins, ce code reste d'une <strong class="pros">complexité raisonnable</strong> car il s'appuie sur le module de <strong class="Arduino">bibliothèque Arduino</strong> <code class="filename">Ethernet.h</code> avec de nombreuses fonctions de haut niveau prêtes à l'emploi. En particulier, la connexion Ethernet au réseau local en mode <strong><em class="sigle">DHCP</em></strong> peut très facilement se coder, comme expliqué au chap. R2‑II <a class="previous" href="Rc2-2_dhcp.html#carteMicrocontroleur" target="_BLANK"></a>. </p>
+
+<div class="expert">
+<p> Dans son principe, ce  <strong class="title">code C++</strong> peut être comparé à celui composé en <em class="mark">JavaScript</em>, puisqu'il consiste essentiellement à <strong class="defin">générer des réponses <em class="sigle">HTTP</em></strong> aux requêtes d'un client. </p>
+
+<p> Mais ici, le <strong class="title">code <em class="sigle">HTML</em></strong> de la page web</strong> qui sera inséré dans le corps de la réponse est préalablement déclaré sous la forme de <strong class="specialO">deux chaînes de caractères brutes</strong> (d'où le préfixe <code>R</code> pour <em class="english">raw</em> – cf. chap. C5‑VI <a class="next" href="../../ModuleC/C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html#rawString" target="_BLANK"></a>). Elles apparaissent respectivement aux lignes n° 10 (<code>pageHead</code>) et 19 (<code>pageTail</code>). L'usage des chaînes brutes <strong class="pros">facilite l'édition</strong> du code, qui peut même être déporté dans des fichiers séparés et insérés dans le code via des directives d'inclusion. </p>
+
+<p> Tout d'abord, le programme consiste à <strong class="defin">attendre la requête d'un client</strong> et à déclarer un <strong>objet</strong> nommé <code class="prettyprint lang-c">client</code> de la classe <code class="prettyprint lang-c">EthernetClient</code> en lui affectant le nombre d'octets disponibles en lecture retournés par la méthode <code class="prettyprint lang-c">available</code>(ligne n° 36). </p>
+
+<p> Ensuite, dans le cas d'une requête à traiter, le programme effectue les actions suivantes :  </p>
+<ul>
+	<li> Il mémorise dans une chaîne de caractère nommée <code>clientRequest</code> les <strong>caractères</strong> de la première ligne de la requête (lignes n° 41 & 42). </li>
+
+	<div class="nobullet"> En effet, il n'est pas nécessaire de scanner plus de caractères, car la donnée recherchée – la valeur affectée à la question <code>?bgcolor</code> – est incluse dans la <code>cible</code> de la requête, donc sans la première ligne (1<sup>er</sup> en‑tête – cf. chap. R2‑III <a class="previous" href="Rc2-3_webClient.html#ligneInitiale" target="_BLANK"></a>). </div>
+
+	<li> Lorsque cette première ligne de la requête est mémorisée (caractère <strong>newline</strong> <code class="prettyprint lang-c">'\n'</code> détecté – cf. ligne n° 46), le programme <strong class="defin">génère une réponse</strong> en commençant par composer par appels successifs de la <strong>méthode</strong> <code class="prettyprint lang-c">client.println</code> (distincte de celle l'objet <code class="prettyprint lang-c">Serial</code>) : </li>
+  <ul>
+  	<li> la <strong>ligne initiale</strong> avec le code <code>200</code> de succès (ligne n° 48) ;  </li>
+  
+  	<li> l'<strong>en‑tête</strong> <code>Content-Type</code> avec la valeur <code>text/html</code> (ligne n° 49) ; </li>
+
+  	<li> la <strong>ligne vide</strong> séparant les en‑têtes du corps de la réponse (ligne n° 50) ; </li>
+
+  	<li> dans le <strong>corps de la réponse</strong>, le début de la page web mémorisé dans la chaîne de caractères brute <code>pageHead</code> (ligne n° 50). </li>
+  </ul>
+  
+  <li> Ensuite, le programme teste si la chaîne <code>clientRequest</code> comporte la <strong>sous‑chaîne</strong> <code>"bgcolor=yellow"</code> à l'aide de la la <strong>méthode</strong> <code class="prettyprint lang-c">indexOf</code> de la classe <code class="prettyprint lang-c">String</code> en <strong>C++</strong> (ligne n° 54). </li>
+	<ul>
+		<li> si tel est le cas, le programme ajoute dans le corps de la réponse l'<strong>objet</strong> <code>body</code> avec l'<strong>attribut</strong> de style <code>background: yellow</code> (ligne n° 55) ; </li>
+	
+		<li> et sinon, il fait la même chose mais avec la <strong>valeur par défaut</strong> <code>background: white</code> (ligne n° 58). </li>
+	</ul>
+  
+  <li> Pour finir, le programme termine le <strong>corps de la réponse</strong> avec la <strong>fin de la page web</strong> mémorisée dans la chaîne de caractères brute <code>pageTail</code> (ligne n° 60).  </li>
+</ul>
+
+<p class="square"> Pour <strong class="title">tester</strong> ce programme, il suffit : </p>
+<ul>
+	<li> bien évidemment, de <strong>téléverser le programme</strong> sur la carte raccordée au réseau local du poste de travail ; </li>
+
+	<li> de scanner le réseau pour déterminer l'<strong class="specialY">adresse <em class="sigle">IP</em></strong> allouée au <strong>shield Ethernet</strong> par le serveur <strong><em class="sigle">DHCP</em></strong> local ;  </li>
+
+	<li> d'ouvrir la page web avec un navigateur en saisissant <strong><em class="sigle">URL</em></strong> : <br>
+  <span class="inline">
+  	<code class="filename">http://<span class="nocode"><strong class="specialY">adresse <em class="sigle">IP</em> du shield</strong></span></code>
+  </span> </li>
+</ul>
+
+
+<p style="margin-top:1em"> <em class="remark">Remarque</em>. Dans le <strong>framework</strong> <strong class="Arduino">Arduino</strong>, on ne trouve <strong class="cons">pas de fonction puissante d'analyse</strong> du texte de la requête du client, comme <code class="cmd">parse</code> en <em class="mark">JavaScript</em>, ni de variable structurée comme <code class="cmd">$_GET</code> en <em class="mark">php</em>.  </p>
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+
+<div class="expert">
+<h3> Autres langages de backend </h3>
+
+
+<h4> Le langage <em class="mark">Java</em> </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/logoJava.png" width="80px">
+<p> Inventé en 1995, <strong class="title">Java</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Java_(langage)" target="_BLANK">W</a> est un langage de programmation <strong>généraliste</strong> qui permet de pré‑compiler des programmes en <em class="mark">bytecode</em> s'exécutant via une <strong class="defin">machine virtuelle</strong> (<em class="english">Java runtime environment</em> <a class="external" href="https://fr.wikipedia.org/wiki/Environnement_d'exécution_Java" target="_BLANK">W</a> ou <strong><em class="sigle">JRE</em></strong>), le rendant potentiellement portable sur toute architecture pour laquelle une telle machine virtuelle est développée. </p>
+
+<p> Utilisable dans les pages web <strong>côté client</strong> pour créer des <strong>applets</strong> (cf. chap. R2‑III <a class="previous" href="Rc2-3_webClient.html#extensionsPlugins" target="_BLANK"></a>), le langage <strong>Java</strong> est donc aussi utilisable <strong class="title">côté serveur</strong>, où l'on parle alors de <strong class="defin">servlets</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Servlet" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le langage <strong>Java</strong> est également directement utilisable dans des pages de code <strong><em class="sigle">HTML</em></strong> par la technique des <strong class="title">JavaServer Pages</strong> <a class="external" href="https://fr.wikipedia.org/wiki/JavaServer_Pages" target="_BLANK">W</a>.  </p>
+
+<p> Parmi les <strong class="title">frameworks</strong> de <strong>Java</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Liste_de_frameworks_Java" target="_BLANK">W</a> utilisés pour le <strong class="defin">backend</strong>, on peut citer <em class="mark">Apache Struts</em> <a class="external" href="https://fr.wikipedia.org/wiki/Apache_Struts" target="_BLANK">W</a>, <em class="mark">Play</em> <a class="external" href="https://fr.wikipedia.org/wiki/Play_Framework" target="_BLANK">W</a>, <em class="mark">Spring</em> <a class="external" href="https://fr.wikipedia.org/wiki/Spring_(framework)" target="_BLANK">W</a>, <em class="mark">Hibernate</em> <a class="external" href="https://fr.wikipedia.org/wiki/Hibernate" target="_BLANK">W</a>…  </p>
+</div><!-- complement -->
+
+
+<div class="remarques" id="JavaSun">
+<div  style="display: inline-block;">
+	<img class="top-right" src="../img/logoSUN.png" width="180px" style="padding-top: 0.5em">
+<p class="remarque"> À l'origine, <strong class="title">Java</strong> était un projet <strong class="pros">open source</strong> développé au sein de la société californienne <strong>Sun microsystems</strong> (constructeur de serveurs et de stations de travail, mais aussi développeur du système d'exploitation <strong>Unix</strong> <em class="mark">Solaris</em>). </p>
+</div><!-- display -->
+
+<div  style="display: inline-block;">
+	<img class="top-right" src="../img/logoOracle.png" width="180px" style="padding-top: 0.5em">
+<p> Cette dernière a été rachetée en 2008 par la société <strong>Oracle</strong>, acteur majeur dans le domaine des systèmes de gestion de bases de données (cf. infra <a class="infra" href="Rc2-4_webServeur.html#Oracle"></a>). C'est elle qui assure depuis la maintenance et le développement du langage <strong class="title">Java</strong>.</p>
+</div><!-- display -->
+</div><!-- remarque -->
+
+
+
+<!-- expert -->
+<h4> Le langage <em class="mark">C#</em> </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/logoCsharp.png" width="100px">
+<p> Inventé en 2001, <strong class="title">C#</strong> <a class="external" href="https://fr.wikipedia.org/wiki/C_sharp" target="_BLANK">W</a> est un langage de programmation <strong>généraliste</strong>. Comme <em class="mark">Java</em>, il procède par pré‑compilation de composants dans un langage intermédiaire (<strong><em class="sigle">CIL</em></strong> ou <em class="english">Common intermediate language</em> <a class="external" href="https://fr.wikipedia.org/wiki/Common_Intermediate_Language" target="_BLANK">W</a>). Ce code est ensuite interprété dans un <strong class="defin">environnement d'exécution</strong> communément appelé la <strong>plate‑forme .NET</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Microsoft_.NET" target="_BLANK">W</a> et basée sur les systèmes d'exploitation <strong>Windows</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/logoNET.png" width="150px" style="padding-top: 0.5em">
+<p> Pour le développement web <strong class="defin">côté serveur</strong>, le codeur en langage <strong>C#</strong> peut s'appuyer sur un très gros <strong class="title">framework</strong> nommé <strong>ASP.NET</strong> <a class="external" href="https://fr.wikipedia.org/wiki/ASP.NET" target="_BLANK">W</a>. Il permet d'insérer des appels de code source <strong>C#</strong> dans un fichier de code <strong><em class="sigle">HTML</em></strong>, notamment par l'intermédiaire de <em class="english">widgets</em> <a class="external" href="https://fr.wikipedia.org/wiki/Composant_d'interface_graphique" target="_BLANK">W</a> appelés <strong>Web controls</strong>.  </p>
+</div><!-- complement -->
+
+
+<!-- expert -->
+<h4> Le langage <em class="mark">Python</em> </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/logoPython.png" width="100px">
+<p> Inventé en 1991, <strong class="title">Python</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Python_(langage)" target="_BLANK">W</a> est un langage de programmation <strong>interprété</strong> et <strong>généraliste</strong>, placé sous <strong class="pros">licence libre</strong>. Universellement employé dans les systèmes d'exploitation (ordinateurs, smartphones), son <strong class="defin">interpréteur</strong> y est presque toujours <strong class="pros">déjà installé</strong>.  </p>
+
+<p> Apprécié pour sa <strong class="pros">syntaxe légère</strong> mais explicite, <strong class="title">Python</strong> dispose d'un <strong>très grand nombre</strong> de <strong class="defin">bibliothèques spécialisées</strong>, notamment dans les domaines du calcul scientifique, de l'intelligence artificielle, du traitement massif des données (<em class="english">data science</em>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On peut aisément <strong>vérifier</strong> qu'un <strong class="title">interpréteur Python 3</strong> est installé sur une machine en saisissant dans un terminal de commandes en ligne : </p>
+<ul>
+	<li> <code class="displayDark"><span class="displayDarkGreen">type</span> python3</code> avec un système <strong class="specialLB">Linux</strong> ;  </li>
+
+	<li> <code class="displayDark"><span class="displayDarkGreen">where</span> python3</code> avec un système <strong class="specialLB">Windows</strong>.  </li>
+</ul>
+<p> Et pour l'anecdote, dans la marque <strong class="Raspberry">Raspberry Pi</strong>, le terme « <strong>Pi</strong> » fait référence à <strong>Python interpreter</strong>. </p>
+
+<div style="display: inline-block;">
+<img class="top-right" src="../img/logoDjango.png" width="150px" style="padding-top: 0.5em">
+<p> De part sa popularité, <strong>Python</strong> est beaucoup utilisé pour le <strong class="defin">développement web côté serveur</strong>. Divers <strong class="title">frameworks</strong> existent, parmi lesquels on peut notamment citer <strong>Django</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Django_(framework)" target="_BLANK">W</a>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les bases de données </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<h4> Notion de base de donnée </h4>
+
+
+
+<div class="expert">
+<p> La plupart des <strong class="title">applications web</strong> manipulent un <strong class="defin">très grand nombre de données</strong>. C'est notamment le cas : </p>
+<ul>
+	<li> de tout <strong>site commercial</strong>, qui fait appel à son « fichier » de clients enregistrés, son catalogue de produits, ses listes de promotion, etc. ;   </li>
+
+	<li> de tout <strong>site administratif</strong> (médical, fiscal, etc.) avec là encore des usagers enregistrés dont il faut mémoriser toutes les informations ; </li>
+
+	<li> de tout <strong>site d'information</strong> (média en ligne) qui permet d'accéder à l'historique de ses publications… </li>
+</ul>
+
+<p> Or ces <strong class="title">données</strong> sont souvent <strong class="defin">utilisées par d'autres applications informatiques</strong>, typiquement des <strong>progiciels de gestion intégrés</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Progiciel_de_gestion_intégré" target="_BLANK">W</a>. Elles ne peuvent donc <strong class="warning">pas</strong> être codées directement dans les fichiers des pages web. En effet : </p>
+<ul>
+	<li> ce serait presque toujours <strong class="cons">techniquement infaisable</strong> en raison du trop grand nombre de données (il en résulterait des fichiers de code <em class="sigle">HTML</em> immenses) ;  </li>
+
+	<li> cela reviendrait à les dupliquer par rapport à leur format d'origine, avec tous les <strong class="cons">problèmes de mise à jour</strong> que cela induirait ;   </li>
+
+	<li> cela rendrait leur <strong class="cons">accès particulièrement malcommode</strong> dans l'application web (avec notamment la difficulté à effectuer des tris dans un format qui n'est pas prévu pour cela). </li>
+</ul>
+</div><!-- expert -->
+
+<div class="important">
+<p> Pour stocker des données en grand nombre, on emploie une <strong>structure informatique dédiée</strong> appelée <strong class="title">base de données</strong>, en abrégé <strong class="title"><em class="sigle">BDD</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Base_de_données" target="_BLANK">W</a> – en anglais, <strong>database</strong>, en abrégé <strong><em class="sigle">DB</em></strong>. Dans une telle structure : </p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/databaseStructure.png" width="350px" style="padding-top: 0.2em">
+<ul>
+	<li> les <strong class="specialLB">données</strong> – en anglais, <strong>data</strong>, qui est un pluriel – sont numérisées dans des <strong>fichiers</strong> sous un <strong class="defin">format binaire</strong> (et non pas sous forme de texte) ;    </li>
+
+	<li> l'<strong class="specialLB">accès</strong> aux données en <strong>lecture</strong> et <strong>écriture</strong> n'est possible que via une <strong class="defin">application spécifique</strong>, appelée <strong class="title">système de gestion de base de données</strong> ou <strong class="title"><em class="sigle">SGBD</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Système_de_gestion_de_base_de_données" target="_BLANK">W</a> – en anglais, <strong>database managment system</strong>, abrégé <strong><em class="sigle">DBMS</em></strong>. </li>
+</ul>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">formats binaires</strong> des fichiers de données incluent des <strong class="defin">systèmes d'indexation</strong> complexes qui optimisent les temps d'accès. Ils sont « incompréhensibles » pour un utilisateur, à l'instar du code exécutable d'un programme compilé. Ils ne doivent <strong class="warning">en aucun cas</strong> être accédés autrement que par le <strong><em class="sigle">SGBD</em></strong>, au risque sinon de <strong class="cons">corrompre la base de données</strong> dans son ensemble. </p>
+
+<p> Le <strong class="title"><em class="sigle">SGBD</em></strong> est donc un logiciel <strong class="warning">incontournable</strong> tant pour la création que la manipulation d'une base de données. En contre‑partie, il apporte des <strong class="defin">fonctionnalités</strong> beaucoup plus <strong class="pros">performantes</strong> que celles que l'on pourrait mettre en œuvre avec de simples fichiers, même au format <code>csv</code>, <code>json</code> ou autre…. En particulier, on peut effectuer :  </p>
+<ul>
+	<li> des <strong>requêtes multi‑critères</strong> complexes, associées à des fonctions de <strong>tri</strong> ;  </li>
+
+	<li> des <strong>accès multi‑utilisateurs</strong> avec gestion des droits, systèmes de verrouillage sécurisant les opérations de lectures (éventuellement simultanées) et d'écriture, journalisation des transactions et reprise en cas d'écriture interrompue par une panne pour ne pas corrompre les données, etc. </li>
+</ul>
+
+</div><!-- complement -->
+
+<p> Par ailleurs, il existe <strong class="title">différents modèles</strong> de <strong>bases de données</strong>, car la question cruciale de la <strong class="defin">structuration des données</strong> se pose différemment selon les domaines (commercial, scientifique, administratif, géographique, etc.). Néanmoins, le modèle de loin <strong>le plus répandu</strong> est celui de la <strong class="specialLB">base de donnée relationnelle</strong>, étudié ci‑après. On parle alors de <strong class="specialLB"><em class="sigle">SGBDR</em></strong> pour désigner son logiciel de gestion.  </p>
+
+
+<h4> Technologie matérielle </h4>
+
+
+<div class="complement">
+<div style="display: inline-block:">
+	<img class="top-right" src="../img/serverLogo0.png" width="100px" style="padding-top: 0.2em">
+<p> Comme le langage de backend, la mise en œuvre d'une <strong>base de donnée</strong> nécessite une <strong class="title">machine de type serveur</strong>, avec ici la spécificité de requérir un <strong class="defin">grand volume de stockage</strong> (cf. chap. R2‑V <a class="next" href="Rc2-5_serveursFichiers.html" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+<p> Lorsque cela est possible, il est plus simple d'installer la <strong class="title">base de données</strong> sur la <strong class="pros">même machine</strong> que celle où s'exécute le serveur <strong><em class="sigle">HTTP</em></strong> et le langage de backend. Mais il est tout à fait usuel d'employer une <strong>machine différente</strong>, éventuellement située sur un <strong>site distant</strong>. Il faut alors en paramétrer les accès. </p>
+</div><!-- complement -->
+
+
+<h4 id="Oracle"> Le domaine des bases de données </h4>
+
+
+<div class="complement">
+<p> Les <strong>bases de données</strong> constituent un <strong class="title">domaine de l'informatique</strong> à la fois <strong class="defin">très vaste</strong> et <strong class="warning">très complexe</strong>. Avec l'essor du <strong>big data</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Big_data" target="_BLANK">W</a>, il n'a cessé de gagner en <strong class="warning">importance stratégique</strong>. </p>
+</div><!-- complement -->
+
+<p class="square"> Le <strong class="title">marché des <em class="sigle">SGBD</em></strong> est principalement dominé par l'entreprise californienne <strong>Oracle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Oracle_(entreprise)" target="_BLANK">W</a> qui distribue : </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoOracleDB.png" height="80px" style="padding-top: 0.5em">
+	<li> <strong class="specialLB">Oracle Database</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Oracle_Database" target="_BLANK">W</a>, logiciel propriétaire et payant destiné aux grandes entreprises et organisations ; il en existe aussi une <strong class="pros">version gratuite</strong> mais <strong class="cons">limitée</strong> en termes de volume (12 Go), dite <strong>express edition</strong> <a class="external" href="https://www.oracle.com/fr/database/technologies/appdev/xe.html" target="_BLANK"></a>. </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/logoMySQL.png" height="80px" style="padding-top: 0.5em">
+  <li> <strong class="specialLB">MySQL</strong> <a class="external" href="https://fr.wikipedia.org/wiki/MySQL" target="_BLANK">W</a>, logiciel initialement <strong class="pros">libre</strong> et <strong class="pros">open source</strong>, acquis par <em class="mark">Oracle</em> via le rachat de la société <em class="mark">Sun microsystems</em> (cf. supra <a class="supra" href="Rc2-4_webServeur.html#JavaSun"></a>) ; il reste aujourd'hui disponible gratuitement. </li>
+	</div><!-- display -->
+</ul>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoMariaDB.png" height="70px" style="padding-top: 0.5em">
+<p> Depuis son acquisition par <em class="mark">Oracle</em>, le principal créateur de <strong>MySQL</strong>, Mickael Widenius <a class="external" href="https://fr.wikipedia.org/wiki/Michael_Widenius" target="_BLANK">W</a>, en a développé un <strong>fork</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fork_(développement_logiciel)" target="_BLANK">W</a> <strong class="pros">libre</strong> et <strong class="pros">open-source</strong>, appelé <strong class="specialLB">MariaDB</strong> <a class="external" href="https://fr.wikipedia.org/wiki/MariaDB" target="_BLANK">W</a>. Ce <strong><em class="sigle">SGBDR</em></strong> est désormais adopté par défaut sur la plupart des systèmes <strong>Linux</strong>. </p>
+</div><!-- display -->
+
+
+<div class="expert">
+<p class="square"> Par ailleurs, parmi les grands acteurs du marché, on peut également citer <strong>Microsoft</strong> et ses logiciels propriétaires : </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/logoMSaccess.png" height="50px" style="padding-top: 0.2em">
+	<li> <strong class="specialLB">Access</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Microsoft_Access" target="_BLANK">W</a>, qui est intégré à la suite bureautique <strong>Office</strong> (avec <em class="mark">Word</em>, <em class="mark">Excel</em>, etc.) ;  </li>
+	</div><!-- display -->
+  
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/logoSQLserver.png" height="80px" style="padding-top: 0.2em">
+	<li> <strong class="specialLB">SQL server</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Microsoft_SQL_Server" target="_BLANK">W</a>, qui est mieux adapté que <em class="mark">Access</em> pour les <strong>applications web</strong> et qui existe en plusieurs <strong class="pros">versions gratuites</strong> mais <strong class="cons">limitées</strong> <a class="external" href="https://www.microsoft.com/fr-fr/sql-server/sql-server-downloads" target="_BLANK"></a>. </li>
+	</div><!-- display -->
+</ul>
+</div><!-- expert -->
+
+
+
+<h3> Base de données relationnelle </h3>
+
+
+
+<div class="important">
+<p> Une <strong class="title">base de donnée relationnelle</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Base_de_données_relationnelle" target="_BLANK">W</a> (en anglais, <em class="english">relational database</em>) est une base de données dans laquelle les données sont <strong>structurées</strong> sous forme de <strong>tableaux à deux dimensions</strong>, qu'on appelle <strong class="defin">tables</strong>. Dans une table : </p>
+<ul>
+	<li> chaque <strong class="specialLB">ligne</strong> est appelée un <strong class="defin">enregistrement</strong> (en anglais, <em class="english">record</em>) dans la base,  </li>
+
+	<li> chaque <strong class="specialLB">colonne</strong> est appelée un <strong class="defin">attribut</strong> d'enregistrement (en anglais, <em class="english">attribute</em>),  </li>
+</ul>
+<p> de sorte qu'un enregistrement <strong class="specialLB">met en relation</strong> toutes les <strong>valeurs des attributs</strong> – qu'on appelle aussi <strong class="defin">champs</strong> – enregistrées dans une même <strong>ligne</strong> (cf. la figure ci‑dessous). </p>
+ 	<img class="top-left" src="../img/BDDtable.png" style="max-width: 700px;">
+ 	</div><!-- important -->
+
+<div class="complement">
+<p> Une base de données peut contenir <strong>plusieurs tables</strong>, et il est alors possible d'établir des <strong>relations entre les différentes tables</strong> (relations historiques, hiérarchiques, etc.). </p> 	
+</div><!-- complement -->
+
+
+<h4> Installation d'un SGBDR (<em class="mark">MySQL</em> ou <em class="mark">MariaDB</em>) </h4>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoMariaDB.png" height="40px" style="padding-top: 0.2em">
+<p> Rappelons qu'un <strong><em class="sigle">SGBDR</em></strong> comme <strong class="specialN">MySQL</strong> ou <strong class="specialN">MariaDB</strong> est nécessairement <strong class="defin">inclus dans toute pile <em class="sigle">AMP</em></strong>. Sur un <strong>poste de travail</strong> doté d'une telle pile, <strong class="pros">aucune installation supplémentaire</strong> n'est donc requise. </p>
+</div><!-- display -->
+
+<p> Pour une installation sur un <strong>serveur</strong>, on se reportera à la procédure décrite dans le sujet de TP R2‑2 <a class="TP" href="Rtp2-2_serveurWeb.html#MariaDB" target="_BLANK"></a>. </p>
+
+<p> Sur une machine à système <strong class="specialLB">Linux</strong>, dans le cas des <strong><em class="sigle">SGBDR</em></strong> comme <strong class="specialN">MySQL</strong> ou <strong class="specialN">MariaDB</strong>, les fichiers de stockage de données sont placés dans le répertoire : <br>
+<span class="inline">
+	<code class="filename">/var/lib/mysql</code>
+</span> <br>
+et il faut les <strong class="defin">droits d'administration</strong> pour y accéder. Rappelons qu'il faut <strong class="warning">surtout ne pas tenter de modifier ces fichiers</strong>. </p>
+
+
+<h4> Notion de moteur de stockage </h4>
+
+
+<div class="important">
+<p> Dans une base de données relationnelle, toute <strong class="title">table</strong> est définie avec un certain nombre de <strong class="defin">caractéristiques</strong>, typiquement son <strong>nom</strong> et son <strong>nombre d'attributs</strong>, mais aussi des aspects plus techniques comme son <strong class="specialLB">moteur de stockage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Moteur_de_base_de_données" target="_BLANK">W</a> – encore appelé <strong class="specialLB">moteur de base de données</strong> (en anglais, <em class="english">storage engine</em> ou <strong>database engine</strong>).  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En règle générale, tout <strong><em class="sigle">SGBDR</em></strong> intègre <strong>plusieurs</strong> <strong class="title">moteurs de stockage</strong> – cf. la liste au lien suivant <a class="external" href="https://en.wikipedia.org/wiki/Database_engine#Storage_engines" target="_BLANK">W</a>. Le choix d'un moteur est une question très technique qui détermine les <strong class="defin">méthodes de stockage et d'accès aux données</strong>, avec à la clef <strong>divers niveaux de garanties</strong> d'<strong class="pros">intégrité</strong> et de <strong class="pros">sécurité</strong> de la base. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Sans entrer dans les détails, dans le cadre d'une pratique débutante, retenons simplement : </p>
+<ul>
+	<li> qu'il est recommandé d'utiliser le <strong class="pros">même moteur</strong> de stockage pour <strong>toutes les tables</strong> de la base, sinon le <strong><em class="sigle">SGBDR</em></strong> devra partager la mémoire qui lui est allouée entre les différents moteurs choisis ;  </li>
+
+	<li> qu'il est recommandé de privilégier un <strong>moteur</strong> dit <strong class="pros">transactionnel</strong> comme <strong class="specialLB">innoDB</strong> <a class="external" href="https://fr.wikipedia.org/wiki/InnoDB" target="_BLANK">W</a> – c'est d'ailleurs la solution par défaut dans <strong>MySQL</strong> – plutôt qu'un moteur « historique » comme <strong class="specialLB">MyISAM</strong> <a class="external" href="https://fr.wikipedia.org/wiki/MyISAM" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- expert -->
+
+
+<h4> Encodage des caractères – notion d'interclassement </h4>
+
+
+<div class="complement">
+<p> Presque toujours, une base de données inclut des données de type <strong class="defin">chaîne de caractères</strong> ou <strong>texte</strong>. Se pose alors évidemment la question du <strong class="title">choix de l'encodage</strong> des caractères (<em class="sigle">ASCII</em>, <em class="sigle">UTF‑8</em> ou autre – cf. les chap. C3‑VIII <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-8_typesCaracteres.html" target="_BLANK">C</a> et C3‑IX <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-9_typesCaracteresEtendus.html" target="_BLANK">C</a>).  </p>
+
+<div style="display: inline-block;">
+		<img class="top-right" src="../img/BDDinterclassement.png" width="150px">
+<p> Par ailleurs, lors du traitement des requêtes, les <strong class="defin">recherches</strong> et les opérations de <strong class="defin">tri</strong> peuvent être grandement <strong class="pros">facilitées</strong> si les <strong>majuscules</strong>, les <strong>minuscules</strong> (la casse) et les <strong>variantes accentuées</strong> d'une même lettre ne sont <strong class="defin">pas différenciées</strong>. En effet, lorsqu'un utilisateur effectue une recherche sur un site, il ne saisit pas forcément ses mots‑clefs avec l'orthographe exacte (par exemple, « noel » au lieu de « Noël ») ; un algorithme de recherche sera apprécié s'il est quand même capable de trouver les ressources correspondantes. C'est ici qu'intervient la notion d'<strong class="title">interclassement</strong> qui permet à l'administrateur de la base de choisir la souplesse requise. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<div class="important">
+<p> Dans une base de donnée, l'<strong class="title">interclassement</strong> <a class="external" href="https://database.guide/what-is-collation-in-databases/" target="_BLANK"></a> (en anglais, <em class="english">collation</em>) définit des <strong>relations</strong> de <strong class="defin">précédences</strong> et d'<strong>égalités</strong> entre les caractères dans un jeu de caractères. Implicitement, il spécifie l'<strong class="specialLB">encodage</strong> des caractères utilisés pour exprimer les champs de types chaînes de caractères ou texte dans la base. </p>
+
+<p> L'<strong class="title">interclassement</strong> peut être <strong class="defin">choisi différemment</strong> pour chaque <strong>table</strong> ou même pour chaque <strong>attribut</strong>.</p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Par défaut, pour des applications générales, il est vivement <strong class="pros">recommandé</strong> de choisir un interclassement <strong class="defin">indifférent à la casse</strong> (<em class="english">case insensitive</em>) et basé sur le <strong class="defin">format <strong><em class="sigle">UTF‑8</em></strong></strong> général, qui offre le catalogue <strong>Unicode</strong> dans son intégralité tout en optimisant l'espace mémoire utilisé (cf. chap. C3‑IX <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-9_typesCaracteresEtendus.html#formatUTF-8" target="_BLANK">C</a>). </p>	
+
+<p> Mais on peut être amené à faire d'<strong class="defin">autres choix</strong> dans des <strong class="title">cas particuliers</strong>, si les champs de types chaînes de caractères sont composés dans un <strong>jeu de caractères plus restreint</strong>. De telles décisions deviennent d'autant plus pertinentes que la taille de la base de données augmente. </p>
+</div><!-- expert -->	
+
+
+<h4> Caractéristiques des attributs d'une table </h4>
+
+
+<div class="important">
+<p> Dans une table de base de données, chaque <strong class="defin">attribut</strong>  est défini par <strong class="title">deux caractéristiques</strong> impératives : son <strong class="specialLB">nom</strong> et son <strong class="specialLB">type</strong> de valeurs – à savoir entier, décimal, chaîne de caractères, type énuméré… comme dans un langage de programmation.  </p>
+
+<p> De plus, pour des attributs de certains types, d'<strong class="title">autres caractéristiques</strong> peuvent devoir être définies, notamment la <strong class="specialLB">taille</strong> dans le cas d'une chaîne de caractères (c'est‑à‑dire sa longueur maximale). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Pour chaque attribut d'une table, il est également possible de choisir un <strong>interclassement spécifique</strong>, d'imposer une <strong>valeur par défaut</strong>, d'autoriser ou non la <strong>valeur nulle</strong>, etc.  </p>
+</div><!-- complement -->
+
+
+<h4> Notion de clef primaire </h4>
+
+
+<div class="complement">
+<p> Dans une table de base de données, il peut arriver incidemment que <strong>deux enregistrements</strong> aient <strong class="cons">tous leurs champs respectivement identiques</strong>. Une telle situation peut évidemment engendrer des <strong class="warning">confusions désastreuses</strong> donc il est nécessaire de s'en prémunir. </p>
+</div><!-- complement -->
+
+<div class="important" style="display: inline-block;">
+		<img class="top-right" src="../img/primaryKey.png" width="100px">
+<p> À toute table, il est possible d'ajouter une <strong class="title">clef primaire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Clé_primaire" target="_BLANK">W</a> (en anglais, <em class="english">primary key</em>), c'est‑à‑dire un <strong class="defin">attribut d'identification</strong>, dont le <strong><em class="sigle">SGBD</em></strong> garantit qu'il prendra une <strong class="pros">valeur différente</strong> pour <strong>chaque enregistrement</strong>. </p>
+
+<p>Typiquement, il peut s'agir un <strong>nombre entier incrémenté</strong> à chaque nouvel enregistrement. </p>
+</div><!-- important -->
+
+
+<h4 id="exempleTable"> Exemple d'une table de base de donnée relationnelle </h4>
+
+
+<div class="exemples">
+<p> À titre académique, considérons une table permettant de stocker des <strong class="title">couleurs</strong> définies par le <strong class="title">code <em class="sigle">RGB</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/https://fr.wikipedia.org/wiki/Rouge_vert_bleu" target="_BLANK">W</a>. Une telle table peut être structurée avec <strong class="defin">5 colonnes</strong> :  </p>
+<img class="top-left" src="../img/exempleTableCouleurs.png" style="max-width: 700px">
+<ul>
+	<li> une colonne nommée <code class="cmd">id</code> pour la <strong class="defin">clef primaire</strong> sous la forme d'un <strong>entier non nul</strong> incrémenté à chaque nouvel enregistrement ;  </li>
+
+	<li> une colonne nommée <code class="cmd">colorName</code> pour le <strong class="defin">nom de couleur</strong> sous la forme d'une <strong>chaîne de caractères</strong> de longueur maximale 64 caractères (ce qui est largement suffisant) ;  </li>
+
+	<li> trois colonnes nommées respectivement <code class="cmd">redCode</code>, <code class="cmd">greenCode</code> et <code class="cmd">blueCode</code>, pour les <strong class="defin">codes des composantes <em class="sigle">RGB</em></strong>, sous la formes d'<strong>entiers non signés</strong> de taille 8 bits ; </li>
+</ul>
+</div><!-- exemple -->
+
+
+
+<h3> Manipulation d'une base de donnée relationnelle  –  le langage SQL </h3>
+
+
+
+<div class="expert">
+<p> Comme avec la plupart des structures informatiques, toute <strong class="title">manipulation</strong> d'une base de données  – <strong>création</strong>, <strong>suppression</strong>, <strong>enregistrement</strong>, <strong>consultation</strong>, etc. – peut être effectuée :  </p>
+<ul>
+	<li> soit dans un <strong class="specialLB">terminal de commandes en ligne</strong>, à l'aide d'un <strong>langage dédié</strong>, qu'il évidemment possible d'employer pour composer une série de commandes dans un <strong class="specialLB">fichier de script</strong> à exécuter d'une traite ;  </li>
+
+	<li> soit dans une <strong class="specialLB">interface fenêtrée</strong>, avec des <strong>champs de saisie</strong> à valider par clic sur tel ou tel bouton ;  </li>
+</ul>
+<p> Et bien entendu, une interface fenêtrée n'est jamais qu'une <strong class="pros">apparence conviviale</strong> qui opère elle‑même les commandes en ligne correspondant aux manipulation effectuées, pour rendre ce travail accessible à des utilisateurs non expérimentés en codage. </p>
+</div><!-- expert -->
+
+<div class="important">
+<p> Pour <strong>manipuler</strong> les <strong>bases de données relationnelles</strong>, il existe un langage  nommé <strong class="title"><em class="sigle">SQL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Structured_Query_Language" target="_BLANK">W</a> – sigle qui signifie <strong class="title">structured query language</strong>. </p>
+
+<p> Créé en 1974 au sein de l'entreprise américaine <strong><em class="sigle">IBM</em></strong>, il est régi par la <strong class="defin">norme <em class="sigle">ISO/CEI 9075</em></strong> depuis 1987. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> <strong class="title"><em class="sigle">SQL</em></strong> est un <strong class="defin">langage de haut niveau</strong>  pour coder des <strong>requêtes</strong> sur une base de données relationnelle. Il ne présuppose pas comment ces requêtes sont mises en œuvre. </p>
+
+<p> Fondamentalement, il doit être considéré comme un <strong class="defin">langage interprété</strong>, un interpréteur étant intégré à tout <strong><em class="sigle">SGBDR</em></strong> qui fournit ainsi une <strong>implémentation</strong> du langage <strong><em class="sigle">SQL</em></strong>. Et dans la pratique, comme pour la plupart des langages interprétés, les instructions peuvent être compilées à la volée en <strong>bytecode</strong> avant d'être exécutées (cf. chap. C1‑I <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-1_langagesGeneralites.html#compileInterprete" target="_BLANK">C</a>). </p>
+
+<p> La <strong class="title">grande majorité des <em class="sigle">SGBDR</em></strong> emploie un langage qui <strong class="pros">respecte la norme</strong> de <strong><em class="sigle">SQL</em></strong> et en constitue une <strong class="defin">extension</strong>, notamment pour permettre la <strong>programmation procédurale</strong> (cf. chap. C1‑I <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-1_langagesGeneralites.html#prgProcedurale" target="_BLANK">C</a>). On peut ainsi coder des fonctions et procédures <strong><em class="sigle">SQL</em></strong> et les regrouper en <strong>modules</strong> stockés dans le <strong><em class="sigle">SGBDR</em></strong>. C'est notamment le cas du langage <strong class="specialLB"><em class="sigle">SQL/PSM</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/SQL/PSM" target="_BLANK">W</a> (pour <em class="english">persistent stored modules</em>) qui est intégré aux logiciels de la famille <em class="mark">MySQL</em></strong>. </p>
+</div><!-- complement -->
+
+
+<h4> Les composantes du langage SQL </h4>
+
+
+<div class="complement">
+<p> Dans le langage <strong class="title"><em class="sigle">SQL</em></strong>, on peut distinguer <strong class="title">quatre composantes</strong> :  </p>
+<ul>
+	<li> Le <strong class="specialLB">data definition language</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_de_définition_de_données" target="_BLANK">W</a> ou <strong><em class="sigle">DDL</em></strong> est dédié à la <strong class="defin">manipulation des bases de données</strong> et des <strong class="defin">tables</strong> – création, modification, suppression, etc. – mais <strong>pas des données elles‑mêmes</strong>. </li>
+
+	<div class="nobullet"> On y trouve notamment les mots‑clefs <code class="prettyprint lang-sql">CREATE</code>, <code class="prettyprint lang-sql">ALTER</code>, <code class="prettyprint lang-sql">DROP</code>, etc. </div>
+
+	<li> Le <strong class="specialLB">data manipulation language</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_de_manipulation_de_données" target="_BLANK">W</a> ou <strong><em class="sigle">DML</em></strong> est dédié à la <strong class="defin">manipulation des données</strong> dans les tables – ajout d'un enregistrement, consultation ciblée, recherche, etc.  </li>
+
+	<div class="nobullet"> On y trouve notamment les mots‑clefs <code class="prettyprint lang-sql">SELECT</code>, <code class="prettyprint lang-sql">INSERT</code>, <code class="prettyprint lang-sql">UPDATE</code>, <code class="prettyprint lang-sql">DELETE</code>, etc. </div>
+
+	<li> Le <strong class="specialLB">data control language</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_de_contrôle_de_données" target="_BLANK">W</a> ou <strong><em class="sigle">DCL</em></strong> est dédié au <strong class="defin">contrôle d'accès</strong> aux <strong class="defin">données</strong> – autorisation, interdiction, verrouillage, etc.  </li>
+
+	<div class="nobullet"> On y trouve notamment les mots‑clefs <code class="prettyprint lang-sql">GRANT</code>, <code class="prettyprint lang-sql">DENY</code>, <code class="prettyprint lang-sql">LOCK</code>, etc. </div>
+
+  <li> Le <strong class="specialLB">transaction control language</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Langage_de_contrôle_des_transactions" target="_BLANK">W</a> ou <strong><em class="sigle">TCL</em></strong> est dédié au <strong class="defin">contrôle des transactions</strong> – validation, annulation, etc.    </li>
+
+  <div class="nobullet"> On y trouve notamment les mots‑clefs <code class="prettyprint lang-sql">COMMIT</code>, <code class="prettyprint lang-sql">SAVEPOINT</code>, <code class="prettyprint lang-sql">ROLLBACK</code>, etc. </div>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="parametrageSGBDR"> Paramétrage et lancement de l'environnement d'exécution d'un SGBDR </h4>
+
+
+<div class="complement">
+<p> Pour pouvoir agir sur une base de donnée via des <strong class="defin">requêtes <em class="sigle">SQL</em></strong>, il est nécessaire de lancer l'<strong class="title">environnement d'exécution du <em class="sigle">SGBDR</em></strong>. Une telle action s'apparente à une connexion avec une étape d'authentification par <strong>identifiant</strong> et <strong>mot de passe</strong>. </p>
+
+<p> Préalablement, il est nécessaire de <strong class="title">paramétrer le <em class="sigle">SGBDR</em></strong> pour définir l'<strong>utilisateur par défaut</strong> (typiquement, le compte <code>root</code>) et faire divers choix de sécurité. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoMariaDB.png" height="40px" style="padding-top: 0.5em">
+<p class="exemple"> Sous <strong class="specialLB">Linux</strong>, dans le cas des <strong><em class="sigle">SGBDR</em></strong> comme <strong class="specialN">MySQL</strong> ou <strong class="specialN">MariaDB</strong>, le <strong class="title">paramétrage</strong> peut être effectué par une <strong class="defin">commande spécifique prédéfinie</strong> qu'on peut exécuter dans un terminal de commande en ligne :   </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mysql_secure_installation</span>
+</pre>
+<!---------- ne pas indenter ---------->  
+
+<p> Pour plus de détails sur cette commande, on pourra consulter le sujet de TP R2‑2 <a class="TP" href="Rtp2-2_serveurWeb.html#MariaDB" target="_BLANK"></a>. </p>
+
+<p> Ensuite, en optant pour les choix usuels, il est possible de <strong class="title">lancer l'environnement d'exécution</strong> du <strong><em class="sigle">SGBDR</em></strong> avec le compte <code>root</code> et une authentification par mot de passe, en saisissant la commande : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mysql</span> <span class="displayDarkRed">-u</span> root <span class="displayDarkRed">-p</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Attention</em>, il est possible que <strong class="warning">deux mots de passe</strong> soient successivement demandés : </p>
+<ul>
+	<li> d'abord celui du <strong>compte</strong> <strong class="specialLB">Linux</strong> pour l'emploi de la commande <code>sudo</code> ; </li>
+
+	<li> ensuite celui du <strong>compte</strong> <code>root</code> du <strong class="specialN"><em class="sigle">SGBDR</em></strong>. </li>
+</ul>
+<p> Il faut <strong class="warning">ne pas les confondre</strong>. </p>
+
+<p class="square"> Si l'authentification est réussie, <strong class="defin">l'invite de commande change</strong> et devient : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span style="color: darkgrey;">mysql></span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> et l'utilisateur peut alors commencer à saisir des requêtes, et notamment accorder des droits à d'autres utilisateurs. </p>
+</div><!-- exemple -->
+
+
+
+<h4> Règles de syntaxe et conventions de codage en SQL </h4>
+
+
+<div class="complement">
+<p> Le codage des requêtes en langage <strong><em class="sigle">SQL</em></strong> obéit à des <strong class="title">règles de syntaxe</strong> dont certaines sont <strong class="defin">spécifiques</strong> à chaque <strong>implémentation</strong>. C'est notamment le cas des types de <strong class="specialLB">guillemets</strong> à employer pour délimiter les identificateurs choisis par le codeur. </p>
+
+<p> Parmi ces règles, deux sont <strong class="pros">très utiles à connaître</strong> pour bien débuter avec des <strong><em class="sigle">SGBDR</em></strong> comme <strong>MySQL</strong> ou <strong>MariaDB</strong> : </p>
+<ul>
+	<li> Par défaut, le délimiteur de <strong class="defin">fin d'instruction</strong> est le <strong class="specialLB">symbole</strong> <code class="prettyprint lang-sql">;</code> (comme dans de nombreux langages de programmation). </li>
+
+	<div class="expert">
+	<div class="nobullet">  Mais attention, ce délimiteur peut être changé par le codeur via une instruction commençant par le mot‑clef <code class="prettyprint lang-sql">DELIMITER</code>. </div>	
+	</div><!-- expert -->
+
+	<li> Tout <strong class="defin">identificateur de table ou de colonne</strong> doit être délimité par une <strong class="specialLB">paire de guillemets simples obliques</strong> <code class="prettyprint lang-sql">` `</code>  (en anglais, <em class="mark">backtips</em> ou <em class="mark">backquotes </em>). </li>
+</ul>
+
+<p> Par ailleurs, il existe des <strong class="title">conventions de codage</strong> qui sont <strong class="warning">très différentes</strong> de celles employées avec les langages de programmation usuels (<em class="mark">C</em>, <em class="mark">Python</em>, <em class="mark">JavaScript</em>, etc.). </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Bien entendu, les <strong class="title">conventions de codade</strong> ne doivent pas être confondues avec les règles de syntaxes, mais leur respect est néanmoins <strong class="pros">vivement recommandé</strong>, surtout dans le cadre d'un travail d'équipe. </p>
+
+<p> En particulier, en langage <strong class="title"><em class="sigle">SQL</em></strong>, il est d'usage de saisir tous les <strong class="specialLB">mots‑clefs</strong> du langage <strong class="defin">tout en majuscules</strong>. Quant aux <strong class="specialLB">identificateurs</strong> choisis par le codeur, ils peuvent adopter une <strong>typographie</strong> <code>camelCase</code> ou <code>snake_case</code> (cf. chap. C2‑IX <a class="previous" href="../../ModuleC/C2-ElementsLangage/Cc2-9_bonnesPratiques.html#typographie" target="_BLANK">C</a>) mais ne doivent évidemment pas être codés en tout en majuscules. </p>
+</div><!-- expert -->
+
+
+<h4 id="exMariaDB"> Création d'une base de donnée et d'une table avec <em class="mark">MariaDB</em> </h4>
+
+
+<div class="exemples">
+<p class="exemple"> Partons de l'exemple académique supra <a class="supra" href="Rc2-4_webServeur.html#exempleTable"></a> d'une table pour stocker des <strong class="title">couleurs préférées</strong> définies par leur <strong class="defin">nom</strong> et leur  <strong class="defin">code <em class="sigle">RGB</em></strong>. Le script <strong><em class="sigle">SQL</em></strong> ci‑dessous code : </p>
+<ul>
+	<li> la création d'une <strong class="specialLB">base de donnée</strong> nommée <code>userPref</code> (pour <em>préférences de l'utilisateur</em>) ; </li>
+
+  <div class="nobullet"> <em class="remark">remarque</em> : comme on ne précise ni l'<strong>interclassement</strong>, ni le <strong>moteur de stockage</strong>, on adopte les <strong class="defin">choix par défaut</strong> du <strong><em class="sigle">SGBDR</em></strong> ; </div>
+
+	<li> dans cette base de données, la création d'une <strong class="specialLB">table</strong> nommée <code>favoriteColors</code> (pour couleurs préférées), comportant les cinq colonnes identifiées précédemment. </li>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-sql linenums:1">
+CREATE DATABASE IF NOT EXISTS `userPref`;
+USE `userPref`;
+CREATE TABLE IF NOT EXISTS `favoriteColors` (
+  `id`        INT NOT NULL,
+  `colorName` VARCHAR(64) NOT NULL,
+  `redCode`   TINYINT UNSIGNED,
+  `greenCode` TINYINT UNSIGNED,
+  `blueCode`  TINYINT UNSIGNED
+) AUTO_INCREMENT = 1;
+ALTER TABLE `favoriteColors` ADD PRIMARY KEY (`id`);
+ALTER TABLE `favoriteColors`
+MODIFY `id` INT NOT NULL AUTO_INCREMENT;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoMariaDB.png" height="40px" style="padding-top: 0.2em">
+<p> Sous un <strong><em class="sigle">SGBDR</em></strong> comme <strong>MariaDB</strong> ou <strong>MySQL</strong>, ce script – enregistré dans un fichier <code class="filename">tableCreation.sql</code> – peut être exécuté par la commande :  </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span style="color: darkgrey">mysql></span> source tableCreation.sql
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> à condition que ce fichier soit enregistré <strong>dans le répertoire courant</strong> d'exécution du terminal de commandes en ligne avant le lancement de l'environnement d'exécution du <strong><em class="sigle">SGBDR</em></strong> – sinon, il faut saisir son <strong>chemin absolu</strong> ou son chemin relatif depuis le répertoire courant. </p>
+
+<p> On obtient alors en sortie les <strong>messages d'acquittement</strong> du <strong><em class="sigle">SGBDR</em></strong> pour les différentes requêtes <strong><em class="sigle">SQL</em></strong> exécutées du script : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Query OK, 1 row affected (0,01 sec)
+
+Database changed
+Query OK, 0 rows affected (0,04 sec)
+
+Query OK, 0 rows affected (0,08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+Query OK, 0 rows affected (0,07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+<span style="color: darkgrey">mysql></span> 
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p class="square"> Une fois que cette table est créée, il est possible d'<strong class="defin">insérer un nouvel enregistrement</strong> par une requête <strong><em class="sigle">SQL</em></strong>. Par exemple, on peut enregistrer une couleur ayant pour <strong>nom</strong> <code>mediumyellow</code> et pour <strong>code <em class="sigle">RGB</em></strong> <code>(255, 255, 128)</code> – via la requête : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span style="color: darkgrey">mysql></span> INSERT INTO `favoriteColors` (colorName, redCode, greenCode, blueCode) VALUES ("mediumyellow", 255, 255, 128);
+Query OK, 1 row affected (0,01 sec)
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> sachant que la valeur de la <strong>clef primaire</strong> <code>id</code> est <strong class="pros">automatiquement affectée</strong> par le <strong><em class="sigle">SGBDR</em></strong>. </p>
+
+<p>	Pour observer d'autres actions simples sur les données d'une table, on pourra consulter le sujet de TP R2‑2 <a class="TP" href="Rtp2-2_serveurWeb.html#MariaDB" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3 id="phpMyAdmin"> L'interface d'administration <em class="mark">phpMyAdmin</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/logoPHPmyAdmin.png" height="90px">
+<p> <strong class="title">phpMyAdmin</strong> est une <strong class="defin">application web</strong> qui fournit une <strong class="pros">interface fenêtrée</strong> d'<strong class="defin">administration de bases de données</strong>, compatible avec les <strong><em class="sigle">SGBDR</em></strong> <strong>MySQL</strong> et <strong>MariaDB</strong>. Elle est opérationnelle dans l'environnement d'un <strong>serveur web</strong> et du langage <strong>php</strong>.  </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> L'application <strong class="title">phpMyAdmin</strong> est <strong>intégrée</strong> à <strong class="specialMg">WampServer</strong> (logiciel d'émulation de <strong>pile <em class="sigle">AMP</em></strong> pour les systèmes <strong class="specialLB">Windows</strong> – cf. supra <a class="supra" href="Rc2-4_webServeur.html#WampServer"></a>). </p>
+
+<p> En revanche, elle n'est <strong class="cons">pas incluse</strong> dans la plupart des <strong>piles <em class="sigle">AMP</em></strong> pour les systèmes <strong class="specialLB">Linux</strong>. Il faut donc procéder à son <strong class="defin">installation</strong> et pour cela, on pourra se reporter à la procédure décrite dans le sujet de TP R2‑2  <a class="TP" href="Rtp2-2_serveurWeb.html#phpmyadmin" target="_BLANK"></a>. </p> 
+
+<p> Une fois l'installation achevée, l'<strong class="title">accès à l'application</strong> est possible dans n'importe que navigateur via l'<strong><em class="sigle">URL</em></strong> : <br>
+<span class="inline">
+  <code class="filename">http://localhost/phpmyadmin</code>
+</span> </p>
+</div><!-- complement -->
+
+
+<h4> Page d'accueil </h4>
+
+
+<p> Après avoir renseigné et validé les <strong>identifiants de connexion</strong> au <strong><em class="sigle">SGBDR</em></strong> (cf. supra <a class="supra" href="Rc2-4_webServeur.html#parametrageSGBDR"></a>), on aboutit à la <strong class="title">page d'accueil</strong> nommée <code class="filename">index.php</code> de <strong>phpMyAdmin</strong> dont la capture d'écran ci‑dessous donne un aperçu. </p>
+
+<img class="top-left" src="../img/phpmyadminHome.png">
+
+<p> À partir de cette page, l'<strong class="title">accès aux bases de données</strong> enregistrées avec le <strong><em class="sigle">SGBDR</em></strong> peut se faire : </p>
+<ul>
+	<li> soit via le <strong class="specialLB">panneau de navigation</strong> de navigation, qui se présente comme un explorateur dans une arborescence, où chaque identificateur affiché est un <strong>hyperlien</strong> ;  </li>
+
+	<div class="nobullet"> (dans l'exemple de la capture d'écran ci‑dessus, on y retrouve la base de donnée <code>userPref</code> et sa table <code>favoriteColors</code> créées précédemment <a class="supra" href="Rc2-4_webServeur.html#exMariaDB"></a>) ; </div>
+
+	<li> soit via le <strong>premier bouton</strong> de la <strong class="specialLB">barre de commande</strong>. </li>
+</ul>
+
+<p> Lorsqu'on sélectionne une base ou une table, l'interface affiche dans le bandeau gris supérieur le <strong class="title">chemin</strong> dans l'arborescence. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/phpmyadminButtons.png" height="40px">
+<p> Par ailleurs, on trouve en haut du panneau de navigation – juste en dessous du logo de l'application – des <strong class="defin">boutons de raccourcis</strong>, respectivement :  </p>
+<ul>
+	<li> de <strong>retour à la page d'accueil</strong> ;  </li>
+
+	<li> de <strong>déconnexion</strong> ;  </li>
+
+	<li> d'accès aux pages de <strong>documentation</strong> interne et externe ; </li>
+
+	<li> de <strong>paramétrage</strong> du panneau de navigation ; </li>
+
+	<li> de <strong>rafraîchissement</strong> du panneau de navigation. </li>
+</ul>
+</div><!-- display -->
+
+
+<h4> Page de manipulation d'une table </h4>
+
+
+<p> Dans le panneau de navigation, lorsqu'on clique sur l'<strong>hyperlien d'une table</strong>, le navigateur ouvre une <strong class="title">page de manipulation</strong> dont la capture d'écran ci‑dessous donne un aperçu. </p>
+
+<img class="top-left" src="../img/phpmyadminTable.png">
+
+<p> Dans cet exemple, on retrouve la couleur <code>mediumyellow</code> enregistrée précédemment. On peut maintenant : </p>
+<ul>
+	<li> <strong class="defin">sélectionner</strong> un enregistrement (voire plusieurs) en cliquant sur sa case‑à‑cocher ; puis on peut : </li>
+	<ul>
+		<li> <strong class="defin">modifier</strong> individuellement cet enregistrement en cliquant sur le bouton <code>Éditer</code> situé dans sa ligne ;  </li>
+	
+		<li> <strong class="defin">effacer</strong> individuellement cet enregistrement en cliquant sur le bouton <code>Supprimer</code> situé dans sa ligne ;  </li>
+	</ul>
+	
+	<li> <strong class="defin">ajouter</strong> à la table un nouvel enregistrement en cliquant sur le bouton <code>Insérer</code> situé dans la <strong class="specialLB">barre de commandes</strong>. </li>
+</ul>
+
+<p> En règle générale, lors de l'<strong>exécution d'une requête</strong>, l'interface bascule dans l'<strong>onglet <em class="sigle">SQL</em></strong> et affiche en haut de la page (sous une bulle de notification jaune), son <strong class="defin">codage en langage <em class="sigle">SQL</em></strong>. </p>
+
+<img class="top-left" src="../img/phpmyadminSQL.png">
+
+
+<p>	Et sous cet affichage, on trouve des <strong class="defin">hyperliens</strong> pour <strong>éditer</strong> ce code ou même le <strong>transcoder</strong> en langage <strong class="php">php</strong>. </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="expert">
+<h2> Exemple d'application web avec une architecture 3 niveaux </h2>
+
+
+<!-- expert -->
+<h3> Présentation </h3>
+
+
+
+<p> Dans le prolongement de l'<strong>exemple académique</strong> d'une <strong class="specialLB">base de données</strong> mémorisant les <strong class="defin">couleurs préférées</strong> d'un utilisateur (cf. supra <a class="supra" href="Rc2-4_webServeur.html#exMariaDB"></a>), on décrit ci‑après le code d'une <strong class="title">page web dynamique d'interface client</strong> pour manipuler cette base de donnée (cf. la capture d'écran ci‑dessous). </p>
+
+<img class="top-left" src="../img/phpColorInterface.png" style="max-width: 700px; border: solid black 1px">
+
+<div class="complement">
+<p> Cette page web doit permettre à un utilisateur de gérer des couleurs enregistrées dans la <strong class="specialLB">base de données</strong> : </p>
+<ul>
+	<li> <strong>enregistrer</strong> une nouvelle couleur, </li>
+
+	<li> <strong>supprimer</strong> une couleur enregistrée,  </li>
+
+	<li> <strong>visualiser</strong> la liste de toutes les couleurs enregistrées, </li>
+</ul>
+<p>	et ceci <strong class="pros">sans recourir</strong> à l'application <strong class="specialO">phpMyAdmin</strong>. En effet, cette dernière est <strong class="warning">réservée à l'administrateur</strong> de la base de donnée, elle ne peut en aucun cas jouer le rôle d'interface usuelle pour un client. </p>
+</div><!-- complement -->
+
+<p> Bien qu'assez simple, une telle <strong class="title">application</strong> constitue un exemple nettement <strong class="warning">plus complexe</strong> que celui de la page web dont dont on pouvait simplement changer la couleur d'arrière plan (cf. supra <a class="supra" href="Rc2-4_webServeur.html#exemplePHP"></a>). Elle fait appel à de la <strong class="defin">programmation orientée objet</strong> – avec notamment des <strong><em class="sigle">PDO</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/PHP_Data_Objects" target="_BLANK">W</a> – et, pour une bonne factorisation du code, elle nécessite le recours à une <strong class="defin">programmation multi‑fichiers</strong>. </p>
+
+
+<!-- expert -->
+<h4> Installation sur une pile AMP </h4>
+
+
+<div class="complement">
+<p> Comme toute application web, elle peut être testée sur un <strong class="title">poste de travail</strong> muni d'une <strong>pile <em class="sigle">AMP</em></strong>. Tous les fichiers de l'application sont à placer dans le même répertoire, nommé par exemple <code class="filename">example3tier</code>, lui‑même à placer dans le répertoire <code class="filename">www</code> du émulé par la pile <em class="sigle">AMP</em> – typiquement, <code class="filename">/var/www/html</code> sur une machine à système <strong class="specialLB">Linux</strong> (cf. supra <a class="supra" href="Rc2-4_webServeur.html#LAMP"></a>). </p>
+</div><!-- complement -->
+
+<p> Ces fichiers sont <strong>téléchargeables</strong> en exécutant le script ci‑dessous dans un terminal de commandes en lignes : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">cd</span> /var/www/html <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">mkdir</span> example3tier <span class="displayDarkBlue">&&</span> <span class="displayDarkGreen">cd</span> example3tier/
+<span class="displayDarkGreen">wget</span> <span class="displayDarkRed">-r --no-parent -nH -l1 --cut-dirs</span>=6 <span class="displayDarkGreen">--reject</span>="index.html*" <span class="displayDarkGreen">--reject</span>="example3tier*" http://lycee-ferry-versailles.fr/snir/moduleR/prog/R2tp2_serveurs/example3tier
+<span class="displayDarkGreen">for</span> f <span class="displayDarkGreen">in</span> *.txt; <span class="displayDarkGreen">do mv</span> <span class="displayDarkRed">--</span> "$f" "${f%.txt}.php"; <span class="displayDarkGreen">done</span>
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Dans le répertoire de l'application, il faut également exécuter avec <strong class="specialN">MariaDB</strong> le fichier source <code class="filename">tableCreation.sql</code> de création de la base de donnée <code>userPref</code> et de la table <code>favoriteColors</code> (cf. supra <a class="supra" href="Rc2-4_webServeur.html#exMariaDB"></a>). </p>
+
+
+<!-- expert -->
+<h3> Synoptique du code de l'application </h3>
+
+
+<div class="complement">
+<p> Le <strong class="title">code de l'application</strong> est réparti sur <strong class="specialLB">8 fichiers source</strong> : </p>
+<ul>
+	<li> le <strong class="specialLB">fichier principal</strong> <code class="filename">index.php</code> et son <strong>fichier de style</strong> associé <code class="filename">style.css</code> ; </li>
+
+	<li> le <strong class="specialLB">fichier de script</strong> <code class="filename">dbConnect.php</code> qui gère la <strong>connexion à la base de donnée</strong> ;  </li>
+
+	<li> les <strong class="specialLB">fichiers de script</strong> <code class="filename">recordColor.php</code> et <code class="filename">deleteColor.php</code> qui gèrent respectivement l'<strong>ajout</strong> et la <strong>suppression d'une couleur</strong> dans la base de donnée ; </li>
+
+	<li> trois autres <strong class="specialLB">fichiers de script</strong> qui gèrent des aspects secondaires :  </li>
+	<ul>
+		<li> <code class="filename">typingErrors.php</code> pour gérer les éventuelles <strong>erreurs de saisies</strong> de l'utilisateur ;  </li>
+	
+		<li> <code class="filename">cssColorStyle.php</code> pour <strong>générer le code <em class="sigle">CSS</em></strong> du nom d'une couleur affiché sur la page web ;  </li>
+
+		<li> <code class="filename">backwardLink.php</code> pour factoriser le <strong>code <em class="sigle">HTML</em></strong> de la balise de retour à la page principale, car ce code est utilisé à plusieurs reprises dans le programme.  </li>
+	</ul>
+</ul>
+</div><!-- complement -->
+
+<p> La figure ci‑dessous représente les <strong class="specialR">relations de dépendances</strong> entre ces différents fichiers : </p>
+
+  <img class="top-left" src="../img/example3tierSynoptique.png" style="max-width: 600px">
+
+
+<p> Pour ne pas surcharger inutilement l'exposé, <strong class="title">certains aspects</strong> ne seront <strong class="cons">pas détaillés</strong>, notamment le fichier <code class="filename">style.css</code>. Toutefois, ce fichier peut être consulté après téléchargement. </p>
+
+
+<!-- expert -->
+<h3> Code de la page principale </h3>
+
+
+
+<p> Le <strong class="title">fichier principal</strong> de l'application web est nommée <code class="filename">index.php</code>. Cela permet le <strong class="pros">chargement automatique de la page</strong> par le navigateur lorsqu'on saisit l'<strong><em class="sigle">URL</em></strong> ciblant le répertoire où sont stockés tous les fichiers :  <br>
+<span class="inline">
+  <code class="filename">http://localhost/example3tier</code>
+</span> </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/example3tierIndex.png" width="400px" style="padding-top: 0.2em">
+<p> Le <strong class="title">code</strong> de cette page se décompose en <strong class="specialLB">deux parties</strong> :  </p>
+<ul>
+	<li> une <strong class="specialLB">première partie</strong>, entièrement composée en <strong><em class="sigle">HTML/CSS</em></strong> qui affiche successivement sur la colonne de gauche les <strong class="defin">formulaires d'enregistrement</strong> d'une nouvelle couleur et de <strong class="defin">suppression</strong> d'une couleur enregistrée ;  </li>
+
+	<li> une <strong class="specialLB">deuxième partie</strong>, essentiellement constituée d'un script <strong class="php">php</strong> qui affiche sur la colonne de droite la  <strong class="defin">liste des couleurs enregistrées</strong> dans la base de donnée.  </li>
+</ul>
+</div><!-- expert -->
+
+<!-- expert -->
+<h4 id="indexPart1"> Code de la première partie (HTML) </h4>
+
+
+<p> La balise <code class="prettyprint lang-html">&lt;body&gt;&lt;/body&gt;</code> de la page principale est essentiellement constituée de <strong class="title">deux balises</strong> <code class="prettyprint lang-html">&lt;form&gt;&lt;/form&gt;</code> <a class="external" href="https://developer.mozilla.org/fr/docs/Web/HTML/Element/Form" target="_BLANK"></a> pour afficher les <strong class="defin">formulaires d'enregistrement</strong> et de <strong class="defin">suppression</strong> d'une couleur. Chacune de ces balises <code class="prettyprint lang-html">&lt;form&gt;&lt;/form&gt;</code> contient elle‑même : </p>
+
+<ul>
+	<li> diverses balises <code class="prettyprint lang-html">&lt;input&gt;</code> de <strong>champs de saisie</strong> de type : </li>
+	<ul>
+		<li> <code>text</code> pour le <strong>nom de la couleur</strong> à enregistrer ou supprimer </li>
+
+		<li> <code>int</code> pour les composantes du <strong>code <em class="sigle">RGB</em></strong> de la couleur à enregistrer ; </li>
+	</ul>
+  
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/example3tierRequest.png" width="400px" style="padding-top: 0.2em">
+	<li> une balise <code class="prettyprint lang-html">&lt;input&gt;</code> de type <code>submit</code>, se présentant comme un <strong>bouton</strong> qui permet de déclencher une <strong class="specialG">requête <em class="sigle">HTTP</em></strong> – de méthode <code>POST</code> dans les deux cas – et l'exécution du <strong>script d'action</strong> en langage <strong class="php">php</strong> dont le chemin est déterminé par l'attribut <code class="cmd" style="color: green">action</code> de la balise <code class="prettyprint lang-html">&lt;form&gt;&lt;/form&gt;</code>. Il s'agit respectivement des <strong>fichiers</strong> :   </li>
+	</div><!-- display -->
+	<ul>
+		<li> <code class="filename">recordColor.php</code> pour le formulaire d'<strong class="defin">enregistrement</strong> (ligne n° 14) ;  </li>
+	
+		<li> <code class="filename">deleteColor.php</code> pour le formulaire de <strong class="defin">suppression</strong> (ligne n° 42).  </li>
+	</ul>
+	
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt; 3‑tier example &lt;/title&gt;
+  &lt;link href="./style.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;div style="display: inline-flex;"&gt;
+  &lt;div class="forms"&gt;
+  &lt;h1&gt; Record a new color &lt;/h1&gt;
+  &lt;form method="post" action="recordColor.php"&gt;
+    &lt;table class="forms"&gt;
+      &lt;tr&gt;
+        &lt;th&gt; &lt;strong&gt;Name&lt;/strong&gt; &lt;/th&gt;
+        &lt;td&gt; &lt;input type="text" name="colorName" placeholder="choose a new name"&gt; &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;th&gt; &lt;/th&gt;&lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt; &lt;strong style="color: red"&gt;Red&lt;/strong&gt; &lt;/th&gt;
+        &lt;td&gt; &lt;input type="int" name="redCode" placeholder="0 – 255"&gt; &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt; &lt;strong style="color: lime"&gt;Green&lt;/strong&gt; &lt;/th&gt;
+        &lt;td&gt; &lt;input type="int" name="greenCode" placeholder="0 – 255"&gt; &lt;/td&gt;  
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt; &lt;strong style="color: blue"&gt;Blue&lt;/strong&gt; &lt;/th&gt;
+        &lt;td&gt; &lt;input type="int" name="blueCode" placeholder="0 – 255"&gt; &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;th&gt; &lt;/th&gt;&lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt; &lt;/th&gt;
+        &lt;td&gt; &lt;input type="submit" value="Record"&gt; &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;  
+  &lt;/form&gt;
+  
+  &lt;h1&gt; Delete one of your colors &lt;/h1&gt;
+  &lt;form method="post" action="deleteColor.php"&gt;
+    &lt;table class="forms"&gt;
+      &lt;tr&gt;
+        &lt;th&gt; &lt;strong&gt;Name&lt;/strong&gt; &lt;/th&gt;
+        &lt;td&gt; &lt;input type="text" name="colorName" placeholder="peek a name from the list"&gt; &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;th&gt; &lt;/th&gt;&lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt; &lt;/th&gt;
+        &lt;td&gt; &lt;input type="submit" value="Delete"&gt; &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;  
+  &lt;/form&gt;
+  &lt;/div&gt;&lt;!-- forms --&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<!-- expert -->
+<h4 id="indexPart2"> Code de la deuxième partie (<em class="mark">php</em>) </h4>
+
+
+<p> Hormis son <strong>titre</strong> codé par une balise <code class="prettyprint lang-html">&lt;h1&gt;</code> (ligne n° 57), la <strong class="title">deuxième partie de la page web</strong> (colonne de droite) est <strong class="defin">entièrement dynamique</strong> et implémentée par du code en langage <strong class="php">php</strong>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-html linenums:57">
+  &lt;div class="list"&gt; 
+  &lt;h1&gt; List of your favorite colors &lt;/h1&gt;
+
+  &lt;?php
+    $conn  = require 'dbConnect.php';
+    $stmt = $conn->prepare("SELECT * FROM `favoriteColors`");
+    $stmt -> execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$result) {
+      echo "&lt;p&gt; No color is recorded in the database. &lt;/p&gt;";
+    }
+    else {
+      echo 
+        "&lt;table class='list'&gt;" .
+        "  &lt;tr&gt;"  .
+        "    &lt;th&gt; &lt;strong&gt;Name&lt;/strong&gt; &lt;/th&gt;" .
+        "    &lt;th&gt; &lt;strong style='color: red' &gt;Red&lt;/strong&gt;   &lt;/th&gt;" .
+        "    &lt;th&gt; &lt;strong style='color: lime'&gt;Green&lt;/strong&gt; &lt;/th&gt;" .
+        "    &lt;th&gt; &lt;strong style='color: blue'&gt;Blue&lt;/strong&gt;  &lt;/th&gt;" .
+        "  &lt;/tr&gt;";
+      require('cssColorStyle.php');
+      foreach ($result as $color) {
+        $rgbCode  = [
+          "red"   => $color["redCode"],
+          "green" => $color["greenCode"],
+          "blue"  => $color["blueCode"]
+        ];
+        echo 
+          "&lt;tr&gt;" .
+          "  &lt;td style='" . colorStyle($rgbCode) . "'&gt;" . $color["colorName"] . "&lt;/td&gt;" .
+          "  &lt;td&gt;" . $color["redCode"]   . "&lt;/td&gt;" .
+          "  &lt;td&gt;" . $color["greenCode"] . "&lt;/td&gt;" .
+          "  &lt;td&gt;" . $color["blueCode"]  . "&lt;/td&gt;" .
+          "&lt;/tr&gt;";
+      }
+      echo "&lt;/table&gt;";
+    }
+  ?&gt;
+  &lt;/div&gt;&lt;!-- list --&gt;
+  
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div style="display: inline-block;">
+  	<img class="top-right" src="../img/example3tierFileConnect.png" width="150px" style="padding-top: 1.0em">
+<p class="square"> La balise <code class="prettyprint lang-php">&lt;?php ?&gt;</code>  commence à la ligne n° 60 par une <strong class="specialLB">requête de connexion</strong> à la <strong>base de données</strong> où sont enregistrées les couleurs. Le script de cette requête est exporté dans un <strong>fichier séparé</strong> nommé <code class="filename">dbConnect.php</code> (ligne n° 61). Ce dernier contient des mécanismes de <strong>gestion des erreurs de connexion</strong>, il sera détaillé infra <a class="infra" href="Rc2-4_webServeur.html#dbConnect"></a>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierSelect.png" width="400px" style="padding-top: 0.5em">
+<p> Une fois que la connexion est établie, on procède à une <strong class="specialLB">requête <em class="sigle">SQL</em> de sélection</strong> de <strong>toutes les lignes</strong> (<code class="cmd" style="color: darkorange;">SELECT *</code>) de la table <code>favoriteColors</code> (lignes n° 62). </p>
+
+<p> La <strong class="defin">réponse du <em class="sigle">SGBDR</em></strong> à cette requête est stockée dans la <strong>variable</strong> nommée <code class="prettyprint lang-php">$result</code> qui est implicitement de type tableau (lignes n° 64). </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierEcho.png" width="400px" style="padding-top: 0.5em">
+<p class="square"> Le reste du code consiste en la  <strong class="specialLB">génération de code <em class="sigle">HTML/CSS</em></strong> pour l'<strong>affichage de la liste des couleurs</strong> sous la forme d'une <strong>table</strong>, à l'aide de la fonction <code class="prettyprint lang-php">echo</code>. </p>
+<ul>
+	<li> Si la variable <code class="prettyprint lang-php">$result</code> est nulle, seul s'affiche dans une balise <code>&lt;p&gt;&lt;/p&gt;</code> un message informant que <strong>la table est vide</strong> (lignes n° 67).   </li>
+
+	<li> Sinon, chaque enregistrement de la table <code>favoriteColors</code> mémorisé dans la variable <code class="prettyprint lang-php">$result</code> est parcouru grâce à la structure de contrôle <code class="prettyprint lang-php">foreach</code> <a class="external" href="https://www.w3schools.com/php/php_looping_foreach.asp" target="_BLANK"></a> (lignes n° 78 à 92). </li>
+  
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/example3tierFileColor.png" width="150px" style="padding-top: 0.2em">
+	<div class="nobullet"> De plus, l'<strong class="specialLB">affichage du nom</strong> de chaque couleur avec sa propre <strong class="defin">couleur en arrière plan</strong> – comme par exemple <code class="cmd" style="background: #0080C0; color: white">duckblue</code> – est réalisé grâce à un script de composition du <strong>style <em class="sigle">CSS</em></strong> exporté dans le fichier <code class="filename">cssColorStyle.php</code>. Il sera détaillé infra <a class="infra" href="Rc2-4_webServeur.html#cssColorStyle"></a>. </div>
+	</div><!-- display -->
+</ul>
+</div><!-- display -->
+
+
+
+<!-- expert -->
+<h3> Code des scripts d'action </h3>
+
+
+
+<h4 id="recordColor"> Script d'enregistrement d'une nouvelle couleur </h4>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierClicRecord.png" width="100px" style="padding-top: 0.5em">
+<p> Rappelons que, dans le code de la <strong>page principale</strong> <code class="filename">index.php</code>, le <strong class="title">script d'enregistrement d'une couleur</strong>, stocké dans le fichier <code class="filename">recordColor.php</code>, est appelé par un clic sur le <strong>bouton</strong> <code>Record</code>. Ce clic engendre également une <strong class="specialG">requête <em class="sigle">HTTP</em></strong> (méthode <code>POST</code>) qui contient dans son corps les données saisies par l'utilisateur dans les quatre formulaires inclus dans la balise <code class="prettyprint lang-html">&lt;form&gt;&lt;/form&gt;</code> du bouton. </p>
+</div><!-- display --> 
+
+
+<p> Ce script commence par la <strong class="specialLB">récupération des données saisies</strong> – le <strong>nom de la couleur</strong> et les trois composantes de son <strong>code <em class="sigle">RGB</em></strong> – en les stockant dans <strong>deux variables</strong> nommées <code class="prettyprint lang-php">$colorName</code> et <code class="prettyprint lang-php">$rgbCode</code> (cf. les lignes n° 3 à 8). Précisons que cette deuxième variable est un <strong>tableau de 3 entiers</strong> indexés respectivement par les étiquettes <code class="prettyprint lang-php">"red"</code>, <code class="prettyprint lang-php">"green"</code> et <code class="prettyprint lang-php">"blue"</code>. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierFileErrors.png" width="150px" style="padding-top: 0.2em">
+<p> Il est alors fait appel à un <strong>script</strong> de <strong class="specialLB">gestion des erreurs de saisie</strong> que l'utilisateur pourrait commettre, qui est codé dans le fichier <code class="filename">typeErrors.php</code> (cf. la ligne n° 10). Ce script définit les fonctions <code>colorNameError</code> et <code>rgbCodeError</code> qui sont appelées juste après (à la ligne n° 11) pour tester d'éventuelles erreurs. Il sera détaillé infra <a class="infra" href="Rc2-4_webServeur.html#typingErrors"></a>. </p>
+</div><!-- display --> 
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierSelect.png" width="400px" style="padding-top: 0.5em">
+<p> Et c'est seulement en l'absence d'erreur de saisie que s'effectue une <strong class="specialLB">requête <em class="sigle">SQL</em></strong> de type <code class="cmd" style="color: darkorange;">SELECT *</code> à la base de donnée (cf. la ligne n° 12), exactement comme dans la deuxième partie de la page principale (cf. supra <a class="supra" href="Rc2-4_webServeur.html#indexPart2" target="_BLANK"></a>). Le but de cette requête est de vérifier si le nom saisi pour la couleur à ajouter <strong class="defin">ne figure pas déjà</strong> dans les enregistrement de la table <code>favoriteColors</code> (cf. les lignes n° 13 à 17).</p>
+</div><!-- display -->
+
+<p> Le script se poursuit donc selon le résultat de cette recherche : </p>
+
+<ul>
+	<div style="display: inline-block;">
+  	<img class="top-right" src="../img/example3tierFileLink.png" width="150px" style="padding-top: 0.5em">
+	<li> dans l'affirmative, le script affiche dans une balise <code>&lt;p&gt;&lt;/p&gt;</code> un <strong class="cons">message d'erreur</strong>, avec une invite à revenir à la page principale (lignes n° 20 à 28), codée dans le fichier <code class="filename">backwardLink.php</code> ;  </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierInsert.png" width="380px" style="padding-top: 0.5em">
+	<li> dans la négative, le script exécute une <strong class="defin">requête d'insertion</strong> dans la base de donnée de la nouvelle couleur, avec à la clef un <strong>message</strong> pour informer l'utilisateur du succès de l'opération et une invite à revenir à la page principale (lignes n° 29 à 40). </li>
+  </div><!-- display -->
+</ul>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierFileColor.png" width="150px" style="padding-top: 0.2em">
+<p> Dans les deux cas, l'<strong class="specialLB">affichage de la couleur</strong> en arrière plan du texte est rendu <strong class="pros">convivial</strong> grâce au script de composition du <strong>style <em class="sigle">CSS</em></strong> (exporté dans le fichier <code class="filename">cssColorStyle.php</code>, cf. infra <a class="infra" href="Rc2-4_webServeur.html#cssColorStyle"></a>). </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;?php
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $colorName = $_POST["colorName"]; 
+    $rgbCode   = [
+      "red"   => $_POST["redCode"],
+      "green" => $_POST["greenCode"],
+      "blue"  => $_POST["blueCode"]
+    ];
+
+    require('typingErrors.php');
+    if (!colorNameError($colorName) && !rgbCodeError($rgbCode)) {
+      $conn  = require 'dbConnect.php';
+      $stmt = $conn->prepare("SELECT * FROM `favoriteColors` WHERE `colorName` = :colorName;");
+      $stmt -> execute([
+        ':colorName' => $colorName,
+      ]);
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      require('cssColorStyle.php');
+      if ($result) {
+        $rgbCode   = [
+          "red"   => $result["redCode"],
+          "green" => $result["greenCode"],
+          "blue"  => $result["blueCode"]
+        ];
+        echo "&lt;p&gt; Sorry, a color named &lt;strong style='" . colorStyle($rgbCode) . "'&gt;&lt;em&gt;" . $colorName . "&lt;/em&gt;&lt;/strong&gt; is &lt;strong&gt;already recorded&lt;/strong&gt; among your favorites. &lt;/p&gt;";
+        require('backwardLink.php');
+      }
+      else {
+        $stmt = $conn->prepare("INSERT INTO favoriteColors (colorName, redCode, greenCode, blueCode) VALUES(:colorName, :redCode, :greenCode, :blueCode);"); 
+        $stmt -> execute([
+          ':colorName' => $colorName,
+          ':redCode'   => $rgbCode["red"],
+          ':greenCode' => $rgbCode["green"],
+          ':blueCode'  => $rgbCode["blue"]
+        ]);
+
+        echo "&lt;p style='" . colorStyle($rgbCode) . "'&gt; Success! The color &lt;strong&gt;&lt;em&gt;" . $colorName . "&lt;/em&gt;&lt;/strong&gt; has been &lt;strong&gt;recorded&lt;/strong&gt; among your favorites. &lt;/p&gt;";
+        require('backwardLink.php');
+      }
+      $conn = null;
+    }
+  }
+?&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<!-- expert -->
+<h4 id="deleteColor"> Script de suppression d'une couleur </h4>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/example3tierClicDelete.png" width="100px" style="padding-top: 0.5em">
+<p> Rappelons que dans le code de la <strong>page principale</strong> <code class="filename">index.php</code> appelle le <strong class="title">script d'effacement d'une couleur</strong>, stocké dans le fichier <code class="filename">deleteColor.php</code>, par un clic sur le <strong>bouton</strong> <code>Delete</code>. Ce clic engendre également une <strong class="specialG">requête <em class="sigle">HTTP</em></strong> (méthode <code>POST</code>) qui contient dans son corps le nom de la couleur saisie par l'utilisateur dans le seul formulaire inclus dans la balise <code class="prettyprint lang-html">&lt;form&gt;&lt;/form&gt;</code> du bouton. </p>
+</div><!-- display -->
+
+<p> Ce script procède dans la <strong class="pros">même logique</strong> que le <strong>script d'enregistrement</strong>, auquel on se reportera pour les détails : </p>
+<ul>
+	<li> <strong class="specialLB">récupération des données</strong> de saisie (cf. la ligne n° 3) ; </li>
+
+	<li> <strong class="specialLB"> gestion des erreurs de saisie</strong> éventuelles  (cf. la ligne n° 5) ;  </li>
+
+	<li> <strong class="specialLB">connexion</strong> à la base de données (cf. la ligne n° 7) ;  </li>
+
+	<li> <strong class="specialLB">recherche du nom de la couleur</strong> saisi pour vérifier s'il figure dans la base de données (cf. les lignes n° 8 à n° 12), puis :  </li>
+	<ul>
+		<li> dans la négative, affichage d'un <strong>message d'erreur</strong> (cf. les lignes n° 14 à n° 17) ;  </li>
+	
+		<li> dans l'affirmative, exécution de la <strong class="specialLB">requête <em class="sigle">SQL</em> de suppression</strong> <code class="cmd" style="color: darkorange;">DELETE</code> avec affichage d'un <strong>message de succès</strong> (cf. les lignes n° 18 à n° 33). </li>
+	</ul>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;?php
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $colorName = $_POST["colorName"]; 
+    
+    require('typingErrors.php');
+    if (!colorNameError($colorName)) {
+      $conn  = require 'dbConnect.php';
+      $stmt = $conn->prepare("SELECT * FROM `favoriteColors` WHERE `colorName` = :colorName;");
+      $stmt -> execute([
+        ':colorName' => $colorName,
+      ]);
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if (!$result) {
+        echo "&lt;p&gt; Sorry, the color &lt;strong&gt;&lt;em&gt;" . $colorName . "&lt;/em&gt;&lt;/strong&gt; is &lt;strong&gt;not recorded&lt;/strong&gt; among your favorites. &lt;/p&gt;";
+        require('backwardLink.php');
+      }
+      else {
+        $rgbCode   = [
+          "red"   => $result["redCode"],
+          "green" => $result["greenCode"],
+          "blue"  => $result["blueCode"]
+        ];
+
+        $stmt = $conn->prepare("DELETE FROM favoriteColors WHERE `colorName` = :colorName;"); 
+        $stmt -> execute([
+          ':colorName' => $colorName
+        ]);
+
+        require('cssColorStyle.php');
+        echo "&lt;p style='" . colorStyle($rgbCode) . "'> Success! The color &lt;strong&gt;&lt;em&gt;" . $colorName . "&lt;/em&gt;&lt;/strong&gt; has been &lt;strong&gt;deleted&lt;/strong&gt; from your favorites. &lt;/p&gt;";
+        require('backwardLink.php');
+      }
+      $conn = null;
+    }
+  }
+?&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<!-- expert -->
+<h3> Code des script secondaires </h3>
+
+
+<p> Tous ces scripts sont <strong class="defin">déportés dans des fichiers séparés</strong> car ils sont utilisés par les trois scripts étudiés supra. Cela permet une bonne <strong class="pros">factorisation du code</strong>. </p>
+
+
+<h4 id="dbConnect"> Script de connexion à la base de données </h4>
+
+
+<p> Le <strong class="title">script de connexion</strong> est stocké dans le <strong>fichier</strong> <code class="filename">dbConnect.php</code>. </p>
+
+<p> Il commence par <strong class="specialLB">renseigner les identifiants de connexion</strong> dans les variables <code class="prettyprint lang-php">$dbhost</code>, <code class="prettyprint lang-php">$dbuser</code>, etc. (cf. les lignes n° 2 à n° 5). </p>
+
+<p> Il définit la <strong class="speciaLB">fonction</strong> <code class="prettyprint lang-php">connect</code> (cf. les lignes n° 7 à n° 17) qui met en œuvre la <strong class="specialLB">connexion</strong> via le <strong>bloc</strong> <code class="prettyprint lang-php">try</code> et avec une <strong class="defin">gestion des exceptions</strong> codée dans le <strong>bloc</strong> <code class="prettyprint lang-php">catch</code> <a class="external" href="https://www.php.net/manual/fr/language.exceptions.php" target="_BLANK"></a>. </p>
+
+<p> Enfin, il retourne un <strong class="specialLB">appel de cette fonction</strong> avec comme arguments effectifs les <strong>identifiants de connexion</strong> mémorisés (cf. la ligne n° 19). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;?php
+  $dbhost   = "localhost";
+  $dbuser   = "root";
+  $dbpasswd = "********";
+  $dbname   = "userPref";
+
+  function connect($host, $db, $user, $passwd) {
+    $dsn = "mysql:host=$host;dbname=$db;charset=UTF8";
+    try {
+      $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+      return new PDO($dsn, $user, $passwd, $options);
+    } 
+    catch (PDOException $e) {
+      echo "&lt;p&gt; Connection error: " . $e->getMessage() . "&lt;/p&gt;";
+      die();
+    }
+  }
+
+  return connect($dbhost, $dbname, $dbuser, $dbpasswd);
+?&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<!-- expert -->
+<h4 id="typingErrors"> Script de gestion des erreurs de saisie </h4>
+
+
+<p> Le <strong class="title">script de gestion des erreurs de saisie</strong> est stocké dans le <strong>fichier</strong> <code class="filename">typingErrors.php</code>. </p>
+
+<p> Il définit juste <strong class="title">deux fonctions</strong>.  </p>
+<ul>
+	<li> La <strong class="specialLB">fonction</strong> <code class="prettyprint lang-php">colorNameError</code> vérifie si son <strong>argument formel</strong> <code class="prettyprint lang-php">$colorName</code> (cf. la ligne n° 3) : </li>
+	<ul>
+		<li> n'est <strong class="cons">pas défini</strong> – cela signifie l'utilisateur n'a <strong class="cons">pas saisi</strong> ce champ avant de cliquer sur le bouton <span class="boutonGris">Record</span> ou <span class="boutonGris">Delete</span> ; </li>
+	
+		<li> ou <strong class="cons">commence par le caractère « espace »</strong> – car cela peut occasionner le risque d'avoir une chaîne de caractère constituée seulement d'espaces, donc <strong class="cons">invisible</strong> ; </li>
+	</ul>
+	
+	<div class="nobullet"> Dans un tel cas, la fonction affiche dans des balises <code>&lt;p&gt;&lt;/p&gt;</code> un <strong>message d'erreur</strong> (cf. la ligne n° 4)puis dans une autre dans une balise <code>&lt;p&gt;&lt;/p&gt;</code> une <strong>invitation de renvoi</strong> à la page d'accueil (ligne n° 5). Elle retourne finalement la valeur booléenne <code class="prettyprint lang-php">true</code> (ligne n° 63); dans le script appelant qui reçoit cette valeur, cela empêche toute requête à la base de donnée et oblige l'utilisateur à <strong class="warning">modifier la saisie</strong>. </div>
+
+  <div class="nobullet"> Sinon – autrement dit, en l'<strong class="pros">absence d'erreur</strong> – la fonction retourne la valeur booléenne <code class="prettyprint lang-php">false</code> (cf. la ligne n° 8). </div>
+
+	<li> La <strong class="specialLB">fonction</strong> <code class="prettyprint lang-php">rgbCodeError</code> vérifie son <strong>argument formel</strong> <code class="prettyprint lang-php">$rgbCode</code> (cf. la ligne n° 13). Il s'agit d'un <strong>tableau</strong> dont chaque élément peut éventuellement être :  </li>
+	<ul>
+		<li> <strong class="cons">non défini</strong> – cela signifie que l'utilisateur n'a <strong class="cons">pas saisi</strong> son champ avant de cliquer sur le bouton <span class="boutonGris">Record</span> ;  </li>
+	
+		<li> <strong class="cons">non compris entre 0 et 255</strong> – une telle valeur saisie ne pouvant constituer une composante de code <strong><em class="sigle">RGB</em></strong> d'une couleur. </li>
+	</ul>
+	<div class="nobullet"> Dans un cas comme dans l'autre, la fonction affiche dans une balise <code>&lt;p&gt;&lt;/p&gt;</code> un <strong>message d'erreur</strong> où le nom du champ ayant fait l'objet d'une erreur de saisie est affiché dans sa couleur : <em class="bold" style="color: red">red</em>, <em class="bold" style="color: lime">green</em> ou <em class="bold" style="color: blue">blue</em> (cf. la ligne n° 18). Elle affiche également une <strong>invitation de renvoi</strong> à la page d'accueil (ligne n° 19).  </div>
+
+  <div class="nobullet"> Pour finir, la fonction retourne une <strong>valeur booléenne</strong> qui indique au script appelant si une <strong class="cons">erreur</strong> a été détectée ou non (cf. la ligne n° 22). </div>
+</ul>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;?php
+  function colorNameError($colorName) {
+    if (!isset($colorName) || $colorName[0] == ' ') {
+      echo "&lt;p&gt; Type &lt;strong&gt;a name&lt;/strong&gt; for your color. &lt;/p&gt;";
+      echo "&lt;p&gt; Click on the &lt;strong&gt;backward button ←&lt;strong&gt; of your browser. &lt;/p&gt;";
+      return true;
+    }
+    return false;
+  }
+
+  function rgbCodeError($rgbCode) {
+    $typingError = false;
+    foreach ($rgbCode as $color => $code) {
+      if (!isset($code) || $code > 255 || $code < 0) {
+        $typingError = true;
+        $textColor = $color;
+        if ($color == "green") $textColor = "lime";
+        echo "&lt;p&gt; Error! Type the &lt;strong style=color:" . $textColor . "&gt;" . $color . " code&lt;/strong&gt; from &lt;strong&gt;0 to 255.&lt;/strong&gt; &lt;/p&gt;";
+        echo "&lt;p&gt; Click on the &lt;strong&gt;backward button ←&lt;/strong&gt; of your browser. &lt;/p&gt;";
+      }  
+    }
+    return $typingError;
+  } 
+?&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<h4 id="cssColorStyle"> Script de composition du style CSS de couleur </h4> 
+
+
+<p> Le <strong class="title">script de composition du style <em class="sigle">CSS</em></strong> est stocké dans le <strong>fichier</strong> <code class="filename">cssColorStyle.php</code>. </p>
+
+<p> Il définit juste la <strong class="title">fonction</strong> <code class="prettyprint lang-php">colorStyle</code> dont l'argument formel <code class="prettyprint lang-php">$rgbCode</code> est implicitement un <strong>tableau de 3 entiers</strong> indexés respectivement par les étiquettes <code class="prettyprint lang-php">"red"</code>, <code class="prettyprint lang-php">"green"</code> et <code class="prettyprint lang-php">"blue"</code>. </p>
+
+<p> Cette fonction commence par préparer la <strong class="specialLB">couleur d'arrière‑plan</strong>. Via la fonction <code class="prettyprint lang-php">sprintf</code> (analogue à celle du langage <strong>C</strong> – cf. chap. C5‑VI <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/C5-StructuresPointeurs/Cc5-6_chainesCaracteres.html#sprintf" target="_BLANK">C</a>), elle transcode dans une variable <code class="prettyprint lang-php">$backgndHexcode</code> les valeurs exprimées en base 10 dans le tableau <code class="prettyprint lang-php">$rgbCode</code> en une chaîne de caractères formant un <strong class="defin">code de couleur hexadécimal</strong> à <strong>6 digits</strong>, préfixé par le caractère <code>#</code>, conformément à la syntaxe du <strong>langage <em class="sigle">CSS</em></strong> (cf. la ligne n° 3). </p>
+
+<p> Ensuite, elle détermine la <strong class="specialLB">couleur de texte</strong> (donc, au premier plan) dans une variable <code class="prettyprint lang-php">$foregndHexcode</code> : </p>
+<ul>
+	<li> en prenant <strong>par défaut</strong> la valeur <code class="prettyprint lang-php">"#000000"</code> – donc le <strong>noir</strong> (cf. la ligne n° 4) ;  </li>
+
+	<li> mais en la changeant en <code class="prettyprint lang-php">"#ffffff"</code> – donc le <strong>blanc</strong> – si la couleur d'arrière plan codée dans les éléments de <code class="prettyprint lang-php">$rgbCode</code> est <strong class="cons">sombre</strong> (cf. les lignes n° 5 & 6). Sinon, le texte en noir serait alors difficile à distinguer de l'arrière plan. </li>
+</ul>
+
+<p> Pour finir, la fonction retourne une <strong>chaîne de caractère</strong> qui concatène le <strong class="specialLB">style d'affichage</strong> en <strong class="specialLB">langage <em class="sigle">CSS</em></strong> à appliquer au texte des messages avec les codes de couleurs précédemment déterminés. Ce style sera injecté dans le <strong>code <em class="sigle">HTML/CSS</em></strong> des messages généré par les scripts appelants, via la fonction <code class="prettyprint lang-phm">echo</code> (cf. les lignes n° 8  à 10). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;?php
+  function colorStyle ($rgbCode) {
+    $backgndHexcode = sprintf("#%02x%02x%02x", $rgbCode["red"], $rgbCode["green"], $rgbCode["blue"]);
+    $foregndHexcode = "#000000";   // black text (default)
+    if (($rgbCode["red"] + $rgbCode["green"] + $rgbCode["blue"]) < 128 * 3) {
+      $foregndHexcode = "#ffffff"; // white text if background is too dark
+    }
+    return "background: " . $backgndHexcode . "; " .
+           "color: "      . $foregndHexcode . "; " .
+           "padding: 0.2em"; 
+  }
+?&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<!-- expert -->
+<h4> Script du lien de retour à la page principale </h4>
+
+
+<p> Stocké dans un fichier nommé <code class="filename">backwardLink.php</code>, ce script très simple code juste un <strong class="title">lien <em class="sigle">HTML</em></strong> de <strong class="title">retour à la page principale</strong> avec une balise <code>&lt;a&gt;&lt;/a&gt;</code>. Le lien s'ajoute sur la page qui appelle ce script par la fonction <code class="prettyprint lang-phm">echo</code>. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-php linenums:1">
+&lt;?php
+  echo "&lt;p&gt; &lt;a href='./index.php'&gt; Back to home &lt;/a&gt;&lt;/p&gt;"; 
+?&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+</div><!-- expert -->
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

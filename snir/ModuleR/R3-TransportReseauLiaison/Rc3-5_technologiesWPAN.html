@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="3"
+	data-pagenumber="V"
+	data-pageState="OK"
+	data-pageheadtitle="WPAN et domotique"
+	data-pagefulltitle="Les réseaux WPAN & domotiques"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/BluetoothLEaudio.png" width="300px" style="padding-top: 1em">
+<p class="square"> La technologie <strong>Wi‑Fi</strong> (cf. chap. R3‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html" target="_BLANK"></a>) n'est <strong class="defin">pas la seule</strong> pour créer des <strong class="title">réseaux sans‑fil</strong> d'équipement connectés. Il existe aussi notamment : </p>
+
+<ul>
+	<li> la technologie <strong class="specialLB">Bluetooth</strong>, qui est surtout adaptée aux <strong class="LB">réseaux personnels</strong>, d'une portée de l'ordre de 10 m maximum – on parle de <strong class="title"><em class="sigle">WPAN</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wireless_Personal_Area_Network" target="_BLANK">W</a> (pour <em class="english">wireless personnal area network</em>) ; </li>
+
+	<li> les technologies <strong class="specialLB">ZigBee</strong>, <strong class="specialLB">Z-Wave</strong>, <strong class="specialLB">EnOcean</strong>… qui servent à développer des <strong class="title">installations domotiques</strong>, dont l'étendue peut, par <strong>maillage</strong> (topologie <strong>mesh</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Topologie_mesh" target="_BLANK">W</a>), s'étendre à l'échelle d'un bâtiment. </li>
+</ul>
+</div><!-- display -->
+
+
+<p> Initialement, certaines de ces technologies étaient régies par la famille des <strong>normes <em class="sigle">IEEE 802.15</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/IEEE_802.15" target="_BLANK">W</a> mais la plupart sont maintenant gérées par des <strong class="defin">consortiums d'entreprises</strong> distincts – on parle d'<strong>alliances</strong>. </p>
+
+<p> Au delà de leurs spécificités techniques, toutes ces technologies partagent certains <strong class="title">aspects communs</strong>, comme : </p>
+<ul>
+	<li> d'opérer par <strong class="defin">ondes électromagnétiques</strong> dans les bandes de fréquences qui sont <strong class="pros">libre de droits</strong> <a class="external" href="https://www.arcep.fr/la-regulation/grands-dossiers-reseaux-mobiles/le-guichet-start-up-et-innovation/le-portail-bandes-libres.html" target="_BLANK"></a>, notamment autour de <em class="bold">2,4 GHz</em> (comme en <em class="mark">Wi‑Fi</em>, cf. chap. R3‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html" target="_BLANK"></a>) ; </li>
+
+	<li> de viser une <strong class="defin">consommation énergétique</strong> des équipements <strong>aussi basse que possible</strong>, pour maximiser leur <strong class="pros">autonomie</strong> ; </li>
+
+	<li> d'employer des <strong class="defin">piles de protocoles spécifiques</strong>, différentes de <strong><em class="sigle">TCP/IP</em></strong> – et c'est pourquoi ce chapitre dépasse largement le cadre la seule <em>couche liaison</em> du modèle <em class="sigle">OSI</em>. </li>
+</ul>
+
+<p class="square"> Depuis leur émergence au début des années 2000, les technologies <strong><em class="sigle">WPAN</em></strong> et <strong>domotiques</strong> ont connu des <strong class="title">développements importants</strong> pour plusieurs raisons : </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/bluetoothSport.png" width="220px" style="padding-top: 0.5em">
+	<li> la <strong class="defin">mobilité</strong> ; elle peut sembler accessoire pour un clavier ou une souris d'ordinateur, mais pour les équipements <strong>audio</strong> (enceinte connectée, casque…), <strong>sportifs</strong> ou autres (montres et bracelets connectés, télécommandes, kits « mains libres »…), c'est un <strong class="pros">aspect décisif</strong> ;     </li>
+
+	<li> la <strong class="defin">facilité de liaison</strong> au sein du réseau ; même pour les équipements stationnaires, l'absence de câble à poser, tout particulièrement  dans le domaine de la <strong>domotique</strong> est un <strong class="pros">avantage essentiel</strong> ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/domotiqueChauffage.jpeg" width="300px" style="padding-top: 0.5em">
+	<li> enfin, la mise en réseau d'équipements communicants (chauffage, éclairage, système d'alarme, caméras…) permet surtout : </li>
+	<ul>
+		<li> du <strong class="defin">contrôle à distance</strong> depuis une page web ou une application pour smartphone, ce qui est très positif pour l'<strong class="pros">expérience utilisateur</strong> ;  </li>
+
+		<li> des <strong class="defin">scénarios de commande</strong> <strong class="pros">sur mesure</strong> en fonction de la présence des utilisateurs, des jours ouvrés ou non, de l'environnement, etc. </li>
+	</ul>
+  </div><!-- display -->
+</ul>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/IoTicon.png" width="400px" style="padding-top: 0.0em">
+<p> Ces développements participent à la « vague » de l'<strong class="title">IoT</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_des_objets" target="_BLANK">W</a> (<strong>Internet of Things</strong>) qui amène sur le réseau mondial une myriade d'équipements dans un <strong class="defin">nombre croissant de domaines</strong> : médical, industriel, bâtiment, transport… </p>
+
+<p> Ainsi, il n'est pas rare que les box et équipements domotiques soient utilisées dans des locaux professionnels voire industriels, et non plus seulement pour les habitations. Avec cet « <strong class="specialLB">Internet 3.0</strong> », d'<strong class="defin">autres protocoles</strong> émergent : <strong><em class="sigle">MQTT</em></strong>, <strong>LoRaWan</strong>…   </p>
+</div><!-- dispaly -->
+
+
+<!--
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaison.png" width="300px" style="padding-top: 1em">
+-->
+
+
+<p class="square"> Toutes ces <strong>technologies</strong> forment un ensemble <strong class="warning">complexe et divers</strong>, difficile à aborder pour un futur technicien en informatique. Et pourtant, il est indispensable d'en acquérir les <strong class="defin">concepts fondamentaux</strong> et les <strong class="defin">connaissances de base</strong>, car la demande en compétences est forte dans le monde professionnel. Il faut pouvoir procéder aux mises en œuvre usuelles, ou à défaut, de se former et s'adapter rapidement.    </p>
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> La technologie <em class="mark">Bluetooth</em> </h2>
+
+
+
+<h3> Historique et évolution </h3>
+
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/bluetoothLogo.png" width="100px" style="padding-top: 0em">
+<p> Initiée dès 1994 par la société suédoise de télécommunications <em class="mark">Ericsson</em>, la technologie <strong class="title">Bluetooth</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bluetooth" target="_BLANK">W</a> (cf. l'article de <em class="mark">Wikipedia</em> pour l'origine du nom et du logo) n'a véritablement émergé qu'en 1999 avec la publication de la version 1.0 de sa norme et le développement des premières applications (téléphones portables). </p>
+</div><!-- display -->
+
+<div class="complement">
+<p> Comme pour la technologie <em class="mark">Wi‑Fi</em>, <strong class="title">Bluetooth</strong> est une <strong>marque</strong> (déposée) qui fédère un <strong>consortium d'entreprises</strong>, nommé le <strong class="specialLB">Bluetooth special interest group</strong> <a class="external" href="https://en.wikipedia.org/wiki/Bluetooth_Special_Interest_Group" target="_BLANK">W</a> (<strong><em class="sigle">SIG</em></strong>, avec, parmi les pionnières, <em class="mark">IBM</em>, <em class="mark">Intel</em>, <em class="mark">Nokia</em>, <em class="mark">Toshiba</em>… qui ont été depuis rejointes par plus de 36000 partenaires). Ce consortium publie les <strong class="defin">normes</strong> <strong>Bluetooth</strong> – qui est un standard <strong class="pros">ouvert</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Format_ouvert" target="_BLANK">W</a> – et définit les critères de <strong class="defin">certification</strong> <strong>des équipements</strong>. </p>
+
+<p> Parmi les <strong class="title">évolutions récentes</strong> de la <strong class="defin">norme</strong>, on peut citer :  </p>
+<ul>
+	<li> la version <em class="bold">2.0</em>, publiée en 2004, dont les exigences en débits sont compatibles avec les applications audio (baladeur <em class="sigle">MP3</em>…) ; </li>
+
+	<li> la version <em class="bold">4.0</em>, publiée en 2010, qui spécifie une <strong class="pros">basse consommation</strong> (<em class="english">Bluetooth low energie</em>, abrégé <strong><em class="sigle">LE</em></strong>) ; elle a été largement adoptée par les constructeurs ; </li>
+
+	<li> les versions <em class="bold">5.0</em>, <em class="bold">5.1</em> et <em class="bold">5.2</em>, publiées respectivement en 2016, janvier 2019 et décembre 2019 qui spécifient de nombreuses fonctionnalités pour l'<strong class="defin">IoT</strong>. </li>
+</ul>
+<p> Quant à la norme initiale <strong><em class="sigle">IEEE 802.15.1</em></strong>, elle n'est plus maintenue depuis 2005.  </p>
+</div><!-- complement -->
+
+
+<h3 id="caracteristiques"> Caractéristiques générales </h3>
+
+
+
+<div class="important">
+<p> <strong class="title">Bluetooth</strong> est une technologie de <strong class="defin">réseaux personnels sans‑fil</strong> (<strong class="defin"><em class="sigle">WPAN</em></strong>) à <strong>« faible » portée</strong> et <strong>faible consommation</strong>, qui opère dans la bande de fréquences comprises entre <em class="bold">2,402</em> et <em class="bold">2,480 GHz</em>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cette technologie existe en <strong>deux déclinaisons</strong> <a class="external" href="https://www.bluetooth.com/learn-about-bluetooth/radio-versions/" target="_BLANK"></a> :   </p>
+
+<ul>
+	<li> <strong class="specialLB">Bluetooth Classic</strong> (ou encore <strong><em class="sigle">BR/EDR</em></strong> pour <strong>basic rate/enhanced data rate</strong>) qui offre des débits de <em class="bold">1 </em> à <em class="bold">3 Mbits/s</em> ;  </li>
+
+	<li> <strong class="specialLB">Bluetooth Low Energie</strong> (<strong><em class="sigle">LE</em></strong>) qui offre des débits de <em class="bold">125 kbits/s </em> à <em class="bold">2 Mbits/s</em> avec une consommation électrique <strong class="pros">de 2 à 100  fois plus faibles</strong> qu'en <em class="mark">Bluetooth classic</em>.  </li>
+</ul>
+
+<p> Par ailleurs, les <strong>équipements Bluetooth</strong> sont étiquetés par <strong class="title">classe</strong>, qui spécifie la <strong class="defin">puissance maximale d'émission</strong> exprimée en <em class="bold">mW</em> ou en <em class="bold">dBm</em> <a class="external" href="https://fr.wikipedia.org/wiki/DBm" target="_BLANK">W</a>) : </p>
+
+<ul>
+	<li> la <strong>classe 1</strong> va jusqu'à <em class="bold">100 mW</em> (+20 dBm), qui constitue la <strong class="warning">limite légale</strong> dans la bande 2,4 Ghz pour les communications ; dans cette gamme de puissances, la technologie <em class="mark">Bluetooth</em> perd son avantage de faible consommation et entre en <strong>concurrence avec la</strong> <strong>Wi‑Fi</strong> ; il y a donc peu d'équipements de classe 1, hormis pour des applications industrielles ; </li>
+
+	<li> la <strong>classe 2</strong> va jusqu'à <em class="bold">2,5 mW</em> (+4 dBm) ; elle offre un <strong class="pros">excellent compromis</strong> entre consommation électrique et portée et englobe la <strong>très grande majorité des équipements</strong> ;  </li>
+
+	<li> la <strong>classe 3</strong> fixe la limite à seulement <em class="bold">1 mW</em> (+0 dBm) ; pour le moment, elle ne permet pas d'obtenir des performances de portée suffisantes pour les applications courantes ; rares sont donc les équipements de cette classe.  </li>
+</ul>
+</div><!-- complement -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/bluetoothCalculateur.png" width="500px" style="padding-top: 0em">
+<p> L'<strong class="title">évaluation de la portée</strong> des <strong>équipements Bluetooth</strong> n'est <strong class="warning">pas facile à estimer</strong> car elle dépend de très nombreux facteurs (milieu intérieur ou extérieur, présence d'obstacles, gain des antennes émétrices et réceptrices…). Plutôt que de se fier aux ordres de grandeur usuels <a class="external" href="https://fr.wikipedia.org/wiki/Bluetooth#La_couche_radio" target="_BLANK">W</a> qui sont <strong class="cons">très approximatifs</strong>, il est préférable de se reporter à l'<strong>estimateur en ligne</strong> proposé sur le site officiel <a class="external" href="https://www.bluetooth.com/learn-about-bluetooth/key-attributes/range/" target="_BLANK"></a>. </p>
+</div><!-- display -->
+
+
+<h4> Principales applications </h4>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/bluetoothEquip.jpg" width="600px" style="padding-top: 0.2em">
+<p> La technologie <strong class="title">Bluetooth</strong> est particulièrement adaptée  et principalement utilisée – pour <strong class="defin">relier</strong> à un <strong>système hôte</strong> (smartphone, ordinateur…) des <strong>périphériques</strong> de toutes sortes : clavier, souris, tablette graphique, enceinte portative, casque audio, montre connectée, bracelet de fitness… </p>
+
+<p> Elle peut également être employée pour <strong class="defin">partager la connexion</strong> d'un smartphone à l'Internet via un réseau de téléphonie avec un autre équipement : </p>
+<ul>
+	<li> un <strong>ordinateur portable</strong> également équipée d'une carte Blutooth ; </li>
+
+	<li> l'<strong>ordinateur de bord</strong> d'un véhicule… </li>
+</ul>
+
+<p> Bien souvent, les <strong class="title">transferts de données</strong> peuvent être <strong class="warning">aussi volumineux et complexes</strong> (streaming, etc.) que sur un réseau informatique usuel. En revanche, les <strong>débits</strong> sont nettement <strong class="cons">plus faibles</strong> qu'en <em class="mark">Wi‑Fi</em>. </p>
+</div><!-- display -->
+
+
+
+<h3> Topologies de réseaux </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+		<img class="top-right" src="../img/bluetoothPiconet.png" width="200px" style="padding-top: 0.5em">
+<p> La technologie <strong>Bluetooth</strong> permet de relier des équipements selon deux topologies de réseaux, dont la plus courante est le <strong class="title">pico-réseau</strong> <a class="external" href="https://en.wikipedia.org/wiki/Piconet" target="_BLANK">W</a> (<em class="english">piconet</em>). Il est constitué d'<strong class="specialR">un seul maître</strong> et de <strong class="specialG">plusieurs esclaves</strong> – jusqu'à <strong>7 actifs</strong> simultanément et <strong>255 passifs</strong> (dits <em class="english">parked slaves</em>) – qui ne peuvent communiquer qu'avec le maître. </p>
+
+<p> C'est typiquement la topologie mise en place lorsqu'on apparie un <strong>smartphone</strong> avec divers accessoires : une montre connectée, des écouteurs sans‑fil… </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/bluetoothScatternet.png" width="300px" style="padding-top: 0.5em">
+<p> Mais il existe aussi la topologie d'<strong class="title">inter-réseaux</strong> <a class="external" href="https://en.wikipedia.org/wiki/Scatternet" target="_BLANK">W</a> (<em class="english">scatternet</em> – le verbe <em class="english">scatter</em> signifiant « éparpiller »), formée de <strong class="defin">plusieurs pico-réseaux</strong> où certains esclaves dits <strong class="specialG">ponts</strong> peuvent communiquer avec plusieurs maîtres et relayer des données entre eux. </p>
+
+<p> Si les <strong>protocoles fondamentaux</strong> de la déclinaison <strong class="specialLB">classic</strong> n'ont pas été conçus pour cette topologie (ils n'ont pas les concepts de routage appropriés pour y gérer des communications avec des débits performants), il n'en va pas de même avec ceux de la technologie <strong class="specialLB">low eneregy</strong>. Cette évolution ouvre à la technologie <strong>Bluetooth</strong> le monde des réseaux de type <strong class="defin">mesh</strong>  qui constituent une composante essentielle de l'<strong>IoT</strong> <a class="external" href="https://www.bluetooth.com/learn-about-bluetooth/recent-enhancements/mesh/" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+
+<h3> Équipements matériels </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/bluetoothChip.png" width="250px" style="padding-top: 0.2em">
+<p> Le plus souvent, la fonctionnalité <strong>Bluetooth</strong> d'un équipement est implémentée matériellement par l'association d'un <strong class="title">circuit intégré</strong> de type <strong><em class="sigle">ASSP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Application_Specific_Standard_Product" target="_BLANK">W</a> (<em class="english">application-specific standard product</em>) et d'une <strong class="specialLB">antenne</strong>, cette dernière se réduisant à une <strong>piste</strong> sur circuit imprimé. </p>
+
+<p> Cette solution rend la technologie à la fois <strong class="pros">miniature</strong> (très facile à embarquer dans toutes sortes d'appareils) et <strong class="pros">très économique</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> En particulier, il n'est pas rare que cette fonctionnalité soit implémentée sur les cartes <em class="sigle">PCI</em> <strong>Wi‑Fi</strong> pour ordinateurs fixes (cf. chap. R3‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html#cartesWifi" target="_BLANK"></a>). </p>
+
+<p> La technologie <strong>Bluetooth</strong> est également disponible par divers <strong class="title">dispositifs raccordables</strong> comme : </p>
+<ul>
+	<div style="display: inline-block;">
+	<img class="top-right" src="../img/bluetoothDongles.png" width="400px" style="padding-top: 0.2em">
+	<li> les <strong class="specialLB">dongles</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dongle" target="_BLANK">W</a> à connecteur <strong><em class="sigle">USB</em></strong> ou <strong>jack</strong> <em class="bold">3,5 mm</em>, avec toute une gamme de performances adaptées aux différents usages ; ces dispositifs sont bienvenus sur des machines disposant d'une <strong>connectique <em class="sigle">USB</em></strong> mais pas de la fonctionnalité <em class="mark">Bluetooth</em> (PC fixe, nano‑ordinateur <em class="mark">Raspberry Pi</em>, etc.) ;</li>
+  </div><!-- display -->
+
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/bluetoothModule.png" width="400px" style="padding-top: 0.2em">
+	<li> les <strong class="specialLB">modules de prototypage</strong>, qui s'adaptent facilement aux <strong>cartes à microcontrôleur</strong> (<em class="mark">Arduino</em>, etc.) ; là encore, ces solutions sont utiles car il est rare que ces cartes intègrent la fonctionnalité <em class="mark">Bluetooth</em>. </li>
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+
+
+<h3> La pile de protocoles  –  généralités </h3>
+
+
+
+<div class="important">
+<p> La technologie <strong>Bluetooth</strong> repose sur une <strong class="title">pile de protocole</strong> <strong class="warning">spécifique</strong>, différente de <em class="sigle">TCP/IP</em>. De plus, cette pile diffère selon la déclinaison <strong class="specialLB">classic</strong> ou <strong class="specialLB">low energy</strong> (ou encore la variante <strong class="specialLB">mesh</strong>) mise en œuvre. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/bluetoothProtocolStack.png" width="500px" style="padding-top: 0.2em">
+<p> Les <strong class="title">piles de protocoles</strong> <strong>Bluetooth</strong> se décomposent en <strong class="defin">8 couches</strong> en incluant l'application qui utilise la technologie pour communiquer. Comme dans le modèle <em class="sigle">OSI</em> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#modeleOSI" target="_BLANK"></a>), ces couches sont présentées par <strong>ordre d'abstraction ascendant</strong>: </p>
+<ul>
+	<li> les <strong class="defin">couches basses</strong> étant prises en charge par les <strong class="specialGr">composants matériels</strong> (circuit, antenne), formant le « <strong>contrôleur</strong> » (rappelons qu'on parle de <em class="english">network interface controller</em> dans la technologie <em class="mark">Ethernet</em>) ;  </li>
+
+	<li> les <strong class="defin">couches hautes</strong> étant prises en charge par le <strong>système d'exploitation</strong> de l'équipement, considéré comme « <strong class="specialO">hôte</strong> » du réseau. </li>
+</ul>
+
+<div class="expert">
+<p> Par ailleurs, <strong class="title">certains équipements esclaves</strong> (casque, etc.) n'ayant <strong class="warning">pas de système d'exploitation</strong> (ils n'en ont pas besoin pour les tâches qu'ils accomplissent), donc c'est leur <strong class="specialGr">contrôleur Bluetooth</strong> qui gère la <strong>totalité des couches</strong>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> Les <strong class="title">piles de protocoles</strong> <strong>Bluetooth</strong> sont évidemment <strong class="warning">complexes</strong> et il n'est pas raisonnable d'en faire ici une description détaillée (on peut y consacrer un livre entier). Comme point de départ pour un <strong>approfondissement</strong>, on pourra consulter cet article <a class="external" href="https://fr.qaz.wiki/wiki/List_of_Bluetooth_protocols" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les technologies domotiques </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+<div class="complement">
+<p> À l'aude des années 2000, dans la foulée de l'émergence des technologies <strong>Wi‑Fi</strong> et <strong>Bluetooth</strong> sont apparues d'<strong class="title">autres technologies</strong> de <strong class="title"><em class="sigle">WPAN</em></strong>, spécialement orientées vers les <strong class="defin">applications domotiques</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domotique" target="_BLANK">W</a> (en anglais, <em class="english">home automation</em>). Leurs concepteurs visaient : </p>
+<ul>
+	<li> une <strong>consommation énergétique</strong> des équipements <strong class="pros">bien plus faible</strong> qu'en <em class="mark">Bluetooth</em>, pour que les équipements puissent fonctionner sur batterie au moins une année sans nécessiter de maintenance ; </li>
+
+	<li> des <strong>coûts</strong> suffisamment <strong class="pros">bas</strong> pour constituer une offre grand public compétitive par rapport aux technologies usuelles (non domotiques) ; </li>
+
+	<li> des <strong>protocoles de communication</strong> nativement adaptés aux topologies de <strong class="pros">réseaux maillés</strong> (cf. ci‑après), permettant de s'affranchir de la faible portée individuelle de chaque équipement. </li>
+</ul>
+
+<p> En revanche, ces technologies n'avaient initialement <strong class="defin">pas de fortes contraintes</strong> en termes de <strong>débits</strong>, puisque les données à transmettre étaient peu volumineuses (informations de capteurs, consignes de contrôle-commande, etc.). Mais la multiplication de dispositifs comme les caméras de vidéo-surveillance a peu à peu augmenté les exigences en débits… </p>
+</div><!-- complement -->
+
+
+<h4> Notion de box domotique </h4>
+
+
+<div class="important">
+<p> En règle générale, une <strong>installation domotique</strong> comporte un équipement qui assure la fonction de « <strong class="defin">centre névralgique</strong> », c'est‑à‑dire : </p>
+<ul>
+	<li> de gestion globale des <strong>scénarios de fonctionnement</strong> des équipements (programmation, lancements, compte‑rendus, statistiques…); </li>
+
+	<li> de passerelle avec le <strong><em class="sigle">LAN</em></strong> domestique – et l'Internet – pour le <strong>contrôle à distance</strong>. </li>
+</ul>
+<p> Devant fonctionner sans discontinuité, il est le plus souvent implémenté par un <strong class="defin">nano‑ordinateur dédié</strong> et on parle alors de <strong class="title">box domotique</strong> (<em class="english">home automation system</em>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme souvent dans les applications informatiques grand public, il existe une <strong class="title">offre variée</strong> de box domotiques sur le marché, avec des solutions : </p>
+<ul>
+	<li> principalement <strong class="specialT">propriétaires</strong> – par exemple, <em class="mark">Somfy Tahoma</em>, <em class="mark">Athom Homey</em>, <em class="mark">Eedomus</em>, <em class="mark">Fibaro Home Center</em>… ; </li>
+
+	<li> ou encore associées aux <strong class="specialO">enceintes connectées</strong> – par exemple, <em class="mark">Amazon Echo Plus</em>, <em class="mark">Google Home</em>… ; </li>
+
+	<li> et aussi <strong class="pros">open‑source</strong>, comme <em class="mark">Jeedom</em> ou <em class="mark">Home Assistant</em> qui seront détaillées infra <a class="infra" href="Rc3-5_technologiesWPAN.html#boxJeedom" target="_BLANK"></a>. </li>
+</ul>
+	<img class="top-left" src="../img/boxDomotiques.png">
+</div><!-- complement -->
+
+<div class="expert">
+<p> Certaines <strong class="specialT">solutions propriétaires</strong> sont néanmoins <strong class="pros">compatibles</strong> avec <strong>plusieurs gammes de modules</strong> et composants à format ouvert. Par exemple, la box <em class="mark">Homey</em> est capable de gérer de nombreux protocoles dont <em class="mark">Bluetooth</em>, <em class="mark">ZigBee</em>, <em class="mark">Z‑Wave</em>…    </p>	
+
+<p> En revanche, d'autres marques « historiques » comme la française <em class="mark">Somfy</em> ont initialement choisi une approche plus « fermée » pour privilégier leur propre écosystème de composants. Mais avec la diversité grandissante créée par la concurrence, une telle stratégie devient de moins en moins pertinente, et oblige à davantage d'ouverture <a class="external" href="https://www.somfy.fr/a-propos-de-somfy/technologies-et-compatibilites" target="_BLANK"></a>.   </p>
+</div><!-- expert -->
+
+
+<h4> Notion de réseau maillé domotique </h4>
+
+
+<div class="important">
+<p> Un <strong class="title">réseau maillé</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Topologie_mesh" target="_BLANK">W</a> (<em class="english">mesh network</em>) est un réseau d'équipements pouvant communiquer <strong class="defin">de proche en proche</strong>, et dont la topologie présente des <strong class="defin">boucles</strong> qui procurent une <strong class="pros">redondance</strong> sur certaines <strong>routes</strong> entre les équipements.   </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/WPANmesh.png" width="400px" style="padding-top: 0.2em">
+<p> Dans le cas d'une installation domotique, la <strong class="title">topologie maillée</strong> joue un rôle essentiel. Elle permet d'<strong class="pros">étendre le réseau</strong> sans‑fil bien <strong class="pros">au delà de la portée de la box</strong>. Pour y parvenir, un certain nombre de composants, en plus de leur fonction principale, assure celle de <strong>relais et routage</strong> des communications. </p>
+
+<p> En règle générale, ces composants ont la particularité d'être <strong>raccordés</strong> à une <strong class="defin">source d'énergie permanente</strong>, – par exemple, une prise de courant, ampoule lumineuse, etc. En effet : </p>
+<ul>
+	<li> toutes proportions gardées, la fonction de la transmission de données est quand même un peu « énergivore » ; un composant fonctionnant exclusivement sur batterie verrait son autonomie grandement diminuée ; </li>
+
+	<li> en cas de rupture d'alimentation, ce composant ne pourrait plus accomplir sa rôle de relais, ce qui risquerait de rendre inopérant toute une partie du réseau. </li>
+</ul>
+
+<p> En plus de la robustesse aux pannes qu'elle apporte, la <strong class="title">redondance des routes</strong> que forme le maillage des nœuds permet de <strong class="pros">compenser la faiblesse des débits</strong> que chaque nœud peut individuellement supporter. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="ZigBee"> La technologie <em class="mark">ZigBee</em> </h3>
+
+
+
+<div class="important"style="display: inline-block;">
+	<img class="top-right" src="../img/ZigBeeLogo.png" width="100px" style="padding-top: 0.2em">
+<p> <strong class="title">ZigBee</strong> <a class="external" href="https://fr.wikipedia.org/wiki/ZigBee" target="_BLANK">W</a> est une marque déposée de <strong class="defin">technologie de communication</strong> partiellement basée sur la <strong>norme <em class="sigle">IEEE 802.15.4</em></strong>. Elle est gérée par la <strong class="specialLB">Zigbee Alliance</strong> <a class="external" href="https://zigbeealliance.org/fr/" target="_BLANK"></a> qui assure principalement le développement des protocoles et la certification des équipements. </p>
+
+<p> À <strong class="pros">standard ouvert</strong>, elle est particulièrement bien adaptée aux <strong class="defin">installations domotiques</strong>, avec des équipements à <strong class="pros">très basse consommation</strong> et à <strong class="pros">très faible coût</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La technologie <strong class="title">ZigBee</strong> est également utilisée dans d'autres domaine comme la <strong>production industrielle</strong>, le secteur de la <strong>santé</strong> (<em class="english">ZigBee Health Care</em>), les <strong>liaisons radio</strong> à faible portée (télécommandes)… </p>
+</div><!-- complement -->
+
+
+<h4 id="caracteristiquesZigbee"> Principales caractéristiques </h4>
+
+
+<div class="complement">
+<p> La technologie <strong>ZigBee</strong> repose sur une <strong class="title">pile de protocoles</strong> spécifique réputée peu complexe. Comme toutes les technologies similaires (<em class="mark">Wi‑Fi</em>, <em class="mark">Bluetooth</em>…), elle est en <strong>constante évolution</strong> depuis sa première version (publiée dès 2004). Néanmoins, on peut retenir les aspects généraux suivants :  </p>
+<ul>
+	<li> l'exploitation de <strong>deux bandes de fréquences</strong> : 16 canaux autour de <em class="bold">2,4 GHz</em> bien sûr  – car libre de droits – mais aussi une bande plus basse, selon la législation du pays – en Europe, 1 canal autour de <em class="bold">868 MHz</em>, très peu sujet aux interférences et procurant une très bonne perméabilité des obstacles ; </li>
+
+	<li> des <strong>communications bidirectionnelles</strong>, qui permettent d'obtenir un <strong class="pros">retour d'état</strong> de n'importe quel équipement du réseau ;  </li>
+
+	<li> un <strong>nombre de nœuds</strong> quasiment <strong class="pros">illimité</strong> (jusqu'à 65536 théoriquement) qui permet de construire des réseaux très complexes et fortement maillés ;  </li>
+
+	<li> un <strong>nombre de sauts</strong> par communication <strong class="cons">limité</strong> à <em class="bold">10</em> au maximum (mais c'est une valeur très « honorable » au regard de la concurrence) ; </li>
+
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/XBeeModule.png" width="200px" style="padding-top: 0.2em">
+  <li> des implémentations matérielles principalement basées sur l'association d'un <strong>microcontrôleur</strong> et d'une <strong>antenne</strong> (cf. le module de prototypage <em class="mark">Xbee</em> 2,4 GHz en photo ci‑contre), avec une tension d'alimentation faible (typiquement, 3,3 V) et une <strong class="pro">consommation électrique minime</strong> (6,3 mW pour le module en photo) ; </li>
+  </div><!-- display -->
+
+  <div class="nobullet"> en principe, les équipements non raccordés au réseau électrique doivent avoir une <strong class="defin">autonomie</strong> de l'ordre de <strong>une à deux années</strong>, selon leur degré de sollicitation ;  </div>
+
+  <li> des <strong>débits</strong> théoriques de l'ordre de <em class="bold">250 kbits/s</em> en 2,4 GHz à <em class="bold">20 kbits/s</em> en 868 MHz ; ces faibles performances sont compensées par la simplicité des protocoles et la petite taille des données usuellement échangées (consignes, retours d'état, etc.) ; </li>
+
+  <li> une <strong>portée</strong> de l'ordre de <em class="bold">15 m</em> en intérieur en 2,4 GHz. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="produitsDomotiques"> Principaux fabricants et gammes de produits </h4>
+
+
+<p> Technologie pionnière en domotique, <strong>ZigBee</strong> a toujours eu un <strong class="pros">grand succès</strong>, notamment auprès des particuliers ayant un budget limité. La <em class="mark">ZigBee Alliance</em> revendique près de 300 millions de produits déployés dans le monde <a class="external" href="https://zigbeealliance.org/why-zigbee/" target="_BLANK"></a>. </p>
+
+<p>	De <strong class="title">nombreux fabricants</strong> développent des <strong class="defin">gammes de produits certifiés</strong>, parmi lesquels on peut citer les grandes marques <em class="mark">Schneider Electric</em>, <em class="mark">Legrand</em>, <em class="mark">Somfy</em>, <em class="mark">Philips</em>, <em class="mark">Texas Instrument</em>, <em class="mark">Ikea</em>… La <strong>variété des composants</strong> est <strong class="pros">grande</strong> – environ 3500 références, dont les exemples ci-dessous ne forment qu'un tout petit échantillon, non représentatif. </p>
+
+<img class="top-left" src="../img/ZigBeeProducts.png">
+
+
+<p> Dans ces gammes de produits, on trouve en particulier les <strong class="title">composants incontournables</strong> de la domotique : </p>
+
+<ul>
+	<li> des <strong>appareils pour tableaux électriques</strong> (disjoncteurs, contacteurs, etc.) ; </li>
+
+	<li> des <strong>appareils électriques</strong> (interrupteurs, prises de courant, relais de commande, etc.) à encastrer ou à brancher directement sur l'installation électriques (ampoules d'éclairage, hauts‑parleurs, etc.) ; </li>
+
+	<li> des <strong>capteurs</strong> de température, humidité, gaz, etc. </li>
+
+	<li> des <strong>détecteurs</strong> de présence ou d'ouverture, des <strong>caméras</strong>, etc. ; </li>
+
+	<li> des <strong>composants</strong> spécialisés dans divers domaines techniques – régulation du chauffage, climatisation, piscine, etc. </li>
+</ul>  
+
+<div class="complement">
+<p> Mais malgré la certification <em class="mark">ZigBee</em>, cette variété de composants n'est <strong class="cons">pas nécessairement interopérable</strong> d'un fabricant à l'autre, car les normes <strong>ZigBee</strong> n'ont pas toujours été suffisamment strictes. La <em class="mark">ZigBee Alliance</em>  travaille depuis plusieurs années à améliorer ce point.  </p>
+</div><!-- complement -->
+
+
+
+<h3> La technologie <em class="mark">Z‑Wave</em> </h3>
+
+
+
+<div class="important"style="display: inline-block;">
+	<img class="top-right" src="../img/ZwaveLogo.png" width="200px" style="padding-top: 0.2em">
+<p> <strong class="title">Z‑Wave</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Z-Wave" target="_BLANK">W</a> est une marque déposée de <strong class="defin">technologie de communication</strong> basée sur un standard partiellement propriétaire. Elle est gérée par la <strong class="specialLB">Z‑Wave Alliance</strong> <a class="external" href="https://z-wavealliance.org/" target="_BLANK"></a> qui assure le développement des protocoles et la certification des équipements. </p>
+
+<p> Elle est en <strong class="defin">concurrence directe</strong> avec la technologie <strong>ZigBee</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Une version améliorée nommée <strong class="title">Z‑Wave+</strong> a été mise au point en 2013, avec une <strong class="pros">amélioration significative</strong> de la <strong>mémoire</strong> embarquée dans les composants, de la <strong>portée</strong> des émetteurs-récepteurs radio de l'<strong>autonomie</strong> des équipements fonctionnant sur batterie.  </p>	
+</div><!-- complement -->
+
+<div class="expert">
+<p> Développée par l'entreprise Danoise <em class="mark">Zensys</em>, la marque <strong class="title">Z‑Wave</strong> a bénéficié de partenariats et d'investissements de nombreuses entreprises (<em class="mark">Danfoss</em>, <em class="mark">Ingersoll-Rand</em>, <em class="mark">Intel</em>, <em class="mark">Panasonic</em>, <em class="mark">Cisco</em>…). Après plusieurs changements de main (<em class="mark">Sigma Designs</em> aux États‑Unis, <em class="mark">Aeotec</em> en Europe), <strong class="title">Z‑Wave</strong> appartient depuis 2018 à l'entreprise américaine <em class="mark">Silicon Labs</em> <a class="external" href="https://en.wikipedia.org/wiki/Silicon_Labs" target="_BLANK">W</a>, qui est spécialisée dans la conception des microcontrôleurs, des puces dites <em class="mark">SoCs</em> <a class="external" href="https://fr.wikipedia.org/wiki/Système_sur_une_puce" target="_BLANK">W</a> (<em class="english">system on chip</em>) et plus généralement de l'<strong>IoT</strong>. </p>
+</div><!-- expert -->
+
+
+<h4 id="caracteristiquesZwave"> Principales caractéristiques et fonctionnement </h4>
+
+
+<div class="complement">
+<p> La technologie <strong class="title">Z‑Wave</strong> présente de <strong class="defin">nombreux points communs</strong> avec sa concurrente <strong>ZigBee</strong> (cf. supra <a class="supra" href="Rc3-5_technologiesWPAN.html#caracteristiquesZigbee"></a>), mais aussi <strong class="specialLB">quelques différences</strong> qui peuvent avoir leur importance : </p>
+<ul>
+	<li> l'emploi d'<strong>une seule bande de fréquence</strong>, inférieure au GHz, qui dépend des pays selon la législation – 868 MHz en Europe, 908 MHz en Amérique du Nord, etc. <a class="external" href="https://en.wikipedia.org/wiki/Z-Wave#Radio_frequencies" target="_BLANK">W</a> – avec à la clef des <strong class="cons">débits moindres</strong> (environ <em class="bold">40 kbits/s</em>) mais une <strong class="pros">meilleure portée</strong> (environ <em class="bold">25 m</em> en intérieur) ; </li>
+
+	<li> un <strong>nombre de nœuds</strong> <strong class="cons">limité</strong> à <em class="bold">232</em>, ce qui reste néanmoins <strong class="pros">largement suffisant</strong> pour la quasi-totalité des applications domotiques ;  </li>
+
+	<li> un <strong>nombre de sauts</strong> par communication <strong class="cons">limité</strong> à <em class="bold">4</em> au maximum (à comparer à la valeur 10 en <em class="mark">ZigBee</em>). </li>
+</ul>
+<p> Pour plus de détails sur le fonctionnement de la technologie <strong>Z‑Wave</strong>, on pourra consulter ce lien <a class="external" href="http://tutoriels.domotique-store.fr/category/2/z_wave.html" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+
+<h4> Principaux fabricants et gammes de produits </h4>
+
+
+<div class="complement">
+<p> Jusqu'à récemment, conformément à la « philosophie » d'une technologie propriétaire, les <strong class="title">équipements</strong> certifiés <strong>Z‑Wave</strong>, quel que soit leur fabricant, devaient nécessairement incorporer une <strong class="specialLB">puce</strong> – typiquement, un microcontrôleur et une antenne – conçue et fabriquée pour le compte de l'entreprise détentrice de la marque (<em class="mark">Zensys</em>, <em class="mark">Sigma Designs</em>, <em class="mark">Aeotec</em>, <em class="mark">Silicon Labs</em>). </p>
+
+<p> Si cette contrainte induit forcément un <strong class="cons">surcoût</strong> pour les équipements, elle n'a pas eu d'impact significatif sur la <strong>diversité</strong> des produits commercialisés. La <em class="mark">Z‑Wave Alliance</em> revendique actuellement plus de <strong>3000 références</strong> <a class="external" href="https://products.z-wavealliance.org/" target="_BLANK"></a>, fabriqués par des grands noms de la domotique (<em class="mark">Fibaro</em>, <em class="mark">Zipato</em>, <em class="mark">Aeotec</em>… cf. la figure ci-dessous).</p>
+
+<img class="top-left" src="../img/ZwaveGammeAeotec.png">
+
+<p> Mais surtout, cette stratégie a garanti aux équipements <strong>Z‑Wave</strong> une <strong class="pros">excellente interopérabilité</strong>, quels que soient leurs fabricants – une qualité décisive qui fait justement défaut à la technologie <em class="mark">ZigBee</em>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> En revanche, la stratégie de développement propriétaire a constitué un handicap pour le <strong class="cons">rayonnement commercial</strong> de la marque <em class="mark">Z‑Wave</em> dans le domaine plus vaste de l'<strong>IoT</strong> et des partenariats potentiels avec les <em class="sigle">GAFA</em><a class="external" href="https://www.abavala.com/le-protocole-proprietaire-z-wave-reve-son-avenir-en-tant-que-standard-ouvert/" target="_BLANK"></a>. Fin 2019, la <em class="mark">Z‑Wave Alliance</em> a donc officialisé sa décision de rendre ses <strong class="pros">protocoles ouverts</strong> <a class="external" href="https://news.silabs.com/2019-12-19-Silicon-Labs-and-Z-Wave-Alliance-Expand-Smart-Home-Ecosystem-by-Opening-Z-Wave-to-Silicon-and-Stack-Suppliers#assets_20295_122852-117" target="_BLANK"></a>. Autrement dit, les fabricants autre  que <em class="mark">Silicon Labs</em> et ses partenaires pourront désormais, sous couvert d'un contrat avec ces derniers, produire des puces <em class="mark">Z‑Wave</em> et les intégrer directement aux équipements qu'ils commercialisent.   </p>
+</div><!-- expert -->
+
+
+
+<h3> La technologie <em class="mark">EnOcean</em> </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/EnOceanLogo.png" width="200px" style="padding-top: 0.2em">
+<p> <strong class="title">EnOcean</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Enocean" target="_BLANK">W</a> est une marque déposée de <strong class="defin">technologie de communication</strong> dite <strong class="pros">à captage d'énergie</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Récolte_d'énergie" target="_BLANK">W</a> (<em class="english">energy harvesting</em>). Elle est basée sur un <strong class="pros">standard ouvert</strong> normalisé (<em class="sigle">ISO/CEI 14543‑3‑10</em>). </p>
+
+<p> Elle est gérée par la <strong class="specialLB">EnOcean Alliance</strong> <a class="external" href="https://www.enocean-alliance.org/fr/" target="_BLANK"></a> qui assure le développement des protocoles et la certification des équipements. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> L'<strong>entreprise</strong> <strong class="title">EnOcean</strong> est une filiale du groupe international <strong>Siemens</strong>, fondée en 2001. À travers son alliance, elle revendique plus de <strong>400 partenaires</strong>.  </p>	
+</div><!-- complement -->
+
+
+<h4> Principales caractéristiques et fonctionnement </h4>
+
+
+<div class="complement">
+<p> La technologie <strong class="title">EnOcean</strong> présente une <strong>particularité essentielle</strong> qui la distingue de ses concurrentes : l'<strong class="pros">absence de pile électrique</strong> dans les équipements. Ces derniers sont <strong>auto-alimentés</strong>, au sens où ils puisent l'énergie nécessaire à leur fonctionnement et leur communication dans leur environnement par divers moyens (cellule photo-électrique, capteur piézo-électrique, module Peltier…) <a class="external" href="https://www.enocean.com/en/technology/energy-harvesting/" target="_BLANK"></a>. Cette orientation diminue considérablement les besoins en maintenance des installations. </p>
+
+<p> Par ailleurs, on peut noter les caractéristiques suivantes : </p>
+<ul>
+	<li> comme en <em class="mark">Z‑Wave</em>, l'emploi d'<strong>une seule bande de fréquence</strong>, inférieure au GHz (aux alentours de 900 MHz selon les pays) ; </li>
+
+	<li> des <strong>émissions</strong> de <strong class="pros">très faible puissance</strong> en cohérence avec le choix technologique d'auto-alimentation des équipements, qui doivent donc consommer le moins possible d'énergie ; </li>
+
+	<li> un <strong>nombre de sauts</strong> par communication <strong class="cons">limité</strong> à <em class="bold">2</em> au maximum (à comparer à la valeur 10 en <em class="mark">ZigBee</em>). </li>
+</ul>
+<p> Pour plus de détails sur l'utilisation de la technologie <strong>EnOcean</strong>, on pourra consulter ce lien <a class="external" href="https://forum.jeedom.com/viewtopic.php?t=14598" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+<h4> Principaux fabricants et gammes de produits </h4>
+
+
+<p> Parce que la marque <strong>EnOcean</strong> est plus récente que ses concurrentes, elle dispose sur le marché de <strong class="cons">produits moins nombreux</strong>. Néanmoins, on trouve bien entendu la plupart des <strong class="title">incontournables</strong> de la domotique cités supra <a class="supra" href="Rc3-5_technologiesWPAN.html#produitsDomotiques"></a> (cf. l'échantillon ci‑dessous qui, comme les précédents, n'est évidemment pas exhaustif). </p>
+
+<img class="top-left" src="../img/EnOceanProducts.png">
+
+
+<h3> Autres technologies de communication domotique </h3>
+
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RF433logo.png" width="250px" style="padding-top: 0.5em">
+<p class="square"> Hormis celles décrites supra, il existe bien d'autres technologies de communication employées domotique, notamment celles qui sont basées sur le <strong>standard</strong> <strong class="title">RF 433</strong> (pour <em class="english">radio‑frequency 433 MHz</em>). C'est le protocole historique de communication par radio-fréquences employé dans les systèmes de télécommande « d'extérieur » (notamment pour portails), pour lequel ont été de nombreux modules émetteurs et/ou récepteurs <a class="external" href="https://en.wikipedia.org/wiki/RF_module" target="_BLANK">W</a>.  </p>
+</div><!-- display -->
+
+<p> Parmi les marques d'<strong class="specialLB">équipements</strong> à technologie <strong class="title">RF 433</strong>, on peut citer : </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RF433logoApp.png" width="200px" style="padding-top: 0.5em">
+<ul>
+	<li> l'équipementier électrique français <strong>Chacon</strong> <a class="external" href="https://chacon.com/fr/" target="_BLANK"></a> et sa filiale domotique <em class="mark">DiO</em> qui propose une large gamme de produits communicants (prises électriques, interrupteurs, relais, etc.)  ; </li>
+
+	<li> la belge <strong>Edisio</strong> <a class="external" href="https://www.edisio.com/" target="_BLANK"></a>, également spécialisée dans l'automatisation et la domotique ; </li>
+
+	<li> la néerlandaise <strong>RFXCOM</strong> <a class="external" href="http://www.rfxcom.com/" target="_BLANK"></a>, spécialisée dans les émetteurs/récepteurs ; </li>
+
+	<li> l'américaine <strong>Oregon Scientific</strong> <a class="external" href="http://global.oregonscientific.com/fr/" target="_BLANK"></a>, spécialisée dans les stations météorologiques… </li>
+</ul>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/KNXpannel.png" width="300px" style="padding-top: 0.5em">
+<p class="square"> On peut également citer <strong class="title">KNX</strong>, une <strong>marque de certification</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Marque_de_certification" target="_BLANK">W</a> développée par l'association éponyme <a class="external" href="https://www.knx.org/knx-en/for-your-home/" target="_BLANK"></a> basée en Belgique (c'est une alliance). Initialement, <strong class="title">KNX</strong> est un <strong>standard de communication</strong> <strong class="pros">normalisé</strong> (<em class="sigle">ISO/IEC 14543</em>) et <strong class="pros">ouvert</strong> basé sur des transmissions <strong class="defin">filaires par bus</strong> pour le <strong class="defin">bâtiment</strong>. </p>
+</div><!-- display -->
+
+<div class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/KNXproducts.png" width="600px" style="padding-top: 0.2em">
+<p> Cette technologie a été conçue pour être mise en œuvre dans les <strong>grands locaux du secteur tertiaire</strong>, afin de mettre en place un contrôle centralisé de toutes les services techniques d'un bâtiment : </p>
+<ul>
+	<li> distribution électrique, </li>
+
+	<li> éclairage, </li>
+
+	<li> chauffage et climatisation, </li>
+
+	<li> contrôle de présence, </li>
+
+	<li> contrôle de présence, </li>
+
+	<li> etc.</li>
+</ul>
+</div><!-- display -->
+
+<div class="expert" class="expert" style="display: inline-block;">
+	<img class="top-right" src="../img/KNXmarks.png" width="250px" style="padding-top: 0.2em">
+<p> Aujourd'hui, l'<strong>association</strong> <strong class="title">KNX</strong> promeut des <strong class="pros">technologies diversifiées</strong> (<em class="sigle">CPL</em> <a class="external" href="https://fr.wikipedia.org/wiki/Courants_porteurs_en_ligne" target="_BLANK">W</a>, radio) dans <strong>tous les domaines</strong> d'application : domotique, industrie… Tous les grands équipementiers électriques proposent des <strong class="defin">produits certifiés</strong> <strong>KNX</strong> : <em class="mark">ABB</em>, <em class="mark">Siemens</em>, <em class="mark">Schneider Electric</em>, <em class="mark">Legrand</em>, <em class="mark">Hager</em>, etc. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="boxJeedom"> La technologie de box domotique <em class="mark">Jeedom</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+		<img class="top-right" src="../img/JeedomLogo.png" width="120px" style="padding-top: 0.2em">
+<p> <strong class="title">Jeedom</strong> est avant tout une <strong>technologie logicielle</strong> <strong class="pros">open‑source</strong> de <strong class="defin">box domotique</strong> développée sous la forme d'un <strong>serveur web</strong> par la start‑up française éponyme <a class="external" href="https://www.jeedom.com/fr/" target="_BLANK"></a>. Fondée en 2014, cette entreprise est membre de la <em class="mark">Z‑Wave Alliance</em> et de la <em class="mark">EnOcean Alliance</em>. </p>
+
+<p> Avec quelques <strong class="cons">limites d'utilisation</strong>, elle peut être <strong class="pros">installée gratuitement</strong> sur <strong>diverses configurations matérielles</strong>, notamment une machine à système <em class="mark">Linux Debian</em> comme un nano‑ordinateur de type <em class="mark">Raspberry Pi</em>…  </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/boxJeedomSmart.png" width="250px" style="padding-top: 0.2em;">
+<p> Cette solution logicielle est également commercialisée dans des <strong class="title">configurations matérielles</strong> <strong>prêtes à l'emploi</strong> <a class="external" href="https://www.jeedom.com/site/fr/box.html" target="_BLANK"></a>. </p>
+
+<p> En particulier, on peut citer la <strong>box domotique</strong> <strong class="defin">Jeedom Smart</strong>, qui est destinée au <strong>grand public</strong> (averti). Dans un boîtier métallique ad‑hoc, elle embarque une carte <strong class="specialLB">Odroid‑C2</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Odroid" target="_BLANK">W</a> dotée d'une puce de stockage de masse <strong><em class="sigle">EMMC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Carte_MMC#eMMC" target="_BLANK">W</a> (<em class="english">embedded multi‑media card</em>) et d'une <strong>antenne externe</strong> à grand gain (pour les communications <em class="mark">Z‑Wave</em> ou <em class="mark">EnOcean</em>). </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p> La box <strong class="defin">Jeedom Smart</strong> dispose également d'un port <strong>micro <em class="sigle">USB‑C</em></strong>, de 4 ports <strong><em class="sigle">USB 2.0</em></strong>, d'un port <strong><em class="sigle">RJ45</em></strong> (<em class="mark">Ethernet 10/100/1000</em>) et d'un port <strong><em class="sigle">HDMI 2.0</em></strong>. </p>
+
+<p>	Elle est livrée nativement compatible avec au choix l'une des deux technologies <strong class="specialLB">Z‑Wave</strong> ou <strong class="specialLB">EnOcean</strong>. Et on peut aussi lui faire exploiter d'<strong>autres protocoles</strong> radio (<em class="mark">Wi‑Fi</em>, <em class="mark">Bluetooth</em>, <em class="mark">ZigBee</em>, <em class="mark">RFXCOM</em>…) par le biais de <strong>dongles <em class="sigle">USB</em></strong> dédiés. </p>
+
+
+
+<div  class="expert">
+<h4 id="installationJeedom"> Installation sur une carte <em class="mark">Raspberry Pi</em> </h4>
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/RaspberryPi_Card.png" width="250px" style="padding-top: 0.2em">
+<p> Sur une carte <strong class="Raspberry">Raspberry Pi</strong>, on peut <strong class="title">installer l'application Jeedom</strong> de deux façons (cf. la page web de référence <a class="external" href="https://doc.jeedom.com/fr_FR/installation/rpi" target="_BLANK"></a>). </p>
+<ul>
+	<li> On peut procéder <strong class="specialLB">à partir de zéro</strong>, c'est‑à‑dire sur une carte <em class="mark">MicroSD</em> « vierge », avec une <strong>image</strong> <a class="external" href="https://images.jeedom.com/rpi/" target="_BLANK"></a> qui combine le système d'exploitation <strong class="Raspberry">Raspberry Pi OS</strong> et l'application <strong>Jeedom</strong>. </li>
+
+	<div class="nobullet"> La procédure est similaire à celle que pour l'installation d'un système d'exploitation, avec un logiciel dédié (<em class="mark">Raspberry Imager</em>, <em class="mark">Rufus</em>, <em class="mark">Balena Etcher</em>…) – cf. sujet de TP R2‑2 <a class="previous" href="../R2-Applications/Rtp2-2_serveurWeb.html#prepaPoste" target="_BLANK"></a>.  </div>
+
+	<li> On peut aussi procéder dans un <strong>terminal de commandes</strong> en ligne sur une carte en service avec un <strong class="specialLB">système déjà installé</strong>, comme pour n'importe quelle application (cf. ci‑dessous). <em class="remark">Attention</em>, les <strong>versions les plus récentes</strong> de <strong class="Raspberry">Raspberry Pi OS</strong> ne sont <strong class="warning">pas forcément compatibles</strong> avec l'application <strong class="defin">Jeedom</strong> : certains <strong>plugins</strong> peuvent poser des problèmes.   </li>
+
+	<div class="nobullet"> Cette deuxième solution est un peu <strong class="cons">plus longue</strong> mais elle présente l'avantage de pouvoir utiliser la carte pour d'<strong class="pros">autres applications</strong>. </div>
+</ul>
+</div><!-- complement -->
+
+
+<p class="square"> Pour une carte en service avec un système <strong class="Raspberry">Raspberry Pi OS</strong> déjà installé, il existe un <strong class="title">script d'installation</strong> complet (à retrouver également au lien suivant <a class="external" href="https://nodered.org/docs/getting-started/raspberrypi" target="_BLANK"></a>) qui gère l'installation et la mise à niveau éventuelle de tous les paquets nécessaires : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark" style="font-size: 70%">
+<span class="displayDarkGreen">wget</span> <span class="displayDarkRed">-O-</span> https://raw.githubusercontent.com/jeedom/core/master/install/install.sh <span class="displayDarkBlue">|</span> <span class="displayDarkGreen">sudo bash</span>
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> <em class="remark">Attention</em> : cette installation est une <strong class="cons">procédure longue</strong> (plusieurs dizaines de minutes). </p>
+<p> De plus, pour pouvoir employer cette implémentation de box dans le cadre d'un <strong class="specialLB">réseau domotique sans‑fil</strong>, on peut : </p>
+<ul>
+	<li> soit exploiter les <strong>dispositifs internes</strong> de la carte <strong class="Raspberry">Raspberry Pi</strong> (<em class="mark">Wi‑Fi</em> et/ou <em class="mark">Bluetooth</em>) ; </li>
+
+  <div style="display: inline-block;">
+	<img class="top-right" src="../img/ZstickAeotec.png" width="200px" style="padding-top: 0.5em">
+	<li> soit recourir à un <strong>dongle <em class="sigle">USB</em></strong> pour une technologie spécifique, comme par exemple le <strong class="defin">contrôleur‑passerelle</strong> <strong class="specialLB">Z‑Wave</strong> en photo ci‑contre. </li>
+	</div><!-- display -->
+</ul>
+</div><!-- expert -->
+
+
+<h4> Contrôle de box <em class="mark">Jeedom</em> </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/JeedomLAN.png" width="300px" style="padding-top: 0.2em">
+<p> Quelle que soit son implémentation matérielle, le <strong class="title">contrôle</strong> d'une <strong class="defin">box Jeedom</strong> s'effectue par accès direct au <strong>serveur web</strong> qui la constitue, via un navigateur s'exécutant sur n'importe quel terminal disposant d'un <strong>écran suffisamment grand</strong> (ordinateur ou tablette). </p>
+
+<p> La box doit donc être reliée à un <strong class="specialO"><em class="sigle">LAN</em></strong> à pile de protocoles <strong><em class="sigle"> TCP/IP</em></strong> – typiquement soit par liaison câblée <em class="mark">Ethernet</em>, soit par <em class="mark">Wi‑Fi</em> – et se voir attribuer une <strong class="specialO">adresse <em class="sigle">IP</em></strong>, qu'il est indispensable de déterminer pour s'y connecter initialement. </p>
+</div><!-- important -->
+
+<div class="complement">	
+<p> La <strong class="title">connexion</strong> à la <strong>page web</strong> d'accueil de la <strong class="defin">box Jeedom</strong> s'effectue par le protocole <code class="cmd">http</code> <strong>simple</strong> (non sécurisé) directement sur l'<strong class="specialO">adresse <em class="sigle">IP</em></strong> attribuée à la box. Par la suite, il est possible d'obtenir auprès de l'entreprise <em class="mark">Jeedom</em> un <strong>nom de domaine</strong>. </p>
+
+<p> Les <strong class="specialLB">identifiants de connexion</strong> par défaut et la marche à suivre sont indiqués sur cette page web de documentation du constructeur <a class="external" href="https://doc.jeedom.com/fr_FR/premiers-pas/index" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+<h4> Le marché des plugins </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/JeedomMarketLogo.png" width="200px" style="padding-top: 1em">
+<p> Le <strong>contrôle</strong> d'un <strong>réseau domotique</strong> constitué autour d'une <strong class="defin">box Jeedom</strong> s'effectue par le biais de <strong class="title">plugins logiciels</strong> à installer sur la box. </p>
+
+<p> Les plugins sont accessibles via le <strong class="specialLB">Jeedom Market</strong> <a class="external" href="https://market.jeedom.com/index.php?v=d" target="_BLANK"></a> qui fonctionne comme une <strong>boutique d'applications</strong> pour smartphones, avec un <strong>compte utilisateur</strong> qu'il faut préalablement créer. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Techniquement, un <strong class="title">plugin</strong> est un composant logiciel qui s'exécute en <strong>tâche de fond</strong> – en informatique, on parle de <strong class="specialLB">daemon</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Daemon_(informatique)" target="_BLANK">W</a>. </p>
+
+<p> En interaction avec l'application domotique <strong class="defin">Jeedom</strong> via des <strong><em class="sigle">API</em></strong>, un <strong>plugin</strong> fait l'objet de <strong class="title">dépendances</strong> qui doivent être réactualisées à chaque mise à jour (cf. la capture d'écran ci‑dessous de la page d'accueil du plugin <strong>Z‑Wave</strong> illustré à titre d'exemple). </p>
+	<img class="top-left" src="../img/ZwavePluginPage.jpg">
+</div><!-- complement -->
+
+<p> La capture d'écran ci‑dessous montre la <strong class="title">page d'accueil</strong> du <strong class="defin">Jeedom Market</strong>, à la rubrique des plugins <strong class="pros">les plus populaires</strong>. </p>
+
+<img class="top-left" src="../img/JeedomMarketPopulaires.png">
+
+
+
+<div class="expert">
+<p> Beaucoup de <strong class="title">plugins essentiels</strong> sont <strong class="pros">gratuits</strong> (cf. ci‑dessous). Il en va souvent de même de ceux qui sont associés aux équipements qu'on intègre au réseau. En effet, ces plugins sont inutiles sans les équipements qu'ils sont destinés à gérer, donc les fabricants qui développent leur propre plugin peuvent inclure leur coût de développement dans le prix des équipements et peuvent ensuite le fournir « gratuitement ». </p>
+
+<p> Il y a néanmoins une <strong class="title">exception</strong> notable : le plugin <strong class="specialLB">EnOcean</strong> est <strong class="cons">payant</strong>.  </p>
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> Une fois qu'un plugin payant est <strong class="title">acheté</strong> via un <strong>compte Jeedom Market</strong>, il peut être <strong>installé/désinstallé</strong> <strong class="pros">à volonté</strong> sur n'importe quelle <strong class="defin">box Jeedom</strong> associée à ce compte. </p>
+</div><!-- remarque -->
+
+
+
+<h4> Mise en place du réseau domotique </h4>
+
+
+
+<p> Avec une <strong class="defin">box Jeedom</strong>, la mise en place d'un <strong class="title">réseau d'équipements domotiques</strong> comporte <strong>plusieurs étapes</strong>. </p>
+<ol class="numbered">
+	<li> On commence par une <strong class="specialLB">description architecturale et technique des locaux</strong>. Cette description procède par la déclaration d'une <strong class="defin">arborescence d'objets</strong>, chacun représentant une <strong>pièce</strong> ou une <strong>partie</strong> des locaux – étage, jardin, etc. L'arborescence est définie par les <strong class="specialN">liens de parenté</strong> que l'utilisateur renseigne au fur et à mesure de la création des objets. </li>
+
+	<div class="exemples">
+	<p class="exemple"> Typiquement, on déclare un <strong>objet « maison »</strong> puis autant d'objets que l'habitation compte d'étages (« rez‑de‑chaussée », « 1<sup>er</sup> étage », etc.), chacun ayant pour parent l'« maison ». Puis, en suivant ce principe hiérarchique, pour chaque étage, on déclare ses différentes pièces (cf. TP R3‑2 <a class="TP" href="Rtp3-2_domotique.html#declarationObjets" target="_BLANK"></a>). </p>
+		<img class="top-left" src="../img/R3tp2_objets.png">
+	</div><!-- exemple -->
+
+	<li> Ensuite, on procède à l'<strong class="specialLB">intégration des équipements communicants</strong> s'effectue selon un <strong class="defin">mode opératoire</strong> qui dépend de la technologie choisie (<em class="mark">ZigBee</em>, <em class="mark">Z‑Wave</em>…) et passe nécessairement par son <strong>plugin associé</strong>. </li>
+
+	<div class="exemples" style="display: inline-block;">
+		<img class="top-right" src="../img/Z-stickInclusion.png" width="200px">
+	<p class="exemple"> Tout composant <em class="mark">Z‑Wave</em> est à intégrer au réseau via le <strong class="defin">plugin Z‑Wave</strong> par une <strong class="title">procédure d'inclusion spécifique</strong>. Ainsi, le <strong>contrôleur-passerelle</strong> amovible <em class="mark">Aeotec Z‑Stick</em> possède une batterie interne qui lui permet d'être momentanément débranché de la box pour aller inclure (ou exclure) les composants à n'importe quelle distance de la box. La procédure d'inclusion consiste en un protocole d'échange de données avec le contrôleur ; elle est déclenchée par une <strong>séquence d'appuis</strong> sur des boutons‑poussoirs (sur le contrôleur et sur le composant). </p>
+
+	<p> Après cette séquence, le contrôleur doit être rebranché sur la box et une <strong>procédure de synchronisation</strong> <strong class="cons">plus ou moins complexe</strong> doit être mise en œuvre pour que le composant soit intégré au réseau <em class="mark">Z‑Wave</em>. </p>
+	</div><!-- exemple -->
+
+	<div class="nobullet"> Lors de leur intégration, les <strong class="title">équipements</strong> peuvent être <strong>associés à des objets</strong> déclarés, ainsi qu'à des catégories transversales prédéfinies (« éclairage », « chauffage », etc.) pour permettre ensuite de les contrôler par groupes (par exemple, éteindre simultanément toutes les lumières d'un étage). </div>
+
+	<div class="nobullet"> Par ailleurs, chaque <strong class="title">équipement</strong> est associé à des <strong>commandes spécifiques</strong> qui sont accessibles via une page web. On y trouve des boutons à cliquer pour tester et paramétrer ces commandes. </div>
+
+	<li> La <strong class="specialLB">programmation de scénarios</strong> pour automatiser le fonctionnement des équipements, les surveiller et les contrôler à distance. Ces scénarios sont codés sous formes de <strong>séquences de blocs</strong> incluant des <strong>structures de contrôle</strong> (<code>SI/SINON</code>, <code>TANT QUE</code>, etc.), des informations issues des équipements (états, paramètres, variables) et des actions sur les équipements. Il est également possible de faire intervenir des <strong>aspects temporels</strong> (durées, actions périodiques, déclenchées à une date précise, etc.). </li>
+
+  
+  	<img class="top-right" src="../img/JeedomWidgets.png" width="150px" style="padding-top: 0.5em">
+	<li> Enfin, la mise en place du <strong class="specialLB">panneau de contrôle</strong> (<em class="english">dashboard</em>) est quasiment automatique dans la mesure où il suffit, pour chaque équipement ou scénario, de cocher la case « visible » pour faire apparaître un <strong>widget</strong> approprié sur le panneau. Ensuite, il est évidemment possible d'<strong>arranger la disposition des widgets</strong> et de modifier leur apparence. </li>
+</ol><!-- numbered -->
+
+
+
+<h3 id="homeAssistant"> La technologie <em class="mark">Home Assistant</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/HomeAssistantLogo.png" width="100px" style="padding-top: 0.2em">	
+<p> Initialement, <strong class="title">Home Assistant</strong> <a class="external" href="https://en.wikipedia.org/wiki/Home_Assistant" target="_BLANK">W</a> est un <strong class="defin">logiciel de box domotique</strong> <strong class="pros">libre de droits</strong> (licence Apache 2.0) et <strong class="pros">open‑source</strong> – donc, sans limites d'utilisation. Développé depuis 2013 par l'informaticien néerlandais Paulus Schoutsen, il peut être installé et utilisé gratuitement sur diverses machines à système d'exploitation, notamment un <strong>nano‑ordinateur</strong> (<em class="mark">Raspberry Pi</em>, etc.). </p>
+
+<p> Procédant via une <strong>interface web</strong> ou une application pour smartphone, <strong class="title">Home Assistant</strong> offre une très grande <strong class="pros">compatibilité d'intégration</strong> avec la quasi‑totalité des <strong class="defin">technologies domotiques</strong> (<em class="mark">Wi‑Fi</em>, <em class="mark">Bluetooth</em>, <em class="mark">ZigBee</em>, <em class="mark">Z‑Wave</em>, <em class="mark">EnOcean</em>, <em class="mark">KNX</em>, etc.) et des fournisseurs de services (<em class="mark">Google Assistant</em>, <em class="mark">Amazon Alexa</em>, <em class="mark">Apple HomeKit</em>, etc.). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/NabuCasaLogo.png" width="200px" style="padding-top: 0.2em">	
+<p> Pour vivre économiquement de sa création, Paulus Schoutsen a fondé en 2018 l'entreprise <strong class="title">Nabu Casa</strong> <a class="external" href="https://www.nabucasa.com" target="_BLANK"></a> (dont le nom fait référence au dieu mésopotamien <em>Nabû</em> <a class="external" href="https://fr.wikipedia.org/wiki/Nabû" target="_BLANK">W</a> et au nom commun latin <em>casa</em> pour « maison »), maintenant basée en Californie. Pour assurer le <strong class="defin">maintien et développement</strong> des solutions logicielles <strong>Home Assistant</strong>, elle commercialise à destination du « grand public » :  </p>
+</div><!-- display -->
+<ul>
+	<li> principalement des <strong>services dématérialisés</strong> pour la domotique – <strong class="specialLB">Home Assistant cloud</strong> ;  </li>
+
+	<li> mais aussi des <strong>solutions matérielles</strong> de box domotique – notamment la <strong class="specialY">Home Assistant Yellow</strong> <a class="external" href="https://www.crowdsupply.com/nabu-casa/home-assistant-yellow#products" target="_BLANK"></a> (avec un module <em class="mark">Raspberry Pi CM4</em> et un module <em class="mark">radio ZigBee</em> intégrés). </li>
+</ul>
+</div><!-- complement -->
+
+
+<!-- 
+<h4> Installation </h4>
+
+
+<h4> Utilisation </h4>
+-->
+
+
+
+
+
+
+
+
+
+<h2> Autres technologies de l'IoT </h2>
+
+
+
+<h3 id="protocoleMQTT"> Le protocole MQTT </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/MQTTlogo.png" width="200px" style="padding-top: 0.2em">
+<p> <strong class="title">MQTT</strong> <a class="external" href="https://fr.wikipedia.org/wiki/MQTT" target="_BLANK">W</a> – pour <strong>message queuing telemetry transport</strong> – est un <strong class="specialG">protocole applicatif</strong> (couche nº 7 du modèle <em class="sigle">OSI</em>) de <strong>messagerie</strong> basé sur le principe de <strong class="specialDB">publication</strong>-<strong class="specialDG">abonnement</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Publish-subscribe" target="_BLANK"></a>. </p>
+
+<div class="expert">
+<p> Il est principalement mis en œuvre sur les réseaux à pile <strong><em class="sigle">TCP/IP</em></strong> sur le <strong>port 1883</strong>. Il peut également opérer sur des piles de protocoles fiables à liaisons bidirectionnelles comme celle de la technologie <strong>Bluetooth</strong>. </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Inventé en 1999 pour la surveillance d'oléoducs, le protocole <strong class="title"><em class="sigle">MQTT</em></strong> est conçu pour le partage de données en <strong class="title">faibles volumes</strong>. <strong class="pros">Léger</strong>, <strong class="pros">rapide</strong>, avec une qualité de service paramétrable, il est particulièrement bien adapté à l'exploitation des <strong>objets connectés</strong> qui ne disposent que d'une architecture matérielle réduite (microcontrôleur), d'une liaison au réseau à bas débit et d'une alimentation électrique limitée – typiquement, des <em>capteurs</em>, d'où le terme « <em class="english">telemetry</em> ». Aujourd'hui, il trouve son utilisé pour toutes sortes d'applications de l'<strong>IoT</strong>. </p>
+</div><!-- complement -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/OASISlogo.png" width="200px" style="padding-top: 1em">
+<p> C'est un <strong>protocole</strong> <strong class="pros">ouvert</strong> et <strong class="pros">normalisé</strong> (<strong><em class="sigle">ISO/IEC 20922</em></strong>) dont le développement et la promotion sont assurés depuis 2013 par l'organisation <strong><em class="sigle">OASIS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Organization_for_the_Advancement_of_Structured_Information_Standards" target="_BLANK">W</a> (<em class="english">organization for the advancement of structured information standards</em>), un consortium de plus de 3000 entreprises parmi lesquels de nombreuses majors <a class="external" href="https://www.oasis-open.org/member-roster/" target="_BLANK"></a>. </p>
+</div><!-- display -->
+
+<div class="expert">
+<p> La <strong class="specialLB">version 5</strong> de <strong><em class="sigle">MQTT</em></strong> a été publiée en 2019. Toutes les <strong class="defin">spécifications</strong> sont en <strong class="pros">libre accès</strong> sur le site dédié à ce protocole <a class="external" href="https://mqtt.org/mqtt-specification/" target="_BLANK"></a>. </p>
+
+
+
+<p> En pratique, il existe de nombreuses <strong class="title">implémentations</strong> du protocole <strong><em class="sigle">MQTT</em></strong>, la plupart étant <strong class="pros">open‑source</strong> <a class="external" href="https://en.wikipedia.org/wiki/Comparison_of_MQTT_implementations" target="_BLANK">W</a>.  </p>
+</div><!-- expert -->
+
+
+<h4> Principe général de fonctionnement </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/MQTTprincipe.png" width="400px" style="padding-top: 0.2em;">
+<p> Le protocole <strong><em class="sigle">MQTT</em></strong>  est basé une <strong class="title">architecture logicielle centralisée</strong> autour d'<strong>une application</strong> appelée <strong class="specialO">broker</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Agent_de_messages" target="_BLANK">W</a> (« courtier » en français) auprès de laquelle des <strong class="specialT">clients</strong> peuvent souscrire à des services de <strong class="specialDG">publication</strong> (<em class="english">publish</em>) et d'<strong  class="specialDB">abonnement</strong> (<em class="english">subscribe</em>) <a class="external" href="https://fr.wikipedia.org/wiki/Publish-subscribe" target="_BLANK">W</a>. </p>
+
+<p> Toute souscription de <strong  class="specialDG">publication</strong> sur le <strong class="specialO">broker</strong> constitue un <strong class="specialN">topic</strong> (« thème » en français) qui alors peut faire l'objet d'<strong class="specialDB">abonnements</strong> par divers <strong class="specialT">clients</strong>. Et on peut aussi avoir plusieurs clients qui publient dans le même topic.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Soulignons que dans cette architecture logicielle : </p>
+<ul>
+	<li> l'application <strong class="specialO">broker</strong> est <strong>unique</strong> ; usuellement, elle s'exécute sur une <strong>machine</strong> de type serveur, éventuellement un nano‑ordinateur – typiquement, une carte <strong class="Raspberry">Raspberry Pi</strong> ; </li>
+
+	<li> les <strong class="specialLB">clients</strong> sont <strong>multiples</strong> ; usuellement, il s'agit de <strong>systèmes à microcontrôleur</strong>, éventuellement d'un nano‑ordinateur, sachant que le <strong class="specialO">broker</strong> lui‑même peut aussi héberger des clients. </li>
+</ul>
+<p> Par défaut, le protocole <strong><em class="sigle">MQTT</em></strong> opère sur le <strong class="defin">port n° 1883</strong> (8883 s'il est opéré via la couche sécurisée <em class="sigle">TLS</em>). </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Contrairement à ce que laisse penser son sigle, le protocole <strong class="title"><em class="sigle">MQTT</em></strong> ne met <strong class="warning">pas</strong> en œuvre de mécanisme de <strong>queue</strong> (file d'attente) <a class="external" href="https://en.wikipedia.org/wiki/MQTT#History" target="_BLANK">W</a>.  </p>
+</div><!-- complement -->
+
+
+<h4> Identification des <em class="english">topics</em> </h4>
+
+
+<div class="complement">
+<p> Un <strong class="title">topic</strong> est désigné sur le broker par un <strong class="defin">identifiant hiérarchisé</strong> (comme un chemin dans une arborescence de fichiers <em class="mark">UNIX</em>), constitué de <strong class="specialLB">segments</strong> séparés par le symbole <code class="cmd">/</code>.  Ce principe permet de souscrire à un abonnement sur tout ou partie d'un ensemble de topics. </p>
+
+<!-- à vérifier -->
+
+<p> L'ensemble des topics sur un broker forment donc une <strong class="defin">arborescence</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> En <strong class="title">domotique</strong>, on peut indiquer la <strong>localisation</strong> de l'équipement qui le publie et la <strong>nature des données</strong> publiées. Ainsi, pour des <strong class="defin">capteurs</strong> répartis dans une <strong>habitation</strong>, on pourrait avoir les différents <strong class="specialN">topics</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre style="font-size: 80%; margin-left: 1.2em">
+maison/rez-de-chaussee/cuisine/temperature
+maison/rez-de-chaussee/cuisine/humidite
+maison/rez-de-chaussee/salon/temperature
+maison/etage/chambre/temperature
+maison/etage/salle-de-bain/temperature
+maison/etage/salle-de-bain/humidite
+garage/temperature
+garage/presence
+…
+</pre>
+<!---------- ne pas indenter ---------->
+	<img class="top-left" src="../img/MQTTtopicsExemple.png">
+<p> Avec un <strong>smartphone</strong>, moyennant l'installation d'une application de <strong class="specialT">client <em class="sigle">MQTT</em></strong>, on peut alors s'abonner par exemple : </p>
+<ul>
+	<li> au <strong class="specialN">topic</strong> <code class="cmd">cuisine</code> et ainsi obtenir les données publiées par les capteurs de température et d'humidité de cette pièce ; </li>
+
+	<li> au <strong class="specialN">topic</strong> <code class="cmd">temperature</code> et obtenir les mesures les données publiées par les capteurs de température de toutes les pièces. </li>
+</ul>
+</div><!-- exemple -->
+
+
+<h4 id="Mosquitto"> L'implémentation <em class="mark">Mosquitto</em> </h4>
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/mosquittoLogo.png" width="100px" style="padding-top: 1em">
+<p> Parmi les implémentations du protocole <strong><em class="sigle">MQTT</em></strong>, on peut notamment citer <strong class="specialO">Mosquitto</strong> <a class="external" href="https://mosquitto.org/" target="_BLANK"></a>, développée par la fondation <em class="mark">Eclipse</em> <a class="external" href="https://fr.wikipedia.org/wiki/Fondation_Eclipse" target="_BLANK">W</a>. </p>
+
+<p> <strong class="pros">Libre</strong> de droits et <strong class="pros">open‑source</strong>, cette implémentation permet d'exécuter aussi bien un <strong class="specialO">broker</strong> qu'un <strong class="specialT">client</strong> sur n'importe quel ordinateur (poste de travail, serveur, nano‑ordinateur). La page générale de téléchargement est données au lien suivant <a class="external" href="https://mosquitto.org/download/" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+<p> Sur une machine à système <strong class="specialLB">Linux Debian</strong> ou apparentée (<em class="mark">Raspberry Pi OS</em>, <em class="mark">Ubuntu</em>, <em class="mark">Mint</em>…), la <strong class="title">procédure de mise en œuvre</strong> est la suivante. </p>
+
+<ul>
+	<li> Installer les <strong>paquets</strong> <code>mosquitto</code> et <strong>mosquitto-clients</strong> :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo apt install</span> <span class="displayDarkRed">-y</span> mosquitto mosquitto-clients
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<div class="nobullet"> Une fois que ces paquets sont installés, on peut vérifier la <strong>version</strong> installée de <strong class="specialO">Mosquitto</strong> via la commande :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo mosquitto</span> <span class="displayDarkRed">-v</span>
+</pre>
+<!---------- ne pas indenter ---------->	
+
+	<li> Créer et éditer un <strong>fichier de configuration utilisateur</strong> de l'application <code>mosquitto</code> :   </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo nano</span>  /etc/mosquitto/conf.d/mosquitto.conf
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Pour permettre les échanges de messages entre le <strong class="specialO">broker</strong> et des <strong class="specialT">clients externes</strong> sans authentification, copier/coller dans ce fichier les lignes ci‑dessous :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+listener 1883
+allow_anonymous true
+</pre>
+<!---------- ne pas indenter ---------->  
+
+	<div class="nobullet"> puis sauver ces modifications (<code>Ctrl-S</code>) et quitter l'édition (<code>Ctrl-X</code>). </div>
+
+	<li> Pour lancer l'application <code>mosquitto</code> automatiquement en <strong>tâche de fond au démarrage</strong> de la machine, saisir la commande : </li> 
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo systemctl enable</span> mosquitto.service
+</pre>
+<!---------- ne pas indenter ---------->  
+
+  <div class="nobullet"> Le service peut alors être <strong>inspecté</strong> | <strong>désactivé</strong> | <strong>réactivé</strong> respectivement par les commandes : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+<span class="displayDarkGreen">sudo service</span> mosquitto status <span style="color: dodgerblue;">|</span> stop <span style="color: dodgerblue;">|</span> start  
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <li> L'emploi du protocole <strong><em class="sigle">MQTT</em></strong> pour communiquer s'effectue alors ainsi :  </li> 
+  <ul>
+  	<li> Pour <strong>s'abonner à un topic</strong>, il suffit de saisir la commande : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+mosquitto_sub <span class="displayDarkRed">-t</span> <span class="nocode"><strong class="specialLB">topic name</strong></span> 
+</pre>
+<!---------- ne pas indenter ----------> 
+
+  	<li> Pour <strong>publier un message</strong> sur un <strong>topic</strong> donné, il suffit de saisir la commande : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+mosquitto_pub <span class="displayDarkRed">-t</span> <span class="nocode"><strong class="specialLB">topic name</strong></span> <span class="displayDarkRed">-m</span> "<span class="nocode"><strong class="specialLY">message content</strong></span>" 
+</pre>
+<!---------- ne pas indenter ----------> 
+  
+  </ul>
+  	<div class="nobullet"> On peut <strong class="pros">tester</strong> ces deux commandes en les exécutant respectivement sur <strong>deux terminaux différents</strong> s'exécutant sur la <strong>même machine</strong> où l'application <strong class="specialO">Mosquitto</strong> a été installée.  </div>
+	
+</ul>
+  
+   
+
+
+<h4> Le module de bibliothèque <em class="mark">PubSubClient</em> du framework <em class="mark">Arduino</em> </h4>
+
+
+<div class="complement">
+<p> Dans le framework <strong class="Arduino">Arduino</strong>, on trouve le <strong class="title">module de bibliothèque</strong> <code class="filename">PubSubClient</code> <a class="external" href="https://www.arduino.cc/reference/en/libraries/pubsubclient/" target="_BLANK">A</a> qui permet d'implémenter un <strong class="specialT">client <em class="sigle">MQTT</em></strong> sur une <strong>carte à microcontrôleur</strong> compatible avec le framework et disposant d'un accès réseau – <em class="mark">shield Ethernet</em>, carte à SoC <em class="mark">Wi‑Fi</em> <em class="mark">ESP8266</em> ou <em class="mark">ESP32</em> (cf. chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#cartesWifi" target="_BLANK">C</a>). </p>
+</div><!-- complement -->
+
+
+<p> Dans le module <code class="filename">PubSubClient</code>, on dispose des <strong class="title">éléments de code</strong> suivants. </p>
+
+<ul>
+	<li> Il y a avant tout la <strong class="specialG">classe</strong> <code class="prettyprint lang-c">PubSubClient</code> est une fille de la classe <code class="prettyprint lang-c">Print</code> (cf. chap. C3‑X <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-10_moniteurSerie.html#objetSerial" target="_BLANK"></a>). Toutes les fonctions du module sont des <strong>méthodes</strong> de cette classe </li>
+
+  <div class="nobullet"> Dans le code source d'un programme, il est nécessaire de déclarer une <strong>instance</strong> (objet) de cette classe pour mettre en œuvre un <strong class="specialT">client <em class="sigle">MQTT</em></strong>. </div> 
+
+	<li> Ensuite, on trouve des <strong class="specialLB">méthodes de paramétrage</strong> de l'objet déclaré, notamment :  </li>
+	<ul>
+		<li> <code class="prettyprint lang-c">setServer</code>, qui permet de déterminer le <strong class="specialO">broker</strong> ; elle prend deux arguments :  </li>
+		<ul>
+			<li> l'<strong>adresse <em class="sigle">IP</em></strong> de la machine sur laquelle s'exécute le broker ;  </li>
+		
+			<li> le <strong>n° de port</strong> logiciel sur lequel les messages sont émis et reçus ;   </li>
+		</ul>
+		
+	
+		<li> <code class="prettyprint lang-c">setCallback</code>, qui permet de déterminer la <strong>fonction de callback</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fonction_de_rappel" target="_BLANK"></a> à appeler lorsqu'un message est reçu ; elle prend pour argument l'identificateur de cette fonction.  </li>
+	</ul>
+
+	<li> Puis on a la <strong class="specialLB">méthode de connexion</strong> au <strong class="specialO">broker</strong>, nommée <code class="prettyprint lang-c">connect</code>. En mode de <strong class="defin">connexion anonyme</strong>, elle prend simplement pour argument une <strong>chaîne de caractères</strong> qui permet d'identifier le client qui tente une connexion.  </li>
+
+	<li> Enfin, on a les <strong class="specialLB">méthodes</strong> de <strong class="specialDG">publication</strong> et d'<strong class="specialDB">abonnement</strong> :  </li>
+	<ul>
+		<li> <code class="prettyprint lang-c">subscribe</code>, qui prend comme argument une <strong>chaîne de caractères</strong> – l'identificateur du <strong class="specialN">topic</strong> sur lequel porte l'<strong class="specialDB">abonnement</strong> ; </li>
+
+		<li> <code class="prettyprint lang-c">publish</code> qui prend 3 arguments :  </li>
+		<ul>
+		  <li> une <strong>chaîne de caractères</strong> – l'identificateur du <strong class="specialN">topic</strong> sur lequel porte la <strong class="specialDG">publication</strong> ;  </li>
+
+			<li> un <strong>tableau d'octets</strong> qui constitue la charge utile – dite <strong class="defin">payload</strong> – du message ; </li>
+		
+			<li> un <strong>entier non signé</strong> qui code la <strong>longueur</strong> de la charge utile en octets. </li>
+		</ul>
+	</ul>
+</ul>
+
+<div class="expert">
+<p> Pour <strong class="title">plus de détails</strong> sur ces éléments de code, on peut consulter cette page web de <strong>documentation</strong> <a class="external" href="https://pubsubclient.knolleary.net/api" target="_BLANK"></a> et le <strong>code source</strong> du module au lien suivant <a class="external" href="https://github.com/knolleary/pubsubclient/tree/master/src" target="_BLANK">G</a>. </p>
+</div><!-- expert -->
+
+
+
+
+<h3 id="NodeRED"> L'outil de développement <em class="mark">Node‑RED</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/NodeRedLogo.png" width="120px" style="padding-top: 0.2em;">
+<p> <strong class="title">Node‑RED</strong> <a class="external" href="https://en.wikipedia.org/wiki/Node-RED" target="_BLANK">W</a> est une <strong>application de développement</strong> <strong class="pros">ouvert</strong> et <strong class="pros">gratuit</strong> et qui permet de créer facilement des <strong class="defin">pages web d'interface homme‑machine</strong>. Il est particulièrement bienvenue pour l'<strong class="specialLB">Internet des objets</strong> – et notamment en complément d'un <strong class="specialO">broker <em class="mark">MQTT</em></strong>. </p>
+
+<p> Il emploie un <strong class="title">langage de programmation graphique</strong> dit <strong>low‑code</strong> <a class="external" href="https://en.wikipedia.org/wiki/Low-code_development_platform" target="_BLANK">W</a> et <strong>flow‑based</strong> <a class="external" href="https://en.wikipedia.org/wiki/Flow-based_programming" target="_BLANK">W</a> qui exprime des <strong class="defin">liaisons d'entrées‑sorties</strong> entre des entités appelées <strong class="defin">nœuds</strong> (<em class="english">nodes</em>). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> <strong class="title">Node‑RED</strong> a été créé dans le courant des années 2010 par l'entreprise <strong><em class="sigle">IBM</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/IBM" target="_BLANK">W</a> et instituée dès 2016 comme un projet par la <em class="mark">OpenJS Fondation</em> <a class="external" href="https://en.wikipedia.org/wiki/OpenJS_Foundation#JS_Foundation" target="_BLANK">W</a>. Codé en langage <strong class="specialY">JavaScript</strong>, il s'exécute en tâche de fond grâce à la plate‑forme <strong class="specialG">Node.js</strong> (cf. chap. R2‑IV <a class="previous" href="../R2-Applications/Rc2-4_webServeur.html#NodeJS" target="_BLANK"></a>).  </p>
+
+<p> <strong class="pros">Multi‑plateforme</strong>, il peut s'installer sur n'importe quelle machine informatique équipé d'un système d'exploitation <strong>Linux</strong> ou <strong>Windows</strong>. En particulier, il fonctionne très bien sur les nano‑ordinateur du type <strong class="Raspberry">Raspberry Pi</strong>, même avec un système <strong class="pros">sans bureau</strong> puisque l'interface de développement est elle‑même une <strong>page web</strong>. </p>
+
+<p> Après avoir installé sur la carte les paquets nécessaires <a class="external" href="https://nodered.org/docs/getting-started/raspberrypi" target="_BLANK"></a>, il suffit d'ouvrir, sur un poste de travail relié au même réseau, une <strong class="title">page web de développement</strong> dans un navigateur en ciblant l'<strong>adresse <em class="sigle">IP</em></strong> de la carte et le <strong>port n° 1880</strong>.  </p>
+</div><!-- complement -->
+
+
+<h4> Installation sur machine <em class="mark">Linux</em> </h4>
+
+
+<div class="complement">
+<p> La <strong class="title">procédure d'installation</strong> de l'application <strong class="specialDR">Node‑RED</strong> sur une machine requiert l'installation préalable d'<strong>autres composants logiciels</strong> : <strong class="specialG">Node.js</strong> et <strong class="specialR">npm</strong> (cf. chap. R2‑IV <a class="previous" href="../R2-Applications/Rc2-4_webServeur.html#NodeJS" target="_BLANK"></a>). On trouve le détail de procédure au lien suivant <a class="external" href="https://nodered.org/docs/getting-started/local" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+<p class="square"> Pour une carte <strong class="Raspberry">Raspberry Pi</strong>, il existe un <strong class="title">script d'installation</strong> complet (à retrouver également au lien suivant <a class="external" href="https://nodered.org/docs/getting-started/raspberrypi" target="_BLANK"></a>) qui gère l'installation et la mise à niveau éventuelle de tous les paquets nécessaires : </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark" style="font-size: 70%">
+bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)
+</pre>
+<!---------- ne pas indenter ----------> 
+
+<p> en répondant <code class="displayDark">y</code> pour <strong>approuver</strong> la suppression de l'éventuelle ancienne version de <em class="mark">Node‑RED</em> et l'installation des nœuds spécifiques pour carte <em class="mark">Raspberry Pi</em>. </p>
+
+<div class="expert">
+<p> La procédure dure <strong>quelques minutes</strong> avec un <strong class="pros">affichage dynamique</strong> dans la fenêtre du terminal. Ensuite, on peut exécuter le <strong class="title">script de paramétrage</strong> suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark" style="font-size: 70%">
+$ node-red admin init
+
+<div style="color: springgreen">Node-RED Settings File initialisation
+=====================================</div>
+This tool will help you create a Node-RED settings file.
+
+<span style="color: springgreen">✔</span> Settings file · <span style="color: yellow">/home/pi/.node-red/settings.js</span>
+
+<div style="color: springgreen">User Security
+=============</div>
+<span style="color: springgreen">✔</span> Do you want to setup user security? · <span style="color: springgreen">No</span>
+
+<div style="color: springgreen">Projects
+========</div>
+The Projects feature allows you to version control your flow using a local git repository.
+
+<span style="color: springgreen">✔</span> Do you want to enable the Projects feature? · <span style="color: springgreen">No</span>
+
+<div style="color: springgreen">Flow File settings
+==================</div>
+<span style="color: springgreen">✔</span> Enter a name for your flows file · <span style="color: yellow">flows.json</span>
+<span style="color: springgreen">✔</span> Provide a passphrase to encrypt your credentials file · <span style="color: springgreen">**********</span>
+
+<div style="color: springgreen">Editor settings
+===============</div>
+<span style="color: springgreen">✔</span> Select a theme for the editor. To use any theme other than "default", you will need to install @node-red-contrib-themes/theme-collection in your Node-RED user directory. · <span style="color: springgreen">default</span>
+
+<span style="color: springgreen">✔</span> Select the text editor component to use in the Node-RED Editor · <span style="color: springgreen">ace (default)</span>
+
+<div style="color: springgreen">Node settings
+=============</div>
+<span style="color: springgreen">✔</span> Allow Function nodes to load external modules? (functionExternalModules) · <span style="color: springgreen">Yes</span>
+
+<div style="color: orange">Settings file written to /home/pi/.node-red/settings.js
+To use the 'dark' editor theme, remember to install @node-red-contrib-themes/theme-collection in your Node-RED user directory</div>
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- expert -->
+
+<p class="square"> Après cette installation, pour <strong class="title">démarrer l'application</strong> <strong class="specialDR">Node‑RED</strong> en <strong>tâche de fond</strong>, il suffit de saisir la commandes <code class="displayDark">node-red-start</code>. Alors, la commande <code>Crtl-C</code> ou la fermeture du terminal ne met pas fin au processus. Pour cela, il faut saisir la commandes <code class="displayDark">node-red-stop</code>. De plus : </p>
+<ul>
+	<li> après une commande <code>Crtl-C</code>, pour reprendre l'<strong>affichage du journal</strong>, il suffit de saisir la commande commandes <code class="displayDark">node-red-start</code> ;  </li>
+
+	<li> pour lancer l'application <strong>au démarrage du système</strong>, il faut saisir la commande : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+sudo systemctl enable nodered.service
+</pre>
+<!---------- ne pas indenter ----------> 
+</ul>
+
+
+<h4> Principes de mise en œuvre </h4>
+
+
+<p> Après l'installation et le paramétrage de l'application <strong class="specialDR">Node‑RED</strong>, on accède à son <strong class="title">interface de développement</strong> en saisissant dans la barre d'adresse d'un <strong>navigateur</strong> sur n'importe quel poste de travail du réseau, via une <strong><em class="sigle">URL</em></strong> de la forme : <br>
+<span class="inline">
+	<code class="filename">http://<span class="nocode"><strong class="specialO">adresse IP</strong></span>:1880</code>
+</span> </p>
+
+<img class="top-left" src="../img/Node-RED_interface.png" style="max-width: 800px">
+
+<p> Comme pour une box domotique, l'<strong class="title">interface de développement</strong> de <strong class="specialDR">Node‑RED</strong> est  <strong class="pros">très riche</strong> et <strong class="pros">modulaire</strong>. On y trouve : </p>
+
+<ul>
+	<li> un <strong class="specialDR">espace de travail</strong> central, qui peut accueillir plusieurs <strong class="defin">flows</strong> (onglet) – chacun constituant le code source d'une page web ; </li>
+
+	<li> à gauche, une panneau regroupant de nombreuses <strong class="specialDR">palettes de nœuds</strong> qui peuvent s'insérer dans l'espace de travail ;  </li>
+
+	<li> à droite, un <strong class="specialDR">panneau de paramétrage</strong> des nœuds ; il comporte <strong>plusieurs onglets</strong> – information, aide, configuration, etc. –  qui chacun peut être sélectionné via le bouton en haut à droite du panneau ; </li>
+
+	<li> et dans la barre supérieure de la fenêtre : </li>
+	<ul>
+		<li> un bouton d'accès au <strong class="specialDR">menu principal</strong> de l'utilisateur ; </li>
+	
+		<li> un <strong class="specialDR">bouton de déploiement</strong> qui permet de <strong>compiler les changements</strong> codés dans l'espace de travail pour les déployer sur la page web d'interface correspondant au flow.  </li>
+	</ul>
+</ul>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/Node-RED_managePalette.png" width="400px" style="padding-top: 1.2em">
+<p class="square"> Par défaut, les <strong class="title">palettes de nœuds</strong> sont installées en <strong class="cons">nombre réduit</strong>, mais il est possible d'en importer via le <strong class="specialDR">menu principal</strong> <code>Manage palette</code>. S'ouvre alors un <strong>volet latéral droit</strong> <code>User Settings</code> avec trois rubriques (cf. la capture d'écran ci‑contre). </p>
+
+<p> Dans la <strong>rubrique</strong> <code>Palette</code> et son <strong>onglet</strong> <strong>Install</strong> on peut <strong class="defin">rechercher d'autres palettes existantes</strong> et les installer dans l'interface. Parmi les palettes importantes, on peut notamment citer <code>node-red-dashboard</code> qui permet de déployer des éléments indispensables à toute interface homme‑machine : bouton, interrupteur, jauge, etc. </p>
+
+<div class="expert">
+<p>  Pour plus de détails sur la procédure, on pourra consulter le lien suivant <a class="external" href="https://nodered.org/docs/user-guide/editor/palette/manager" target="_BLANK"></a>. Et pour trouver la <strong class="pros">documentation</strong> sur toutes les palettes existantes, on dispose d'une page web dédiée <a class="external" href="https://flows.nodered.org/" target="_BLANK"></a>. </p>
+
+<p> C'est aussi via ce volet latéral que l'on peut trouver effectuer divers <strong class="title">paramétrages généraux</strong>. </p>
+<ul>
+	<li> Dans la <strong>rubrique</strong> <code>View</code>, on peut notamment paramétrer la <strong class="defin">grille de fond de plan</strong> de l'espace de travail.   </li>
+
+	<li> Dans la <strong>rubrique</strong> <code>Keyboard</code>, on peut définir tous les <strong class="defin">raccourcis clavier</strong> des commandes de l'application. </li>
+</ul>
+</div><!-- display-->
+</div><!-- expert -->
+
+<p class="square"> Comme avec la plupart des applications à interface graphique, la <strong class="title">prise en main</strong> est <strong class="pros">très intuitive</strong>. </p>
+<ul>
+	<li> on place des <strong class="specialLB">nœuds</strong> sur l'espace de travail par <strong>glisser‑déposer</strong> depuis le panneau latéral des palettes ;    </li>
+
+	<li> on établie une <strong class="specialLB">liaisons</strong> entre deux nœuds par <strong>cliquer‑tirer</strong> entre les connecteurs respectifs de ces nœuds ;  </li>
+
+	<li> on accède au <strong class="title">paramétrage</strong> d'un nœud en par <strong>double‑clic</strong> sur ce dernier, ce qui ouvre un <strong>volet latéral droit </strong> avec des champs à saisir.</li>
+</ul>
+
+
+<p> La <strong class="title">sauvegarde</strong> des modifications est automatique. Les <strong>flows</strong> sont mémorisés dans un fichier dont le chemin d'accès est typiquement :  <br>
+<span class="inline">
+	<code class="filename">~/.node-red/flows.json</code>
+</span></p>
+
+<p> Une fois le paramétrage terminé, il suffit de cliquer sur le <strong class="specialDR">bouton</strong> <span class="framedSmall"><code>Deploy</code></span> pour compiler le code de la page web  d'<strong class="title">interface utilisateur</strong>. </p>
+ 
+
+<h4> Page d'interface homme‑machine </h4>
+
+
+<div class="complement">
+<p> La page web d'<strong class="title">interface utilisateur</strong> (<em class="english">user interface</em>, abrégée <strong><em class="sigle">UI</em></strong>) codée par la structure et le paramétrage des nœuds dans l'interface de développement est accessible avec n'importe quel navigateur s'exécutant sur n'importe quelle machine du réseau, via une <strong><em class="sigle">URL</em></strong> de la forme : <br>
+<span class="inline">
+	<code class="filename">http://<span class="nocode"><strong class="specialO">adresse IP</strong></span>:1880/ui</code>
+</span> </p>
+</div><!-- complement -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/Node-RED_ui.png" width="600px" style="padding-top: 0.0em">
+<p> Lorsqu'un <strong>flow</strong> met en œuvres des nœuds d'une palette <strong>Dashboard</strong>, des éléments apparaissent sur la page web d'<strong class="title">interface utilisateur</strong>. Ils sont disposés  en <strong class="specialLB">zones</strong> appelées <code class="cmd">ui_groups</code> qui elles‑même se divisent horizontalement en <strong class="specialLB">« blocs » </strong> appelés <code class="cmd">tabs</code>, comme indiqué sur la capture d'écran ci‑dessous donnée pour exemple.   </p>
+
+</div><!-- display -->
+
+
+
+<h4> Approfondissements </h4>
+
+<p> <strong class="specialDR">Node‑RED</strong> est un outil de développement <strong>low‑code</strong> <strong class="pros">très puissant</strong>, mais pour un codeur « traditionnel », il n'est <strong class="cons">pas si facile</strong> de l'utiliser intuitivement. En effet : </p>
+<ul>
+	<li> La <strong class="defin">panoplie des nœuds</strong> est <strong>immense</strong> et chacun nécessite un <strong>paramétrage spécifique</strong>.  </li>
+
+	<li> La <strong class="defin">logique de fonctionnement</strong> des nœuds n'est pas celle des instructions d'un programme séquentiel en langage impératif. Elle correspond davantage à celle d'un programme parallèle temps‑réel. </li>
+</ul>
+<p> Il peut être donc difficile de comprendre du premier coup pourquoi choisir tel ou tel nœud à employer et comment les relier entre eux pour obtenir le comportement voulu. Pour ne pas rester longtemps bloqué, il est vivement recommandé de suivre des tutoriels. Dans cette perspective, on peut recommander cette <strong>série de vidéos très courtes</strong> (quelques minutes chacune) <a class="external" href="https://www.youtube.com/playlist?list=PLyNBB9VCLmo1hyO-4fIZ08gqFcXBkHy-6" target="_BLANK">Y</a>.  </p>
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

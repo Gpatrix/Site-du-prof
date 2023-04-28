@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="2"
+	data-pagenumber="II"
+	data-pageState="OK"
+	data-pageheadtitle="Syntaxe fondamentale"
+	data-pagefulltitle="Les éléments fondamentaux de la syntaxe"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/syntaxeC.png" width="350px" style="margin-top: 1.2em">
+<p class="square"> Dans tout langage littéral, un <strong class="specialLB">programme source</strong> se compose d'<strong class="defin">éléments lexicographiques</strong> de différentes sortes, qui s'agencent selon des <strong class="defin">règles de syntaxe</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Syntaxe" target="_BLANK">W</a>. Ces différents aspects peuvent varier selon le langage et le paradigme de programmation adoptés, mais on retrouve presque toujours les mêmes <strong class="title">notions fondamentales</strong> : celles de <strong>commentaire</strong>, d'<strong>instruction</strong>, d'<strong>expression</strong>, de <strong>mot‑clef</strong>, etc. </p>
+</div><!-- display -->
+
+<p class="square"> Pour <strong class="pros">bien débuter l'apprentissage</strong> de la programmation dans un langage donné, il est indispensable d'<strong>acquérir</strong> et <strong>maîtriser</strong> (pour ne pas confondre) ces <strong class="title">notions fondamentales</strong> sur lesquelles reposent toutes les <strong class="defin">règles de syntaxe</strong>. L'enjeu est considérable, car un compilateur est un logiciel déterministe – il ne fait rien au hasard – et inflexible. La moindre <strong class="warning">erreur de syntaxe</strong> produit : </p>
+
+<ul>
+	<li> au mieux, l'<strong class="cons">échec de la compilation</strong> (aucun code machine n'est alors généré) ; </li>
+
+	<li> au pire, un <strong class="cons">code exécutable défectueux</strong> dont les erreurs ne sont ni flagrantes, ni immédiates (donc, potentiellement difficiles à diagnostiquer). </li>
+</ul>
+
+
+<div class="expert">
+<p> Très souvent, c'est par <strong class="warning">confusion</strong> des <strong class="title">notions fondamentales</strong> que les débutants échouent à comprendre leurs erreurs à répétition et se découragent. Aussi, plutôt que d'écrire tout de suite des premiers programmes et donner des satisfactions immédiates (mais illusoires…), ce chapitre invite à la patience. Avant de « mettre les gaz », prenons encore un peu de temps pour découvrir le poste de pilotage.  </p>
+</div><!-- expert -->
+
+<p class="square"> Ce chapitre a donc pour <strong class="title">objectif</strong> de présenter les éléments de syntaxe fondamentale des langages <strong>C</strong> et <strong>C++</strong>, à savoir dans l'ordre : </p>
+<ul>
+	<li> les <strong class="specialLB">commentaires</strong>, </li>
+
+	<li> les <strong class="specialLB">instructions</strong> et les <strong class="specialLB">expressions</strong> ; </li>
+
+	<li> les <strong class="specialLB">identificateurs</strong> et les <strong class="specialLB">mots‑clefs</strong>, </li>
+
+	<li> les <strong class="specialLB">séparateurs</strong> et les <strong class="specialLB">délimiteurs</strong>. </li>
+</ul>
+
+<!-- à compléter par quelques généralités -->
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="commentaires"> Commentaires </h2>
+
+
+
+<h3> Définition et syntaxe de saisie </h3>
+
+
+
+<div class="important">
+<p class="square" style="margin-top: 0.5em"> Dans un programme source, un <strong class="title">commentaire</strong> est un <strong>morceau de « code »</strong> <strong class="defin">délimité</strong> qui est <strong class="defin">ignoré</strong> lors de la compilation ou de l'interprétation. Il ne constitue donc <strong class="warning">pas du code</strong> à proprement parler. </p>
+
+<p class="square"> En langages <strong>C/C++</strong>, un commentaire est <strong class="title">délimité</strong> : </p>
+<ul>
+	<li> soit entre le <strong class="defin">séparateur</strong> <code class="prettyprint lang-c">//</code> et la <strong>fin de ligne</strong> du fichier source ou le commentaire est saisi ; </li>
+
+	<li> soit par une paire de <strong class="defin">délimiteurs</strong> <code class="prettyprint lang-c">/*<span class="nocode" style="font-weight: normal">  …  </span>*/</code> entre lesquels le morceaux de <strong>code</strong> peut éventuellement s'étendre sur <strong>plusieurs lignes consécutives</strong> du fichier ; on parle alors de <strong class="specialLB">bloc de commentaires</strong>. </li>
+</ul>
+<p> Ainsi détecté par le <strong>préprocesseur</strong>, tout commentaire ne fait l'objet d'<strong class="warning">aucune transmission</strong> au <strong>compilateur</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les commentaires peuvent être <strong>placés</strong> <strong class="pros">partout où un espace est autorisé</strong> dans le code source (cf. infra <a class="infra" href="Cc2-2_syntaxeFondamentale.html#formatLibre"></a>). </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> En revanche, on ne peut <strong class="warning">pas encapsulter</strong> <strong>deux blocs de commentaires</strong> l'un dans l'autre, comme ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// DO NOT DO THIS (will generate an error)
+/* starting of comment bloc 1
+
+/* starting of comment bloc 2
+
+ending of comment bloc 2 */ 
+
+ending of comment bloc 1 */ // the error is visible here
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En effet, pour le préprocesseur : </p>
+<ul>
+	<li> le délimiteur initial <code class="prettyprint lang-c">/*</code> du bloc 2 (interne) n'est alors pas reconnu comme tel, mais comme un commentaire ; </li>
+
+	<li> le délimiteur final <code class="prettyprint lang-c">*/</code> du bloc 2 (interne) est donc reconnu comme celui du bloc 1 ; </li>
+
+	<li> le délimiteur final <code class="prettyprint lang-c">*/</code> du bloc 1 (externe) est génère donc une <strong class="warning">erreur syntaxique</strong> puisqu'il n'est pas apparié à un délimteur initial. </li>
+</ul>
+
+<p> Une <strong class="defin">solution</strong> consiste donc à mettre en commentaire individuellement <strong>toutes les lignes</strong> avec autant de séparateurs <code class="prettyprint lang-c">//</code> comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+// THIS IS OK (but not very convenient)
+// starting of comment bloc 1
+//
+///* starting of comment bloc 2
+//
+//ending of comment bloc 2 */ 
+//
+//ending of comment bloc 1 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Malcommode à saisir à la main, cette solution peut être <strong class="pros">automatisée</strong> par une fonctionnalité de l'éditeur de code. Avec <strong class="SublimeText">Sublime Text</strong>, il suffit de sélectionner le bloc de lignes à commenter ou décommenter et employer la commande <code>Comment/Toggle Comment</code> du menu <code>Edit</code> (raccourcis clavier <code>crtl :</code>). </p>
+</div><!-- expert -->
+
+
+
+<h3> Emploi des commentaires </h3>
+
+
+
+<div class="important">
+<p> Réservés aux seuls lecteurs du code source, les <strong class="title">commentaires</strong> servent principalement à apporter des <strong class="defin">explications complémentaires</strong> au code. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les commentaires peuvent avoir d'<strong class="title">autres emplois</strong>, notamment :  </p>
+
+<ul>
+	<li> former des <strong>lignes de séparation</strong> dans le code ; </li>
+
+	<li> <strong>rendre « invisible »</strong> pour le compilateur une partie de code. </li>
+
+	<div class="expert">
+	<div class="nobullet"> (On a vu supra que cette pratique est néanmoins <strong class="cons">malcommode</strong>. Il existe une bien meilleure solution – cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#compilCondi" target="_BLANK"></a>.) 	</div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> Apporter des explications complémentaires sur le code est parfois nécessaire, mais il faut <strong class="defin">ne pas abuser</strong> des commentaires, au risque sinon de <strong class="warning">gêner la lecture du code</strong> lui‑même. Des <strong class="pros">recommandations</strong> de <strong>rédaction</strong> des commentaires sont données au chapitre C2‑IX <a class="next" href="Cc2-9_bonnesPratiques.html#commentaires" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<div class="exemples">
+<p class="exemple"> Dans l'extrait de programme ci‑dessous, les commentaires sont présentés en <code style="color: grey; font-style: italic;">italique gris</code>. C'est un style de <strong>coloration syntaxique</strong> d'<strong class="defin">atténuation</strong> (pour géner le moins possible la lecture du code proprement dit). </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+/* * * * * * *  PROGRAM: basic LED blink * * * * * * *
+ * Hardware:
+ *  - board: any Arduino board
+ *  - green LED associated with 220 ohm resistor
+ * Version : 1.0 (01/04/2018)
+ */
+
+const int ledPin = 2; // avoid pin 0 and 1 (serial port)
+
+// const int buttonPin = 3; // comment if not needed
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+// =====================================================
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> Les langages <strong>C</strong> et <strong>C++</strong> <strong class="warning">n'acceptent pas</strong> les commentaires au sein d'une <strong class="title">chaîne de caractères</strong> (morceau de code délimité entre des guillemets doubles <code class="prettyprint lang-c">"</code>). Ainsi, le code : <br> 
+<span class="inline">
+	<code class="prettyprint lang-c">"text /* comment */ text"</code>
+</span>  <br>
+est compris par le compilateur comme une chaîne de caractères qui inclut les séquences <code>/*</code> et <code>*/</code> comme des caractères ordinaires. </p>
+
+<p> Cette restriction est <strong class="defin">conforme avec la propriété</strong> énoncée supra qu'un commentaire peut être placé partout où un espace est autorisé. En effet, dans une chaîne de caractères, il n'est pas possible d'ajouter indifféremment un espace : tout espace saisi constitue un caractère supplémentaire, « significatif » dans la chaîne. </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="instructionsPreambule"> Instructions et expressions </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<p> En faisant abstraction des commentaires, un <strong class="title">programme source</strong> en langages <strong>C/C++</strong> est fondamentalement constitué : </p>
+<ul>
+	<li> de <strong class="specialLB">directives</strong> destinées au <strong>préprocesseur</strong> (premier composant de la chaîne de compilation) ; </li>
+
+	<li> d'<strong class="specialLB">instructions</strong> destinées au <strong>compilateur</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces deux notions ne doivent pas être confondues. Syntaxiquement, la distinction est très facile. </p>	
+
+<p class="square"> Les <strong class="title">directives</strong> commencent toujours par le <strong>symbole</strong> <code class="prettyprint lang-c">#</code> et sont séparées des autres parties de code (autres directives ou instructions) ou par de simples <strong>sauts de ligne</strong> – et non <strong class="warning">pas</strong> par le symbole <code class="prettyprint lang-c">;</code> qui délimite une fin d'instruction simple (cf. infra <a class="infra" href="Cc2-2_syntaxeFondamentale.html#categoriesInstructions"></a>). </p>
+
+<div class="expert">
+<p> Elles servent à <strong class="defin">modifier le code source</strong> <strong>avant la compilation</strong>, notamment pour inclure d'autres fichiers source ou pour prendre en compte des paramètres d'environnement (caractéristiques de la machine cible, etc.). Leur codage est détaillé au chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html" target="_BLANK"></a>. </p> 
+</div><!-- expert -->
+
+
+<p class="square"> Les <strong class="title">instructions</strong> sont les principales « unités » de compilation. Elles peuvent être <strong class="defin">regroupées</strong> dans des <strong class="specialLB">blocs</strong>, qui sont des <strong>séquences d'instructions</strong> délimitées par des <strong>accolades</strong> ouvrantes et fermantes <code class="prettyprint lang-c">{ }</code>. </p>
+
+<div class="expert">
+<p>	Par ailleurs, un <strong class="title">bloc</strong> (en anglais, <em class="english">compound statement</em>) peut être : </p>
+<ul>
+	<li> soit <strong>anonyme</strong>, avec ou sans structure de contrôle (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C2-ElementsLangage/categoriesInstructions"></a>) ;  </li>
+
+	<li> soit <strong>nommé</strong> (et éventuellement paramétré) dans le cadre de la définition d'une <strong class="specialO">fonction</strong> – c'est la notion fondamentale de « sous‑programme », qui est étudiée au chap. C4‑I <a class="next" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html" target="_BLANK"></a>. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Considérons le programme source académique ci‑dessous qui teste une formule de <strong class="title">génération de nombres aléatoires</strong> <strong>compris entre 1 et 6</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+#define MAX_VALUE 6
+
+int nbRoll = 50;
+
+int main(void) {
+  srand(time(NULL));
+  for (int roll = 1; roll <= nbRoll; roll++) {
+    int dice = (rand() % MAX_VALUE) + 1;
+    printf("%d ", dice);
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+<p> On y trouve dans l'ordre : </p>
+<ul>
+	<li> quatre <strong>directives</strong> (aux lignes n° 1, 2, 3 et 5) ; </li>
+
+	<li> une <strong>instruction de déclaration</strong> globale (à la ligne n° 7) ; </li>
+
+	<li> la définition de la <strong class="specialO">fonction</strong> <code class="cmd">main</code> dont le <strong class="specialLB">bloc</strong> ainsi nommé comporte <strong>trois instructions</strong> (respectivement celle de la ligne n° 10, celle du bloc des lignes n° 11 à 14, et de la ligne n° 15). </li>
+</ul>
+  
+<div class="expert">
+<p> De plus, dans le <strong class="specialLB">bloc</strong> <strong>anonyme</strong> d'une structure de contrôle <code class="prettyprint lang-c">for</code> (lignes n° 11 à 14), on trouve encore deux instructions (aux lignes n° 12 et 13). </li>
+  </div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+
+<h3 id="instructions"> Notion d'instruction </h3>
+
+
+
+<div class="important">
+<p> Une <strong class="title">instruction</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Instruction_informatique" target="_BLANK">W</a> – en anglais, <strong>statement</strong> – est un <strong>élément de code</strong> formant une <strong class="defin">« unité » de compilation</strong> ou d'interprétation. </p>
+
+<p> En première approximation, on peut considérer qu'une <strong class="title">instruction</strong> est destinée à « déclencher une <strong class="defin">action</strong> » lors de l'exécution du programme. </p>
+</div><!-- important -->
+
+
+<div class="exemples" id="exemplesInstructions"><p class="exemples"></p>
+<p> Parmi les « <strong class="defin">actions</strong> » que peut déclencher une instruction, il y notamment le fait : </p>
+
+<ul>
+	<li> de <strong>déclarer une donnée</strong>, c'est‑à‑dire lui attribuer un <em>type</em> et lui allouer un <em>espace mémoire adressable</em> pour sa valeur courante – cf. remarque <em class="bold">A)</em> infra ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">int userAge;</code> </li>
+
+
+	<li> de <strong>affecter une valeur</strong> à une donnée ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">userAge = 20;</code> </li>
+
+	<li style="text-align: left"> d'<strong>écrire du texte</strong> dans la fenêtre d'exécution ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">printf("Tapez un chiffre : ");</code> </li>
+
+	<li style="text-align: left"> de <strong>lire une donnée</strong> saisie par un utilisateur dans la fenêtre d'exécution après une invite du programme ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">scanf("%d", &typedDigit);</code> </li>
+
+	<li style="text-align: left"> d'<strong>établir un niveau logique</strong> de tension sur une broche de sortie d'une carte électronique  ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">digitalWrite(ledPin, HIGH);</code> </li>
+
+	<li> de <strong>mettre en pause</strong> le microcontrôleur d'une carte électronique ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">delay(500); </code> </li>
+</ul>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques" id="remInstructions"></p>
+<ol class="littered">
+	<li> La norme du <strong class="defin">langage C</strong> fait la <strong class="warning">distinction</strong> entre les notions d'<strong class="title">instruction</strong> et de <strong class="title">déclaration</strong>. Dans ce sens plus strict, le premier exemple supra n'est pas une <em>instruction</em> mais une <em>déclaration</em>. </li>
+
+	<div class="nobullet"> Mais a contrario, la norme du <strong class="specialO">langage C++</strong> considère que certaines déclarations (celles codées dans un bloc) sont bien des instructions. Ces subtilités seront réexaminées dans la partie <span class="partie">C4</span> du cours. </div>
+
+	<li> En langages <strong>C/C++</strong>, rien n'interdit de coder une <strong>instruction</strong> qui n'accomplit <strong class="cons">aucune action utile</strong>, par exemple : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  2 + 2;
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<div class="nobullet"> En effet, cette instruction programme la machine pour <strong>effectuer une opération</strong> mais <strong class="cons">sans mémoriser le résultat</strong>. Elle ne sera pas considérée comme une erreur rédhibitoire pour la compilation. Au mieux, elle sera signalée par un <strong class="warning">avertissement</strong> du compilateur, du genre : <br>
+	<span class="inline">
+	  <code class="displayDark" style="font-style: italic">statement with no effect</code>
+	</span> </div>
+</ol>
+</div><!-- remarque -->
+
+
+
+<h4 id="categoriesInstructions"> Instructions simples et structurées </h4>
+
+
+<div class="important">
+<p> Sans entrer dans les détails de la classification complexe des instructions que distinguent les normes des langages <strong>C</strong> et <strong>C++</strong>, on peut considérer qu'il existe <strong class="title">deux catégories</strong> <strong>d'instructions</strong> : </p>
+<ul>
+	<li> les <strong class="specialLB">instructions simples</strong>, qui sont codées <strong class="defin">sans</strong> <strong>structures de contrôle</strong> (cf. chap. C2‑V <a class="next" href="Cc2-5_structuresControle.html" target="_BLANK"></a>) ; </li>
+
+	<li> les <strong class="specialLB">instructions structurées</strong>, qui sont codées <strong class="warning">avec</strong> des <strong>structures de contrôle</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p class="square" style="margin-top: 0em"> Une <strong class="title">instruction simple</strong> est (sans considérer le cas spécial d'une déclaration) constituée d'<strong class="defin">une seule expression</strong> (laquelle peut éventuellement être complexe) immédiatement suivie du <strong>symbole</strong> <code class="prettyprint lang-c">;</code> (en anglais, <em class="english">semicolon</em> <a class="external" href="https://en.wikipedia.org/wiki/Semicolon#Computing_usage" target="_BLANK">W</a>) qui délimite la <strong class="defin">fin d'instruction</strong>. Ce symbole est en quelques sorte un <strong>opérateur</strong> qui transforme l'expression en instruction pour constituer une unité de compilation. </p>
+
+<div class="expert">
+<p> Cet aspect est important, car contrairement à l'intuition que pourrait avoir un codeur débutant, c'est l'<strong class="title">évaluation de l'expression</strong> (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C2-ElementsLangage/expressions"></a>) qui potentiellement <strong>enclenche une action</strong> lors de l'exécution du programme, et non <strong class="warning">pas</strong> l'achèvement de l'instruction qui englobe cette expression. </p>
+
+<p> Ainsi, même une <strong class="title">instruction simple</strong> peut enclencher <strong>plusieurs actions</strong> au cours de l'évaluation de son expression, en particulier si cette dernière est composée avec l'opérateur séquentiel (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C2-ElementsLangage/operateurSequentiel"></a>). </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Tous les exemples donnés <strong>supra</strong> <a class="supra" href="Cc2-2_syntaxeFondamentale.html#exemplesInstructions"></a> sont des <strong class="specialLB">instructions simples</strong>. </p>
+</div><!-- exemple -->
+
+<div class="complement">
+<p class="square" style="margin-top: 0em"> Une <strong class="title">instruction structurée</strong> permet de faire <strong class="defin">bifurquer</strong> ou <strong class="defin">reboucler</strong> le <strong>flux séquentiel des actions</strong> qui normalement suit l'ordre d'inscription des instructions dans le ou les fichiers sources. Elle se <strong class="defin">compose</strong> : </p>
+<ul>
+	<li> d'<strong>expressions</strong> encapsulées dans des parenthèses <code class="prettyprint lang-c">()</code>, </li>
+
+	<li> d'<strong>instructions simples</strong> ou d'<strong>autres instructions structurées</strong>,</li>
+
+	<li> de <strong>mots‑clefs</strong> comme <code class="prettyprint lang-c">if</code>, <code class="prettyprint lang-c">else</code>, <code class="prettyprint lang-c">while</code>, etc. </li>
+
+	<li> de <strong>délimiteurs de blocs</strong> <code class="prettyprint lang-c">{}</code>. </li>
+</ul>
+<p> <em class="remark">Remarque</em> : l'accolade fermante <code class="prettyprint lang-c">}</code> d'un <strong class="title">bloc</strong> intégré à une <strong>structure de contrôle</strong> n'est <strong class="warning">jamais suivie</strong> par un séparateur <code class="prettyprint lang-c">;</code> de fin d'instruction. </p>
+
+<div class="expert">
+<p> (Le <strong class="title">cas particuliers</strong> de la structure <code class="prettyprint lang-c">do<span class="nocode">…</span> while</code> qui, elle, se termine bien par un séparateur de fin d'instruction <code class="prettyprint lang-c">;</code> n'est pas concerné par cette règle puisque son dernier élément de code est une expression encapsulée dans des parenthèses et non <strong class="defin">pas un bloc</strong> – cf. chap. C2‑V <a class="next" href="Cc2-5_structuresControle.html#doWhile" target="_BLANK"></a>). </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<div class="exemples" id="exempleInstructionStructuree">
+<p class="exemple"> L'extrait de code ci‑dessous ne comporte qu'<strong class="title">une seule instruction structurée</strong>, dite de <strong class="defin">bifurcation</strong> :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (userAge >= 18) {
+    entrance = true;
+  }
+  else {
+    entrance = false;
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Cette instruction est composée de <strong>deux instructions simples</strong>, dont une seule est exécutée selon le résultat du test spécifié par l'<strong>expression</strong> entre parenthèses après le mot‑clef <code class="prettyprint lang-c">if</code>. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="expressions"> Expressions </h3>
+
+
+
+<div class="important">
+<p> Une <strong class="title">expression</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Expression_(informatique)" target="_BLANK">W</a> (mot dont la traduction est transparente en anglais) est un <strong>élément de code</strong> destiné à prendre une <strong class="defin">valeur</strong> durant la compilation ou l'exécution du programme. </p>
+
+<p> Le <strong class="defin">calcul</strong> de cette valeur par la machine s'appelle l'<strong class="title">évaluation</strong> de l'expression. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> En langages <strong>C/C++</strong>, la <strong class="title">notion d'expression</strong> est <strong>plus générale qu'en mathématiques</strong>. Elle n'est pas forcément réduite à un simple calcul et peut, lors de son évaluation, enclencher <strong>une ou plusieurs</strong> <strong class="defin">actions</strong>, comme par exemple des affectations ou des opérations d'entrées‑sorties. </p>
+</div><!-- complementExpert -->
+
+
+<h4 id="compositionExpression"> Composition d'une expression </h4>
+
+
+<div class="complement">
+<p> Formellement, une <strong class="title">expression</strong> se <strong class="defin">compose</strong> : </p>
+<ul>
+	<li> d'<strong>appels de fonctions</strong> ;  <em class="remark">ex.</em> :
+			<code class="prettyprint lang-c">sin( )</code>,	<code class="prettyprint lang-c">abs( )</code>, etc. </li>
+
+	<li> d'<strong>opérateurs</strong> ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">+</code>
+			<code class="prettyprint lang-c">-</code>
+			<code class="prettyprint lang-c">*</code>
+			<code class="prettyprint lang-c">/</code>
+			<code class="prettyprint lang-c">,</code>
+	    <code class="prettyprint lang-c">()</code>
+	    <code class="prettyprint lang-c">=</code>, etc. </li>
+
+	<li> d'<strong>identificateurs de données déclarées</strong> (variables ou constantes) ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">newVoltage</code>,
+			<code class="prettyprint lang-c">previousVoltage</code>… </li>
+
+	<li> de <strong>constantes littérales</strong> (valeurs numériques, caractères isolés, chaînes de caractères, etc.) ;  <em class="remark">ex.</em> : <code class="prettyprint lang-c">100.0</code>, <code class="prettyprint lang-c">'A'</code>, <code class="prettyprint lang-c">"hello"</code>… </li>
+</ul>
+</div><!-- complement -->
+
+<p> À chaque emploi d'un <strong>opérateur</strong> ou <strong>appel d'une fonction</strong>, une expression peut se <strong class="defin">décomposer</strong> en <strong class="title">sous‑expressions</strong> jusqu'à ce que ces dernières se réduisent à : </p>
+<ul>
+	<li> soit à un <strong>identificateur de donnée</strong>, </li>
+
+	<li> soit à <strong>constante littérale</strong>, </li>
+</ul>
+
+<p>  constituant autant d'<strong class="title">expressions atomiques</strong>, au sens où elles‑mêmes ne sont <strong class="defin">pas décomposables</strong> – littéralement, elles sont<em>indivisibles</em>. </p>
+
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> L'<strong class="title">expression</strong> codée en langage <strong>C</strong> : <br>
+	<span class="inline">
+		<code class="prettyprint lang-c">abs(newVoltage - previousVoltage)</code>
+	</span><br>
+	correspond à l'<strong>expression mathématique</strong> : <br>
+	<span class="inline">
+		|<var>newVoltage</var> − <var>previousVoltage</var>|</var>
+	</span></li>
+
+	<div class="nobullet">Elle est <strong class="defin">composée</strong> : </div>
+  <ul>
+  	<li> de l'appel de la <strong>fonction</strong> <code class="prettyprint lang-c">abs</code> (valeur absolue) appliquée à la <strong>sous‑expression</strong> <code class="prettyprint lang-c">newVoltage - previousVoltage</code> ; </li>
+
+  	<li> cette <strong>sous‑expression</strong> étant elle‑même composée via l'<strong>opérateur</strong> <code class="prettyprint lang-c">-</code> (soustraction) appliqué aux deux <strong>sous‑expressions atomiques</strong> <code class="prettyprint lang-c">newVoltage</code> et <code class="prettyprint lang-c">previousVoltage</code>. </li>
+  </ul>
+
+	<li> Le code : <br>
+	<span class="inline">
+		<code class="prettyprint lang-c">newVoltage = previousVoltage / 2.0 </code>
+	</span><br>
+	est également une <strong class="title">expression</strong> en langage <strong>C</strong>, car le symbole d'affectation <code class="prettyprint lang-c">=</code> est un <strong>opérateur</strong> (cf. chap. C2‑IV <a class="next" href="Cc2-4_manipulationDonnees.html#syntaxeAffectation" target="_BLANK"></a>). Elle est <strong>composée</strong> : </li>
+  <ul>
+  	<li> de la <strong>sous‑expression atomique</strong> <code class="prettyprint lang-c">newVoltage</code> et de la <strong>sous‑expression</strong> <code class="prettyprint lang-c">previousVoltage / 2.0</code> ; </li>
+
+  	<li> cette <strong>sous‑expression</strong> étant elle‑même composée via l'<strong>opérateur</strong> <code class="prettyprint lang-c">/</code> (division) appliqué aux deux <strong>sous‑expressions atomiques</strong> <code class="prettyprint lang-c">previousVoltage</code> et <code class="prettyprint lang-c">2.0</code>, cette dernière étant une <strong>constante littérale</strong> numérique de type décimal. </li>
+  </ul>
+</ol><!-- numbered -->
+
+</div><!-- exemple -->
+
+<div class="expert">
+<h4 id="expressionConstante"> Expression constante </h4>
+
+
+<div class="important">
+<p> En première approximation, on peut dire qu'une <strong class="title">expression constante</strong> est une expression dont les  <strong>atomes</strong> sont <strong class="warning">exclusivement</strong> des <strong class="defin">constantes littérales ou déclarées</strong> (cf. supra <a class="supra" href="Cc2-2_syntaxeFondamentale.html#compositionExpression"></a>). Cette restriction rend bien évidemment <strong class="warning">impossible</strong> tout recours à un <strong>opérateur d'affectation</strong> (simple ou composé), qui ne peut s'appliquer qu'à une variable déclarée. </p>
+
+<p> De plus, une <strong class="title">expression constante</strong> ne doit comporter <strong class="warning">aucun appel de fonction</strong> ni <strong class="warning">aucun recours</strong> à l'<strong>opérareur séquentiel</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En règle générale, une <strong class="title">expression constante</strong> doit donc pouvoir être <strong class="defin">évaluée dès la compilation</strong> du programme, et non pas seulement lors de son exécution. </p>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"> L'expression <code class="prettyprint lang-c">1 + (a / 2)</code> :  </p>
+<ul>
+	<li> est bien une <strong class="title">expression constante</strong> si <code class="prettyprint lang-c">a</code> est une <strong>constante déclarée</strong> dans une instruction préalable ;  </li>
+
+	<li> n'est <strong class="warning">pas</strong> une <strong class="title">expression constante</strong> si <code class="prettyprint lang-c">a</code> est une <strong>variable déclarée</strong> dans une instruction préalable.  </li>
+</ul>
+</div><!-- exemples -->
+
+
+<p> Pour <strong class="title">plus de détails</strong>, il est vivement recommandé de consulter : </p>
+<ul>
+	<li> la <strong class="defin">norme du langage C</strong> <a class="external" href="http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1570.pdf" target="_BLANK"></a>, section <em class="bold">6.6</em> ; </li>
+
+	<li> la <strong class="defin">norme du langage C++</strong> <a class="external" href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2017/n4659.pdf" target="_BLANK"></a>, section <em class="bold">8.20</em>. </li>
+</ul>
+
+ 
+<!-- expert -->
+<h4 id="expressionConstanteEntiere"> Expression constante entière </h4>
+
+
+<div class="important">
+<p> En première approximation, on peut dire qu'une <strong class="title">expression constante entière</strong> est une <strong>expression constante</strong> qui : </p>
+<ul>
+	<li> doit être évaluée dans un <strong class="specialG">type entier</strong> ; </li>
+
+	<li> ne peut être composée qu'avec d'autres <strong>expressions constantes entières</strong> et des <strong class="defin">constantes littérales</strong> – autrement dit, les <strong>constantes déclarées</strong> sont <strong class="warning">interdites</strong>.  </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> La notion d'<strong class="title">expression constante entière</strong> est <strong class="warning">très importante</strong>, car elle est <strong class="defin">requise</strong> dans de <strong>nombreuses formes syntaxiques</strong> en langage <strong>C</strong> – par exemple, pour coder le nombre d'éléments d'un tableau, les valeurs des cas d'une bifurcation multiple <code class="prettyprint lang-c">switch</code>, etc.  </p>
+
+<p> Sa définition est subtile et elle ne doit <strong class="warning">pas être confondue</strong> avec celle d'<strong>expression constante</strong> à laquelle on imposerait seulement en plus d'être de <strong class="specialG">type entier</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Sont par exemple des <strong class="title">expressions constantes entières</strong> : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">(8 * 7) - 3</code> ou encore n'importe quelle <strong>expression arithmétique</strong> composée de <strong class="defin">constantes littérales entières</strong>, et même en utilisant l'<strong>opérateur</strong> <code class="prettyprint lang-c">/</code> qui agit comme la <strong>division euclidienne</strong> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#division" target="_BLANK"></a> ; </li>
+
+	<li> <code class="prettyprint lang-c">RED + 1</code> où <code class="prettyprint lang-c">RED</code> est l'identificateur d'une <strong class="specialT">constante entière</strong> listée dans la déclaration d'un <strong class="specialG">type énuméré</strong> (cf. chap. C3‑IV <a class="next" href="../C3-Numeration/Cc3-4_typesEnumeres.html#syntaxeAnonyme" target="_BLANK"></a>), car une telle constante a le statut d'expression constante entière ; </li>
+
+	<li> <code class="prettyprint lang-c">(int) (7.0/3)</code> où la constante littérale décimale <code class="prettyprint lang-c">7.0</code> impose une <strong>division algébrique</strong>, mais dont la valeur décimale est ensuite <strong class="specialV">convertie explicitement</strong> par l'opérateur <code class="prettyprint lang-c">(int)</code> dans un <strong class="specialG">type entier</strong> (cf. chap. C3‑VI <a class="next" href="../C3-Numeration/Cc3-6_conversionsTypes.html#cast" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- exemples -->
+
+<p> Là encore, pour <strong class="title">plus de détails</strong>, il est vivement recommandé de consulter la <strong class="defin">norme du langage C</strong> <a class="external" href="http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1570.pdf" target="_BLANK"></a>, section <em class="bold">6.6</em>. </p>
+
+
+<!-- expert -->
+<h4 id="operateurSequentiel"> L'opérateur séquentiel </h4>
+
+
+<div class="important">
+<p> Le langage <strong>C</strong> inclut l'<strong class="title">opérateur séquentiel</strong> dont le symbole est <code class="prettyprint lang-c">,</code> (<em class="english">comma operator</em>). Cet opérateur permet de <strong class="defin">concaténer</strong> (c'est‑à‑dire réunir bout à bout) <strong>plusieurs expressions</strong>. Le code :<br>
+<span class="inline">
+	<code class="prettyprint lang-c">
+		<span class="nocode"><strong>expression 1</strong></span>,
+		<span class="nocode"><strong>expression 2</strong></span>,
+		<span class="nocode"><strong>…</strong></span>,
+		<span class="nocode"><strong>expression n</strong></span>
+	</code>
+</span><br>
+constitue une <strong class="defin">expression séquentielle</strong> qui, lorsqu'elle est évaluée, procède aux évaluations successives de <strong>expression 1</strong> à <strong>expression n</strong> dans cet ordre. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Lorsque plusieurs expressions très courtes se suivent dans un programme, il pourrait être tentant de concaténer avec l'opérateur séquentiel afin de les faire tenir sur une seule ligne de code, comme par exemple :<br>
+<span class="inline">
+ <code class="prettyprint lang-c">a = 0, b = 2;</code>
+</span><br>
+Toutefois, pour une bonne lisibilité, sauf exceptions, il est <strong>recommandé</strong> de respecter le principe : <br>
+<span class="inline">
+	« <strong>une</strong> <strong class="pros">affectation</strong>, <strong>une</strong> <strong class="pros">ligne</strong> <strong>de code</strong> ».
+</span> </p>
+
+
+<p> Néanmoins, l'opérateur séquentiel trouve son utilité dans certaines parties structurées du code, notamment pour enrichir les trois expressions spécifiant les conditions de répétition d'une boucle <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="next" href="Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Identificateurs et mots‑clefs </h2>
+
+
+
+<h3 id="identificateurs"> Identificateurs </h3>
+
+
+<div class="important">
+<p> Dans le code source, on appelle <strong class="title">identificateur</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Identificateur" target="_BLANK">W</a> – en anglais, <strong>identifier</strong> – est une <strong>suite de caractères</strong> formant un <strong class="defin">nom</strong> pour désigner : </p>
+<ul>
+	<li> une <strong>donnée</strong> (constante ou variable), </li>
+
+	<li> un <strong>type</strong> de données, </li>
+
+	<li> une <strong>fonction</strong>… </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Dans tout langage de programmation, de nombreux identificateurs sont évidemment <strong>déjà définis</strong>, en particulier les <strong class="specialG">mots‑clefs</strong> (cf. infra <a class="infra" href="Cc2-2_syntaxeFondamentale.html#mots‑clefs"></a>), qui constituent le <strong>noyau</strong> du langage (en anglais, <em class="english">core</em>).	On dit qu'ils sont des <strong>identificateurs</strong> <strong class="specialG">réservés</strong>, au sens où ils ne peuvent pas être redéfinis par le codeur. </p>
+
+<p> De plus, tout <strong>module de bibliothèque</strong> apporte aussi son lot d'<strong>identificateurs</strong> <strong class="defin">déjà déclarés</strong>. En langages <strong>C/C++</strong>, ces identificateurs peuvent être  <strong class="pros">employés</strong> dans le code dès lors qu'on a codé la <strong>directive d'inclusion</strong> du module (cf. chap. C2‑I <a class="previous" href="Cc2-1_squeletteCode.html#directives" target="_BLANK"></a>). </p>
+
+<p> En revanche, tout nouvel tout <strong class="title">nouvel identificateur</strong> choisi par le codeur doit être préalablement faire l'objet d'une <strong class="defin">déclaration</strong> ou d'une <strong class="defin">définition</strong> avant d'être utilisé dans une instruction. </p>
+</div><!-- complement -->
+
+
+<h4 id="choixIdentificateur"> Choix d'un identificateur </h4>
+
+
+<div class="important">
+<p> Le <strong class="defin">choix</strong> par le codeur d'un <strong class="specialG">nouvel identificateur</strong> obéit à des <strong class="title">règles lexicographiques</strong> <strong class="warning">impératives</strong>, spécifiques aux langages <strong>C</strong> et <strong>C++</strong> :  </p>
+<ul>
+	<li> <strong>employer seulement</strong> le <strong class="defin">jeu de caractères autorisés</strong> qui comprend (sauf configurations de compilation spéciales) : </li>
+
+	<ul>
+		<li> les <strong>lettres</strong> de l'alphabet latin <code class="prettyprint lang-c">A</code> à <code class="prettyprint lang-c">Z</code> et <code class="prettyprint lang-c">a</code> à <code class="prettyprint lang-c">z</code>, </li>
+
+		<ul>
+			<li> <strong class="cons">sans accents</strong>, </li>
+
+			<li> avec <strong class="pros">distinction de la casse</strong> (<em>majuscules</em> et <em>minuscules</em> non confondues) ; </li>
+		</ul>
+
+		<li> les <strong>chiffres</strong> dits « arabes » <code class="prettyprint lang-c">0</code> à <code class="prettyprint lang-c">9</code> ; </li>
+
+		<li> le <strong>tiret bas</strong> <code class="prettyprint lang-c">_</code> (<em class="english">underscore</em>) qui est assimilé à une <strong>lettre</strong>. </li>
+	</ul>
+
+	<div class="nobullet"> Sont donc <strong class="warning">exclus</strong> l'<strong class="cons">espace</strong> (qui est un séparateur) et tous les autres <strong class="cons">caractères symboliques</strong>, en particulier le <strong class="cons">trait d'union</strong> <code class="prettyprint lang-c">-</code> (<em class="english">hyphen</em>) qui symbolise l'opérateur de soustraction ; </div>
+
+	<li> <strong>ne pas commencer par un</strong> <strong class="warning">chiffre</strong> (mais donc, un identificateur peut commencer par un tiret bas). </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> <strong class="title">Identificateurs</strong> <strong class="defin">valides</strong> : <br>
+	<span class="inline">
+		<code class="prettyprint">i</code>   <code class="prettyprint">D5</code>   <code class="prettyprint">d5</code>   <code class="prettyprint">newVoltage</code>   <code class="prettyprint">NEW_VOLTAGE</code>   <code class="prettyprint">_exceptions</code>  …
+	</span> </li>
+
+	<li> <strong class="title">Identificateurs</strong> <strong class="warning">non valides</strong> : </li>
+	<ul>
+		<li> <code class="grey">5D</code>  (<strong class="cons">chiffre initial</strong> interdit), </li>
+
+		<li> <code class="grey">énergieCumulée</code>  (<strong class="cons">lettres accentuées</strong> interdites), </li>
+
+		<li> <code class="grey">new Voltage</code>  (<strong class="cons">espace</strong> interdit), </li>
+
+		<li> <code class="grey">new-Voltage</code>  (<strong class="cons">trait d'union</strong> interdit). </li>
+	</ul>
+</ul>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<p> Des <strong>recommandations</strong> de choix des identificateurs sont données au chapitre C2‑IX <a class="next" href="Cc2-9_bonnesPratiques.html#identificateurs" target="_BLANK"></a>. </p>
+</div>
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> <strong class="title">Commencer un identificateur</strong> par un <strong>tiret‑bas</strong> <code class="prettyprint lang-c">_</code> est syntaxiquement correct, mais en pratique réservé pour des <strong class="specialV">identificateurs spéciaux</strong>, notamment ceux désignant les <strong>variables d'environnement</strong> (par exemple <code>__cplusplus</code>, cf. infra <a class="infra" href="Cc2-2_syntaxeFondamentale.html#versionCompilateur"></a>). </li>
+
+	<div class="nobullet"> Un codeur non expérimenté doit donc <strong class="warning">s'abstenir</strong> de recourir à cette pratique pour <strong>éviter des conflits potentiels</strong> avec des variables dont il ignorerait l'existence. </div>
+
+	<li> Certains compilateurs de la famille <strong>GCC</strong> autorisent l'emploi du <strong class="title">caractère</strong> <code class="prettyprint lang-c">$</code>  en qualité de <strong>lettre</strong> dans les identificateurs. </li>
+
+	<div class="nobullet"> Toutefois, un tel usage n'est <strong class="warning">pas recommandé</strong> car il n'est pas portable dans toutes les implémentations. En particulier, il n'est pas accepté dans le framework <strong class="Arduino">Arduino</strong>. </div>
+</ol>	
+</div><!-- remarques -->
+
+
+
+<h3 id="mots‑clefs"> Mots‑clefs </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">mot‑clef</strong> <a class="external" href="https://en.wikipedia.org/wiki/Reserved_word" target="_BLANK"></a> – en anglais, <strong>keyword</strong> – est un <strong class="defin">identificateur réservé</strong> du langage. Il est <strong>reconnu</strong> <strong class="pros">sans déclaration préalable</strong> ni instruction spécifique par le compilateur. </p>
+
+<p> En langage <strong class="title">C/C++</strong>, les mots‑clefs servent principalement à coder les <strong>déclarations</strong> et les <strong>structures de contrôle</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Les <strong class="title">mot‑clefs</strong> d'un langage <strong>évoluent</strong> au fil des normes : </p>
+
+<ul>
+	<li> le langage <strong class="defin">C</strong> en compte 44 depuis la norme <em class="mark">C11</em> (avec 6 ajouts par rapport à la norme <em class="mark">C99</em>) <a class="external" href="https://en.cppreference.com/w/c/keyword" target="_BLANK"></a> ; </li>
+
+	<li> le langage <strong class="specialO">C++</strong> en compte 94 depuis la norme <em class="mark">C++20</em> (avec 7 ajouts par rapport à la norme <em class="mark">C++17</em>) <a class="external" href="https://en.cppreference.com/w/cpp/keyword" target="_BLANK"></a>. </li>
+</ul>
+
+<p> Les <strong class="title">mots‑clefs</strong> s’apprennent <strong>au fur et à mesure</strong> de leur utilisation. Certains étant très techniques et d'usage rares, il faut plusieurs années de pratique avant de les aborder. </p>
+</div><!-- complementExpert -->
+
+<p> <em class="remark">Dans un premier temps</em>, on peut se contenter de retenir les <strong class="title">mot‑clefs</strong> listés ci‑dessous, relatifs : </p>
+
+<ul>
+  <li> aux <strong class="specialLB">types</strong> :
+    <code class="prettyprint lang-c">const</code> (constante),
+    <code class="prettyprint lang-c">void</code> (vide),
+    <code class="prettyprint lang-c">int</code> (entier),
+    <code class="prettyprint lang-c">float</code> (décimal à virgule flottante),
+    <code class="prettyprint lang-c">bool</code>
+      (booléen, en <em class="mark">C++</em>)… </li>
+
+  <li> aux <strong class="specialLB">structures de contrôle</strong> :
+    <code class="prettyprint lang-c">if</code>,
+    <code class="prettyprint lang-c">else</code>,
+    <code class="prettyprint lang-c">switch</code>,
+    <code class="prettyprint lang-c">case</code>,
+    <code class="prettyprint lang-c">break</code>,
+    <code class="prettyprint lang-c">default</code>,
+    <code class="prettyprint lang-c">for</code>,
+    <code class="prettyprint lang-c">while</code>,
+    <code class="prettyprint lang-c">do</code>… </li>
+</ul>
+
+
+
+<div class="remarques">
+<p class="remarque">	Aux yeux d'un codeur débutant, certains identificateurs d'usage très courant peuvent passer pour mots‑clefs, alors qu'ils sont en fait introduits dans des <strong>modules de bibliothèques</strong>. </p>
+
+<p> Ainsi, contrairement à <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code> en <strong>C++</strong>, les identificateurs <code class="prettyprint lang-c">LOW</code> et <code class="prettyprint lang-c">HIGH</code> ne sont pas des mots‑clefs mais des <strong>pseudo‑constantes</strong> définies dans le fichier d'en‑tête <code class="filename">Arduino.h</code>. </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Séparateurs et délimiteurs </h2>
+
+
+
+<h3> Séparateurs et délimiteurs symboliques </h3>
+
+
+<h4 id="separateurs"> Séparateurs </h4>
+
+
+<div class="important">
+<p> Un <strong class="title">séparateur</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Séparateur_(informatique)" target="_BLANK">W</a> est un <strong class="defin">symbole</strong> ou une <strong>séquence de</strong> <strong class="defin">symboles</strong>. Il sert à la chaîne de compilation pour <strong>distinguer</strong> les uns des autres les éléments de code</strong> <strong class="specialLB">successifs</strong> d'un programme. </p>
+
+<p>	Les séparateurs du langage <strong>C</strong> sont listés ci‑dessous. Certains peuvent avoir de <strong class="warning">multiples usages</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">	
+  <tr>  <th> Symbole(s) </th> <th> Usage courant  </th> </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">;</code> </td>
+    <td> <strong>fin d'instruction</strong> </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">,</code> </td>
+    <td> <strong>entre expressions</strong> (arguments de fonctions, valeurs de tableau, etc.) </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">...</code> </td>
+    <td> <strong>entre expressions</strong> (valeurs de cas, index de tableaux, fin des arguments explicites) </td>
+  </tr>
+    <td> <code class="prettyprint lang-c">:</code> </td>
+    <td> <strong>fin d'étiquette</strong> (<code class="prettyprint lang-c">case</code>) </td>
+  <tr>
+    <td> <code class="prettyprint lang-c">//</code> </td>
+    <td> <strong>début de commentaire</strong> de fin de ligne  </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Le <strong>symbole</strong> <code class="prettyprint lang-c">;</code> sert également séparer les <strong>expressions</strong> codant l'en‑tête d'une <strong class="title">boucle</strong> <code class="prettyprint lang-c">for</code>  (cf. chap. C2‑V <a class="next" href="Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>), lesquelles ne sont pas à proprement parler des instructions. </li>
+
+	<li> Le <strong>symbole</strong> <code class="prettyprint lang-c">,</code> est aussi celui de l'<strong class="title">opérateur séquentiel</strong> (cf. supra <a class="supra" href="Cc2-2_syntaxeFondamentale.html#operateurSequentiel"></a>). </li>
+
+	<li> Le <strong>séparateur</strong> <code class="prettyprint lang-c">...</code> est appelé <strong class="title">ellipsis</strong> en anglais <a class="external" href="https://en.wikipedia.org/wiki/Ellipsis_(computer_programming)#C_and_C++" target="_BLANK">W</a>. </li>
+</ol>
+</div><!-- remarques -->
+
+
+<h4 id="delimiteurs"> Délimiteurs </h4>
+
+
+<div class="important">
+<p> On parle de <strong class="title">délimiteurs</strong> <a class="external" href="https://en.wikipedia.org/wiki/Delimiter#Bracket_delimiters" target="_BLANK">W</a> – en anglais, <strong>balanced delimiter</strong> – lorsque <strong class="defin">deux séparateurs</strong> fonctionnent par <strong class="specialLB">paire</strong> pour <strong>encadrer une partie de code</strong>. </p>
+
+<p> Ceux du langage <strong>C</strong> sont listés ci‑dessous. Comme les séparateurs, ils peuvent avoir de <strong class="warning">multiples usages</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em;">
+	<tr>  <th> Symboles </th> <th> Usage courant  </th> </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">{ }</code> </td>
+    <td> séquence d'<strong>instructions</strong> (<strong>bloc</strong>), liste de <strong>valeurs</strong>, de <strong>constantes</strong>… </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">( )</code> </td>
+    <td> <strong>expression</strong> </td>
+  </tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">[ ]</code> </td>
+    <td> <strong>nombre d'éléments</strong> ou <strong>indice d'élément</strong> d'un tableau </td>
+  </tr>
+    <td> <code class="prettyprint lang-c">&lt; &gt;</code> </td>
+    <td> <strong>nom de fichier</strong> d'en‑tête de module de bibliothèque </td>
+  <tr>
+  </tr>
+    <td> <code class="prettyprint lang-c">' '</code> </td>
+    <td> <strong>caractère</strong> seul</td>
+  <tr>
+  <tr>
+    <td> <code class="prettyprint lang-c">" "</code> </td>
+    <td> <strong>chaîne</strong> de caractères </td>
+  </tr>
+    <td> <code class="prettyprint lang-c">/* */</code> </td>
+    <td> bloc de <strong>commentaires</strong> (sur une ou plusieurs lignes) </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- complement -->
+
+
+<div class="remarques"><p class="remarques"></p>
+
+<ol class="littered">
+	<li> Certains délimiteurs jouent très souvent le <strong>rôle d'</strong><strong class="title">opérateur</strong>, en particulier <code class="prettyprint lang-c">()</code> et <code class="prettyprint lang-c">[]</code> (cf. chap. C2‑IV <a class="next" href="Cc2-4_manipulationDonnees.html#operateursStructurels" target="_BLANK"></a>). </li>
+
+	<li> La <strong class="title">distinction</strong> entre <strong>séparateurs</strong> et <strong>délimiteurs</strong> ne fait <strong class="warning">pas l'unanimité</strong>. On pourrait en effet considérer que <code class="prettyprint lang-c">;</code> est un délimiteur de fin d'instruction, alors que <code class="prettyprint lang-c">,</code> serait un « vrai » séparateur d'expressions (il est placé entre deux expressions, mais pas à la fin). En définitive, même si elle emploie le terme <em class="english">delimiters</em>, la norme classe tous ces éléments de code dans la même catégorie <em class="english">punctuators</em> (avec les symboles des opérateurs). </li>
+
+	<li> Quoi qu'il en soit, ces symboles <strong>requièrent</strong> <strong class="warning">la plus grande attention</strong>. Toute confusion, omission ou mauvais placement est une source d'erreur de codage. C'est pourquoi : </li>
+	<ul>
+		<li> il est vivement recommandé de les placer conformément aux <strong class="defin">règles usuelles de formatage</strong> du code, avec des espaces d'<strong class="pros">aération</strong> entre les symboles (cf. infra) ; </li>
+
+		<li> il est très utile que l'éditeur de code mette en œuvre une <strong class="defin">coloration syntaxique</strong> pour rendre les <strong>séparateurs</strong> et <strong>délimiteurs</strong> particulièrement <strong class="pros">visibles</strong>. </li>
+	</ul>
+
+  <div class="nobullet"> Pour plus de détails, consulter les <strong>recommandations</strong> du chapitre C2‑IX <a class="next" href="Cc2-9_bonnesPratiques.html#formatCode" target="_BLANK"></a>. </div>
+</ol>
+
+</div><!-- remarques -->
+
+
+
+<h3 id="separateursBlancs"> Séparateurs « blancs » </h3>
+
+
+
+<div class="important">
+<p> Dans un fichier source, les principaux <strong class="title">caractères d'espacement</strong> sont : </p>
+<ul>
+	<li> l'<strong>espace</strong> (saisi par la barre « espace <span class="touche">   </span> ») ;  </li>
+
+	<li>  le <strong>saut de tabulation</strong> horizontale (saisi par la touche « <em class="sigle">TAB</em> <span class="touche">↹</span> ») ;  </li>
+
+	<li> le <strong>saut de ligne</strong> (saisi par la touche « <em class="sigle">entrée</em> <span class="touche">↲</span> ») – en anglais <em class="english">newline</em>. </li>
+</ul>
+<p> Dans certains cas, ils peuvent jouer le rôle de <strong  class="defin">séparateurs</strong> entre deux éléments de code atomiques successifs. On parle de <strong class="defin">séparateurs « blancs »</strong> <a class="external" href="https://en.wikipedia.org/wiki/Whitespace_character" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="remarques"><p class="remarque"></p>
+<ol class="littered">
+	<li> Il existe également <strong class="title">deux autres caractères d'espacement</strong> qui sont acceptés en langages <strong>C</strong> et <strong>C++</strong> : </li>
+	<ul>
+		<li> le <strong>saut de tabulation verticale</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Touche_de_tabulation#Caractères_de_tabulation" target="_BLANK"></a> (<em class="english">vertical tabulation</em>, abrégé <em class="sigle">VT</em>), </li>
+
+		<li> et le <strong>saut de page</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Form_feed" target="_BLANK">W</a> (<em class="english">form feed</em>, abrégé <em class="sigle">FF</em>), </li>
+	</ul>
+  <div class="nobullet"> mais ces deux caractères issus de la technologie mécanique des <strong>téléscripteurs</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Téléscripteur" target="_BLANK">W</a> sont depuis longtemps <strong class="cons">désuets</strong>, et par voie de conséquence, il n'existe <strong class="cons">pas de touche de clavier</strong> directe pour les insérer dans un code source.  </div>
+
+
+	<li>  Également en héritage des <strong>téléscripteurs</strong>, un <strong class="title">saut de ligne</strong> est souvent implémenté dans un fichier source par une séquence de <strong class="defin">deux caractères de contrôle</strong> <strong><em class="sigle">CR</em> <em class="sigle">LF</em></strong> (non affichés à l'écran mais opérant une action lors de la visualisation du fichier), à savoir : </li>
+	<ul>
+		<li> un caractère de <strong>retour chariot</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Retour_chariot" target="_BLANK">W</a> (<em class="english">carriage return</em> ou <strong><em class="sigle">CR</em></strong>) ;  </li>
+
+		<li> un caractère de <strong>nouvelle ligne</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Saut_de_ligne" target="_BLANK">W</a> (littéralement, d'alimentation d'une ligne supplémentaire par rotation du tambour, d'où le terme anglais <em class="english">line feed</em> ou <strong><em class="sigle">LF</em></strong>). </li>
+	</ul>
+
+	<div class="nobullet"> <em class="remark"> Attention</em>, cette implémentation des fins de lignes est surtout adoptée par les systèmes d'exploitation <strong class="specialLB">Windows</strong>. Mais : </div>
+	<ul>
+		<li> avec <strong class="specialLB">Linux</strong>, un saut de ligne est par défaut implémenté par un caractère <strong><em class="sigle">LF</em> seul</strong> ; </li>
+
+		<li> avec <strong class="specialLB">MacOS</strong>, un saut de ligne est par défaut implémenté par un caractère <strong><em class="sigle">CR</em> seul</strong>. </li>
+	</ul>
+	<div class="nobullet"> sachant que lorsqu'un fichier source est crée sous un système d'exploitation donné puis copié sur une machine avec un autre système d'exploitation, il peut très bien garder son <strong class="warning">implémentation d'origine</strong>. Les éditeurs de code savent gérer ces situations ; par exemple, avec <strong class="Sublime">Sublime Text</strong>, on peut changer l'implémentation des fins de lignes du fichier en cochant une case dans le menu <code>View/Line Endings</code>. </div>
+</ol>
+</div><!-- remarque -->
+
+<div class="complement">
+<p> Comme pour les expressions (cf. supra <a class="supra" href="Cc2-2_syntaxeFondamentale.html#compositionExpression"></a>), on a la notion d'<strong>élément de code</strong> <strong class="title">atomique</strong> pour désigner toute succession de caractères du code source qui <strong>ne peut <strong class="warning">pas</strong> être</strong> <strong class="warning">divisée</strong> par un séparateur blanc sans en changer le sens. En particulier, on a : </p>
+
+<ul>
+	<li> tous les <strong>mots‑clefs</strong> et autres <strong>identificateurs</strong>, </li>
+
+	<li> toutes les <strong>constantes littérales</strong>, </li>
+
+	<li> tous les <strong>symboles</strong> constitués de plusieurs caractères (<code class="prettyprint lang-c">//</code> <code class="prettyprint lang-c"><<</code> etc.). </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Dans la déclaration : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+int userAge;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<ul>
+	<li> l'identificateur <code class="prettyprint lang-c">userAge</code> est un <strong>atome</strong> ; </li>
+
+	<div class="nobullet"> si l'on codait par mégarde <code class="prettyprint lang-c">int user Age;</code> le compilateur détecterait deux nouveaux identificateurs distincts ;  </div>
+
+	<li> en revanche, un <strong>espace</strong> entre <code class="prettyprint lang-c">int</code> et <code class="prettyprint lang-c">userAge</code> est <strong>indispensable</strong> comme séparateur ; </li>
+
+	<div class="nobullet"> si l'on codait par mégarde <code class="prettyprint lang-c">intuserAge;</code> le compilateur ne détecterait un seul identificateur et pas le mot‑clef <code class="prettyprint lang-c">int</code>. </div>
+</ul>	
+</div><!-- exemple -->
+
+
+<h3 id="formatLibre"> Principe du format libre </h3>
+
+
+<div class="complement">
+<p> En langages <strong>C/C++</strong>, les <strong class="title">caractères d'espacement</strong>  diffèrent des autres séparateurs car ils <strong>peuvent être</strong> <strong class="pros">surnuméraires</strong> d'un point de vue purement syntaxique. Ceux qui sont « en trop » sont tout simplement <strong>supprimés par le préprocesseur</strong> (au même titre que les commentaires). </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> On dit que les langages <strong class="title">C/C++</strong> sont à <strong class="defin">format libre</strong>, au sens où le programmeur est libre d'<strong>espacer</strong> et d'<strong>indenter</strong> son code. </p>
+</div><!-- important -->
+
+<div class="remarques">
+<p class="remarque"> A contrario, un langage comme <strong>Python</strong> n'est pas à format libre : l'indentation des instructions d'un programme code la structure d'exécution de ce dernier. </p>
+</div>
+
+<div class="exemples">
+<p class="exemple"> La déclaration de l'exemple précédent pourrait aussi se coder de façon « fantaisiste » : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+int
+userAge
+    ;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Mais bien entendu, il n'est pas question d'<strong class="warning">abuser</strong> de cette liberté ! Pour <strong>faciliter la lecture</strong>, on doit trouver un <strong class="pros">bon compromis</strong> entre <strong class="defin">aération</strong> et <strong class="defin">compacité</strong>. Ici, les espaces ne sont pas ajoutés avec pertinence – au contraire, ils nuisent à la bonne lisibilité du code (cf. chap. C2‑IX <a class="next" href="Cc2-9_bonnesPratiques.html#aeration" target="_BLANK"></a>). </p>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4 id="contreOblique"> Codage d'un saut de ligne « fictif » </h4>
+
+
+<div class="complement">
+<p> Lorsqu'une <strong>ligne</strong> de code est <strong class="cons">très longue</strong>, il peut être souhaitable pour bonne la lisibilité d'insérer un <strong class="title">saut de ligne « fictif »</strong>, c'est‑à‑dire <strong class="defin">sans séparateur blanc</strong>. </p>
+
+<p> Un tel saut de ligne doit apparaître lors de l'édition de code mais pas durant la compilation. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p>	Le langage <strong>C</strong> permet justement de demander au <strong>préprocesseur</strong> d'<strong class="title">ignorer un saut de ligne</strong> : il suffit de faire précéder la séquence de caractères de ce saut de lignes par le symbole <code class="prettyprint lang-c">\</code> (<strong>contre-oblique</strong>, en anglais <em class="english">antislash</em> ou <em class="english">backslash</em>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> <em class="remark">Attention</em> ! <strong class="warning">Aucun séparateur blanc</strong> ni <strong>commentaire</strong> ne peut être inséré <strong>entre</strong> le symbole <code class="prettyprint lang-c">\</code> et le caractère (ou la séquence de caractères) de <strong>saut de ligne</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Le code : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+printf("====================\
+====================\
+====================");
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> sera, avant compilation, transformé par le préprocesseur en : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+printf("============================================================");
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Il produira l'affichage d'une ligne de caractères « <code>=</code> » sans discontinuité. </p>
+</div><!-- exemple -->
+
+<div class="remarques"><!-- A VERIFIER -->
+<p class="remarque"> Le codage de <strong class="title">sauts de ligne fictifs</strong> peut <strong class="cons">fausser</strong> les indications de <strong>numéros des lignes</strong> dans les messages d'avertissement ou d'erreurs émis par la chaîne de compilation. </p>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

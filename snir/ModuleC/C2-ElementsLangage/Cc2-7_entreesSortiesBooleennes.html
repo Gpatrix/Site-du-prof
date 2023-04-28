@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="VII"
+  data-pageState="OK"
+  data-pageheadtitle="E-S booléennes"
+  data-pagefulltitle="Arduino : les entrées‑sorties booléennes"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="exergue">
+
+<p class="square"> Dans le domaine des systèmes programmables, on trouve des <strong>ports</strong> d'<strong class="title">entrées‑sorties numériques</strong> (en anglais, <em class="english">digital input output port</em>) principalement sur : </p>
+
+<ul>
+  <li> les <strong>cartes à microcontrôleur</strong> (<em class="mark">Arduino</em>, <em class="mark">Teensy</em>, etc.) ; </li>
+
+  <li> les <strong>nano‑ordinateurs</strong> monocartes (<em class="mark">Raspeberry Pi</em>, <em class="mark">BeagleBone</em>, etc.) ; </li>
+
+  <li> les ordinateurs équipés d'un <strong>port parallèle</strong> (technologie obsolète). </li>
+</ul>
+  <img class="top-left" src="../img/digitalIOports.png">
+
+<p class="square"> La <strong class="title">technologie matérielle</strong> des ports d'entrées‑sorties numériques est plus <strong class="warning">complexe</strong> qu'on pourrait naïvement le penser. Elle dépend du type de machine utilisée. </p>
+
+<p> Il en va de même pour la <strong class="title">syntaxe de codage</strong> des <strong >opérations d'entrées‑sorties</strong>. Néanmoins, les <strong class="specialLB">notions fondamentales</strong> sont souvent les mêmes : </p>
+
+<ul>
+  <li> on procède en <strong class="defin">logique tout‑ou‑rien</strong> avec deux niveaux de tension discrétisés <strong class="specialG">BAS</strong> et <strong class="specialG">HAUT</strong> ; la tension sur une broche du port d'entrées‑sorties peut donc être représentée par une <strong>variable booléenne</strong> ; </li>
+
+  <li> les <strong class="defin">broches</strong> du port peuvent être employées comme <strong>entrée</strong> ou <strong>sortie</strong>, mais pas les deux en même temps ; </li>
+
+  <li> les <strong class="defin">opérations</strong> de base sur une broche sont la <strong>lecture</strong> et l'<strong>écriture</strong> de son niveau logique de tension. </li>
+</ul>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/logoArduino.png" width="150px" style="padding-top: 1.2em">
+<p class="square"> Ce chapitre présente exclusivement la <strong class="title">technologie</strong> et la <strong class="title">syntaxe de codage</strong> <strong class="Arduino">Arduino</strong>, dont les <strong class="defin">fonctions spécifiques</strong> de <strong>haut niveau</strong> (<code class="prettyprint lang-c">pinMode</code>, <code class="prettyprint lang-c">digitalWrite</code>, etc.) ont apporté d'énormes progrès en termes de <strong class="pros">lisibilité</strong> du code et de <strong class="pros">simplicité</strong> de mise en œuvre. Elle constitue aujourd'hui une référence en programmation des cartes à microcontrôleur. </p>
+
+<p> Pour poursuivre l'apprentissage de la programmation procédurable dans le contexte des <strong class="Arduino">cartes Arduino</strong> et compatibles, l'emploi de ces <strong>fonctions d'entrées‑sorties de haut niveau</strong> doit être <strong class="pros">maîtrisé</strong>. Dans cet <strong class="title">objectif</strong>, on abordera dans l'ordre : </p>
+<ul>
+  <li> des <strong class="specialLB">rappels d'électronique</strong> sur les notions de <strong>niveau logique de tension</strong> et de <strong>potentiel de référence</strong> ainsi que les spécificités matérielles et logicielles de la <strong class="specialLB">technologie Arduino ‑ Atmel</strong> ; </li>
+
+  <li> la <strong class="specialLB">configuration des broches</strong> d'entrées‑sorties d'une <strong class="Arduino">carte Arduino</strong> via la fonction <code class="prettyprint lang-c">pinMode</code> ; </li>
+
+  <li> la <strong class="specialLB">gestion du niveau logique d'une broche</strong> d'entrées‑sortie via la fonction d'<strong>écriture</strong> <code class="prettyprint lang-c">digitalWrite</code> et la fonction de <strong>lecture</strong> <code class="prettyprint lang-c">digitalRead</code>, avec en particulier la détection d'un <strong class="defin">front montant</strong> ou <strong class="defin">descendant</strong>. </li>
+</ul>
+
+<div class="expert">
+<p> Le <strong>code source</strong> de ces <strong class="Arduino">fonctions Arduino</strong> est consultable dans le fichier <code class="filename">wiring_digital.c</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/wiring_digital.c" target="_BLANK">G</a> mais il est <strong class="warning">complexe</strong> et difficile à comprendre, même pour un étudiant motivé. En effet, il fait appel à plusieurs macro‑définitions codées dans le fichier d'en‑tête <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> – ces dernières faisant appel à d'autres macro‑définitions codées dans des fichiers d'en‑tête de la bibliothèque <code class="filename">libc</code> spécifique au microcontrôleur utilisé (par exemple le fichier <code class="filename">avr/pgmspace.h</code> <a class="external" href="https://github.com/avrdudes/avr-libc/blob/main/include/avr/pgmspace.h" target="_BLANK">G</a> pour les microcontrôleurs <em class="mark">Atmel</em> à cœur <em class="sigle">AVR</em> – cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>). </p> 
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Rappels d'électronique </h2>
+
+
+
+<p> Dans cette section, il n'est pas question d'exposer des connaissances approfondis, mais simplement des <strong class="title">rappels</strong> – voire des <strong class="specialLB">rudiments</strong> pour les étudiants qui n'auraient pas étudié l'électronique avant d'aborder ce module. Pour tout <strong>complément</strong>, on pourra consulter ce chapitre d'introduction à l'<strong class="defin">électrocinétique</strong> <a class="external" href="../doc/SI_31C&#32;-&#32;circuits.pdf" target="_BLANK"></a>. </p>
+
+
+
+<h3> Potentiels de référence </h3>
+
+
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/ArduinoTensions.png" width="200px">
+<p> Sur une carte électronique, la <strong class="title">niveau de tension</strong> ou <strong class="title">potentiel</strong> d'une <strong>broche</strong> est sa <strong class="defin">différence de potentiel</strong> avec la <strong>broche</strong> <em class="bold"><em class="sigle">GND</em></em> (de l'anglais <em class="english">ground</em>, c'est‑à‑dire « Terre », en fait la <strong>masse</strong>) de l'alimentation de la carte. Cette dernière est considérée comme ayant le <strong class="specialN">potentiel bas</strong>. </p>
+
+<p> Par ailleurs, il existe au moins un <strong class="title">autre potentiel remarquable</strong>, dit <strong class="specialR">potentiel haut</strong> dont la stabilité est assurée par un <strong>régulateur de tension</strong>. La <strong class="defin">valeur</strong> de ce potentiel dépend de la <strong class="specialLB">technologie des semi‑conducteurs</strong> employée : </p>
+
+<ul>
+  <li> en technologie dite <strong class="specialLB"><em class="sigle">TTL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transistor-Transistor_logic" target="_BLANK">W</a> (<em class="english">transistor transistor logic</em>), il vaut <em class="bold" style="color : red">5 V </em> (± 10%) ; <br>
+  on emploie le sigle <em class="bold" style="color : red">V<sub>CC</sub></em> pour le repérer ; </li>
+
+  <li> en technologie dite <strong class="specialLB"><em class="sigle">CMOS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Complementary_metal_oxide_semi-conductor" target="_BLANK">W</a> (<em class="english">complementary metal oxide semi‑conductor</em>), il peut aller de <em class="bold" style="color : red">3</em> à <em class="bold" style="color : red">18 V</em> selon les applications (ce qui constitue un avantage indéniable de cette technologie) ; <br>
+  on emploie le sigle <em class="bold" style="color : red">V<sub>DD</sub></em> pour le repérer. </li>
+</ul>
+<p> Très souvent, la technologie <em class="bold"><em class="sigle">CMOS</em></em> est implémentée avec le <strong class="specialR">potentiel haut</strong> fixé à <em class="bold" style="color : red">5 V</em>, ce qui apporte une <strong>compatibilité</strong> avec les composants <em class="bold"><em class="sigle">TTL</em></em>. </p>
+</div>
+
+<div class="remarques">
+<p class="remarque"> Par souci de simplicité, il arrive qu'on emploie le sigle <em class="bold" style="color : red">V<sub>CC</sub></em> pour désigner le <strong class="specialR">potentiel haut</strong> de façon <strong>générique</strong>, c'est‑à‑dire quelle que soit la technologie des circuits. </p>
+</div><!-- complement -->
+
+
+
+<h3> Niveaux logiques de tension </h3>
+
+
+
+<div class="important"> 
+<p> Le <strong class="defin">niveau de tension</strong> d'une <strong>broche</strong> peut être interprété en <strong class="title">logique tout‑ou‑rien</strong> (<strong><em class="sigle">TOR</em></strong>) par rapport à ces deux potentiels de référence, moyennant des <strong>intervalles d'interprétation</strong> très larges. </p>
+
+<p> Pour éviter les confusions avec les potentiels de référence, on peut noter ces deux <strong class="title">niveaux logiques de tension</strong> en majuscules, respectivement <strong class="specialG">BAS</strong> et <strong class="specialG">HAUT</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Ainsi, en technologie <strong><em class="sigle">TTL</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Logic_level#Logic_voltage_levels" target="_BLANK">W</a> : </p>
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/TTLlogicalVoltages.png" width="500px">
+<ul>
+  <li> le <strong class="specialLB">niveau logique</strong> de tension <strong class="specialG">HAUT</strong> – en anglais, <strong class="specialG">HIGH</strong> – est spécifié comme étant compris entre la <em>limite inférieure d'interprétation</em> <em class="bold">2 V</em> et le <strong class="specialR">potentiel haut</strong> <em class="bold" style="color : red">V<sub>CC</sub> = 5 V</em> ; </li>
+
+  <li> le <strong class="specialLB">niveau logique</strong> de tension <strong class="specialG">BAS</strong> – en anglais, <strong class="specialG">LOW</strong> – est spécifié comme étant compris entre le <strong class="specialN">potentiel bas</strong> <em class="bold">0 V</em> et la <em>limite supérieure d'interprétation</em> <em class="bold">0,8 V</em>.  </li>
+
+  
+</ul>
+<p> L'<strong>intervalle</strong> compris entre les deux <em>limites d'interprétation</em> <em class="bold">0,8</em> et <em class="bold">2 V</em> est considéré comme <strong class="cons">non fiable</strong> en termes de comportement des circuits. La technologie doit garantir qu'aucune broche d'un circuit ne présente durablement une valeur de tension dans cet intervalle. </p>
+</div><!-- display -->
+
+
+</div><!-- complementExpert -->
+
+
+<!-- 
+<h3> Nécessité de référencement des broches d'entrées d'un système électronique </h3>
+
+
+
+<h3> Rappels sur quelques composants usuels </h3>
+
+
+
+<h4> Le résistor </h4> 
+
+
+<h4> La led </h4>
+
+
+<h4> Le bouton‑poussoir </h4>
+
+
+<h4> Le condensateur </h4>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Technologie <em class="mark">Arduino</em> – <em class="mark">Atmel</em> </h2>
+
+
+<div class="expert">
+<h4> Schéma‑bloc d'une broche d'entrée‑sortie </h4>
+
+
+<div style="display: block;">
+
+<p id="schemaIO">  Le <strong>schéma‑bloc</strong> ci‑dessous illustre l'implémentation matérielle d'une <strong class="title">broche</strong> <code>Pxn</code> – broche nº <strong>n</strong> du <strong class="title">port d'entrée‑sortie</strong> numérique <strong>x</strong> (<em>B</em>, <em>C</em>…) du microcontrôleur <strong>Atmel ATmega328p</strong>, lequel équipe notamment les <strong>cartes</strong> <strong class="Arduino">Arduino Uno</strong> et <strong class="Arduino">Nano</strong> (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>). </p>
+
+<img class="top-left" src="../img/ATmega328P_ioSchema.jpg">
+
+<p> Ce schéma consiste principalement en <strong class="title">trois registres 1-bit</strong> implémentés par des <strong>bascules D</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bascule_(circuit_logique)#Bascule_D" target="_BLANK">W</a> : </p>
+
+<ol class="numbered">
+  <li> le registre <code style="background: white">DDxn</code> qui mémorise le <strong class="specialO">mode</strong> configuré de la broche en <strong>entrée</strong> (bit à <code>0</code>) ou en <strong>sortie</strong> (bit à <code>1</code>) ; </li>
+
+  <li> le registre <code style="background: white">PORTxn</code> qui mémorise la <strong class="defin">valeur</strong> (c'est‑à‑dire le niveau logique <code>0</code> ou <code>1</code>) d'écriture en <strong>sortie</strong> ; ce registre dispose également d'un circuit de <strong>lecture</strong> ; </li>
+
+  <li> le registre <code style="background: white">PINxn</code> qui mémorise la <strong class="defin">valeur</strong> (c'est‑à‑dire le niveau logique <code>0</code> ou <code>1</code>) de lecture en <strong>entrée</strong> ; </li>
+
+  <ul>
+    <li> un <strong>trigger de Schmitt</strong> assure la discrétisation en <strong class="specialG">niveaux logiques</strong> du signal de tension présent sur la broche ; </li>
+
+    <li> le registre est <strong>synchronisé</strong> avec l'horloge du microcontrôleur (sa valeur est figée entre deux tops d'horloge).</li>
+  </ul>
+</ol>
+
+<p> De plus, ce schéma comprend une <strong class="specialR">résistance de pull‑up</strong> <a class="external " href="https://fr.wikipedia.org/wiki/Résistance_de_rappel" target="_BLANK">W</a> d'environ <strong class="specialR">20 kΩ</strong> pour référencer le niveau de tension de la broche au potentiel de référence <strong class="specialG">haut</strong>. Elle est activée ou déactivée par le signal <code>PUD</code>. </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+<h3> Liaisons des broches d'une carte au microcontrôleur </h3>
+
+
+
+<div class="complement" style="display:inline-block";>
+
+<img class="top-right" src="../img/ArduinoUnoPortNum.jpg" width="250px"> 
+
+<p> Sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong>, les connecteurs électriques du <strong class="title">port d'entrées‑sorties numériques</strong> (des broches de type « <em class="mark">Dupont</em> » au pas d'écartement standard de 2,54 mm – cf. photo ci‑contre) sont <strong class="pros">directement reliés</strong> aux broches des ports d'entrées‑sorties correspondantes du <strong>microcontrôleur</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Ainsi, conformément à son schéma électronique, on a les correspondances ci‑dessous pour la <strong>carte</strong> <strong class="Arduino">Uno</strong> <a class="external" href="https://content.arduino.cc/assets/UNO-TH_Rev3e_sch.pdf" target="_BLANK">A</a>, qui est dotée d'un microcontrôleur <strong>Atmel ATmega328P</strong> : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Carte </th> <th> Microcontrôleur </th>
+  </tr>
+  <tr>
+    <td> <strong class="specialLB">port numérique</strong> <br> 
+      broches nº <em class="bold">0</em> à <em class="bold">7</em> </td>
+    <td style="text-align: center"> <strong>port D</strong> <br> broches PD0 à PD7 </td>
+  </tr>
+  <tr>
+    <td> <strong class="specialLB">port numérique</strong> <br> 
+      broches nº <em class="bold">8</em> à <em class="bold">13</em> </td>
+    <td style="text-align: center"> <strong>port B</strong> <br> broches PB0 à PB5 </td>
+  </tr>
+  <tr>
+    <td> <strong class="specialO">port analogique</strong> <br> 
+      broches nº <em class="bold">A0</em> à <em class="bold">A5</em> </td>
+    <td style="text-align: center"> <strong>port C</strong> <br> broches PC0 à PC5 </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+
+<p> Dans un premier temps, il n'est pas nécessaire de connaître ce genre de correspondance pour programmer une <strong>carte</strong> <strong class="Arduino">Arduino</strong> : quel que soit le modèle, les numéros de broches de la carte sont pris en charge par les <strong>fonctions</strong> <strong class="Arduino">Arduino</strong> de lecture et d'écriture sur les ports de la carte (cf. infra <a class="infra" href="Cc2-7_entreesSortiesBooleennes.html#lectureEcriture"></a>) ainsi que des pseudo‑constantes. </p>
+
+<div class="remarques" id="polyvalencePortC">
+<p class="remarque"> En règle générale, les ports d'un microcontrôleur sont très polyvalents. En particulier, le <strong class="title">port C</strong> du microcontrôleur <strong>Atmel ATmega328P</strong>, « nominalement » dévolu aux entrées analogiques, fait aussi fonction de <strong class="specialLB">port numérique</strong>, ce qui porte à <em class="bold">20</em> le nombre d'<strong>entrées‑sorties booléennes</strong> qu'une carte <strong class="Arduino">Uno</strong> peut gérer. </p>
+</div><!-- remarque -->
+</div><!-- expert -->
+
+
+
+<h3> Niveaux logiques de tension d'entrée‑sortie du microcontrôleur </h3> 
+
+
+
+<div class="complement" style="display:inline-block";>  
+<p> Dans les microcontrôleurs employés par les <strong>cartes</strong> <strong class="Arduino">Arduino</strong>, les circuits d'entrées‑sorties sont réalisés en <strong>technologie <em class="sigle">CMOS</em></strong> mais avec les <strong class="title">potentiels de référence</strong> suivants <a class="external" href="https://www.arduino.cc/reference/en/language/variables/constants/constants/" target="_BLANK">A</a> : </p>
+
+<ul>
+  <li> <em class="bold">0 ‑ <span style="color: red">5 V</span></em> sur microcontrôleurs à <strong class="specialLB">cœur <em class="sigle">AVR</em></strong> (cas des cartes les plus usuelles : <em>Uno</em>, <em>Mega</em>, <em>Nano</em>…), avec les <strong class="defin">intervalles d'interprétation</strong> : </li>
+
+  <ul>
+    <li> de <em class="bold">0</em> à 1,5 V pour le niveau logique <strong class="specialG">BAS</strong>,</li>
+
+    <li> de 3 à <em class="bold" style="color: red">5 V</em> pour le niveau logique <strong class="specialG">HAUT</strong> ;</li>
+  </ul>
+  ces niveaux étant <strong class="pros">compatibles</strong> avec la <strong>technologie <em class="sigle">TTL</em></strong>. </li>
+
+  <li> <em class="bold">0 ‑ <span style="color: red">3,3 V</span></em> sur microcontrôleurs à <strong class="specialLB">cœur <em class="sigle">ARM</em></strong> (cartes <em class="mark">Due</em>, <em class="mark">Zero</em>…), avec les <strong class="defin">intervalles d'interprétation</strong> : </li>
+
+  <ul>
+    <li> de <em class="bold">0</em> à 1 V pour le niveau logique <strong class="specialG">BAS</strong>,</li>
+
+    <li> de 2 à <em class="bold" style="color: red">3,3 V</em> pour le niveau logique <strong class="specialG">HAUT</strong>.</li>
+  </ul>
+
+  <div class="expert">
+  <div class="nobullet"> La <strong class="cons">faiblesse</strong> de la valeur du potentiel de référence <em class="bold" style="color: red">V<sub>DD</sub></em> sur ces carte limite encore davantage les possibilités de mettre en œuvre des sorties pilotant <strong>directement</strong> des composants, notamment les relais. Il faut souvent recourir à des transistors d'amplification.  </div>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Sur les <strong>cartes</strong> <strong class="Arduino">Arduino</strong>, le potentiel de référence <strong class="warning">haut</strong> employé sur le port numérique d'entrées‑sorties <strong class="cons">ne peut pas être modifié</strong>, même si la carte dispose par ailleurs d'une broche d'alimentation avec un autre potentiel de référence haut (il y a une broche 3,3 V sur une <em class="mark">Uno</em> et une broche 5 V sur une <em class="mark">Due</em>). </p>
+</div><!-- remarque -->
+
+
+
+<h3> Pseudo‑constantes logiques <code class="prettyprint lang-c">LOW</code> et <code class="prettyprint lang-c">HIGH</code> </h3>
+
+
+
+<div class="important">
+<p> Pour rendre les programmes simples à coder et plus lisibles, le fichier <code class="filename">Arduino.h</code> définit  <strong class="title">deux pseudo‑constantes</strong> <strong>spécifiques</strong> <code class="prettyprint lang-c">LOW</code> et <code class="prettyprint lang-c">HIGH</code> <a class="external" href="https://www.arduino.cc/reference/en/language/variables/constants/constants/" target="_BLANK">A</a> qui ont respectivement les correspondances avec les <strong>valeurs booléennes</strong> <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code> et les <strong>constantes logiques</strong> <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code> du <strong>C++</strong>, ce que récapitule le tableau ci‑dessous. </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Niveau de <br> tension </th>
+    <th> pseudo‑constante <br> <em class="mark">Arduino</em> </th>
+    <th> Valeur <br> booléenne </th>
+    <th> Constante <br> logique </th>
+  </tr>
+  <tr>
+    <td> <strong class="specialG">BAS</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">LOW</code> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">0</code> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">false</code> </td>
+  </tr>
+  <tr>
+    <td> <strong class="specialG">HAUT</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">HIGH</code> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">1</code> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">true</code> </td>
+  </tr>
+</table>
+</div><!-- overflow -->
+</div><!-- important -->
+
+<div class="complement"> 
+<p> Dans la pratique, il est alors courant de faire l'amalgame entre une pseudo‑constante et sa valeur booléenne correspondante. </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Configuration des modes d'entrée‑sortie d'une broche</h2>
+
+
+
+<h3> Modes et particularités des broches d'une carte <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="important">
+
+<p> Les <strong class="title">broches</strong> du port numérique d'une <strong>carte</strong> <strong class="Arduino">Arduino</strong> sont <strong>polyvalentes</strong> : elles peuvent aussi bien être employées en <strong class="defin">entrée</strong> <strong class="title">ou</strong> en <strong class="defin">sortie</strong>. </p>
+
+<p> En revanche, ces deux <strong class="title">modes</strong> sont <strong>exclusifs</strong> l'un de l'autre : une broche ne peut <strong class="warning">pas simultanément</strong> jouer le rôle d'<strong>entrée</strong> <strong class="warning">et</strong> de <strong>sortie</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ArduinoDigitalPort.png" width="450px">
+<p> Par ailleurs, certaines broches ont des <strong class="title">usages particuliers</strong>. C'est notamment le cas sur une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>, comme détaillé ci‑dessous. </p>
+</div><!-- display -->
+
+<ul>
+  <li> Les broches <strong>nº 0</strong> et <strong>1</strong> sont respectivement les connecteurs <em class="bold"><em class="sigle">rx</em></em> et <em class="bold"><em class="sigle">tx</em></em> de la <strong class="defin">liaison série</strong> de la carte. Elles sont donc affectées par son protocole de communication, notamment lors du <strong>chargement du programme</strong>, ou de l'utilisation du <strong>moniteur série</strong>. </li>
+
+  <li> Les broches <strong>nº 3</strong>, <strong>5</strong>, <strong>6</strong>, <strong>9</strong>, <strong>10</strong> et <strong>11</strong> sont <strong class="defin">modulables</strong> en sortie (<em class="bold"><em class="sigle">PWM</em></em>, <em class="english">pulse width modulation</em>), ce qui est indiqué par le symbole <code>~</code> inscrit avant leur numéro sur la carte (cf. figure ci‑dessus). La technique de modulation permet de faire <strong>varier la valeur</strong> moyenne du signal tension sur une broche dans l'intervalle 0 ‑ 5 V. </li>
+
+  <li> La broche <strong>nº 13</strong> est raccordée à la <strong class="defin">led intégrée</strong>  – cf. le symbole <code style="font-weight:800">L</code> sur la figure ci‑dessus et le chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>. De ce fait, elle  ne peut jouer le rôle d'entrée qu'avec une restriction : pour référencer son potentiel, il faut impérativement employer une <strong>résistance externe</strong>, et non pas la résistance de <em class="english">pull‑up</em> interne à la carte (cf. supra <a class="supra" href="Cc2-7_entreesSortiesBooleennes.html#schemaIO"></a>). </li>
+</ul>
+</div><!-- complementExpert -->
+
+<div class="remarques">
+<p class="remarque"> Lorsqu’on souhaite utiliser la <strong class="title">led intégrée</strong> de la carte, il est <strong class="pros">préférable</strong> dans le code de désigner son numéro par la <strong>pseudo‑constante</strong> <code class="prettyprint lang-c">LED_BUILTIN</code> – cette derniere étant définie dans le fichier <code class="filename">pin_arduino.h</code>. </p>
+
+<p> En effet, ce codage sera <strong class="pros">portable</strong> sur une <strong>autre carte</strong> <strong class="Arduino">Arduino</strong> ou compatible, car la pseudo‑constante <em class="mark">Arduino</em> <code class="prettyprint lang-c">LED_BUILTIN</code> est définie spécifiquement en fonction du brochage de chaque carte (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>, <em class="mark">Due</em>, <em class="mark">ESP8266</em>…) </p>
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4 id="pinout"> Schéma de brochage d'une carte à microcontrôleur </h4>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ArduinoUno_pinout.png" width="450px">
+<p> Plus généralement, on peut découvrir les <strong>fonctionnalités des broches</strong> d'une carte électronique de développement en récupérant dans la documentation technique son <strong class="title">schéma de brochage</strong> – en anglais, <strong>pinout diagram</strong>. Celui de la carte <strong class="Arduino">Arduino Uno</strong>, restitué partiellement ci‑contre, est disponible sur le site du constructeur <a class="external" href="https://content.arduino.cc/assets/Pinout-UNOrev3_latest.pdf" target="_BLANK">A</a>.  </p>
+
+
+<p> On y observe en particulier qu'on peut bien employer les broches du <strong class="specialO">port analogique</strong> comme <strong>entrées‑sorties booléennes</strong> (cf. remarque supra <a class="supra" href="Cc2-7_entreesSortiesBooleennes.html#polyvalencePortC"></a>). Pour cela, il suffit de coder comme premier argument des <strong>fonctions</strong> <strong class="Arduino">Arduino</strong> décrites infra (<code class="prettyprint lang-c">pinMode</code>, <code class="prettyprint lang-c">digitalWrite</code>, <code class="prettyprint lang-c">digitalRead</code>) : </p>
+<ul>
+  <li> soit les <strong>numéros</strong> <code class="cmd">14</code> à <code class="cmd">19</code> ;   </li>
+
+  <li> soit les <strong>identificateurs</strong> <code class="cmd">A0</code> à <code class="cmd">A5</code> qui sont définis comme des pseudo‑constantes dans le fichier <code class="filename">pin_arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/variants/standard/pins_arduino.h" target="_BLANK">G</a>. </li>
+</ul> 
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+<h3 id="configurationBroche"> Configuration du mode d'une broche </h3>
+
+
+
+<div class="complement">
+
+<p> <strong>Avant tout emploi d'une broche</strong> du port numérique d'une <strong>carte</strong> <strong class="Arduino">Arduino</strong>, il est <strong class="title">obligatoire</strong> de <strong class="defin">configurer son mode</strong>. </p>
+<p> Tout <strong class="cons">oubli</strong> est inévitablement la source de <strong class="warning">dysfonctionnements insidieux</strong> du programme, typiquement : </p>
+<ul>
+  <li> l'éclat lumineux <strong class="cons">anormalement faible</strong> d'une led ; </li>
+
+  <li> le <strong class="cons">fonctionnement erratique</strong> dun bouton‑poussoir…</li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> Pour <strong class="title">configurer le mode</strong> d'une broche, on code une <strong>instruction</strong> appelant une <strong>fonction spécifique</strong> <strong class="Arduino">Arduino</strong> de la forme :<br>
+<span class="inline">
+  <code class="prettyprint lang-c">pinMode(<span class="nocode"><strong class="specialT">pin</strong></span>, <span class="nocode"><strong class="specialO">mode</strong></span>);</code>  <a class="external" href="https://www.arduino.cc/reference/en/language/functions/digital-io/pinmode/" target="_BLANK">A</a>
+</span>  </p>
+<ul>
+  <li> l'<strong>expression</strong> à valeurs entières positives <strong class="specialT">pin</strong> déterminant le <strong>numéro de la broche</strong> de la carte ;  </li>
+
+  <li> l'<strong>expression</strong> à valeurs entières positives <strong class="specialO">mode</strong> déterminant la <strong>configuration</strong> – <strong>entrée</strong> ou <strong>sortie</strong> – choisie via l'une des trois <strong>pseudo‑constantes</strong> <code style="color:darkorange; background: white;">OUTPUT</code>, <code style="color:darkorange; background: white;">INPUT</code> ou <code style="color:darkorange; background: white;">INPUT_PULLUP</code> définies dans le fichier <code class="filename">Arduino.h</code> (elles valent respectivement <code>0</code>, <code>1</code> et <code>2</code>).</li>
+</ul>
+<p> Plus précisément, ces deux arguments sont attendus de type <code class="prettyprint lang-c">uint8_t</code> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#stdint" target="_BLANK"></a>). De plus, la fonction <code class="prettyprint lang-c">pinMode</code> est de type <code class="prettyprint lang-c">void</code> : elle ne retourne <strong>aucune valeur</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement"> 
+<p> Voyons maintenant les valeurs à coder pour l'argument <strong class="specialO">mode</strong>. </p>
+<ol class="numbered">
+<li id="OUTPUT"> La pseudo‑constante <code style="color:darkorange; background: white;">OUTPUT</code> configure la broche en  <strong class="title">sortie</strong>. Cette dernière peut alors être <strong>commandée en tension</strong> en tout‑ou‑rien (<em class="sigle">TOR</em>). </li>
+
+<div class="exemples" style="display: inline-block;"> 
+  <img class="top-right" src="../img/led.jpg" width="400px">
+
+<p class="exemple"> Un <strong class="title">câblage typique</strong> de <strong class="defin">led</strong> reliée à la broche nº 7 est schématisé ci‑contre : </p>
+<ul>
+  <li> lorsque la broche sera mise au potentiel bas <em class="bold">0&#8239;V</em> (commandé par l'écriture sur la broche de la pseudo‑constante <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code>), la led sera <strong>éteinte</strong> ; </li>
+
+  <li> lorsque la broche sera mise au potentiel haut <em class="bold" style="color:red;">V<sub>DD</sub></em> (commandé par l'écriture sur la broche de la pseudo‑constante <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code>), la led sera <strong>allumée</strong>. </li>
+</ul> 
+</div><!-- exemple -->
+
+<div class="expert">
+<div class="nobullet"> De plus, si elle en possède la faculté, la broche peut aussi être <strong class="title">commandée en modulation <em class="sigle">PWM</em></strong> (cf. chap. C3‑VII <a class="next" href="../C3-Numeration/Cc3-7_entreesSortiesAnalogiques.html#modulationSorties" target="_BLANK"></a>), par exemple pour faire <strong>varier la luminosité</strong> d'une led . </div>
+</div><!-- expert -->
+
+<li id="INPUT"> La pseudo‑constante <code style="color:darkorange; background: white;">INPUT</code>  configure la broche en <strong class="title">entrée</strong>. Son potentiel doit alors être référencé par une <strong>résistance</strong> <strong class="specialV">externe</strong> : </li>
+<ul>
+  <li> dite de <strong>pull‑down</strong>, au potentiel bas <em class="bold">0 V</em> <a class="external " href="https://fr.wikipedia.org/wiki/Résistance_de_rappel" target="_BLANK">W</a> ; </li>
+
+  <li> ou de <strong style="color:red;">pull‑up</strong> au potentiel haut <em class="bold" style="color:red;">V<sub>CC</sub></em>. </li>
+</ul>
+
+<div class="nobullet"> Avec une résistance de <strong>pull‑down</strong>, le bouton opère en <strong class="specialG">logique positive</strong> (poussoir au repos ⇒ niveau logique <code>LOW</code>, poussoir en appui ⇒ niveau logique <code>HIGH</code>). </div>
+
+<div class="exemples" style="display: inline-block;"> 
+  <img class="top-right" src="../img/buttonPulldown.jpg" width="400px">
+
+<p class="exemple">  Un <strong class="title">câblage typique</strong> de <strong class="cons">bouton‑poussoir</strong> en <strong class="specialG">logique positive</strong> relié à la broche nº 8 est schématisé ci‑contre : </p>
+<ul>
+  <li> tant que le bouton restera au <strong>repos</strong>, la broche sera au potentiel <em class="bold">0&#8239;V</em> (qui doit être interprété comme équivalent à la pseudo‑constante  <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code>) ; </li>
+
+  <li> lors d'un <strong>appui</strong> sur le bouton, la broche sera au potentiel <em class="bold" style="color:red;">V<sub>DD</sub></em> (qui doit être interprété comme équivalent à la pseudo‑constante <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code>). </li>
+</ul> 
+</div><!-- exemple -->
+
+
+
+<li id="INPUT_PULLUP"> La pseudo‑constante <code style="color:darkorange; background: white;">INPUT_PULLUP</code> configure la broche en <strong class="title">entrée</strong> en la référençant au potentiel haut <em class="bold" style="color:red;">V<sub>DD</sub> </em> de la carte via sa <strong>résistance</strong> <strong class="specialV">interne</strong> de <strong class="specialR">pull‑up</strong> (cf. supra <a class="supra" href="Cc2-7_entreesSortiesBooleennes.html#schemaIO"></a>). Le bouton opère alors en <strong class="specialG">logique négative</strong> (repos ⇒ <code>HIGH</code>, appui ⇒ <code>LOW</code>). </li>
+
+<div class="exemples" style="display: inline-block;"> 
+  <img class="top-right" src="../img/buttonPullup.jpg" width="400px">
+
+<p class="exemple"> Un <strong class="title">câblage typique</strong> de <strong class="cons">bouton‑poussoir</strong> en <strong class="specialG">logique négative</strong> avec recours à la résistance de <strong class="specialR">pull‑up interne</strong> relié à la broche nº 8 est schématisé ci‑contre : </p>
+<ul>
+  <li> tant que le bouton sera au <strong>repos</strong>, la broche restera au potentiel <em class="bold" style="color:red;">V<sub>DD</sub></em> (interprété comme équivalent à la pseudo‑constante <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code>) ;</li>
+
+  <li> lors d'un <strong>appui</strong> sur le bouton, la broche passera au potentiel <em class="bold">0&#8239;V</em> (interprété comme équivalent à la pseudo‑constante  <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code>).</li>
+</ul> 
+</div><!-- exemple -->
+
+</ol>
+</div><!-- complement -->
+
+
+
+<div class="remarques" id="remConfigES"><p class="remarques"></p>
+
+<ol class="remarques">
+  <li> Le <strong class="title">référencement de potentiel</strong> de la broche commandée d'un bouton est <strong class="warning">indispensable</strong>. En son <strong class="cons">absence</strong>, la broche se comporte comme une <strong>antenne</strong> qui capte le champ électromagnétique ambiant et prend un <strong>niveau logique</strong> <strong class="warning">aléatoire</strong>, provoquant des comportements indéterminés. </li>
+
+  <div class="nobullet">L'application <strong class="Tinkercad">Tinkercad</strong> simule ces phénomènes. </div>
+
+  <li> Avec des composant d'entrée tout‑ou‑rien (bouton, capteur, etc.), on recommande de raccorder entre les deux contacts électriques un <strong class="title">consendateur anti-rebond</strong> afin de lisser les phénomènes indésirable de <strong>rebond électrique</strong> et de <strong>surtension</strong> qui se produisent lors des commutations. </li>
+
+  <div class="nobullet"> Néanmoins, le comportement d'un tel condensateur ne semble <strong class="cons">pas bien simulé</strong> dans l'environnement <strong class="Tinkercad">Tinkercad</strong> ; il est donc préférable de s'en passer dans cet environnement. </div>
+
+  <li> En règle générale, la <strong class="title">configuration des broches</strong> d'entrées‑sorties est codée <strong>une fois pour toute</strong> dans la <strong>fonction</strong> <code class="prettyprint lang-c">setup</code>, du moins tant que les composants externes branchés sur le port numérique de la carte ne sont pas susceptibles de changer durant l'exécution du programme. </li>
+
+  <div class="nobullet"> Néanmoins, <strong class="pros">rien n’interdit</strong>, après une première instruction de configuration, de coder des <strong class="title">modifications du mode</strong> d'une broche plus loin dans le code – dans la fonction <code class="prettyprint lang-c">setup</code> ou même dans la fonction <code class="prettyprint lang-c">loop</code>.  </div>
+</ol>
+
+</div><!-- remarques -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="lectureEcriture"> Gestion du niveau logique d'une broche </h2>
+
+
+<h3 id="digitalWrite"> Écriture du niveau logique d'une sortie </h3>
+
+
+<div class="important">
+<p> L'<strong class="title">écriture</strong> (ou l'établissement) du <strong class="defin">niveau logique</strong> du signal de tension sur une broche configurée en <strong class="title">sortie</strong> se code par une <strong>instruction</strong> appelant une <strong>fonction spécifique</strong> <strong class="Arduino">Arduino</strong> de la forme </span> : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">digitalWrite(<span class="nocode"><strong class="specialT">pin</strong></span>, <span class="nocode"><strong class="specialG">level</strong></span>);</code>  <a class="external" href="https://www.arduino.cc/reference/en/language/functions/digital-io/digitalwrite" target="_BLANK">A</a>
+</span> </p>
+<ul>
+  <li> l'<strong>expression</strong> à valeurs entières positives <strong class="specialT">pin</strong> déterminant le <strong>numéro de la broche</strong> ; </li>
+
+  <li> l'<strong>expression</strong> à valeurs entières positives  <strong class="specialG">level</strong> déterminant le <strong>niveau logique</strong> à écrire. </li>
+</ul>
+
+<p> Plus précisément, ces deux arguments sont attendus de type <code class="prettyprint lang-c">uint8_t</code> (cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#stdint" target="_BLANK"></a>). De plus, la fonction <code class="prettyprint lang-c">digitalWrite</code> est de type <code class="prettyprint lang-c">void</code> : elle ne retourne <strong>aucune valeur</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Dans la forme de l'instruction d'appel de la fonction <code class="prettyprint lang-c">digitalWrite</code> ci‑dessus, les arguments <strong class="specialT">pin</strong> et <strong class="specialG">level</strong> sont, <em class="remark">comme pour tout appel de fonction</em>, des <strong class="title">expressions</strong>. Cela signifie que l'on peut y coder : </p>
+
+<ul>
+  <li> non seulement des <strong>constantes booléennes</strong> <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code>, et préférentiellement les <strong>pseudo‑constantes</strong> <strong class="Arduino">Arduino</strong> <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code> et <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code>, </li>
+
+  <li> mais aussi des <strong>identificateurs de données déclarées</strong> constantes ou variables, </li>
+
+  <li> et des <strong>opérations</strong> sur ces données, y compris des <strong>appels d'autres fonctions</strong>. </li>
+</ul>
+</div><!-- complementExpert -->
+
+<div class="exemples" style="display: inline-block;">
+  <img class="top-right" src="../img/led7.png" width="250px">
+<p class="exemple"> En règle générale, lorsqu'on configure une broche en <strong>sortie</strong>, une <strong class="title">bonne pratique de sécurité</strong> consiste à lui conférer d'emblée le niveau logique <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code>. </p>
+
+<p> Si cette sortie commande une <strong class="specialG">led</strong>, cette dernière sera <strong>éteinte</strong> au début de l'exécution du programme, avec le code ci‑dessous (cf. ligne nº 5). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin = 7;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);   
+  digitalWrite(ledPin, LOW); 
+}
+<span class="nocode">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> <em class="remark">Attention</em> !  Les circuits électroniques de la <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong> ne peuvent débiter qu'un <strong>courant</strong> <strong class="warning">au maximum 40 mA </strong> sur une broche du port numérique. Cela est usuellement <strong class="pros">suffisant pour allumer une led</strong> mais <strong class="cons">pas pour exciter une bobine</strong> d'un relais ou faire tourner un moteur (sauf avec des modèles de très petite puissance). </p>
+
+<p> Lorsque la sortie d'une carte doit débiter <strong class="title">plus de 40 mA</strong>, il est donc nécessaire d'interposer un <strong>transistor</strong> associé à une <strong>alimentation externe</strong>. La sortie ne fait alors que commander le transistor qui joue le rôle de <strong class="defin">relais de puissance</strong>. </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="digitalRead"> Lecture du niveau logique d'une broche </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">lecture</strong> (ou la détection) du <strong class="defin">niveau logique</strong> du signal de tension présent sur une broche, qu'elle soit <strong class="title">entrée</strong> <strong>ou</strong> <strong  class="title">sortie</strong>, se code par une <strong>expression</strong> appelant une <strong>fonction spécifique</strong> <strong class="Arduino">Arduino</strong> de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">digitalRead(<span class="nocode"><strong class="specialT">pin</strong></span>)</code>  <a class="external" href="https://www.arduino.cc/reference/en/language/functions/digital-io/digitalread" target="_BLANK">A</a>
+</span> <br>
+où l'<strong>expression</strong> à valeurs entières positives <strong class="specialT">pin</strong> – attendue de type <code class="prettyprint lang-c">uint8_t</code>, cf. chap. C3‑II <a class="next" href="../C3-Numeration/Cc3-2_typesEntiers.html#stdint" target="_BLANK"></a> – détermine le <strong>numéro de la broche</strong>. </p>
+
+<p> La <strong>valeur retournée</strong> par la fonction <code class="prettyprint lang-c">digitalRead</code> est encodée dans le type <code class="prettyprint lang-c">int</code>. Elle correspond au niveau logique <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code> ou <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code> de tension lu sur la broche. </p>
+</div><!-- important -->
+
+<div class="complement"> 
+<p> Comme avec toute fonction, la valeur retournée par <code class="prettyprint lang-c">digitalRead</code> est <strong class="defin">utilisable</strong> pour un <strong>test</strong>, un <strong>calcul</strong> ou une <strong>affectation</strong> afin de la mémoriser. En revanche, il n'y a <strong class="warning">aucun sens</strong> à coder une instruction comme par exemple : <br>
+<span class="inline">
+  <code class="grey">digitalRead(buttonPin);   <span style="color:grey">// nonsense!</span> </code>
+</span> <br>
+(cf. la remarque au chap. C2‑IV <a class="previous" href="Cc2-4_manipulationDonnees.html#emploiFonctions" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/button8.jpg" width="250px">
+<p class="exemple"> Considérons encore un <strong class="title">câblage typique</strong> similaire à l'exemple 2) supra <a class="supra" href="Cc2-7_entreesSortiesBooleennes.html#configurationBroche"></a> employant : </p>
+<ul>
+  <li> un <strong class="cons">bouton‑poussoir</strong> câblé en <strong class="defin">logique positive</strong> à la broche nº 8 via une résistance de <strong>pull‑down</strong> ; </li>
+
+  <li> la <strong class="specialO">led intégrée</strong> à la carte (repérée <code>L</code> sur la figure ci‑contre), dont le numéro de broche est défini par la pseudo‑constante <em class="mark">Arduino</em> <code class="prettyprint lang-c">LED_BUILTIN</code>). </li>
+</ul>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/buttonLed1.png" width="450px">
+
+<p> On souhaite que l'<strong>état de la led</strong> (<em>éteinte</em> ou <em>allumée</em>) soit l'exact <strong class="defin">miroir</strong> de l'<strong>état du bouton</strong> (<em>au repos</em> ou <em>appuyé</em>), conformément au chronogramme ci‑contre. Pour cela, on peut par exemple coder une <strong>bifurcation simple</strong> dont la condition est basée sur la <strong>lecture</strong> de la broche du bouton (cf. la ligne nº 11 dans le code ci‑dessous). </p>
+</div><!-- display -->
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin = LED_BUILTIN;
+const int buttonPin = 8;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);   
+  digitalWrite(ledPin, LOW); 
+
+  pinMode(buttonPin, INPUT);
+}
+
+void loop() {
+  if (digitalRead(buttonPin) == LOW) {
+    digitalWrite(ledPin, LOW);
+  }
+  else {
+    digitalWrite(ledPin, HIGH);
+  }
+  delay(10); // only for a quicker Tinkercad simulation
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p> 
+
+<ol class="remarques">
+  <li> <em class="remark">Attention</em> ! Avant toute lecture sur une broche, on doit s'assurer que son <strong class="title">niveau de tension</strong> est <strong class="defin">compatible avec les spécifications du constructeur</strong>. Dans le cas des cartes <strong class="Arduino">Arduino</strong> : <br>
+  <ul>
+    <li> une <strong class="cons">surtension</strong> prolongée <strong>supérieure à 6 V</strong>, </li>
+
+    <li> ou une <strong class="cons">inversion de polarité</strong> au delà de <strong>−0,5 V</strong>, </li>
+  </ul>
+  sont <strong class="warning">potentiellement destructrices</strong> pour le microcontrôleur embarqué. </li>
+
+  <li> Dans le programme de l'<strong class="title">exemple ci‑dessus</strong>,la fonction <code class="prettyprint lang-c">loop</code>  peut se <strong>coder</strong> <strong class="pros">plus concisément</strong> par composition de fonctions : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+void loop() {
+  digitalWrite(ledPin, digitalRead(buttonPin));
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+autrement dit, en écrivant sur la sortie <code class="prettyprint lang-c">ledPin</code> le niveau logique de tension lu sur l'entrée <code class="prettyprint lang-c">buttonPin</code>. </li>
+</ol>
+</div><!-- remarques -->
+
+  
+
+<h3 id="detectionFronts"> Détection d'un front montant ou descendant sur un signal logique </h3>
+
+
+<h4> Notion de front montant et descendant d'un signal </h4>
+
+
+<div class="important">
+<p> Souvent, lire le <strong class="title">niveau logique</strong> du <strong>signal de tension</strong> présent sur une broche configurée en entrée <strong class="warning">ne suffit pas</strong> pour piloter un système. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+  <img class="top-right" src="../img/frontSignal.png" width="450px">
+<p> Si l'on souhaite par exemple détecter l'<strong class="defin">occurrence</strong> d'un <strong>appui</strong> sur un bouton – et non <strong class="warning">pas simplement</strong> le fait qu'il soit appuyé ou non à un instant donné – il faut être capable d'observer un <strong class="title">front montant</strong> ou <strong class="title">descendant</strong> (en anglais, respectivement <strong>rising edge</strong> et <strong>falling edge</strong>) sur le signal de tension de la broche à laquelle ce bouton est relié. Ces deux types de fronts se traduisent respectivement par : </p>
+
+<ul>
+  <li> la <strong class="specialLB">montée</strong> du signal du niveau <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code> au niveau <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code>, </li>
+
+  <li> la <strong class="specialLB">descente</strong> du signal du niveau <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code> au niveau <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code>. </li>
+</ul>
+
+
+<p> À <strong>chaque appui</strong> sur le bouton, l'un et l'autre de ces deux événements ne se produit qu'<strong class="pros">une seule fois</strong> (sauf en cas de phénomène de rebond électrique). </p>
+
+<div class="expert">
+<p> Pour une <strong class="pros">réactivité optimale</strong> aux appuis sur le bouton : </p>
+<ul>
+  <li> si ce dernier est câblé en <strong class="specialG">logique positive</strong> (cf. supra <a class="supra" href="Cc2-7_entreesSortiesBooleennes.html#INPUT"></a>), il est évidemment nécessaire de détecter les <strong>fronts montants</strong> ;  </li>
+
+  <li> alors que s'il est <strong class="specialG">logique négative</strong> (cf. supra <a class="supra" href="Cc2-7_entreesSortiesBooleennes.html#INPUT_PULLUP"></a>), il faut détecter les <strong>fronts descendants</strong>. </li>
+</ul>
+</div><!-- expert --> 
+
+</div><!-- complement -->
+
+
+<h4> Principe de détection </h4>
+
+
+<div class="important">
+<p> Pour <strong class="title">détecter</strong> un <strong class="specialLB">front montant</strong> ou <strong class="specialLB">descendant</strong> sur le signal de tension d'une entrée d'une carte <strong class="Arduino">Arduino</strong>, il faut pouvoir comparer les niveaux de tension antérieur et actuel sur cette entrée. Une solution rudimentaire consiste à employer pour cela <strong class="defin">deux variables booléennes</strong> <strong>globales</strong>, c'est‑à‑dire <strong>hors</strong> des fonctions <code class="prettyprint lang-c">setup</code> et <code class="prettyprint lang-c">loop</code>. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/frontSignal1.png" width="450px">
+<p> Plus précisément, ces deux <strong class="title">variables globales</strong> servent à mémoriser : </p>
+<ul>
+  <li> la <strong style="color:magenta">valeur actuelle</strong> du niveau logique de tension sur l'entrée, c'est‑à‑dire durant l'<strong>itération</strong> en cours de la fonction <code class="prettyprint lang-c">loop</code> ; </li>
+
+  <li> la <strong style="color:indianred">valeur antérieure</strong> du niveau logique de tension sur l'entrée, c'est‑à‑dire durant l'<strong>itération</strong> précédente de la fonction <code class="prettyprint lang-c">loop</code>.</li>
+</ul>
+</div><!-- complement -->
+
+<p> Attention, <strong class="title">deux précautions</strong> doivent être prises. </p>
+<ol class="numbered"> 
+	<li> Il faut <strong class="defin">initialiser ces deux variables</strong> avec la <strong>même valeur initiale</strong> : </li>
+  <ul>
+	  <li> <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code> si l'entrée est câblée en <strong class="specialG">logique positive</strong> ; </li>
+
+	  <li> <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code> si l'entrée est câblée en <strong class="specialG">logique négative</strong>. </li>
+	</ul>
+    
+  <li> La <strong class="defin">mémorisation des valeurs</strong>  doit être effectuée <strong>au début</strong> de chaque itération de la fonction <code class="prettyprint lang-c">loop</code>, en codant : </li>
+  <ul>
+	  <li> la <strong>recopie</strong> dans la <strong style="color:indianred">valeur antérieure</strong> de la <strong style="color:magenta">valeur actuelle</strong> (en fait, celle de l'itération précédente de la fonction <code class="prettyprint lang-c">loop</code>) ; </li>
+
+	  <li> la <strong>mise à jour</strong> de la <strong style="color:magenta">valeur actuelle</strong> par lecture de l'entrée. </li>
+	</ul>
+</ol>
+
+
+
+<div class="important" style="margin-top: 1em">
+<p> Grâce à ces éléments algorithmiques, on peut alors <strong class="title">détecter</strong> : </p>
+<ul>
+  <li> un <strong class="specialLB">front montant</strong> en testant si la <strong style="color:indianred">valeur antérieure</strong> est au niveau <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code>  et la <strong style="color:magenta">valeur actuelle</strong> au niveau <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code> ;   </li>
+
+  <li> un <strong class="specialLB">front descendant</strong> en testant si la <strong style="color:indianred">valeur antérieure</strong> est au niveau <code style="color:green; text-shadow: 0.05em 0.05em black">HIGH</code>  et la <strong style="color:magenta">valeur actuelle</strong> au niveau <code style="color:green; text-shadow: 0.05em 0.05em black">LOW</code>. </li>
+</ul>
+</div><!-- important -->
+
+
+<h4> Exemple </h4>
+
+
+<div class="exemples">
+
+<div style="display: inline-flex; ">
+
+<div style="width: auto;">
+<p> Reprenons le <strong class="title">montage typique</strong> (cf. supra <a class="supra" href="Cc2-7_entreesSortiesBooleennes.html#digitalRead"></a>) du <strong class="cons">bouton‑poussoir</strong> câblé en <strong class="specialG">logique positive</strong> commandant la <strong class="specialO">led intégrée</strong> d'une <strong>carte</strong> <strong class="Arduino">Arduino</strong>. </p>
+
+ <p> On garde les <strong>mêmes identificateurs</strong> et la <strong>même fonction</strong> <code class="prettyprint lang-c">setup</code>. </p>
+
+ <!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int ledPin = LED_BUILTIN;
+const int buttonPin = 8;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);   
+  digitalWrite(ledPin, LOW); 
+
+  pinMode(buttonPin, INPUT);
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- left box -->
+<div style="width: 270px;">
+<img class="top-right" src="../img/button8.jpg" width="250px">
+</div><!-- right box -->
+</div><!-- display -->
+
+<div style="display: inline-block; margin-top: 1em;">
+<img class="top-right" src="../img/buttonLed2.png" width="450px">
+
+<p> On souhaite maintenant réaliser une <strong class="title">commande bistable de la led</strong>, c'est‑à‑dire qu'elle <strong>s'allume</strong> (et reste allumée) ou <strong>s'éteigne</strong> (et reste éteinte) <strong class="defin">à chaque appui</strong> sur le bouton, conformément au <strong>chronogramme ci‑contre</strong>. </p>
+
+<p> Dans la <strong>fonction</strong> <code class="prettyprint lang-c">loop</code> codée ci‑dessous, après les instructions de mémorisation des valeurs précédentes et actuelles du niveau logique sur la broche du bouton (lignes nº 14 & 15) :  </p>
+
+<ul>
+  <li> on <strong>teste</strong> l'existence d'un <strong class="specialLB">front montant</strong> (instruction <code class="prettyprint lang-c">if</code> en ligne nº 17) sur la broche du <strong class="specialGr">bouton</strong> ; </li>
+
+  <li> on <strong>écrit</strong> sur la broche de la <strong class="specialG">led</strong> le <strong class="defin">niveau logique inverse</strong> qu'on y <strong>lit</strong> (instruction <code class="prettyprint lang-c">if</code> en ligne nº 18) pour inverser son état (<code>LOW</code> → <code>HIGH</code> ;  <code>HIGH</code> → <code>LOW</code>). </li>
+</ul>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+
+bool previousButtonLevel = LOW;   
+bool currentButtonLevel = LOW;
+
+void loop() {
+  previousButtonLevel = currentButtonLevel;
+  currentButtonLevel = digitalRead(buttonPin);
+  if (currentButtonLevel == HIGH && previousButtonLevel == LOW) { // rising edge
+    if (digitalRead(ledPin) == LOW) {
+      digitalWrite(ledPin, HIGH);
+    }
+    else {
+      digitalWrite(ledPin, LOW);
+    }  
+  }
+  delay(10); // only for a quicker Tinkercad simulation
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemples -->
+
+<div class="remarques" id="remarquesFronts"><p class="remarques"></p> 
+<ol class="remarques">
+  <li> La <strong class="title">détection des fronts montants</strong> est ici <strong class="warning">indispensable</strong>. En effet, si, au lieu de tester l'existence d'un front montant, on testait simplement que l'<strong class="cons">état du bouton</strong> – le fait qu'il soit appuyé ou non – en remplaçant la ligne nº 17 par : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:17">
+  if (digitalRead(buttonPin)) { // level detection (not edge detection)
+</pre>
+<!---------- ne pas indenter ---------->
+
+  alors chaque appui sur le bouton commanderait un <strong class="warning">très grand nombre d'inversions</strong> de l'état de la led, donnant à cette dernière un <strong class="cons">aspect moins brillant</strong>. En effet, même un appui bref de 0,1 seconde constitue un « événement » très long au regard de la durée d'itération de la boucle <code class="prettyprint lang-c">loop</code> (de l'odre de quelques micro‑secondes). Le microcontrôleur exécuterait  donc quelques 10&#8239;000 fois l'instruction <code class="prettyprint lang-c">if</code> de la ligne nº 18 (on raisonne ici sans prendre en compte l'instruction de la ligne nº 25 qui est spécifique à la simulation sur <em class="mark">Tinkercad</em>). </li>
+
+  <li> L'<strong class="title">inversion du niveau logique</strong> sur la broche de la led (ligne nº 18) peut se coder <strong class="pros">plus concisément</strong> par <strong>composition de fonctions</strong> et en employant l'opérateur de <strong>négation booléenne</strong> <code class="prettyprint lang-c">!</code> : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:17">
+  digitalWrite(ledPin, !digitalRead(ledPin));
+</pre>
+<!---------- ne pas indenter ---------->
+   </li>
+</ol>
+</div><!-- remarques --> 
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

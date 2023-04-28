@@ -1,0 +1,270 @@
+html{
+	height: 100%;
+	width: 100%;
+}
+
+body{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-content: stretch;
+	justify-content: stretch;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	margin : 0em;
+	padding : 0em;
+	background: none;
+}
+
+
+nav {
+	float : left;
+	min-width: 15em;
+	max-width: 15em;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	margin: 0em;
+	padding: 0em;
+	background: none;
+	border: none;
+}
+
+.side{
+	display : flex;
+	flex-direction : column;
+	flex-wrap: nowrap;
+  justify-content: stretch;
+	align-content: stretch;
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	margin: 0em;
+	padding: 0em;
+}
+
+button.double {
+	height: 100%;
+
+	margin: 0em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	padding-left: 0.9em;
+	padding-right: 0.5em;
+	border: none;
+  background: none;
+}
+
+
+img.buttonDouble{ 
+	height: 6em;
+	margin-top: 0.3em;
+	margin-right: 0.2em;  
+	padding-bottom: 0em;
+}
+
+
+
+#mainFrame { 
+	display : flex;
+	flex-direction: column;
+	justify-content: stretch;
+	align-content: stretch;
+	
+	height: 100%;
+  width: 100%;
+	min-width: 40em;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	margin: 0em;
+	padding: 0em;
+	background: none;
+}
+
+header {
+	border-bottom: solid 0.5em white;
+}
+
+footer {
+	border-top: solid 0.5em white;
+	order: 2;
+}
+
+button#hidePannel:hover {
+	background: white;
+}
+
+button#showPannel:hover {
+	background: white;
+}
+
+
+
+.band { /* header&footer common properties */
+	display: inline-flex;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	min-height: 6.4em;
+	max-height: 6.4em;
+	background: #A0A0AF;
+}
+
+.bandContent{
+	display: inline;
+	justify-content: start;
+	height: 68%;
+
+  margin-top: 0.6em;
+  margin-bottom: auto;
+	margin-left: 0.5em;
+	margin-right: auto;
+	padding-top: 0.1em;
+	padding-bottom: 0.1em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	background: #002377;
+	border: solid 1px #707070;
+	border-radius: 0.3em;
+
+  font-family: open sans;
+	font-size: 1.5em;
+	font-weight: 600;
+	font-style: italic;
+	color: white;
+	text-shadow: 0.07em 0.07em #80808F;
+	word-spacing: 0.5rem;
+	letter-spacing: 0.08rem;
+}
+
+.channelFrame{
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+}
+
+
+.bandContent1{
+	display: inline-flex;
+	align-items: center;
+	height: 100%;
+
+	margin: 0em;
+	margin-right: 1em;
+	padding-left:0.1em;
+	background: none;
+
+  line-height: 1.4em;
+	font-family: magneto;
+	color: #002377;
+	font-size: 1.8em;
+	font-weight: bold;
+	text-shadow: 0.04em 0.04em white;
+	word-spacing: 0.5rem;
+	letter-spacing: 0.04rem;
+}
+
+.bandContent2{
+	display: inline-flex;
+	text-align: right;
+	align-items: center;
+	height: 100%;
+	width: auto;
+
+	margin-left: 2em;
+	margin-right: 0.5em;
+	padding-left:0.1em;
+	background: none;
+
+  line-height: 1.4em;
+	font-family: open sans;
+	font-style: italic;
+	color: #C1121F;
+	font-size: 1.8em;
+	font-weight: bold;
+	text-shadow: 0.04em 0.04em white;
+	word-spacing: 0.5rem;
+	letter-spacing: 0.04rem;
+}
+
+object.inline{
+	display: flex;
+	flex-wrap: nowrap;
+	flex-basis: auto;
+	align-items: center;
+	justify-content: start;
+	flex-grow: 2;
+	height: 100%;
+	width: auto;
+
+	margin: 0em;
+	padding: 0em;
+	background: none;
+}
+
+object.intext{
+	width: 100%;
+	height: inherit;
+	margin: 0em;
+	padding: 0em;
+}
+
+
+#scrollingFrame { /*contains section & footer */
+	display : flex;
+	flex-direction: column;
+	justify-content: stretch;
+	align-content: stretch;
+	height: 100%;
+	width: 100%;
+  overflow-x: hidden;
+	overflow-y: auto;
+
+	background: none;
+}
+
+
+section {
+	order: 1;
+	text-align: justify;
+	height: auto;
+	width: auto;
+
+
+	margin: 0em;
+	padding-top: 0.5em;
+	padding-bottom : 0.5em;
+	padding-left: 1em;
+	padding-right : 1em;
+	background: #DFD0D0;
+
+	font-size: 1.5em;
+	font-family: cambria, bookman, georgia;
+	counter-reset: h2counter;
+}
+
+#version{
+	text-align: right;
+
+	margin-top: 0em;
+	margin-bottom: 1em;
+	
+	font-family: Open Sans;
+	font-size: 0.9em;
+	font-style: italic;
+	text-shadow: 0.05em 0.05em white;
+	color: #002377;
+}
+
+
+
+
+
+
+
+

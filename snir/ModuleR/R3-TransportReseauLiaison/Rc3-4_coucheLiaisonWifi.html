@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="3"
+	data-pagenumber="IV"
+	data-pageState="travaux"
+	data-pageheadtitle="Liaison Wi‑Fi"
+	data-pagefulltitle="La couche liaison  –  Technologie Wi‑Fi"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaison2.png" width="300px" style="padding-top: 1em">
+<p class="square"> Après la technologie <strong>Ethernet</strong> étudiée au chapitre R3‑III <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportReseauLiaison/Rc3-3_coucheReseauEthernet.html" target="_BLANK"></a>, la technologie <strong class="title">Wi‑Fi</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi‑Fi" target="_BLANK">W</a> (acronyme de <strong>wireless fidelity</strong> – étonnamment inspiré de l'acronyme <em>Hi‑Fi</em> du domaine audio‑phonique) apporte une <strong class="pros">excellente alternative</strong> dans les réseaux locaux informatiques pour implémenter les <strong>couches</strong> <strong class="specialPR">liaison</strong> et <strong class="specialDR">physique</strong>. Basée sur les <strong class="defin">ondes électromagnétiques</strong>, elle offre des <strong class="cons">débits inférieurs</strong> et une <strong class="cons">moindre fiabilité</strong> que la technologie <strong>Ethernet</strong>, mais procure l'avantage décisif de la <strong class="pros">mobilité</strong> des hôtes. </p>
+
+<p> Depuis le <strong>développement massif</strong> des <strong class="defin">terminaux mobiles</strong> (ordinateurs portables, smartphones, etc.) amorcé au début des années 2000, la technologie <strong>Wi‑Fi</strong> est maintenant <strong class="pros">très répandue</strong>, tant dans les <strong class="specialLB">réseaux publics</strong> (gares, centres commerciaux, cafés et restaurants…) que <strong class="specialLB">privés</strong>, qu'ils soient domestiques ou professionnels (et même industriels). On parle de <strong class="title">réseaux locaux sans‑fil</strong> ou <strong class="title"><em class="sigle">WLAN</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Wireless_LAN" target="_BLANK"></a> – pour <strong>wireless local area network</strong>. </p>
+</div><!-- display -->
+
+<div class="expert">
+<p> Précisons toutefois que : </p>
+<ul>
+	<li> la technologie <strong>Wi‑Fi</strong> n'est <strong class="defin">pas la seule</strong> pour implémenter ce type de réseaux ; en particulier, on peut mettre en place un <strong><em class="sigle">WLAN</em></strong> avec des protocoles de <strong>téléphonie mobile</strong> ou de <strong>domotique</strong> ;   </li>
+
+	<li> il faut <strong class="warning">ne pas confondre</strong> le sigle <strong class="defin"><em class="sigle">WLAN</em></strong> avec <strong><em class="sigle">WAN</em></strong> (lequel signifie <em class="english">wide area network</em>  – cf. chap R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#WAN" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- expert -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/logoWifi.png" width="150px" style="padding-top: 1.2em">
+<p class="square"> La technologie <strong>Wi‑Fi</strong> présente des points communs avec <em class="	mark">Ethernet</em>. En premier lieu, elle est spécifiée par une famille de <strong>normes <em class="sigle">IEEE 802</em></strong>. Plus précisément, il s'agit des <strong class="specialLB">normes <em class="sigle">802.11</em></strong> dite <strong class="title">normes Wi‑Fi</strong> qui, comme les normes <em class="sigle">802.3</em> d'<em class="mark">Ethernet</em> (cf. chap. R3‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportReseauLiaison/Rc3-3_coucheReseauEthernet.html" target="_BLANK"></a>), couvrent : </p>
+</div><!-- display -->
+
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/coucheLiaison.png" width="180px" style="padding-top: 0.5em">
+	<li> la <strong class="specialPR">sous‑couche <em class="sigle">MAC</em></strong> (<em class="english">medium access control</em>) dont elle reprend la notion d'<strong>adresse physique</strong> dite <strong><em class="sigle">MAC</em></strong> ;  </li>
+  </div><!-- display -->
+  
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/couchePhysique.png" width="180px" style="padding-top: 0.5em">
+	<li> la <strong class="specialDR">couche physique</strong>, mais bien évidemment, avec des solution de codage et modulation adaptées au medium de transmission qu'est le <strong>champ électromagnétique</strong> ambiant. </li>
+	</div><!-- display -->
+</ul>
+
+<p> En revanche, du fait qu'elle repose sur un <strong class="defin">médium partagé</strong> – le champ électromagnétique ambiant – la technologie <strong>Wi‑Fi</strong> soulève des <strong class="title">problématiques spécifiques</strong>, notamment en termes de <strong class="warning">sécurité</strong> et <strong class="warning">fiabilité</strong>. Ces problématiques sont essentiellement gérées au niveau logiciel. </p>
+
+<!-- peut-être à détailler -->
+
+<p class="square"> Objectif du chapitre : découverte de la technologie Wi‑Fi. </p>
+
+
+
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+<h2> Technologie <em class="mark">Wi‑Fi</em>  –  Généralités </h2>
+
+
+
+<h3> Historique et évolution </h3>
+
+
+
+<div class="complement">
+<p> La technologie dite <strong class="title">Wi‑Fi</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi‑Fi" target="_BLANK">W</a> est apparue à la fin des années 1990 avec les deux <strong class="specialLB">grandes étapes initiales</strong> suivantes <a class="external" href="https://www.cablefree.net/wireless-technology/history-of-wifi-technology/" target="_BLANK"></a>. </p>
+<ul>
+	<li> En 1997, l'<strong><em class="sigle">IEEE</em></strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#organismes" target="_BLANK"></a>) publie la première version de la <strong>norme <em class="sigle">802.11</em></strong>. Elle sera remplacée dès 1999 par les déclinaisons <em class="sigle">802.11</em><em>a</em>, <em class="sigle">802.11</em><em>b</em>, qui restent depuis, en constante évolution – normes dites <strong class="defin">Wi‑Fi</strong> <strong class="specialN">x</strong> (cf. infra). </li>
+
+	<li> En 1999 se forme l'<strong>association commerciale <em class="sigle">WECA</em></strong> (pour <em class="english">Wireless Ethernet Compatibility Alliance</em>) avec 6 entreprises pionnières (dont <em class="mark">3com</em>, <em class="mark">Cisco</em>, <em class="mark">Lucent</em> et <em class="mark">Nokia</em>). Elle est maintenant dénommée la <strong class="defin">Wi‑Fi Alliance</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi-Fi_Alliance" target="_BLANK">W</a>. </li>
+
+  <div class="nobullet"> Dès cette même année est créée 
+	 et la création de la <strong>marque commerciale</strong> <strong class="specialN">Wi‑Fi</strong> (légalement, il s'agit de ce qu'on appelle une <em class="english">trade mark</em>, identifiée par l'exposant <em class="bold">™</em>  <a class="external" href="https://fr.wikipedia.org/wiki/Droit_des_marques" target="_BLANK">W</a>).  </div>
+</ul>
+</div><!-- complement -->
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/logoWifiAlliance.png" width="150px" style="padding-top: 0.5em">
+<p> Aujourd'hui, la <strong class="title">Wi‑Fi Alliance</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi‑Fi_Alliance" target="_BLANK">W</a> compte <strong class="specialN">plusieurs centaines de membres</strong>. Elle joue un rôle déterminant : </p>
+<ul>
+	<li> dans la <strong class="defin">certification des équipements</strong> opérant la <strong>technologie Wi‑Fi</strong> ; </li>
+
+	<li> dans l'<strong class="defin">évolution des normes Wi‑Fi</strong> en collaboration avec l'<strong><em class="sigle">IEEE</em></strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="expert">
+<h4> Panorama des normes <em class="mark">Wi‑Fi</em> récentes </h4>
+
+
+<div class="complement">
+<p> Depuis 1997, les <strong class="title">normes Wi‑Fi</strong> ou <strong class="title"><em class="sigle">IEEE 802.11</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/IEEE_802.11" target="_BLANK">W</a> ont beaucoup évolué pour accompagner les spécifications en termes de <strong class="defin">performances en débit</strong>. En particulier, on peut retenir : </p>
+
+<ul>
+	<li> la norme <em class="bold">802.11g</em> dite <strong class="specialLB">Wi‑Fi 3</strong>, publiée en 2003, qui autorise des débits allant théoriquement jusqu'à <strong class="defin">54 Mbit/s</strong> ; elle est restée longtemps le standard de base ; </li>
+
+	<li> la norme <em class="bold">802.11n</em> dite <strong class="specialLB">Wi‑Fi 4</strong>, publiée en 2009, qui ajoute une technique de <strong>multiplexage</strong> (<strong><em class="sigle">MIMO</em></strong> ou <em class="english">Multiple‑Input Multiple‑Output</em> <a class="external" href="https://fr.wikipedia.org/wiki/MIMO_(télécommunications)" target="_BLANK">W</a>) et autorise des débits allant théoriquement jusqu'à <strong class="defin">600 Mbit/s</strong> ;  </li>
+
+	<li> la norme <em class="bold">802.11ac</em> dite <strong class="specialLB">Wi‑Fi 5</strong>, publiée en 2013, qui autorise des débits allant théoriquement jusqu'à <strong class="defin">3,4 Gbit/s</strong> ; c'est actuellement le standard adopté par la quasi‑totalité des équipements usuels (ordinateurs portables, smartphones) ; </li>
+
+	<li> la norme <em class="bold">802.11ax</em> dite <strong class="specialLB">Wi‑Fi 6</strong>, publiée en 2021, qui autorise des débits allant théoriquement jusqu'à <strong class="defin">10,5 Gbit/s</strong> ; elle est amenée à devenir le nouveau standard dans les années à venir. </li>
+</ul>
+</div><!-- complement -->
+
+<!--
+<p> Les normes diffèrent aussi les unes des autres par les techniques de codage et de modulation auxquelles elles font appel. </p>
+-->
+
+</div><!-- expert -->
+
+
+
+<h3> Notions de station et de point d'accès </h3>
+
+
+
+<div class="important">
+<p> Les <strong>normes <em class="sigle">802.11</em></strong> distinguent <strong class="specialLB">deux notions fondamentales</strong> indépendamment de toute technologie.  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/WifiSTA.png" width="120px" style="padding-top: 0.5em">
+	<li> On parle de <strong class="title">station</strong> <a class="external" href="https://en.wikipedia.org/wiki/Station_(networking)" target="_BLANK">W</a> – abrégée <strong class="title"><em class="sigle">STA</em></strong> – pour désigner toute <strong>machine</strong> capable de <strong class="defin">communiquer dans un réseau Wi‑Fi</strong>.   </li>
+
+	<div class="nobullet"> Dans la pratique, ce terme désigne plus particulièrement un <strong>équipement « client »</strong> connecté à un réseau en <strong>Wi‑Fi</strong>.  </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/WifiWAP.png" width="120px" style="padding-top: 0.5em">
+	<li> On parle de <strong class="title">point d'accès</strong> <a class="external" href="https://en.wikipedia.org/wiki/Wireless_access_point" target="_BLANK">W</a> – abrégé <strong class="specialLB"><em class="sigle">WAP</em></strong> pour <strong>wireless access point</strong>, ou plus simplement <strong class="title"><em class="sigle">AP</em></strong> – pour désigner un <strong>équipement</strong> qui <strong class="defin">crée</strong> un <strong class="defin">sous‑réseau Wi‑Fi</strong> au sein d'un réseau local.  </li>
+</div><!-- display -->
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/WifiSoftAP.png" width="120px" style="padding-right: 0.5em">
+<p> En complément de la notion d'<strong>access point</strong>, il existe également celle de <strong class="title">software enabled access point</strong> <a class="external" href="https://en.wikipedia.org/wiki/SoftAP" target="_BLANK">W</a> – abrégé <strong class="title">softAP</strong>. Ce terme désigne une machine qui n'est pas conçue pour cela mais qui remplit le rôle d'<strong class="defin"><em class="sigle">AP</em></strong> grâce à un <strong class="defin">composant logiciel</strong>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<div class="remarques" style="display: inline-block;">
+  <img class="top-right" src="../img/hotspotWifi.jpg" width="300px" style="margin-top:0.5em">
+<p class="remarque"> Dans la vie courante, on parle de <strong class="title">hotspot</strong> <a class="external" href="https://en.wikipedia.org/wiki/Hotspot_(Wi-Fi)" target="_BLANK">W</a> pour désigner un <strong class="defin">lieu</strong>, public ou privé, où un <strong class="defin">réseau Wi‑Fi</strong> avec un accès à l'<strong>Internet</strong> est mis à disposition d'usagers – typiquement, dans une gare, un aéroport, un café, etc. </p>
+
+<p> La porté des <strong>ondes Wi‑Fi</strong> étant <strong class="cons">limitée</strong>, un <strong class="title">hotstop</strong> mis en œuvre sur une <strong class="defin">surface étendue</strong> nécessite l'installation de <strong>plusieurs points d'accès</strong>. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Modes de liaison </h3>
+
+
+
+<div class="important">
+<p> Pour mettre en place un <strong><em class="sigle">WLAN</em></strong>, la technologie <strong>Wi‑Fi</strong> autorise <strong>différents</strong> <strong class="title">modes de liaison</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi-Fi#Modes_de_mise_en_réseau" target="_BLANK">W</a> entre équipements munis d'<strong>interfaces Wi‑Fi</strong> <strong class="defin">compatibles entre elles</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En particulier, on peut mettre en œuvre les <strong class="title">deux principaux modes</strong> suivants : le <strong class="specialLB">mode infrastructure</strong> et le <strong class="specialLB">mode ad‑hoc</strong>. </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/modeInfrastructureWifi.png" width="300px" style="padding-top: 0.5em">
+	<li> Le <strong class="specialLB">mode infrastructure</strong> est de loin <strong class="pros">le plus employé</strong> et le plus connu des modes de liaison. Il nécessite un équipement constituant <strong class="specialN">au moins</strong> un <strong class="defin">point d'accès</strong>. En général, le <strong><em class="sigle">WAN</em></strong> ainsi constitué est relié au reste du réseau (<strong><em class="sigle">LAN</em></strong>), on dit qu'il offre aux machines qui s'y connectent un <strong class="specialO">basic service set</strong> – abrégé <strong class="specialO"><em class="sigle">BSS</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Service_set_(802.11_network)" target="_BLANK">W</a> – auquel est associé un identifiant unique <strong><em class="sigle">BSSID</em></strong> (il s'agit en fait, l'<strong>adresse <em class="sigle">MAC</em></strong> de l'interface réseau du point d'accès). </li>
+
+  <div class="expert" style="display: inline-block;">
+		<img class="top-right" src="../img/modeInfrastructureWifi2.png" width="400px" style="padding-top: 0.2em">
+	<div class="nobullet"> Le <strong class="specialLB">mode infrastructure</strong> peut aussi être mis en œuvre avec <strong class="specialN">plusieurs</strong> <strong class="defin">points d'accès</strong> pour augmenter l'étendue du <strong><em class="sigle">WLAN</em></strong>. Les machines qui s'y connectent doivent pouvoir se déplacer de la porté d'un point d'accès à celle d'un point d'accès voisin sans rupture de connexion. Et on parle alors d'<strong class="specialO">extended service set</strong>, abrégé <strong class="specialO"><em class="sigle">ESS</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Service_set_(802.11_network)#Extended_service_set" target="_BLANK">W</a>.  </div>
+  </div><!-- expert -->
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/modeAdHocWifi.png" width="300px" style="padding-top: 0.5em">
+	<li> Le <strong class="specialLB">mode ad hoc</strong>  opère <strong class="pros">sans points d'accès</strong>, à la manière dont on peut relier deux machines par un simple câble <em class="mark">Ethernet</em>, sauf qu'en technologie <strong>Wi‑Fi</strong>, le nombre de machine n'est pas limité et on obtient une <strong>topologie entièrement maillée</strong>. On peut aussi parler de réseau <strong class="defin">peer‑to‑peer</strong>. </li>
+
+	<div class="nobullet"> L'ensemble des machines ainsi connectées constitue ce qu'on appelle un <strong class="specialO"><em class="sigle">IBSS</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Service_set_(802.11_network)#Independent" target="_BLANK">W</a> – pour <strong class="specialO">independent <em class="sigle">BSS</em></strong> – mais à ce dernier n'est <strong class="warning">pas</strong> associé un identifiant unique. En fait, c'est chaque <strong>liaison</strong> qui possède un identifiant (cf. infra). </div>
+  </div><!-- display -->
+
+  <div class="expert" style="display: inline-block;"> 
+	<img class="top-right" src="../img/meshNetwork.png" width="400px" style="padding-top: 0.2em">
+	<div class="nobullet"> Avec une telle topologie, rien n'interdit d'avoir un voire plusieurs <strong class="defin">accès à un <em class="sigle">LAN</em></strong> via certaines machines, qui peuvent chacune jouer le rôle de routeur (mais sans pour autant constituer un <em class="mark">softAP</em>). On parle alors de <strong class="specialO"><em class="sigle">MBSS</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Service_set_(802.11_network)#Mesh" target="_BLANK">W</a> – pour <strong class="specialO">mesh <em class="sigle">BSS</em></strong>. </div>
+
+	<div class="nobullet"> <em class="remark">Remarque</em>. La <strong class="specialO">topologie mesh</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Topologie_mesh" target="_BLANK">W</a> est également très employée dans les <strong>technologies domotiques</strong> (cf. chap. R3‑V <a class="next" href="Rc3-5_technologiesWPAN.html#mesh" target="_BLANK"></a>). </div>
+	</div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<div class="expert" id="repeteurPont">
+<p> Par ailleurs, la technologie <strong>Wi‑Fi</strong> apporte des solutions pour l'<strong class="title">extension d'un réseau</strong>.  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/modePontWifi.png" width="300px" style="padding-top: 0.5em">
+	<li> <strong>Deux points d'accès</strong> peuvent être associés en <strong class="specialLB">mode pont</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi-Fi#Le_mode_«_Pont_»_(«_Bridge_»)" target="_BLANK">W</a> (<em class="english">bridge</em>) pour <strong class="defin">réunir deux <em class="sigle">LAN</em></strong> pouvant être l'un ou l'autre filaire ou sans‑fil, peu importe.    </li>
+  
+  <div class="nobullet"> Cette solution apporte une <strong class="pros">alternative</strong> lorsqu'il n'est pas possible ou très coûteux d'installer une liaison filaire entre les deux réseaux (par exemple, entre deux bâtiments séparés). </div>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/modeRepeteurWifi.png" width="400px" style="padding-top: 0.5em">
+	<li> Pour étendre un <strong><em class="sigle">WLAN</em></strong>, il existe une solution <strong class="pros">plus économique</strong> que l'ajout d'un point d'accès supplémentaire :  on peut aussi employer un <strong class="specialLB">répéteur</strong> (<em class="english">range extender</em>). Un tel équipement s'associe à l'<strong><em class="sigle">AP</em></strong> pour jouer un rôle d'<strong>amplificateur des signaux</strong> qu'il reçoit de part et d'autre.   </li>
+
+	<div class="nobullet"> Là aussi, cette solution peut constituer une <strong class="pros">alternative</strong> à une liaison filaire. La différence essentielle avec un pont ou un réseau à multiples points d'accès (<strong><em class="sigle">ESS</em></strong> – cf. supra) est qu'un répéteur ne constitue <strong class="warning">pas</strong> <em class="remark">à lui tout seul</em> un <strong class="specialN">point d'accès</strong>. </div>
+  </div><!-- display -->
+</ul>
+</div><!-- expert -->
+
+
+<h3 id="SSID"> Identifiant <em class="sigle">SSID</em> </h3>
+
+
+
+<p> Avec la technologie <strong>Wi‑Fi</strong>, du fait que l'on utilise un <strong class="defin">médium de transmission commun</strong>, on est confronté à la <strong class="warning">problématique essentielle</strong> de l'<strong class="specialN">accès au réseau</strong> – c'est‑à‑dire, pour une machine, l'établissement d'une connexion puis l'émission et la réception de données. En particulier, il n'est pas rare que <strong>plusieurs <em class="sigle">WLAN</em></strong> coexistent dans un espace donné. Il faut donc être en mesure d'<strong class="title">identifier</strong> chaque réseau pour que les connexions et échanges de données ne s'entremêlent pas. </p>
+
+<div class="important">
+<p> On appelle <strong class="title"><em class="sigle">SSID</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Service_set_identifier" target="_BLANK"></a> – qui signifie <strong class="title">service set identifier</strong>, c'est‑à‑dire <em>identifiant d'ensemble de services</em> – une <strong class="defin">chaîne de caractères</strong> qui identifie : </p>
+<ul>
+	<li> un <strong class="specialLB"><em class="sigle">WLAN</em></strong> en <strong>mode infrastructure</strong> ; </li>
+
+	<li> une <strong class="specialLB">liaison</strong> entre deux équipements en <strong>mode ad hoc</strong>. </li>
+</ul>
+<p> La <strong>norme <em class="sigle">802.11</em></strong> impose une <strong class="defin">taille maximale</strong> de <strong>32 octets</strong>, sans spécification d'encodage. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">choix d'un <em class="sigle">SSID</em></strong> est effectué par l'<strong>administrateur réseau</strong> lorsqu'il paramètre les équipements (point d'accès ou machine paire). En principe, on peut donc employer l'encodage <strong class="defin"><em class="sigle">UTF‑8</em></strong>. Néanmoins, dans la chaîne de caractère constituant un <strong><em class="sigle">SSID</em></strong>, il est recommandé de se limiter aux <strong class="pros">caractères alphanumériques</strong> du jeu <strong class="defin"><em class="sigle">ASCII</em> restreint</strong>. </p>
+</div><!-- complement -->
+
+<p> En règle générale, un <strong><em class="sigle">SSID</em></strong> est associé à une <strong class="defin">clef de sécurité</strong> – ou <strong>mot de passe</strong>. Cet aspect sera abordé plus loin, dans le cadre des aspects logiciels <a class="infra" href="Rc3-4_coucheLiaisonWifi.html#securite"></a>. </p>
+
+
+<div class="remarques">
+<p class="remarque"> La notion de <strong class="title"><em class="sigle">SSID</em></strong> (la chaîne de caractères déterminant le <strong>nom d'un <em class="sigle">WLAN</em></strong>) est à <strong class="warning">ne pas confondre</strong> avec celle de <strong class="defin"><em class="sigle">BSSID</em></strong> (l'<strong>adresse <em class="sigle">MAC</em></strong> de l'interface réseau d'un point d'accès).  </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Technologie <em class="mark">Wi‑Fi</em>  –  Aspects matériels </h2>
+
+
+
+<h3> Rappels sur les ondes électromagnétiques </h3>
+
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ondeElectroMagnetique.jpg" width="400px" style="padding-top: 0.2em">
+<p> Une <strong class="title">onde électromagnétique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Onde_électromagnétique" target="_BLANK">W</a> est une <strong class="defin">variation périodique</strong> du <strong>champ électromagnétique ambiant</strong> – cf. la représentation vectorielle académique ci‑contre avec le <strong class="specialDR">champ électrique</strong> représenté en <strong class="specialDR">rouge</strong> et le <strong class="specialLB">champ magnétique</strong> en <strong class="specialLB">bleu</strong>, synchronisés. </p>
+
+<p> Se propageant de façon transversale <a class="external" href="https://fr.wikipedia.org/wiki/Onde_transversale" target="_BLANK">W</a> et à la <strong>vitesse de la lumière</strong> – notée <strong class="defin">c</strong> – dans le milieu considéré, une onde électromagnétique est <strong class="defin">caractérisée</strong> par :  </p>
+<ul>
+	<li> son <strong>amplitude</strong> – en général, on retient la valeur maximale <strong class="defin"><var>E</var><sub style="font-style: normal">0</sub></strong> du champ électrique ;  </li>
+
+	<li> sa <strong>longueur d'onde</strong> notée <strong class="defin">λ</strong>, sa <strong>fréquence</strong> notée <strong class="defin">f</strong> et sa <strong>période</strong> notée <strong class="defin">T</strong>, qui vérifient les relations <span class="framed" style="line-height: 150%"><strong class="defin">λ</strong> = <strong class="defin">c</strong> / <strong class="defin">f</strong> = <strong class="defin">c</strong>.<strong class="defin">T</strong></span>.  </li>
+</ul>
+</div><!-- display -->
+
+
+<h4> Application à la transmission de données </h4>
+
+
+<div class="expert" style="display">
+	
+<p> La figure ci‑dessous rappelle le <strong>spectre général</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Spectre_électromagnétique" target="_BLANK">W</a> des ondes électromagnétiques. </p>
+
+	<img class="top-left" src="../img/spectreElectromagnetique.png" style="max-width: 1000;">
+
+<p> Dans le contexte de la <strong class="title">transmission de données</strong> par ondes électromagnétiques, on est confronté à <strong class="defin">dilemme</strong> : </p>
+<ul>
+	<li> plus la fréquence d'un onde est élevée – donc plus la <strong>longueur d'onde</strong> est <strong>courte</strong> – <strong class="pros">meilleur est le débit</strong> (fondamentalement, un débit est une fréquence) ;     </li>
+
+	<li> mais inversement, plus la longueur d'onde est courte, plus l'onde est énergétique – c'est‑à‑dire capable d'interactions avec les particules qu'elle rencontre – et donc, <strong class="cons">moindre est sa portée</strong> dans un milieu matériel. </li>
+</ul>	
+</div><!-- expert -->
+
+<div class="important">
+<p>	La technologie <strong class="title">Wi‑Fi</strong> opère dans le domaine des <strong class="defin">micro‑ondes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Micro-onde" target="_BLANK">W</a> (très en dessous du spectre visible), en particulier dans la <strong>bande S</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bande_S" target="_BLANK">W</a> des <em class="bold"><em class="sigle">UHF</em></em> <a class="external" href="https://fr.wikipedia.org/wiki/Ultra_haute_fréquence" target="_BLANK">W</a> dites « <em class="bold">2,4 GHz</em> » et « <em class="bold">5 GHz</em> ». </p>
+
+<p> Ce choix permet d'obtenir des <strong class="pros">débits assez satisfaisants</strong> – de l'ordre du <strong>Gbit/s</strong> – mais n'offre aux signaux qu'une <strong class="cons">capacité de franchissement modérée</strong>  (difficultés avec les murs épais…).  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément : </p>	
+<ul>
+	<li> la bande dite « <em class="bold">2,4 GHz</em> » couvre les fréquences allant de 2,4000 à 2,4835 GHz ; elle procure une <strong class="pros">assez bonne perméabilité des obstacles</strong>, mais elle peut être sujette à des <strong class="cons">perturbations</strong> par des applications ou phénomènes « concurrentes » (radio‑amateurs, téléphones sans fils, fours à micro‑ondes…) ; </li>
+
+	<li> la bande dite « <em class="bold">5 GHz</em> » se compose en réalité de <strong>deux sous‑bandes</strong> allant respectivement de 5,150 à 5,350 GHz et de 5,470 à 5,850 GHz ; elle procure des <strong class="pros">débits plus élevés</strong> que la bande 2,4 GHz et subit <strong class="pros">moins de perturbations</strong> (peu d'autres applications l'utilisent) ; en revanche, elle offre une <strong class="cons">moins bonne perméabilité</strong> des obstacles.  </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="canalWifi"> Notion de canal <em class="mark">Wi‑Fi</em> </h4>
+
+
+<div class="important" style="display">
+	<img class="top-right" src="../img/canalWifi.png" width="250px" style="padding-top: 0.2em">
+<p> Pour optimiser les débits de transmissions, les deux <strong>bandes Wi‑Fi</strong> sont chacune <strong>divisées</strong> en une série de sous‑bandes appelées <strong class="title">canaux Wi‑Fi</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Liste_des_canaux_Wi-Fi" target="_BLANK">W</a>, <strong class="defin">avec ou sans chevauchement</strong> selon la bande.   </p>
+
+<p> Tout <strong class="title">canal Wi‑Fi</strong> est défini par sa <strong class="defin">fréquence médiane</strong> et sa <strong class="defin">largeur</strong> – laquelle est exploitée pour la modulation des signaux. Pour simplifier l'identification, ils sont <strong>numérotés</strong>. </p>
+</div><!-- important -->
+
+<div class="complement"><!-- à vérifier -->
+<p> La <strong class="title">division en canaux</strong> <strong class="pros">sans chevauchements</strong> permet : </p>
+<ul>
+	<li> soit le <strong class="defin">multiplexage fréquentiel</strong> des signaux dans un réseau qui n'a <strong>pas de concurrence</strong> dans le champ magnétique ambiant ;  </li>
+
+	<li> soit la <strong class="defin">superposition de plusieurs réseaux</strong> dans le champ magnétique ambiant <strong>sans risques d'interférences</strong> entre les transmissions de ces réseaux.   </li>
+</ul>
+</div><!-- complement -->
+
+
+<p class="square"> La <strong class="specialLB">bande <em class="bold">2,4 GHz</em></strong> se divise en <strong class="defin">14 canaux chevauchants</strong> de <strong>largeur 22 MHz</strong> chacun, avec une <strong>distance de 5 MHz</strong> entre les fréquences médianes respectives de deux canaux voisins. Ils sont <strong>numérotés de 1 à 14</strong>. </p>
+
+<img class="top-left" src="../img/WifiCanals2-4.png">
+
+<p> Parmi ces canaux, il est possible d'en sélectionner <strong class="pros">3 sans chevauchement</strong> – par exemple, les canaux <em class="bold">nº 1</em>, <em class="bold">6</em> et <em class="bold">11</em>. </p>
+
+
+<p class="square"> La <strong class="specialLB">bande <em class="bold">5 GHz</em></strong> se divise en <strong class="defin">22 canaux non chevauchants</strong> de <strong>largeur 20 MHz</strong> chacun, avec une <strong>distance de 20 MHz</strong> entre les fréquences médianes respectives de deux canaux voisins. Ils sont <strong>numérotés</strong> de 4 en 4 : </p>
+<ul>
+	<li> de 32 à 68</strong> (donc 32, 36, 40…) sur la sous‑bande de 5,150 à 5,350 GHz ; </li>
+
+	<li> de 96 à 140</strong> (donc 96, 100, 104…) sur la sous‑bande de 5,470 à 5,850 GHz. </li>
+</ul>
+
+<img class="top-left" src="../img/WifiCanals5.png">
+
+
+<h4 id="forceSignal"> Force d'un signal <em class="mark">Wi‑Fi</em> </h4>
+
+
+<div class="important">
+<p> La <strong class="title">portée d'un émetteur Wi‑Fi</strong> n'est <strong>pas de limite nette</strong>. Son signal s'atténue à mesure qu'on s'en éloigne où que des obstacles se présentent. Pour caractériser cette portée, il est donc nécessaire de quantifier son niveau de <strong class="defin">puissance en réception</strong> et de fixer une limite acceptable en dessous de laquelle le lieu peut être considéré en dehors de la portée de l'émetteur. </p>
+
+<p> C'est le rôle de la notion de <strong class="title"><em class="sigle">RSSI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Received_Signal_Strength_Indication" target="_BLANK">W</a> – pour <strong>received signal strength indication</strong> – exprimé en <strong>dBm</strong> <a class="external" href="https://fr.wikipedia.org/wiki/DBm" target="_BLANK">W</a> (<em class="english">décibel milliwatt</em>), échelle logarithmique dont la valeur <em class="bold">0</em> exprime une puissance de référence de <strong class="defin">1 mW</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/WiFiStrength.png" width="500px" style="padding-top: 0.2em">
+<p> Pour mémoire, sur l'échelle des décibels, une augmentation de <em class="bold">+3 dB</em> exprime un <strong class="defin">doublement de la puissance</strong> du signal. </p>
+
+<p> Dans le cas des réseaux <strong>Wi‑Fi</strong>, les puissances mises en jeu sont <strong class="pros">les plus faibles possibles</strong> pour ne pas rendre les signaux nocifs (à forte puissance, les micro‑ondes sont utilisées pour cuire les aliments). Les valeurs s'échelonnent de <strong class="specialG">−30 dBm</strong> (excellente réception) à <strong class="specialR">−90 dBm</strong> (connexion quasi‑impossible). </p>
+</div><!-- complement -->
+
+
+
+
+<h3 id="cartesWifi"> Interface réseau <em class="mark">Wi‑Fi</em> </h3>
+
+
+
+<div class="important">
+<p> De façon générale, on appelle <strong class="title">interface réseau Wi‑Fi</strong> tout <strong class="defin">composant</strong> qui, <strong>raccordé</strong> ou <strong>intégré</strong> à un <strong>équipement terminal</strong>, permet de participer à des communications conformément aux <strong>normes <em class="sigle">802.11</em></strong>. Il comprend nécessairement une <strong class="defin">antenne</strong> et au moins un <strong class="defin">circuit intégré</strong> de type <strong><em class="sigle">ASSP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Application_Specific_Standard_Product" target="_BLANK">W</a> (<em class="english">application‑specific standard product</em>). </p>
+
+<p> Un tel dispositif entre dans la catégorie des <strong class="title">interfaces réseau</strong> – <strong><em class="sigle">NIC</em></strong> ou <strong>network interface controller</strong> (cf. chap. R1-I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#carteReseau" target="_BLANK"></a>).  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Comme pour les cartes <em class="mark">Ethernet</em>, il existe une <strong class="title">grande variété</strong> d'<strong class="title">interfaces Wi‑Fi</strong>. </p>
+<ul>
+	<li> Parmi les <strong class="specialLB">dispositifs intégrés</strong>, on trouve les <strong>circuits spécifiques</strong> ou <strong>modulaires</strong> pour appareils communiquant miniatures (smartphones, web‑cam, répéteurs, cartes de prototypage, etc.). </li>
+	<img class="top-left" src="../img/antennesWifi.png">
+
+	<li> Parmi les <strong class="specialLB">dispositifs raccordés</strong>, on trouve notamment les <strong>dongles <em class="sigle">USB</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dongle" target="_BLANK">W</a>, très polyvalents (compatibles avec tout type d'ordinateur disposant d'un port <em class="sigle">USB</em>) et les <strong>cartes <em class="sigle">PCI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/PCI_(informatique)" target="_BLANK">W</a> pour postes fixes. On a également les <strong>modules pour routeurs stationnaires</strong>  (matériel <em class="mark">Cisco</em>, etc.). </li>
+	<img class="top-left" src="../img/cartesWifi.png">
+</ul>
+</div><!-- complement -->
+
+<div class="remarques" id="HWIC">
+<p class="remarque"> Chez le constructeur <strong class="Cisco">Cisco</strong>, on emploie le sigle <strong class="title"><em class="sigle">WIC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/WAN_Interface_Card" target="_BLANK">W</a> – <strong class="title"><em class="sigle">WAN</em> interface card</strong> – pour désigner un module d'interface de <strong>routeur en général</strong> (pas forcément <em class="mark">Wi‑Fi</em>) – cf. chap. R3‑II <a class="previous" href="Rc3-2_coucheReseau.html#HWIC" target="_BLANK"></a>. C'est l'occasion de rappeler l'avertissement à ne pas confondre les sigles <strong><em class="sigle">WAN</em></strong> et <strong><em class="sigle">WLAN</em></strong> en introduction de ce chapitre. </p>
+
+<p style="margin-top: 1em"> <em class="remark">Exemple</em>. La désignation <strong class="specialLB"><em class="sigle">HWIC‑AP‑AG‑B</em></strong> <a class="external" href="https://www.cisco.com/c/en/us/products/collateral/interfaces-modules/1800-2800-3800-series-ap-ag-802-11a-b-g-high-speed-wan-interface-card/product_data_sheet0900aecd8028cc7b.html" target="_BLANK"></a> du module en photo ci‑dessus à droite s'interprète ainsi : </p>
+<ul>
+	<li> <strong class="specialLB"><em class="sigle">HWIC</em></strong> pour <strong>high‑speed <em class="sigle">WAN</em> interface card</strong>, parce que c'est une interface réseau pour routeur (cf. chap. R3‑II <a class="previous" href="Rc3-2_coucheReseau.html#extensionRouteurCisco" target="_BLANK"></a>) ; </li>
+
+	<li> <strong class="specialLB"><em class="sigle">AP</em></strong> pour <strong>access point</strong>, parce que cette interface confère la fonction de point d'accès au routeur dans laquelle elle est montée (il devient un routeur <em class="mark">Wi‑Fi</em>) ; </li>
+
+	<li> <strong class="specialLB"><em class="sigle">AG-B</em></strong> parce que ce point d'accès est conforme aux <strong>normes <em class="sigle">802.11</em><em>a</em></strong>, <strong><em class="sigle">802.11</em><em>b</em></strong> et <strong><em class="sigle">802.11</em><em>g</em></strong> (<em class="sigle">802.11</em><em>b/g</em> en simple bande 2,4 GHz et <em class="sigle">802.11</em><em>a/b/g</em> en double bande 2,4 GHz et 5 GHz). </li>
+</ul>
+</div><!-- remarque -->
+
+
+
+<h3 id="routeursWiFi"> Routeurs <em class="mark">Wi‑Fi</em> </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">routeur Wi‑Fi</strong> est un <strong>routeur</strong> qui dispose d'une <strong>interface Wi‑Fi</strong> conçue pour assurer la fonction de <strong class="defin">point d'accès</strong> dans une <strong><em class="sigle">WLAN</em></strong>. </p>
+
+<p> Mais ne perdons pas de vue qu'il s'agit avant tout d'un <strong class="title">routeur</strong>, dont la principale fonction est d'assurer la <strong>passerelle</strong> avec un autre réseau (typiquement, l'Internet). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Parmi les <strong class="title">routeurs Wi‑Fi</strong>, on trouve les catégories suivantes. </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/boxFree.png" width="200px" style="padding-top: 0.2em">
+	<li> On a les <strong class="specialLB">box de <em class="sigle">FAI</em></strong> (fournisseur d'accès à l'Internet), qui assurent quasiment toute la fonction de <strong class="specialN">point d'accès</strong>, même si l'<strong>antenne <em class="mark">Wi‑Fi</em></strong> n'est <strong class="cons">pas forcément apparente</strong>. Un tel équipement n'offre le plus souvent qu'un paramétrage très limité. </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/routeurNetgearAC1900.png" width="200px" style="padding-top: 0.2em">
+	<li> Il existe aussi toute une gamme de <strong class="specialLB">routeurs « grand public »</strong> (comme le <em class="mark">Netgear AC1900</em> en photo ci‑contre), sachant qu'un tel équipement peut :  </li>
+	<ul>
+		<li> être <strong>raccordé à un modem</strong> auquel il confère alors la fonction de <strong class="pros">point d'accès</strong> principal ou supplémentaire ;  </li>
+	
+		<li> intégré dans un <strong><em class="sigle">LAN</em></strong> pour déployer un <strong>sous‑réseau</strong> de petite taille, sans‑fil ou même filaire grâce à un <strong>switch intégré</strong>.  </li>
+	</ul>
+  </div><!-- display -->
+
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/routeurCiscoRV340W.png" width="200px" style="padding-top: 0.2em">
+	<li> Ensuite, on trouve des <strong class="specialLB">petits routeurs professionnels</strong> (comme le <em class="mark">Cisco RV340W</em> « <em class="english">small business</em> » en photo ci‑contre), qui peuvent adopter une enveloppe similaire à celle d'un routeur grand public mais qui, en plus des caractéristiques usuelles, embarquent des <strong class="defin">fonctionnalités avancées</strong> :  </li>
+	<ul>
+		<li> <strong>pare‑feu</strong> avec la possibilité d'imposer des règles de filtrage complexes ;   </li>
+	
+		<li> <strong> <em class="sigle">VPN</em></strong> (<em class="english">virtual private network</em>) avec un autre routeur compatible ;   </li>
+
+		<li> <strong> <em class="sigle">VLAN</em></strong> (<em class="english">virtual local area network</em>).   </li>
+	</ul>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/routeurWifiCisco.png" width="300px" style="padding-top: 0.2em">
+	<li> On a enfin les <strong class="specialLB">solutions professionnelles</strong> pour les grands réseaux d'entreprise ou de collectivité, qui doivent pouvoir gérer un trafic important et disposer de fonction d'administration avancées. Un tel routeur peut‑être constitué d'un <strong>routeur rack polyvalent</strong> auquel on ajoute un <strong>module Wi‑Fi</strong> dans un emplacement prévu à cet effet. </li>
+	</div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques" style="display: inline-block;">
+<p class="remarque"> Comme déjà mentionné au chap. R3‑III <a class="previous" href="Rc3-2_coucheReseau.html#interfacesRouteurs" target="_BLANK"></a>, un <strong class="title">routeur Wi‑Fi</strong> comporte en général (cf. la face arrière du <em class="mark">Cisco RV215W</em> en photo ci‑dessous) : </p>
+	<img class="top-right" src="../img/WifiRouterBack.png" width="400px" style="padding-top: 1em">
+<ul>
+	<li> une <strong>multi‑port Ethernet</strong> étiqueté « <strong class="specialLB"><em class="sigle">LAN</em></strong> » ; il constitue un <strong>switch</strong> procurant quelques connexions filaires associée au <strong><em class="sigle">WLAN</em></strong> que le routeur a pour fonction principale de mettre en œuvre ; </li>
+
+	<li> un <strong>port Ethernet</strong> étiqueté « <strong class="specialO"><em class="sigle">WAN</em></strong> » qui sert à raccorder le routeur dans un <strong><em class="sigle">LAN</em></strong>, avec en principe un accès vers un <strong><em class="sigle">WAN</em></strong> – l'Internet. </li>
+</ul>
+</div><!-- remarque -->
+
+
+
+<h3 id="accessPoint"> Points d'accès <em class="mark">Wi‑Fi</em> (équipement) </h3>
+
+
+
+<div class="important">
+<p> Un <strong class="title">point d'accès</strong> <strong>matériel</strong> est un équipement qui permet d'<strong class="defin">ajouter un point d'accès</strong> <strong>Wi‑Fi</strong> (<strong><em class="sigle">WAP</em></strong>) dans un réseau filaire ou <em class="mark">Wi‑Fi</em> déjà existant. Il n'assure <strong class="cons">pas de fonction de routage</strong>, autrement dit il ne permet pas de raccorder deux réseaux <em class="sigle">IP</em> différents. </p>
+
+<p> D'une certaine façon, on peut considérer qu'un <strong class="title">point d'accès</strong> dans un réseau <strong>Wi‑Fi</strong> est l'équivalent d'un <strong>switch</strong> au sein d'un réseau filaire. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/WLANaccessPoints.png" width="400px" style="padding-top: 0.2em">
+<p> <strong class="pros">Moins cher qu'un routeur</strong>, un <strong class="title">point d'accès</strong> peut constituer une solution satisfaisante pour <strong class="defin">étendre un <em class="sigle">WLAN</em></strong> avec une <strong>administration centralisée</strong>. C'est la solution privilégiée dans les grands bâtiments de bureau, les espaces publics connectés, les établissements scolaires, etc. </p>
+</div><!-- complement -->
+
+<p> Comme pour les routeurs, il existe une <strong class="title">grande variété de modèles</strong> adaptés en fonction des besoins domestiques ou professionnels. L'<strong>absence d'antenne apparente</strong> diminue un peu la portée mais présente une meilleure <strong class="pros">robustesse aux dégradations</strong> dans les environnements publics. </p>
+  <img class="top-left" src="../img/WifiAccessPoints.png">
+
+
+
+
+<div class="expert">
+<h3> Répéteurs et ponts <em class="mark">Wi‑Fi</em> </h3>
+
+
+<h4> Répéteurs <em class="mark">Wi‑Fi</em> </h4>
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/modeRepeteurWifi.png" width="400px" style="padding-top: 0.0em">
+<p> Rappelons (cf. supra <a class="supra" href="Rc3-4_coucheLiaisonWifi.html#repeteurPont"></a>) qu'un <strong class="title">répéteur Wi‑Fi</strong> n'est <strong class="warning">pas</strong> un <strong class="specialN">point d'accès</strong> mais un équipement qui permet d'<strong class="defin">étendre la portée d'un <em class="sigle">WAP</em></strong> <em class="remark">déjà installé</em>. </p>
+
+<p> En termes de <strong>mise en œuvre des protocoles réseau</strong>, un répéteur doit donc être considéré comme <strong class="defin">passif</strong>, il ne constitue <strong class="warning">pas</strong> un <strong>nœud</strong> du réseau (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#noeud" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<p> Techniquement, un tel équipement dispose simplement d'une <strong class="specialLB">alimentation électrique</strong>, d'une ou plusieurs <strong class="specialLB">antennes Wi‑Fi</strong> d'une carte électronique d'<strong class="specialLB">amplification et de répétition</strong> des signaux qu'il reçoit des <strong>stations Wi‑Fi</strong> qu'il dessert (les machines qui se connectent à travers lui) et du <strong><em class="sigle">WAP</em></strong> dont il étend la portée. </p>
+
+<p> Les différents <strong class="title">modèles de répéteurs Wi‑Fi</strong> vendus dans le commerce se distinguent principalement par leur <strong>portée</strong> et les <strong>normes de protection</strong> qu'ils respectent en vue de leur usage – intérieur ou extérieurs, locaux publics ou privés, etc. </p>
+
+  <img class="top-left" src="../img/WifiRepeteurs.png">
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">modèles d'intérieur</strong> qualifiés dans le commerce de <strong>répéteurs Wi‑Fi</strong> présentent diverses caractéristiques qui peuvent être sujettes à des <strong class="warning">confusions</strong>.    </p>
+<ul>
+	<li> La <strong>prise électrique</strong> en façade sert simplement de prolongement à celle sur laquelle l'appareil est branché. </li>
+
+	<li> Un éventuel <strong>port Ethernet</strong> peut être présent permettre à des clients de se raccorder localement au réseau qu'il étend par connexion filaire plutôt que <em class="mark">Wi‑Fi</em>. Mais ce n'est <strong class="warning">pas</strong> un <strong>port « <em class="sigle">WAN</em> »</strong> comme sur un équipement de type <em class="mark">point d'accès</em>.</p> </li>
+
+	<li> Certains modèles sont en fait <strong class="pros">polyvalents</strong> et peuvent faire fonction de <strong>point d'accès</strong>, voire même de <strong>routeur Wi‑Fi</strong> (cf. le modèle d'intérieur en photo à droite ci‑dessus). </li>
+</ul>
+</div><!-- remarque -->
+
+
+<h4> Ponts <em class="mark">Wi‑Fi</em> </h4>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/WifiBridge.png" width="100px" style="padding-top: 0.2em">
+<p> Techniquement, un <strong class="title">pont Wi‑Fi</strong> est un équipement qui agit comme un <strong class="defin">puissant répéteur</strong>. Il est essentiellement constitué d'une <strong>paire d'antennes</strong> à installer en vis‑à‑vis en extérieur pour créer une liaison sans‑fil pour déployer entre deux bâtiments. </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Technologie <em class="mark">Wi‑Fi</em>  –  Aspects logiciels  </h2>
+
+
+<p> Comme cela a été souligné à plusieurs reprises dans ce chapitre, la <strong class="specialLB">technologie Wi‑Fi</strong> repose physiquement sur un <strong class="warning">médium partagé</strong>, le <strong>champ électromagnétique</strong> ambiant. Se posent donc des problématiques de : </p>
+<ul>
+	<li> <strong class="defin">fiabilité</strong> – le fait, par exemple, qu'une transmission ne soit pas perturbée par une autre ;  </li>
+
+	<li> <strong class="defin">sécurité</strong> – le fait que l'accès au réseau puisse être contrôlé ou qu'un tiers ne puisse pas lire les échanges de donnée entre une station et un point d'accès </li>
+</ul>
+
+<p> Tous ces aspects sont pris en charge au <strong class="title">niveau logiciel</strong>. </p>
+
+
+
+<h3 id="identification"> Identification des interfaces réseau <em class="mark">Wi‑Fi</em></h3>
+
+
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaison.png" width="180px" style="padding-top: 0.2em">
+<p> On rappelle (cf. introduction) que la <strong class="specialLB">technologie Wi‑Fi</strong> est spécifiée par les <strong>normes <em class="sigle">802.11</em></strong> qui couvrent notamment la <strong class="specialPR">sous‑couche <em class="sigle">MAC</em></strong>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/EUI-48.png" width="350px" style="padding-top: 0.2em">
+<p> Toute <strong class="title">interface réseau Wi‑Fi</strong> est donc identifiée par son <strong class="defin">adresse <em class="sigle">MAC</em></strong> – à savoir un identifiant numérique codé sur <strong>48 bits</strong> – exactement comme une interface réseau <em class="mark">Ethernet</em> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adresseMAC" target="_BLANK"></a>). </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<h3 id="securite"> Protocoles sécurisés de connexion  </h3>
+
+
+<div class="expert" style="display: inline-block;">
+<p> Dans un <strong class="title"><em class="sigle">LAN</em> filaire</strong>, il est incontournable d'avoir physiquement <strong class="defin">accès à une prise réseau</strong> pour pouvoir y raccorder une machine (sans considérer les éventuelles possibilités de connexion distante via une passerelle). Si le réseau est déployé dans des <strong>locaux privés</strong>, il est donc a priori <strong class="pros">inaccessible</strong> à toute <strong>machine externe</strong> aux locaux. </p>
+
+  <img class="top-right" src="../img/WifiSecurity.png" width="350px" style="padding-top: 0.2em">
+
+<p> <em class="remark">Au contraire</em>, dans un <strong class="title"><em class="sigle">WLAN</em></strong>, n'importe quelle machine située à l'extérieur des locaux mais <strong>dans la portée d'un</strong> <strong class="specialLB"><em class="sigle">WAP</em></strong> pourrait a priori se connecter au réseau, car les <strong>murs</strong> usuels ne sont <strong class="defin">pas totalement imperméables aux ondes Wi‑Fi</strong> (ce qui est d'ailleurs un atout de cette technologie). C'est pourquoi un <strong class="warning">contrôle d'accès</strong> est <strong class="pros">vivement recommandé</strong>. </p>
+</div><!-- expert -->
+
+
+<div class="complement">
+<p> En premier lieu, pour une <strong>station Wi‑Fi</strong>, l'<strong class="title">accès à un <em class="sigle">WLAN</em></strong> n'est facile que si la <strong class="defin">diffusion de son <em class="sigle">SSID</em></strong> est mise en œuvre (cf. supra <a class="supra" href="Rc3-4_coucheLiaisonWifi.html#SSID"></a>). Si on choisit de <strong class="specialO">ne pas diffuser</strong> l'identifiant, alors le <strong><em class="sigle">WLAN</em></strong> devient « invisible » pour les tiers et seuls les stations ayant connaissance du <strong><em class="sigle">SSID</em></strong> peuvent s'y connecter. Cela apporte une certaine protection contre les intrusions indésirables. </p>
+
+<p> Toutefois, cette solution de contrôle d'accès n'est <strong class="cons">pas totalement efficace</strong> et donc, finalement, assez peu mise en œuvre, car il existe des <strong class="warning">outils d'analyse</strong> – notamment sous forme d'<strong>applications pour smartphone</strong> – qui permettent de détecter les réseaux <strong>Wi‑Fi</strong> et de récupérer leur <strong><em class="sigle">SSID</em></strong>. </p>
+
+<div class="expert">
+<p> <em class="remark">Remarques</em>. </p>
+<ul>
+	<li>  De tels <strong class="title">outils d'analyse</strong> ne sont <strong class="pros">pas facilement accessibles</strong> au grand public : en particulier, les applications pour smartphone ne sont pas distribuées sur les <em class="mark">app‑stores</em> et il faut que l'appareil soit <em class="mark">rooté</em> pour procéder à l'installation. </li>
+
+	<li> La <strong class="title">récupération par un tiers</strong> du <strong><em class="sigle">SSID</em> caché</strong> d'un <strong><em class="sigle">WLAN</em></strong> peut‑être considérée comme un <strong class="warning">acte illégal</strong> de violation de sécurité.  </li>
+</ul>
+<!-- rechercher ref. loi française -->
+</div><!-- expert -->
+
+</div><!-- complement -->
+
+
+<div class="important">
+<p> Que le <strong><em class="sigle">SSID</em></strong> soit <strong>diffusé ou non</strong>, l'<strong class="title">accès à un <em class="sigle">WLAN</em></strong> engage la <strong class="warning">responsabilité du (des) administrateur(s)</strong>. C'est pourquoi il est fortement recommandé de limiter l'accès par un <strong class="defin">protocole d'authentification</strong> avec un <strong class="specialO">mot de passe</strong>. </p>
+</div><!-- important -->
+
+<div class="expert">
+<p> Pour approfondir la problématique de la <strong class="title">sécurisation des connexions</strong> à un <strong class="title"><em class="sigle">WLAN</em></strong>, on pourra consulter la <strong>note technique de l'<em class="sigle">ANSSI</em></strong> qui y est consacrée <a class="external" href="https://www.ssi.gouv.fr/uploads/IMG/pdf/NP_WIFI_NoteTech.pdf" target="_BLANK"></a>. </p>
+</div><!-- expert -->	
+
+<div class="remarques">
+<p class="remarque"> Dans les <strong class="title"><em class="sigle">WLAN</em> ouverts au grand public</strong> (gares, aéroports, etc.), l'accès n'est pas sécurisé par un mot de passe mais par une <strong class="defin">procédure d'identification</strong> de l'<strong class="specialO">utilisateur</strong> – typiquement, via une demande de adresse électronique – et de fortes <strong class="defin">limitations de droit</strong> mises en œuvre par un <strong>serveur proxy</strong>. </p>
+</div><!-- remarque -->
+
+
+<h4> Connexion par protocole chiffré </h4>
+
+
+<div class="important">
+<p> Afin de satisfaire aux exigences de <strong class="pros">confidentialité</strong>, une <strong class="title">connexion Wi‑Fi</strong> obéit toujours à un <strong>protocole</strong> avec <strong class="defin">chiffrement des données</strong> dès le début de la connexion. </p>
+
+<p> Sinon, n'importe quelle communication entre un <strong>client</strong> et un <strong><em class="sigle">WAP</em></strong> peut être <strong class="warning">interceptée</strong> par une machine tierce à l'aide d'un logiciel dédié (sniffeur <em class="mark">Wi‑Fi</em>) </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong>protocoles</strong> de <strong class="title">connexion chiffrée</strong> ont <strong class="defin">beaucoup évolué</strong> depuis les débuts de la technologie <em class="mark">Wi‑Fi</em>. Se sont succédés : </p>
+<ul>
+	<li> le protocole <strong class="title"><em class="sigle">WEP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wired_Equivalent_Privacy" target="_BLANK">W</a> – pour <strong>wired equivalent privacy</strong> – mis en place dès 1999, qui s'est révélé rapidement <strong class="cons">beaucoup trop faible</strong> ;   </li>
+
+	<div class="expert">
+		<ul>
+			<li> la <strong>taille de la clef</strong> était <strong class="cons">insuffisante</strong> au regard des progrès en capacité de calcul des ordinateurs ;  </li>
+
+			<li> l'<strong>algorithme</strong> de chiffrement <strong><em class="sigle">RC4</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/RC4" target="_BLANK">W</a> (<em class="english">Rivest Cipher 4</em> – du nom de son inventeur) était <strong class="cons">vulnérable</strong> à cause du partage de clef ; </li>
+		</ul>
+	</div><!-- expert -->	
+
+	<li> le protocole <strong class="title"><em class="sigle">WPA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Wi‑Fi_Protected_Access" target="_BLANK">W</a> – pour <strong>Wi‑Fi protected access</strong> apparu en 2003 – a été complété en 2004 par une version <strong ><em class="sigle">WPA2</em></strong> ;  </li>
+
+  <div class="expert">
+	<ul>
+		<li> <strong class="specialLB"><em class="sigle">WPA</em></strong> utilise l'algorithme de chiffrement <strong><em class="sigle">TKIP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Temporal_Key_Integrity_Protocol" target="_BLANK">W</a> (<em class="english">temporal key integrity protocol</em>) ; </li>
+
+		<li> <strong class="specialLB"><em class="sigle">WPA2</em></strong> utilise préférentiellement l'algorithme de chiffrement <strong><em class="sigle">CCMP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Counter-Mode/CBC-Mac_protocol" target="_BLANK">W</a> (<em class="english">counter‑mode/CBC‑Mac protocol</em>) ou <strong><em class="sigle">AES</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_BLANK">W</a> (<em class="english">advanced encryption standard</em>). </li>
+	</ul>
+
+	<div class="nobullet"> Par ailleurs, les deux versions du protocole <strong class="title"><em class="sigle">WPA</em></strong> peuvent être mises en œuvre de deux façons : </div>
+	<ul>
+		<li> <strong class="specialLB"><em class="sigle">WPA</em>‑Personal</strong> (ou <strong><em class="sigle">PSK</em></strong> pour <em class="english">pre‑shared key</em>), simple à installer, bien adapté aux réseaux domestiques ; </li>
+
+		<li> <strong class="specialLB"><em class="sigle">WPA</em>‑Enterprise</strong> (ou <strong><em class="sigle">EAP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Extensible_Authentication_Protocol" target="_BLANK">W</a> pour <em class="english">extensible authentication protocol</em>), plus sécurisé mais qui nécessite la mise en place d'un <strong class="specialO">serveur d'authentification</strong> <a class="external" href="https://en.wikipedia.org/wiki/Authentication_server" target="_BLANK">W</a>. </li>
+	</ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<!-- donner un exemple (Cisco RV215W) -->
+
+
+
+<h3> Paramétrage d'une interface <em class="mark">Wi‑Fi</em> </h3>
+
+
+<!--
+<h4 id="Windows"> Cas d'un poste de travail sous Windows </h4>
+-->
+
+
+<!--
+<h4 id="Linux"> Cas d'un poste de travail sous Windows </h4>
+-->
+
+
+
+<!--
+<h4 id="RaspberryPi"> Cas d'une carte <em class="mark">Raspberry‑Pi</em> </h4>
+-->
+
+
+
+
+<h3> Protocole de communication à évitement de collisions </h3>
+
+
+
+<div class="expert">
+<p> En technologie <strong class="specialLB">Wi‑Fi</strong>, pour toute transmission de données, la problématique de l'<strong class="title">accès au médium</strong> se pose a priori dans les mêmes termes qu'en technologie <strong>Ethernet</strong> sur une topologie en <strong>bus</strong> (cf. chap. R3‑III <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportReseauLiaison/Rc3-3_coucheReseauEthernet.html#topologieBus" target="_BLANK"></a>) : si <strong>deux stations</strong> émettent <strong class="warning">simultanément</strong> des signaux, leurs <strong class="cons">interférences</strong> risquent de faire échouer les transmissions de l'une et l'autre – et on parle alors de <strong class="defin">collision</strong>. Toute station souhaitant émettre doit donc préalablement <strong class="pros">s'assurer que le médium est disponible</strong>. </p>
+
+<p> Toutefois, la technique dite <strong><em class="sigle">CSMA/CD</em></strong> (<em class="english">carrier sense multiple access / collision detection</em>) employée en technologie <strong>Ethernet</strong> n'est <strong class="cons">pas adaptée</strong> à la spécificité de la technologie <strong class="specialLB">Wi‑Fi</strong>. Rappelons que cette technique consiste, pour une machine devant transmettre des données sur le médium, à émettre un paquet tout en écoutant le médium pour vérifier s'il est victime d'une <strong>collision</strong>. Or la technologie <strong>Wi‑Fi</strong> n'est <strong class="cons">pas opérable en full‑duplex</strong> (une station ne pas employer son ou ses antennes pour simultanément émettre et recevoir des signaux). </p>
+
+</div><!-- expert -->
+
+<div class="complement">
+<p> Dans un réseau <em class="mark">Wi‑Fi</em>, l'<strong class="specialLB">accès au médium</strong> est géré par la technique dite <strong class="title"><em class="sigle">CSMA/CA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Carrier_Sense_Multiple_Access_with_Collision_Avoidance" target="_BLANK">W</a> – pour <strong>carrier sense multiple access / collision avoidance</strong>. </p>
+
+<p> Cette technique consiste, pour toute machine devant transmettre des données sur le médium à d'abord se mettre en <strong class="defin">écoute du réseau</strong> pendant une <strong>durée</strong> appelée <strong class="defin"><em class="sigle">DIFS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/DCF_Interframe_Space" target="_BLANK">W</a> (<em class="english">distributed inter frame space</em>, de l'ordre de 30 à 50 µs), puis :  </p>
+<ul>
+	<li> en l'<strong>absence de signaux</strong> détectés, à <strong class="defin">transmettre</strong> les données voulues ; </li>
+
+	<li> <strong>sinon</strong>, à <strong class="cons">attendre</strong> une <strong>durée aléatoire</strong> supplémentaire avant de pouvoir reprendre l'écoute. </li>
+</ul>
+</div><!-- complement -->
+
+<img class="top-left" src="../img/csma-ca.gif" style="max-width: 800px">
+
+
+
+<h3> Trames Wi‑Fi </h3>
+
+
+
+<p> Les <strong class="title">trames Wi‑Fi</strong> adoptent une <strong class="pros">structure globale</strong> similaire à celles de la technologie <em>Ethernet</em> <a class="external" href="https://en.wikipedia.org/wiki/Ethernet_frame" target="_BLANK">W</a>. Mais des <strong class="defin">spécificités</strong> existent, notamment en fonction des <strong>techniques de modulation et de multiplexage</strong> adoptées. </p>
+
+<img class="top-left" src="../img/tramesWifi.jpg">
+
+
+
+<h3> Techniques de modulation et multiplexage </h3>
+
+
+
+<div class="expert">
+<p> Les techniques <strong><em class="sigle">FHSS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/étalement_de_spectre_par_saut_de_fréquence" target="_BLANK">W</a> (<em class="english">frequency-hopping spread spectrum</em>) et <strong><em class="sigle">DSSS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Direct-sequence_spread_spectrum" target="_BLANK">W</a> (<em class="english">direct-sequence spread spectrum</em>) ne sont presque <strong class="cons">plus utilisées</strong> en <strong>Wi‑Fi</strong> (elles étaient employées pour les normes 802.11a et 802.11b). </p>
+</div><!-- expert -->
+
+<div class="important">
+<p> Depuis la norme 802.11g (2003), c'est la technique <strong class="title"><em class="sigle">OFDM</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Orthogonal_frequency-division_multiplexing" target="_BLANK">W</a> (<em class="english">orthogonal frequency-division multiplexing</em>) qui est presque exclusivement utilisée en <strong>Wi‑Fi</strong>. </p>
+</div><!-- important -->
+
+
+
+<h3> Protocole de routage dans les réseaux maillés </h3>
+
+
+
+<p> 	<strong class="title"><em class="sigle">OLSR</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Optimized_Link_State_Routing_Protocol" target="_BLANK">W</a> (<em class="english">optimized link state routing protocol</em>) </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Mise en œuvre sur carte à microcontrôleur </h2>
+
+
+<div class="expert">
+<p> On présente ici uniquement le cas des <strong class="title">cartes à  microcontrôleur ESP8266</strong>. En effet, en raison de leur <strong class="pros">excellent rapport qualité/prix</strong>, ces cartes – ainsi que celle à microcontrôleur <strong class="title">ESP32</strong> – sont <strong>très utilisées</strong> dans le domaine des <strong class="defin">objets connectés</strong>. </p>
+</div><!-- expert -->
+
+
+<h3 id="ESP8266"> Généralités sur les modules <em class="mark">ESP</em> </h3>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/logoEspressif.png" width="80px" style="padding-top: 0.0em">
+<p> Les <strong>cartes à microcontrôleur ESP8266</strong> et <strong>ESP32</strong> ont été brièvement présentées au chapitre C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#cartesWifi" target="_BLANK"></a>. Toutes embarquent un <strong class="title">module ESP</strong> développé par le fabricant chinois <strong class="specialR">Espressif</strong>. </p>
+</div><!-- display -->
+
+<div class="complement">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ESP-Fdetails.png" width="500px" style="padding-top: 0.0em">
+<p> Un <strong class="title">module ESP</strong> est essentiellement constitué d'un <strong>microcontrôleur</strong>, d'un <strong>oscillateur à quartz</strong>, d'une unité de <strong>mémoire flash</strong> externe et d'une <strong>antenne Wi‑Fi</strong> – cf. le module <em class="mark">ESP‑12F</em> à microcontrôleur en photo ci‑contre avec et sans son <strong>blindage</strong>. </p>
+
+<p> De plus, la plupart des modules à microcontrôleur <strong class="specialLB">ESP8266</strong> embarquent une <strong>led intégrée</strong>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<div class="important">
+<p> Les <strong class="title">microcontrôleurs ESP8266</strong> et <strong class="title">ESP32</strong> sont <strong class="pros">compatibles</strong> avec le framework <strong class="Arduino">Arduino</strong>, moyennant l'installation de la <strong>chaîne de compilation dédiée</strong> (cf. chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#gestionnaireCartes" target="_BLANK"></a>). La mise en œuvre des <strong class="defin">communications en Wi‑Fi</strong> sont facilitées par l'emploi des modules de <strong>bibliothèque</strong> de fonctions spécialisées. </p>
+</div><!-- important -->
+
+
+
+<h3> Les modules de bibliothèque <em class="mark">ESP8266Wifi</em> </h3>
+
+
+
+<div class="complement">
+<p> Pour un <strong>microcontrôleur ESP8266</strong>, on dispose des <strong class="title">modules de bibliothèque </strong> <code class="filename">ESP8266Wifi</code> (qui s'inspirent initialement de ceux de la bibliothèque <em class="mark">Arduino WiFi Link</em> <a class="external" href="https://www.arduino.cc/reference/en/libraries/wifi-link/" target="_BLANK"></a>). Ces modules s'installent par défaut dans l'application <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong> lors de l'importation des <strong>cartes ESP8266</strong> (cf. chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#gestionnaireCartes" target="_BLANK">C</a>). Il s'agit de bibliothèques tierces dont la <strong class="defin">documentation</strong> « officielle »</strong>, <strong class="cons">très succincte</strong>, est référencée sur un <strong>site web indépendant</strong> <a class="external" href="http://arduino.esp8266.com/Arduino/versions/2.0.0/doc/libraries.html" target="_BLANK"></a>. Toutefois, il existe aussi une <strong class="defin">documentation alternative</strong>  <strong class="pros">très détaillée</strong> comme celle‑ci <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/readme.html" target="_BLANK"></a>. </p>
+
+<div class="expert">
+<p> Quant au <strong>code source</strong> du module de bibliothèque <code class="filename">ESP8266WiFi</code> (plus de 30 fichiers), il est disponible ici <a class="external" href="https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi" target="_BLANK">G</a>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<p> La <strong class="title">mise en œuvre</strong> des <strong>fonctionnalités Wi‑Fi</strong> sur une carte à microcontrôleur <strong>ESP8266</strong> requiert la <strong class="defin">directive d'inclusion</strong> du fichier d'en‑tête principal : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">#include &lt;ESP8266WiFi.h&gt;</code>
+</span> <br>
+sachant que ce fichier : </p> 
+<ul>
+	<li> comporte lui‑même <strong>12 directives d'inclusion</strong>, en particulier celle du fichier d'en‑tête <em class="mark">Arduino</em> <code class="filename">IPAddress.h</code> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#carteMicrocontroleur" target="_BLANK"></a>) ; </li>
+
+	<li> déclare l'<strong class="specialN">objet</strong> <code class="prettyprint lang-c">WiFi</code> par lequel on peut appeler les <strong>méthodes publiques</strong> du module de bibliothèque ; cette instance n'a donc pas besoin d'être déclarée dans le programme utilisateur (à l'instar de l'objet <code>Serial</code> pour la mise en œuvre de moniteur série – cf. chap. C3‑X <a class="previous" href="../../ModuleC/C3-Numeration/Cc3-10_moniteurSerie.html#objetSerial" target="_BLANK">C</a>).  </li>
+</ul>
+
+<p> Le module offre de très nombreuses <strong class="title">méthodes publiques</strong> associées à l'<strong>objet</strong> <code class="prettyprint lang-c">WiFi</code>, qu'il ne serait pas raisonnable de détailler en intégralité dans ce cours. On ne va donc présenter que <strong class="defin">les plus usuelles</strong>. En tout premier lieu, on trouve dans le fichier d'en‑tête <code class="filename">ESP8266WiFiGeneric.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiGeneric.h" target="_BLANK">G</a> diverses <strong>méthodes génériques</strong>, la plus importante étant la suivante : </p>
+
+<ul>
+	<li> <code class="prettyprint lang-c">WiFi.mode</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#mode" target="_BLANK"></a> code le <strong class="defin">choix du mode de fonctionnement</strong> de la carte programmée. </li>
+  <ul>
+  	<li> Elle prend pour seul <strong class="specialT">argument</strong> une valeur de type énuméré <code class="prettyprint lang-c">WiFiMode_t</code> parmi les 4 constantes déclarées <code class="prettyprint lang-c">WIFI_OFF</code>, <code class="prettyprint lang-c">WIFI_STA</code> (mode <strong>station</strong>), <code class="prettyprint lang-c">WIFI_AP</code> (mode <strong>access point</strong>) et <code class="prettyprint lang-c">WIFI_AP_STA</code> (mode <strong>mixte</strong>). </li>
+
+  	<li> Elle retourne une <strong>valeur booléenne</strong> qui exprime la <strong class="defin">faisabilité du mode</strong> sur la carte. </li>
+  </ul>
+
+  <li> <code class="prettyprint lang-c">WiFi.channel</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#other-function-calls" target="_BLANK"></a>, sans argument, retourne le <strong class="defin">canal Wi‑Fi</strong> adopté. </li>
+</ul>
+
+<p> Une bonne partie des autres méthodes sont <strong class="specialLB">spécifiques aux modes</strong> respectifs <strong>station</strong> et <strong>access point</strong>. </p>
+
+
+
+<h3> Mise en œuvre d'une carte <em class="mark">ESP8266</em> en mode <em>station</em> </h3>
+
+
+
+<p class="square"> Pour la <strong class="title">mise en œuvre</strong> d'une <strong class="specialLB">station</strong> et tout particulièrement sa <strong>connexion</strong> à un <strong class="defin"><em class="sigle">WLAN</em> préexistant</strong>, on dispose des <strong>méthodes</strong> suivantes, toutes déclarées dans le fichier d'en‑tête <code class="filename">ESP8266WiFiSTA.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiSTA.h" target="_BLANK">G</a> : </p>
+
+<ul> 
+  <li> <code class="prettyprint lang-c">WiFi.config</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/station-class.html#config" target="_BLANK"></a> code l'attribution d'une <strong class="specialO">configuration <em class="sigle">IP</em> statique</strong> choisie pour la carte programmée en mode <strong>station</strong>. </li>
+  <ul>
+  	<li> Elle admet de <strong class="specialT">3 à 5 arguments</strong> de classe <code class="prettyprint lang-c">IPAddress</code> qui codent respectivement l'<strong>adresse <em class="sigle">IP</em></strong>, la <strong>passerelle</strong> par défaut, le <strong>masque de sous‑réseau</strong> et, optionnellement, les deux adresses de <strong>résolveur <em class="sigle">DNS</em></strong>. </li>
+
+  	<li> Elle retourne une <strong>valeur booléenne</strong> qui exprime la <strong class="defin">compatibilité de la configuration</strong> avec le mode choisi pour la carte. </li>
+  </ul>
+  <div class="nobullet"> <em class="remark">Remarque</em>. Sans appel de la méthode <code class="prettyprint lang-c">config</code> dans le programme utilisateur, la carte adopte par défaut une <strong class="specialO">configuration <em class="sigle">IP</em> dynamique</strong> (ce qui requiert l'existence du service <strong><em class="sigle">DHCP</em></strong> sur le réseau – cf. chap. R2‑II <a class="previous" href="../R2-Applications/Rc2-2_dhcp.html" target="_BLANK"></a>). </div>
+  
+	<li> <code class="prettyprint lang-c">WiFi.begin</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/station-class.html#config" target="_BLANK"></a> code la commande de <strong class="defin">connexion</strong> à un <strong><em class="sigle">WLAN</em></strong> avec le mode et la configuration préalablement codés. </li>
+	<ul>
+		<li> Elle possède <strong>plusieurs variantes d'appel</strong> (surcharges), la plus usuelle étant de la forme : <br>
+	  <span class="inline">
+			<code class="prettyprint lang-c">WiFi.begin(<span class="nocode"><strong class="specialT"><em class="sigle">SSID</em></strong></span>, <span class="nocode"><strong class="specialO">password</strong></span>)</code>
+		</span> <br>
+	  où <strong class="specialT"><em class="sigle">SSID</em></strong> et <strong class="specialO">password</strong> sont les identifiants de connexion au <strong><em class="sigle">WLAN</em></strong> (cf. supra <a class="supra" href="Rc3-4_coucheLiaisonWifi.html#SSID"></a>) ;  </li>
+
+		<li> Elle retourne une valeur de <strong>type énuméré</strong> <code class="prettyprint lang-c">wl_status_t</code> déclaré dans le fichier d'en‑tête <code class="filename">wl_definitions.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/cores/esp8266/wl_definitions.h" target="_BLANK">G</a>. </li>
+	</ul>
+
+	<div class="nobullet"> <em class="remark">Remarque</em>. La <strong>méthode</strong> <code class="prettyprint lang-c">begin</code> n'a <strong class="pros">pas besoin d'être réitérée</strong> en cas d'échec. De plus, en cas de déconnexion, le socket réseau met en œuvre une <strong class="pros">procédure automatique de reconnexion</strong>.  </div>
+
+	<li> <code class="prettyprint lang-c">WiFi.status</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/station-class.html#status" target="_BLANK"></a>, sans argument, retourne le <strong class="defin">statut courant</strong> de la <strong>connexion</strong> à un <strong><em class="sigle">WLAN</em></strong>, exprimé par une valeur de <strong>type énuméré</strong> <code class="prettyprint lang-c">wl_status_t</code> (cf. ci‑dessus). </li>
+
+	<div class="nobullet"> Les valeurs exprimant que la <strong>connexion</strong> ou la <strong>déconnexion</strong> est <strong class="pros">effective</strong> sont respectivement codées <code class="prettyprint lang-c">WL_CONNECTED</code> et  <code class="prettyprint lang-c">WL_DISCONNECTED</code>(les autres valeurs servent à faire du diagnostic en cas d'échec).  </div>
+
+	<li> <code class="prettyprint lang-c">WiFi.isConnected</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/station-class.html#isconnected" target="_BLANK"></a> est une alternative <strong class="pros">plus simple</strong> et lisible que <code class="prettyprint lang-c">status</code> pour déterminer si la carte est <strong class="defin">connectée</strong> à un <strong><em class="sigle">WLAN</em></strong>. Elle est sans argument et retourne une valeur de type <code class="prettyprint lang-c">bool</code>. </li>
+
+	<li> <code class="prettyprint lang-c">WiFi.disconnect</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/station-class.html#disconnect" target="_BLANK"></a> code la  <strong class="defin">déconnexion</strong> de la carte. </li>
+  <ul>
+  	<li> Elle admet <strong class="specialT">1 ou 2 arguments</strong> optionnels de type <code class="prettyprint lang-c">bool</code> pour provoquer respectivement :  </li>
+  	<ol class="numbered">
+  		<li> le retour dans le mode <code class="prettyprint lang-c">WIFI_OFF</code> ;  </li>
+  	
+  		<li> l'effacement en mémoire des <strong>identifiants de connexion</strong> (<strong class="specialT"><em class="sigle">SSID</em></strong> et <strong class="specialO"><em class="sigle">PSWD</em></strong>). </li>
+  	</ol>
+  	<li> Elle retourne une valeur de type <code class="prettyprint lang-c">bool</code> qui exprime le succès ou non de la déconnexion. </li>
+  </ul>
+</ul>
+
+<p class="square"> Dans le fichier d'en‑tête <code class="filename">ESP8266WiFiSTA.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiSTA.h" target="_BLANK">G</a> sont également déclarées toute une série de <strong>méthodes</strong> pour récupérer les <strong class="specialLB">paramètres de connexion</strong> (un fois que cette dernière est établie) <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/station-class.html#configuration" target="_BLANK"></a> :  </p>
+
+<ul>
+	<li> <code class="prettyprint lang-c">WiFi.localIP</code>, <code class="prettyprint lang-c">WiFi.subnetMask</code>, <code class="prettyprint lang-c">WiFi.gatewayIP</code>, <code class="prettyprint lang-c">WiFi.dnsIP</code> retournent respectivement les <strong>adresses <em class="sigle">IP</em></strong> de la <strong class="defin">configuration</strong> de la carte (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#configuration" target="_BLANK"></a>), dans la <strong class="specialG">classe</strong> <code class="prettyprint lang-c">IPAddress</code>. </li>
+
+	<div class="nobullet"> Ces méthodes ne prennent <strong>pas d'argument</strong> <em class="remark">sauf</em> <code class="prettyprint lang-c">dnsIP</code> qui admet un <strong class="specialT">argument</strong> de type <code class="prettyprint lang-c">uint8_t</code> pour indiquer le <strong class="specialT">numéro d'ordre</strong> du résolveur <strong><em class="sigle">DNS</em></strong>, avec pour seules valeurs possibles <code class="cmd">0</code> pour le primaire (valeur par défaut) et <code class="cmd">1</code> pour le secondaire (cf. chap. R2‑I <a class="previous" href="../R2-Applications/Rc2-1_dns_url.html#resolveurs" target="_BLANK"></a>). </div>
+
+	<li> <code class="prettyprint lang-c">WiFi.macAddress</code>, sans argument, retourne l'<strong class="defin">adresse <em class="sigle">MAC</em></strong> de la carte sous la forme d'un <strong>chaîne de caractère</strong> de la classe <code class="prettyprint lang-c">String</code>.  </li>
+
+	<div class="nobullet"> Il existe également une <strong class="defin">surcharge</strong> de cette méthode qui retourne l'<strong>adresse <em class="sigle">MAC</em></strong> sous la forme d'un <strong>tableau</strong>  (également passé comme argument transmis par adresse). </div>
+
+	<li> <code class="prettyprint lang-c">WiFi.RSSI</code>, sans argument, retourne la <strong class="defin">force du signal Wi‑Fi reçu</strong> (cf. supra <a class="supra" href="Rc3-4_coucheLiaisonWifi.html#forceSignal"></a>) exprimée en <strong>dBm</strong> par une valeur de type <code class="prettyprint lang-c">int32_t</code>. </li>
+</ul>
+
+
+<div class="exemples" id="exESP8266connect" style="margin-top: 1.5em">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ESP8266nodeMCUmodeSTA.png" width="350px" style="padding-top: 0.2em">
+<p class="exemple"> Le <strong class="title">programme de démonstration</strong> ci‑après est codé pour connecter à volonté une <strong class="defin">carte de développement NodeMCU</strong> à <strong>microcontrôleur ESP8266</strong> à un point d'accès dans un <strong><em class="sigle">WLAN</em></strong> et afficher les éléments de connexion sur le moniteur série. Il ne nécessite aucun accessoire car il exploite le <strong>bouton intégré</strong> « flash » de la carte et la <strong>led intégrée</strong> au module <em class="mark">ESP‑12</em> (cf. chap. C1‑III <a class="previous" href="../../ModuleC/C1-Generalites/Cc1-3_ArduinoTinkercad.html#cartesWifi" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+<p> Pour plus de confidentialité, les <strong class="defin">identifiants de connexion</strong> au point d'accès sont déportés dans un fichier d'en‑tête <code class="filename">connectionID.h</code>, comme ci‑dessous (valeurs ici masquées) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+/***** WLAN connection IDs *****/
+const char * SSID = "xxxxx";
+const char * PSWD = "???????????????????????????????????????";
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Le programme est structuré avec <strong class="defin">3 fonctions auxiliaires</strong> : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">buttonPushed</code> qui détecte un appui sur le bouton « flash » ;  </li>
+
+	<li> <code class="prettyprint lang-c">connectToAP</code> qui effectue la connexion de la carte au point d'accès ;  </li>
+
+	<li> <code class="prettyprint lang-c">disconnectFromAP</code> qui effectue la déconnexion de la carte. </li>
+</ul>
+
+<p> Les appuis sur le bouton commandent la connexion/déconnexion de la carte. Lorsque la connexion est établie, la <strong class="specialLB">led intégrée</strong> brille proportionnellement à la force du signal (<em class="sigle">RSSI</em>). Elle s'éteint en cas de déconnexion. </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;ESP8266WiFi.h&gt;
+
+#include "connectionID.h" // -> Access point SSID & PSWD
+
+const uint8_t LED_PIN = 2;    // ESP-12 module builtin led (negative logic)
+const uint8_t BUTTON_PIN = 0; // builtin button "flash"
+
+void setup() {
+  Serial.begin(115200);
+  Serial.flush();
+  Serial.println();
+
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+}
+
+void loop() {
+  if (buttonPushed()) {
+    WiFi.isConnected() ? disconnectFromAP() : connectToAP();
+  }
+
+  if (WiFi.isConnected()) {
+    analogWrite(LED_PIN, map(WiFi.RSSI(), -80, -30, 255, 0)); // negative logic
+  }
+  else {
+    digitalWrite(LED_PIN, !LOW); // negative logic
+  }
+}
+
+void connectToAP() {
+  WiFi.mode(WIFI_STA);      // station mode
+  WiFi.begin(SSID, PSWD);   // no config, DHCP mode     
+  Serial.print("Connection in process");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+
+  Serial.printf("Connected to WLAN %s\n", WiFi.SSID().c_str());
+  Serial.printf("Channel %d\tSignal strength = %d dBm\n", WiFi.channel(), WiFi.RSSI()); 
+  Serial.println("IPv4    = " + WiFi.localIP().toString());
+  Serial.println("Mask    = " + WiFi.subnetMask().toString());
+  Serial.println("Gateway = " + WiFi.gatewayIP().toString());
+  Serial.println("DNS1    = " + WiFi.dnsIP(0).toString());
+  Serial.println("DNS2    = " + WiFi.dnsIP(1).toString());
+  Serial.flush();
+}
+
+void disconnectFromAP() {
+  WiFi.disconnect(true);
+  Serial.print("Disconnection ");
+  while (WiFi.status() != WL_DISCONNECTED) {
+    delay(500);
+  }
+  Serial.println(" complete.");
+  Serial.println();
+  Serial.flush();
+}
+
+bool buttonPushed(){
+  static bool previousButtonLevel = HIGH; // negative logic
+  static bool currentButtonLevel  = HIGH;  
+  previousButtonLevel = currentButtonLevel;
+  currentButtonLevel  = digitalRead(BUTTON_PIN); 
+  return (currentButtonLevel == LOW && previousButtonLevel == HIGH); // falling edge
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Lors d'une <strong class="title">exécution du programme</strong>, si par exemple l'utilisateur appuie 2 fois sur le bouton « flash » à une minute d'intervalle, on obtient sur le <strong>moniteur série</strong> typiquement un affichage comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Connection in process...........
+Connected to WLAN xxxxx
+Channel 11      Signal strength = -50 dBm
+IPv4    = 192.168.1.18
+Mask    = 255.255.255.0
+Gateway = 192.168.1.1
+DNS1    = 8.8.8.8
+DNS2    = 8.8.4.4
+Disconnection from xxxxx complete.
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> <em class="remark">Remarque</em>. Dans la bibliothèque développée pour les cartes à microcontrôleur <strong>ESP8266</strong>, il existe une implémentation de la <strong class="title">fonction</strong> <code class="prettyprint lang-c">printf</code> pour l'<strong>objet</strong> <code class="prettyprint lang-c">Serial</code>. </p>
+<ul>
+	<li> Elle est déclarée dans le fichier d'en‑tête <code class="filename">Print.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Print.h" target="_BLANK">G</a>. </li>
+
+	<li> Elle adopte une <strong class="pros">syntaxe similaire</strong> à celle de la fonction <code class="prettyprint lang-c">printf</code> de la bibliothèque standard du langage <strong>C</strong> (déclarée dans le fichier d'en‑tête <code class="filename">stdio.h</code>). </li>
+</ul>
+
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Gestion des événements de connexion en tâche de fond </h4>
+
+
+<p class="square"> Le fichier d'en‑tête <code class="filename">ESP8266WiFiGeneric.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiGeneric.h" target="_BLANK"></a> déclare également une série de <strong>méthodes</strong> pour <strong class="title">gérer les connexions au <em class="sigle">WLAN</em></strong> en <strong class="pros">tâches de fond</strong> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#wifieventhandler" target="_BLANK"></a>. En particulier, pour le <strong>mode station</strong>, on a (entre autres) : </p>
+<ul>
+ 	<li> <code class="prettyprint lang-c">onStationModeConnected</code> pour détecter la <strong>connexion</strong> de la station à un <strong><em class="sigle">WLAN</em></strong> ; </li>
+ 
+ 	<li> <code class="prettyprint lang-c">onStationModeDisconnected</code> pour détecter la <strong>déconnexion</strong> de la station ; </li>
+
+ 	<li> <code class="prettyprint lang-c">onStationModeGotIP</code>  pour détecter que la station a obtenu une <strong>configuration <em class="sigle">IP</em></strong> de la station ; </li>
+</ul>
+
+<p>	Basées sur la notion d'<strong class="defin">événement</strong>, toutes ces méthodes adoptent un prototype semblable : </p>
+<ul>
+	<li> Elles retournent une valeur du <strong class="specialG">type générique</strong> <code class="prettyprint lang-c">WiFiEventHandler</code> (défini via un pointeur intelligent de mémoire partagée <code class="prettyprint lang-c">std::shared_ptr</code> <a class="external" href="https://en.cppreference.com/w/cpp/memory/shared_ptr" target="_BLANK"></a> pour ne pas encombrer la mémoire avec les événements).  </li>
+
+	<li> Elles admettent comme <strong class="title">argument</strong> un <strong>pointeur de fonction</strong> qui, lorsque l'événement attendu par la méthode se produit, permet d'appeler une <strong class="specialV">fonction de callback</strong> <a class="external" href="https://en.wikipedia.org/wiki/Callback_(computer_programming)" target="_BLANK">W</a> codée dans le programme utilisateur. </li>
+</ul>
+
+<p class="square"> Chaque type d'événement doit faire l'objet d'une déclaration de <strong class="defin">variable statique</strong> de <strong class="specialO">gestion d'événement Wi‑Fi</strong> de la forme : <br>
+<span class="inline">
+	<code class="prettyprint lang-c">static WiFiEventHandler <span class="nocode"><strong class="specialO">Wi‑Fi event handler</strong></span> = WiFi.<span class="nocode"><strong class="specialMg">method</strong></span>(<span class="nocode"><strong class="specialV">callback function</strong></span>);</code> 
+</span> <br>
+sachant que pour coder la <strong class="specialV">callback function</strong>, le fichier <code class="filename">ESP8266WiFiType.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiType.h" target="_BLANK">G</a> met à disposition un <strong class="specialG">type</strong> <code class="prettyprint lang-c">struct</code> <strong class="specialN">spécifique</strong> à chaque méthode pour déclarer son <strong class="defin">événement</strong> passé en <strong class="specialLB">argument</strong> : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">WiFiEventStationModeConnected</code> pour un événement de <strong>connexion</strong> d'une station ;  </li>
+
+	<li> <code class="prettyprint lang-c">WiFiEventStationModeDisconnected</code> pour un événement de <strong>déconnexion</strong> d'une station ;  </li>
+
+	<li> <code class="prettyprint lang-c">WiFiEventStationModeGotIP</code> pour un événement de <strong>configuration <em class="sigle">IP</em></strong>  d'une station ;  </li>
+
+	<li> etc. </li>
+</ul>
+<p> Une explication détaillée est donnée à la suite du code de l'exemple ci‑dessous. </p>
+
+<!-- expert -->
+<div class="exemples">
+<p class="exemple"> Avec ces <strong class="defin">méthodes de gestion d'événements</strong>, le <strong class="title">programme de démonstration</strong> précédent peut être codé comme ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;ESP8266WiFi.h&gt;
+
+#include "connectionID.h" // -> Access point SSID & PSWD
+
+const uint8_t LED_PIN = 2;    // ESP-12 module builtin led (negative logic)
+const uint8_t BUTTON_PIN = 0; // builtin button "flash"
+
+void setup() {
+  Serial.begin(115200);
+  Serial.flush();
+  Serial.println();
+
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  static WiFiEventHandler onConnectionHandler    = WiFi.onStationModeConnected(onConnected);
+  static WiFiEventHandler onGotIPhandler         = WiFi.onStationModeGotIP(onGotIP);
+  static WiFiEventHandler onDisconnectionHandler = WiFi.onStationModeDisconnected(onDisconnected);
+}
+
+void loop() {
+  if (buttonPushed()) {
+    WiFi.isConnected() ? disconnectFromAP() : connectToAP();
+  }
+
+  if (WiFi.isConnected()) {
+    analogWrite(LED_PIN, map(WiFi.RSSI(), -80, -30, 255, 0)); // negative logic
+  }
+  else {
+    digitalWrite(LED_PIN, !LOW); // negative logic
+  }
+  delay(5);
+}
+
+void connectToAP() {
+  WiFi.mode(WIFI_STA); // station mode
+  WiFi.begin(SSID, PSWD);
+  Serial.print("Connection in process...");
+}
+
+// callback on connection
+void onConnected(const WiFiEventStationModeConnected & event) {
+  Serial.printf("\nConnected to WLAN %s\n", event.ssid.c_str());
+  Serial.printf("Channel %d\tSignal strength = %d dBm\n", event.channel, WiFi.RSSI()); 
+  Serial.flush();
+}
+
+// callback on configuration
+void onGotIP(const WiFiEventStationModeGotIP & event) {
+  Serial.println("IPv4    = " + event.ip.toString());
+  Serial.println("Mask    = " + event.mask.toString());
+  Serial.println("Gateway = " + event.gw.toString());
+  Serial.println("DNS1    = " + WiFi.dnsIP(0).toString());
+  Serial.println("DNS2    = " + WiFi.dnsIP(1).toString());
+  Serial.flush();
+}
+
+void disconnectFromAP() {
+  WiFi.disconnect(true);
+  Serial.print("Disconnection ");
+}
+
+// callback on disconnection
+void onDisconnected(const WiFiEventStationModeDisconnected & event) {
+  Serial.printf("from %s complete\n", event.ssid.c_str());
+  Serial.flush();
+}
+
+bool buttonPushed(){
+  static bool previousButtonLevel = HIGH; // negative logic
+  static bool currentButtonLevel  = HIGH;  
+  previousButtonLevel = currentButtonLevel;
+  currentButtonLevel  = digitalRead(BUTTON_PIN); 
+  return (currentButtonLevel == LOW && previousButtonLevel == HIGH); // falling edge
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ainsi, grâce à la déclaration du <strong class="specialO">gestionnaire d'événement de connexion</strong> <code class="prettyprint lang-c">onConnectionHandler</code> (ligne nº 16), la <strong class="specialV">fonction de callback</strong> <code class="prettyprint lang-c">onConnected</code> est appelée automatiquement à chaque fois que la connexion au <strong><em class="sigle">WLAN</em></strong> devient effective. </p>
+
+<p> Cette fonction est déclarée avec un <strong class="specialT">argument</strong> <code class="prettyprint lang-c">event</code> de type <code class="prettyprint lang-c">WiFiEventStationModeDisconnected</code> passé <strong class="defin">par référence</strong>. Ce dernier permet de récupérer via ses attributs 3 éléments de la connexion : </p>
+<ul>
+	<li> l'<strong>adresse <em class="sigle">IP</em></strong> obtenue par la carte (<code class="prettyprint lang-c">event.ip</code>) ;  </li>
+
+	<li> le <strong>masque de sous‑réseau</strong> du <strong><em class="sigle">WLAN</em></strong> (<code class="prettyprint lang-c">event.mask</code>) ;  </li>
+
+	<li> l'adresse <strong><em class="sigle">IP</em></strong> de la <strong>passerelle</strong> du <strong><em class="sigle">WLAN</em></strong> (<code class="prettyprint lang-c">event.gw</code>).  </li>
+</ul>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3> Mise en œuvre d'une carte <em class="mark">ESP8266</em> en mode <em>access point</em> </h3>
+
+
+
+<p class="square"> La bibliothèque <code class="filename">ESP8266WiFi</code>permet la <strong class="title">mise en œuvre</strong> d'un <strong class="specialLB">point d'accès</strong> sur une carte à microcontrôleur <strong>ESP8266</strong>. Avec des <strong class="cons">potentialités limitées </strong>comparativement à celles d'un routeur, il permet la connexion de <strong class="defin">jusqu'à 8 stations</strong> avec la prise en charge d'un <strong>service <em class="sigle">DHCP</em></strong>. </p>
+
+<p> Pour cette mise en œuvre, on dispose des <strong>méthodes</strong> suivantes, toutes déclarées dans le fichier d'en‑tête <code class="filename">ESP8266WiFiAP.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiAP.h" target="_BLANK">G</a> :  </p>
+
+<ul> 
+  <li> <code class="prettyprint lang-c">WiFi.softAP</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html#softap" target="_BLANK"></a> code l'activation du point d'accès <strong class="specialO">configuration <em class="sigle">IP</em> statique</strong> choisie pour la carte programmée en mode <strong>station</strong>. </li>
+  <ul>
+		<li> Elle possède <strong>plusieurs variantes d'appel</strong> (surcharges), la plus usuelle étant de la forme : <br>
+	  <span class="inline">
+			<code class="prettyprint lang-c">WiFi.softAP(<span class="nocode"><strong class="specialT"><em class="sigle">SSID</em></strong></span>, <span class="nocode"><strong class="specialO">password</strong></span>) </code>
+		</span> où <strong class="specialT"><em class="sigle">SSID</em></strong> et <strong class="specialO">password</strong> sont les identifiants de connexion au point d'accès (cf. supra <a class="supra" href="Rc3-4_coucheLiaisonWifi.html#SSID"></a>) ;  </li>
+
+		<li> Elle retourne une valeur de type <code class="prettyprint lang-c">bool</code> qui indique le <strong class="pros">succès de l'activation</strong>.  </li>
+	</ul>
+
+	<div class="expert">
+	<div class="nobullet"> Dans la forme d'appel ci‑dessus, le paramètre <strong class="specialO">password</strong> est <strong class="defin">optionnel</strong>. S'il est omis, le point d'accès est ouvert à toute connexion <strong class="cons">sans contrôle d'accès</strong>.  </div>	
+
+	<div class="nobullet"> La méthode <code class="prettyprint lang-c">WiFi.softAP</code> possède d'<strong>autres paramètres optionnels</strong> : </div>
+	<ul>
+		<li> <strong class="defin">channel</strong>, de type <code class="prettyprint lang-c">int</code>, pour fixer le <strong>canal Wi‑Fi</strong> utilisé ; </li>
+
+		<li> <strong class="defin">hidden</strong>, de type <code class="prettyprint lang-c">bool</code>, pour <strong>cacher le <em class="sigle">SSID</em></strong> <a class="supra" href="Rc3-4_coucheLiaisonWifi.html#securite"></a> ; </li>
+
+		<li> <strong class="defin">max connection</strong>, de type <code class="prettyprint lang-c">int</code>, pour <strong class="defin">limiter le nombre de stations</strong> prises en charge par le point d'accès (la valeur par défaut est <code>4</code>, la valeur maximale <code>8</code>). </li>
+	</ul>	
+	</div><!-- expert -->	
+  
+  <li> <code class="prettyprint lang-c">WiFi.softAPConfig</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html#softapconfig" target="_BLANK"></a> code la <strong class="defin">configuration IP</strong> du sous‑réseau mis en œuvre par le point d'accès. </li>
+  <ul>
+  	<li> Elle admet de <strong class="specialT">3 arguments</strong> de classe <code class="prettyprint lang-c">IPAddress</code> qui codent respectivement l'<strong>adresse <em class="sigle">IP</em></strong> du point d'accès, la <strong>passerelle</strong> par défaut et le <strong>masque de sous‑réseau</strong>. </li>
+
+  	<div class="expert">
+  	<div class="nobullet"> Implicitement, les adresses des <strong>résolveurs <em class="sigle">DNS</em></strong> sont attribuées <strong class="defin">identiques à celle de la passerelle</strong>. Ce choix est motivé par le fait que la carte elle‑même n'a pas la capacité de mettre en œuvre cette fonctionnalité. </div>	
+  	</div><!-- expert -->
+
+  	<li> Sa <strong>valeur de retour</strong>, de type <code class="prettyprint lang-c">bool</code>, exprime le <strong class="pros">succès de la configuration</strong>.  </li>
+	</ul>
+
+	<div class="expert">
+  <div class="nobullet"> Il est <strong class="pros">recommandé</strong> de configurer le point d'accès avec un <strong>réseau en</strong> <code class="cmd">/24</code> (typiquement, <code class="cmd">192.168.x.0/24</code>) et d'attribuer l'adresse <code class="cmd">1</code> à la carte. En effet, le <strong>service <em class="sigle">DHCP</em></strong> sélectionne automatiquement une <strong class="specialO">plage d'adresses dynamiques</strong> décalée de <code>99</code> par rapport à l'adresse de la carte – donc, commençant à l'adresse <code class="cmd">100</code> si la carte a l'adresse <code class="cmd">1</code>, ce qui est « lisible ». </div>
+
+	<div class="nobullet"> Si le programme utilisateur n'appelle <strong class="warning">pas</strong> la méthode <code class="prettyprint lang-c">WiFi.softAPConfig</code>, alors le point d'accès adopte la <strong class="defin">configuration par défaut</strong> <code class="cmd">192.168.4.1/24</code> et attribue aussi l'adresse <code class="cmd">1</code> à la passerelle. La plage d'adresses dynamiques commence alors à l'adresse <code class="cmd">2</code>. </div>
+	</div><!-- expert -->	
+  
+  <li> <code class="prettyprint lang-c">WiFi.softAPIP</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html#softapgetstationnum" target="_BLANK"></a>, sans argument retourne l'<strong class="defin">adresse <em class="sigle">IP</em></strong> du point d'accès, de classe <code class="prettyprint lang-c">IPAddress</code>.  </li>
+
+  <div class="nobullet"> Cette méthode peut être utilisée pour déterminer si le point d'accès est correctement activé.  </div>
+
+
+	<li> <code class="prettyprint lang-c">WiFi.softAPgetStationNum</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html#softapgetstationnum" target="_BLANK"></a>, sans argument retourne le <strong class="defin">nombre de stations connectées</strong> au point d'accès.  </li>
+  
+  <div class="expert">
+  <div class="nobullet"> La bibliothèque <code class="filename">ESP8266WiFi</code> ne déclare <strong class="cons">pas de méthode</strong> pour récupérer les informations (<em class="english">hostname</em>, adresse <em class="sigle">MAC</em>, adresse <em class="sigle">IP</em>) des stations connectées au point d'accès. </div>
+  </div><!-- expert -->
+
+	<li> <code class="prettyprint lang-c">WiFi.softAPdisconnect</code> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html#softapgetstationnum" target="_BLANK"></a>, code la <strong class="defin">désactivation</strong> du point d'accès.   </li>
+	<ul>
+		<li> Elle prend un unique <strong class="specialT">argument</strong> de type <code class="prettyprint lang-c">bool</code> qui, s'il est passé à la valeur <code class="prettyprint lang-c">true</code>, <strong class="defin">désactive</strong> aussi le mode <strong>access point</strong>. </li>
+
+		<li> Sa <strong>valeur de retour</strong>, de type <code class="prettyprint lang-c">bool</code>, exprime le succès de la désactivation. </li>
+	</ul>
+</ul>
+
+<div class="exemples" id="exESP8266softAP" style="margin-top: 1.5em">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/ESP8266nodeMCUmodeAP.png" width="350px" style="padding-top: 0.2em">
+<p class="exemple"> Le <strong class="title">programme de démonstration</strong> ci‑après est codé pour activer à volonté un <strong class="defin">point d'accès</strong> sur une <strong class="defin">carte de développement NodeMCU</strong> à <strong>microcontrôleur ESP8266</strong>. Comme pour l'exemple de démonstration d'une connexion (cf. supra <a class="supra" href="Rc3-4_coucheLiaisonWifi.html#exESP8266softconnect" ></a> : </p>
+<ul>
+	<li> il exploite le <strong>bouton intégré</strong> « flash » et la <strong>led intégrée</strong> au module <em class="mark">ESP‑12</em> ; </li>
+
+	<li> il déporte les <strong class="defin">identifiants de connexion</strong> au point d'accès dans un fichier d'en‑tête <code class="filename">connectionID.h</code> ; </li>
+
+	<li> Le programme est structuré avec <strong class="defin">3 fonctions auxiliaires</strong>, ici : </li>
+	<ul>
+		<li> <code class="prettyprint lang-c">buttonPushed</code> qui détecte un appui sur le bouton « flash » ;  </li>
+
+		<li> <code class="prettyprint lang-c">enableAP</code> qui active le point d'accès ;  </li>
+
+		<li> <code class="prettyprint lang-c">disableAP</code> qui désactive le point d'accès. </li>
+	</ul>
+</ul>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;ESP8266WiFi.h&gt;
+
+#include "connectionID.h" // -> Access point SSID & PSWD
+
+const uint8_t LED_PIN = 2;    // ESP-12 module builtin led (negative logic)
+const uint8_t BUTTON_PIN = 0; // builtin button "flash"
+
+// AP subnet configuration 
+IPAddress ap_localIP (192, 168, 10, 1);
+IPAddress ap_gateway (192, 168, 10, 1);
+IPAddress ap_subnet  (255, 255, 255,0);
+
+
+void setup() {
+  Serial.begin(115200);
+  Serial.flush();
+  Serial.println();
+
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+}
+
+void loop() {
+  static int8_t previousStationNum = -1;
+  if (buttonPushed()) {
+    if (WiFi.softAPIP()) {
+      disableAP();
+      previousStationNum = -1;
+    }
+    else {
+      enableAP();
+    }
+  }
+  
+  if (WiFi.softAPIP()) {
+    digitalWrite(LED_PIN, !HIGH); // LED negative logic
+    if (previousStationNum != WiFi.softAPgetStationNum()) {
+      Serial.printf("Nb. of Nb. of stations connected: %d\n", WiFi.softAPgetStationNum());
+      previousStationNum = WiFi.softAPgetStationNum();
+    }
+  }
+  else {
+    digitalWrite(LED_PIN, !LOW);  // LED negative logic
+  }
+}
+
+bool buttonPushed() {
+  static bool previousButtonLevel = HIGH; // negative logic
+  static bool currentButtonLevel  = HIGH;  
+  previousButtonLevel = currentButtonLevel;
+  currentButtonLevel  = digitalRead(BUTTON_PIN); 
+  return (currentButtonLevel == LOW && previousButtonLevel == HIGH); // falling edge
+}
+
+void enableAP() {
+  WiFi.mode(WIFI_AP); // station mode
+  if (WiFi.softAPConfig(ap_localIP, ap_gateway, ap_subnet)) {
+    Serial.println("AP configured with:");
+    Serial.println("IPv4    = " + ap_localIP.toString());
+    Serial.println("Mask    = " + ap_subnet.toString());
+    Serial.println("Gateway = " + ap_gateway.toString());
+    Serial.flush();
+  }
+  else {
+     Serial.println("AP configuration failed");
+  }
+  if (WiFi.softAP(SSID, PSWD, false)) {
+    Serial.println("AP enabled");
+  }
+  else {
+     Serial.println("AP enabling failed");
+  }
+}
+
+void disableAP() {
+  if (WiFi.softAPdisconnect(true)) {
+    Serial.println("AP disabled");
+  }
+  else {
+    Serial.println("AP disabling failed");
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Lors d'une <strong class="title">exécution du programme</strong>, si par exemple l'utilisateur : </p>
+<ol class="lower">
+	<li> <strong>active le point d'accès</strong> en appuyant une première fois sur le bouton « flash » de la carte, </li>
+
+	<li> <strong>se connecte</strong> au point d'accès avec son smartphone, </li>
+
+  <li> <strong>se déconnecte</strong> du point d'accès, </li>
+
+  <li> <strong>déactive le point d'accès</strong> en appuyant une deuxième fois sur le bouton « flash » de la carte, </li>
+</ol>
+<p> alors on obtient sur le <strong class="defin">moniteur série</strong> un affichage comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+AP configured with:
+IPv4    = 192.168.10.1
+Mask    = 255.255.255.0
+Gateway = 192.168.10.1
+AP enabled
+Nb. of stations connected: 0
+Nb. of stations connected: 1
+Nb. of stations connected: 0
+AP disabled
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> Dans le fichier d'en‑tête <code class="filename">ESP8266WiFiAP.h</code>, on ne trouve malheureusement <strong class="cons">aucune méthode</strong> pour <strong class="defin">identifier une station</strong> connectée au point d'accès, par son nom d'hôte, son adresse <em class="sigle">IP</em> ou son adresse <em class="sigle">MAC</em>. </p>	
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Gestion des événements de connexion en tâche de fond </h4>
+
+
+<p> Comme pour le mode <em>station</em>, le fichier d'en‑tête <code class="filename">ESP8266WiFiGeneric.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiGeneric.h" target="_BLANK"></a> déclare des <strong>méthodes</strong> pour <strong class="title">gérer les connexions au  point d'accès</strong> en <strong class="pros">tâches de fond</strong> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#wifieventhandler" target="_BLANK"></a>. En particulier, on a : </p>
+<ul>
+ 	<li> <code class="prettyprint lang-c">onSoftAPModeStationConnected</code> pour détecter la <strong>connexion</strong> d'une station ; </li>
+ 
+ 	<li> <code class="prettyprint lang-c">onSoftAPModeStationDisconnected</code>  pour détecter la <strong>déconnexion</strong> d'une station. </li>
+</ul>
+
+<p> Et les <strong class="specialG">types</strong> <code class="prettyprint lang-c">struct</code> <strong class="specialN">spécifiques</strong> associés respectivement à ces deux méthodes, déclarés dans le fichier d'en‑tête <code class="filename">ESP8266WiFiType.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiType.h" target="_BLANK">G</a>, comportent <strong class="defin">deux attributs</strong> : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">mac</code>, un tableau de 6 éléments, qui contient l'<strong>adresse <em class="sigle">MAC</em></strong> de la station connectée ou déconnectée ;   </li>
+
+	<li> <code class="prettyprint lang-c">aid</code>, un entier positif qui identifie le <strong>numéro</strong> attribué par le point d'accès à la station connectée ou déconnectée (en anglais, <em class="english">association identifier</em>). </li>
+</ul>
+
+
+<!-- expert -->
+<div class="exemples">
+<p class="exemple"> Avec ces <strong class="defin">méthodes de gestion d'événements</strong>, le <strong class="title">programme de démonstration</strong> précédent peut être codé comme ci‑dessous, en apportant les <strong class="pros">éléments d'identification</strong> des stations qui faisaient défaut. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;ESP8266WiFi.h&gt;
+
+#include "connectionID.h" // -> Access point SSID & PSWD
+
+const uint8_t LED_PIN = 2;    // ESP-12 module builtin led (negative logic)
+const uint8_t BUTTON_PIN = 0; // builtin button "flash"
+
+// AP subnet configuration 
+IPAddress ap_localIP (192, 168,  10, 1);
+IPAddress ap_gateway (192, 168,  10, 1);
+IPAddress ap_subnet  (255, 255, 255, 0);
+
+
+void setup() {
+  Serial.begin(115200);
+  Serial.flush();
+  Serial.println();
+
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  static WiFiEventHandler onSoftAPConnectedHandler    = WiFi.onSoftAPModeStationConnected(onStationConnected);
+  static WiFiEventHandler onSoftAPDisconnectedHandler = WiFi.onSoftAPModeStationDisconnected(onStationDisconnected);
+}
+
+void loop() {
+  if (buttonPushed()) {
+    WiFi.softAPIP() ? disableAP() : enableAP();
+  }
+  digitalWrite(LED_PIN, !WiFi.softAPIP()); // LED negative logic
+}
+
+bool buttonPushed() {
+  static bool previousButtonLevel = HIGH; // negative logic
+  static bool currentButtonLevel  = HIGH;  
+  previousButtonLevel = currentButtonLevel;
+  currentButtonLevel  = digitalRead(BUTTON_PIN); 
+  return (currentButtonLevel == LOW && previousButtonLevel == HIGH); // falling edge
+}
+
+void enableAP() {
+  WiFi.mode(WIFI_AP); // station mode
+  if (WiFi.softAPConfig(ap_localIP, ap_gateway, ap_subnet)) {
+    Serial.println("AP configured with:");
+    Serial.println("IPv4    = " + ap_localIP.toString());
+    Serial.println("Mask    = " + ap_subnet.toString());
+    Serial.println("Gateway = " + ap_gateway.toString());
+    Serial.flush();
+  }
+  else {
+     Serial.println("AP configuration failed");
+  }
+  if (WiFi.softAP(SSID, PSWD, false)) {
+    Serial.println("AP enabled");
+  }
+  else {
+     Serial.println("AP enabling failed");
+  }
+}
+
+void disableAP() {
+  if (WiFi.softAPdisconnect(true)) {
+    Serial.println("AP disabled");
+  }
+  else {
+    Serial.println("AP disabling failed");
+  }
+}
+
+// callback on connection
+void onStationConnected(const WiFiEventSoftAPModeStationConnected & event) {
+  Serial.printf("New station connected: id. %d, MAC ", event.aid);
+  displayMACaddress(event.mac);
+  Serial.printf("Nb. of stations connected: %d\n", WiFi.softAPgetStationNum());
+}
+
+// callback on disconnection
+void onStationDisconnected(const WiFiEventSoftAPModeStationDisconnected & event) {
+  Serial.printf("Station disconnected:  id. %d, MAC ", event.aid);
+  displayMACaddress(event.mac);
+  Serial.printf("Nb. of stations connected: %d\n", WiFi.softAPgetStationNum());
+}
+
+void displayMACaddress(const uint8_t * mac) {
+  for (uint8_t byteRank = 0; byteRank <= 5; byteRank++) {
+    Serial.print(mac[byteRank], HEX);
+    byteRank < 5 ? Serial.print("-") : Serial.println();
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En gardant le <strong class="title">même scénario d'exécution</strong> que pour la version précédente du programme, on obtient sur le <strong class="defin">moniteur série</strong> une sortie de la forme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+AP configured with:
+IPv4    = 192.168.10.1
+Mask    = 255.255.255.0
+Gateway = 192.168.10.1
+AP enabled
+New station connected: id. 1, MAC XX-XX-XX-XX-XX-XX
+Nb. of stations connected: 1
+Station disconnected:  id. 1, MAC XX-XX-XX-XX-XX-XX
+Nb. of stations connected: 0
+AP disabled
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3> Autres fonctionnalités du module de bibliothèque <em class="mark">ESP8266WiFi</em> </h3>
+
+
+<h4>	Scan des réseaux <em class="mark">Wi‑Fi</em> environnants </h4>
+
+
+<p> Un <strong class="title">scan de réseaux Wi‑Fi</strong> consiste à <strong class="defin">détecter</strong> et <strong class="defin">lister</strong> les <strong>réseaux Wi‑Fi</strong> environnants d'un système. Sur une carte à microcontrôleur, une telle fonctionnalité peut être <strong class="pros">utile</strong> : </p>
+<ul>
+	<li> en elle‑même – si c'est précisément le rôle qu'on assigne au programme utilisateur : </li>
+
+	<li> ou pour apporter une souplesse de connexion au système (pour par exemple chosir tel ou tel réseau en fonction de la force du signal). </li>
+</ul>
+
+<p> Les <strong class="title">méthodes de scan</strong> <a class="external" href="https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/scan-class.html" target="_BLANK"></a> sont déclarées dans le fichier d'en‑tête <code class="filename">ESP8266WiFiScan.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiScan.h" target="_BLANK">G</a>. </p>
+<ul>
+	<li> La plus utile est la méthode : <br>
+		<span class="inline">
+			<code class="prettyprint lang-c">WiFi.scanNetworksAsync(<span class="nocode"><strong class="specialO">onComplete</strong></span>, <span class="nocode"><strong class="specialT">show_hidden</strong></span>)</code>
+		</span>	<br>
+		qui lance un <strong class="specialLB">scan en tâche de fond</strong> avec : </li>
+		<ul>
+			<li> <strong>mémorisation</strong> des caractéristiques des réseaux détectés ; </li>
+			<li> appel de la <strong class="specialV">fonction de callback</strong> <strong class="specialO">onComplete</strong> (premier argument) lorsque le scan est achevé ;  </li>
+		
+			<li> repérage des <strong>réseaux cachés</strong> lorsque l'argument <strong class="specialT">show_hidden</strong> est passé avec la valeur <code class="prettyprint lang-c">true</code>. </li>
+		</ul>
+
+	<li> On dispose également de diverses méthodes pour récupérer les <strong class="specialLB">caractéristiques des réseaux scannées</strong>, toutes prenant un <strong>argument numérique</strong> <strong class="specialO">n</strong> qui spécifie le <strong>numéro d'ordre</strong> du réseau scanné parmi tous ceux détectés. En particulier, on a :  </li>
+	<ul>
+		<li> <code class="prettyprint lang-c">WiFi.SSID(<span class="nocode"><strong class="specialO">n</strong></span>)</code> retourne le <strong><em class="sigle">SSID</em></strong> du réseau nº <strong class="specialO">n</strong> scanné.</li>
+	
+		<li> <code class="prettyprint lang-c">WiFi.channel(<span class="nocode"><strong class="specialO">n</strong></span>)</code> retourne le <strong>canal Wi‑Fi</strong> exploité par le réseau nº <strong class="specialO">n</strong> scanné.</li>
+	  
+	  <li> <code class="prettyprint lang-c">WiFi.encryptionType(<span class="nocode"><strong class="specialO">n</strong></span>)</code> pour retourne le <strong>chiffrement</strong> utilisé par le réseau nº <strong class="specialO">n</strong> scanné. La valeur retournée est du <strong class="specialG">type énuméré</strong> <code class="prettyprint lang-c">wl_enc_type</code> qui est déclaré dans le fichier d'en‑tête <code class="filename">wl_definitions.h</code> <a class="external" href="https://github.com/esp8266/Arduino/blob/master/cores/esp8266/wl_definitions.h" target="_BLANK">G</a>. </li>
+	  </li>
+	</ul>
+</ul>
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="title">programme de démonstration</strong> ci‑dessous est codé pour une <strong class="defin">carte de développement NodeMCU</strong> à <strong>microcontrôleur ESP8266</strong>. À chaque appui sur le <strong>bouton intégré</strong> « flash » intégré à la carte, il opère un <strong class="defin">scan asynchrone</strong> des <strong>réseaux Wi‑Fi</strong> environnants. </p>
+
+<p> Via la <strong class="specialV">fonction de callback</strong> <code class="prettyprint lang-c">displayScan</code> (cf. les lignes nº 24 à 33), pour chaque <strong>réseau Wi‑Fi</strong> détecté, le programme produit sur le moniteur série une <strong class="specialLB">ligne d'affichage</strong>, avec dans l'ordre : </p>
+<ul>
+	<li> son <strong><em class="sigle">SSID</em></strong> (sauf si le réseau est caché) ;  </li>
+
+	<li> le <strong>canal Wi‑Fi</strong> qu'il exploite ; </li>
+
+	<li> la <strong>force du signal</strong> détecté, exprimé en dBm ; </li>
+
+	<li> l'éventuel algorithme de chiffrement qu'il utilise ; </li>
+
+	<li> si le réseau est <strong>caché ou non</strong> (ce qui permet de comprendre pourquoi, le cas échéant, le <strong><em class="sigle">SSID</em></strong> du réseau ne s'affiche pas). </li>
+</ul>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;ESP8266WiFi.h&gt;
+
+const int BUTTON_PIN = 0; // builtin button "flash"
+
+const char * encryption[] = {"?", "?", "WPA - TKIP", "?", "WPA2 - CCMP", "WEP",
+                             "?", "NONE", "AUTO"};
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println();
+
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(1000);
+}
+
+void loop() {
+  if (buttonPushed()) {
+    WiFi.scanNetworksAsync(displayScan, true); // true -> hidden networks displayed
+  }
+}
+
+// callback function called when scan completed
+void displayScan(int networksFound) {
+  Serial.printf("%d networks found\n", networksFound);
+  for (int n = 0; n < networksFound; n++) {
+    Serial.printf("%2d: %30s ", n + 1, WiFi.SSID(n).c_str());
+    Serial.printf("Ch: %2d (%d dBm) ", WiFi.channel(n), WiFi.RSSI(n));
+    Serial.printf("%s %s\n", encryption[WiFi.encryptionType(n)], WiFi.isHidden(n) ? "(hidden)" : " ");
+    Serial.flush();
+  }
+  Serial.println();
+}
+
+bool buttonPushed() {
+  static bool previousButtonLevel = HIGH; // negative logic
+  static bool currentButtonLevel  = HIGH;  
+  previousButtonLevel = currentButtonLevel;
+  currentButtonLevel  = digitalRead(BUTTON_PIN); 
+  return (currentButtonLevel == LOW && previousButtonLevel == HIGH); // falling edge
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+ 
+<h4> Mise en œuvre de clients applicatifs </h4>	
+
+
+
+
+
+
+	
+
+
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

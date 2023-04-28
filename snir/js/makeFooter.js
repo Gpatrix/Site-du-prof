@@ -1,0 +1,23 @@
+var footerBox = document.createElement("div");
+	footerBox.id = "auteur";
+	footerBox.className = "bandContent";
+var licenceLink = document.createElement("a");
+	licenceLink.id = "cclink";
+  licenceLink.href = "https://creativecommons.org/licenses/by-nc-sa/4.0/";
+  licenceLink.target = "_BLANK";
+  licenceLink.style = "margin-left: 2em";
+var licenceIcons = document.createElement("img");
+  licenceIcons.id = "licence";
+  licenceIcons.src = mainPath + "img/iconesLicenceCC.png";
+licenceLink.appendChild(licenceIcons);
+var blankSpace = document.createTextNode("    ");
+var authorLink = document.createElement("a");
+  authorLink.id = "mailto";
+  authorLink.href = "mailto:" + authorMail + "?subject=SNIR";  
+var authorNameText = document.createTextNode(authorName + " \u2709"); 
+  authorLink.appendChild(authorNameText);
+footerBox.appendChild(licenceLink);
+footerBox.appendChild(blankSpace);
+footerBox.appendChild(authorLink);
+document.getElementsByTagName("footer")[0].appendChild(footerBox);
+

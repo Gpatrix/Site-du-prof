@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="3"
+	data-pagenumber="III"
+	data-pageState="chantier"
+	data-pageheadtitle="Liaison Ethernet"
+	data-pagefulltitle="La couche liaison  –  Technologie Ethernet"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaison2.png" width="300px" style="padding-top: 0.5em">
+<p class="square"> Comme brièvement expliqué au chapitre R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#protocolesLiaison" target="_BLANK"></a>, la <strong class="title">couche Liaison</strong> a pour but d'établir une <strong class="defin">connexion logique</strong> entre <strong>nœuds adjacents</strong> dans un réseau, en les identifiant par leur <strong>adresse physique</strong> – dite adresse <strong><em class="sigle">MAC</em></strong>. En tant que <strong class="defin">couche basse</strong>, elle est implémentée sur chaque nœud et opère <strong>de proche en proche</strong>. </p>
+
+<p> Dans le modèle <strong><em class="sigle">OSI</em></strong>, elle constitue une <strong class="defin">couche d'interface</strong> entre les <strong>couches supérieures</strong>, purement logicielles, et la <strong>couche physique</strong>, purement matérielle. Son implémentation est en partie logicielle, en partie matérielle <a class="external" href="https://fr.wikipedia.org/wiki/Couche_liaison_de_données" target="_BLANK">W</a>. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheLiaison.png" width="200px" style="padding-top: 0.0em">
+<p> Rappelons également que, du fait de la diversité des technologies de la couche <em>Physique</em>, la <strong class="title">couche Liaison</strong> a été historiquement divisée en <strong>deux sous‑couches</strong> : </p>
+<ul>
+	<li> la sous‑couche <strong class="specialLB"><em class="sigle">LLC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Logical_link_control" target="_BLANK">W</a> – pour <strong>logical link control</strong> – qui est principalement dédiée au <strong class="defin">contrôle de flux</strong> ; </li>
+
+	<li> la sous‑couche <strong class="specialLB"><em class="sigle">MAC</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/Medium_access_control" target="_BLANK">W</a> – pour <strong>medium access control</strong> – est <strong class="defin">spécifique</strong> à chaque <strong>technologie de liaison</strong> et qui prend en charge de nombreux aspects, notamment la <strong class="defin">fragmentation‑défragmentation</strong> des trames, leur <strong class="defin">étiquetage</strong>, le <strong class="defin">filtrage</strong>, le <strong class="defin">contrôle d'erreur</strong>… </li>
+</ul>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/technosLiaison.png" width="450px" style="padding-top: 1em">
+<p class="square"> Dans la pratique, les différentes <strong class="title">technologies de liaison</strong> ne s'inscrivent pas seulement dans la <strong class="specialR">couche Liaison</strong>, mais aussi dans la <strong class="specialDR">couche physique</strong> – rappelons que ces deux couches ne font qu'une dans le <strong>modèle <em class="sigle">TCP/IP</em></strong> qui était le modèle de référence lors de l'invention de la technologie <strong>Ethernet</strong>. </p>
+</div><!-- display -->
+
+<p> Elles ont été normalisées par des <strong>standards</strong> développés, non <strong class="cons">pas par l'<em class="sigle">IETF</em></strong> comme pour les couches supérieures, mais par des entreprises de l'<strong class="defin">industrie des télécommunication</strong> « fédérées » par l' <strong class="defin"><em class="sigle">IEEE</em></strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#organismes" target="_BLANK"></a>).  </p>
+
+<p> Plus précisément, ces <strong class="title">différents standards</strong> initiaux de technologies de liaisons ont tous été regroupés sous l'appellation <strong class="defin"><em class="sigle">IEEE 802</em></strong>  <a class="external" href="https://fr.wikipedia.org/wiki/IEEE_802" target="_BLANK">W</a>. On en compte une trentaine, mais dont <strong>très peu</strong> bénéficient d'un <strong class="pros">groupe de travail actif</strong>. Ainsi :    </p>
+
+<ul>
+	<div class="expert">
+	<li> Le standard <strong class="specialLB"><em class="sigle">802.2</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/IEEE_802.2" target="_BLANK">W</a> régit les protocoles de la <strong class="specialR">sous‑couche <em class="sigle">LLC</em></strong>. Son groupe de travail a été dissous en 1998 mais le standard a fait l'objet de la <strong>norme <em class="sigle">ISO/IEC 8802‑2:1998</em></strong> <a class="external" href="https://www.iso.org/fr/standard/30174.html" target="_BLANK"></a>, quasiment figée depuis. </li>
+  </div><!-- expert -->
+
+  <li> Le standard <strong class="specialLB"><em class="sigle">802.3</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/IEEE_802.3" target="_BLANK">W</a> régit la technologie de <strong>liaison câblée</strong> <strong class="defin">Ethernet</strong> (qui fait l'objet du présent chapitre). Son groupe de travail est <strong class="pros">toujours actif</strong>. </li>
+  
+  <div class="expert">
+  <li> Le standard <strong class="specialLB"><em class="sigle">802.9</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/IEEE_802.2" target="_BLANK">W</a> régit la technologie <strong class="defin"><em class="sigle">ISDN</em></strong> – pour <em class="english">integrated service digital network</em>, en français <strong><em class="sigle">RNIS</em></strong> (cf. chap. R2‑VIII <a class="previous" href="../R2-Applications/Rc2-8_fluxMultimedia.html#RNIS" target="_BLANK"></a>). Dépassé par le développement de la technologie <strong>FastEthernet</strong> à partir de 1995, son groupe de travail a été dissous en 1998 et la technologie est <strong class="cons">obsolète</strong>. </li>
+  </div><!-- expert -->
+	
+  <li> Le standard <strong class="specialLB"><em class="sigle">802.11</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/IEEE_802.11" target="_BLANK">W</a> régit la technologie de <strong>liaison sans‑fil</strong> <strong class="defin">Wi‑Fi</strong> (qui fait l'objet du chapitre R3‑VI <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R3-TransportReseauLiaison/Rc3-4%C3%82%C2%A0coucheLiaisonWifi.html" target="_BLANK"></a>). Son groupe de travail est <strong class="pros">toujours actif</strong>, sachant que c'est principalement au sein de la <strong>Wi‑Fi Alliance</strong> que cette technologie se développe.  </li>
+	
+  <li> Le standard <strong class="specialLB"><em class="sigle">802.15</em></strong> <a class="external" href="https://en.wikipedia.org/wiki/IEEE_802.11" target="_BLANK">W</a> régit l'ensemble des <strong>technologies sans‑fil</strong> de <strong class="defin"><em class="sigle">WPAN</em></strong> – pour <em class="english">wireless local area network</em> (qui fait l'objet du chapitre R3‑V <a class="next" href="Rc3-5_technologiesWPAN.html" target="_BLANK"></a>). Son groupe de travail est <strong class="pros">toujours actif</strong> et se divise en plusieurs sous‑groupes, sachant que ce sont les <strong>alliances</strong> respectives de ces technologies qui les font évoluer.  </li>
+</ul>
+<p> Toutes ces normes sont portées au niveau international par des <strong class="defin">normes <em class="sigle">ISO/IEC</em></strong>. Par exemple, la norme <strong><em class="sigle">ISO/IEC 8802‑3</em></strong> </p>
+
+
+<p class="square"> Objectif du chapitre : découverte de la technologie Ethernet. </p>
+
+<p> <strong class="title">Ethernet</strong> n'est pas seulement utilisé dans les réseaux <strong><em class="sigle">TCP/IP</em></strong> mais aussi dans les <strong>réseaux locaux industriels</strong>.    </p>
+
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+<h2> La technologie <em class="mark">Ethernet</em>  –  Généralités </h2>
+
+
+
+<h3> Description générale </h3>
+
+
+<div class="important">
+<p> La <strong class="title">technologie Ethernet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Ethernet" target="_BLANK">W</a> est la technologie <strong>matérielle</strong> et <strong>logicielle</strong> de <strong class="defin">liaison filaire</strong> qui est depuis plus d'une décennie <strong class="pros">universellement adoptée</strong> dans les réseaux informatiques, qu'il s'agissent de <strong><em class="sigle">LAN</em></strong> ou de <strong><em class="sigle">WAN</em></strong>. </p>
+
+<p> Elle est opérationnelle sur des câbles aussi bien en <strong class="defin">cuivre</strong> (à paires torsadées) qu'en <strong class="defin">fibre optique</strong>, avec des débits pouvant aller jusqu'à respectivement <strong>25 Gb/s</strong> et <strong>400 Gb/s</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/EthernetAllianceLogo.png" width="200px" style="padding-top: 0.0em">
+<p> Comme pour la plupart des autres technologies de liaison (<em class="mark">Wi‑Fi</em>, protocoles domotiques, etc. – cf. les chap. suivants), le développement de la technologie <strong>Ethernet</strong> est fédéré par une alliance d'entreprises et d'organisation appelée <strong class="title">Ethernet Alliance</strong> <a class="external" href="https://en.wikipedia.org/wiki/Ethernet_Alliance" target="_BLANK">W</a>. Et même s'ils sont relativement peu nombreux (quelques centaines seulement), elle compte parmi ses membres tous les grands constructeurs de matériel informatique (<em class="mark">Cisco</em>, <em class="mark">Broadcom</em>, <em class="mark">Juniper</em>, <em class="mark">Hewlett Packard</em>, <em class="mark">Texas Instruments</em>, etc.) </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/POElogo.png" width="150px" style="padding-top: 0.0em">
+<p> Par ailleurs, la technologie <strong>Ethernet</strong> se distingue des autres technologies de liaison, par ce qu'elle ne se limite pas aux liaisons de données. Ses variantes dites <strong class="title"><em class="sigle">POE</em></strong> – pour <strong class="title">power over Ethernet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Alimentation_électrique_par_câble_Ethernet" target="_BLANK">W</a> – permettent l'<strong class="defin">alimentation en tension continue</strong> (48 V) d'équipements à faible consommation (environ 15 W maximum, par exemple, certains modèles de téléphone <em class="sigle">IP</em>, de caméra <em class="sigle">IP</em>, de point d'accès <em class="mark">Wi‑Fi</em>).  </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+
+<h3> Historique des évolutions </h3>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/MetcalfeBoggs.jpg" width="200px" style="padding-top: 0.0em">
+<p> La <strong class="title">technologie Ethernet</strong> est très ancienne. Elle a été inventée dès le début des années 1970, notamment par Robert Metcalfe <a class="external" href="https://en.wikipedia.org/wiki/Robert_Metcalfe" target="_BLANK">W</a> et David Boggs <a class="external" href="https://en.wikipedia.org/wiki/David_Boggs" target="_BLANK">W</a>, alors jeunes chercheurs au centre <em class="mark">Xerox Palo Alto reseach center (PARC)</em> <a class="external" href="https://en.wikipedia.org/wiki/PARC_(company)" target="_BLANK">W</a> – la photo ci‑contre ne correspond pas à cette époque. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/EthernetFIrstDraft.png" width="400px" style="padding-top: 0.0em">
+<p> Ils se sont inspiré du principe de la <strong class="defin">commutation de paquets</strong> mise en œuvre dans le <strong><em class="sigle">WAN</em></strong> nommé <strong>Arpanet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/ARPANET" target="_BLANK">W</a> et l'on appliqué à des ordinateurs du centre, tous reliés à un câble coaxial commun nommé « <strong>Ether</strong> », via des interfaces spécialement conçues. Ils ont ainsi formé le <strong class="specialLB">premier <em class="sigle">LAN</em></strong>, avec un débit nominal remarquable de <strong>2,94 Mb/s</strong>. Cette implémentation a par la suite été standardisée sous la référence <strong class="specialLB"><em class="sigle">10BASE2</em></strong> </p>
+</div><!-- display -->
+
+<p>  </p>
+
+<p> <a class="external" href="https://www.youtube.com/watch?v=HLziLmaYsO0" target="_BLANK">Y</a> </p>
+
+
+<h4 id="topologieBus"> Topologie en bus </h4>
+
+
+<p> Gestion des collisions <strong><em class="sigle">CSMA/CD</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Carrier_Sense_Multiple_Access_with_Collision_Detection" target="_BLANK">W</a></p>
+
+
+<h4 id="topologie"> Topologie en étoile commutée (switchs) </h4>
+
+
+<p> Avec des liaisons full‑duplex, <strong class="pros">plus de collisions</strong> </p>
+
+
+
+<h3> Nomenclature des standards <em class="mark">Ethernet</em> récents </h3>
+
+
+<p> <a class="external" href="https://www.synopsys.com/designware-ip/technical-bulletin/ethernet-dwtb-q117.html" target="_BLANK"></a></p>
+
+
+<p> <strong>Fast Ethernet</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fast_Ethernet" target="_BLANK">W</a></p>
+
+
+<p> <strong>Gigabit Ethernet </strong> <a class="external" href="https://fr.wikipedia.org/wiki/Gigabit_Ethernet" target="_BLANK">W</a> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> La technologie <em class="mark">Ethernet</em>  –  Aspects matériels </h2>
+
+
+
+<p> <a class="external" href="https://en.wikipedia.org/wiki/Ethernet_physical_layer" target="_BLANK">W</a></p>
+
+<p> La <strong class="title">technologie matérielle</strong> de liaison a un impact direct sur les <strong>débits</strong> qu'il est possible d'obtenir : notion de bande passante dans un câble </p>
+
+
+<h3> Liaisons électriques (technologie « <em>cuivre</em> ») </h3>
+
+
+<p> Installation statiques et volantes </p>
+
+
+<p> <strong class="cons">Câble coaxial</strong> : ancienne technologie, en voie d'obsolescence (vieux équipements industriels) </p>
+
+
+<p> <strong class="defin">Câble à paires torsadées</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Paire_torsadée" target="_BLANK">W</a> <a class="external" href="https://www.youtube.com/watch?v=_NX99ad2FUA" target="_BLANK">Y</a> </p>
+
+<h4> Connecteurs <em class="sigle">RJ45</em> </h4>
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/RJ45" target="_BLANK">W</a></p>
+
+
+<h4> Ports <em class="sigle">PoE</em> </h4>
+
+<p> <strong>Power over Ethernet</strong> (48 V) <a class="external" href="https://fr.wikipedia.org/wiki/Alimentation_électrique_par_câble_Ethernet" target="_BLANK">W</a> </p>
+
+
+
+<h3> Liaisons optiques (technologie « <em>fibre</em> ») </h3>
+
+
+
+<p> Réservées pour les installations statiques (rayon de courbure limité, fragilité, donc risques d'endommagement si manipulations fréquentes) </p>
+
+
+
+<h4> Connecteurs fibres  </h4>
+
+<div style="display: inline-block;"> <img class="top-right" src="../img/portsSFP.jpg" width="400px"> </div>
+
+<div style="display: inline-block;"> <img class="top-right" src="../img/cableSFP.jpg" width="400px"> </div>
+
+
+
+
+<h3> Cartes et contrôleurs réseaux </h3>
+
+
+<p> <a class="external" href="https://fr.wikipedia.org/wiki/Carte_réseau" target="_BLANK">W</a></p>
+
+<p> Carte réseau pour PC – bus PCI <a class="external" href="https://fr.wikipedia.org/wiki/PCI_(informatique)" target="_BLANK">W</a> </p>
+
+<div style="display: inline-block;"> <img class="top-right" src="../img/carteReseauPCI.jpg" width="400px"> </div>
+
+
+<p> Module miniature </p>
+
+
+<div style="display: inline-block;">
+ <img class="top-right" src="../img/carteEthernet_mini.jpg" width="200px"> </div>
+
+<div style="display: inline-block;"> <img class="top-right" src="../img/carteEthernet_miniVerso.jpg" width="200px"> </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> La technologie <em class="mark">Ethernet</em>  –  Aspects logiciels  </h2>
+
+
+<p> Adresse <em class="sigle">MAC</em> (rappel) : pas spécifique à <em class="mark">Ethernet</em> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adresseMAC" target="_BLANK"></a>) </p>
+
+
+
+<h3> Trame Ethernet </h3>
+
+
+
+<p> trame = traduction « approximative » de <em class="english">frame</em> (cadre) </p>
+
+<p> <a class="external" href="https://en.wikipedia.org/wiki/Ethernet_frame" target="_BLANK">W</a>
+
+<a class="external" href="https://www.youtube.com/watch?v=Vs672DYoakk" target="_BLANK">Y</a>
+</p>
+
+
+
+
+
+<h3> Protocole ARP </h3>
+
+
+
+<p> <strong class="title">Address resolution protocol</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Address_Resolution_Protocol" target="_BLANK">W</a> 
+
+<a class="external" href="https://www.youtube.com/watch?v=6FPo9oBJBJY" target="_BLANK">Y</a> </p>
+
+<p> Permet aux commutateurs de déterminer l'adresse <em class="sigle">MAC</em> correspondant à une adresse <em class="sigle">IP</em> </p>
+
+
+<div class="complement">
+<p> En effet, lorsqu'une <strong>machine A</strong> (typiquement, un poste de travail) doit envoyer un datagramme <em class="sigle">IP</em> à une <strong>machine B</strong> (typiquement, un routeur) à laquelle il est relié (éventuellement via un switch) : </p>
+<ul>
+	<li> Il ne connaît a priori que l'<strong>adresse <em class="sigle">IP</em></strong> de l'interface réseau de ce destinataire (elle est étiquetée sur l'en‑tête du datagramme). </li>
+
+	<li> Pour qu'il puisse lui envoyer une trame <strong>Ethernet</strong> (ou Wi‑Fi, ou autre…) encapsulant ce datagramme, il doit <strong class="defin">préalablement déterminer l'adresse <em class="sigle">MAC</em></strong> de cette interface. </li>
+
+	<li> C'est ici qu'intervient le <strong class="title">protocole <em class="sigle">ARP</em></strong> qui procède en générant une <strong class="defin">trame de requète</strong> en <strong>broadcast</strong>, qui se propage à tous les nœuds voisins, sans aller au delà des routeurs rencontrés. Elle demande quelle adresse <em class="sigle">MAC</em> correspond à l'adresse <em class="sigle">IP</em> de l'interface réseau de la <strong>machine B</strong> ? </li>
+
+	<li> À cette trame requète, seule la machine hébergeant l'interface dotée de cette adresse <em class="sigle">IP</em> est autorisée à répondre. Si elle a bien reçu cette trame, elle y répond en envoyant son adresse <em class="sigle">MAC</em>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h3> Protocole <em class="sigle">STP</em> </h3>
+
+
+
+<p> <strong class="title">Spanning tree protocol</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Spanning_Tree_Protocol" target="_BLANK">W</a> </p>
+
+<p> Permet d'avoir des <strong>liaisons redondantes</strong> dans les réseaux <em class="mark">Ethernet</em> sans engendrer de tempêtes de diffusion <a class="external" href="https://fr.wikipedia.org/wiki/Broadcast_storm" target="_BLANK">W</a> (<em class="english">broadcast storm</em>) </p>
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

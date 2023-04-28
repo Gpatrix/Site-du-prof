@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="X"
+  data-pageState="OK"
+  data-pageheadtitle="Moniteur série"
+  data-pagefulltitle="Arduino : les entrées‑sorties par moniteur série"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<!-- pas de relecture approfondie en nov. 2021 -->
+<!-- ajouter des schémas (introduction, buffers, etc.) -->
+<!-- ajouter des programmes d'exemple directement exécutables -->
+
+
+
+
+<div class="exergue">
+
+<p class="square"> Comme remarqué au chapitre C2‑I <a class="previous" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#ArduinoES" target="_BLANK"></a>, si une <strong>carte</strong> <strong class="Arduino">Arduino</strong> ne permet pas de mettre en œuvre des entrées-sorties standards, elle peut néanmoins <strong class="defin">échanger des données textuelles</strong> avec son terminal de programmation via une <strong class="title">liaison série</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transmission_série" target="_BLANK">W</a>. De manière générale, une liaison série est constituée d'un <strong class="defin">médium</strong> (c'est‑à‑dire un câble ou autre support de transmission) associé à un <strong class="defin">protocole de communication</strong> (cf. chap. R1‑IV <a class="previous" href="../../moduleR/R1-Generalites/Rc1-4_protocoles.html" target="_BLANK">R</a>) permettant, entre deux systèmes numériques : </p>
+
+<ul> 
+  <li> d'<strong>établir la communication</strong> (avec, par exemple, un bit de <em>start</em>), c'est‑à‑dire préparer chaque système à la transmission de données ; </li>
+
+  <li> de <strong>transmettre des données</strong> <strong class="defin">les unes après les autres</strong> sur le médium – ce que sous-tend le terme « série » ;  </li>
+
+  <li> de <strong>clore la communication</strong> (avec, par exemple, un bit de <em>start</em>), éventuellement avec des éléments de vérification de bonne transmission (typiquement, par contrôle de parité).  </li>
+</ul>
+
+<p class="square"> Parce qu'elles ne requièrent qu'un <strong class="pros">nombre minimal de conducteurs</strong> dans le support de transmission, les liaisons séries ont depuis longtemps supplanté les liaisons parallèles. 
+<!-- ref cours réseaux -->
+
+Ainsi, un protocole série ancien comme l'<strong><em class="sigle">UART</em></strong> (<em class="english">universal asynchronous receiver transmitter</em>) <a class="external" href="https://fr.wikipedia.org/wiki/UART" target="_BLANK">W</a> reste <strong class="pros">très employé</strong> en informatique embarquée. Et même s'il peut sembler simple par rapport à d'autres (<em class="mark">Ethernet</em>, etc.), sa mise en œuvre complète reste <strong class="warning">assez complexe</strong> Il ne suffit pas de quelques heures d'étude pour en comprendre tous les ressorts. </p> 
+
+<p> Heureusement, en programmation des microcontrôleurs, cette complexité est masquée par l'emploi de <strong>fonctions</strong> de <strong class="defin">haut niveau</strong> comme, par exemple, <code class="prettyprint lang-c">Serial.print</code> dans le framework <strong class="Arduino">Arduino</strong>. Néanmoins, pour une bonne compréhension de ces fonctions, il est souhaitable de connaître quelques concepts et mécanismes sous‑jacents (buffer d'entrée‑sortie, circuit de sérialisation, etc.). Or certains de ces aspects font appel des notions de codage qui n'ont <strong class="cons">pas encore été étudiées</strong> : objets, chaînes de caractères, pointeurs, interruptions… certaines n'étant même pas au programme du module de formation au langage <strong>C</strong>. </p>
+
+<p class="square"> Ce chapitre n'a <strong class="	warning">pas</strong> vocation à exposer en détail tous les aspects d'une liaison série (pour des compléments, on pourra se reporter à ce cours destiné à des étudiants en <em class="sigle">STS SNIR</em> <a class="external" href="http://tvaira.free.fr/bts-sn/reseaux/cours/cours-transmission-serie.pdf" target="_BLANK"></a>). L'<strong class="title">objectif</strong> est ici d'aborder les <strong>principes essentiels</strong> de communication par liaison série, afin de pouvoir ensuite coder, avec quand même une bonne maîtrise, des <strong>opérations</strong> de <strong class="defin">lecture</strong> et d'<strong class="defin">écriture</strong> de données dans le <strong>moniteur série</strong> émulé par le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> ou dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong>. Seront donc étudiés dans l'ordre : </p>
+
+<ul>
+	<li> des <strong>rudiments</strong> sur les <strong class="specialLB">aspects matériels</strong> d'une liaison série de type <strong><em class="sigle">UART</em></strong> ;   </li>
+
+	<li> les <strong>éléments</strong> sur lesquels reposent <strong class="specialLB">aspects logiciels</strong> d'une telle liaison série dans le framework <strong class="Arduino">Arduino</strong>, notamment l'objet <code class="prettyprint lang-c">Serial</code> et ses buffers, ainsi que le <strong>moniteur série</strong> ;  </li>
+
+	<li> les quelques <strong>fonctions</strong> d'<strong class="specialLB">administration</strong> d'une telle liaison série ; </li>
+
+	<li> les principales <strong>fonctions</strong> associées aux <strong class="specialLB">opérations de sortie</strong>, c'est‑à‑dire d'<strong>écriture</strong> dans le moniteur série ; </li>
+
+	<li> les principales <strong>fonctions</strong> associées aux <strong class="specialLB">opérations d'entrée</strong>, c'est‑à‑dire de <strong>lecture</strong> dans le moniteur série ; </li>
+</ul>
+
+<p> sachant que ce sont ces deux dernières sections du chapitre qui apportent les éléments de langage les plus opérationnels dans le bagage d'un codeur. </p>
+
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Aspects matériels  –  généralités </h2>
+
+
+<div class="expert">
+<h3> Cas des cartes <em class="mark">Arduino</em> </h3>
+</div><!-- expert -->
+
+
+<div class="important">
+<p> Sauf exceptions, toute <strong>carte</strong> <strong class="Arduino">Arduino</strong> possède au moins (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>) : </p>
+<ul>
+  <li> un <strong class="title"><em class="sigle">USART</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/UART" target="_BLANK">W</a> (<em class="english">universal synchronous & asynchronous receiver transmitter</em>) <strong>intégré</strong> à son <strong>microcontrôleur</strong> principal ; </li>
+
+  <li> un <strong class="title">port <em class="sigle">USB</em></strong> avec, typiquement, un microcontrôleur dédié <em class="mark">Atmel ATmega16U2</em> et un circuit oscillant externe à quartz 16 MHz, l'un et l'autre dédiés à l'interface <em class="sigle">USB</em>‑<em class="mark">serial</em>.</li>
+</ul>
+<p> Ces dispositifs permettent une <strong class="pros">mise en œuvre facile</strong> des communications par <strong class="title">liaison série standard</strong> avec un <strong class="defin">autre système</strong>, notamment un <strong>terminal de programmation</strong> – cf. figure ci‑dessous. </p>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block">
+<p> Pour une liaison série, le <strong class="title">médium de transmission</strong> employé usuellement est  un <strong class="specialV">câble <em class="sigle">USB</em></strong> (<em class="english">universal serial bus</em>) raccordé au <strong>port <em class="sigle">USB</em></strong> de la carte. </p>
+  <img class="top-left" src="../img/ArduinoSerialLink.png" style="max-width: 800;">
+</div><!-- complement -->
+
+
+
+<div class="expert" style="display: inline-block">
+  <img class="top-right" src="../img/carteArduinoUnoUSART.jpg" width="500px">
+<p> Sur les <strong>carte</strong> <strong class="Arduino">Arduino</strong> les plus courantes, on peut aussi employer comme <strong class="title">médium</strong> (cf. la carte <strong>Uno</strong> en figure ci‑contre) : </p>
+<ul>
+  <li> une <strong class="specialV">paire de fils torsadés</strong> reliée aux <strong>broches nº 0 et 1</strong> du port numérique, lesquelles sont respectivement dédiées à l'<strong class="specialMg">émission</strong> (désignée <strong class="specialMg"><em class="sigle">TX</em></strong>) et à la <strong class="specialLP">réception</strong> (désignée <strong class="specialLP"><em class="sigle">RX</em></strong>) ; </li>
+
+  <li> et un <strong style="text-shadow: 0.05em 0.05em gray">fil de masse</strong> relié à la borne <strong><em class="sigle">GND</em></strong>, ce dernier fournissant le potentiel de référence pour déterminer les <strong>niveaux de tension</strong> <strong class="defin">bas</strong> et <strong class="defin">haut</strong> (respectivement 0 V et 5 V) sur les bornes <strong class="specialMg"><em class="sigle">TX</em></strong> et <strong class="specialLP"><em class="sigle">RX</em></strong>. </li>
+</ul>
+
+<p> Par ailleurs, <strong class="specialO">deux leds</strong> désignées également <strong class="specialO"><em class="sigle">TX</em></strong> et <strong class="specialO"><em class="sigle">RX</em></strong> donnent l'image des niveaux de tension sur les deux conducteurs correspondant de la liaison série. Leur <strong>clignotement</strong> témoigne de l'activité de l'<strong><em class="sigle">USART</em></strong> (sachant que la led <strong class="specialO"><em class="sigle">TX</em></strong> donne aussi l'image du niveau logique de tension sur la broche nº 1 lorsqu'elle est employée comme une sortie ordinaire). </p>
+
+<div class="remarques">
+<p class="remarque"> La liaison série peut aussi être employée pour échanger des données entre une <strong>carte</strong> <strong class="Arduino">Arduino</strong> et un serveur de données, une machine, un instrument de musique… </p>
+</div><!-- remarque -->
+
+
+<h4> Ports séries multiples </h4>
+
+
+<p> Sur certains modèles de cartes à microcontrôleur, il peut exister <strong>plusieurs autres paires de broches</strong> permettant la mise en œuvre d'une <strong class="title">autre liaison série</strong> (par exemple, les broches nº 19 & 18, 17 & 16, 14 & 15 sur une <strong class="Arduino">Arduino</strong> <strong>Mega</strong> ou <strong>Due</strong>). </p>
+
+
+
+
+
+<h4> Schéma‑bloc de l'USART interne au microcontrôleur</h4>
+
+
+<div style="display: block;">
+<p id="schemaIO">  Le <strong>schéma‑bloc</strong> ci‑dessous détaille l'implémentation matérielle de l'<strong class="title"><em class="sigle">USART</em></strong> intégré au microcontrôleur <strong>Atmel ATmega328p</strong>, lequel équipe notamment les <strong>cartes</strong> <strong class="Arduino">Arduino Uno</strong> et <strong class="Arduino">Nano</strong> (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#carteUno" target="_BLANK"></a>). </p>
+  <img class="top-left" src="../img/ATmega328P_usartSchema.jpg">
+</div><!-- display -->
+
+<p> Il est constitué de <strong class="title">3 principaux circuits</strong> : </p>
+
+<ul>
+	<li> un <strong>circuit d'horloge</strong> (<em class="mark">clock generator</em>) qui, en divisant la fréquence du signal issu du circuit oscillant externe, génère le signal de cadencement de la liaison série à la vitesse spécifiée (<em class="english">baud rate</em>) ;  </li>
+
+	<li> un <strong class="specialMg">circuit d'émission</strong> (<em class="mark">transmitter</em>) dédié à la sortie des données, qui est lui‑même composé : </li>
+
+	<ul>
+		<li> d'un <strong class="specialMg">registre d'émission</strong> pour stocker un octet à émettre ; </li>
+
+		<li> et d'un sous‑circuit de <strong>sérialisation</strong> qui, à partir des bits de l'octet contenu dans le registre d'émission, génère à la fréquence du circuit d'horloge le <strong class="defin">signal logique</strong> à écrire sur la <strong>borne</strong> <strong class="specialMg"><em class="sigle">TX</em></strong> ;</li>
+	</ul>
+
+  <li> un <strong class="specialLP">circuit de réception</strong> (<em class="mark">receiver</em>) dédié à l'entrée des données, qui est lui‑même composé : </li>
+
+	<ul>
+		<li> d'un sous-circuit de <strong>désérialisation</strong> qui, à partir du signal logique reçu sur la <strong>borne</strong> <strong class="specialLP"><em class="sigle">RX</em></strong>, reconstitue un octet de donnée ; </li>
+
+		<li> cet octet étant stocké dans le <strong class="specialLP">registre de réception</strong> ; </li>
+	</ul>
+
+	<li> d'un groupe de <strong>3 registres</strong>, d'un octet chacun, pour stocker les bits d'état et de commande de l'<strong><em class="sigle">USART</em></strong>, à des fins de <strong>contrôle logiciel</strong>. </li>
+</ul>
+
+
+
+<h3 id="cartesAsoc"> Cas des cartes à SoC ESP8266 et ESP32 </h3>
+
+
+
+<div class="complement">
+<p> À la différence de la plupart des cartes <em class="mark">Arduino</em> authentiques, les cartes à SoC <strong class="title"><em class="sigle">ESP8266</em></strong> et <strong class="title"><em class="sigle">ESP32</em></strong> (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#cartesWifi" target="_BLANK"></a>) ne sont <strong class="warning">pas</strong> dotées d'un microcontrôleur et d'un quartz externe dédiés pour la conversion <strong><em class="sigle">USB</em>‑Serial</strong>. </p>
+
+<p>	Elles sont équipées à la place d'un <strong class="title"><em class="sigle">ASIC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Application-specific_integrated_circuit" target="_BLANK">W</a> (<em class="english">application‑specific integrated circuit</em>) qui intègre un <strong>circuit oscillant interne</strong>.  </p>
+</div><!-- complement -->
+
+
+<p> Néanmoins, en règle générale, on retrouve les <strong class="pros">mêmes fonctionnalités</strong> de <strong class="title">liaisons séries</strong> que sur des cartes <em class="mark">Arduino</em>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/NodeMCU-ESP8266-Pinout.jpg" width="400px">
+<p> À titre d'exemple, la carte <strong class="title">SBC‑NodeMCU</strong> <a class="external" href="https://joy-it.net/en/products/SBC-NodeMCU" target="_BLANK"></a> de <strong>Joy‑It</strong> (cf. la figure ci‑contre dite <em class="english">pinout</em>) permet <strong class="defin">deux liaisons séries <em class="sigle">UART</em></strong> : </p>
+<ul>
+  <li> <em class="bold"><em class="sigle">UART</em>0</em> sur les broches <em class="sigle">GPIO</em> <strong>nº 1 & 3</strong> (<em class="sigle">TXD0</em> & <em class="sigle">RXD0</em>) ; </li>
+
+  <li> <em class="bold"><em class="sigle">UART</em>2</em> sur les broches <em class="sigle">GPIO</em> <strong>nº 15 & 13</strong> (<em class="sigle">TXD2</em> & <em class="sigle">RXD2</em>) ; </li>
+</ul>
+<p> sachant que la liaison <em class="bold"><em class="sigle">UART</em>0</em> est celle qui est prise en charge par défaut via le circuit convertisseur <em class="sigle">USB</em>‑Serial <em class="sigle">CP2102</em>. </p>
+</div><!-- display -->
+
+<div class="remarques">
+<p class="remarque"> La carte <strong class="title">SBC‑NodeMCU</strong> illustrant l'exemple supra possède aussi une liaison <em class="bold"><em class="sigle">UART</em>1</em> qui est réservée au téléversement du programme utilisateur et du <em>firmware</em> de la carte. Seule la broche <em class="sigle">TXD1</em> est déployée sur le port <em class="sigle">GPIO</em> (<em class="english">general‑purpose input/output</em> <a class="external" href="https://fr.wikipedia.org/wiki/General_Purpose_Input/Output" target="_BLANK"></a>). </p>
+</div><!-- remarque -->
+</div><!-- expert 140-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Aspects logiciels  –  généralités  </h2>
+
+
+
+<h3 id="objetSerial"> L'objet <code class="prettyprint lang-c">Serial</code>  </h3>
+
+
+<div class="important">
+<p> La liaison série entre une <strong>carte</strong> <strong class="Arduino">Arduino</strong> et le <strong>moniteur série</strong> de son terminal de programmation est une <strong class="defin">liaison asynchrone</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Transmission_série#Transmission_série_asynchrone" target="_BLANK">W</a> spécifiée par le protocole <strong><em class="sigle">UART</em></strong>. </p>
+
+<p> Du point de vue <strong class="title">logiciel</strong>, cette liaison est implémentée par défaut sur la base d'un <strong class="title">objet</strong> désigné par l'<strong>identificateur</strong> <code class="prettyprint lang-c">Serial</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" target="_BLANK">A</a>.  </p>
+</div><!-- important -->
+
+
+<h4> Déclaration de l'objet <code class="prettyprint lang-c">Serial</code> </h4>
+
+
+<div class="expert">
+<p> Les notions de la <strong class="defin">programmation orientée objet</strong> n'ont pas été encore abordées, mais il est nécessaire d'y recourir pour bien comprendre l'emploi des fonctions d'entrées-sorties par moniteur série : </p>
+
+<ul>
+  <li> L'<strong class="title">objet</strong> <code class="prettyprint lang-c">Serial</code> est déclaré dans le fichier <code class="filename">HardwareSerial0.cpp</code> comme une <strong>instance</strong> de la <strong class="defin">classe</strong> <code class="prettyprint lang-c">HardwareSerial</code>, laquelle est déclarée le fichier d'en‑tête <code class="filename">HardwareSerial.h</code>, inclus par défaut dans tout programme d'extension <code class="filename">.ino </code> par une directive codée dans le fichier <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> (ligne nº 233). </li>
+
+  <li> La classe <code class="prettyprint lang-c">HardwareSerial</code> est elle‑même une <strong>fille</strong> de la <strong class="defin">classe</strong> <code class="prettyprint lang-c">Stream</code> qui est déclarée dans fichier d'en‑tête <code class="filename">Stream.h</code>, lequel est inclus par une directive codée dans le fichier d'en‑tête <code class="filename">HardwareSerial.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/HardwareSerial.h" target="_BLANK">G</a> (ligne nº 29). </li>
+
+  <li> La classe <code class="prettyprint lang-c">Stream</code> est elle‑même une <strong>fille</strong> de la <strong class="defin">classe</strong> <code class="prettyprint lang-c">Print</code> qui est déclarée dans le fichier d'en‑tête <code class="filename">Print.h</code>, lequel est inclus par une directive codée dans le fichier d'en‑tête <code class="filename">Stream.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Stream.h" target="_BLANK">G</a>(ligne nº 26). </li>
+</ul>
+<p> Donc, en résumé : </p>
+</div><!-- expert -->
+
+<div class="complement">
+<p> L'<strong class="title">objet</strong> <code class="prettyprint lang-c">Serial</code> n'a <strong class="pros">pas besoin d'être déclaré</strong> <strong>par le codeur</strong> dans le code source des programmes pour <strong>cartes</strong> <strong class="Arduino">Arduino</strong>. </p>
+
+<div class="expert">
+<p> Il <strong class="pros">hérite</strong> de tous les <strong>attributs</strong> et <strong>méthodes</strong> (cf. infra <a class="infra" href="Cc3-10_moniteurSerie.html#methodes"></a>) définis pour les <strong class="defin">classes</strong> <code class="prettyprint lang-c">HardwareSerial</code>, <code class="prettyprint lang-c">Stream</code> et <code class="prettyprint lang-c">Print</code>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+<h4 id="buffersSerial"> Buffers de l'objet <code class="prettyprint lang-c">Serial</code> </h4>
+
+
+<div class="expert">
+<p> D'une manière générale, tout <strong class="defin">objet</strong> est une <strong>variable structurée</strong>, définie avec divers <strong class="defin">attributs</strong>, c'est‑à‑dire des composantes de stockage de données (en quelque sorte, des « sous-variables »). </p>
+
+<p class="square"> L'objet <code class="prettyprint lang-c">Serial</code> possède <strong class="defin">deux attributs</strong> essentiels, protégés, issus de la classe <code class="prettyprint lang-c">HardwareSerial</code>, déclarés dans le fichier d'en‑tête <code class="filename">HardwareSerial.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/HardwareSerial.h" target="_BLANK">G</a> : </p>
+
+<ul>
+  <li> le <strong class="specialV">buffer</strong> de <strong class="specialLP">réception</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:113">
+    unsigned char _rx_buffer[SERIAL_RX_BUFFER_SIZE];
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> le <strong class="specialV">buffer</strong> d'<strong class="specialMg">émission</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:114">
+    unsigned char _tx_buffer[SERIAL_TX_BUFFER_SIZE];
+</pre>
+<!---------- ne pas indenter ---------->
+
+</ul>
+
+<p> sachant qu'un <strong class="specialV">buffer</strong> est un <strong class="defin">espace mémoire tampon</strong> permettant de stocker des données de façon temporaire. </p>
+
+<p> Dans les instructions ci‑dessus, les deux buffers sont déclarés : </p>
+
+<ul>
+  <li> comme des <strong class="defin">tableaux</strong> (notion abordée au chap. C5‑III <a class="next" href="../C5-StructuresPointeurs/Cc5-3_tableauxDeclarations.html" target="_BLANK"></a>), </li>
+
+  <li> dont les <strong class="defin">éléments</strong> sont de type <code class="prettyprint lang-c">unsigned char</code>, donc encodés en <strong>binaire naturel</strong> sur <strong>1 octet</strong> (<strong>8 bits</strong>) chacun, </li>
+
+  <li> le <strong class="defin">nombre d'éléments</strong> étant respectivement spécifié par les <strong>pseudo‑constantes</strong> <code class="prettyprint lang-c">SERIAL_RX_BUFFER_SIZE</code> et <code class="prettyprint lang-c">SERIAL_TX_BUFFER_SIZE</code>, définies dans le fichier d'en‑tête <code class="filename">HardwareSerial.h</code> avec comme valeur par défaut : </li>
+  <ul>
+    <li> <strong>16</strong> octets si la mémoire pour les données est inférieure à 1 ko (par exemple, sur un microcontrôleur <em class="mark">Atmel ATtiny</em> – cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#ATtiny" target="_BLANK"></a>) ;  </li>
+
+    <li> <strong>64</strong> octets pour les cartes <strong class="defin">Arduino</strong> à cœur <em class="sigle">AVR</em> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…)  ; </li>
+
+    <li> <strong>128</strong> octets pour les cartes <strong class="defin">Arduino</strong> à cœur <em class="sigle">ARM</em> et les cartes à SoC <em class="bold">ESP8266</em> et <em class="bold">ESP32</em>. </li>
+  </ul>
+</ul>
+
+<p> Dans le framework <strong class="Arduino">Arduino</strong>, les identificateurs de ces deux pseudo‑constantes sont utilisables pour former des expressions dans les programmes sources. </p>
+
+
+<div style="display: inline-block;">
+   <img class="top-right" src="../img/circularBuffer.png" width="500px" style="padding-top: 1em">
+
+<p class="square"> De plus, les buffers d'émission et de réception de l'objet Serial sont l'un et l'autre implémentés de façon <strong class="specialV">circulaire</strong> avec, pour chacun, un <strong>indice de queue</strong> (<code>_buffer_tail</code>) et un <strong>indice de tête</strong> (<code>_buffer_head</code>) <a class="external" href="https://fr.wikipedia.org/wiki/Buffer_circulaire" target="_BLANK">W</a>. </p>
+
+<p> Chaque buffer est opéré avec une gestion des priorités comme celle d'une <strong class="specialV">file d'attente</strong> <strong><em class="sigle">FIFO</em></strong> (<em class="english">first in first out</em> <a class="external" href="https://fr.wikipedia.org/wiki/Premier_entré,_premier_sorti_(gestion)" target="_BLANK">W</a>) : </p>
+
+
+<ul>
+  <li> l'<strong class="specialV">indice de queue</strong> cible l'octet arrivé en premier dans le buffer (le plus ancien), qui doit être <strong>traité en premier</strong> ; il est incrémenté d'une unité à chaque octet traité ;  </li>
+
+  <li> l'<strong class="specialV">indice de tête</strong> cible l'élément placé juste après l'octet arrivé en dernier dans le buffer (le plus récent), qui sera <strong>traité en dernier</strong> ; il est incrémenté d'une unité à chaque octet arrivé. </li>
+</ul>
+
+<p> Sachant sa circularité, le buffer est donc : </p>
+
+<ul>
+  <li> <strong class="specialG">vide</strong> lorsque l'<strong class="specialV">indice de queue</strong>  est <strong class="specialG">égal</strong> à l'<strong class="specialV">indice de tête</strong>, </li>
+
+  <li> <strong class="specialR">plein</strong> lorsque l'<strong class="specialV">indice de tête</strong> est <strong class="specialR">égal moins une unité</strong> à l'<strong class="specialV">indice de queue</strong> . </li>
+</ul>
+
+<p> Avec cette structure de données, la capacité effective du buffer est <strong>inférieure d'une unité</strong> au nombre d'éléments du tableau (donc égal à 63 si la taille du tableau est 64). </p>
+</div><!-- display -->
+
+<p class="square"> En résumé, pour une mise en œuvre <strong>asynchrone</strong> de la liaison série : </p>
+</div><!-- expert --> 
+
+<div class="complement">
+<p> L'objet <code class="prettyprint lang-c">Serial</code> dispose, respectivement pour l'<strong class="specialLP">émission</strong> et la <strong class="specialMg">réception</strong> de données d'un <strong class="specialV">buffer</strong> <strong>circulaire</strong> d'une capacité effective qui dépend du type de carte à microntrôleur employée, typiquement <strong>63 octets</strong> pour une <strong class="Arduino">Arduino</strong> <strong>Uno</strong>.  </p>
+
+<p> Ces buffers constituent l'un et l'autre un <strong>espace mémoire tampon</strong> géré comme une <strong class="specialV">file d'attente</strong> <strong><em class="sigle">FIFO</em></strong> (<em class="english">first in first out</em>) :  </p>
+<ul>
+	<li> avant <strong>sérialisation</strong> en signal logique de chaque octet émis vers le système auquel la carte est raccordée ; </li>
+
+	<li> après <strong>désérialisation</strong> du signal logique de chaque octet reçu depuis le système auquel la carte est raccordée. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+
+<div class="expert">
+<h4> Ports séries multiples </h4>
+
+
+<p> Pour les <strong>cartes</strong> <strong class="Arduino">Arduino</strong> disposant de <strong>plusieurs ports séries</strong> (<em class="mark">Mega</em>, <em class="mark">Due</em>…), le fichier <code class="filename">HardwareSerial0.cpp</code> déclare des instances supplémentaires de la classe <code class="prettyprint lang-c">HardwareSerial</code>, qui sont identifiées respectivement <code class="prettyprint lang-c">Serial1</code>, <code class="prettyprint lang-c">Serial2</code> et <code class="prettyprint lang-c">Serial3</code>. </p>
+
+<p> Ces objets ont exactement les <strong class="defin">mêmes propriétés</strong> que l'objet <code class="prettyprint lang-c">Serial</code>. </p>
+
+</div><!-- expert -->
+
+
+
+<h3 id="methodes"> Méthodes associées à l'objet <code class="prettyprint lang-c">Serial</code> </h3>
+
+
+
+<p> Dans la logique de la <strong>programmation orientée objet</strong>, un objet se manipule à l'aide de <strong class="title">méthodes</strong>, c'est‑à‑dire des <strong class="defin">fonctions dédiées</strong> qui sont définies dans la déclaration de la classe à laquelle l'objet appartient ou des classes dont il descend (c'est la notion d'<strong>héritage</strong>). </p>
+
+<div class="complement">
+<p> L'objet <code class="prettyprint lang-c">Serial</code> compte <strong class="title">20 méthodes</strong>, recensées sur la page de référence <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" target="_BLANK">A</a>. On peut les classer en <strong>trois catégories</strong> comme dans le tableau ci‑dessous. </p>
+</div><!-- complement -->
+
+<table>
+  <tr>  
+    <th> Administration  </th>
+    <td style="line-height: 150%"> <code class="prettyprint lang-c">begin</code>   <code class="prettyprint lang-c">end</code>  </td>
+  </tr>
+  <tr> 
+    <th> Écriture  </th>
+    <td style="line-height: 150%"> <code class="prettyprint lang-c">availableForWrite</code>   <code class="prettyprint lang-c">flush</code>   <code class="prettyprint lang-c">print</code>   <code class="prettyprint lang-c">println</code>   <code class="prettyprint lang-c">write</code> </td>
+  </tr>
+  <tr> 
+    <th> Lecture </th>
+    <td style="line-height: 150%"> <code class="prettyprint lang-c">available</code>   <code class="prettyprint lang-c">find</code>   <code class="prettyprint lang-c">findUntil</code>   <code class="prettyprint lang-c">parseFloat</code>   <code class="prettyprint lang-c">parseInt</code>   <code class="prettyprint lang-c">peek</code>   <code class="prettyprint lang-c">read</code>   <code class="prettyprint lang-c">readBytes</code>   <code class="prettyprint lang-c">readByteUntil</code>   <code class="prettyprint lang-c">readString</code>   <code style="background: white">serialEvent</code>   <code class="prettyprint lang-c">setTimeout</code> </td>
+  </tr>
+</table>
+
+
+<div class="important">
+<p> Toutes ces <strong class="title">méthodes</strong> ne peuvent être <strong class="defin">appelées</strong> que via l'<strong class="title">opérateur de sélection</strong>, codé par le symbole <code class="prettyprint lang-c">.</code> et appliqué à l'objet <code class="prettyprint lang-c">Serial</code> (ou un autre objet de la même classe). </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Pour mettre fin à la liaison série entre une carte <em class="mark">Arduino</em> et un terminal, on code une instruction appelant la <strong>méthode</strong> <code class="prettyprint lang-c">end</code> via la syntaxe : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:50">
+  Serial.end();
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Cas des cartes à SoC <em class="sigle">ESP8266</em> et <em class="sigle">ESP32</em> </h4> 
+
+<div class="complement"> 
+<p> Dans le cas des cartes à SoC <strong class="title"><em class="sigle">ESP8266</em></strong> et <strong class="title"><em class="sigle">ESP32</em></strong> (cf. supra <a class="supra" href="Cc3-10_moniteurSerie.html#cartesAsoc" target="_BLANK"></a>), les <strong class="title">fichiers de bibliothèque</strong> qui implémente les liaisons série <em class="sigle">UART</em> (<code class="filename">HardwareSerial.h</code>, etc.) sont <strong class="pros">similaires</strong> à ceux pour les cartes <em class="mark">Arduino</em>, mais <strong class="warning">pas identiques</strong>.  En effet : </p>
+
+<ul>
+  <li> il existe <strong class="defin">quelques méthodes spécifiques</strong>, par exemple <code class="prettyprint lang-c">baudRate</code> qui retourne la valeur de vitesse de transmission (cf. infra <a class="infra" href="Cc3-10_moniteurSerie.html#vitesseTransmission" target="_BLANK"></a>) de la liaison série associée à l'objet <code class="prettyprint lang-c">Serial</code> ou autre ; </li>
+
+  <li> de plus, certaines méthodes communes acceptent des <strong class="defin">arguments supplémentaires</strong>. </li>
+</ul>
+<p> Pour plus de détails, on pourra se rapporter à ce lien <a class="external" href="http://arduino.esp8266.com/Arduino/versions/2.3.0/doc/reference.html#serial" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+
+<h3 id="moniteur"> Le moniteur série </h3>
+
+
+
+<div class="important">
+<p> L'application <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> émule un <strong class="title">moniteur série</strong> dans une <strong>fenêtre indépendante</strong> pour visualiser et saisir des <strong class="defin">entrées-sorties</strong> codées dans un programme. </p>
+</div><!-- important -->
+
+<div style="display: inline-block">
+  <img class="top-right" src="../img/moniteurSerie.jpg" width="600px">
+  
+<p> La <strong class="title">fenêtre du moniteur</strong> est ouverte par une <strong>commande du menu « Outils »</strong> de la fenêtre principale de l'application, ou en cliquant sur un <strong>bouton de raccourci</strong> en haut à droite (cf. chap. C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#ArduinoIDE" target="_BLANK"></a>). Elle présente : </p>
+
+<ul>
+  <li> en haut, une <strong class="specialLP">barre de saisie</strong> pour les <strong class="defin">entrées</strong> de la carte, qui sont envoyées après un clic sur le bouton éponyme ; </li>
+
+  <li> au centre, une <strong class="specialMg">zone d'affichage</strong> pour les <strong class="defin">sorties</strong> de la carte ; </li>
+
+  <li> en bas, une <strong class="specialV">barre de paramétrage</strong> de la liaison, en particulier de sa <strong class="defin">vitesse</strong>. </li>
+</ul>
+</div>
+
+<div class="complement"> 
+<p> La <strong class="specialLP">barre de saisie</strong> et la <strong class="specialMg">zone d'affichage</strong> opèrent l'une comme l'autre au <strong class="defin">format <em class="sigle">UTF‑8</em></strong> qui est, rappelons-le, <strong>compatible</strong> avec le jeu de caractères <strong><em class="sigle">ASCII</em> restreint</strong> (cf. chap. C3‑IX <a class="previous" href="Cc3-8_typesCaracteres.html#formatUTF‑8" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+
+
+<div class="expert">
+<h4 id="vitesseTransmission"> Vitesse de transmission </h4>
+
+
+<div class="complement">
+<p> Dans une <strong class="defin">liaison asynchrone</strong> où les deux machines ne partagent <strong>pas d'horloge commune</strong>, il est indispensable qu chacune ajuste son horloge à la <strong>même fréquence</strong> pour qu'aucun écart significatif ne se creuse au cours de la transmission. La valeur de cette fréquence conditionne directement la <strong class="title">vitesse de transmission</strong>. </p>
+
+<p> Dans une transmission en série, l'unité de vitesse est le <strong class="title">baud</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Baud_(mesure)" target="_BLANK">W</a> (symbole <em class="bold">Bd</em>), défini comme égal à <strong>1 <strong class="specialLB">symbole</strong> par seconde</strong>, le symbole étant l'entité fondamentale transmise. Dans la plupart des cas, et notamment avec les <strong>cartes</strong> <strong class="Arduino">Arduino</strong>, le <strong class="specialLB">symbole</strong> est simplement le <strong class="specialLG">bit</strong>, et on a donc : </p>
+<div class="inline">
+  <span class="framed" style="line-height: 150%; border-color: black">1 <em class="bold">Bd</em> = 1 <strong class="specialLG">bit</strong><em class="bold">/s</em></span>
+</div><!-- inline -->  
+</div><!-- complement -->
+
+
+</div><!-- expert -->
+
+
+
+
+<p> Concrètement on spécifie la <strong class="title">vitesse de transmission</strong> : </p>
+
+<!-- ajouter une capture d'écran du menu déroulant des vitesses standards -->
+
+<ul>
+	<li> au niveau de la <strong class="defin">carte</strong>, dans le <strong>code source</strong> du programme, en argument d'appel de la <strong>méthode</strong> <code class="prettyprint lang-c">begin</code> (cf. infra <a class="infra" href="Cc3-10_moniteurSerie.html#initialisation"></a>) ; </li>
+
+	<li> au niveau du <strong class="defin">terminal</strong>, dans un <strong>menu déroulant</strong> de la <strong class="specialV">barre de paramétrage</strong> de la fenêtre du moniteur série.</li>
+</ul>
+
+<p> Les <strong>valeurs standards</strong> vont de <em class="bold">300</em> à <em class="bold">2&#8239;000&#8239;000 Bd</em>. Pour faire un bon choix, il faut avoir en tête les considérations suivantes : </p>
+<ul>
+  <li> La valeur <em class="bold">9600 Bd</em> est restée durant longtemps la vitesse <strong>par défaut</strong>. C'est un choix « historique » qui aujourd'hui peut être <strong class="cons">pénalisant</strong> pour la réactivité du programme. En effet, sachant qu'il faut au minimum 10 bits pour transmettre un octet, il faut compter <strong>environ 1 ms par octet transmis</strong> avec cette vitesse. Si le buffer d'émission en vient à être saturé, l'exécution du programme va inévitablement ralentir dans des proportions inacceptables pour un système temps‑réel. </li>
+
+  <div class="nobullet"> Quant aux valeurs inférieures à 9600 Bd, elles sont complètement désuètes. </div> 
+
+
+  <li> La valeur <em class="bold">115200 Bd</em> est aujourd'hui celle qui est employée <strong class="pros">préférentiellement</strong>. Elle est environ 10 fois supérieure à la précédente. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Mais lorsque les données échangées sont très nombreuses, pour ne pas pénaliser le temps d'exécution des programmes, on peut éventuellement augmenter encore cette vitesse d'un facteur 10, c'est‑à‑dire jusqu'à <em class="bold">1000000 Bd</em>. Toutefois, sur certaines cartes à microcontrôleur hautes‑performances et très miniaturisées (<em class="mark">Teensy</em>, par exemple), il peut exister un risque <strong class="warning">échauffement</strong> <strong>du convertisseur <em class="sigle">USB</em>‑serial</strong>.  </div>
+  </div><!-- expert -->
+</ul>
+
+<div class="expert">
+<h4 id="traceur"> Le traceur série </h4>
+
+
+<div class="complement">
+<p> En alternative au moniteur série, l'application <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> permet d'<strong class="defin">afficher sous forme graphique</strong> les <strong>valeurs numériques de sortie</strong> d'une carte à microcontrôleur. </p>
+
+<p> Ce mode d'affichage est activé via la commande « <strong class="title">Traceur série</strong> » du menu « Outils », à condition que le moniteur série ne soit pas lui-même déjà activé (il suffit alors de fermer sa fenêtre). </p>
+</div><!-- complement -->
+
+
+
+<p> <strong>Pour chaque variable du programme</strong> exécuté dans la carte, dont les valeurs sont envoyées via la liaison série par une <strong>instruction répétitive</strong> (c'est‑à‑dire codée dans la fonction <code>loop</code>) de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.print(<span class="nocode"><strong>identificateur</strong></span>);</code>   (cf. infra <a class="infra" href="Cc3-10_moniteurSerie.html#ecriture"></a>)
+</span> <br>
+le traceur trace sur un <strong class="title">diagramme cartésien</strong> une <strong class="defin">courbe</strong> dont les points ont pour <strong>abscisse</strong> l'instant de réception et pour <strong>ordonnée</strong> la valeur de la variable transmise à cet instant. </p>
+
+<p> On voit donc apparaître sur le diagramme <strong>autant de courbes de que variables</strong> suivies, chacune étant tracée avec une <strong>couleur distincte</strong>, automatiquement choisie. </p>
+
+
+<div class="exemples"  style="display: flex; flex-direction: column;">
+<p class="exemple"> La capture d'écran ci‑dessous montre l'affichage du <strong class="title">traceur série</strong> lors de l'exécution d'un <strong class="defin">programme d'asservissement</strong> en fréquence de rotation d'un moteur à courant continu, avec <strong>2 variables</strong> tracées : la <strong style="color:red;">consigne de fréquence de rotation</strong> et la <strong style="color:blue;">mesure de fréquence de rotation</strong>. </p>
+
+  <img class="top-left" src="../img/traceurSerie.jpg">
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+<h3> Dans l'environnement en ligne <em class="mark">Tinkercad</em> </h3>
+
+
+<div class="complement">
+<p> L'environnement de simulation <strong class="Tinkercad">Tinkercad</strong> permet de simuler le <strong>moniteur série</strong> comme si une vraie carte était reliée à l'ordinateur par liaison série. </p>
+</div><!-- complement -->
+
+<div style="display: flex; flex-direction: column;"> 
+  
+<p> Dans une fenêtre de circuit dont le <strong>volet code</strong> est ouvert, la simulation du <strong class="title">moniteur série</strong> est activée par un <strong>clic en bas du volet</strong>. </p>
+
+<p> Il apparaît alors un <strong class="specialMg">zone d'affichage</strong> pour visualiser les sorties et en dessous une <strong class="specialLP">barre de saisie</strong> pour taper au clavier des entrées, à <strong>valider</strong> en cliquant sur le bouton de droite « <strong class="specialV">envoyer</strong> ». </p>
+
+<img class="top-left" src="../img/TinkercadMoniteur.jpg">
+
+</div><!-- display -->
+
+<div class="expert">
+<p> Il n'est <strong class="pros">pas nécessaire</strong> de paramétrer la <strong>vitesse de transmission</strong> : elle s'ajuste automatiquement à celle du code source (il ne s'agit pas d'une véritable liaison série mais d'une simulation). </p>
+
+
+<p> En plus du bouton « envoyer », les <strong>deux autres boutons</strong> à droite dans la barre de saisie ont respectivement pour fonction : </p>
+
+<ul>
+  <li> d'<strong class="specialLP">effacer</strong> le contenu de la zone d'affichage, </li>
+
+  <li> d'activer le mode <strong class="specialMg">traceur série</strong>. </li>
+</ul>
+
+</div><!-- expert -->
+
+<div class="remarques" id="TinkercadUTF8">
+<p class="remarque"> L'environnement <strong class="Tinkercad">Tinkercad</strong> ne simule pas bien certains aspects du fonctionnement de l'application <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. En particulier, la fenêtre du moniteur série n'interprète pas les octets au format <strong class="defin"><em class="sigle">UTF-8</em></strong>, mais en <strong class="warning"><em class="sigle">ASCII</em></strong>. En conséquence, les caractères accentués ne passent <strong class="cons">pas correctement</strong>. </p>
+</div><!-- remarque -->
+
+
+
+
+
+
+
+
+
+
+
+<h2> Administration d'une liaison série </h2>
+
+
+
+<h3 id="initialisation"> Initialisation </h3>
+
+
+
+<div class="complement">
+<p> Même si les objets comme <code class="prettyprint lang-c">Serial</code> sont déjà déclarés par défaut, toute liaison série doit <strong>impérativement</strong> être <strong class="defin">initialisée</strong> avant d'être opérationnelle. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Dans le cas de la liaison usuelle avec le terminal de programmation, l'<strong class="title">initialisation</strong> est effectuée par une instruction d'appel de la <strong class="title">méthode</strong> <code class="prettyprint lang-c">begin</code> de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.begin(<span class="nocode"><strong class="specialLB">vitesse</strong></span>);</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/begin/" target="_BLANK">A</a> 
+</span> <br>
+dont l'argument <strong class="specialLB">vitesse</strong> est une expression à valeur dans le type <code class="prettyprint lang-c">unsigned long</code> qui spécifie la <strong>vitesse de transmission</strong> en <strong class="specialLB">baud</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complementExpert">
+<p> En fait, la <strong>méthode</strong> <code class="prettyprint lang-c">begin</code> possède une <strong class="title">syntaxe générale</strong> d'appel plus détaillée. Elle admet un <strong class="title">deuxième argument</strong> nommé <strong class="defin">config</strong> qui spécifie par une <strong>pseudo‑constantes</strong> de la forme <code class="prettyprint lang-c">SERIAL_<span class="nocode"><strong>xLy</strong></span></code> les options possibles du protocole <em class="sigle">UART</em>, où : </p>
+<ul>
+  <li> <strong>x</strong> est un nombre allant de <code class="prettyprint lang-c">5</code> à <code class="prettyprint lang-c">8</code> qui code <strong>nombre de bits de données</strong> du mot transmis (code <code class="prettyprint lang-c">8</code> par défaut) ; </li>
+
+  <li> <strong>L</strong> est une <em>lettre</em> qui code le <strong>contrôle de parité</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Somme_de_contrôle#Exemple_:_bit_de_parité" target="_BLANK">W</a> mis en œuvre, avec <code class="prettyprint lang-c">N</code> pour <em class="english">no parity</em> (code par défaut), <code class="prettyprint lang-c">E</code> pour <em class="english">even parity</em> (parité paire) ou <code class="prettyprint lang-c">0</code> pour <em class="english">odd parity</em> (parité impaire) ; </li>
+
+  <li> <strong>y</strong> est un nombre à <em>un chiffre</em> valant <code class="prettyprint lang-c">1</code> ou <code class="prettyprint lang-c">2</code> pour coder <strong>nombre de bits de stop</strong> marquant la fin d'émission (code <code class="prettyprint lang-c">1</code> par défaut). </li>
+</ul>
+<p> La pseudo‑constante <strong>par défaut</strong> est donc <code class="prettyprint lang-c">SERIAL_8N1</code> (transmission par mots de 8 bits sans contrôle de parité et avec un seul bit de stop). </p>
+</ul>
+</div><!-- complementExpert -->
+
+
+<div class="remarques">
+<p class="remarque"> L'exécution de l'appel de la <strong>méthode</strong> <code class="prettyprint lang-c">begin</code> : </p>
+<ul>
+  <li> procède simplement au <strong class="defin">paramétrage</strong> du protocole <strong><em class="sigle">UART</em></strong> ; </li>
+
+  <li> n'engendre <strong class="cons">aucun signal logique</strong> sur les broches <strong class="specialMg"><em class="sigle">TX</em></strong> et <strong class="specialLP"><em class="sigle">RX</em></strong> associées à la liaison série ; </li>
+
+  <li> opère <strong class="warning">même en l'absence de medium de transmission</strong> (câble <em class="sigle">USB</em> ou autre) ; </li>
+
+  <li> peut, sur certaines cartes (notamment celles à SoC <strong class="title"><em class="sigle">ESP8266</em></strong> et <strong class="title"><em class="sigle">ESP32</em></strong>) être <strong class="warning">parasitée</strong> par le téléversement ou la réinitialisation du programme, avec : </li>
+  <ul>
+    <li> l'affichage d'une chaîne de <strong class="cons">caractères inattendus</strong> dits <em class="english">garbage</em> (déchets) ou <em class="english">gibberish</em> (charabia), typiquement :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayWhite">
+⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮
+</pre>
+<!---------- ne pas indenter ---------->
+
+    <li> et a contrario, le <strong class="cons">non affichage</strong> de l'argument du premier appel de la fonction <code class="prettyprint lang-c">print</code> ou <code class="prettyprint lang-c">println</code> ;  </li>
+  </ul>
+  <div class="nobullet"> aussi pour éviter la perte d'affichage, il est conseillé de <strong>temporiser l'initialisation</strong> de la liaison et de commencer par un <strong>saut de ligne</strong>, autrement dit de coder par exemple :   </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5" >
+void setup() {
+  delay(500);
+  Serial.begin(115200);
+  Serial.println();
+  <span class="nocode" style="color: grey">…</span>
+</pre>
+<!---------- ne pas indenter ---------->
+  <div class="nobullet"> avant la première instruction de sortie. </div>
+</ul>
+</div><!-- remarques -->
+
+
+<h3> Terminaison </h3>
+
+
+<div class="important">
+<p> Pour coder la <strong class="title">terminaison</strong> de la liaison série, il suffit d'appeler la <strong class="title">méthode</strong> <code class="prettyprint lang-c">end</code> dans une instruction de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.end();</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/end/" target="_BLANK">A</a>
+</span> </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ensuite, pour <strong class="defin">réactiver</strong> la liaison série, il suffit d'appeler à nouveau la méthode <code class="prettyprint lang-c">begin</code>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Clore la liaison série permet d'<strong class="defin">employer autrement</strong> les <strong>broches nº 0 et 1</strong> du port numérique auxquelles la liaison est associée, sans risque de voir les niveaux logiques sur ces broches perturbés. </p>
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> La première instruction dans le code de définition de la méthode <code class="prettyprint lang-c">end</code> est un appel de la méthode <code class="prettyprint lang-c">flush</code> afin de laisser le temps d'achever les émissions en cours (cf. infra <a class="infra" href="Cc3-10_moniteurSerie.html#flush"></a>). </p>
+</div><!-- remarque -->
+
+
+<h3> Test </h3>
+
+
+<div class="complement">
+<p> Le test <code class="prettyprint lang-c">if (Serial)</code>… <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/ifserial" target="_BLANK">A</a> est implémenté par surcharge de l'opérateur <code class="prettyprint lang-c">bool()</code> pour déterminer si la liaison série <strong><em class="sigle">USB</em></strong> est « ouverte ». Il n'est valable que pour les très <strong class="cons">rares</strong> <strong>cartes</strong> <strong class="Arduino">Arduino</strong> ayant un port <strong><em class="sigle">USB</em></strong> <strong class="specialM">natif</strong> , donc <strong class="warning">pas</strong> pour les modèles usuels de cartes (<em class="mark">Uno</em>, <em class="mark">Mega</em>, <em class="mark">Nano</em>, etc.). </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> En revanche, ce test peut être employé pour une carte <strong class="Arduino">Arduino</strong> <strong>Due</strong>. L'objet associé à son port natif étant identifié par <code class="prettyprint lang-c">SerialUSB</code>, l'expression <code class="prettyprint lang-c">SerialUSB</code> prend la valeur <code class="prettyprint lang-c">1</code> (<strong>true</strong>) : </p>
+<ul>
+  <li> <strong>si la carte est bien raccordée</strong> à un terminal via un câble <em class="sigle">USB</em>, </li>
+
+  <li> et <strong>si la liaison série est opérationnelle</strong>, par exemple si le numéro de port est bien sélectionné avec le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> et si le moniteur série est activé. </li>
+</ul>
+<p> Sinon, l'expression <code class="prettyprint lang-c">SerialUSB</code> prend la valeur <code class="prettyprint lang-c">0</code> (<strong>false</strong>). </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="ecriture"> Opérations de sortie par liaison série </h2>
+
+
+
+<h3> Principe général d'une opération de sortie </h3>
+
+
+<!-- faire des schémas -->
+
+
+<div class="complement">
+<p> Dès lors qu'une liaison série est initialisée par un programme sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong>, effectuer une <strong class="title">opération de sortie</strong>, c'est‑à‑dire l'<strong class="defin">émission de données</strong> par la carte se déroule en <strong>3 étapes</strong> : </p>
+
+<ol class="numbered">
+	<li> Les données sont d'abord <strong class="title">écrites</strong> <strong>octet par octet</strong> dans le <strong class="specialMg">buffer d'émission</strong> de l'objet <code class="prettyprint lang-c">Serial</code> associé à la liaison, sachant que chaque octet écrit <strong class="specialR">occupe</strong> un élément du buffer. </li>
+
+	<li> Tant que le buffer n'est pas vide, ces octets sont ensuite l'un après l'autre <strong>sérialisés</strong> en <strong class="defin">signal logique</strong> par l'<strong><em class="sigle">USART</em></strong> ; </li>  
+	<li> Enfin, la <strong class="defin">réception</strong> et le <strong class="defin">traitement</strong> des données émises sont pris en charge par le système avec lequel la carte communique, donc au rythme de ce système, et <strong>indépendamment</strong> de l'exécution du programme sur la carte. </li>
+
+	<div class="nobullet">	S'il s'agit d'un terminal de programmation, c'est l'application <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>, plus précisément son <strong class="specialV">moniteur série</strong>, qui procède à l'affichage des caractères ou l'exécution des actions (tabulation, etc.) dans la <strong class="specialMg">zone d'affichage</strong>, en interprétant ces derniers au <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong>. </div>
+</ol>
+</div><!-- complement -->
+
+<div class="expert">
+<p class="square"> Pour mémoire (cf. supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/buffersSerial"></a>) : </p>
+
+<ul>
+	<li> l'<strong class="specialR">occupation</strong> d'un élément du <strong class="specialMg">buffer d'émission</strong> s'effectue simplement par incrémentation unitaire de l'<strong>indice de tête</strong> du buffer ; </li>
+
+	<li> la <strong class="specialG">libération</strong> d'un élément du <strong class="specialMg">buffer d'émission</strong> s'effectue par incrémentation unitaire de l'<strong>indice de queue</strong> du buffer ; </li>
+</ul>
+
+<p> Si l'indice de tête « rattrape » l'indice de queue (moins une unité), le buffer est <strong class="specialR">plein</strong>. </p>
+
+
+<p class="square"> Quant à l'<strong><em class="sigle">USART</em></strong>, il opère en <strong>arrière-plan</strong> de l'exécution du programme sur le microcontrôleur : </p>
+<ul>
+  <li> sur déclenchement d'une interruption, l'<strong>octet de queue</strong> du <strong class="specialMg">buffer d'émission</strong> est d'abord copié dans le <strong class="specialMg">registre d'émission</strong>, ce qui <strong class="specialG">libère</strong> un élément du buffer d'émission ; </li>
+
+  <li> l'<strong><em class="sigle">USART</em></strong> <strong>sérialise</strong> les bits de l'octet stocké dans le <strong class="specialMg">registre d'émission</strong> et génére un <strong class="defin">signal logique</strong> conforme au protocole <strong><em class="sigle">UART</em></strong> sur la <strong>broche</strong> <strong class="specialMg"><em class="sigle">TX</em></strong> associée à la liaison série ; </li>
+
+  <li> lorsque la génération du signal logique est achevée, l'<strong><em class="sigle">USART</em></strong> déclenche une <strong>interruption</strong> pour signifier que son registre d'émission est prêt pour la sérialisation d'un nouvel octet ; </li>
+</ul>
+<p> ce processus étant mis en œuvre <strong class="warning">même en l'absence de medium de transmission</strong> branché à la carte (câble <em class="sigle">USB</em> ou autre). </p>
+
+<div class="remarques">
+<p class="remarque"> Lorsque le <strong class="specialMg">buffer d'émission</strong> est <strong class="specialG">vide</strong>, l'octet à émettre est <strong>directement copié</strong> dans le <strong class="specialMg">registre d'émission</strong> de l'<strong><em class="sigle">USART</em></strong>, ce qui augmente significativement la vitesse maximale de transmission possible. </p>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+<h3> Modes d'écriture </h3>
+
+
+<div class="complement">
+<p> Pour programmer une émission de données, le codeur dispose principalement de <strong class="defin">deux modes</strong> <strong class="title">d'écriture</strong> : </p>
+
+<ul>
+  <li> <strong>par <strong class="defin">octets</strong></strong>, via la méthode <code class="prettyprint lang-c">write</code> (mode dit de <em>bas niveau</em>) ; </li>
+
+  <li> <strong>par <strong class="defin">caractères</strong></strong>, via les méthodes <code class="prettyprint lang-c">print</code> et <code class="prettyprint lang-c">println</code> (mode dit de <em>haut niveau</em>, car au format <strong><em class="sigle">UTF‑8</em></strong>, un caractère peut être encodé sur plusieurs octets). </li>
+</ul>
+
+<p> Les <strong>méthodes</strong> (ou <em>fonctions</em>) d'<strong class="title">écriture</strong> sont héritées de la classe <code class="prettyprint lang-c">Print</code>, et sont définies dans le fichier <code class="filename">Print.cpp</code>. </p>
+
+</div><!-- complement -->
+
+<div class="expert">
+<p> Les méthodes d'écriture font elle‑même appel à des méthodes de <strong>très bas niveau</strong> définies dans le fichier <code class="filename">HardwareSerial.cpp</code>, en particulier : </p>
+
+<ul>
+  <li> la méthode <code class="prettyprint lang-c">write</code> pour écrire un nouvel octet <strong>en tête</strong> du <strong class="specialMg">buffer d'émission</strong> (cet octet étant le <strong>dernier entré</strong> parmi de tous ceux déjà présents dans le buffer, il sera donc le <strong>dernier à sortir</strong>) ; </li>
+
+  <li> la méthode <code class="prettyprint lang-c">_tx_udr_empty_irq</code> pour copier l'octet <strong>en queue</strong> de <strong class="specialMg">buffer d'émission</strong> dans le <strong class="specialMg">registre d'émission</strong> (cet octet étant alors le <strong>premier entré</strong> parmi de tous ceux présents dans le buffer, il est donc le <strong>premier à sortir</strong>). </li>
+</ul>
+
+<p> Même si elles sont publiques, ces deux méthodes n'ont pas vocation à être appelée dans un programme codé sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong>. </p>
+
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> La méthode <code class="prettyprint lang-c">write</code> de très bas niveau définie dans le fichier <code class="filename">HardwareSerial.cpp</code> ne doit pas être confondue avec celle ayant le même identificateur mais définie dans le fichier <code class="filename">Print.cpp</code>. </p>
+</div><!-- remarque --> 
+
+
+
+<h3> Écriture par octets </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">méthode</strong> <code class="prettyprint lang-c">write</code> définie dans le fichier <code class="filename">Print.cpp</code> est une fonction de <strong>bas niveau</strong> qui procède <strong class="defin">par octets</strong>. Un appel de la forme : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.write(<span class="nocode"><strong class="specialLB">expression</strong></span>)</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/write/" target="_BLANK">A</a>
+</span> <br>
+<strong class="defin">écrit</strong> <strong>octet par octet</strong> la valeur de l'<strong class="specialLB">expression</strong> en tête du <strong class="specialMg">buffer d'émission</strong> de l'objet <code class="prettyprint lang-c">Serial</code>. </p>
+</div><!-- important -->
+
+<div class="remarques"><p class="remarques"></p>
+  
+<ul>
+  <li> La méthode <code class="prettyprint lang-c">write</code> retourne le <strong class="specialM">nombre d'octets écrits</strong>, encodé dans le type <code class="prettyprint lang-c">size_t</code>. Mais cette valeur est <strong>rarement exploitée</strong> ; usuellement, l'appel est codé comme une simple instruction. </li>
+
+  <li> Dans le <strong class="specialV">moniteur série</strong>, les <strong>octets reçus</strong> sont <strong>interprétés</strong> au <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong> et affichés comme des <strong>caractères</strong>, ce qui peut prêter à confusion sur le mode d'écriture de la méthode <code class="prettyprint lang-c">write</code>, qui procède bien par <strong class="defin">octets</strong>.</li>
+</ul>
+</div><!-- remarques -->
+
+<div class="complement">
+<p> L'<strong class="specialLB">expression</strong> passée en argument de la méthode <code class="prettyprint lang-c">write</code> peut être de <strong>type</strong> : </p>
+
+<ol class="littered">
+	<li> <strong class="defin">entier</strong>, et en particulier codée par une <strong>valeur de caractère</strong> saisie entre guillemets simples <code class="prettyprint lang-c">''</code> ; </li>
+
+	<li> <strong class="defin">chaîne de caractère</strong>, et en particulier codée par <strong>suite de caractères simples ou étendus</strong> encadrée par des guillemets doubles <code class="prettyprint lang-c">""</code>. </li>
+</ol>
+</div><!-- complement -->
+
+
+<ol class="littered" id="exemplesWrite">
+	<li> Si l'argument <strong class="specialLB">expression</strong> est de <strong>type</strong> <strong class="defin">entier</strong> :  </li>
+
+	<div class="expert"> Elle est évaluée par <strong>conversion implicite</strong> dans le type <code class="prettyprint lang-c">unsigned char</code>, avec rebouclage cyclique éventuel (cf. chap. C3‑VI <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/Cc3-6\conversionsTypes.html#conversionsImplicites" target="_BLANK"></a>. S'il s'agit d'une valeur de caractère saisie entre guillemets simples  seul l'<strong>octet de poids faible</strong> de son code <strong class="defin"><em class="sigle">UTF‑8</em></strong> est retenu. Dans tous les cas, <strong>un seul octet</strong> est écrit en tête du buffer d'émission.
+	</div><!-- expert -->
+
+  <div class="exemples"><p class="exemples"></p>
+  <p> Dans tous les exemples ci‑dessous, on fait l'hypothèse que le programme s'exécute sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> reliée à un terminal de programmation où le <strong class="specialV">moniteur série</strong> est activé. La liaison série est supposée initialisée correctement. </p>
+   	
+  <ul>
+  	<li> L'instruction <code class="prettyprint lang-c">Serial.write(65);</code> écrit l'octet de valeur <code>65</code> (ou <code>0x41</code>) dans le buffer d'émission. Interprété au <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong>, il devient <code class="displayWhite">A</code> dans la zone d'affichage, car <code>65</code> est le code de la lettre « A » (cf. chap. C3‑VIII <a class="previous" href="Cc3-8_typesCaracteres.html#tableASCIIrestreint" target="_BLANK"></a>). </li>
+
+    <div class="expert">
+  	<li> L'instruction <code class="prettyprint lang-c">Serial.write(65 + 256);</code> donne exactement le même résultat parce qu'un octet encode 256 valeurs entières, donc le rebouclage opère modulo 256. </li>
+    </div><!-- expert -->
+
+    <li> L'instruction <code class="prettyprint lang-c">Serial.write('A');</code> donne aussi le même résultat parce que la valeur de caractère <code>'A'</code> est évaluée par son code <strong class="defin"><em class="sigle">UTF‑8</em></strong>, à savoir l'entier <code>65</code>. </li>
+
+    <div class="expert">
+    <li> L'instruction <code class="prettyprint lang-c">Serial.write(128);</code> écrit l'octet de valeur <code>128</code> (ou <code>0x80</code>) dans le buffer d'émission. Mais comme <code>128</code> ne correspond pas dans le <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong> à un code de caractère affichable, il n'apparaît qu'un symbole générique « <code class="displayWhite">⍰</code> » dans la zone d'affichage. </li>
+
+    <li> L'instruction <code class="prettyprint lang-c">Serial.write('é');</code> écrit l'octet de valeur <code>169</code> (ou <code>0xA9</code>) dans le buffer d'émission car c'est la valeur de l'octet de poids faible du code <strong class="defin"><em class="sigle">UTF‑8</em></strong> du caractère <code>'é'</code>. Mais comme <code>169</code> ne correspond pas dans le <strong>format</strong> <strong class="defin"><em class="sigle">UTF‑8</em></strong> à un code de caractère affichable, il n'apparaît qu'un symbole générique « <code class="displayWhite">⍰</code> » dans la zone d'affichage. </li>
+    </div><!-- expert -->
+  </ul>
+  </div><!-- exemples -->
+
+  <li> Si l'argument <strong class="specialLB">expression</strong> est de <strong>type</strong> <strong class="defin">chaîne de caractères </strong> :</li>
+
+  <div class="expert"> Les <strong>codes <em class="sigle">UTF‑8</em></strong> des caractères qui la composent (encodés sur un ou plusieurs octets) sont écrits sont l'un après l'autre en tête du buffer d'émission.
+  </div><!-- expert -->
+
+  <div class="exemples"><p class="exemples"></p>
+  	<p> Comme précédemment, on fait l'hypothèse que le programme s'exécute sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> reliée à un terminal de programmation où le <strong class="specialV">moniteur série</strong> est activé, la liaison série étant initialisée. </p>
+  <ul>
+  	<li> L'instruction <code class="prettyprint lang-c">Serial.write("C++");</code> écrit les codes <strong class="defin"><em class="sigle">UTF‑8</em></strong> <code>67</code> (<code>'C'</code>), <code>43</code> (<code>'+'</code>) et <code>43</code> (<code>'+'</code>) dans le buffer d'émission. Dans le moniteur série, ils sont interprétés comme tels pour former le mot <code class="displayWhite">C++</code>  sur la zone d'affichage. </li>
+    
+    <div class="expert">
+  	<li> L'instruction <code class="prettyprint lang-c">Serial.write("é");</code> écrit le code <strong class="defin"><em class="sigle">UTF‑8</em></strong> <code>0xC3A9</code>, soit les deux octets de valeur décimale <code>169</code> (<code>0xA9</code>) et <code>195</code> (<code>0xC3</code>) dans le buffer d'émission. Dans la zone d'affichage du moniteur série, ils formeront la chaîne composée d'un seul caractère <code class="displayWhite">é</code>. </li>
+
+    <div class="nobullet"> <em class="remark">Remarque</em>. Comme exposé supra <a class="supra" href="Cc3-10_moniteurSerie.html#TinkercadUTF8"></a>, l'environnement <strong class="Tinkercad">Tinkercad</strong> ne prend <strong class="cons">pas en charge</strong> le format <strong><em class="sigle">UTF‑8</em></strong> dans la simulation du moniteur série. Ainsi, l'instruction <code class="prettyprint lang-c">Serial.write("é");</code> affiche la chaîne de caractères <code class="displayWhite">Ã©</code> dans la fenêtre de simulation du moniteur série. Ces deux caractères correspondent respectivement aux valeurs de caractères des codes <strong class="warning"><em class="sigle">ASCII</em> étendus</strong> <code>0xC3</code> et <code>0xC3A9</code> de la <strong>page de code 1252</strong> (cf. chap. C3‑VIII <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/..C3-Numeration/Cc3-8_typesCaracteres.html#page1252" target="_BLANK"></a>).
+    </div>
+    </div><!-- expert -->
+  </ul>
+  </div><!-- exemples -->
+</ol>
+
+
+<div class="expert">
+<h4> Limitation du nombre d'octets émis </h4>
+
+
+<div class="complement">
+<p> Dans le cas où l'<strong class="specialLB">expression</strong> est une <strong class="defin">chaîne de caractères</strong>, on peut <strong>limiter le nombre <strong class="specialG">n</strong> d'octets</strong> effectivement <strong class="defin">écrits</strong> en tête du <strong class="specialMg">buffer d'émission</strong> de l'objet <code class="prettyprint lang-c">Serial</code> par un <strong class="specialG">argument optionnel</strong> de type <code class="prettyprint lang-c">size_t</code> dans l'appel de la méthode. </p>
+<p> Il suffit pour cela d'employer la syntaxe d'appel :  <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.write(<span class="nocode"><strong class="specialLB">expression</strong> <span class="option">[</span></span>, <span class="nocode"><strong class="specialG">n</strong><span class="option">]</span></span>)</code>
+</span> </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> L'instruction <code class="prettyprint lang-c">Serial.write("Bonjour", 3);</code> affiche la chaîne tronquée <code class="displayWhite">Bon</code> (3 premiers caractères) sur le moniteur série. </p> 
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+<h3 id="printPrintln"> Écriture par caractères </h3>
+
+
+<h4> Principe de l'écriture par caractères </h4>
+
+
+<div class="complement">
+
+<p> Les <strong class="title">méthodes</strong> <code class="prettyprint lang-c">print</code>  et <code class="prettyprint lang-c">println</code>  sont des fonctions similaires à <code class="prettyprint lang-c">write</code>, mais elles opèrent à plus <strong class="defin">haut niveau</strong> : elles acceptent également comme argument principal une <strong class="specialLB">expression</strong> à <strong>valeurs numériques</strong> <strong class="defin">entières</strong> ou <strong class="defin">décimales</strong>, et non plus seulement un octet ou une chaîne d'octets.  </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p class="square"> Le principe de traitement est le suivant : </p>
+<ol class="numbered">
+  <li> Une fois que l'<strong class="specialLB">expression</strong> est évaluée, la <strong class="defin">valeur numérique</strong> obtenue est éventuellement <strong>convertie</strong> dans une autre base de numération, ou encore <strong>tronquée</strong>, si un argument optionnel de <strong class="specialG">format</strong> est codé dans l'appel de la méthode. </li>
+
+  <li> Cette <strong class="defin">valeur numérique</strong> est alors est interprétée non pas dans son format usuel d'encodage mais comme <strong>une chaîne de caractères</strong> codés en <strong><em class="sigle">ASCII</em></strong>. </li>
+
+  <li> Les <strong>octets</strong> constituant les codes <strong><em class="sigle">ASCII</em></strong>  de chaque chiffre ou symbole de la chaîne de caractères sont ensuite <strong>écrits</strong> l'un après l'autre dans le <strong class="specialMg">buffer d'émission</strong>. </li>
+</ol>
+
+<p> Ensuite, le procédé suit le même cours qu'avec la méthode write : les octets contenus dans le <strong class="specialMg">buffer d'émission</strong> sont copiés l'un après l'autre dans le <strong class="specialMg">registre d'émission</strong> pour y être sérialisés. S'ils sont émis par l'<strong><em class="sigle">USART</em></strong> à destination du <strong class="specialV">moniteur série</strong>, ils seront interprétés – et donc affichés – comme des <strong>caractères</strong> au format <strong class="defin"><em class="sigle">UTF‑8</em></strong>. </p>
+</div><!-- expert -->
+
+
+<p class="square"> Pour bien comprendre la différence avec la méthode <code class="prettyprint lang-c">write</code>, comparons l'affichage obtenu pour le même argument qu'au 1<sup>er</sup> exemple supra <a class="supra" href="Cc3-10_moniteurSerie.html#exemplesWrite"></a> (pour mémoire, l'instruction <code class="prettyprint lang-c">Serial.write(65);</code> affiche <code class="displayWhite">A</code> sur le moniteur série  car 65 est le code <strong><em class="sigle">UTF‑8</em></strong> du caractère « A »). </p>
+
+<div class="exemples">
+<p class="exemple"> Dans l'instruction <code class="prettyprint lang-c">Serial.print(65);</code> l'argument <code>65</code> est lu par le compilateur non pas comme le code <em class="sigle">UTF‑8</em> d'un caractère mais comme le <strong>nombre entier</strong> <em class="bold">65</em>. Il est interprété comme la chaîne constituée des caractères <code>'6'</code> et <code>'5'</code> qui sont l'un après l'autre affichés sur le moniteur série pour former la chaîne ­<code class="displayWhite">65</code> (et non pas la lettre <code class="displayWhite">A</code>). </p>
+
+<p> Ainsi, on pourrait avoir l'illusion que c'est la valeur entière 65 (encodée en binaire) qui a été transmise, mais il n'en est rien : c'est une chaîne de caractères. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> L'instruction <code class="prettyprint lang-c">Serial.print('A');</code> produit le <strong>même effet</strong> que <code class="prettyprint lang-c">Serial.write('A');</code>, à savoir l'émission du code <strong><em class="sigle">UTF‑8</em></strong> du caractère « A » passé en argument, qui est ensuite affiché <code class="displayWhite">A</code> sur le moniteur série. </p>
+</div><!-- remarque -->
+
+
+
+<h4> Syntaxes d'appel </h4>
+
+
+<div class="complement">
+<p> Les méthodes <code class="prettyprint lang-c">print</code> et <code class="prettyprint lang-c">println</code> obéissent à une <strong>syntaxe d'appel plus variée</strong> que  <code class="prettyprint lang-c">write</code>. Elle dépend de l'<strong class="specialLB">expression</strong> passée en premier argument, qui peut être de <strong>type</strong> : </p>
+
+<ol class="littered">
+	<li> <strong class="defin">entier</strong>, </li>
+
+	<li> <strong class="defin">décimal</strong>, </li>
+
+	<li> <strong class="defin">caractère</strong> ou <strong class="defin">chaîne de caractère</strong>, </li>
+</ol>
+
+<p> sachant que dans tous les cas, l'expression peut en particulier être codée par une <strong>constante littérale</strong> avec la syntaxe appropriée (cf. les chapitres précédents et spécifiquement le chapitre C5‑VI pour les chaînes de caractères). </p>
+</div><!-- complement -->
+
+
+<ol class="littered">
+	<li> 
+	<div class="important">
+	<p> Si l'<strong class="specialLB">expression</strong> est à valeur <strong class="defin">entière</strong>, <strong>signée ou non</strong>, alors la <strong class="title">syntaxe d'appel</strong> est : <br>
+  <span class="inline">
+	<code class="prettyprint lang-c">Serial.print(<span class="nocode"><strong class="specialLB">expression</strong> <span class="option">[</span></span>,
+  <span class="nocode"><strong class="specialG">base</strong><span class="option">]</span></span>)</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/print/" target="_BLANK">A</a>
+	</span> <br>
+	où l'<strong>argument optionnel</strong> <strong class="specialG">base</strong> spécifie la <strong>base de numération</strong> de la <strong class="specialG">valeur formatée</strong> à <strong class="title">écrire</strong> en tête du <strong>buffer d'émission</strong> de l'objet <code class="prettyprint lang-c">Serial</code>. </p>
+
+	<p> Ce formatage est appliqué quel que soit le préfixe (<code>0x</code>, <code>0b</code>…) éventuellement spécifié dans l'<strong class="specialLB">expression</strong> passée comme premier argument. </p>
+	</div><!-- important -->
+
+	<div class="complement">
+	<p> L'argument optionnel <strong class="specialG">base</strong> peut être codé : </p>
+	<ul>
+	  <li> par n'importe quelle expression prenant la <strong>valeur</strong> <code class="prettyprint lang-c">2</code>, <code class="prettyprint lang-c">8</code>, <code class="prettyprint lang-c">10</code> ou <code class="prettyprint lang-c">16</code> ;</li>
+
+	  <li> où, pour une meilleure lisibilité, par l'une des <strong>pseudo-constantes</strong> <code class="prettyprint lang-c">BIN</code>, <code class="prettyprint lang-c">OCT</code>, <code class="prettyprint lang-c">DEC</code> ou <code class="prettyprint lang-c">HEX</code> définies dans le fichier d'en‑tête <code class="filename">Print.h</code> ; </li>
+	</ul>
+	<p>sachant que c'est <strong>par défaut</strong> la <strong class="specialG">base 10</strong> de formatage qui est adoptée. </p>
+	</div><!-- complement -->
+
+	<div class="exemples"><p class="exemples"></p>
+	<p> Comme précédemment, on fait l'hypothèse que le programme s'exécute sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> reliée à un terminal de programmation où le <strong class="specialV">moniteur série</strong> est activé, la liaison série étant initialisée. </p>
+	<ul>
+		<li> L'instruction <code class="prettyprint lang-c">Serial.print(6, BIN);</code> affiche la chaîne de caractères <code class="displayWhite">110</code>. </li>
+
+	  <div class="expert"> 
+	  <div class="nobullet"> Plus précisément, cette instruction : </div>
+	  <ul>
+			<li> convertit la valeur <code>6</code> en <strong class="specialG">base 2</strong>, aboutissant au nombre binaire <code>110</code>, </li>
+
+		  <li> convertit ce nombre binaire en la chaîne de trois caractères <code>'1'</code>, <code>'1'</code> et <code>'0'</code>, </li>
+
+		  <li> convertit ces caractères en leurs codes <strong><em class="sigle">ASCII</em></strong> <code>0x31</code>, <code>0x31</code> et <code>0x30</code>, </li>
+
+		  <li> écrit ces octets de code dans le <strong class="specialMg">buffer d'émission</strong>. </li>
+	  </ul>
+
+	  <div class="nobullet"> Copiés l'un après l'autre dans le <strong class="specialMg">registre d'émission</strong>, puis sérialisés par l'<strong><em class="sigle">USART</em></strong>, ces octets sont interprétés par le <strong class="specialV">moniteur série</strong> comme des codes <strong class="defin"><em class="sigle">UTF‑8</em></strong> (identiques aux codes <em class="sigle">ASCII</em> restreints). Les caractère qui s'affichent sont donc les digits binaires de la constante littérale <code class="prettyprint lang-c">6</code> passée en argument. </div>
+	  </div><!-- expert -->
+
+	  <li> L'instruction <code class="prettyprint lang-c">Serial.print(0b1111, HEX);</code> affiche la chaîne de caractères <code class="displayWhite">F</code>. </li>
+
+	  <div class="expert"> 
+	  <div class="nobullet"> Plus précisément, cette instruction : </div>
+	  <ul>
+		  <li> convertit la valeur binaire <code>1111</code> en <strong class="specialG">base 16</strong>,  aboutissant au nombre à un seul digit <code>F</code> ; </li>
+
+		  <li> convertit ce digit en son code <strong><em class="sigle">ASCII</em></strong> <code>0x46</code>, </li>
+
+		  <li> écrit cet octet de code dans le <strong class="specialMg">buffer d'émission</strong>. </li>
+	  </ul>
+
+	  <div class="nobullet"> Comme pour l'exemple précédent, cet octet est ensuite interprété comme un code <strong class="defin"><em class="sigle">UTF‑8</em></strong> et apparaît donc comme <code class="displayWhite">F</code> dans la <strong class="specialMg">zone d'affichage</strong>. </div>
+	  </div><!-- expert -->
+	</ul>
+	</div><!-- exemples -->
+	</li><!-- cas entiers -->
+  
+  <li> 
+  	<div class="important">
+		<p> Si <strong class="specialLB">expression</strong> est à valeur <strong class="defin">décimale</strong> (c'est‑à‑dire codé dans un type flottant) alors la <strong class="title">syntaxe d'appel</strong> est : <br>
+		<span class="inline">
+  		<code class="prettyprint lang-c">Serial.print(<span class="nocode"><strong class="specialLB">expression</strong> <span class="option">[</span></span>, <span class="nocode"><strong class="specialT">digit</strong><span class="option">]</span></span>)</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/print/" target="_BLANK">A</a>
+		</span> <br>
+		où l'<strong>argument optionnel</strong> <strong class="specialT">digit</strong> spécifie le <strong>nombre de décimales</strong> près auquel arrondir la <strong class="specialT">valeur formatée</strong> <strong class="title">écrite</strong> en tête du <strong>buffer d'émission</strong> de l'objet <code class="prettyprint lang-c">Serial</code>. </p>
+		</div><!-- important -->
+
+		<div class="complement">
+		<p> L'argument optionnel <strong class="specialT">digit</strong> peut être codé par n'importe quelle expression à <strong>valeur entière positive ou nulle</strong>.  </p>
+
+		<p> En principe, toutes les décimales spécifiées supplémentaires à celles encodées dans le type flottant de l'<strong class="specialLB">expression</strong> passée en premier argument sont formatées <code class="displayWhite">0</code>. </p>
+		</div><!-- complement -->
+
+    <div class="exemples"><p class="exemples"></p>
+    <p> Comme précédemment, on fait l'hypothèse que le programme s'exécute sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> reliée à un terminal de programmation où le <strong class="specialV">moniteur série</strong> est activé, la liaison série étant initialisée. </p>
+
+	  <ul>
+		  <li> L'instruction <code class="prettyprint lang-c">Serial.print(12.345678, 3);</code> affiche la chaîne de caractères <code class="displayWhite">12.346</code> </li>
+
+		  <div class="expert">
+
+		  <div class="nobullet"> Plus précisément, cette instruction : </div>
+			<ul>
+			  <li> arrondit à <code>12.346</code> la valeur formatée (la 3<sup>e</sup> décimale est passée à la valeur entière supérieure parce que la décimale suivante <code>6</code> est supérieure où égale à 5) ; </li>
+
+			  <li> convertit cette valeur numérique en la chaîne de caractères <code>"12.346"</code> ;  </li>
+
+			  <li> convertit chaque caractère de cette chaîne en son code <em class="sigle">ASCII</em> ; </li>
+
+			  <li> écrit ces octets de code dans le buffer d'émission.  </li>
+			</ul>
+			<div class="nobullet"> Interprétés comme des codes <em class="sigle">UTF‑8</em>, ils formeront la chaîne de caractères décimaux souhaitée dans la zone d'affichage. </div>
+
+      <li> L'instruction <code class="prettyprint lang-c">Serial.print(PI, 25)</code> affiche : <br>
+			<span class="inline">
+  			<code class="displayWhite">3.1415927410125732421875000</code>
+			</span> <br>
+			sur le <strong class="specialV">moniteur série</strong> (pour mémoire, le nombre π vaut 3,14159265 à 10<sup>−8</sup> près). </li>
+
+      <div class="nobullet"> Le fait de spécifier 25 décimales n'apporte pas de précision supplémentaire au nombre affiché, qui reste tributaire de la résolution du type <code class="prettyprint lang-c">double</code> dans lequel la pseudo-constante <code>PI</code> (définie pourtant avec 31 décimales dans le fichier <code class="filename">Arduino.h</code>) est implicitement convertie, sachant que sur une carte <strong>Uno</strong>, le type <code class="prettyprint lang-c">double</code> est implémenté avec la même précision que le type <code class="prettyprint lang-c">float</code> (cf. chap. C3‑V <a class="previous" href="Cc3-5_typesFlottants.html#floatArduino" target="_BLANK"></a>).</div>
+
+      <li> L'instruction <code class="prettyprint lang-c">Serial.print(123456789.012345, 2)</code> affiche : <br>
+			<span class="inline">
+  			<code class="displayWhite">123456792.00</code>
+			</span> <br>
+			sur le <strong class="specialV">moniteur série</strong>. </li>
+
+			<div class="nobullet"> Là encore, le nombre affiché diffère de celui spécifié à cause de sa conversion implicite dans le type <code class="prettyprint lang-c">double</code> qui n'est implémenté qu'en simple précision. </div>
+
+			</div><!-- expert -->
+    	</ul>
+  	</div><!-- exemples -->  
+  </li><!-- cas décimaux -->
+
+  <li> 
+  <div class="important">
+	<p> Si l'<strong class="specialLB">expression</strong> prend une valeur de <strong class="defin">caractère</strong> ou de <strong class="defin">chaîne de caractères</strong>, alors la <strong class="title">syntaxe d'appel</strong> est simplement :  <br>
+	<span class="inline">
+	  <code class="prettyprint lang-c">Serial.print(<span class="nocode"><strong class="specialLB">expression</strong></span>)</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/print/" target="_BLANK">A</a>
+	</span> <br>
+	avec des résultats identiques à ceux obtenus par appel de la méthode <code class="prettyprint lang-c">write</code> (cf. supra <a class="supra" href="Cc3-10_moniteurSerie.html#exemplesWrite"></a>). </p>
+	</div><!-- important -->
+
+  <div class="expert">
+  <div class="exemples"> <p class="exemples"></p>
+  	<p> Dans la <strong class="specialMg">zone d'affichage</strong> du moniteur série : </p>
+    <ul>
+    	<li> <code class="prettyprint lang-c">Serial.print('e')</code> donne <code class="displayWhite">e</code> mais <code class="prettyprint lang-c">Serial.print('é')</code> donne <code class="displayWhite">⍰</code> ; </li>
+
+    	<li>  <code class="prettyprint lang-c">Serial.print("Hé")</code> donne <code class="displayWhite">Hé</code>. </li>
+    </ul>
+	</div><!-- exemple -->
+  </div><!-- expert -->
+  </li><!-- cas caractères -->
+</ol>
+
+
+<h4> Spécificité de la méthode <code class="prettyprint lang-c">println</code> </h4>
+
+
+<div class="important">
+<p> La <strong class="title">méthode</strong> <code class="prettyprint lang-c">println</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/println/" target="_BLANK">A</a> obéit à la <strong>même syntaxe</strong> que <code class="prettyprint lang-c">print</code>. </p>
+
+<p> Sa spécificité est qu'elle <strong class="title">écrit</strong> <strong>en plus</strong> un <strong class="specialO">saut de ligne</strong> après le dernier octet encodant l'<strong class="specialLB">expression</strong> passée en argument principal. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ce <strong class="specialO">saut de ligne</strong> est constitué de <strong class="defin">deux caractères spéciaux</strong> : </p>
+<ul>
+  <li> un caractère <strong>retour chariot</strong> <code class="prettyprint lang-c">'\r'</code> (<em class="english">carriage return</em>), code <em class="sigle">ASCII</em> ou <em class="sigle">UTF‑8</em> <code>0x0D</code> ; </li>
+
+  <li> un caractère <strong>nouvelle ligne</strong> <code class="prettyprint lang-c">'\n'</code> (<em class="english">new line</em> ou <em class="english">line feed</em>), code <em class="sigle">ASCII</em> ou <em class="sigle">UTF‑8</em> <code>0x0A</code>.</li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">sauts de ligne</strong> émis à destination du moniteur série sont <strong>toujours effectifs</strong> dans la <strong class="specialMg">zone d'affichage</strong> quel que soit le paramétrage choisi dans le menu déroulant situé bas de la fenêtre – cf. supra <a class="supra" href="Cc3-10_moniteurSerie.html#moniteur"></a>. En effet, ce dernier ne s'applique à qu'à la <strong class="specialLP">barre de saisie</strong> et non pas à la zone d'affichage. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Gestion du buffer d'émission  </h3>
+
+
+
+<p> On vient de voir que les méthodes <code class="prettyprint lang-c">write</code> ou <code class="prettyprint lang-c">print</code>(<code class="prettyprint lang-c">ln</code>) se résument in fine à <strong class="defin">écrire des octets</strong> en tête de <strong class="specialMg">buffer d'émission</strong>. </p>
+
+<p> Quant au <strong>transfert</strong> de ces octets dans le <strong class="specialMg">registre d'émission</strong> puis leur <strong>sérialisation</strong> en signal logique sur la <strong>broche</strong> <strong class="specialMg"><em class="sigle">TX</em></strong>, cela est effectué en arrière-plan de l'exécution du programme. </p> 
+
+
+<div class="complement">
+<p> Mais, tant qu'ils ne sont <strong>pas émis</strong>, les octets <strong class="defin">restent stockés</strong> dans le <strong class="specialMg">buffer d'émission</strong>. Donc si <strong class="cons">trop</strong> de d'opérations de <strong class="title">sortie</strong> sont codées, le buffer se remplit plus vite qu'il ne se vide et on s'achemine vers une <strong class="specialR">saturation</strong> au sens où le buffer est <strong class="specialR">plein</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> En cas de <strong class="warning">saturation</strong> du <strong class="specialMg">buffer d'émission</strong>, tout <strong>nouvel appel</strong> d'une <strong class="title">méthode de sortie</strong> ne provoque <strong class="	defin">pas d'écrasement d'octets</strong>. </p>
+
+<p>En revanche, l'exécution de ce nouvel appel comprend une <strong class="cons">attente</strong> de libération d'éléments dans le <strong class="specialMg">buffer d'émission</strong> jusqu'à ce que <strong>tous les octets</strong> de l'<strong class="specialLB">expression</strong> passée en argument y soient <strong class="defin">écrits</strong>. </p>
+</div><!-- important -->
+
+<p> La préservation de l'intégrité des données se paye donc par une potentielle <strong class="cons">baisse de réactivité</strong> du programme. Pour <strong class="title">prévenir</strong> ce phénomène, le module de bibliothèque <code>HardwareSerial</code> fournit : </p>
+
+<ul>
+	<li> <code class="prettyprint lang-c">flush</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/flush/" target="_BLANK">A</a>, une méthode pour <strong class="	defin">attendre</strong> que le buffer soit <strong>vide</strong> ; </li>
+
+	<li> <code class="prettyprint lang-c">availableForWrite</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/availableforwrite/" target="_BLANK">A</a>, une méthode pour connaître le <strong>nombre d'éléments</strong> <strong class="defin">disponibles</strong> dans le buffer. </li>
+</ul> </p>
+
+
+<div class="expert">
+<h4 id="flush"> La méthode <code class="prettyprint lang-c">flush</code> </h4>
+
+
+<div class="important">
+<p> La <strong class="title">méthode</strong> <code class="prettyprint lang-c">flush</code> est une fonction <strong>sans argument</strong> et qui ne retourne <strong>aucune valeur</strong>. Elle <strong class="defin">suspend l'exécution du programme</strong> jusqu'à ce que tous les octets stockés dans le <strong class="specialMg">buffer d'émission</strong> aient été <strong>envoyés</strong>, avant de passer à l'exécution de l'instruction suivante. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ainsi, le codage d'une instruction : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.flush();</code>
+</span> <br>
+garantit, immédiatement après, la <strong>disponibilité maximale</strong> du <strong class="specialMg">buffer d'émission</strong>. </p>
+</div><!-- complement -->
+
+<p> En contre-partie, l'appel de la méthode <code class="prettyprint lang-c">flush</code> demande un <strong><strong class="defin">temps d'exécution</strong> d'autant plus <strong class="warning">long</strong> que le buffer est <strong class="warning">rempli</strong></strong>. L'idéal est de la programmer durant une phase d'exécution qui n'est pas soumises à des exigences de vitesse trop sévères. </p>
+
+<p> On peut coder également coder l'appel de <code class="prettyprint lang-c">flush</code> dans une <strong>instruction conditionnelle</strong>, en testant la valeur du nombre d'éléments disponibles en écriture à l'aide de la <strong>méthode</strong> <code class="prettyprint lang-c">availableForWrite</code> (cf. infra). </p>
+
+
+
+<h4> La méthode <code class="prettyprint lang-c">availableForWrite</code> </h4>
+
+
+<div class="important">
+<p> La <strong class="title">méthode</strong> <code class="prettyprint lang-c">availableForWrite</code> est une fonction <strong>sans argument</strong> qui retourne dans le type <code class="prettyprint lang-c">int</code> le <strong class="defin">nombre d'éléments vacants</strong> dans le <strong class="specialMg">buffer d'émission</strong> . </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Cette méthode permet aussi de déterminer par complément le <strong>nombre d'éléments</strong> en <strong class="defin">attente d'envoi</strong> dans le <strong class="specialMg">buffer d'émission</strong> associé à l'objet <code class="prettyprint lang-c">Serial</code>. Il suffit de coder l'expression : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">SERIAL_TX_BUFFER_SIZE - 1 - Serial.availableForWrite()</code>
+</span> </p> 
+</div><!-- complement -->
+
+<p> Grâce à la connaissance du nombre d'éléments vacants dans le <strong class="specialMg">buffer d'émission</strong>, en cas d'impératifs de rapidité, on peut alors conditionner l'appel d'une méthode de sortie, sachant par ailleurs le <strong>nombre d'octets à émettre</strong> que cette sortie suppose. </p>
+
+
+<div class="exemples">
+<p class="exemple"></p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:50">
+  if (Serial.availableForWrite() >= 17) { // message not urgent
+    Serial.println("Wait, please...");
+  } 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p class="remarque"> La chaîne de caractères à envoyer ne compte que 15 octets, mais on compare ici à la valeur <code>17</code>. </p>
+
+<p> En effet, avant de programmer une sortie série par la méthode <code class="prettyprint lang-c">println</code>, il faut aussi tenir compte des <strong>deux caractères spéciaux</strong> de <strong class="specialO">saut de ligne</strong> (et pas seulement les caractères de la chaîne ou de la valeur numérique à émettre) pour vérifier s'il y a suffisamment d'éléments vacants dans le <strong class="specialMg">buffer d'émission</strong>. </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+<h3> Gestion de la zone d'affichage du moniteur série </h3>
+
+
+
+<div class="important">
+Le <strong class="title">moniteur série</strong> de l'application <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong> n'a <strong class="cons">pas toutes les fonctionnalités</strong> d'un véritable <strong class="defin">terminal série</strong>. </p>
+
+<p>  Il est juste destiné à la <strong>mise au point des programmes</strong> (<em class="english">debugging</em>). </p>
+</div><!-- important --> 
+
+<div class="complement">
+<p> À l'heure actuelle (cf. la date de version en haut de cette page web), dans les bibliothèques <strong class="Arduino">Arduino</strong>, il n'existe <strong class="cons">pas de méthode</strong> pour <strong>effacer le contenu</strong> de la <strong class="specialMg">zone d'affichage</strong> du moniteur série. </p>
+
+<p> Il est également <strong class="cons">impossible</strong> d'opérer un <strong>retour en arrière</strong> dans une ligne pour en modifier l'affichage par écrasement. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> En effet, lorsqu'ils sont émis via un appel de <code class="prettyprint lang-c">write</code> ou de toute autre méthode d'écriture, les <strong class="defin">caractères de contrôle</strong> : </p>
+
+<ul>
+  <li> <strong>backspace</strong>  (code <em class="sigle">UTF‑8</em> ou <em class="sigle">ASCII</em> <code>0x08</code>), </li>
+
+  <li> ou <strong>delete</strong>  (code <em class="sigle">UTF‑8</em> ou <em class="sigle">ASCII</em> <code>0xF7</code>), </li>
+</ul>
+
+<p>  ne sont <strong class="warning">pas exécutés</strong> par le moniteur série. Ils sont simplement représentés dans la <strong class="specialMg">zone d'affichage</strong> par le <strong>symbole générique</strong> « □ » comme tous les caractères de contrôle. </p>
+
+<p> Le <strong>seul pis-aller</strong> consiste à cliquer sur le <strong>bouton « <strong class="specialMg">Effacer la sortie</strong> » </strong>en bas à droite de la fenêtre du <strong class="special">moniteur série</strong> pour effacer « manuellement » le contenu de la zone d'affichage. Mais une telle action ne peut pas être codée dans le programme embarqué sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong>. </p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="lecture"> Opérations de lecture par liaison série </h2>
+
+
+
+<h3> Principe général d'une opération d'entrée </h3>
+
+
+
+<div class="complement">
+<p> Dès lors qu'une liaison série est initialisée par un programme sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong>, une <strong class="title">opération d'entrée</strong>, c'est‑à‑dire une <strong class="defin">reception de données</strong> sur la carte se déroule en <strong>3 étapes</strong> : </p>
+
+<ol class="numbered">
+  <li> Il faut d'abord que les données soient envoyées sous la forme d'un <strong class="defin">signal logique</strong> conforme au protocole <em class="sigle">UART</em> sur la <strong>broche</strong> <strong class="specialLP"><em class="sigle">RX</em></strong> associée à la liaison série. </li>
+
+  <div class="nobullet"> Un tel signal intervient typiquement si un <strong>utilisateur</strong> tape des caractères dans la <strong class="specialLP">barre de saisie</strong> et clique sur le bouton « <strong class="specialLP">envoyer</strong> » du <strong class="specialV">moniteur série</strong> émulé sur le terminal de programmation par le logiciel <strong class="Arduino">Arduino</strong> <strong><em class="sigle">IDE</em></strong>. Dans ce cas, tout caractère saisi est interprété au format <strong><em class="sigle">UTF‑8</em></strong>, générant chacun de 1 à 4 octets. </div>
+
+  <li> Détecté par l'<strong><em class="sigle">USART</em></strong> en <strong>arrière-plan</strong> de l'exécution du programme, ce signal logique est <strong class="defin">désérialisé</strong> <strong>octet par octet</strong>.  Chaque octet est stocké en tête du <strong class="specialLP">buffer de réception</strong>, et <strong class="specialR">occupe</strong> donc un élément de plus dans ce buffer.    </li>
+
+  <li> C'est seulement alors qu'un appel d'une <strong class="title">méthodes de lecture</strong> opère ; elle retourne une valeur formée à partir des octets stockés dans le <strong class="specialLP">buffer de réception</strong> et, éventuellement (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/methodePeek"></a>), <strong class="specialG">libère</strong> un élément du buffer. </li>
+</ol>
+</div><!-- complement -->
+
+<div class="expert">
+<p class="square"> Plus précisément, tout <strong>octet</strong> issu de la désérialisation d'un signal logique reçu sur la <strong>broche</strong> <strong class="specialLP"><em class="sigle">RX</em></strong> est d'abord stocké dans le <strong class="specialLP">registre de réception</strong>. Chaque nouvel octet déclenche une <strong>interruption</strong> du programme, qui appelle la méthode <code class="prettyprint lang-c">_rx_complete_irq</code> définie dans le fichier <code class="filename">HardWareSerial_private.h</code>. </p>
+
+<p> Cette méthode <code class="prettyprint lang-c">_rx_complete_irq</code> vérifie que le <strong class="specialLP">buffer de réception</strong> de l'objet <code class="prettyprint lang-c">Serial</code> n'est <strong class="specialG">pas plein</strong> : </p>
+
+<ul>
+	<li> si tel est le cas, l'octet du <strong class="specialLP">registre de réception</strong> est alors <strong class="defin">écrit</strong> <strong>en tête de buffer</strong>, et donc <strong class="specialR">occupe</strong> cet élément, cette occupation étant implémentée par l'incrémentation unitaire de l'<strong>indice de tête</strong> du buffer ;</li>
+
+	<li> sinon, l'octet est <strong class="warning">perdu</strong> (il sera écrasé par le prochain octet désérialisé issu d'un nouveau signal logique reçu alors que le buffer de réception dispose enfin d'éléments vacants). </li>
+</ul>
+
+
+<p> Le processus d'écriture d'octets dans le buffer de réception se répète tant que l'<strong><em class="sigle">USART</em></strong> détecte un nouveau signal logique sur la broche <strong class="specialLP"><em class="sigle">RX</em></strong>. Comme pour celui d'émission, le <strong class="specialLP">buffer de réception</strong> n'est <strong class="specialR">plein</strong> que quand l'indice de tête n'est plus qu'à une unité de l'indice de queue. </p>
+</div><!-- expert --> 
+
+
+
+<h3> Méthodes de lecture </h3>
+
+
+
+<p> La <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong> met à disposition du codeur une dizaine de <strong class="title">méthodes de lecture</strong> associées à l'objet <code class="prettyprint lang-c">Serial</code>. On peut les classer en deux catégories : </p> 
+
+<ul>
+  <li> les méthodes de <strong class="defin">bas niveau</strong> <code class="prettyprint lang-c">available</code>, <code class="prettyprint lang-c">peek</code> et <code class="prettyprint lang-c">read</code>, définies dans le fichier <code class="filename">hardwareSerial.cpp</code> ; </li>
+
+  <li> les méthodes de <strong class="defin">haut niveau</strong>, notamment <code class="prettyprint lang-c">readString</code>, <code class="prettyprint lang-c">parseInt</code> ou <code class="prettyprint lang-c">parseFloat</code>, définies dans le fichier <code class="filename">Stream.cpp</code>. </li>
+</ul>
+
+
+
+<p> Seules les méthodes citées ci‑dessus seront détaillées ci‑après. Pour les autres, on se reportera au lien suivant <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" target="_BLANK">A</a>.   </p>
+
+
+<h4 class="temporisation"> Temporisation des méthodes de haut niveau </h4>
+
+
+<div class="complement">
+<p> Contrairement à celles de bas niveau dont la valeur de retour est « immédiate », les <strong class="title">méthodes de lecture</strong> de <strong class="defin">haut niveau</strong> sont basées sur des <strong>méthodes protégées</strong> (non appelables par le codeur). </p>
+
+<p> En particulier, elles emploient la méthode protégée de lecture unitaire <code class="prettyprint lang-c">timedRead</code> qui opère de façon <strong class="title">temporisée</strong> avec <strong>réitération</strong> de la lecture jusqu'à <strong>expiration</strong> d'un <strong class="specialM">délai d'abandon</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p>	La durée de ce délai est fixée par un <strong>attribut</strong> de la <strong class="defin">classe</strong> <code class="prettyprint lang-c">Stream</code> : la variable de type <code class="prettyprint lang-c">unsigned long</code> nommée <code class="prettyprint lang-c">_timeOut</code>. </p>
+
+<p> Cette variable <code class="prettyprint lang-c">_timeOut</code> prend la <strong class="specialM">valeur 1000</strong> <strong>par défaut</strong>, exprimée en <strong>millisecondes</strong> (soit une seconde). Protégée, elle n'est consultable et modifiable que via des <strong class="title">méthodes spécifiques</strong> (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleC/C3-Numeration/parametrageTimeout"></a>). </p>
+</div><!-- expert -->
+
+
+<h4> Gestion des fins de ligne dans la barre de saisie </h4>
+
+
+<div style="display:inline-block">
+  <img class="top-right" src="../img/menuNewline.jpg" width="150px">
+<p> Lorsque la <strong class="title">barre de saisie</strong> du <strong class="specialV">moniteur série</strong> est active (état signalé par le <em>curseur clignotant</em> dans la barre), l'appui sur la <strong>touche « <strong class="title">entrée</strong> »</strong> <span class="touche"> ↵ </span> du clavier est traité de différentes manières selon l'<strong class="defin">option choisie</strong> dans le <strong>menu déroulant</strong> en bas de la fenêtre (cf. la capture d'écran ci‑contre). </p>
+</div><!-- display -->
+
+<div class="expert">
+<p>	Cet appui <strong>ajoute</strong> dans le <strong class="specialLP">buffer de réception</strong> <strong>zéro</strong>, <strong>un</strong> ou <strong>deux</strong> des caractères de contrôle ci‑dessous : </p>
+<ul>
+  <li> le caractère <strong>retour chariot</strong> <code class="prettyprint lang-c">'\r'</code> (<em class="english">carriage return</em> <strong><em class="sigle">CR</em></strong>), dont le code <em class="sigle">ASCII</em> ou <em class="sigle">UTF‑8</em> est <code>0x0D</code> ; </li>
+
+  <li> le caractère <strong>nouvelle ligne</strong> <code class="prettyprint lang-c">'\n'</code> (<em class="english">new line</em> <strong><em class="sigle">NL</em></strong> ou <em class="english">line feed</em> <strong><em class="sigle">LF</em></strong>), dont le code <em class="sigle">ASCII</em> ou <em class="sigle">UTF‑8</em> est <code>0x0A</code>.</li>
+</ul>
+</div><!-- expert -->
+
+
+
+<h3> Lecture unitaire d'octets </h3>
+
+
+
+<div class="complement">
+<p> Les méthodes <code class="prettyprint lang-c">read</code> et <code class="prettyprint lang-c">peek</code> sont deux <strong class="title">méthodes de lecture</strong> de <strong class="defin">bas niveau</strong> qui ne lisent qu'un <strong>un seul octet</strong> par appel : celui situé en <strong>queue</strong> du <strong class="specialLP">buffer de réception</strong> de l'objet <code class="prettyprint lang-c">Serial</code>. </p>
+</div><!-- complement --> 
+
+
+<h4> La méthode <code class="prettyprint lang-c">read</code> </h4>
+
+
+<div class="important">
+<p> L'expression : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.read()</code>
+</span> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/read/" target="_BLANK">A</a> <br>
+retourne <strong class="specialM">immédiatement</strong> une <strong>valeur entière</strong> de type <code class="prettyprint lang-c">int</code> qui peut être : </p>
+<ul>
+	<li> <code class="prettyprint lang-c">-1</code> si le <strong class="specialLP">buffer de réception</strong> de l'objet <code class="prettyprint lang-c">Serial</code> est <strong class="cons">vide</strong> ; </li>
+
+	<li> sinon égale à l'<strong class="title">octet lu</strong> en <strong>queue</strong> du <strong class="specialLP">buffer réception</strong>, ce qui <strong class="specialG">libère</strong> cet élément du buffer. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+
+<div class="expert">	
+<p> La <strong class="specialG">libération</strong> d'un élément du <strong class="specialO">buffer de réception</strong> consiste simplement en l'incrémentation unitaire de son <strong>indice de queue</strong>. </p>
+</div>
+
+<p> Des appels successifs de la méthode <code class="prettyprint lang-c">read</code> permettent de lire l'un après l'autre tous les octets stockés dans le buffer de réception. </p>
+</div><!-- complement --> 
+
+<div class="exemples"><p class="exemples"></p>
+
+<p> Comme précédemment, on fait l'hypothèse que le programme s'exécute sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> reliée à un terminal de programmation où le <strong class="specialV">moniteur série</strong> est activé, la liaison série étant initialisée. </p>
+
+<p> De plus, on suppose qu'avant la saisie, le <strong class="specialLP">buffer de réception</strong> est <strong>vide</strong> et que l'option <strong>pas de fin de ligne</strong> est choisie dans les options de saisie du moniteur série. </p>
+
+  
+<ul>
+	<li> Après saisie et envoi de la lettre <code class="displayWhite">A</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.read()</code> retourne la valeur entière <code>65</code> qui est le code <strong class="defin"><em class="sigle">UTF‑8</em></strong> du caractère « A ». </li>
+
+	<div class="nobullet">Suite à cette évaluation, le buffer de réception est à nouveau vide. </div>
+
+	<li> Après saisie et envoi du nombre <code class="displayWhite">65</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.read()</code> retourne la valeur entière <code>54</code> qui est le code <strong class="defin"><em class="sigle">UTF‑8</em></strong> du caractère « 6 ». </li>
+
+	<div class="nobullet"> Suite à cet appel, le buffer de réception contient encore un octet de valeur entière <code>53</code> qui est le code <strong class="defin"><em class="sigle">UTF‑8</em></strong> du caractère « 5 ». Une nouvelle évaluation de <code class="prettyprint lang-c">Serial.read()</code> retournerait cette valeur. </div>
+
+  <div class="expert">
+  <li> Après frappe et envoi de la lettre <code class="displayWhite">é</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.read()</code> retourne la valeur entière <code>195</code> (c'est‑à‑dire <code>0xC3)</code> qui est l'octet de poids fort du code <strong class="defin"><em class="sigle">UTF‑8</em></strong> du caractère « é ». </li>
+
+	<div class="nobullet"> Suite à cet appel, le buffer de réception contient encore un octet de valeur entière <code>169</code> (c'est‑à‑dire <code>0xA9)</code> qui est l'octet de poids faible du code <strong class="defin"><em class="sigle">UTF‑8</em></strong> du caractère « é ». Une nouvelle évaluation de <code class="prettyprint lang-c">Serial.read()</code> retournerait cette valeur. </div>
+	</div><!-- expert -->
+</ul>	
+</div><!-- exemples -->
+
+
+<div class="expert">
+<h4 id="methodePeek"> La méthode <code class="prettyprint lang-c">peek</code> </h4>
+
+
+<div class="important">
+<p> L'expression : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.peek()</code>
+</span> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/peek/" target="_BLANK">A</a> <br>
+retourne la <strong>même valeur</strong> que la <strong class="title">méthode</strong> <code class="prettyprint lang-c">read</code>, mais <strong class="specialR">sans libérer l'élément</strong> correspondant dans le <strong class="specialLP">buffer de réception</strong>. </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> On fait les mêmes hypothèses que pour les exemples donnés supra d'application de la méthode <code class="prettyprint lang-c">read</code>. </p> 
+
+<p> Après saisie et envoi de la lettre <code class="displayWhite">A</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.peek()</code> retourne la valeur entière <code>65</code> qui est le code <em class="sigle">UTF‑8</em> du caractère « A ». </p>
+
+<p> Suite à cet appel, le <strong class="specialLP">buffer de réception</strong> est <strong>inchangé</strong>. Une nouvelle évaluation de <code class="prettyprint lang-c">Serial.peek()</code> retourne la même valeur. </p>
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> La méthode <code class="prettyprint lang-c">peek</code> ne permet donc pas de scanner tout le contenu du buffer de réception, <strong class="cons">seulement</strong> son <strong>octet de queue</strong> (des appels successifs de cette méthode rendent toujours la même valeur tant qu'une méthode de lecture comme <code class="prettyprint lang-c">read</code> n'a pas été appelée). </p>
+</div><!-- remarque --> 
+</div><!-- expert -->
+
+
+<h3> Lecture de chaînes de caractères </h3>
+
+
+
+<div class="important">
+<p> L'expression : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.readString()</code>
+</span> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/readstring/" target="_BLANK">A</a> <br>
+procède par <strong class="title">lecture unitaire</strong> <strong class="specialM">temporisée</strong> de <strong>tous les</strong> <strong class="specialV">octets</strong> du <strong class="specialLP">buffer de réception</strong> de l'objet <code class="prettyprint lang-c">Serial</code>. </p>
+
+<p> Elle retourne une valeur de <strong class="defin">chaîne de caractère</strong> de classe <code class="prettyprint lang-c">String</code> qui peut être : </p>
+<ul>
+	<li> la <strong>chaîne</strong> <strong class="warning">vide</strong> (réduite au caractère de fin de chaîne <em class="sigle">NUL</em>) si le nombre d'octets lus est nul depuis le début de l'évaluation de l'appel jusqu'à expiration du <strong class="specialM">délai d'abandon</strong> <code class="prettyprint lang-c">_timeOut</code> ; </li>
+
+	<li> sinon la <strong>chaîne</strong> formée de <strong class="title">tous les octets lus</strong> dans l'ordre, quelle que soit la valeur de ces octets. </li>
+</ul>
+<p> Quel que soit le résultat, l'appel de la méthode <code class="prettyprint lang-c">readString</code> laisse le <strong class="specialLP">buffer de réception</strong> complètement <strong class="specialG">vide</strong>. </p>
+</div><!-- important -->
+
+
+
+
+<div class="complement">
+
+
+<p> La chaîne de caractères retournée par la méthode <code class="prettyprint lang-c">readString</code> comporte à la suite des octets lus un <strong class="specialO">octet supplémentaire</strong> de <strong>valeur nulle</strong>, qui constitue pour toutes les valeurs de la classe <code class="prettyprint lang-c">String</code> le <strong class="specialO">caractère de fin de chaîne</strong> dit <strong><em class="sigle">NUL</em></strong> (de code <em class="sigle">ASCII</em> <code>0x0</code>). </p>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+
+<p> Comme précédemment, on fait l'hypothèse que le programme s'exécute sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> reliée à un terminal de programmation où le <strong class="specialV">moniteur série</strong> est activé, la liaison série étant initialisée. </p>
+
+<p> De plus, on suppose qu'avant la saisie, le <strong class="specialLP">buffer de réception</strong> est <strong class="specialG">vide</strong>. </p>
+
+<ul>
+	<li> Après saisie et envoi des caractères <code class="displayWhite">Hé !</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.readString()</code> retourne : </li>
+  
+  <ul>
+  	<li> si l'option « <strong>pas de fin de ligne</strong> » est choisie, la chaîne de caractères constituée des 6 octets hexadécimaux : <br>
+		<span class="inline"> 
+		 <code>48 C3 A9 20 21 0</code>
+		</span> <br>
+		qui concatène les codes <strong class="defin"><em class="sigle">UTF‑8</em></strong> respectifs des caractères <code>'H'</code> (<code>0x48</code>), <code>'é'</code> (<code>0xC3A9</code>), <code>' '</code> (<code>0x20</code>), <code>'!'</code> (<code>0x21</code>) et du caractère <em class="sigle">NUL</em> (<code>0x0</code>). </li>
+
+	  <li> si l'option « <strong>Les deux, NL et CR</strong> » est choisie, la chaîne de caractères constituée des 8 octets hexadécimaux : <br>
+	  	<span class="inline"> 
+		 <code>48 C3 A9 20 21 <em class="remark">0D</em> <em class="remark">0A</em> 0</code>
+		</span> <br>
+		où l'on retrouve les codes des caractères de contrôle <em class="sigle">CR</em> (<code>0x0D</code>) et <em class="sigle">NL</em> (<code>0x0A</code>) juste avant le caractère <em class="sigle">NUL</em> de fin de chaîne. </li>
+  </ul>
+
+  <div class="expert">
+  <li> Si l'on saisit et envoie d'abord le caractère <code class="displayWhite">C</code>, puis les caractères <code class="displayWhite">++</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.readString()</code> retourne : </li>
+
+  <ul>
+  	<li> si l'option « <strong>pas de fin de ligne</strong> » est choisie, la chaîne de caractères constituée des 4 octets hexadécimaux : <br>
+    <span class="inline"> 
+ 			<code>43 2B 2B 0 </code>
+		</span> <br>
+		qui concatène les codes <strong class="defin"><em class="sigle">UTF‑8</em></strong> respectifs des caractères <code>'C'</code> (<code>0x43</code>), <code>'+'</code> (<code>0x2B</code>), <code>'+'</code> (<code>0x2B</code>) et <em class="sigle">NUL</em> (<code>0x0</code>). </li>
+
+  	<li> si l'option « <strong>Les deux, NL et CR</strong> » est choisie, la chaîne de caractères constituée des 8 octets hexadécimaux : <br> 
+    <span class="inline"> 
+ 			<code>43 <em class="remark">0D</em> <em class="remark">0A</em> 2B 2B <em class="remark">0D</em> <em class="remark">0A</em> 0 </code>
+		</span> <br>
+		où l'on retrouve à deux reprises les codes des caractères de contrôle <em class="sigle">CR</em> (<code>0x0D</code>) et <em class="sigle">NL</em> (<code>0x0A</code>), puisqu'on a procédé en deux envois. </li>
+	</ul>
+
+  <li> Si l'on saisit et envoie les caractères <code class="displayWhite">\n</code> formant la séquence d'échappement usuelle pour un saut de ligne, et 
+  que l'on a choisi l'option « <strong>pas de fin de ligne</strong> », l'évaluation de l'expression <code class="prettyprint lang-c">Serial.readString()</code> retourne la chaîne de caractères constituée des 3 octets hexadécimaux : <br>
+  <span class="inline"> 
+    <code>5C 6E 0 </code>
+  </span> <br>
+  qui concatène les codes <strong class="defin"><em class="sigle">UTF‑8</em></strong> respectifs des caractères <code>'\'</code> (<code>0x5C</code>), <code>'n'</code> (<code>0x6E</code>) et <em class="sigle">NUL</em> (<code>0x0</code>). </li>
+
+  <div class="nobullet">
+  <p class="remarque"> On comprend à la lumière de ce dernier exemple qu'il n'est <strong class="cons">pas possible</strong> dans la barre de saisie de coder des <strong class="defin">séquences d'échappement</strong> comme dans une valeur de chaîne de caractères entre guillemets doubles <code class="prettyprint lang-c">""</code> dans un code source (cf. chap. C3‑VIII <a class="previous" href="Cc3-8_typesCaracteres.html#sequenceEchap" target="_BLANK"></a>. </p>
+
+  <p> En effet, <strong>tout caractère</strong> dans la barre de saisie – y compris l'<strong>antislash</strong> <code>'\'</code> – est interprété <strong>individuellement</strong> par son code <strong class="defin"><em class="sigle">UTF‑8</em></strong>. </p>
+  </div><!-- nobullet -->
+
+  </div><!-- expert -->
+</ul>
+</div><!-- exemples -->
+
+
+
+
+<h3 id="parse"> Lecture de nombres formatés </h3>
+
+
+<div class="complement">
+<p> Pour <strong class="title">lire</strong> un <strong class="defin">valeur numérique</strong>, la méthode <code class="prettyprint lang-c">readString</code> n'est pas adaptée. En effet, dans la chaîne d'octets stockées dans le buffer de réception, il faut non seulement <strong>délimiter</strong> ceux qui codent la valeur, mais aussi  distinguer les éléments de sa <strong class="defin">syntaxe de codage</strong> : les chiffres, mais aussi éventuellement un signe, un point décimal… </p>
+
+
+<p> Le fichier <code class="filename">Stream.cpp</code> de la <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong> définit donc deux méthodes spécifiques de haut niveau pour accomplir cette action : </p>
+
+<ul>
+  <li> la <strong class="title">méthode</strong> <code class="prettyprint lang-c">parseInt</code> pour les valeurs de <strong class="defin">types entiers</strong>, signés ou non (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html" target="_BLANK"></a>) ;</li>
+
+  <li> la <strong class="title">méthode</strong> <code class="prettyprint lang-c">parseFloat</code> pour les valeurs de <strong class="defin">types décimaux</strong> à virgule flottante – mais <strong class="cons">sans exposant</strong> (cf. chap. C3‑V <a class="previous" href="Cc3-5_typesFlottants.html" target="_BLANK"></a>) ; </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Ces méthodes mettent en œuvre de façon sous-jacente une <strong>analyse lexicographique</strong> (en anglais, le mot <em class="english">parse</em> signifie « analyser ») des éléments contenus dans le <strong class="specialLP">buffer de réception</strong> pour y lire une valeur numérique codée conformément aux syntaxes de saisie usuellles des constantes littérales entières et décimales en langage <strong>C</strong>. </p>
+</div>
+
+
+<h4 id="parseInt"> La méthode <code class="prettyprint lang-c">parseInt</code> </h4>
+
+
+<div class="important">
+<p> Une expression de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.parseInt()</code>  <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/parseint/" target="_BLANK">A</a>
+</span> <br>
+retourne, conformément aux spécifications des deux <strong>arguments optionnels</strong>, une <strong class="defin">valeur entière</strong> dans le <strong>type signé</strong> <code class="prettyprint lang-c">long</code>, qui peut être : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">0</code> en cas d'<strong class="cons">échec d'identification</strong> d'une valeur entière dans le <strong class="specialLP">buffer de réception</strong>, après expiration du <strong class="specialM">délai d'abandon</strong> <code class="prettyprint lang-c">_timeOut</code> ; </li>
+
+  <li> sinon, la <strong>première</strong> <strong class="defin">valeur entière identifiée</strong> et dans ce cas, <strong>tous les octets lus</strong> sont <strong class="specialG">libérés</strong> dans le <strong class="specialLP">buffer de réception</strong>. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="expert">
+<div class="complement">
+<p> La méthode <code class="prettyprint lang-c">parseInt</code> admet <strong class="title">deux arguments optionnels</strong>, conformément à la syntaxe d'appel complète suivante : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.parseInt(<span class="nocode"><span class="option">[</span><strong class="specialO">mode de lecture</strong></span>, <span class="nocode"><strong class="specialT">caractère ignoré</strong><span class="option">]</span></span>)</code>
+</span> </p>
+</div><!-- complement -->
+
+<ul>
+  <li> Le <strong class="specialO">mode de lecture</strong> (argument identifié <code>lookahead</code> dans le ficheir <code class="filename">Stream.cpp</code>) permet de spécifier des <strong>catégories de caractères</strong> dont <strong>toutes les occurrences</strong> sont à <strong class="specialO">ignorer</strong> dans le buffer de réception. Cet argument optionnel peut être codé par l'une des trois <strong>constantes énumérées</strong> ci‑dessous :  </li>
+	<ul>
+		<li> <code style="color:orange; background: white;">SKIP_ALL</code> – les caractères <strong class="specialO">autres que</strong> les <strong>chiffres</strong> (codes <em class="sigle">ASCII</em> <code>0x30</code> à <code>0x39</code>) et le <strong>signe « - »</strong> (code <em class="sigle">ASCII</em> <code>0x2D</code>) sont <strong class="specialO">ignorés</strong> ; c'est le <strong>mode par défaut</strong> ; </li>
+
+		<li> <code style="color:orange; background: white;">SKIP_NONE</code> – <strong class="specialO">aucun</strong> <strong>caractère</strong> n'est ignoré ; </li>
+
+		<li> <code style="color:orange; background: white;">SKIP_WHITESPACE</code> – les <strong>caractères d'espacement</strong>  <em>espace</em> (<code>0x20</code>), <em>tabulation horizontale</em> (<code>0x09</code>), <em>nouvelle ligne</em> (<code>0x0C</code>) et <em>retour chariot</em> (<code>0x0D</code>) sont <strong class="specialO">ignorés</strong>. </li>
+	</ul>
+
+  <li> L'<strong>argument optionnel</strong> <strong class="specialT">caractère ignoré</strong> permet d'indiquer un <strong>caractère spécifique</strong> dont <strong>toutes les occurrences</strong> sont à <strong class="specialT">ignorer</strong> dans le <strong class="specialLP">buffer de réception</strong>. Sa valeur peut être spécifiée par son <strong>glyphe</strong> entre guillemets simples <code class="prettyprint lang-c">''</code> ou par son <strong>code <em class="sigle">ASCII</em></strong>.  </li>
+</ul>
+</div><!-- expert -->
+
+<div class="remarques">
+<p class="remarque"> À l'heure actuelle (cf. la date de version indiquée en haut de cette la page web), les  arguments optionnels des méthodes <code class="prettyprint lang-c">parseInt</code> et <code class="prettyprint lang-c">parseFloat</code> ne sont <strong class="cons">pas codables</strong> dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong>. </p>
+</div><!-- remarque -->
+
+<div class="exemples"><p class="exemples"></p>
+
+<p> Comme précédemment, on fait l'hypothèse que le programme s'exécute sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> reliée à un terminal de programmation où le <strong class="specialV">moniteur série</strong> est activé, la liaison série étant initialisée. </p>
+
+<p> De plus, on suppose qu'avant la saisie, le <strong class="specialLP">buffer de réception</strong> est <strong class="specialG">vide</strong> et que l'option <strong>pas de fin de ligne</strong> est choisie dans les options de saisie du moniteur série. </p>
+
+<ul>
+  <li> Après saisie et envoi des caractères <code class="displayWhite">-123</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.parseInt()</code> retourne la valeur entière <code>-123</code> et <strong class="specialG">vide</strong> le <strong class="specialLP">buffer de réception</strong>. </li>
+
+  <div class="expert">
+  <div class="nobullet"> Toute spécification optionnelle de caractères à ignorer n'aurait aucun effet ici car les caractères saisis sont tous conformes à la syntaxe d'une valeur entière. </div>
+  
+  <li> Après saisie et envoi des caractères <code class="displayWhite"> 4 5</code> (avec un <em>espace</em> initial), l'évaluation de l'expression : </li>
+  <ul>
+    <li> <code class="prettyprint lang-c">Serial.parseInt()</code> retourne la valeur entière <code>4</code> et laisse dans le <strong class="specialLP">buffer de réception</strong> les octets codants les caractères <code>' '</code> et <code>'5'</code> ; en effet : </li>
+	  <ul>
+	    <li> l'<em>espace</em> initial a été ignoré, conformément au <strong class="specialO">mode de lecture</strong> <strong>par défaut</strong> <code style="color:orange; background: white;">SKIP_ALL</code> ; </li>
+
+	    <li> l'<em>espace</em> saisi après <code>'4'</code> n'étant pas un chiffre, il est analysé comme un séparateur ; comme la chaîne des symboles déjà lus forme un nombre entier, le processus de lecture s'achève ; </li>
+	  </ul> 
+
+  	<li> <code class="prettyprint lang-c">Serial.parseInt(SKIP_NONE)</code> retourne la valeur entière <code>0</code> après expiration du délai d'abandon car l'<em>espace</em> initial n'est pas un caractère autorisé dans une valeur entière et bloque le processus de lecture. </li>
+  </ul>
+
+  <li> Après saisie et envoi des caractères <code class="displayWhite">12,345.6</code>, l'évaluation de l'expression : </li>
+  <ul>
+  	<li> <code class="prettyprint lang-c">Serial.parseInt()</code> retourne la valeur entière <code>12</code> et laisse dans le buffer de réception la chaîne de caractères <code>",345.6"</code> ; en effet : </li>
+    
+    <ul>
+    	<li> la <em>virgule</em> saisie après <code>'2'</code> n'étant pas un chiffre, elle est analysée comme un séparateur ; </li>
+
+    	<li> comme la chaîne des symboles déjà lus forme un nombre entier, le processus de lecture s'achève ; </li>
+    </ul>
+
+  	<li> <code class="prettyprint lang-c">Serial.parseInt(SKIP_NONE, ',')</code> retourne la valeur entière <code>12345</code> et laisse dans le buffer de réception la chaîne de caractères <code>".6"</code> ; en effet : </li>
+  	<ul>
+	    <li> la <em>virgule</em> saisie après <code>'2'</code> est ignorée, conformément au deuxième argument optionnel spécifié dans l'appel ; </li>
+
+	    <li> le <em>point</em> saisi après <code>'5'</code> n'étant pas un chiffre, il est analysé comme un séparateur ; comme la chaîne des symboles déjà lus forme un nombre entier, le processus de lecture s'achève. </li>
+  	</ul>
+  </ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- exemple -->
+
+
+
+<h4 id="parseFloat"> La méthode <code class="prettyprint lang-c">parseFloat</code> </h4>
+
+
+<div class="important">
+<p> La <strong class="title">méthode</strong> <code class="prettyprint lang-c">parseFloat</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/parsefloat/" target="_BLANK">A</a> obéit à la <strong>même syntaxe d'appel</strong> que celle de <code class="prettyprint lang-c">parseInt</code> exposée supra <a class="supra" href="Cc3-10_moniteurSerie.html#parseInt"></a>, mais : </p>
+<ul>
+  <li> elle opère pour <strong class="title">lire</strong> des chaînes de caractères conformes à la syntaxe des <strong class="defin">constantes littérales décimales</strong> où le symbole <code>'.'</code> joue le rôle de <strong>séparateur décimal</strong> ; </li>
+
+  <li> elle n'opère <strong class="cons">pas</strong> la lecture des constantes littérales formatées avec des <strong>exposants</strong> ;  </li>
+
+  <li> elle rend une valeur encodée dans le type <code class="prettyprint lang-c">float</code>, avec une éventuelle erreur d'encodage à partir du 7<sup>e</sup> chiffre significatif. </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="exemples"><p class="exemples"></p>
+
+<p> On fait les <strong>mêmes hypothèses</strong> que pour les exemples données d'application de la méthode <code class="prettyprint lang-c">parseInt</code>. </p>
+
+<ul>
+	<li> Après saisie et envoi des caractères <code class="displayWhite">0.25</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.parseFloat()</code> retourne la valeur décimale <code>0.2500000023…</code> et <strong class="specialG">vide</strong> le <strong class="specialLP">buffer de réception</strong>. </li> 
+
+  <div class="expert">
+	<li> Après saisie et envoi des caractères <code class="displayWhite">12,345.6</code>, l'évaluation de l'expression <code class="prettyprint lang-c">Serial.parseFloat(SKIP_NONE, ',')</code> retourne la valeur décimale <code>12345.60058…</code> et <strong class="specialG">vide</strong> le <strong class="specialLP">buffer de réception</strong>. </li>
+  </div><!-- expert -->
+</ul>
+</div><!-- exemples -->
+
+
+
+<div class="expert">
+<h3> Gestion du buffer de réception </h3>
+
+
+
+<p class="square"> Si le <strong class="specialLP">buffer de réception</strong> est <strong class="specialG">vide</strong> : </p>
+<ul>
+  <li> un appel de la méthode <code class="prettyprint lang-c">read</code> retourne la valeur <code class="prettyprint lang-c">-1</code> et un appel de la méthode <code class="prettyprint lang-c">readString</code> retourne une valeur de <strong>chaîne vide</strong> ; dans les deux cas, la valeur de retour permet de diagnostiquer sans ambiguïté la vacuïté du buffer ; </li>
+
+  <li> en revanche, un appel d'une méthode comme <code class="prettyprint lang-c">parseInt</code> retourne la valeur <code class="prettyprint lang-c">0</code> qui peut prêter à confusion ; cette valeur aurait aussi pu avoir été saisie. </li>
+</ul>
+
+<p> Pour permettre un diagnostic fiable de l'<strong class="defin">état</strong> du <strong class="specialLP">buffer de réception</strong>, on dispose de la <strong class="title">méthode</strong> <code class="prettyprint lang-c">available</code> définie dans le fichier <code class="filename">Stream.cpp</code>. </p>
+
+<div class="important">
+<p> L'évaluation de l'expression : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">Serial.available()</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/available/" target="_BLANK">A</a> 
+</span> <br>
+retourne la valeur entière dans le type <code class="prettyprint lang-c">int</code> égale au <strong class="defin">nombre d'octets</strong> <strong>stockés</strong> – donc, en attente de lecture – dans le <strong class="specialLP">buffer de réception</strong> associé à l'objet <code class="prettyprint lang-c">Serial</code>. </p>
+</div><!-- important --> 
+
+<div class="complement">
+<p> Donc, si un appel de la méthode <code class="prettyprint lang-c">available</code> retourne la <strong>valeur</strong> <code class="prettyprint lang-c">0</code>, cela signifie que le <strong class="specialLP">buffer de réception</strong> est <strong class="specialG">vide</strong> (autrement dit, il n'y a aucun octet à lire). </p>
+</div><!-- complement --> 
+
+<p class="square"> La méthode <code class="prettyprint lang-c">available</code> permet de coder très facilement un algorithme pour <strong class="specialG">vider</strong> le <strong class="specialV">buffer de réception</strong>, comme ci‑dessous. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+while (Serial.available() > 0) {
+  Serial.read(); // all bytes in _rx_buffer are lost 
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="remarques">
+<p class="remarque"> Dans cet alorithme de vidage, à la ligne nº 11, l'expression <code class="prettyprint lang-c">Serial.read()</code> n'est pas composée comme <em>r-value</em> d'une affectation : la méthode  s'exécute mais la valeur qu'elle retourne n'est pas exploitée (elle est donc perdue). </p>
+</div><!-- remarque -->
+
+<div class="expert">
+
+<p class="square"> Par ailleurs, rappelons que l'on peut déterminer la <strong>contenance maximale</strong> du <strong class="specialLP">buffer de réception</strong> via l'<strong>expression</strong> : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">SERIAL_RX_BUFFER_SIZE - 1</code> 
+</span> </p>
+
+
+
+<!-- expert -->
+<h3 id="parametrageTimeout"> Paramétrage de la temporisation </h3>
+
+
+
+<p> On a vu supra <a class="supra" href="Cc3-10_moniteurSerie.html#temporisation"></a> que la durée du <strong class="specialM">délai d'abandon</strong> des <strong class="title">méthodes de lecture</strong> de <strong class="defin">haut niveau</strong> est fixée par la valeur de la variable <code class="prettyprint lang-c">_timeout</code>, exprimée en <strong>millisecondes</strong>, sachant que </p>
+
+<ul>
+  <li> il s'agit d'un <strong>attribut</strong> de la <strong class="defin">classe</strong> <code class="prettyprint lang-c">Stream</code> dont hérite l'<strong>objet</strong> <code class="prettyprint lang-c">Serial</code> ; </li>
+
+  <li> cet attribut est <strong>protégé</strong>, donc son identificateur ne peut être employé directement dans un <strong>programme</strong> <strong class="Arduino">Arduino</strong>.</li>
+</ul>
+
+<div class="complement">
+<p> Pour <strong>consulter</strong> ou <strong>modifier</strong> la valeur de l'attribut <code class="prettyprint lang-c">_timeout</code>, le fichier <code class="filename">Stream.cpp</code> de la <strong class="defin">bibliothèque</strong> Arduino définit respectivement les <strong class="title">méthodes</strong> <code class="prettyprint lang-c">getTimeout</code> et <code class="prettyprint lang-c">setTimeout</code>. </p>
+<ul>
+	<li> L'évaluation de l'expression : <br>
+	<span class="inline">
+	  <code class="prettyprint lang-c">Serial.getTimeout()</code>  <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/gettimeout/" target="_BLANK">A</a>
+	</span> <br>
+	retourne dans le type <code class="prettyprint lang-c">unsigned long</code> la <strong class="defin">valeur</strong> de l'attribut <code class="prettyprint lang-c">_timeout</code>. </li>
+
+	<li> Une instruction d'appel de la forme : <br>
+	<span class="inline">
+	  <code class="prettyprint lang-c">Serial.setTimeout(<span class="nocode"><strong class="specialM">durée</strong></span>);</code>  <a class="external" href="https://www.arduino.cc/reference/en/language/functions/communication/serial/settimeout/" target="_BLANK">A</a>
+	</span> <br>
+	affecte à l'attribut <code class="prettyprint lang-c">_timeout</code> la <strong>valeur</strong> prise par l'<strong>expression</strong> <strong class="specialM">durée</strong> passée en argument, de type <code class="prettyprint lang-c">unsigned long</code> (la méthode <code class="prettyprint lang-c">setTimeout</code> étant elle‑même de type <code class="prettyprint lang-c">void</code>). </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> La <strong>valeur par défaut</strong> de l'attribut <code class="prettyprint lang-c">_timeout</code> est de <strong class="specialM">1000 ms</strong>, soit <strong>une seconde</strong>. Cette valeur est <strong class="warning">très grande</strong> au regard des valeurs typiques de la durée d'exécution de la fonction <code class="prettyprint lang-c">loop</code> d'un <strong>programme</strong> <strong class="Arduino">Arduino</strong> – durée qui se mesure usuellement en microsecondes ou millisecondes. </p>
+
+<p> Avec cette valeur par défaut, il en résulte que coder l'appel d'une méthode de lecture <strong class="cons">sans condition</strong> dans la fonction <code class="prettyprint lang-c">loop</code> risque de <strong class="warning">compromettre la réactivité</strong> du programme si le buffer de réception n'est pas rempli en permanence par un flux d'octets. </p>
+
+<p> Pour <strong class="title">prévenir</strong> ce problème, il est judicieux : </p>
+
+<ul>
+  <li> soit de diminuer à sa <strong>valeur minimale</strong> – <strong class="specialM">1 ms</strong> – l'attribut <code class="prettyprint lang-c">_timeout</code> ; en effet, comme la lecture des octets dans le buffer de réception ne requiert que quelques microsecondes et que la capacité par défaut du buffer est très limitée (63 octets), une milliseconde suffit largement, quelle que soit la méthode de lecture employée ; </li>
+
+  <li> soit de coder l'appel de la méthode de lecture sous une <strong>condition rare</strong> et durant laquelle la réactivité du programme n'est pas essentielle. </li>
+</ul>
+</div><!-- remarque -->
+
+</div><!-- expert -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="2"
+	data-pagenumber="II"
+	data-pageState="travaux"
+	data-pageheadtitle="DHCP"
+	data-pagefulltitle="Le service DHCP"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<!-- relecture nov 2022 non achevée (couleurs à modifier) -->
+
+
+
+<div class="exergue" style="display:inline-block">
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/IPmachines.png" width="400px" style="margin-top:1em">
+<p class="square"> On rappelle que pour pouvoir communiquer dans un réseau informatique, <strong class="specialN">toute machine</strong> – poste de travail, imprimante réseau, smartphone, camera <em class="sigle">IP</em>, serveur, etc. – doit y être raccordée par l'intermédiaire d'une <strong class="title">interface réseau</strong> <strong class="pros">correctement configurée</strong> avec notamment (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#configuration" target="_BLANK"></a>) : </p>
+<ul>
+	<li> une <strong class="specialLB">adresse <em class="sigle">IP</em></strong> et un <strong class="specialLB">masque de (sous‑)réseau</strong> associé ; </li>
+
+	<li> et, s'il s'agit d'un réseau local raccordé à l'<strong>Internet</strong> (cas le plus courant) : </li>
+  <ul>
+  	<li> l'<strong>adresse <em class="sigle">IP</em></strong> d'une <strong class="specialLB">passerelle</strong> par défaut pour y accéder ; </li>
+
+  	<li>  l'<strong>adresse <em class="sigle">IP</em></strong> d'un <strong class="specialLB">résolveur <em class="sigle">DNS</em></strong> pour les noms de domaines. </li>
+  </ul>
+</ul>
+</div><!-- display -->
+
+<p> On parle de <strong class="title">configuration statique</strong> lorsque ces informations sont <strong class="defin">saisies « à la main »</strong> par un personnel administrateur du réseau dans les paramètres du <strong>système d'exploitation</strong>  de la machine ou même dans un script de commande qui s'exécute au démarrage, ou encore dans le <strong>programme utilisateur</strong> s'il s'agit d'une carte à microcontrôleur. Mais dans tous les cas : </p>
+	
+<ul>
+	<div style="display: inline-block;">
+  	<img class="top-right" src="../img/internetPME.jpg" width="300px" style="margin-top:0.5em">
+	<li> si le réseau comporte un <strong>grand nombre de machines</strong>, le travail de configuration est <strong class="cons">fastidieux</strong> (et il peut devoir être recommencé lorsque le nombre de machine augmente au delà des prévisions initiales et nécessite une refonte du plan d'adressage) ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/hotspotWifi.jpg" width="300px" style="margin-top:0.5em">
+	<li> si le réseau héberge beaucoup de <strong>machines nomades</strong> (<em class="english">hotspot Wi‑Fi</em> <a class="external" href="https://en.wikipedia.org/wiki/Hotspot_(Wi-Fi)" target="_BLANK">W</a> des lieux publics, etc.), cette stratégie n'est tout simplement <strong class="cons">pas envisageable</strong> (dans un tel cadre, il serait inimaginable de devoir confier son smartphone à un administrateur pour le configurer). </li>
+	</div><!-- display -->
+</ul>
+
+
+
+<p class="square"> Le <strong class="title">protocole <em class="sigle">DHCP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" target="_BLANK">W</a> (<em class="english">dynamic host configuration protocol</em>) est précisément conçu pour <strong class="defin">automatiser ce travail</strong> et on parle alors de <strong class="specialV">configuration dynamique</strong>. Il s'agit d'un <strong>protocole applicatif de service</strong>. </p>
+
+
+<p> Sans surprise, ce service est basé sur un <strong class="title">modèle client‑serveur</strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#clientServeur" target="_BLANK"></a>) où : </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/DHCPtransaction.png" width="400px" style="margin-top:0.5em">
+<ul>
+	<li> le <strong class="specialLB">client <em class="sigle">DHCP</em></strong> est une machine raccordée au réseau et paramétrée pour émettre des <strong class="specialO">requêtes</strong> en vue d'obtenir une <strong>configuration <em class="sigle">IP</em></strong> dans son réseau local ; </li>
+
+	<li> le <strong class="specialLB">serveur <em class="sigle">DHCP</em></strong> est une machine  raccordée au réseau (avec une configuration <em class="sigle">IP</em> statique) sur laquelle s'exécute un logiciel capable d'émettre des <strong class="specialO">réponses</strong> aux clients, en disposant pour cela d'une <strong class="specialSG">plage d'adresses <em class="sigle">IP</em> dynamiques</strong> pour le réseau. </li>
+</ul>   
+</div><!-- display --> 
+
+<p> Le <strong class="title">rôle d'un serveur <em class="sigle">DHCP</em></strong> consiste donc à <strong class="defin">attribuer</strong> pour un certain temps – ou <strong class="defin">renouveler</strong> – des <strong>adresses <em class="sigle">IP</em></strong>. Comme pour ces dernières, il existe donc <strong class="specialLB">deux versions</strong> du protocole : <strong class="specialLB"><em class="sigle">DHCP</em> v4</strong> et <strong class="specialLB"><em class="sigle">DHCP</em> v6</strong> – sachant que lorsqu'on emploie le <strong>sigle <em class="sigle">DHCP</em> seul</strong>, on fait usuellement référence à <strong class="specialV"><em class="sigle">DHCP</em> v4</strong>. </p>
+
+<div class="expert">
+<p> Il faut également préciser que le protocole <strong class="specialLB"><em class="sigle">DHCP</em> v6</strong> est <strong class="pros">plus réduit</strong> que dans sa version <strong>v4</strong> car la <strong>norme IPv6</strong> prévoit plusieurs mécanismes d'<strong class="defin">auto‑configuration des interfaces</strong> – le but étant précisément de <strong class="pros">diminuer</strong> le nombre de <strong>transactions <em class="sigle">DHCP</em></strong>, donc les congestions, dans les réseaux locaux. </p> 
+</div><!-- expert -->
+
+
+
+<p class="square"> Beaucoup moins complexe que le <em class="sigle">DNS</em>, le protocole <strong class="title"><em class="sigle">DHCP</em></strong> est une <strong class="defin">technologie logicielle incontournable</strong> pour  tout technicien réseau, et plus généralement pour tout informaticien qui serait amené à programmer des systèmes hébergés dans des réseaux à pile de protocoles <strong><em class="sigle">TCP/IP</em></strong>. </p>
+
+<p> L'<strong class="title">objectif</strong> de ce chapitre est donc d'apporter <strong class="defin">toutes les connaissances nécessaires</strong> pour pouvoir <strong>comprendre et utiliser ce protocole</strong> tant du côté <strong>client</strong> que<strong> serveur</strong>, en détaillant :  </p>
+
+<ul>
+	<li> les <strong class="specialLB">principes généraux</strong> et le <strong class="specialLB">déroulement</strong> du <strong>protocole <em class="sigle">DHCP</em></strong> : </li>
+  <ul>
+  	<li> selon ses <strong class="defin">différentes transactions</strong> (initialisation, déconnexion, renouvellement) ; </li>
+
+  	<li> et dans pour chaque type de transaction, les <strong>différents messages</strong> échangés ;</li>
+  </ul>
+
+  <li> le <strong class="specialLB">paramétrage d'une interface</strong> réseau en <strong class="specialLB">client <em class="sigle">DHCP</em></strong>, avec différents cas de figure selon le <strong>système d'exploitation</strong> et la <strong>méthode</strong> (via des fenêtres de dialogue ou en ligne de commande) ;   </li>
+
+	<li> les <strong class="specialLB">architectures matérielles</strong> et les <strong class="specialLB">paramétrages logiciels</strong> <strong>basiques</strong> : </li>
+	<ul>
+		<li> pour configurer une interface en <strong class="defin">client <em class="sigle">DHCP</em></strong> ; </li>
+
+		<li> pour comprendre le rôle des <strong class="defin">relais <em class="sigle">DHCP</em></strong> dans le cas d'un <strong>réseau segmenté</strong> ; </li>
+	</ul>
+  
+  <!-- 
+	<div class="expert">
+	<li> le protocole <strong class="specialLB"><em class="sigle">DHCP</em> v6</strong> et les différents mécanismes d'<strong class="defin">auto‑configuration des interfaces</strong> en <strong>IPv6</strong> qui permettent de ne pas y recourir ; </li>
+	</div> expert -->	
+</ul> 
+
+<div class="expert">
+<p> sachant que pour <strong class="title">approfondir</strong> certains aspects, on pourra consulter par exemple cette page web <a class="external" href="https://www.frameip.com/dhcp/" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="protocole"> Principes et déroulement du protocole DHCP</em> v4 </h2>
+
+
+
+<h3 id="generalites"> Généralités </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="150px" style="margin-top:1em">	
+<p> Le <strong class="title">protocole <em class="sigle">DHCP</em></strong> est un <strong class="specialG">protocole applicatif</strong> (niveau 7 dans le modèle <strong><em class="sigle">OSI</em></strong> – cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#modeleOSI" target="_BLANK"></a>) qui est basé sur les <strong>mêmes principes</strong> que le protocole <strong><em class="sigle">BOOTP</em></strong>, et dont il étend significativement les fonctionnalités. </p>
+</div><!-- display -->
+
+<p> Il peut être employé pour <strong class="pros">toute interface</strong> de machine raccordée à un réseau à pile de protocoles <strong><em class="sigle">TCP/IP</em></strong> (ordinateur, carte à microcontrôleur, etc.). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le protocole <strong class="title"><em class="sigle">BOOTP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Bootstrap_Protocol" target="_BLANK">W</a> (<em class="english">bootstrap protocol</em>) permet d'<strong class="defin">attribuer au démarrage</strong> d'une machine de type <strong>client léger</strong>  une <strong class="defin">configuration <em class="sigle">IP</em></strong>.  Il est principalement spécifié par la <strong><em class="sigle">RFC 951</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc951" target="_BLANK"></a> datant de 1985, et mise à jour par diverses autres <em class="sigle">RFC</em> (<em class="sigle">1395</em>, <em class="sigle">1497</em>, etc.). </p>
+
+<p> Quant à lui, le protocole <strong class="title"><em class="sigle">DHCP</em></strong> est principalement spécifié par les <strong><em class="sigle">RFC 2131</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc2131" target="_BLANK"></a> et <strong><em class="sigle">2132</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc2132" target="_BLANK"></a> datant de 1997, également mises à jour par d'autres <em class="sigle">RFC</em> (<em class="sigle">3396</em>, <em class="sigle">4361</em>, etc.). </p>
+</div><!-- complement -->
+
+<p>	Comme <strong><em class="sigle">BOOTP</em></strong>, le protocole <strong class="title"><em class="sigle">DHCP</em></strong> utilise les <strong class="defin">ports nº 67</strong> (côté serveur) et <strong class="defin">68</strong> (côté client).</p>
+
+<div class="remarques">
+<p class="remarque"> Un <strong class="title">client léger</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Client_leger" target="_BLANK">W</a> (<em class="english">thin client</em>) est une machine <strong class="warning">sans disque dur</strong> – donc sans même un système d'exploitation qui lui soit propre. Il fonctionne exclusivement par chargement dans sa mémoire vive de code exécutable de <strong>logiciels</strong> (système et applications) et de <strong>données</strong> (fichiers), toutes fournies par des <strong>serveurs</strong>. <strong class="defin">À chaque démarrage</strong> (<em class="english">boot</em>), il doit donc d'abord exécuter le protocole <strong><em class="sigle">BOOTP</em></strong> pour configurer son interface réseau. C'est seulement ensuite  qu'il peut émettre une requête aux serveurs d'application et de données.  </p>	
+
+<p> Ce type de machines était <strong class="defin">très courant</strong> dans les années 1980, quand les réseaux informatiques étaient constitués de <strong>gros ordinateurs centraux</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Ordinateur_central" target="_BLANK">W</a> (<em class="english">main frame</em>) auxquels étaient raccordés une <strong>multitude de terminaux</strong>. </p>
+
+<p> En déclin dans les années 1990 avec l’avènement des PC et autres stations de travail, les clients légers sont <strong class="defin">revenus en force</strong> dans les années 2010 avec l'essor de l'<strong>informatique dématérialisée</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Cloud_computing" target="_BLANK">W</a> (<em class="english">cloud computing</em>).</p>
+</div><!-- remarque -->
+
+
+<h4 id="principesDHCP"> Principes généraux de fonctionnement </h4>
+
+
+<div class="important">
+<p> Basé sur un <strong>modèle client‑serveur</strong>, le <strong>protocole <em class="sigle">DHCP</em></strong> comporte principalement <strong class="title">deux types de transactions</strong> : </p>
+<ul>
+	<li> l'<strong class="specialLB">initialisation</strong>, lorsqu'un client nouvellement raccordé au réseau ne dispose <strong>pas encore</strong> d'une <strong class="defin">configuration <em class="sigle">IP</em></strong> et en <strong>sollicite</strong> une ; </li>
+
+	<li> le <strong class="specialLB">renouvellement</strong>, lorsqu'un client dispose <strong>déjà</strong> d'une configuration et sollicite le <strong>prolongement</strong> de son <strong class="defin">bail</strong> (sa durée de validité). </li>
+</ul>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> De plus, les <strong class="title">messages <em class="sigle">DHCP</em></strong> échangés lors d'une transaction entre un client et un serveur sont : </p>
+<ul>
+	<li> transmis par <strong class="defin">datagrammes</strong>, c'est‑à‑dire via le protocole de transport <strong class="defin"><em class="sigle">UDP</em></strong> ; </li>
+
+	<li> dans la <strong>transaction initiale</strong>, diffusés en <strong class="specialO">broadcast</strong>. </li>
+
+	<div class="nobullet"> En effet, tant que la <strong> configuration <em class="sigle">IP</em></strong> du client n'est <strong class="cons">pas finalisée</strong>, ce dernier ne peut <strong class="warning">pas</strong> émettre ni recevoir des messages en <strong>unicast</strong> via le protocole <em class="sigle">IP</em>.  </div>
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> Le choix de transmettre en <strong class="title">datagrammes</strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#UDP.html" target="_BLANK"></a>) est <strong class="defin">pertinent</strong> puisque les données échangées sont peu volumineuses. Cela garantit une <strong class="pros">légèreté</strong> et une <strong class="pros">rapidité optimales</strong> des transmissions. </p>
+
+<p> En revanche, la diffusion en <strong class="specialO">broadcast</strong> (cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture#diffusion.html" target="_BLANK"></a>) peut occasionner une <strong class="cons">charge non négligeable</strong> sur le réseau si le serveur <em class="sigle">DHCP</em>  est mal paramétré, en particulier si les <strong>durées de bail</strong> (cf. infra <a class="infra" href="Rc2-2_dhcp.html#bail"></a>) ne sont pas judicieusement choisies. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="initialisation"> Transaction d'initialisation </h3>
+
+
+
+<div class="important">
+<p> L'<strong class="title">initialisation</strong> de la <strong>configuration <em class="sigle">IP</em></strong>  d'une interface par le protocole <strong class="title"><em class="sigle">DHCP</em></strong> est déclenchée par le <strong>système d'exploitation</strong> de la machine – ou le <strong>programme utilisateur</strong> de la carte à microcontrôleur – qui agit comme <strong class="defin">client <em class="sigle">DHCP</em></strong>. </p>
+
+<p> Cette <strong class="title">transaction</strong> débute juste après le <strong>raccordement</strong> physique de l'interface au réseau (branchement par câble <em class="mark">Ethernet</em> et l'activation de cette interface, ou l'activation de la fonction <em class="mark">Wi‑Fi</em>, etc.), ou encore le <strong>démarrage</strong> du système alors que l'interface est déjà physiquement raccordée et activée par défaut. </p>
+
+<p> Elle procède par l'échange de <strong class="specialLB">4 messages <em class="sigle">DHCP</em></strong> entre le client et le serveur. </p>
+</div><!-- important -->
+
+<div style="display: inline-block;">
+<div class="complement">
+<p> Ces <strong class="specialLB">4 messages <em class="sigle">DHCP</em></strong> <strong class="title">d'initialisation</strong> sont respectivement dits : </p>
+
+	<img class="top-right" src="../img/DHCP_4stages_1.png" width="400px" style="padding-top: 0.5em">
+<ol class="numbered">
+	<li> de <strong class="specialLB">découverte</strong> – <em class="sigle">DHCP</em> <em class="english">discover</em> – c'est‑à‑dire de <strong>recherche</strong> <strong class="defin">par le client</strong> d'un <strong>serveur <em class="sigle">DHCP</em></strong> présent sur le réseau ; </li>
+
+	<li> d'<strong class="specialLB">offre</strong> – <em class="sigle">DHCP</em> <em class="english">offer</em> – de configuration, c'est‑à‑dire d'une <strong>proposition de configuration <em class="sigle">IP</em></strong> émise <strong class="defin">par tout serveur <em class="sigle">DHCP</em></strong> ayant en réserve au moins une <strong>adresse <em class="sigle">IP</em> dynamique vacante</strong> sur le réseau ; </li>
+
+	<li> de <strong class="specialLB">demande</strong> – <em class="sigle">DHCP</em> <em class="english">request</em> – <strong class="defin">par le client</strong> d'une <strong>configuration offerte</strong>  par un <strong>serveur <em class="sigle">DHCP</em></strong> (par défaut, la première reçue dans le cas où plusieurs serveurs auraient répondu) ; </li>
+
+	<li> de <strong class="specialLB">confirmation</strong> – <em class="sigle">DHCP</em> <em class="english">acknowledgment</em>, abrégé <em class="english">ack</em> – <strong class="defin">par le serveur</strong> ayant fait l'offre, que la demande du client est <strong>acceptée</strong>. </li>
+</ol>
+</div><!-- complement -->
+
+<p> Une <strong class="title">confirmation</strong> <strong class="pros">vaut attribution</strong> de l'<strong>adresse <em class="sigle">IP</em> dynamique</strong>. Sans plus attendre : </p>
+<ul>
+	<li> le <strong class="defin">client <em class="sigle">DHCP</em></strong> <strong>configure son interface</strong> avec les éléments transmis par le serveur (adresse <strong><em class="sigle">IP</em></strong>, masque, passerelle et résolveurs <strong><em class="sigle">DNS</em></strong>) ; </li>
+
+	<li>  le <strong class="defin">serveur <em class="sigle">DHCP</em></strong> <strong>met à jour sa</strong>  <strong class="specialSG">plage d'adresses <em class="sigle">IP</em> dynamiques</strong> afin que celle qui  vient d'être attribuée ne soit <strong>plus vacante</strong>. </li>
+</ul>
+</div><!-- display -->
+
+<div class="expert">
+<h4> Vérification opérée par le client </h4>
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/DHCPdecline.png" width="400px" style="padding-top: 0.5em">
+<p> Lorsqu'un <strong class="defin">client <em class="sigle">DHCP</em></strong> reçoit un message <strong class="specialLB">offre</strong> d'une configuration de la part d'un <strong class="defin">serveur <em class="sigle">DHCP</em></strong>, avant d'envoyer un message de demande de cette configuration, il peut procéder à la <strong class="title">vérification</strong> que l'<strong>adresse <em class="sigle">IP</em></strong> dynamique proposée est bien <strong class="pros">libre</strong>. Il lui suffit pour cela de générer une <strong>commande</strong> <code class="prettyprint lang-c">ping</code> sur cette adresse (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#ping" target="_BLANK"></a>), qui doit normalement rester <strong class="pros">sans réponse</strong>. </p>
+
+<p> Dans le <strong class="warning">cas contraire</strong> (par exemple si l'adresse a été attribuée dans une configuration statique), le client envoie alors immédiatement au serveur un message de <strong class="specialLB">refus</strong> (<em class="english"><em class="sigle">DHCP</em> decline</em>), à la suite de quoi : </p>
+<ul>
+	<li>  le <strong class="defin">serveur</strong> <strong>met à jour sa</strong> <strong class="specialSG">plage d'adresses dynamiques</strong> afin que cette  adresse soit marquée comme <strong>non vacante</strong> ; </li>
+
+  <div class="nobullet"> en principe, il doit aussi émettre un <strong class="warning">avertissement à l'administrateur réseau</strong> car une telle situation n'est pas normale (une adresse incluse dans une plage dynamique ne doit pas être attribuée par ailleurs) ; </div>
+
+	<li> de son côté, le <strong class="defin">client</strong> entame une <strong>nouvelle transaction d'initialisation</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<!-- expert -->
+<h4> Détails opérationnels du protocole DHCP</h4>
+
+
+<p> Afin de bien comprendre le <strong class="title">fonctionnement opérationnel</strong> du <strong>protocole <em class="sigle">DHCP</em></strong>, il faut considérer successivement les <strong class="specialLB">« points de vue »</strong> du <strong class="defin">client</strong> et du <strong class="defin">serveur</strong>. </p>
+
+<p class="square"> Pour un <strong class="title">nouveau client <em class="sigle">DHCP</em></strong> sur le réseau, il faut avoir conscience de ce qu'implique l'<strong class="warning">absence initiale</strong>  de <strong>configuration <em class="sigle">IP</em></strong> : </p>
+<ul>
+	<li> il n'a évidemment lui‑même <strong class="cons">pas d'adresse <em class="sigle">IP</em></strong> ;  </li>
+
+	<li> et il ne connaît <strong class="cons">pas l'adresse d'un serveur <em class="sigle">DHCP</em></strong> (il ne connaît même pas l'adresse du réseau ni son masque). </li>
+</ul> 
+
+<p> Or le <strong class="title">routage <em class="sigle">IP</em></strong> des <strong>messages <em class="sigle">DHCP</em></strong> requiert obligatoirement une <strong class="specialO">adresse d'émetteur</strong> et une <strong class="specialO">adresse de destinataire</strong>.  </p>
+<ul>
+	<li> Pour l'<strong class="specialLB">adresse d'émetteur</strong>, le <strong>client <em class="sigle">DHCP</em></strong> adopte temporairement l'<strong class="specialO">adresse <em class="sigle">IP</em> spéciale</strong> <code class="cmd">0.0.0.0</code> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>) qui signifie justement qu'il n'a <strong>pas encore de configuration <em class="sigle">IP</em></strong>. </li>
+
+	<div class="nobullet"> Comme <strong class="warning">plusieurs client <em class="sigle">DHCP</em></strong> peuvent être simultanément dans la même situation, divers <strong>dispositifs d'identification</strong> sont incorporés dans les <strong>messages <em class="sigle">DHCP</em></strong> (nombre aléatoire généré par le client, adresse physique <em class="sigle">MAC</em>…) pour éviter toute confusion entre deux clients. </div>
+
+	<li> Pour l'<strong class="specialLB">adresse de destinataire</strong>, le <strong>client <em class="sigle">DHCP</em></strong> utilise l'<strong class="specialO">adresse <em class="sigle">IP</em> spéciale</strong> <code class="cmd">255.255.255.255</code> dite de <strong class="specialMg">broadcast limité</strong> (car la diffusion est limitée au réseau local et n'est pas relayée par les interfaces des routeurs – cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>, <strong class="warning">sauf</strong> celles spécifiquement configurées comme <strong class="specialV">relais <em class="sigle">DHCP</em></strong> – cf. infra <a class="infra" href="Rc2-2_dhcp.html#relaisDHCP"></a>). </li> 
+
+  <div class="nobullet"> Cette adresse de <strong class="specialMg">broadcast limité</strong> est <strong class="defin">résolue</strong> par le <strong>protocole <em class="sigle">ARP</em></strong> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#ARP" target="_BLANK"></a>) au niveau 2 du modèle <strong><em class="sigle">OSI</em></strong> avec l'adresse physique de <em class="english">broadcast</em> <code>FF-FF-FF-FF-FF-FF</code>. </div>
+</ul>
+
+<p> Les <strong class="title">datagrammes <em class="sigle">UDP</em></strong> encapsulant les messages d'un <strong class="defin">client <em class="sigle">DHCP</em></strong> sont <strong class="title">repérés</strong> par les <strong>serveurs <em class="sigle">DHCP</em></strong> grâce aux <strong class="specialO">numéros de ports</strong> d'émission – <strong>nº 68</strong> – et de destination – <strong>nº 67</strong> –  inscrits dans leur entête. En effet, tout <strong>serveur <em class="sigle">DHCP</em></strong> a forcément son <strong class="specialO">port nº 67 ouvert</strong> et analyse en détail tous les datagrammes qui y sont envoyés. </p>
+
+<p class="square"> Quant au <strong class="defin">serveur <em class="sigle">DHCP</em></strong>, il ne peut <strong class="warning">pas</strong> émettre ses datagrammes encapsulant les messages d'offre ou de confirmation destinés au client en <strong class="warning">unicast</strong> vers l'adresse <code>0.0.0.0</code> car cette dernière n'est <strong class="cons">pas routable</strong>. </p>
+
+<p>	Il utilise donc aussi l'adresse de <strong class="specialMg">broadcast limité</strong> <code class="cmd">255.255.255.255</code> et émet depuis son <strong>port nº 67</strong> à destination du <strong class="specialO">port nº 68</strong>, qui est <strong class="specialO">ouvert</strong> seulement chez les machines configurées en <strong class="defin">clients <em class="sigle">DHCP</em></strong>. </p>
+
+<p> Pour toute <strong class="title">offre</strong>, le <strong class="defin">serveur <em class="sigle">DHCP</em></strong> choisit pour le client une <strong>adresse <em class="sigle">IP</em></strong> <strong class="pros">vacante</strong> parmi celles figurant dans une <strong class="specialSG">plage d'adresses dynamiques</strong> du réseau (en anglais, <em class="english">address pool</em> <a class="external" href="https://en.wikipedia.org/wiki/Address_pool" target="_BLANK">W</a>) qui lui a été confiée par l'administrateur système lors du paramétrage du serveur. </p>
+
+<p> Bien évidemment, la <strong class="title">mise à jour</strong> des <strong>plages d'adresses dynamiques</strong> au fur et à mesure des attributions et des restitutions fait partie des tâches que tout <strong class="defin">serveur <em class="sigle">DHCP</em></strong> sait mettre en œuvre de façon automatisée. </p>
+
+
+<!-- expert -->
+<h4> Cas d'un ancien hôte du réseau </h4>
+
+
+<div class="complement">
+<p> Un <strong class="defin">client <em class="sigle">DHCP</em></strong> qui obtient une configuration dynamique dans un réseau, il <strong class="title">garde en mémoire l'adresse <em class="sigle">IP</em></strong> qui lui a été attribuée <strong>après sa déconnexion</strong>. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/DHCP_4stages_2.png" width="400px" style="padding-top: 0.0em">
+<p> Lorsqu'il se <strong class="title">reconnecte</strong> au même réseau, la <strong class="specialLB">phase initiale</strong> se déroule <strong class="pros">sans recommencer les étapes de découverte et d'offre</strong> : </p>
+<ul>
+	<li> le <strong class="defin">client <em class="sigle">DHCP</em></strong> émet directement un message de <strong>demande</strong> – <em class="english">request</em> – en y incorporant directement son <strong class="specialLGr">ancienne adresse <em class="sigle">IP</em></strong> comme si elle émanait d'une offre, dans un champ optionnel du message ; </li>
+
+	<li> si elle fait partie de sa plage d'adresses dynamiques, le <strong class="defin">serveur <em class="sigle">DHCP</em></strong> accepte cette demande en émettant un message de confirmation – <em class="english">acknowledgement</em> – <strong class="pros">même</strong> si l'adresse est étiquetée comme <strong>déjà attribuée</strong>.  </li>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p> En effet, la machine du <strong class="defin">client <em class="sigle">DHCP</em></strong> peut avoir simplement été <strong>redémarrée</strong> pour une mise à jour, ou déconnectée momentanément par invisibilité accidentelle du réseau (en technologie <em class="mark">Wi‑Fi</em>). Il est donc <strong class="pros">judicieux</strong> de lui attribuer la <strong class="pros">même adresse <em class="sigle">IP</em></strong>. </p>
+
+<p> Néanmoins, le <strong class="defin">serveur <em class="sigle">DHCP</em></strong> peut quand même <strong class="title">préalablement vérifier</strong> que cette <strong class="specialLGr">ancienne adresse <em class="sigle">IP</em></strong> n'a pas été attribuée entre temps à une <strong class="specialN">autre machine</strong>, de façon statique ou dynamique. </p>
+
+<p> Cette <strong class="title">vérification</strong> est opérée par le biais d'une <strong class="defin">commande</strong> <code class="cmd">ping</code> (cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#ICMP" target="_BLANK"></a>). </p>
+<ul>
+	<li> Si cette adresse n'est <strong class="pros">pas déjà attribuée</strong> à une autre machine, la commande <code class="cmd">ping</code> reste <strong>sans réponse</strong>.  </li>
+
+	<div class="nobullet"> En effet, même le <strong class="defin">client <em class="sigle">DHCP</em></strong> <strong>n'y répond pas</strong> (car ce n'est pas parce qu'il en fait la demande qu'il en dispose, et tant que la phase initiale n'est pas achevée, il garde l'adresse <strong><em class="sigle">IP</em></strong> spéciale <code class="cmd">0.0.0.0</code>). </div>
+
+	<li> En revanche, si cette adresse <strong class="cons">est attribuée</strong> à une autre machine, alors les datagrammes <strong><em class="sigle">ICMP</em></strong> de la commande <code class="cmd">ping</code> reçoivent des accusés de réception de son interface. </li>
+	<ul>
+		<li> Dans ce cas, le <strong class="defin">serveur <em class="sigle">DHCP</em></strong> envoie un message de <strong class="warning">non‑acquittement</strong> – <em class="english">negative acknowledgment</em>, abrégé <em class="english">nack</em>. </li>
+
+		<li> Quant au <strong class="defin">client <em class="sigle">DHCP</em></strong>, il  doit <strong class="cons">reprendre à zéro</strong> une phase initiale complète de configuration, comme un tout nouveau client sur le réseau. </li>
+	</ul>
+</ul>
+</div><!-- expert -->
+
+
+<h4 id="release"> Transaction de déconnexion appropriée </h4>
+
+
+<div class="complement">
+<p> Dans le cas d'une interface réseau configurée dynamiquement, lorsque sa <strong class="title">déconnexion</strong> intervient par le biais d'une <strong class="title">commande appropriée</strong> – mise en veille ou à l'arrêt du système, passage en mode « avion » d'un smartphone, etc. – le <strong>client <em class="sigle">DHCP</em></strong> doit envoyer en <strong class="specialO">unicast</strong> au <strong class="defin">serveur <em class="sigle">DHCP</em></strong> qui a offert la configuration un <strong>message de</strong> <strong class="specialLB">libération</strong> (<em class="sigle">DHCP</em> <em class="english">release</em>).  </p>
+
+<p> Le <strong class="defin">serveur <em class="sigle">DHCP</em></strong> peut alors procéder à la <strong class="title">mise à jour</strong> de sa <strong class="specialSG">plage d'adresses dynamique</strong> en étiquetant comme <strong class="pros">vacante</strong> celle qu'il avait offerte à l'interface. </p>
+
+<div class="expert">
+<p> En principe, il doit <strong class="title">garder en mémoire</strong> les paramètres d'initialisation du <strong>client</strong> (adresse physique, et.) pour une éventuelle <strong class="specialO">future demande de configuration</strong> – auquel cas il serait préférable de lui offrir la <strong class="pros">même adresse</strong>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+
+<h3 id="bail"> Notion de bail </h3>
+
+
+
+<div class="expert">
+<p> La <strong class="title">déconnexion d'une interface</strong> du réseau ne se déroule <strong class="specialO">pas forcément</strong> par une <strong>commande appropriée</strong>. </p>
+<ul>
+	<li> Elle peut être la conséquence d'un <strong class="cons">débranchement de câble</strong> ou d'un <strong class="cons">arrêt inopiné</strong> du système (perte de la tension d'alimentation…) ; </li>
+
+	<li> Dans le cas d'un <strong>appareil nomade</strong> (smartphone, etc.), il peut s'agir d'une <strong class="cons">sortie de la zone de visibilité</strong> du réseau par effet de mobilité. </li>
+</ul>
+
+<p> Se pose alors la question de la procédure de <strong class="title">récupération de l'adresse <em class="sigle">IP</em></strong> qui lui a été attribuée – procédure sans laquelle le serveur est exposé au <strong class="warning">risque de pénurie</strong> d'adresses dynamiques. Mais <strong class="specialO">comment savoir</strong> si l'hôte de l'interface est durablement sorti du réseau – donc que son adresse est <strong>disponible pour un prochain client <em class="sigle">DHCP</em></strong> – ou si sa déconnexion est juste momentanée ?  </p>
+
+<p> La <strong class="defin">solution</strong> adoptée par le protocole <strong><em class="sigle">DHCP</em></strong> est d'instaurer une  <strong class="pros">limite temporelle de validité</strong> des <strong>adresses <em class="sigle">IP</em></strong> dynamiques : c'est la notion de <strong class="title">bail</strong>, qui est assortie de la possibilité de <strong class="specialLB">renouvellement</strong>.  </p>
+</div><!-- expert -->
+
+<div class="important">
+<p> Le <strong class="title">bail</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol#Renouvellement_du_bail" target="_BLANK">W</a> – en anglais, <em class="english">lease time</em> – d'une <strong>configuration <em class="sigle">IP</em></strong> est la <strong class="defin">période de validité</strong> de cette configuration pour un <strong>client <em class="sigle">DHCP</em></strong>. </p>
+
+<p> Sa <strong class="title">durée</strong> est exprimée en <strong class="defin">secondes</strong> dans un <strong>champ d'option</strong> (nº 51) des messages d'<strong class="specialLB">offre</strong> et de <strong class="specialLB">confirmation</strong> émis par le <strong>serveur <em class="sigle">DHCP</em></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Une <strong class="title">durée de bail</strong> est un <strong class="defin">entier non signé</strong> codé sur <strong class="defin">32 bits</strong> (avec donc une valeur maximale théorique d'environ 136 ans).  Une valeur typique est <em class="bold">86&#8239;400 s</em>, soit <strong>un jour</strong>, mais on peut être amené à choisir une valeur : </p>
+
+<ul>
+	<li> <strong class="specialO">bien plus longue</strong> – une semaine, voire plus – pour les <strong>postes de travail fixes</strong> fortement sollicités dans un réseau, quelle que soit la taille et le contexte de ce dernier (entreprise, université…) ;  </li>
+
+	<li> ou <strong class="specialO">bien plus courte</strong> – une heure, voire moins – pour les <strong>hôtes nomades</strong> d'un réseau à accès public (gare, aéroport, café, etc.). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Il est même possible d'attribuer un <strong class="title">bail à validité permanente</strong> pour certains hôtes, en particulier les machines fonctionnant sans discontinuité (serveurs, etc.). On parle alors de <strong>configuration <em class="sigle">IP</em></strong> <strong class="specialG">fixe</strong> – à ne pas confondre avec la notion de <strong>configuration <em class="sigle">IP</em></strong> <strong class="specialO">statique</strong>. </p>
+</div><!-- expert -->
+
+
+<h4 id="renouvellement"> Renouvellement d'une configuration </h4>
+
+
+<div class="important">
+<p> Après une initialisation réussie, la demande de <strong class="title">renouvellement du bail</strong> d'une <strong>configuration <em class="sigle">IP</em></strong> procède automatiquement par <strong class="specialT">une ou deux transactions</strong> déclenchées par le <strong class="defin">client <em class="sigle">DHCP</em></strong> : </p>
+<ul>
+	<li> la première – dite <strong class="specialT">renewing</strong> – est opérée en <strong class="specialO">unicast</strong>, au bout d'une <strong>durée</strong> <strong class="specialT">T1</strong> valant par défaut la <strong>moitié</strong> de celle du bail ; </li>
+
+	<li> <strong class="warning">en cas d'échec</strong>, la seconde – dite <strong class="specialT">rebinding</strong> – est opérée  en <strong class="specialO">broadcast</strong> au bout d'une <strong>durée</strong> <strong class="specialT">T2</strong> valant par défaut les <strong>7/8<sup>e</sup></strong> de celle du bail. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+<p> Ces deux transactions se déroulent chacune par échange de <strong>2 messages DHCP</strong> : </p>
+  <img class="top-right" src="../img/DHCP_4stages_3.png" width="400px" style="padding-top: 0.5em">
+<ol class="numbered">
+	<li> Le <strong class="defin">client</strong> émet une <strong class="specialLB">demande</strong> – <em class="english">request</em> – de renouvellement, où figure bien entendu l'<strong class="specialO">adresse <em class="sigle">IP</em></strong> à renouveler.   </li>
+
+	<li> Le plus souvent, le <strong class="defin">serveur</strong> répond par une <strong class="specialLB">confirmation</strong> – <em>ack</em> – que la configuration est renouvelée. </li>
+
+	<div class="nobullet"> Mais éventuellement, le serveur peut émettre un <strong class="warning">non acquittement</strong> – <em>nack</em> – si l'<strong>adresse <em class="sigle">IP</em></strong> n'est <strong class="cons">pas disponible</strong> au renouvellement (entre‑temps, elle peut avoir été supprimée de la plage des adresses dynamiques). </div>
+</ol>
+
+<p> À l'issue de la <strong>confirmation</strong> pour l'une ou l'autre de ces tentatives, la <strong>date de fin de bail</strong> du client est <strong class="defin">incrémentée</strong> de la durée de bail spécifiée dans le message de confirmation. Les dates correspondant aux fins de périodes <strong class="specialT">T1</strong> et <strong class="specialT">T2</strong> sont modifiées en conséquence. </p>
+
+<p> En cas de <strong class="warning">non acquittement</strong>, le bail reste <strong class="pros">valable</strong> jusqu'à sa <strong>date d'expiration</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert" style="margin-top: 0.5em;">
+<p> De son côté, le <strong class="defin">serveur <em class="sigle">DHCP</em></strong> peut aussi <strong class="title">prendre l'initiative du renouvellement</strong>, en émettant un message de <strong class="specialLB">non acquittement</strong> à tout hôte du réseau  dont la durée <strong class="specialT">T1</strong> a expiré et qui n'a pas encore émis de demande de renouvellement. Une telle situation se produit notamment lorsque l'hôte s'est déconnecté du réseau <strong class="cons">sans libérer son adresse <em class="sigle">IP</em></strong> de façon appropriée (cf. supra <a class="supra" href="Rc2-2_dhcp.html#release"></a>). </p>
+<ul>
+	<li> Si l'hôte est <strong class="specialLO">encore présent</strong> sur le réseau, ce message déclenche alors normalement de sa part une transaction de type <strong>rebinding</strong> de la part du client. </li>
+
+	<li> Dans le <strong class="specialLO">cas contraire</strong>, le <strong>serveur <em class="sigle">DHCP</em></strong> peut alors <strong class="defin">mettre à jour</strong> sa <strong class="specialSG">plage d'adresses dynamiques</strong> en considérant que celle de l'hôte est désormais <strong class="pros">vacante</strong>. </li>
+</ul>
+</div><!-- expert -->	
+
+
+
+<h3 id="messageDHCP"> Format et contenu des messages DHCP </h3>
+
+
+
+<div class="complement">
+<p> Rappelons que tout <strong class="title">message <em class="sigle">DHCP</em></strong> est encapsulé : </p>
+<ul>
+	<li> dans un <strong class="specialO">datagramme <em class="sigle">UDP</em></strong>, dont l'en‑tête comporte notamment les <strong>numéros de port</strong> d'émission et de réception (67 ou 68) ; </li>
+
+	<li> lui‑même encapsulé dans un <strong class="specialO">datagramme <em class="sigle">IP</em></strong>, dont l'en‑tête comporte notamment les <strong>adresses <em class="sigle">IP</em></strong> d'émission et de réception ; </li>
+</ul>
+</div><!-- complement -->
+
+<div class="important">
+<p> Dans un <strong class="title">message <em class="sigle">DHCP</em></strong>, quel que soit sont type, on distingue <strong class="defin">deux parties</strong> : </p>
+<ul>
+	<li> en premier, un partie formée de <strong class="specialG">divers champs</strong> codés dans un <strong>format invariable</strong> sur <strong>236 octets</strong> ;  </li>
+
+	<li> en deuxième, une partie réservée aux <strong class="specialLG">options</strong>, formée d'un <strong>champ unique</strong> de <strong>taille variable</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/DHCPmessage.png" width="600px" style="padding-top: 1em">
+
+<p class="square"> La <strong class="title">première partie</strong> d'un <strong>message <em class="sigle">DHCP</em></strong> comporte dans l'ordre : </p>
+<ul>
+	<li> <strong class="specialG">7 champs techniques</strong> (sur 12 octets) d'identification (code d'opération, etc.) ; </li>
+
+	<li> <strong class="specialG">4 champs d'adresse IPv4</strong> (32 bits chacun)  qui contiennent les <strong class="pros">informations essentielles</strong> du message : </li>
+	<ul>
+		<li> l'<strong>adresse du client <em class="sigle">DHCP</em></strong> au moment de l'émission du message – toujours renseignée par le client lui‑même conformément à sa configuration courante (et non pas sa future configuration) ;  </li>
+
+		<li> l'<strong>adresse offerte</strong> par le serveur <em class="sigle">DHCP</em> ; </li>
+
+		<li> l'<strong>adresse du serveur <em class="sigle">DHCP</em></strong> ; </li>
+
+		<li> l'<strong>adresse de la passerelle</strong> qui joue éventuellement le rôle de <strong class="defin">relais <em class="sigle">DHCP</em></strong> (cf. infra <a class="infra" href="Rc2-2_dhcp.html#relaisDHCP"></a>) ; </li>
+	</ul>
+
+	<div class="nobullet"> sachant que dans un message de <strong>découverte</strong>, faute de connaissance, le <strong>client <em class="sigle">DHCP</em></strong> renseigne systématiquement l'<strong>adresse <em class="sigle">IP</em> spéciale</strong> <code class="cmd">0.0.0.0</code> pour tous ces champs ; </div>
+
+	<li> un champ de <strong>16 octets</strong> (128 bits) pour l'<strong class="defin">adresse physique</strong> de l'interface réseau du <strong>client <em class="sigle">DHCP</em></strong>. </li>
+    
+	<div class="remarques"><p class="remarques"></p>
+	<ul>
+		<li> Lorsqu'il s'agit d'une <strong>adresse <em class="sigle">MAC</em></strong> codée sur <strong>6 octets</strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#formatsMAC" target="_BLANK"></a>), les 10 derniers octets du champ sont mis à zéro.</li>
+
+		<li> La <strong>longueur</strong> de cette adresse est justement codée dans l'octet technique <code>h‑len</code>. </li>
+
+		<li> Cette adresse est requise dans le message dans l'éventualité où le <strong>serveur <em class="sigle">DHCP</em></strong> mettrait en œuvre un <strong class="specialR">filtrage des hôtes</strong> via leur adresse physique. </li>
+	</ul>	
+	</div><!-- remarques -->	
+</ul>
+</div><!-- display -->
+
+<div class="expert">
+<p> Quant aux <strong class="specialG">autres champs</strong> de cette <strong class="title">première partie</strong> – le <strong class="defin">nom d'hôte du serveur</strong> (64 octets) et le <strong class="defin">nom du fichier de démarrage</strong> (128 octets) – ce sont des héritages du protocole <strong><em class="sigle">BOOTP</em></strong> (cf. supra <a class="supra" href="Rc2-2_dhcp.html#generalites"></a>). Dans le cadre du protocole <strong class="title"><em class="sigle">DHCP</em></strong>, ces 192 octets sont <strong class="specialO">tous mis à zéro</strong>. </p>
+</div><!-- expert -->
+
+
+<p class="square"> La <strong class="title">deuxième partie</strong> d'un <strong>message <em class="sigle">DHCP</em></strong> commence toujours le <strong class="specialLG">magic cookie</strong> <a class="external" href="https://en.wikipedia.org/wiki/Magic_cookie" target="_BLANK">W</a> <code class="cmd">0x 63 82 53 63</code>. C'est un nombre sans signification particulière qui permet seulement de <strong>repérer</strong> sans équivoque le début de cette partie du message (c'est un héritage du protocole <strong><em class="sigle">BOOTP</em></strong>). </p>
+
+<p> ENsuite, il faut savoir que les <strong>paramètres du protocole <em class="sigle">DHCP</em></strong> renseignées dans les divers <strong class="specialLG">champs d'option</strong> ne sont <strong class="warning">pas facultatives</strong> pour le déroulement du protocole – contrairement à ce que pourrait laisser penser le mot « option ». Ce sont des <strong class="defin">informations essentielles</strong> qui viennent compléter celles de la première partie. Elles sont <strong class="specialLB">numérotées</strong>. À titre d'exemple, on a : </p>
+<ul>
+	<li> l'<strong class="specialLG">option nº 51</strong> qui précise la <strong class="specialT">durée du bail</strong> de la configuration offerte par le serveur <em class="sigle">DHCP</em> ; </li>
+
+	<li> l'<strong class="specialLG">option nº 53</strong> qui précise le <strong class="specialLB">type de message <em class="sigle">DHCP</em></strong> (découverte, offre, etc.). </li>
+</ul>
+
+
+<div class="expert">
+<h4> Champs techniques d'identification d'un message DHCP </h4>
+
+
+<div class="complement">
+<p> Les <strong class="title">champs techniques</strong> codés au début d'un <strong>message <em class="sigle">DHCP</em></strong> regroupent des <strong class="defin">paramètres techniques</strong> pour mettre en œuvre la <strong>transaction</strong> (les échanges de messages) entre le client et le serveur. </p>
+
+<p> Pour certains de ces champs, les <strong class="title">valeurs</strong> initialement définies dans la <strong><em class="sigle">RFC 1700</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1700" target="_BLANK"></a>, maintenant <strong class="cons">obsolète</strong>, sont publiées dans une <strong>base de données</strong> de l'<strong><em class="sigle">IANA</em></strong> <a class="external" href="https://www.iana.org/protocols" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+<ol class="numbered">
+	<li> L'<strong class="specialLB">octet</strong> <code class="cmd">op</code> (<em class="english">operation code</em>) ne peut ici prendre que <strong>deux valeurs</strong> parmi les mêmes que celles définies pour le protocole <strong><em class="sigle">ARP</em></strong> <a class="external" href="https://www.iana.org/assignments/arp-parameters/arp-parameters.xhtml#arp-parameters-1" target="_BLANK"></a> :  </li>
+	<ul>
+		<li> <code class="cmd">1</code> (<code>REQUEST</code>), c'est‑à‑dire si le message est <strong>émis par le client</strong> (<em class="english">discover</em>, <em class="english">request</em>…) ;  </li>
+
+		<li>  <code class="cmd">2</code> (<code>REPLY</code>) si le message est <strong>émis par le serveur</strong> (<em class="english">offer</em>, <em class="english">ack</em>, <em class="english">nack</em>…) ;  </li>
+	</ul>
+	<div class="nobullet"> Cette valeur permet ensuite de déterminer les numéros de port d'émission et de réception dans l'en‑tête du datagramme <em class="sigle">UDP</em> qui encapsule le message <em class="sigle">DHCP</em>. </div>
+
+	<div class="nobullet"> Par ailleurs, cette valeur est complétée par celle du champ d'option nº 53 qui code exactement le type de message envoyé (<em class="english">discover</em>, <em class="english">offer</em>, etc.) </div>
+
+	<li> L'<strong  class="specialLB">octet</strong> <code class="cmd">h-type</code> (<em class="english">hardware address type</em>) code la <strong>technologie de l'interface réseau</strong> pour laquelle le client <em class="sigle">DHCP</em> demande une configuration. Les valeurs sont là encore basées sur celles définies pour le protocole <strong><em class="sigle">ARP</em></strong> <a class="external" href="https://www.iana.org/assignments/arp-parameters/arp-parameters.xhtml#arp-parameters-2" target="_BLANK"></a> mais, par défaut, pour presque toutes les technologies récentes (<em class="mark">Ethernet</em>, <em class="mark">Wi‑Fi</em>) on a la valeur : </li>
+	<ul>
+		<li> <code class="cmd">1</code> (historiquement pour la technologie <em class="mark">Ethernet 10 Mb/s</em>). </li>
+	</ul>
+
+	<li> L'<strong  class="specialLB">octet</strong> <code>h-len</code> (<em class="english">hardware address length</em>) code le <strong>nombre d'octets</strong> de l'<strong>adresse physique</strong> de l'interface réseau du client <em class="sigle">DHCP</em>. En particulier, il prend la valeur <code>6</code> s'il s'agit d'une adresse <strong><em class="sigle">MAC</em></strong> au format <strong><em class="sigle">EUI‑48</em></strong> (48 bits, donc 6 octets, cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#formatsMAC" target="_BLANK"></a>).  </li>
+
+	<div class="nobullet"> Cette valeur permet ensuite de récupérer sans difficulté l'adresse elle‑même, codée dans le champ <code>c-h-addr</code> du message <em class="sigle">DHCP</em> (cf. supra <a class="supra" href="Rc2-2_dhcp.html#messageDHCP"></a>). </div>
+
+	<li> L'<strong  class="specialLB">octet</strong> <code class="cmd">hops</code> (<em class="english">hardware address length</em>) code le <strong>nombre de routeurs </strong> traversés par le message (on parle de « <em>sauts</em> »). Initialisé à <code class="cmd">0</code> par l'émetteur du message, il est incrémenté par toute interface de routeur jouant le rôle de <strong>relais <em class="sigle">DHCP</em></strong> – cf. infra <a class="inrfa" href="Rc2-2_dhcp.html#relaisDHCP"></a>.  </li>
+
+	<li> Le <strong  class="specialLB">champ</strong> <code class="cmd">x-id</code> <em class="english">(transaction identifier</em>), codé sur 32 bits, est un <strong>nombre aléatoire</strong> entier positif généré par le <strong>client <em class="sigle">DHCP</em></strong> pour identifier toute <strong>nouvelle transaction</strong> (<em class="english">discover</em>, <em class="english">renew</em>, <em class="english">rebind</em>). </li>
+
+	<div class="nobullet"> En effet, comme les messages sont diffusés en <strong>broadcast</strong>, cela permet aux clients comme aux serveurs de <strong class="pros">ne pas confondre</strong> les <strong>différentes transactions</strong> simultanément en cours. </div>
+
+	<li> Le <strong  class="specialLB">champ</strong> <code class="cmd">secs</code> <em class="english">(seconds elapsed</em>), codé sur 16 bits, est initialisé à <code class="cmd">0</code> par le client au début de toute <strong>nouvelle transaction</strong> (<em class="english">discover</em>, <em class="english">renew</em>, <em class="english">rebind</em>). </li>
+
+	<div class="nobullet"> Dans les messages suivants de la transaction (<em class="english">request</em>), le client incrémente cette valeur de l'<strong>écoulement des secondes</strong> mesuré avec son horloge. </div>
+
+	<li> Le <strong  class="specialLB">champ</strong> <code class="cmd">flags</code> (mot binaire constitué de <em>drapeaux</em> ayant chacun une signification particulière), codé sur 16 bits, est pour le moment <strong class="cons">très peu exploité</strong>. Il doit être <strong>mis à zéro</strong>, <strong class="warning">sauf</strong> le <strong>bit le plus à gauche</strong>, dit <strong>bit de broadcast</strong>. Le client met sa valeur à : </li>
+	<ul>
+		<li> <code class="cmd">1</code> (donc la valeur <code>0x8000</code> pour le champ tout entier) pour indiquer au serveur qu'il attend un réponse en <strong>broadcast</strong> ; </li>
+
+		<li> <code class="cmd">0</code> (donc la valeur <code>0x0000</code> pour le champ tout entier) pour indiquer au serveur qu'il peut recevoir une réponse en <strong>unicast</strong></li>
+	</ul>
+</ol><!-- numbered -->
+
+
+<!-- expert -->
+<h4 id="optionsDHCP"> Options du protocole DHCP </h4>
+
+
+<div class="complement">
+<p> Le <strong class="title">champ d'options</strong> d'un <strong>message <em class="sigle">DHCP</em></strong> reprend le <strong class="defin">même format</strong> que celui du protocole <strong><em class="sigle">BOOTP</em></strong>, appelé <em class="english">vendor extensions</em>. </p>
+
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/DHCPoptionsFormat.png" width="400px" style="padding-top: 0.5em">
+<p>	Ce <strong class="title">format</strong> se compose d'un nombre variables de <strong class="specialLB">mots binaires</strong> qui adoptent le <strong>format générique</strong> détaillé en figure ci‑contre, où :  </p>
+</div><!-- display -->
+<ul>
+	<li> l'<strong>octet</strong> <code class="cmd">code</code> indique le <strong class="defin">numéro d'option</strong>, compris entre <code>0</code> et <code>255</code>, sachant que ces deux valeurs extrêmes sont spéciales  </li>
+	<ul>
+		<li> l'option nº <code>0</code> sert à intercaler des octets nuls (<em class="english">padding</em>) pour faire respecter des <strong>contraintes d'alignement</strong> aux options significatives ;  </li>
+
+		<li> l'option nº <code>255</code> (<code>0xFF</code>) marque la fin des options (<em class="english">end mark</em>) ; </li>
+	</ul>
+
+	<li> l'<strong>octet</strong> <code class="cmd">length</code> indique le <strong>nombre</strong> <strong class="defin">n</strong> <strong>d'octets de la partie variable</strong> à suivre dans le mot binaire ; </li>
+
+	<li> les <strong>n octets suivants</strong> – partie variable – codent les <strong class="defin">informations spécifiques</strong> de l'option. </li>
+</ul>
+</div><!-- complement -->
+
+
+<p class="square"> Toutes les <strong class="title">options</strong> sont détaillées dans la <strong><em class="sigle">RFC 2132</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc2132" target="_BLANK"></a>. 	Celles <strong class="specialLB">spécifiques au protocole <em class="sigle">DHCP</em></strong> portent des numéros compris entre <code class="cmd">50</code> à <code class="cmd">67</code>. En particulier, on a :  </p>
+<ul>
+	<li> l'option nº <code class="cmd">50</code>, de longueur <code>4</code>, qui code l'<strong>adresse <em class="sigle">IP</em> demandée</strong> par le <strong>client <em class="sigle">DHCP</em></strong> s'il en possédait déjà une auparavant dans le réseau ; </li>
+
+	<li> l'option nº <code class="cmd">51</code>, de longueur <code>4</code>, qui code la <strong>durée de bail</strong> de la configuration offerte par le <strong>serveur <em class="sigle">DHCP</em></strong> ; </li>
+
+	<li> L'option nº <code class="cmd">53</code>, de longueur <code>1</code>, qui code le <strong>type de message <em class="sigle">DHCP</em></strong> (<em class="english">discover</em> <code>1</code>, <em class="english">offer</em> <code>2</code>, <em class="english">request</em> <code>3</code>, <em class="english">decline</em> <code>4</code>, <em class="english">ack</em> <code>5</code> etc.). </li>
+
+  <li> Les options nº <code class="cmd">58</code> et <code class="cmd">59</code>, chacune de longueur <code>4</code> (32 bits), qui codent respectivement sous la forme d'entiers non signés les <strong>durées</strong> <strong class="defin">T1</strong> et <strong class="defin">T2</strong> au delà desquelles le client doit enclencher les transactions de <strong>renouvellement</strong> (<em class="english">renewing</em> et <em class="english">rebinding</em> – cf. supra <a class="supra" href="Rc2-2_dhcp.html#renouvellement"></a>). </li>
+</ul>
+
+<p> D'autres <strong class="specialLB">options communes</strong> avec le protocole <strong><em class="sigle">BOOTP</em></strong> (dites <em class="english">vendor extensions</em>) sont également exploitées par le protocole <strong><em class="sigle">DHCP</em></strong>, notamment : </p>
+<ul>
+	<li> l'option nº <code class="cmd">1</code>, de longueur <code>4</code>, qui code le <strong>masque de (sous)‑réseau</strong> (cf. chap. R‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#masque" target="_BLANK"></a>) qu'offre le serveur <em class="sigle">DHCP</em> pour la configuration de l'interface réseau du client <em class="sigle">DHCP</em> ; </li>
+
+	<li> l'option nº <code class="cmd">6</code>, de longueur variable (multiple de <code>4</code>), qui code les <strong>adresses <em class="sigle">IP</em> des résolveurs <em class="sigle">DNS</em></strong> dans l'ordre de priorité d'utilisation (serveur primaire puis secondaire – cf. chap. R2‑I <a class="previous" href="Rc2-1_dns_url.html#resolveurs" target="_BLANK"></a>) pour la configuration de l'interface réseau du client <em class="sigle">DHCP</em>. </li>
+</ul>
+
+<p> Pour un <strong class="title">panorama général des options</strong>, on pourra consulter cette page web <a class="external" href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol#Options" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="APIPA"> Le protocole d'auto‑configuration en liaison locale </h3>
+
+
+
+<div class="important">
+<p> En cas de <strong class="warning">non‑réponse</strong> aux <strong>messages <em class="sigle">DHCP</em></strong> émis par une interface (par exemple, parce que le serveur ou l'un de ses relais est inaccessible, défaillant…), le système d'exploitation de la machine (ou le programme utilisateur de la carte à microcontrôleur) peut l'<strong class="defin">auto‑configurer</strong> en lui attribuant une <strong>adresse <em class="sigle">IP</em> privée spéciale</strong> dite de <strong class="title">liaison locale</strong> <a class="external" href="https://en.wikipedia.org/wiki/Link-local_address" target="_BLANK">W</a> (<em class="english">local‑link address</em>) dans un bloc d'adresses réservé spécialement par l'<strong><em class="sigle">IANA</em></strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ce <strong class="title">protocole d'auto‑configuration</strong> qui est défini par la <strong><em class="sigle">RFC 3297</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc3927" target="_BLANK"></a> de 2005. Il est également désigné : </p>
+<ul>
+	<li> <strong class="specialLB">automatic private <em class="sigle">IP</em> addressing</strong> (<strong><em class="sigle">APIPA</em></strong>) dans les systèmes d'exploitation<strong> Windows</strong> ;  </li>
+
+	<li> <strong class="specialLB">stateless address autoconfiguration</strong> en <strong>IPv6</strong>… </li>
+</ul>
+
+<p>	Les <strong>adresses réservées</strong> sont dite de <strong class="title">liaison locale</strong>	parce qu'elles ne sont <strong class="warning">pas routables</strong>, ni sur l'Internet, ni même dans un réseau local. Elles permettent aux interfaces de communiquer <strong class="cons">seulement dans leur segment</strong> immédiat (déployé par des switchs) –  ce qui est déjà mieux que rien. </p>
+<ul>
+	<li> En <strong class="specialLB">IPv4</strong>, il s'agit du bloc <code class="cmd">169.254.0.0/16</code>. </li>
+
+	<li> En <strong class="specialLB">IPv6</strong>, il s'agit du bloc <code class="cmd">fe80::/10</code>. </li>
+</ul> 
+</div><!-- complement -->
+
+<div class="expert">
+<p> La <strong class="title">non‑routabilité</strong> des <strong>adresses de liaison locale</strong> s'explique par le fait qu'il faut garantir l'<strong class="defin">absence de conflit</strong> sur les adresses attribuées par ce protocole. Or en cas de <strong>défaillance du service <em class="sigle">DHCP</em></strong>, il y a toutes les chances que <strong class="cons">plusieurs machines</strong> du réseau local se retrouvent simultanément dans la même situation d'échec et de procéder à leur auto‑configuration, d'où un risque de conflit. </p>
+
+<p> Lorsqu'une machine auto‑configure une de ses interfaces, elle doit donc vérifier en <strong class="warning">broadcast</strong> que l'adresse qu'elle choisie n'est <strong class="cons">pas déjà utilisée</strong>. Pour ne pas surcharger la bande passante du réseau, il est raisonnable de <strong class="pros">limiter la diffusion</strong> au segment du réseau dans lequel elle est hébergée, donc <strong>sans recourir à des relais</strong>. </p>
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Paramétrage d'une interface réseau en client DHCP </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<p> Rappelons (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#configuration" target="_BLANK"></a>) que le <strong class="title">paramétrage d'une interface réseau</strong> s'effectue au niveau de son <strong class="defin">système d'exploitation</strong> ou de son <strong class="defin">programme utilisateur</strong> si la machine hôte est une carte à microcontrôleur. </p>
+
+<div class="important">
+<p> En règle générale, toutes les <strong>machines informatiques</strong> destinées au <strong class="defin">grand public</strong> (ordinateurs fixes ou portables, smartphones, imprimantes, routeur <em class="mark">Wi‑Fi</em>, etc.) sont paramétrées <strong class="title">par défaut en client <em class="sigle">DHCP</em></strong>, et ce pour des raisons évidentes de <strong class="pros">simplicité de mise en service</strong> et d'utilisation basique.  </p>
+
+<p> Avec un <strong>système neuf</strong> ou <strong>« fraîchement » installé</strong>, il n'y a donc en général <strong class="defin">aucun paramétrage à effectuer</strong> pour activer le <strong>client <em class="sigle">DHCP</em>.</strong>  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Néanmoins, tout technicien réseau doit savoir effectuer un tel paramétrage <strong>dans tous les cas de figure</strong>. Avec un <strong class="title">ordinateur</strong>, on peut procéder au choix : </p>
+<ul>
+	<li> très <strong class="pros">intuitivement</strong>, via des <strong>fenêtres de dialogue</strong> ; </li>
+
+	<li> de façon plus experte, mais plus <strong class="pros">efficacement</strong>, par des <strong>commandes en ligne</strong> dans un terminal ; </li>
+
+	<li> et, pour les systèmes <strong class="specialLB">Linux</strong>, dans un <strong>fichier de script</strong>. </li>
+</ul>
+</div><!-- complement --> 
+
+
+
+<h3> Cas d'un PC <em class="mark">Windows</em> </h3>
+
+
+<h4> Via l'interface graphique du système (<em class="sigle">GUI</em>) </h4>
+
+
+<p> Dans le cas d'un PC sous <strong class="specialLB">Windows 10</strong>, il existe plusieurs manières d'accéder à la <strong class="title">fenêtre de dialogue</strong> de paramétrage des <strong>interfaces réseau</strong> :  </p>
+<ul>
+	<li> soit via le <strong class="defin">panneau de configuration</strong>, en cliquant sur l'icône <code class="displayDark">Réseau et Internet</code> ;  </li>
+
+	<li> soit via la <strong class="defin">zone de notification</strong> (à droite dans la barre de tâche), en cliquant sur l'<strong>icône du réseau</strong> puis sur <code class="displayDark">Paramètres réseau & Internet</code>. </li>
+</ul>
+  <img class="top-left" src="../img/WindowsParamReseau0.png" style="max-width: 800px">
+
+
+
+<p> Dans cette fenêtre de dialogue, pour avoir accès à <strong class="title">toutes les interfaces réseau</strong>, il faut choisir dans les <strong>Paramètres réseau avancés</strong> l'option : <br>
+<span class="inline">
+  <code class="displayDark">Modifier les options d'adaptateur</code> 
+</span></p>
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/WindowsInterfacesReseau.png" width="400px">
+<p> S'ouvre alors une fenêtre où chaque interface apparaît comme une icône.	En faisant un <strong>clic‑droit</strong> sur l'icône d'une carte réseau, et en sélectionnant <code class="filename">Propriétés</code> dans le menu contextuel, on ouvre une fenêtre avec un <strong>onglet</strong> <code>Gestion de réseau</code>. </p>
+</div><!-- display -->
+ 
+  <img class="top-left" src="../img/WindowsConfigIPv4.png" style="max-width: 800px">
+
+<p> On doit alors sélectionner l'élément : <br>
+<span class="inline">
+	<code class="cmd">☑ <span style="font-weight: 800; color: green;">⫠</span> Protocole Internet version 4 (TCP/IPv4)</code>
+</span> <br>
+et cliquer sur le bouton <span class="boutonGris">Propriétés</span> pour ouvrir la fenêtre de paramétrage de l'interface en <strong>IPv4</strong>. </p>
+
+<p> Dans cette fenêtre, il suffit alors de cocher l'<strong>option</strong> : <br>
+	<span class="inline">
+		<code class="cmd">⦿ Obtenir une adresse IP automatiquement</code>
+	</span> <br>  
+pour paramétrer l'interface en <strong class="defin">client <em class="sigle">DHCP</em></strong>. </p>
+
+
+<h4> Via un terminal de commandes en ligne </h4>
+
+
+<p> On peut effectuer exactement la même démarche que ci‑dessus dans un <strong>terminal de commandes en ligne</strong> exécuté en qualité d'administrateur, avec la commande <code class="cmd">netsh</code> <a class="external" href="https://fr.wikipedia.org/wiki/Netsh" target="_BLANK">W</a> (<em class="english">network shell</em>). Il suffit de saisir : <br>
+<span class="inline">
+	<code class="displayDark">C:\>netsh interface ipv4 set address name="Ethernet" dhcp</code>
+</span> </p>
+
+
+<h3> Cas d'un système <em class="mark">Linux</em> </h3>
+
+
+<p> Dans le cas d'un PC à système <strong class="specialLB">Linux</strong>, on dispose de <strong class="pros">méthodes similaires</strong> de paramétrage qu'avec <strong>Windows</strong>. Seule la présentation change, selon la distribution (<em class="mark">Debian</em>, <em class="mark">Ubuntu</em>, <em class="mark">Mint</em>, <em class="mark">Fedora</em>, etc.) et le bureau adopté (<em class="mark">Gnome</em>, <em class="mark">Cinnamon</em>, <em class="mark">Xfce</em>, etc. ). </p>
+
+
+<!-- à completer -->
+
+<h4> Cas d'une carte <em class="mark">Raspberry Pi</em> </h4>
+
+
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/RaspberryPi.png" width="200px" style="padding-top: 0.0em">
+<p> Rappelons que dans le cas d'une carte <strong class="Raspberry">Raspberry Pi</strong>, la configuration de l'interface <em class="mark">Ethernet</em> <strong>eth0</strong> est effectuée au démarrage en fonction du paramétrage codé dans le <strong>fichier</strong> <code class="filename">/etc/dhcpcd.conf</code> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#RaspberryPi" target="_BLANK"></a>). </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/RpiConfigDHCP.png" width="450px" style="padding-top: 0.0em">
+<p> Pour paramétrer cette interface en <strong class="title">client <em class="sigle">DHCP</em></strong>, il suffit de laisser ou <strong class="defin">mettre en commentaires</strong> (par ajout du symbole <code class="displayDark">#</code> en tête de ligne) <strong>toutes les lignes de configuration statique</strong>, comme sur la capture d'écran ci‑contre (lignes n° 44 à 48), sachant que c'est le <strong class="pros">choix par défaut</strong> du constructeur, donc en principe, il n'y a rien à faire. </p>
+</div><!-- display -->
+
+<div class="expert">
+<p class="square"> Dans le <strong>fichier</strong> <code class="filename">/etc/dhcpcd.conf</code>, on peut même prévoir une <strong class="specialO">configuration statique de secours</strong> (<em class="english">fallback</em>) au cas où la transaction de configuration <em class="sigle">DHCP</em> échouerait (typiquement parce que le serveur <em class="sigle">DHCP</em> est inaccessible, la configuration mal définie, ou autre cause…). </p>
+
+<div style="display: inline-block;">
+		<img class="top-right" src="../img/RpiConfigDHCPfallback.png" width="550px" style="padding-top: 0.0em">
+<p> Pour cela, il faut <strong class="defin">dé‑commenter et renseigner les lignes</strong>  prévues à cet effet en codant les <strong>différents éléments de la configuration</strong> statique souhaitée (adresse de l'interface et masque du réseau, adresse de la passerelle par défaut, des <em class="sigle">DNS</em> primaire et secondaire – cf. la capture d'écran ci‑contre, lignes n° 51 à 55 et n° 58 & 59). </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+<h3 id="carteMicrocontroleur"> Cas d'une carte à microcontrôleur </h3>
+
+
+
+<p> Dans le cas d'une <strong class="title">carte à microcontrôleur</strong>, on rappelle qu'il est vivement recommandé de faire appel à une <strong class="defin">bibliothèque de fonctions spécialisées</strong> pour mettre en œuvre les communications réseau (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#carteMicrocontroleur" target="_BLANK"></a>).   </p>
+
+<p> Sur une telle carte, il n'est pas aussi simple que pour une carte <em class="mark">Raspberry Pi</em> de  <strong>configurer une interface réseau</strong> en <strong class="title">client <em class="sigle">DHCP</em></strong>, puisqu'il faut explicitement <strong class="defin">coder des instructions appropriées</strong> dans le programme utilisateur. Néanmoins, on trouve des exemples basiques dans les documentations disponibles sur l'Internet. </p>
+
+<div class="exemples">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/ArduinoEthernetShield.png" width="200px" style="padding-top: 0.5em">
+<p class="exemple"> 	Rappelons que dans un programme pour <strong class="Arduino">carte Arduino</strong> équipée d'un <strong class="specialN">shield Ethernet</strong>, on appelle les fichiers d'en‑tête <code class="filename">SPI.h</code> et <code class="filename">Ethernet.h</code> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#carteMicrocontroleur" target="_BLANK"></a>). </p>
+
+<p> Pour configurer cette interface en <strong class="title">client <em class="sigle">DHCP</em></strong>, il suffit d'appeler la <strong>méthode</strong> <code class="prettyprint lang-c">Ethernet.begin</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetBegin" target="_BLANK">A</a> avec <strong class="warning">un seul argument</strong> : l'<strong>adresse <em class="sigle">MAC</em></strong> inscrite sur l'étiquette en dessous du shield, comme dans le code ci‑dessous (ligne nº 11) :  </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;SPI.h&gt;
+#include &lt;Ethernet.h&gt;
+
+const int spiSSethernetPin = 10; // choice depends of the Arduino board  
+
+byte mac[] = {0x90, 0xA2, 0xDA, 0x0D, 0x15, 0x43};
+
+void setup() {
+  Ethernet.init(spiSSethernetPin); 
+  /* ===== Dynamic IP config - uncomment next line */
+  Ethernet.begin(mac);
+  /* ===== Static IP config  - uncomment the next 5 lines */
+  // IPAddress ip      (192, 168,   1,  20); 
+  // IPAddress subnet  (255, 255, 255,   0);
+  // IPAddress gateway (192, 168,   1,   1);
+  // IPAddress dns     (  8,   8,   8,   8);
+  // Ethernet.begin(mac, ip, dns, gateway, subnet);
+  // =======================================================
+
+  Serial.begin(115200);
+  delay(1000);
+ 
+  if (Ethernet.linkStatus() == LinkON) {
+    Serial.println("Network connection successful :)");
+    Serial.print("IPv4    = "); Serial.println(Ethernet.localIP());
+    Serial.print("Gateway = "); Serial.println(Ethernet.gatewayIP());
+    Serial.print("DNS     = "); Serial.println(Ethernet.dnsServerIP());
+    Serial.println(""); 
+  }
+  else {
+    Serial.println("Network connection failed :(");
+  }
+}
+
+void loop() {
+  delay(10);
+}
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert">
+<p> <em class="remark">Remarques.</em> </p>
+
+<ul>
+	<li> C'est le fait d'appeler la <strong>méthode</strong> <code class="prettyprint lang-c">Ethernet.begin </code> avec <strong class="warning">un seul argument</strong> – l'adresse <strong><em class="sigle">MAC</em></strong> – qui paramètre implicitement l'interface en <strong>client <em class="sigle">DHCP</em></strong>. </li>
+
+	<div class="nobullet"> Si on code d'<strong>autres arguments</strong> comme dans l'exemple donné au chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#carteMicrocontroleur" target="_BLANK"></a>, on donne à l'interface une <strong class="specialLB">configuration statique</strong>. </div>
+
+	<li> Lorsqu'elle est appelée avec un seul argument, la méthode <code class="prettyprint lang-c">Ethernet.begin</code> retourne la valeur : </li>
+	<ul>
+		<li> <code class="cmd">1</code> si la transaction d'initialisation déclenchée par son appel s'achève sur un <strong class="pros">succès</strong> (c'est‑à‑dire avec la réception d'un message <em class="english">ack</em> du serveur) ; </li>
+
+		<li> <code class="cmd">0</code> <strong class="cons">sinon</strong>. </li>
+	</ul> 
+	<div class="nobullet"> C'est pourquoi il est aussi possible de coder la ligne nº 23 comme ci‑dessous :  </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:23">
+  if (Ethernet.begin(mac)) {
+</pre>
+<!---------- ne pas indenter ---------->	
+
+	<li> Pour garantir la persistance de la connexion, il est nécessaire de coder dans la fonction <code class="prettyprint lang-c">loop</code> l'instruction <code class="prettyprint lang-c">Ethernet.maintain();</code> <a class="external" href="https://www.arduino.cc/en/Reference/EthernetMaintain" target="_BLANK">A</a>. Elle commande au <strong>client <em class="sigle">DHCP</em></strong> de déclencher <strong class="pros">aux moments opportuns</strong> – c'est‑à‑dire conformément à la norme – des transactions de <strong class="defin">renouvellement</strong> (cf. supra <a class="supra" href="Rc2-2_dhcp.html#renouvellement"></a>).  </li>
+
+	<div class="nobullet"> Un appel de la <strong>méthode</strong> <code class="prettyprint lang-c">Ethernet.maintain</code> retourne respectivement la valeur : </div>
+	<ul>
+		<li> <code class="cmd">0</code> si <strong>rien ne s'est passé</strong>, c'est‑à‑dire qu'aucune transaction n'a été déclenchée car ce n'était pas le moment ; </li>
+
+		<li> <code class="cmd">1</code> si une transaction de <strong>renewing</strong> vient de s'achever sur un <strong class="cons">échec</strong> ; </li>
+
+		<li> <code class="cmd">2</code> si une transaction de <strong>renewing</strong> vient de s'achever sur un <strong class="pros">succès</strong> ; </li>
+
+		<li> <code class="cmd">3</code> si une transaction de <strong>rebinding</strong> vient de s'achever sur un <strong class="cons">échec</strong> ; </li>
+
+		<li> <code class="cmd">4</code> si une transaction <strong>rebinding</strong> vient de s'achever sur un <strong class="pros">succès</strong>. </li>
+	</ul>
+</ul>
+</div><!-- expert -->
+
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Architecture matérielle et logicielle d'un serveur DHCP </h2>
+
+
+
+<h3> Cas d'un PAN ou d'un petit LAN </h3>
+
+
+
+<p> Dans un <strong class="defin"><em class="sigle">PAN</em></strong> (<em class="english">personnal area network</em> – cf. chap. R1‑II <a class="previous" href="../R1-Generalites/Rc1-2_architecture.html#pan" target="_BLANK"></a>) ou d'un <strong><em class="sigle">LAN</em></strong> de petite taille (typiquement, un réseau domestique), même si le nombre de machines est faible, le <strong class="title">service <em class="sigle">DHCP</em></strong> est particulièrement <strong class="pros">utile</strong>. Il permet de faire communiquer sur le réseau – et sur l'Internet via la passerelle d'accès – toute <strong>machine</strong> paramétrée en <strong>client <em class="sigle">DHCP</em>,</strong> et ce <strong class="pros">dès son raccordement</strong> par câble ou liaison sans‑fil. Dans le cadre d'un usage basique, cela évite de recourir systématiquement aux compétences d'un administrateur réseau. </p>
+
+
+<div class="important" style="display : inline-block">
+	<img class="top-right" src="../img/box-sfr-4k.png" width="150px">
+<p> En général, toute <strong>box d'abonné à l'Internet</strong> intègre un <strong class="title">serveur <em class="sigle">DHCP</em></strong>. De plus, son service est <strong class="defin">activé par défaut</strong> avec, typiquement :   </p>
+<ul>
+	<li> pour son interface interne, une <strong class="specialO">adresse IPv4 statique</strong> comme <code class="cmd">192.168.0.1</code> ou <code class="cmd">192.168.0.254</code> – ce sont respectivement la première et la dernière adresse du segment <code class="cmdn">192.168.0.0/24</code> ; </li>
+
+	<div class="nobullet"> (cette interface joue le rôle de passerelle par défaut dans le réseau local) ; </div>
+
+	<li> une plage de <strong class="specialG">quelques dizaines d'adresses dynamiques</strong> consécutives dans le segment. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> La prise en charge des <strong class="title">hôtes nomades</strong> du réseau (smartphones, tablettes, imprimante réseau sans‑fil, etc.) nécessite en plus : </p>
+<ul>
+	<li> l'activation de la fonction <strong class="defin">routeur Wi‑Fi</strong> intégrée à la box ; </li>
+
+	<li> et, si une <strong class="defin">fonction d'authentification</strong> est activée, la communication à l'utilisateur de l'hôte nomade de la <strong>clef de sécurité</strong> (mot de passe pour la connexion <em class="mark">Wi‑Fi</em>). </li>
+</ul>
+<p> En général, c'est le <strong class="title">paramétrage par défaut</strong> adopté par les <em class="sigle">FAI</em>, toujours dans une perspective de <strong class="pros">facilité d'usage</strong> pour le grand public, tout en procurant une <strong class="pros">sécurité suffisante</strong>. </p>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Paramétrage du serveur DHCP intégré à une box FAI </h4>
+
+
+
+<p> En général, une <strong class="title">box d'abonné</strong> à l'Internet peut être <strong class="defin">contrôlée via une page web dynamique</strong> à accès distant par mot de passe (communiqué seulement à l'abonné). Bien que souvent rudimentaire, cette solution donne accès aux <strong class="specialLB">réglages de base</strong> et propose quelques <strong class="specialLB">fonctions avancées</strong>. </p>
+
+<p class="square"> Parmi les <strong class="specialLB">réglages de base</strong>, on a notamment: </p>
+<div style="display: inline-block;">
+<img class="top-right" src="../img/routeurFreeboxConfigDHCP.png" width="400px">
+<ul>
+	<li> l'<strong>activation-désactivation</strong> du point d'accès <strong>Wi‑Fi</strong> ; </li>
+
+	<li> le choix de la <strong>clef d'authentification</strong> ;  </li>
+
+	<li> le choix de l'<strong>adresse <em class="sigle">IP</em> statique privée</strong> de la box dans un segment prédéfini (typiquement <code class="cmd">192.168.0.0/24</code>) ; </li>
+
+	<li> la délimitation d'une <strong class="specialSG">plage d'adresses dynamiques</strong> consécutives dans le segment prédéfini (cf. la capture d'écran ci‑contre). </li>
+</ul>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/routeurFreeboxConfigDHCPbailPerm.png" width="550px" style="padding-top: 1em">
+<p class="square"> Parmi les <strong class="specialLB">fonctions avancées</strong>, on peut également attribuer à une interface une <strong>adresse <em class="sigle">IP</em></strong> assortie d'un <strong class="defin">bail permanent</strong> (adresse <em class="sigle">IP</em> dite <strong class="title">fixe</strong> – cf. supra <a class="supra" href="Rc2-2_dhcp.html#bail"></a>). L'attribution se fait par l'association d'une adresse <em class="sigle">IP</em> et d'une adresse <em class="sigle">MAC</em> (celle de l'interface). </p>
+</div><!-- display -->
+
+<p> Par rapport à une adresse <em class="sigle">IP</em> <strong>statique</strong>, une adresse <em class="sigle">IP</em> <strong>fixe</strong> présente l'avantage de pouvoir être <strong>configurée</strong> de façon <strong class="pros">centralisée</strong> sur le <strong>serveur <em class="sigle">DHCP</em></strong> et non pas localement sur la machine hébergeant l'interface à laquelle l'adresse <em class="sigle">IP</em> est attribuée. </p>
+
+<p> Néanmoins, il faut avoir conscience que plus on recourt à cette possibilité, plus on mobilise d'adresses <em class="sigle">IP</em> <strong class="cons">définitivement</strong>. Sur un réseau personnel, cela ne pose en principe aucun problème, mais ce n'est pas forcément le cas sur un <em class="sigle">LAN</em> comportant un grand nombre de machines (grande entreprise, université, etc.) </p>
+
+<div class="remarques">
+<p class="remarque"> Le contrôle de la box par une page web à <strong class="title">accès distant par mot de passe</strong> présente <strong class="pros">plusieurs avantages</strong> par rapport aux anciennes solutions implémentée par une <strong class="cons">page web locale</strong> embarquée dans la box (accessible via son adresse <em class="sigle">IP</em> statique privée) et une <strong class="cons">authentification par bouton‑poussoir</strong>. </p>
+<ul>
+	<li> D'une part, le <strong>contrôle de la box</strong> est opérable depuis <strong class="defin">n'importe quel lieu géographique</strong>, et non pas seulement à domicile ; </li>
+
+	<li> D'autre part, l'<strong>accès par mot de passe</strong>, dès lors que ce dernier n'est pas divulgué, <strong class="pros">prévient le contrôle par tout tiers</strong> (intrus, personne non autorisée).  </li>
+</ul>
+</div><!-- remarque -->
+</div><!-- expert -->
+
+
+
+<h3> Cas d'un LAN segmenté </h3>
+
+
+
+<div class="complement">
+<p> Dans le cas d'un <strong class="defin"><em class="sigle">LAN</em></strong>, pas forcément très grand, mais structuré en <strong>plusieurs segments</strong> ou <strong><em class="sigle">VLAN</em></strong> communiquant via des routeurs, <strong class="title">plusieurs solutions matérielles</strong> sont envisageables.  </p>
+<ul>
+	<li> On peut notamment <strong class="specialLB">décentraliser le service <em class="sigle">DHCP</em></strong> en mettant en place un <strong>serveur <em class="sigle">DHCP</em> dans chaque segment</strong> – et typiquement, en activant ce service dans les <strong>routeur‑passerelle</strong> respectifs des segments. </li>
+
+	<div class="expert">
+	<div class="nobullet"><strong class="pros">Économique</strong>, cette solution est en revanche <strong class="cons">moins commode à administrer</strong> puisqu'il faut se connecter à chaque routeur pour définir ou modifier les plages d'adresses dynamiques. 
+	</div>	
+	</div><!-- expert -->
+
+	<li> Au contraire, on peut aussi <strong class="specialLB">centraliser le service <em class="sigle">DHCP</em></strong> sur <strong>un seul serveur</strong> – voire, pour les architectures les plus sollicitées, un <strong>cluster de serveurs</strong> en redondances et avec un système de basculement (<em class="english">failover</em>). </li>
+
+	<div class="nobullet">De plus, elle nécessite la mise en place d'<strong>agents relais <em class="sigle">DHCP</em></strong> pour permettre aux messages <em class="sigle">DHCP</em> de traverser les routeurs du réseaux (cf. infra <a class="infra" href="Rc2-2_dhcp.html#relaisDHCP"></a>). </div>
+
+	<div class="expert">
+	<div class="nobullet">Sans surprise, cette solution a des <strong class="pros">avantages</strong> et <strong class="cons">inconvénients</strong> <strong>diamétralement opposés</strong> à ceux de la précédente. </div>	
+	</div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+<h4 id="relaisDHCP"> Notion d'agent relais DHCP </h4>
+
+
+<p> Rappelons que pour prévenir toute saturation de la bande passante sur les réseaux, l'adresse <em class="sigle">IP</em> <code class="cmd">255.255.255.255</code> de <strong class="title">broadcast limité</strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>) employée dans les transactions d'<strong>initialisation</strong> et de <strong>rebinding</strong> n'est <strong class="warning">pas diffusée par les routeurs</strong> . </p>
+
+<p> Donc a priori, dans une <strong>architecture segmentée</strong> à <strong class="specialLB">service <em class="sigle">DHCP</em> centralisé</strong>, les messages <em class="english">discover</em> d'un client <em class="sigle">DHCP</em> ne parviendront jamais à atteindre le serveur <em class="sigle">DHCP</em> : ils ne passeront pas la barrière du <strong>routeur‑passerelle</strong> du sous‑réseau matériel dans lequel la machine est physiquement raccordée. </p>
+
+
+<div class="important">
+<p> Une <strong class="pros">solution</strong> usuellement retenue consiste, <strong>pour chaque segment</strong> du réseau n'hébergeant <strong>pas de serveur <em class="sigle">DHCP</em></strong> à paramétrer l'interface de sa <strong class="defin">passerelle par défaut</strong> en <strong class="title">agent relais <em class="sigle">DHCP</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol#Client_et_serveur_sur_des_segments_différents" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ce <strong class="title">paramétrage</strong> de l'interface du routeur en <strong>agent relais <em class="sigle">DHCP</em></strong> est opéré en le plus souvent en ligne de commande avec une <strong>commande spéciale</strong> qui doit désigne l'<strong class="defin">adresse <em class="sigle">IP</em> du serveur <em class="sigle">DHCP</em></strong>. </p>
+
+<p> Par exemple, dans le cas d'un routeur <strong class="Cisco">Cisco</strong>, la commande est de la forme : <br>
+<span class="inline">
+	<code class="displayDark">ip helper-address <span class="nocode"><strong style="color: yellow;">adresse <em class="mark">IP</em> serveur <em class="mark">DHCP</em></strong></span></code>
+</span>
+</div><!-- complement -->
+
+
+<div class="expert">
+<p> Comme un serveur <em class="sigle">DHCP</em>, un <strong class="title">agent relais</strong> a son <strong>port nº 67 actif</strong>. Lorsqu'un <strong>message <em class="sigle">DHCP</em></strong> diffusé en <strong>broadcast</strong> lui parvient, il le relaie vers le <strong>serveur <em class="sigle">DHCP</em></strong> en <strong class="pros">unicast</strong>, en opérant une <strong class="defin">substitution d'adresses</strong> dans l'en‑tête du datagramme <strong><em class="sigle">IP</em></strong> encapsulant le message : </p>
+
+<ul>
+	<li> à la place de l'<strong>adresse d'émission spéciale</strong> <code>0.0.0.0</code>, il inscrit <strong class="defin">son adresse</strong> ;</li>
+
+	<li> à la place de l'<strong>adresse de diffusion restreinte</strong> <code>255.255.255.255</code>, il inscrit l'<strong class="defin">adresse du serveur <em class="sigle">DHCP</em></strong> ; </li>
+</ul>
+
+ <img class="top-left" src="../img/relayDHCP.png" style="max-width: 1000px">
+
+<p> De plus, l'<strong class="title">agent relais</strong> indique <strong class="defin">son adresse</strong> dans le champ <code class="cmd">g-i-addr</code> du message <em class="sigle">DHCP</em> (cf. supra <a class="supra" href="Rc2-2_dhcp.html#messageDHCP"></a>). </p>
+
+<p> En retour, le <strong class="title">serveur <em class="sigle">DHCP</em></strong> répond toujours en <strong class="pros">unicast</strong> à l'<strong>agent relais <em class="sigle">DHCP</em></strong>, ce qui évite de saturer la bande passante du segment où il est hébergé. La diffusion large ne reprend que lorsque l'agent relais reçoit la réponse du serveur et doit la procéder en <strong class="defin">broadcast</strong> pour atteindre le <strong>client <em class="sigle">DHCP</em></strong>. 
+</div><!-- expert -->
+
+
+<div class="expert">
+<h4> Notion de cluster DHCP </h4>
+
+
+<p> Dans un <strong><em class="sigle">LAN</em> structuré</strong> en multiples segments avec un <strong class="specialLB">service <em class="sigle">DHCP</em> centralisé</strong>, il serait risqué de n'équiper le réseau que d'<strong class="cons">un seul serveur <em class="sigle">DHCP</em></strong>. En effet, toute <strong class="warning">panne</strong> de ce dernier causerait peu à peu, avec l'expiration des baux en cours, le <strong class="warning">blocage complet du réseau</strong>. </p>
+
+<div class="complement">
+<p> Le <strong>service <em class="sigle">DHCP</em></strong> est donc souvent mis en œuvre sur un <strong class="title">cluster <em class="sigle">DHCP</em></strong>, c'est‑à‑dire un <strong>ensemble de serveur</strong> fonctionnant en <strong class="defin">redondance</strong> pour garantir la continuité de service. </p>
+
+<p> Sans entrer dans les détails, on interpose dans ou entre la passerelle d'accès au cluster et les serveurs eux‑même un dispositif de <strong class="title">gestion de la redondance</strong> avec :</p>
+<ul>
+	<li> un <strong class="specialLB">système de miroirs</strong> des bases de données d'adresse entre un serveur maître et un ou plusieurs serveurs esclaves <a class="external" href="https://www.it-connect.fr/redondance-de-serveurs-dhcp-sous-linux/" target="_BLANK"></a> ; </li>
+
+	<li> un <strong class="specialLB">système de basculement</strong> (<em class="english"><em class="sigle">DHCP</em> failover</em>) pour passer à un serveur secondaire en cas de panne du serveur principal. </li>
+</ul>
+</div><!-- complement -->
+<p> Pour plus de précisions, on pourra consulter cette référence  <a class="external" href="https://www.it-connect.fr/modules/le-dhcp-failover-pour-assurer-la-haute-disponibilite/" target="_BLANK"></a>.
+</div><!-- expert -->
+
+
+
+<h3> Logiciels serveurs DHCP </h3>
+
+
+
+<div class="important">
+<p> On peut implémenter un <strong class="title">serveur <em class="sigle">DHCP</em></strong> de <strong>deux façons</strong> : </p>
+<ul>
+	<li> soit comme un <strong class="defin">composant logiciel</strong> intégré à un <strong>système d'exploitation</strong> de machine de type <strong>serveur</strong>, mais aussi un routeur, ; </li>
+
+	<li> soit comme un <strong class="defin">logiciel applicatif</strong> s'exécutant sur un système d'exploitation ; le plus souvent, ce dernier est couplé à un <strong>résolveur <em class="sigle">DNS</em></strong> (cf. chap. R2‑I <a class="previous" href="Rc2-1_dns_url.html#resolveurs" target="_BLANK"></a>).   </li>
+</ul>
+</div><!-- important -->
+
+
+<p class="square"> Les <strong class="title">systèmes d'exploitation</strong> les plus courants disposent tous d'un <strong class="defin">composant</strong> <em class="sigle">DHCP</em></strong>. </p> 
+<ul>
+	<li> <strong class="specialLB">Microsoft Windows Server</strong> intègre une implémentation <strong><em class="sigle">DHCP</em> propriétaire</strong> <a class="external" href="https://docs.microsoft.com/fr-fr/windows-server/networking/technologies/dhcp/dhcp-top" target="_BLANK"></a> ;  </li>
+
+	<li> En principe sur <strong class="specialLB">toute distribution de Linux</strong>, on peut installer des <strong>paquets</strong> libres de droits et open‑source pour doter la machine de la fonctionnalité de <strong>serveur <em class="sigle">DHCP</em></strong>, notamment ceux développés par l'<em class="sigle">ISC</em> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#organismes" target="_BLANK"></a>) <a class="external" href="https://www.isc.org/dhcp/" target="_BLANK"></a>. Par exemple, on a <code>isc-dhcp-server</code> pour <em class="mark">Ubuntu</em> <a class="external" href="https://doc.ubuntu-fr.org/isc-dhcp-server" target="_BLANK"></a>).  </li>
+</ul>
+
+
+<p class="square"> Parmi les <strong class="defin">logiciels applicatifs</strong> <strong>serveurs <em class="sigle">DHCP</em></strong>, on peut citer : </p>
+
+<ul>
+	<li> <em class="mark">Cisco network registrar</em> <a class="external" href="https://www.cisco.com/c/en/us/products/cloud-systems-management/network-registrar/index.html" target="_BLANK"></a> développé par l'entreprise <strong class="Cisco">Cisco</strong> ;  </li>
+
+	<li> <em class="mark">VitalQIP</em> <a class="external" href="https://www.nuvias.com/fr-fr/vendors/nokia/vitalqip/" target="_BLANK"></a> développé par l'entreprise <strong>Nokia</strong>. </li>
+</ul>
+
+
+<!--
+<h3> Serveur <em class="sigle">DHCP</em> – Cas d'un réseaux d'accès </h3>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="R"
+	data-pagetype="Chapitre"
+	data-modulepartnumber="2"
+	data-pagenumber="I"
+	data-pageState="travaux"
+	data-pageheadtitle="DNS & URL"
+	data-pagefulltitle="Le DNS  –  les URL"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue" style="display:inline-block">
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/hostsTXT.png" width="200px" style="padding-top: 1em;">
+<p class="square"> Dès la naissance du réseau <strong>Arpanet</strong>, il était évident que les utilisateurs apprécieraient d'employer des <strong class="title">adresses littérales</strong> et non pas <strong class="cons">numériques</strong> pour transmettre des données. Un fichier d'<strong class="defin">annuaire centralisé des machines hôtes</strong>, nommé <code class="filename">hosts.txt</code> fut donc créé au <em class="english">Stanford Reseach Institute</em> (<strong><em class="sigle">SRI</em></strong>) <a class="external" href="https://www.sri.com/" target="_BLANK">W</a> pour mettre en correspondance les <strong>noms des machines</strong> et leurs <strong>adresses <em class="sigle">IP</em></strong> respectives. </p>
+</div><!-- dispaly -->
+<p> Mais rapidement, il fallu confier les incessantes <strong class="title">mises à jour</strong> et <strong class="title">diffusions</strong> de ce fichier à un département spécialisé, le <em class="english">Network Information Center</em>. Et avec la croissance exponentielle du réseau – et donc des requêtes en consultation et modifications – comme en matière d'adresses <em class="sigle">IP</em> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#attributionIP" target="_BLANK"></a>), toute <strong class="cons">solution centralisée</strong> était vouée à l'<strong class="warning">échec</strong>. </p>
+
+<p> Aussi, dès 1983 (<em class="sigle">RFC 882</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc882" target="_BLANK"></a>) commence la mise en place d'un <strong class="defin">système distribué de serveurs de noms</strong> appelé <strong class="title">domain name system</strong> ou <strong class="title"><em class="sigle">DNS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domain_Name_System" target="_BLANK">W</a>. Contribueront notamment à sa conception Paul Mockapetris <a class="external" href="https://en.wikipedia.org/wiki/Paul_Mockapetris" target="_BLANK">W</a>, chercheur au <strong><em class="sigle">SRI</em></strong> et Jon Postel <a class="external" href="Rc2-1_dns_url.html" target="_BLANK">W</a>, professeur à l'<strong><em class="sigle">UCS</em></strong> (<em class="english">University of Southern California</em>). </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/DNS.png" width="300px" style="padding-top: 1em;">
+<p class="square"> Aujourd'hui, le <strong class="title"><em class="sigle">DNS</em></strong> <strong>de l'Internet</strong> constitue un véritable <strong class="specialY">système informatique</strong>, <strong class="warning">complexe</strong> et <strong class="warning">très sollicité</strong> : presque toutes les applications web font appel à lui pour pouvoir fonctionner. Il est organisé en une myriade de <strong class="specialLB">zones d'autorité</strong> qui implémentent sa <strong class="defin">décentralisation</strong>. </p>
+
+
+<p> Incontournable, le <strong class="title"><em class="sigle">DNS</em></strong> a été évoquée dès le chapitre R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#DNS" target="_BLANK"></a>. Pour un simple internaute, il peut sembler « transparent », tant son usage est simple (il suffit de saisir des noms de domaines pour accéder aux ressources). Mais pour un futur technicien réseau, il requiert un certain nombre de <strong class="pros">connaissances</strong> et de <strong class="pros">savoir‑faire indispensables</strong>. En effet : </p>
+<ul>
+	<li> chaque organisme disposant d'un <strong  class="defin">nom de domaine public</strong> formant une <strong>zone d'autorité</strong> est responsable de « son » <strong><em class="sigle">DNS</em></strong>  et doit l'administrer ; </li>
+
+	<li> sur un <strong>réseau local privé</strong>, il n'est pas rare de mettre en place un <strong class="defin"><em class="sigle">DNS</em> privé</strong>, qui opère de la même manière que celui de l'Internet. </li>
+</ul>
+</div><!-- display -->
+
+
+<p class="square"> Dans une perspective de <strong class="title">découverte avancée</strong>, ce cours aborde : </p>
+<ul>
+	<li> les <strong class="specialLB">principes généraux du <em class="sigle">DNS</em></strong>, et en particulier l'<strong>architecture</strong> pour le mettre en œuvre (serveurs de noms, résolveur, mémoire cache…) ;  </li>
+
+	<li> les <strong class="specialLB">noms de domaines</strong> – l'<strong>espace</strong> qu'ils forment, les <strong>règles syntaxiques</strong> qui les régissent, la notion d'<strong>alias</strong>, les <strong>enregistrements</strong> ;  </li>
+
+	<li> les <strong class="specialLB"><em class="sigle">URL</em></strong> (<strong class="specialLB">uniform resource locator</strong>) qui exploitent les noms de domaines pour <strong>cibler des ressources</strong> accessibles sur un réseau ;  </li>
+
+	<li> le <strong class="specialLB">fonctionnement opérationnel du <em class="sigle">DNS</em></strong>, et notamment ses <strong>aspects protocolaires</strong> ;  </li>
+
+	<li> et pour finir, quelques <strong class="specialLB">outils logiciels du <em class="sigle">DNS</em></strong>, notamment pour inspecter des enregistrements, mais aussi pour mettre en œuvre un résolveur. </li>
+</ul>
+
+<div class="expert">
+<p>	<strong class="pros">Pour approfondir</strong> les connaissances générales sur le <strong class="title"><em class="sigle">DNS</em></strong>, on pourra regarder <strong>deux vidéos</strong> sur la chaîne <em class="mark">YouTube</em> de vulgarisation <em class="mark">Monsieur Bidouille</em> : <a class="external" href="https://www.youtube.com/watch?v=xhP_guPY1CM" target="_BLANK">Y</a> et <a class="external" href="https://www.youtube.com/watch?v=MH0cdiggpb8" target="_BLANK">Y</a>.  Et pour approfondir certains aspects techniques, on pourra consulter ces <strong>pages web</strong> : <a class="external" href="http://www-inf.int-evry.fr/~hennequi/CoursDNS/NOTES-COURS/syst.html" target="_BLANK"></a> et <a class="external" href="https://www.frameip.com/dns/" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le DNS  –  principes généraux </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/coucheApplication.png" width="150px" style="margin-top:1em">	
+<p> Un <strong class="title"><em class="sigle">DNS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domain_Name_System" target="_BLANK">W</a> ou <strong class="title"><em class="english">domain name system</em></strong> est un <strong class="specialG">service réseau applicatif</strong> dont la fonction principale est de <strong class="defin">déterminer</strong> une ou plusieurs <strong>adresse(s) <em class="sigle">IP</em></strong> associée(s) à un <strong>nom de domaine</strong> dans un réseau informatique (public ou privé) géré par la pile de protocoles <em class="sigle">TCP/IP</em>. Un tel système permet de mettre en œuvre un <strong class="pros">adressage littéral</strong> des ressources du réseau, ce qui facilite grandement leur accès aux utilisateurs. </p>
+</div><!-- display -->
+
+<p> Plutôt que de <strong>détermination d'adresse(s) <em class="sigle">IP</em></strong>, on parle de <strong class="title">résolution de nom de domaine</strong>.   </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Par défaut, le sigle <strong class="title"><em class="sigle">DNS</em></strong> fait référence au <strong class="defin">système de résolution global</strong> des <strong>noms de domaines</strong> de l'<strong class="title">Internet</strong>. Ce dernier ne fournit que des <strong>adresses <em class="sigle">IP</em> publiques</strong>. </p>
+
+<p> Mais il est également possible de mettre en place un <strong><em class="sigle">DNS</em></strong> dans un <strong class="title">réseau privé</strong>. En effet, de même qu'il existe des <strong>adresses <em class="sigle">IP</em> privées</strong> non routables sur l'Internet (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>), on peut définir des <strong class="defin">noms de domaines privés</strong>, c'est‑à‑dire qui <strong>ne peuvent pas être résolus par le <em class="sigle">DNS</em> de l'Internet</strong>. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Le <strong class="title"><em class="sigle">DNS</em></strong> fait l'objet de <strong class="defin">nombreuses <em class="sigle">RFC</em></strong>, les plus importantes étant :  </p>
+<ul>
+	<li> la <strong class="defin"><em class="sigle">RFC 1034</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1034" target="_BLANK"></a> consacrée aux <strong>concepts</strong> et aux <strong>infrastructures</strong> du <strong><em class="sigle">DNS</em></strong> – elle constitue en fait une <strong class="specialLB">introduction générale</strong> ; </li>
+
+	<li> la <strong class="defin"><em class="sigle">RFC 1035</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1035" target="_BLANK"></a> consacrée à l'<strong>implémentation</strong> et à la <strong>spécification</strong> du <strong><em class="sigle">DNS</em></strong> – elle expose tous les <strong class="specialLB">détails techniques</strong>. </li>
+</ul>
+</div><!-- expert -->
+
+
+<h3 id="nameServers"> Les serveurs de noms </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/serveurNoms.png" width="120px">
+<p> Pour répondre dans les meilleurs délais aux <strong class="warning">milliards de requêtes quotidiennes</strong> en résolution de nom qu'il reçoit, le <strong><em class="sigle">DNS</em></strong> fait appel à un <strong class="defin">grand nombre de serveurs</strong> – des machines exécutant un <strong>logiciel spécifique</strong> sur une <strong>base de donnée</strong> – appelés <strong class="title">serveurs de noms</strong> <a class="external" href="https://en.wikipedia.org/wiki/Name_server" target="_BLANK">W</a> (<em class="english">name server</em>). </p>
+
+<div class="expert">
+<p> <em class="remark">Remarque</em> : étant donnée leur fonction, on devrait parler plutôt de <strong class="pros">« serveurs d'adresses »</strong>. </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement" style="display: inline-block;">
+<p> Les <strong>serveurs de noms</strong> forment une <strong class="title">topologie en arbre</strong> qui est constituée d'une myriade de <strong class="defin">zones d'autorité</strong> hiérarchisées. </p>
+	
+<ul>
+	<li> Chaque <strong class="title">zone d'autorité</strong> doit prendre en charge, de façon <strong>autonome</strong>, la <strong class="defin">résolution des noms du domaine qu'elle comprend</strong> – cette zone pouvant s'étendre sur <strong>plusieurs niveaux de sous‑domaines</strong>. On dit du ou des <strong class="specialLB">serveurs de noms</strong> qu'elle emploie qu'ils <strong class="defin">font autorité</strong> sur la zone (en anglais, on parle d'<em class="english">authoritative name servers</em>). </li>
+  
+  <div class="expert">
+  <div class="nobullet"> Lorsqu'une zone d'autorité emploie <strong class="title">plusieurs serveurs de noms</strong>, ils sont le plus souvent organisés en réplication d'un <strong class="defin">serveur maître</strong>. </div>
+  </div><!-- expert -->
+  
+    <img class="top-right" src="../img/DNS_tree0.jpg" width="600px" style="padding-top: 0.5em">
+  <li> La <strong class="title">hiérarchie des noms de domaines</strong> obéit au <strong class="defin">principe de délégation descendante</strong>, c'est‑à‑dire depuis la racine de l'arbre vers les feuilles. </li>
+
+  <div class="nobullet"> Par exemple, en réponse à une requête en résolution du nom <code class="filename">www.culture.gouv.fr</code> : </div>
+  <ul>
+  	<li> le serveur de la zone <code class="filename">fr</code> ne fera que retourner l'<strong>adresse <em class="sigle">IP</em></strong> d'un <strong class="specialLB">serveur de noms</strong> de la zone <code class="filename">gouv.fr</code> ;  </li>
+
+  	<li> qui lui‑même retournera l'<strong>adresse <em class="sigle">IP</em></strong> du <strong class="specialLB">serveur de noms</strong> faisant autorité sur la zone <code class="filename">culture.gouv.fr</code> ; </li>
+
+  	<li> et c'est seulement ce dernier serveur de nom qui fournira l'<strong class="pros">adresse <em class="sigle">IP</em> de la ressource demandée</strong> – typiquement celle du serveur web de la page d'index de ce domaine. </li>
+  </ul>
+
+	<li> La <strong class="title">racine</strong> (unique) de l'arbre constituant l'ensemble de tous les noms de domaines publics forme une <strong>zone spéciale</strong> placée sous l'<strong class="defin">autorité de l'<em class="sigle">ICANN</em></strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#institutionsAdmin" target="_BLANK"></a>). Ses serveurs de noms sont appelés les <strong class="specialLB">serveurs racine</strong> <a class="external" href="https://en.wikipedia.org/wiki/Root_name_server" target="_BLANK">W</a> du <strong><em class="sigle">DNS</em></strong> (<em class="english">root name servers</em>). Ils ne résolvent que les noms de domaines dits de <strong class=>premier niveau</strong> – tous individuellement constitués en zones distinctes, par exemple <code class="filename">org</code>, <code class="filename">com</code>, <code class="filename">fr</code>, etc. </li>
+
+	<div class="nobullet"> Ainsi, en réponse à une requête en résolution du nom <code class="filename">www.culture.gouv.fr</code>, un <strong class="title">serveur racine</strong> ne fera que retourner l'<strong>adresse <em class="sigle">IP</em></strong> d'un <strong class="specialLB">serveur de noms</strong> faisant autorité sur le domaine <code class="filename">fr</code>. </div>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> La <strong class="title">topologie du <em class="sigle">DNS</em></strong> ne correspond <strong class="warning">pas du tout</strong> à celle du « réseau » <strong>Internet</strong>. En effet, cette topologie ne fait apparaître que les <strong>serveurs de noms</strong> et les <strong>ressources</strong> (serveurs de données ou autres) ayant une adresse publique. Elle ne révèle rien de la redondance des serveurs ni de l'existence des routeurs, ni même de la multiplicité des routes entre les machines en général. </li>
+
+	<li> Les <strong class="title">serveurs racine</strong> font l'objet de quelques <strong class="warning">phantasmes et idées reçues</strong> en termes de criticité, qu'il importe de relativiser .  </li>
+	<ul>
+		<li> Certes, il n'y a que <strong>13 adresses logiques</strong> de serveurs racine (cf. <a class="external" href="https://en.wikipedia.org/wiki/Root_name_server#Root_server_addresses" target="_BLANK">W</a>) mais chacune redirige vers une <strong>multitude de serveurs physiques</strong> répliqués en redondance. </li>
+
+		<li> Certes, 10 des <strong>13 serveurs</strong> étaient historiquement situés sur le <strong>territoire des États‑Unis</strong>, mais une bonne part sont maintenant opérés par <strong class="defin">adressage anycast</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Anycast" target="_BLANK">W</a>, si bien que leurs serveurs physiques peuvent être – et sont – situés <strong>partout dans le monde</strong>. </li>
+
+		<li> Certes, toute requête en résolution de nom passe en principe par un <strong>serveur racine</strong>, mais : </li>
+		<ul>
+			<li> comme il y a assez peu de domaines de premier niveau (de l'ordre de 1500 seulement en 2020), répondre à une requête ne nécessite qu'une <strong class="pros">recherche modeste</strong> dans la base de donnée d'un serveur racine ; </li>
+
+			<li> l'emploi des <strong>mémoires caches</strong> dans les résolveurs (cf. infra <a class="infra" href="Rc2-1_dns_url.html#cache" target="_BLANK"></a>) diminue grandement le nombre de requêtes réellement soumises aux serveurs racine. </li>
+		</ul>
+
+		<li> Enfin, les attaques de grande ampleur sur les serveurs racine (cf. <a class="external" href="https://fr.wikipedia.org/wiki/Serveur_racine_du_DNS#Sécurité_des_serveurs_racine" target="_BLANK">W</a>) ont permis de constater que la <strong>qualité de service</strong> globale du <strong><em class="sigle">DNS</em></strong> était <strong class="pros">assez peu affectée</strong> par ces attaques. </li>
+	</ul>
+</ol>
+</div><!-- remarques -->
+
+
+
+<h3 id="notionEnregistrement"> Notion d'enregistrement </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;">	
+	<img class="top-right" src="../img/baseDonnees.png" width="80px">
+<p> Tout <strong>serveur de noms du <em class="sigle">DNS</em></strong> embarque une <strong class="title">base de donnée</strong> qui contient  principalement des <strong class="defin">enregistrements d'adresse</strong> – en anglais <strong>address record</strong> – de la forme : </p>
+<div class="inline">
+	<span class="framedFull"><strong class="specialLB"> nom de domaine enregistré</strong>   ⟶   <strong class="specialN">adresse <em class="sigle">IP</em> </strong></span>
+</div> <!-- inline -->
+</div><!-- display -->
+<p> Mais il existe d'<strong>autre types d'enregistrements</strong>, notamment les <strong class="defin">alias</strong> (cf. infra <a class="infra" href="Rc2-1_dns_url.html#alias"></a>). De façon générale, on parle d'<strong class="title">enregistrement de ressource</strong> – en anglais <strong class="defin">resource record</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domain_Name_System#Principaux_enregistrements_DNS" target="_BLANK">W</a> (abrégé <strong class="defin"><em class="sigle">RR</em></strong>) – pour qualifier tout enregistrement dans la base de donnée d'un serveur de noms du <strong><em class="sigle">DNS</em></strong>. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans la pratique, un <strong class="title">enregistrement</strong> comporte d'<strong>autres informations techniques</strong> en plus des deux champs de la forme donnée ci‑dessus. Sa composition sera détaillée infra <a class="infra" href="Rc2-1_dns_url.html#enregistrement"></a>. </p>
+</div><!-- complement -->
+
+
+
+<!-- 
+<h4> Zones de délégation </h4>
+-->
+
+
+<h3 id="resolveurs"> Les serveurs DNS dits <em>résolveurs</em> </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/resolverDNS.png" width="250px">
+<p> Étant donné à l'hyper‑complexité de l'Internet, une <strong>requête en résolution de nom</strong> issue d'une application ne peut pas être adressée directement à un serveur racine, sinon ces derniers seraient beaucoup trop sollicités. Elle passe par un autre type de <strong>serveur du <em class="sigle">DNS</em></strong> appelé <strong class="title">résolveur</strong> – donc, à <strong class="warning">ne pas confondre</strong> avec un serveur de nom. </p>
+
+<p> Un <strong class="title">résolveur <em class="sigle">DNS</em></strong> agit comme un <strong class="defin">intermédiaire</strong> : il joue le rôle de <strong>serveur</strong> pour la machine terminale et de <strong>client</strong> pour les serveurs de noms, en exécutant un <strong class="defin">algorithme de résolution de nom</strong>.  </p>
+
+<p> On verra infra qu'il dispose de sa <strong class="specialLB">propre base de donnée</strong>, appelée <strong>cache</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Un <strong class="title">résolveur <em class="sigle">DNS</em></strong> assure un <strong class="warning">service crucial</strong>. En cas de <strong>dysfonctionnement</strong>, la navigation sur l'Internet devient <strong class="cons">quasi impossible</strong> : les hyperliens ne fonctionnant plus, il faudrait saisir les adresses <strong><em class="sigle">IP</em></strong> des sites pour y accéder, ce qui est très laborieux. </p>
+
+<p> C'est pourquoi, en règle générale, la <strong class="title">configuration réseau</strong> de l'interface d'une machine comporte <strong class="pros">au moins deux</strong> <strong class="defin">adresses <em class="sigle">IP</em> de résolveur <em class="sigle">DNS</em></strong> (cf. chap. R1‑III <a class="external" href="../R1-Generalites/Rc1-3_adressage.html#configuration" target="_BLANK"></a>). Elles déterminent respectivement ce qu'on appelle les <strong class="specialLB">résolveurs <em class="sigle">DNS</em> primaire</strong> et <strong class="specialLB">secondaire</strong>, prévus pour coopérer dans un système de <strong class="pros">répartition de charge</strong>. </p>
+</div><!-- complement -->
+
+
+<h4 id="DNSpublic"> Choix d'un résolveur DNS public </h4>
+
+
+<div class="important">
+<p> On parle de <strong class="title">résolveur <em class="sigle">DNS</em> public</strong> lorsqu'un tel serveur est accessible via une <strong class="defin">adresse <em class="sigle">IP</em> publique</strong> <strong class="pros">sans limitation de droit d'accès</strong>. Cette adresse est alors utilisable telle pour <strong>configurer n'importe quelle interface</strong> disposant d'un accès à l'Internet. </p>
+
+<p> En règle générale, un <strong class="defin">adresse <em class="sigle">IP</em></strong> de <strong>résolveur <em class="sigle">DNS</em> public</strong> donne accès à un <strong class="title">pool de serveurs</strong> géré par un système de <strong class="pros">répartition de charge</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Par défaut, tout <strong class="specialLB">fournisseur d'accès à l'Internet</strong> met à disposition de ses abonnés (ou de tout autre internaute) <strong class="defin">deux adresses <em class="sigle">IP</em></strong> de <strong class="title">résolveurs <em class="sigle">DNS</em> publics</strong>, respectivement <strong>primaires</strong> et <strong>secondaires</strong>. Elles sont attribuées automatiquement aux interfaces des machines reliées à la box  via son service <strong><em class="sigle">DHCP</em></strong>. </p>
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="specialLB"><em class="sigle">FAI</em></strong> <em class="mark">Free SAS</em> donne les <strong class="defin">adresses <em class="sigle">IP</em> publiques</strong>  de <strong class="title">résolveurs <em class="sigle">DNS</em></strong> suivantes : </p>
+<ul>
+	<li> <strong><em class="sigle">DNS</em> primaire</strong> <code>212.27.40.240</code> (<em class="mark">IPv4</em>) ou <code>2a01:e0c:1:1599::22</code> (<em class="mark">Ipv6</em>) ; </li>
+
+	<li> <strong><em class="sigle">DNS</em> secondaire</strong> <code>212.27.40.241</code> (<em class="mark">IPv4</em>) ou <code>2a01:e0c:1:1599::23</code> (<em class="mark">Ipv6</em>). </li>
+</ul>
+</div><!-- complement -->
+
+<p> Ce faisant, un fournisseur d'accès est en mesure de <strong class="cons">connaître toutes les requêtes</strong> en résolution de noms des internautes qui recourent à son service de <strong>résolveur <em class="sigle">DNS</em></strong>. Ces données ont une <strong class="pros">grande valeur commerciale</strong>, elles permettent de répondre aux attentes des organisations qui souhaite connaître les tendances d'actualité, l'évolution de la popularité de tel ou tel sujet, etc. </p>
+</div><!-- complement -->
+
+<p> Par ailleurs, certains <strong class="specialLB">grands acteurs du web</strong> offrent également un service de <strong class="title">résolveur <em class="sigle">DNS</em> public</strong> avec des <strong class="pros">adresses IPv4 particulièrement faciles à mémoriser</strong> : </p>
+
+<div style="overflow-x: auto; margin: 0.5em;">
+<table style="margin: 0em; ">
+	<col style="min-width:25%; max-width:25%">
+	<col style="min-width:25%; max-width:25%">
+	<col style="width:auto">
+	<thead><tr>  
+    <th> Entreprise  </th>
+    <th> DNS primaire </th>
+    <th> DNS secondaire </th>
+  </tr></thead>
+  <tbody>
+  <tr>
+  	<td> <em class="mark">Google</em> <a class="external" href="https://developers.google.com/speed/public-dns" target="_BLANK"></a></td>
+  	<td> <code>8.8.8.8</code> <br> <code>2001:4860:4860::8888</code> </td>
+  	<td> <code>8.8.4.4</code> <br> <code>2001:4860:4860::8844</code> </td>
+  </tr>
+  <tr>
+  	<td> <em class="mark">Cloudflare</em> <a class="external" href="https://www.cloudflare.com/fr-fr/dns//" target="_BLANK"></a></td>
+  	<td> <code>1.1.1.1</code> <br> <code>2606:4700:4700::1111</code> </td>
+  	<td> <code>1.0.0.1</code> <br> <code>2606:4700:4700::1001</code> </td>
+  </tr>
+  </tbody>
+ </table>
+</div><!-- overflow --> 
+
+<div class="expert">
+<p> Plus généralement, on trouve une <strong class="title">liste très complète</strong>, classée <strong>par pays</strong>, et en <strong class="pros">régulièrement actualisée</strong> des adresses de <strong>résolveurs <em class="sigle">DNS</em> publics</strong> au lien suivant <a class="external" href="https://public-dns.info/" target="_BLANK"></a>. </p>
+
+<p> Mais au delà des considérations en termes de performance ou de confidentialité pour <strong>choisir</strong> tel ou tel service <a class="external" href="https://dnslookup.fr/blog/quel-resolveur-dns-public-choisir/" target="_BLANK"></a>, les <strong class="title">adresses IP remarquables</strong> données dans le tableau ci‑dessus sont <strong class="pros">utiles à connaître</strong> pour un technicien des réseaux. Elles constituent un bon <strong class="defin">choix par défaut</strong> lorsqu'on définit la configuration statique d'une interface ou les paramètres d'un <strong>serveur <em class="sigle">DHCP</em></strong>, et qu'on ne dispose pas encore d'un accès à l'Internet pour déterminer des adresses de résolveurs <strong><em class="sigle">DNS</em></strong>. </p>	
+</div><!-- expert -->
+
+
+
+<h3> Mode opératoire d'un résolveur DNS </h3>
+
+
+
+<div class="complement">
+<p> Même s'il est le plus souvent implémenté sur une machine dédiée (typiquement un serveur), un <strong>résolveur <em class="sigle">DNS</em></strong> est avant tout un <strong class="defin">logiciel</strong> qui met en œuvre <strong class="title">algorithme de résolution de nom</strong>. Et ce dernier peut procéder de deux façons : </p>
+  
+<ul>
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/resolveurModeRecursif.png" width="500px" style="padding-top: 0.5em">
+	<li> Il peut opérer en <strong class="specialLB">mode récursif</strong> lorsqu'il <strong>propage la requête</strong> en interrogeant un <strong class="defin">autre résolveur</strong> qu'il connaît par défaut pour obtenir une réponse. </li>
+
+	 <div class="expert">
+  <div class="nobullet"> C'est typiquement ce mode qui est adopté lorsque, sollicité par une application (typiquement, un navigateur), le <strong>système d'exploitation</strong> d'une machine ne trouve <strong class="cons">pas</strong> dans sa <strong>mémoire cache</strong> l'adresse correspondant à un nom de domaine requis. Il sollicite alors l'un des <strong class="defin">résolveurs <em class="sigle">DNS</em></strong> définis dans la <strong>configuration de l'interface réseau</strong> – typiquement, un résolveur du <strong><em class="sigle">FAI</em></strong> – pour accomplir cette même tâche.  </div>
+  </div><!-- expert -->
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/resolveurModeIteratif.png" width="400px" style="padding-top: 0.5em">
+	<li> Il peut aussi opérer en <strong class="specialLB">mode itératif</strong> lorsqu'il obtient de la part d'un <strong>serveur de noms</strong> non pas l'adresse <strong><em class="sigle">IP</em></strong> du nom de domaine à résoudre mais celle d'un <strong class="defin">autre serveur de noms</strong>, qu'il doit alors solliciter, et ce jusqu'à obtenir une réponse. </li>
+ 
+  <div class="expert">
+  <div class="nobullet"> C'est typiquement ce mode qui est adopté lorsqu'un <strong class="defin">résolveur</strong> interroge un serveur de noms de la <strong>racine du <em class="sigle">DNS</em></strong> : </div>
+  
+  <ul>
+  	<li> ce dernier ne connaissant <strong class="cons">pas</strong> l'<strong>adresse <em class="sigle">IP</em></strong> du nom de domaine complet recherché, il retourne celle du serveur de noms de <strong>premier niveau</strong> (<strong><em class="sigle">TLD</em></strong>) ;  </li>
+  
+  	<li> le résolveur doit alors réitérer sa requête auprès de ce serveur de noms, qui lui‑même peut renvoyer celle d'un serveur de noms de <strong>2<sup>e</sup> niveau</strong>, etc. </li>
+  </ul>
+  </div><!-- expert -->
+  </div><!-- display -->
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="cache"> Mémoire cache d'un résolveur DNS </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/resolverCache.png" width="250px">
+<p> Comme de nombreux logiciels (système d'exploitation, navigateurs…), celui d'un <strong>résolveur <em class="sigle">DNS</em></strong> dispose aussi en <strong class="title">mémoire cache</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Mémoire_cache" target="_BLANK">W</a> d'une base de donnée qui lui permet d'<strong class="defin">enregistrer temporairement</strong> les <strong>réponses</strong> qu'ils ont obtenues aux dernières requêtes. </p> 
+</div><!-- important -->
+
+<div class="complement"> 
+<p> Cette stratégie présente <strong class="title">deux avantages</strong> : </p>
+<ul>
+	<li> <strong class="pros">diminuer le temps de réponse</strong> aux applications qui sont à l'origine des requête ; </li>
+
+	<li> <strong class="pros">diminuer le nombre de requêtes</strong> adressées aux <strong>serveurs de noms</strong>. </li>
+</ul>
+<p> Mais elle pourrait avoir l'<strong class="cons">inconvénient</strong> d'aboutir à une <strong>réponse erronée</strong> lorsqu'elle n'est <strong>plus à jour</strong>. C'est pourquoi la <strong class="defin">durée de vie</strong> des enregistrements en mémoire cache doit être judicieusement choisie. </p>
+</div><!-- complement --> 
+
+
+<h4> Durée de vie d'un enregistrement en mémoire cache </h4>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/timer.png" width="100px">
+<p> La <strong class="title">durée de vie</strong>  <a class="external" href="https://fr.wikipedia.org/wiki/Time_to_Live#Le_Time_to_Live_dans_le_DNS" target="_BLANK ">W</a> – en anglais, <strong>time‑to‑live</strong>, abrégé <strong class="title"><em class="sigle">TTL</em></strong> – d'un <strong>enregistrement en mémoire cache</strong> est un paramètre qui <strong class="defin">limite dans le temps la validité</strong> de l'enregistrement. </p>
+
+<p> C'est un <strong>entier non signé</strong> encodé sur <strong>32 bits</strong> qui exprime cette <strong class="defin">durée en secondes</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le format d'encodage sur <strong>32 bits</strong> permet théoriquement de définir une <strong class="title">valeur</strong> de durée de vie jusqu'à <strong class="cons">136 ans</strong> (environ 4,3 × 10<sup>9</sup> s). Mais en pratique : </p>
+<ul>
+	<li> <strong class="specialLB">dans tous les cas</strong>, on ne dépasse pas <strong class="warning">7 jours maximum</strong> (604&#8239;800 s) ; </li>
+
+	<li> pour un <strong>domaine peu sollicité</strong> et doté d'un <strong class="specialLB">adressage stabilisé</strong>, <strong class="defin">par défaut</strong>, on peut prendre une valeur de <strong>12 heures</strong> (43&#8239;200 s) ou <strong>24 heures</strong> (86&#8239;400 s) ; </li>
+
+	<li> sur un tel domaine, lorsque des <strong class="specialLB">changements d'adressage</strong> sont en cours, on aura tendance à choisir une valeur de l'ordre d'<strong>1 heure</strong> (3&#8239;600 s) ;  </li>
+
+	<li> les <strong class="specialLB">domaines très sollicités</strong> (moteurs de recherche, <em class="mark">Wikipedia</em>, etc.) qui ont recours à des dispositifs de répartition de charge <a class="external" href="https://fr.wikipedia.org/wiki/Répartition_de_charge" target="_BLANK">W</a>, on observe des valeurs beaucoup plus courtes, typiquement <strong>5 minutes</strong> (300 s). </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="cacheDNSsystem"> Contribution au DNS du système d'exploitation </h3>
+
+
+
+<div class="important">
+<div  style="display: inline-flex;">	
+<div>
+<p> Sur une machine dotée d'un <strong class="defin">système d'exploitation</strong> (ordinateur, smartphone, serveur…), ce dernier <strong class="title">contribuer au <em class="sigle">DNS</em></strong> de <strong>deux façons</strong> :  </p>
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/hostsFile.png" width="60px" style="margin-top: 0.5em">
+	<li> par des <strong>enregistrements statiques</strong> – c'est‑à‑dire <strong class="warning">sans limite de durée de vie</strong> – inscrits dans un <strong class="specialLB">fichier</strong> nommé <code class="filename">hosts</code> ;  </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/cache.png" width="60px" style="margin-top: 0.5em">
+	<li> en conservant aussi dans une <strong>base de données</strong> en <strong class="specialLB">mémoire cache <em class="sigle">DNS</em></strong> les enregistrements les plus sollicités ; en principe, le système leur confère la <strong class="pros">même durée de vie</strong> que celle spécifiée dans l'enregistrement.  </li>
+  </div><!-- display -->
+</ul>
+</div>
+<img class="top-right" src="../img/operatingSystems.png" style="height : 200px; margin-top: 1em; margin-left: 1.5em;">
+</div><!-- inline-flex -->
+<div class="expert">
+<p> Tous ces dispositifs sont mis en œuvre par des bibliothèques logicielles qui permettent au système d'exploitation d'agir comme un <strong>résolveur strictement récursif</strong>. On parle de <strong class="title">stub resolver</strong>, ou plus récemment de <strong class="title">caching resolver</strong> pour tenir compte de l'usage d'une mémoire cache. </p>
+</div><!-- expert -->
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces <strong class="title">composants logiciels</strong> permettent de considérablement <strong class="pros">accélérer le temps de réponse</strong> et <strong class="pros">diminuer la charge</strong> sur les <strong>résolveurs <em class="sigle">DNS</em> publics</strong>. Et il faut savoir que lorsqu'une application sollicite le système pour accéder à une ressource par son nom de domaine : </p>
+<ul>
+	<li> par défaut, et en l'absence de recours à un <strong class="warning">serveur proxy</strong>, c'est le <strong class="specialLB">fichier</strong> <code class="filename">hosts</code> qui est <strong class="defin">consulté en premier</strong> ; si une <strong>adresse <em class="sigle">IP</em></strong> y est associé au nom à résoudre, c'est cette réponse et elle seule qui est retournée à l'application ; </li>
+
+	<li> dans la négative, c'est la <strong class="specialLB">mémoire cache <em class="sigle">DNS</em></strong> du système d'exploitation qui est <strong class="defin">ensuite</strong> consultée ; là encore, si une <strong>adresse <em class="sigle">IP</em></strong> correspondante y figure, elle est fournie à l'application requérante sans qu'aucun résolveur <em class="sigle">DNS</em> ne soit sollicité.  </li>
+</ul>
+<p> Comme ces composants logiciels sont gérés par le système d'exploitation, un administrateur du poste peut les manipuler, contrairement à tout autre élément issu d'un résolveur public ou d'un serveur de noms. Ce qui donne <strong>quelques moyens rudimentaires</strong> pour <strong class="title">orienter et filtrer</strong> les réponses aux requêtes en résolution de noms (cf. infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/fichierHosts"></a>). </p>
+</div><!-- complement -->
+
+
+
+<h4 id="cacheDNSbrowser"> Mémoire cache DNS du navigateur </h4>
+
+
+<div class="important" style="display: inline-flex;">
+<div>
+	<img class="top-right" src="../img/cache.png" width="60px" style="margin-top: 0.5em">
+<p> Toujours dans l'objectif de <strong class="pros">diminuer le nombre de requêtes au <em class="sigle">DNS</em></strong>, tout <strong class="defin">navigateurs web</strong> (<em class="mark">Firefox</em>, <em class="mark">Chrome</em>, etc.) dispose également d'une <strong>base de donnée</strong> en <strong class="title">mémoire cache <em class="sigle">DNS</em></strong> qui lui est propre. </p>
+
+<p> En règle générale, la <strong class="title">durée de vie</strong> des enregistrements mémorisés dans ce cache est<strong class="defin"> beaucoup plus faible</strong> – typiquement, <strong>2 minutes</strong> – que dans celui du système d'exploitation ou d'un résolveur.  </p>
+</div>
+	<img class="top-right" src="../img/webBrowsers.png" style="height : 200px; margin-top: 1em; margin-left: 1.5em;">
+</div><!-- important -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="nomDomaine"> Les noms de domaine </h2>
+
+
+
+<h3 id="nomDomaine"> Notions de nom de domaine  et de ressource enregistrée</h3>
+
+
+<div class="important">
+<p> Un <strong class="title">nom de domaine</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nom_de_domaine" target="_BLANK">W</a> est une <strong class="defin">chaîne de caractères</strong> qui identifie littéralement un <strong class="specialLB">domaine enregistré</strong> ou une <strong class="specialLB">ressource enregistrée</strong> dans une <strong>zone d'autorité</strong> sur un réseau informatique. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Plus précisément : </p>
+<ul>
+	<li> Un <strong class="specialLB">domaine enregistré</strong> est constitué d'un <strong class="defin">ensemble de machines</strong> répertorié par le <strong><em class="sigle">DNS</em> du réseau</strong> – chacune disposant d'une <strong>adresse <em class="sigle">IP</em></strong> susceptible d'être fournie lors une requête en résolution du nom de ce domaine traitée positivement par un serveur de nom de la zone d'autorité. </li>
+
+	<li> Une <strong class="specialLB">ressource enregistrée</strong> est une <strong class="defin">machine</strong> répertoriée par le <strong><em class="sigle">DNS</em> du réseau</strong>, c'est‑à‑dire disposant d'une <strong>adresse <em class="sigle">IP</em></strong> et donnant accès à une ou plusieurs <strong>ressource</strong> du réseau (site web, etc.). On peut alors parler <strong class="defin">nom d'hôte</strong> <a class="external" href="https://en.wikipedia.org/wiki/Hostname" target="_BLANK">W</a> (en anglais, <strong>hostname</strong>) au sens où cette machine est « hébergée » dans le réseau. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ul>
+	<li> Le <strong class="title">nom de domaine</strong> <code class="filename">org</code> identifie le <strong class="specialLB">domaine enregistré</strong> du réseau Internet constitué de <strong class="defin">toutes les machines</strong> ayant une <strong>adresse <em class="sigle">IP</em> publique</strong> identifiable lors d'une requête en résolution traitée positivement par un serveur de nom faisant autorité sur la <strong>zone</strong> <span class="framedSmall"><code>org</code></span>.</li>
+
+	<li> Le <strong class="title">nom de domaine</strong> <code class="filename">www.wikipedia.org</code> identifie <strong class="defin">l'une des machine</strong> du réseau Internet ayant une <strong>adresse <em class="sigle">IP</em> publique</strong> qui constitue la <strong class="specialLB">ressource enregistrée</strong> donnant accès à la <strong>page d'accueil</strong> du site web de l'encyclopédie en ligne <em class="mark">Wikipedia</em>.</li>
+</ul>
+</div><!-- exemples -->
+
+
+
+<h3> Espace des noms de domaine </h3>
+
+
+
+<div class="important">
+<p> <strong class="warning">De droite à gauche</strong>, un <strong class="title">nom de domaine</strong> est <strong>récursivement composé</strong> : </p>
+<ul>
+	<li> d'<strong class="defin">identifiants  de domaines</strong> (en anglais, on emploie le mot <em class="english">label</em>) ; </li>
+
+	<li> avec le <strong class="defin">séparateur</strong> <code class="filename">.</code> qui joue le rôle d'<strong>opérateur de composition</strong>. </li>
+</ul>
+
+<p> On appelle <strong class="title">espace des noms de domaine</strong> l'ensemble formé de <strong>tous les noms de domaines</strong> <strong class="defin">enregistrés</strong>. </p> 
+</div><!-- important -->
+
+
+<div class="complement" style="display: inline-block;">
+	<img class="top-right" src="../img/DNS_tree2.png" width="600px" >
+<p> L'<strong class="title">espace des noms de domaine</strong> (<em class="english">domain name space</em>) forme un <strong class="defin">arbre</strong> : </p>
+<ul>
+	<li> dont la <strong class="specialMg">racine</strong> est <strong>anonyme</strong> ; on la symbolise par un simple <strong>caractère</strong> <code class="filename">.</code> sachant qu'il est le plus souvent <strong>omis</strong> lors des saisies ; </li>
+
+	<li> dont les <strong>nœuds</strong> de <strong class="specialO">premier niveau</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domaine_de_premier_niveau" target="_BLANK">W</a> (<em class="english">top-level domain</em> ou <strong><em class="sigle">TLD</em></strong>) peuvent être : </li>
+	<ul>
+		<li> soit <strong class="specialLB">génériques</strong> (<em>gTLD</em> pour <em class="english">generic</em>), c'est‑à‑dire chacun attribué à un <strong>domaine d'activité transversal</strong>, par exemple <code class="filename">org</code> pour les organisations à but non lucratif, <code class="filename">com</code> pour le commerce, etc. ; </li>
+
+		<li> soit « <strong class="specialLB">géographiques</strong> » (<em>ccTLD</em> pour <em class="english">country code</em>), c'est‑à‑dire chacun attribué à un <strong>pays</strong> ou un <strong>territoire</strong>, par exemple <code class="filename">fr</code> pour la France métropolitaine, <code class="filename">mq</code> pour l'île de la Martinique, <code class="filename">uk</code> pour le Royaume‑Uni, etc. </li>
+	</ul>
+
+	<li> dont les <strong>nœuds</strong> de <strong class="specialT">deuxième niveau</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domaine_de_premier_niveau" target="_BLANK">W</a> forment des <strong class="title">sous‑domaines</strong> à l'intérieur du domaine de premier niveau dont ils sont issus ; ils sont attribués à des organisations de toutes sortes (entreprises, administrations, associations, etc.) ; par exemple, <code class="filename">wikipedia.org</code> désigne le domaine qui réunit tous les sous‑domaines de l'encyclopédie en ligne ; </li>
+
+	<li> dont les <strong>feuilles</strong> désignent des <strong>ressources enregistrées</strong> hébergées dans un domaine particulier ; par exemple, <code class="filename">fr.wikipedia.org</code> désigne la ou les machines qui donnent accès au site web de la <strong>page d'accueil en langue française</strong> de <em class="mark">Wikipedia</em>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Le <strong class="title">nombre de niveaux</strong> de sous‑domaine n'est en principe <strong class="pros">pas limité</strong> (sauf par des <strong class="cons">contraintes syntaxiques</strong>, cf. infra <a class="infra" href="Rc2-1_dns_url.html#syntaxe"></a>). Par exemple, le nom de domaine : <br>
+<span class="inline">
+	<code class="filename">www.lyc-ferry-versailles.ac-versailles.fr</code>
+</span><br>
+comporte <strong>trois niveaux</strong> de sous‑domaines. </p>
+
+<p> Toutefois, il est recommandé de <strong class="warning">ne pas dépasser 2 niveaux</strong>. En effet, plus on ajoute de niveaux, plus les adresses sont <strong class="cons">difficiles à retenir</strong>, ce qui va à l'encontre de l'objectif principal de l'adressage littéral, qui est de faciliter l'accès aux ressources. </p>
+</div><!-- expert -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Dans la littérature scientifique et technique, par <strong class="defin">convention implicite</strong>, les <strong class="title">identifiants des <em class="sigle">TLD</em></strong> sont écrits avec un <strong>point initial</strong> (<code class="filename">.com</code>, <code class="filename">.org</code>, etc.) car : </li>
+  <ul>
+  	<li> ils désignent rarement une ressource ; ils attendent donc une <strong>complétion</strong>, ce à quoi le point invite ; </li>
+
+  	<li> cela permet d'<strong class="pros">éviter les confusions </strong>avec un mot ou un sigle. </li>
+  </ul>
+  <div class="nobullet"> Mais il ne s'agit que d'une convention d'écriture : en réalité, <code class="filename">com</code> est un nom de domaine, mais pas <code>.com</code> à strictement parler. </div>
+
+  <li> Historiquement, les <strong class="title"><em class="sigle">TLD</em> génériques</strong> ont été créés pour les besoins des <strong>États‑Unis</strong> – là où le réseau Internet a été inventé. </li>
+  <ul>
+  	<li> <strong class="specialLB">Certains <em class="mark">gTLD</em></strong>, comme <code class="filename">gov</code> et <code class="filename">mil</code> restent encore <strong class="cons">strictement réservés</strong> à leur usage initial (respectivement pour le gouvernement et l'armée américaine). C'est aussi le cas pratique de <code class="filename">edu</code> qui ne couvre que les établissements universitaires des États‑Unis. On dit que ces <strong><em class="sigle">TLD</em></strong> sont <strong class="defin">parrainés</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domaine_de_premier_niveau_parrainé" target="_BLANK">W</a> – en anglais, <strong>sponsored</strong> – au sens où il faut impérativement le soutien d'un « parrain » (un organisme décisionnaire dans un secteur d'activité spécifique) pour y enregistrer un sous‑domaine. </li>
+
+  	<li> Les <strong class="specialLB">autres <em class="mark">gTLD</em></strong> – <code class="filename">com</code>, <code class="filename">org</code>, <code class="filename">net</code>, <code class="filename">biz</code>, <code class="filename">info</code>, etc. – sont en revanche <strong class="pros">ouverts</strong> à toutes les demandes d'enregistrement de noms de sous‑domaines à partir du moment où elles répondent à certaines exigences (par exemple, d'être émise par une organisation à but non lucratif pour obtenir une adresse dans le domaine <code class="filename">org</code>). </li>
+  </ul>
+
+  <li> Hors des deux catégories de <strong><em class="sigle">TLD</em></strong> mentionnées supra (<em>gTLD</em> et <em>ccTLD</em>), il existe aussi un <strong class="title"><em class="sigle">TLD</em> spécial</strong> (catalogué <em class="english">infrastructure</em>) : <code class="filename">arpa</code> <a class="external" href="https://en.wikipedia.org/wiki/.arpa" target="_BLANK">W</a> (aujourd'hui tenant pour <em class="english">address and routing parameter area</em>). Il est réservé pour des <strong>usages techniques</strong>. </li>
+
+</ol>
+</div><!-- remarques -->
+
+
+
+<h4 id="FQDN"> Nom de domaine pleinement qualifié </h4>
+
+
+<div class="complement">
+<p> On dit d'un <strong>nom de domaine</strong> qu'il est <strong class="title">pleinement qualifié</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fully_qualified_domain_name" target="_BLANK">W</a> (<em class="english">fully qualified domain name</em>, abrégé <strong><em class="sigle">FQDN</em></strong>) s'il forme un chemin jusqu'à la <strong class="defin">racine incluse</strong> de l'arbre de l'espace de nom, marquée par un « <code class="filename">.</code> » <strong>final</strong>.  </p>
+
+<p> Ce <strong>point</strong> symbolisant la racine est nécessaire pour le bon déroulement des algorithmes de résolution de noms. Lorsqu'il est omis dans une requête en résolution de nom, il est en fait <strong class="pros">automatiquement rajouté</strong> par l'application ou le système d'exploitation. </p>
+</div><!-- complement -->
+
+<div class="exemples"> 
+<p class="exemple"> Le nom de domaine <code class="filename">www.wikipedia.org.</code> avec son <strong>point final</strong> constitue un <strong class="title"><em class="sigle">FQDN</em></strong>. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="alias"> Notion d'alias </h3>
+
+
+
+<div class="important">
+<p> À tout <strong>nom de domaine enregistré</strong>, l'administrateur de sa zone d'autorité peut définir <strong>un ou plusieurs</strong> <strong class="title">alias</strong> : ce sont d'<strong class="defin">autres noms</strong> qui identifient le <strong class="defin">même domaine</strong>. </p>
+
+<p> Dans la base de donnée des serveurs de noms, tout <strong class="title">alias</strong> est défini par un <strong class="defin">enregistrement d'un type différent</strong> de celui d'un nom de domaine enregistré. Techniquement appelé <strong>canonical name</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Enregistrement_de_nom_canonique" target="_BLANK">W</a>, un tel enregistrement est de la forme : </p> 
+<div class="inline">
+	<span class="framedFull"><strong class="specialLB"> nom d'alias</strong>   ⟶   <strong class="specialN">nom de domaine enregistré </strong></span>
+</div> <!-- inline -->
+</div><!-- important -->
+
+<div class="complement">
+<p> L'enregistrement d'un <strong class="title">alias</strong> d'un <strong>nom de domaine</strong> présente potentiellement <strong class="pros">plusieurs intérêts</strong>, en particulier : </p>
+<ul>
+	<li> <strong class="specialLB">augmenter la visibilité</strong> d'un site par l'ajout de différents noms pour y accéder, notamment avec et sans le nom de sous‑domaine <code>www</code> (cf. infra <a class="infra" href="Rc2-1_dns_url.html#www"></a>) ;  </li>
+
+  <div class="exemples">
+  <p class="exemple"> Le <strong>nom de domaine</strong> <code class="filename">www.lycee-ferry-versailles.fr</code> est en fait un <strong class="title">alias</strong> du nom de domaine enregistré <code class="filename">lycee-ferry-versailles.fr</code> qui est plus simple. </p>
+  </div><!-- exemple -->
+
+	<li> assurer la <strong class="specialLB">transition d'hébergement</strong> d'un  site qui soit robuste aux habitudes des internautes non informés de cette transition (l'ancien nom étant l'alias du nouveau nom durant toute la période de transition) ; </li>
+ 
+  <div class="exemples">
+  <p class="exemple"> Le <strong>nom de domaine</strong> <code class="filename">www.neuf.fr</code> est un <strong class="title">alias</strong> de <code class="filename">www.sfr.fr</code>. En effet, l'opérateur <em class="mark">9 Télécom</em> est un ancien <em class="sigle">FAI</em> ayant fusionné avec <em class="sigle">SFR</em> en 2008 <a class="external" href="https://fr.wikipedia.org/wiki/Neuf_(entreprise)" target="_BLANK">W</a>. </p>
+  </div><!-- exemple -->
+
+
+	<li> <strong class="specialLB">simplifier l'espace des noms</strong> d'un sous‑domaine pour le rendre <strong class="pros">plus attractif</strong>, voire <strong class="warning">complètement différent</strong> du nom de domaine réellement utilisé. </li>
+
+	<div class="exemples">
+  <p class="exemple"> Le <strong>nom de domaine</strong> <code class="filename">www.education.gouv.fr</code> est un <strong class="title">alias</strong> du nom de domaine enregistré <code class="filename">cs4.wpc.alphacdn.net</code>. Ce domaine est géré par la société américaine <em class="mark">Verizon Trademark Services LLC</em> qui agit en qualité d'<strong>hébergeur web</strong> pour le Ministère de l'éducation nationale français. Bien évidemment, ce nom de domaine « technique » est <strong class="cons">trop complexe</strong> pour les internautes, c'est pourquoi il est doté d'un <strong>alias</strong> beaucoup plus <strong class="pros">lisible</strong>. </p>
+  </div><!-- exemple -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Tous les <strong class="title">exemples</strong> ont été <strong class="defin">vérifiés</strong> en 2021 à l'aide de la commande <code class="cmd">nslookup</code>. Toutefois, le résultat obtenu est susceptible de varier au gré de changements d'enregistrement opérés depuis cette date. </li>
+
+	<li> L'<strong class="title">enregistrement d'un alias</strong> n'est <strong class="defin">pas la seule technique</strong> pour associer plusieurs noms à un même domaine. Il existe aussi divers mécanismes de <strong class="defin">redirection d'<em class="sigle">URL</em></strong> (cf. infra <a class="infra" href="Rc2-1_dns_url.html#redirection"></a>). </li>
+</ol>
+</div><!-- remarque -->
+
+
+
+<h3 id="syntaxeNomsDomaine"> Règles syntaxiques des noms de domaine </h3>
+
+
+
+<div class="important">
+<p> Par défaut, un <strong class="title">nom de domaine</strong> doit être <strong class="warning">composé exclusivement</strong> avec le jeu de caractères <strong class="defin"><em class="sigle">ASCII</em> restreint</strong> (cf. chap. C3‑VIII <a class="next" href="../../ModuleC/C3-Numeration/Cc3-8_typesCaracteres.html#jeuRestreintASCII" target="_BLANK">C</a>) et : </p>
+<ul>
+	<li> <strong>sans distinction de casse</strong> (les majuscules sont automatiquement converties en minuscules) ; </li>
+
+	<li> <strong>sans caractères spéciaux</strong>, <strong class="pros">excepté le trait d'union</strong> (<em class="english">hyphen</em>, code <em class="sigle">ASCII</em> <code>0x2d</code>). </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> De plus, un <strong class="title">nom de domaine</strong> doit respecter les <strong class="warning">limites</strong> suivantes : </p>
+<ul>
+	<li> chaque <strong class="specialLB">identifiant</strong> (<em class="english">label</em>) ne doit pas dépasser <strong>63 caractères</strong> ;  </li>
+
+	<li> un <strong class="specialLB">nom complet</strong> ne doit pas dépasser <strong>253 caractères</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Noms de domaines internationalisés </h4>
+
+
+<div class="complement">
+<p> De plus en plus, des <strong><em class="sigle">TLD</em></strong> acceptent dans leurs <strong class="title">sous‑domaines</strong> des identifiants formés avec certains jeux de <strong class="defin">caractères larges</strong> (lettres accentués, caractères grecs ou cyrilliques, etc. – cf. chap. C3‑IX <a class="next" href="../../ModuleC/C3-Numeration/Cc3-9_typesCaracteresEtendus.html" target="_BLANK">C</a>). On parle alors de <strong>noms de domaines</strong> <strong class="title">internationalisés</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nom_de_domaine_internationalisé" target="_BLANK">W</a>. </p>
+</div><!-- complement -->
+
+
+<p> Cette extension est rendue possible grâce au <strong class="title">protocole <em class="sigle">IDNA</em></strong> (<em class="english">internationalized domain names in applications</em>, formalisé par les <em class="sigle">RFC 5890</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc5890" target="_BLANK"></a> et <em class="sigle">5891</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc5891" target="_BLANK"></a>) qui est aujourd'hui pris en charge par la plupart des navigateurs. Il consiste à <strong class="defin">transcrire en <em class="sigle">ASCII</em> restreint</strong> les noms de domaines internationalisés par l'algorithme <strong>punycode</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Punycode" target="_BLANK">W</a> (<em class="sigle">RFC 3492</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc3492" target="_BLANK"></a>). Afin qu'il n'y ait pas de confusion avec tout autre nom de domaine directement composé en <strong><em class="sigle">ASCII</em></strong>, le préfixe <code class="filename">xn--</code> est ajouté à chaque identifiant transcrit. </p>	
+
+<div class="exemples">
+<p class="exemples"> Assez <strong class="warning">rare</strong> pour être signalé, le <strong class="title">nom de domaine</strong> <code class="filename">www.académie-française.fr</code> peut être directement saisi dans la barre d'adresse d'un navigateur <a class="external" href="http://www.académie-française.fr/" target="_BLANK"></a>. Sa transcription en <strong>punycode</strong> : </p>
+<div class="inline">
+	<code class="filename">www.xn--acadmie-franaise-npb1a.fr</code>
+</div>
+<p> apparaît dès qu'on tente une modification. On voit que cette transcription est bien entièrement composée dans le <strong class="defin">jeu <em class="sigle">ASCII</em> restreint</strong> (pas de « <code>é</code> » ni de « <code>ç</code> ») et comporte le préfixe <code>xn--</code>. </p>
+
+<p> <em class="remark">Remarque</em> : dans tous les cas, on aboutit au site <code class="filename">www.academie-francaise.fr</code> par un mécanisme de <strong>redirection d'<em class="sigle">URL</em></strong> (cf. infra <a class="infra" href="Rc2-1_dns_url.html#redirectionURL" target="_BLANK"></a>). </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+<h4 id="www"> Usage du sigle <code>www</code>  </h4>
+
+
+<div class="important">
+<p> Dans les noms de domaine, le <strong class="title">sigle <code style="font-style : normal">www</code></strong> – pour <strong>world wide web</strong> – est <strong class="pros">conventionnellement</strong> employé pour désigner un <strong>sous‑domaine</strong> regroupant des <strong class="defin">pages web</strong> (de même, que le sigle <code>ftp</code> est usuellement réservé désigner le nom de domaine d'un serveur de fichier par le protocole du même nom). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Si cet <strong class="title">usage</strong> facilite l'identification du contenu des noms de domaine, il n'est pourtant <strong class="pros">pas obligatoire</strong>. Aujourd'hui, pour diminuer les erreurs d'adressage, il est fréquent d'attribuer <strong class="defin">deux noms</strong> à un même domaine, <strong>avec</strong> <strong class="pros">et</strong> <strong>sans</strong> sous‑domaine <code class="filename">www</code> et de renvoyer l'un sur l'autre. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple">	Si l'on saisit seulement le <strong>nom de domaine</strong> <code class="filename">education.gouv.fr</code> dans la barre d'adresse d'un navigateur, ce dernier aboutit automatiquement au nom de domaine <code class="filename">www.education.gouv.fr</code> par un mécanisme de <strong>redirection d'<em class="sigle">URL</em></strong> (cf. infra <a class="infra" href="Rc2-1_dns_url.html#redirectionURL" target="_BLANK"></a>). </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="enregistrement"> Enregistrement d'un nom de domaine </h3>
+
+
+
+<div class="important">
+<p> Tout <strong class="title">enregistrement</strong> d'un <strong>nom de (sous‑)domaine</strong> est soumise à l'<strong class="defin">autorité</strong> de l'institution ou de l'organisme qui gère le <strong>domaine</strong> auquel ce (sous‑)domaine appartient. </p>
+
+<p> Dans le cas des domaines de <strong class="specialO">premier niveau</strong>, on parle de <strong class="title"><em class="sigle">TLD</em> manager</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il faut savoir que : </p>	
+<ul>
+	<li> la <strong class="specialLB">racine</strong> et certains <strong class="specialLB"><em class="sigle">TLD</em> génériques</strong> (<code class="filename">int</code>, <code class="filename">arpa</code>) sont placés sous l'autorité historique de l'<strong class="defin"><em class="sigle">IANA</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority" target="_BLANK">W</a> – <strong>Internet assigned numbers authority</strong> – qui est un département de l'<strong><em class="sigle">ICANN</em></strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#institutionsAdmin" target="_BLANK"></a>) ; </li>
+
+	<li> d'autres <strong class="specialLB"><em class="sigle">TLD</em> génériques</strong> sont gérés par divers organismes, par exemple : </li>
+  <ul>
+  	<li> <code class="filename">org</code> par le <strong class="defin"><em class="sigle">PIR</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Public_Interest_Registry" target="_BLANK">W</a> – <strong>public interest registry</strong> – qui est une association américaine à but non lucratif ;  </li>
+
+  	<li> <code class="filename">com</code> par <strong class="defin">VeriSign</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Verisign" target="_BLANK">W</a>, une société américaine qui gère également deux serveurs racine ; </li>
+  </ul>
+
+	<li> les <strong class="specialLB"><em class="sigle">TLD</em> géographiques</strong> sont le plus souvent placés sous l'autorité d'<strong class="defin">institutions</strong> des <strong>pays respectifs</strong> ou <strong class="defin">régions</strong> correspondant à ces domaines ; par exemple, le domaine <code class="filename">fr</code>… est géré par l'<strong><em class="sigle">AFNIC</em></strong>.  </li>
+</ul>
+</div><!-- complement -->
+
+<p> Plus généralement, on peut consulter la <strong class="title">liste complète des <em class="sigle">TLD</em></strong> directement sur le site de l'<strong><em class="sigle">IANA</em></strong> <a class="external" href="https://www.iana.org/domains/root/db" target="_BLANK"></a> et ainsi connaître l'organisme gestionnaire de chacun – son <strong><em class="sigle">TLD</em> <em class="english">manager</em></strong>. </p>
+
+
+
+<h4 id="registraire"> Bureaux d'enregistrement </h4>
+
+
+<div class="important">
+<p> Dans la pratique, les <strong><em class="sigle">TLD</em> <em class="english">managers</em></strong> n'ont <strong class="cons">pas les moyens</strong> de traiter les demandes d'enregistrement de noms de domaine. </p>
+
+<p> Ils délèguent donc cette tâche à des <strong>entreprises</strong> ou <strong>associations</strong> appelées <strong class="title">registraires</strong> ou <strong class="title">bureaux d'enregistrement</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Registraire_de_nom_de_domaine" target="_BLANK">W</a> (<em class="english">domain name registrar</em>). Moyennant une contribution financière, un registraire  agit comme <strong class="defin">intermédiaire commercial</strong> pour le compte des demandeurs d'enregistrement. </p>
+</div><!-- important --> 
+
+
+<div class="complement">
+<div class="expert">
+<p> On retrouve ici le <strong class="pros">même principe</strong> que pour l'attribution des <strong>adresses <em class="sigle">IP</em></strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#roleRIR" target="_BLANK"></a>), les <strong class="defin"><em class="sigle">TLD</em> managers</strong> jouant le rôle des <strong><em class="sigle">RIR</em></strong> et les <strong class="defin">registraires</strong> celui des <strong><em class="sigle">LIR</em></strong>. </p>	
+</div><!-- expert -->
+
+<ul>
+	<li> C'est donc le <strong class="title"><em class="sigle">TLD</em> manager</strong> qui détermine la <strong class="defin">politique d'enregistrement</strong> (conditions générales, limites tarifaires…). </li>
+
+	<li> Quant au <strong class="title">registraire</strong>, il se charge :</li>
+	<ul>
+		<li> d'instruire au demandeur les formalités administratives à accomplir ; </li>
+
+		<li> de maintenir au niveau des serveurs de noms la base de donnée des enregistrements qu'il commercialise. </li>
+	</ul>
+
+	<div class="nobullet"> En règle générale, tous les <strong>fournisseurs d'accès à l'Internet</strong> et les <strong>hébergeurs de données</strong> assument des fonctions de <strong class="title">registraires</strong>. </div>
+</ul>
+</div><!-- complement -->
+
+<p> La <strong class="title">liste des registraires</strong> d'un <strong class="title"><em class="sigle">TLD</em></strong> est en général accessible le <strong>site web</strong> du <strong><em class="sigle">TLD</em> <em>manager</em></strong>.  </p>
+
+<div class="exemples">
+<p class="exemple"> Sur le site de l'<strong class="title"><em class="sigle">AFNIC</em></strong> (<em class="sigle">TLD</em> manager des domaines <code class="filename">fr</code>, <code class="filename">re</code>, etc.) on trouve un <strong>formulaire</strong> de base de donnée <a class="external" href="https://www.afnic.fr/fr/votre-nom-de-domaine/comment-choisir-et-creer-mon-nom-de-domaine/annuaire-des-bureaux-d-enregistrement/" target="_BLANK"></a> qui permet de <strong>cibler la recherche d'un registraire</strong> en fonction des besoins, du pays, de la région…  </p>
+
+<p> D'<strong class="title">autres outils</strong> sont également disponibles, en particulier pour savoir si un <strong>nom de sous‑domaine</strong> est <strong class="cons">déjà réservé</strong>. </p>
+</div><!-- exemple -->
+
+
+
+<h3 id="localhost"> L'hôte local </h3>
+
+
+
+<div class="important">
+<p> Le <strong>nom d'hôte</strong> <code class="filename"><span class="title">localhost</span></code> <a class="external" href="https://fr.wikipedia.org/wiki/Localhost" target="_BLANK">W</a> – littéralement, l'<strong>hôte local</strong> – est un <strong class="title">nom de domaine</strong> reconnu par les systèmes d'exploitation des machines. Il désigne la <strong>machine locale</strong> sur laquelle sont exécutées des requêtes vers ce nom de domaine. </p>
+
+<p> Ce <strong>nom de domaine</strong> est associé à l'<strong class="defin">adresse <em class="sigle">IP</em> de rebouclage</strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#loopback" target="_BLANK"></a>). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Cette association est en général enregistrée dans le <strong>fichier</strong> <code class="filename">hosts</code> du système d'exploitation (cf. supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/cacheDNSsystem"></a> et infra <a class="infra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/fichierHosts"></a>).  </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="URL"> Les URL </h2>
+
+
+
+<h3> Notion d'URL </h3>
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/url.jpg" width="150px">
+<p> Une <strong class="title"><em class="sigle">URL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Uniform_Resource_Locator" target="_BLANK">W</a> – pour <strong class="title">uniform resource locator</strong> – est une <strong class="defin">chaîne de caractères</strong> qui détermine l'<strong>accès</strong> à une <strong>ressource enregistrée</strong> dans un réseau informatique ou sur une machine terminale. </p>
+
+<p> Elle est destinée à être saisie : </p>
+<ul>
+	<li> dans la <strong class="specialLB">barre d'adresse</strong> d'un <strong>navigateurs web</strong>, ou plus généralement dans un <strong class="defin">champ de saisie</strong> spécifique de logiciel (par exemple, pour définir un <strong>hyperlien</strong> dans un document bureautique) ; </li>
+
+	<li> comme <strong class="specialLB">valeur d'un attribut de balise</strong> du langage <strong><em class="sigle">HTLM</em></strong> (par exemple, un attribut <code>href</code> ou <code>src</code>) ; </li>
+
+	<li> comme <strong class="specialLB">argument d'une commande</strong> de système d'exploitation (par exemple, sous <em class="mark">Linux</em>,  <code>wget</code>, <code>curl</code>, etc.) ; </li>
+</ul>
+<p> cette liste n'étant pas exhaustive. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Il existe de <strong class="title">nombreux types</strong> d'<strong><em class="sigle">URL</em></strong>. Les plus courants sont ceux qui donnent accès à : </p>
+<ul>
+	<li> des serveurs de <strong class="specialLB">pages web</strong>, via le protocole <code>http</code> ; </li>
+
+	<li> des serveurs de <strong class="specialLB">fichiers</strong>, via le protocole <code>ftp</code> ; </li>
+
+	<li> des serveurs de <strong class="specialLB">messagerie</strong>, via le protocole <code>smtp</code>… </li>
+</ul>
+<p> Mais on peut aussi spécifier l'accès à une <strong class="specialLB">ressource locale</strong> (un fichier) sur la <strong>même machine</strong> que celle qui héberge l'application dans laquelle l'<strong><em class="sigle">URL</em></strong> est saisie. </p>
+</div><!-- complement -->
+
+<p> En fait, la notion d'<strong><em class="sigle">URL</em></strong> s'inscrit dans le concept plus vaste d'<strong class="title"><em class="sigle">URI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Uniform_Resource_Identifier" target="_BLANK">W</a> – pour <strong class="title">uniform ressource identifier</strong> – qui définit un <strong>format général</strong> pour <strong class="defin">identifier toutes les ressources</strong> sur les <strong>réseaux informatiques</strong>. </p>
+
+
+<h3 id="formatURL"> Forme d'une URL </h3>
+
+
+<div class="important">
+<p> Dans l'absolu, une <strong class="title"><em class="sigle">URL</em></strong> se compose selon une <strong>forme syntaxique</strong> comportant jusqu'à <strong class="defin">6 composantes</strong>, certaines étant <strong>optionnelles</strong>. Elles sont concaténées les unes à la suite des autres, comme ci‑dessous : <br>
+<span class="inline" style="background: ivory">
+   <strong class="specialR">schéma</strong> <code>:</code><span style="color:grey">[</span><code>//</code><strong class="specialT">autorité</strong><span style="color:grey">&#8239;]</span> <span style="color:grey">[</span><code>:</code><strong class="specialO">nº port</strong><span style="color:grey">&#8239;]</span> <strong class="specialLG">chemin</strong> <span style="color:grey">[</span><code>?</code><strong class="specialV">requête</strong><span style="color:grey">&#8239;]</span> <span style="color:grey">[</span><code>#</code><strong class="specialPV">fragment</strong><span style="color:grey">&#8239;] </span>
+</span></p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong class="title">détail</strong> de ces <strong>6 composantes</strong> peut être trouvé sur cette page web <a class="external" href="https://en.wikipedia.org/wiki/URL#Syntax" target="_BLANK">W</a>. La combinatoire de toutes leurs valeurs possibles est immense. Toutefois, pour un étudiant dans le domaine des réseaux, il est surtout important d'en retenir les <strong class="defin">usages les plus courants</strong>, qui seront exposés ci‑après. </p>
+
+<div class="expert">
+<p> Pour une <strong class="title">description encore plus exhaustive</strong>, on peut évidemment consulter la <strong><em class="sigle">RFC 3986</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc3986" target="_BLANK"></a> qui est consacrée à la <strong>syntaxe générale des</strong> <strong class="title"><em class="sigle">URI</em></strong>. Sa rédaction a été dirigée par Tim Berners‑Lee <a class="external" href="https://fr.wikipedia.org/wiki/Tim_Berners-Lee" target="_BLANK">W</a>, également principal inventeur du langage <strong><em class="sigle">HTML</em></strong>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Le <strong class="specialO">nº port</strong> ne doit être spécifié que lorsqu'il n'est <strong>pas standard</strong>, ce qui est assez <strong class="warning">rare</strong> dans la pratique. C'est pourquoi cette composante est le plus souvent passée sous silence, mais on peut en trouver mention ici <a class="external" href="https://developer.mozilla.org/fr/docs/Apprendre/Comprendre_les_URL" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+
+<h4 id="schemaAbout"> Le schéma <code class="filename"><span class="specialR">about</span>:</code> </h4>
+
+
+<div class="important">
+<p> Peu connu du grand public, le <strong class="title">schéma</strong> <code class="filename"><span class="specialR">about</span>:</code> <a class="external" href="https://fr.wikipedia.org/wiki/About:" target="_BLANK">W</a> permet d'afficher <strong class="defin">toutes sortes d'informations</strong> dans la <strong>fenêtre principale du navigateur</strong>. Il suffit de saisir à la suite le <strong>nom de la page d'information</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On peut trouver dans le lien supra la <strong class="title">liste des noms de pages d'information</strong> qui sont valides dans tel ou tel navigateur. </p>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Dans certains navigateurs (<em class="mark">Chromium</em>, <em class="mark">Opera</em>…), le schéma <code class="filename"><span class="specialR">about</span>:</code> est automatiquement remplacé par un autre, équivalent – typiquement, <code>chrome:</code> ou <code>opera:</code>… </p>
+</div><!-- expert -->
+<div class="exemples">
+<p class="exemple"> L'<strong><em class="sigle">URL</em></strong> <code class="filename"><span class="specialR">about</span>:<span class="specialLG">about</span></code> affiche la <strong class="specialLB">liste de toutes les pages d'information</strong> disponibles sur le <strong>navigateur utilisé</strong>. Elles sont présentées sous forme d'<strong>hyperliens</strong> donc il suffit de cliquer sur leur nom pour y accéder. </p>
+
+<p> Par exemple, avec le navigateur <strong>Firefox</strong>, on trouve la page <code class="filename"><span class="specialR">about</span>:<span class="specialLG">networking</span></code> qui donne accès à de nombreuses <strong class="specialLB">informations relatives au réseau</strong> (liste des hôtes contactés pour des requêtes <code>http</code>, cache <strong><em class="sigle">DNS</em></strong>, etc.) </p>
+</div><!-- exemple -->
+
+
+<h4 id="urlLibreAcces"> URL d'une page web en libre accès </h4>
+
+
+<div class="important">
+<p> Pour accéder à une <strong class="title">page web</strong> en <strong>libre accès</strong> sur un serveur, l'<strong><em class="sigle">URL</em></strong> est de la forme : <br>
+<span class="inline" style="background: ivory">
+  <code> <span class="specialR">http</span>://</code><strong class="specialT">nom d'hôte</strong> <strong class="specialLG">chemin</strong> 
+</span></p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Dans cette forme :  </p>
+<ul>
+	<li> le <strong class="specialT">nom d'hôte</strong> doit être un <strong>nom de domaine enregistré</strong> de machine (cf. supra <a class="supra" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/nomDomaine"></a>) ;  
+  </li>
+
+  <li> le <strong class="specialLG">chemin</strong> définit le <strong>chemin d'accès au fichier</strong> sur la machine hôte dans l'<strong>arbre des répertoires web</strong> qu'elle héberge. </li>
+
+  <div class="nobullet"> Quel que soit le système d'exploitation, ce chemin est codé par une <strong class="defin">succession de segments</strong> concaténés les uns après les autres par le <strong>séparateur</strong> <code class="filename"><span class="specialLG">/</span></code> – et non <strong class="warning">pas</strong> <code>\</code> – sachant que : </div>
+  <ul>
+  	<li> la <strong class="defin">racine</strong> est conventionnellement un <strong>segment vide</strong>, autrement dit le chemin commence toujours par le caractère <code class="filename"><span class="specialLG">/</span></code> ; </li>
+
+  	<li> le <strong>dernier segment</strong> est le <strong class="defin">nom du fichier</strong> codant la page web ; par défaut, le nom doit être complet, c'est‑à‑dire codé avec son extension (mais il existe des solutions pour se passer de ce détail technique peu commode pour le grand public). </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+<p> Par ailleurs, l'accès à une page web via le <strong class="title">protocole sécurisé</strong> <code><span class="specialR">https</span></code> prend la <strong>même forme d'<em class="sigle">URL</em></strong>, sauf bien entendu pour le sigle du protocole. </p>
+
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> L'<strong class="title"><em class="sigle">URL</em></strong> de la <strong>page d'accueil de ce module</strong> de formation est : <br>
+	<span class="inline" style="background: ivory; font-size: 90%"> <code><span class="specialR">http</span>://<span class="specialT">www.lycee-ferry-versailles.fr</span><span class="specialLG">/snir/ModuleR/indexR.html</span></code> 
+	</span> </li>
+
+	<li> L'<strong class="title"><em class="sigle">URL</em></strong> de la page de prévisions météorologiques du service public <strong>Météo France</strong> pour la ville de <strong>Versailles</strong> est : <br>
+	<span class="inline" style="background: ivory; font-size: 90%"> <code><span class="specialR">https</span>://<span class="specialT">meteofrance.com</span><span class="specialLG">/previsions-meteo-france/versailles/78000</span></code> 
+	</span> </li>
+</ol>
+</div><!-- exemple -->
+
+
+<h4> URL d'un segment de page web </h4>
+
+
+<div class="important">
+<p> Pour accéder à un <strong class="title">segment</strong> de <strong>page web</strong> en libre accès sur un serveur, c'est‑à‑dire une section particulière de cette page, l'<strong class="title"><em class="sigle">URL</em></strong> reprend la forme générale de celle d'une page web et y concatène un <strong>identificateur</strong> de <strong class="specialPV">fragment</strong> précédé par le <strong>préfixe</strong> <code class="filename">#</code> : <br>
+<span  class="inline" style="background: ivory">
+  <code> <span class="specialR">http</span>://</code><strong class="specialT">nom d'hôte</strong> <strong class="specialLG">chemin</strong><code>#</code><strong class="specialPV">fragment</strong> 
+</span></p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Une telle <strong><em class="sigle">URL</em></strong> permet d'<strong>accéder à la page web</strong> non pas à son début mais directement au <strong class="title">segment</strong> qui commence là où est identifié le fragment. </p>
+
+<p> L'<strong class="title">identificateur</strong> du <strong class="specialPV">fragment</strong> doit être déclaré dans une et une seule <strong>balise</strong> du code <code>html</code> de la page web, comme valeur de son <strong class="defin">attribut</strong> <code class="cmd"><span style="color:green">id</span></code>. </p>
+
+
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans la <strong>page web</strong> de l'encyclopédie <strong>Wikipedia</strong> consacrée au <strong><em class="sigle">DNS</em></strong> figure une <strong class="title">sous‑section</strong> qui détaille la notion de <strong class="defin">mise à jour dynamique</strong>. Ce segment de la page est directement accessible via l'<strong class="title"><em class="sigle">URL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Domain_Name_System#Mise_à_jour_dynamique" target="_BLANK">W</a> : <br>
+<span class="inline" style="background: ivory; font-size: 90%"> <code><span class="specialR">https</span>://<span class="specialT">fr.wikipedia.org</span><span class="specialLG">/wiki/Domain_Name_System</span>#<span class="specialPV">Mise_à_jour_dynamique</span></code> 
+</span> </p>
+
+<div class="expert">
+<p> Dans le code <code>html</code> de la page, en examinant l'élément du <strong>titre</strong> de cette sous‑section (accessible dans le menu contextuel par clic‑droit, commande <code>Inspecter</code>), on peut vérifier que la <strong>balise</strong> <code>&lt;span&gt;</code> qui contient ce titre possède bien l'<strong class="defin">attribut</strong> <code class="cmd"><span style="color:green">id</span></code> figurant en fin d'<strong><em class="sigle">URL</em></strong> :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-html">
+&lt;h2&gt;
+  …
+  &lt;span id="Mise_à_jour_dynamique" class="mw-headline"&gt;Mise à jour dynamique&lt;/span&gt;
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<h4 id="URLquery"> URL de page web incluant une requête </h4>
+
+
+<div class="important">
+<p> Dans une <strong><em class="sigle">URL</em></strong>, des éléments de <strong class="specialV">requête</strong> <a class="external" href="https://en.wikipedia.org/wiki/Query_string" target="_BLANK">W</a> – en anglais, <strong>query string</strong> – permettent de passer des <strong class="specialM">valeurs</strong> à des <strong class="specialMg">paramètres</strong> pour qu'une <strong class="defin">page web dynamique</strong> puisse opérer des <strong>traitements spécifiques</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> La <strong class="title">syntaxe</strong> d'une <strong class="specialV">requête</strong> est celle d'une <strong>suite d'affectations</strong>, chacune de la forme <code style="background: ivory"><strong class="specialMg"> champ</strong>=<strong class="specialM">valeur </strong></code>. Ces affectations sont concaténées l'une après l'autre avec les <strong>séparateurs</strong> <code style="background: ivory">&</code> ou <code style="background: ivory">;</code>. </p>
+
+<div class="expert">
+<p> D'<strong class="title">autres éléments syntaxiques</strong> peuvent être employés, comme par exemple le <strong>symbole</strong> <code style="background: ivory">+</code> qui se substitue au caractère <em>espace</em>, lequel est interdit. Pour plus de détails sur tous ces aspects, on pourra consulter ce lien <a class="external" href="https://fr.wikipedia.org/wiki/Encodage-pourcent" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="exemples" id="exempleURLrequete">
+<p class="exemple"> L'<strong class="title"><em class="sigle">URL</em></strong> ci‑dessous : <br>
+<span class="inline" style="background: ivory; font-size: 90%"> <code><span class="specialR">https</span>://<span class="specialT">www.youtube.com</span><span class="specialLG">/watch</span>?<span class="specialMg">v</span>=<span class="specialM">xhP_guPY1CM</span>&<span class="specialMg">t</span>=<span class="specialM">182</span></code>
+</span> <br>
+cible la page web de <strong>YouTube</strong> qui commence une diffusion à la <strong>182<sup>e</sup> seconde</strong> de la vidéo de vulgarisation sur le <strong><em class="sigle">DNS</em></strong> citée supra en introduction de ce chapitre. </p>  
+</div><!-- exemple -->
+
+
+
+<h4> URL d'une page web locale </h4>
+
+
+<div class="complement">
+<p> Sur un poste de travail, pour accéder à une <strong class="title">page web stockée localement</strong> (ou même une image, un document <code>.pdf</code>, etc.), le <strong class="specialR">schéma</strong> d'<strong><em class="sigle">URL</em></strong> est <span class="filename"><code class="specialR">file</code></span>. Il doit être suivi du <strong class="specialLG">chemin absolu</strong> de la ressource dans l'arborescence du <strong>système de fichiers</strong> sur la machine. </p>
+</div><!-- complement -->
+
+<div class="exemples" id="exempleURLrequete">
+<p class="exemple"> L'<strong class="title"><em class="sigle">URL</em></strong> ci‑dessous : <br>
+<span class="inline" style="background: ivory; font-size: 90%"> <code><span class="specialR">file</span>://<span class="specialLG">/F:/TRAVAIL/SOURCES/SNIR/SNIR_WEB/index.htm</span></code>
+</span> <br>
+cible la <strong>page d'accueil du site <em class="sigle">SNIR</em></strong> stockée sur le disque dur étiqueté <code>F</code> d'un PC. Le 3<sup>e</sup> caractère <span class="filename"><code class="specialLG">/</code></span> après le schéma <span class="filename"><code class="specialR">file</code></span> symbolise la racine de l'arborescence du système de fichiers du PC. </p>  
+</div><!-- exemple -->
+
+<div class="expert">
+<!-- 
+<h4> <em class="sigle">URL</em> d'une page web en accès restreint </h4>
+-->
+</div><!-- expert -->
+
+
+
+<h3 id="redirection"> Redirection d'URL </h3>
+
+
+
+<div class="important">
+<p> Une <strong class="title">redirection d'<em class="sigle">URL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Redirection_d'URL" target="_BLANK">W</a> – en anglais, <strong><em class="sigle">URL</em> forwarding</strong> ou <strong>redirection</strong> – est un procédé qui permet d'accéder à une <strong>même ressource</strong> par <strong class="defin">plusieurs <em class="sigle">URL</em></strong>, et ce <strong class="pros">sans recourir à un enregistrement d'alias</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">raisons d'employer</strong> une <strong>redirection d'<em class="sigle">URL</em></strong> sont <strong class="defin">les mêmes</strong> que celles pour l'enregistrement d'un <strong>alias</strong> évoquées supra <a class="supra" href="Rc2-1_dns_url.html#alias"></a> : robustesse aux erreurs de saisie des utilisateurs, migration d'un site, simplification de noms, etc..  </p>
+
+<p> Mais une <strong class="title">redirection d'<em class="sigle">URL</em></strong> offre <strong class="pros">plus de possibilités</strong> qu'un alias, puisqu'une <strong><em class="sigle">URL</em></strong> ne se limite pas à un <strong>nom de domaine</strong> : </p>
+<ul>
+	<li> elle précise le <strong class="specialR">protocole</strong>, qui peut donc être changé – en particulier, pour basculer automatiquement de <code><span class="specialR">http</span></code> à <code><span class="specialR">https</span></code> ; </li>
+
+	<li> elle cible aussi un <strong class="specialLG">chemin</strong> et peut inclure un <strong class="specialPV">fragment</strong>, une <strong class="specialV">requête</strong>… </li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Il existe de nombreuses <strong class="title">techniques</strong> et <strong class="title">services</strong> de <strong>redirection d'<em class="sigle">URL</em></strong>, dont l'étude dépasse le cadre de ce chapitre. Pour en avoir un aperçu, on pourra consulter les liens suivants <a class="external" href="https://en.wikipedia.org/wiki/URL_redirection#Implementation" target="_BLANK">W</a> <a class="external" href="https://developer.mozilla.org/fr/docs/Web/HTTP/Redirections" target="_BLANK"></a>. </p>
+</div><!-- expert -->
+
+
+<h4 id="redirectionURL"> Réduction d'URL </h4>
+
+
+<div class="important">
+<p> Une <strong class="title">réduction</strong> – ou <strong class="title">minimisation</strong> – d'<strong class="title"><em class="sigle">URL</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Réduction_d'URL" target="_BLANK">W</a> – en anglais, <strong><em class="sigle">URL</em> shortening</strong> –  est une <strong>redirection</strong> qui utilise une <strong class="defin"><em class="sigle">URL</em> très courte</strong> pour accéder à une ressource. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> En général, on opère une <strong class="title">réduction d'<em class="sigle">URL</em></strong> en concaténant : </p>
+<ul>
+	<li> un <strong class="specialLB">nom de domaine abrégé</strong> ;  </li>
+
+	<li> une <strong class="specialLB">clef unique</strong> – <strong class="defin">la plus petite possible</strong> – générée à partir de l'<strong><em class="sigle">URL</em></strong> initiale ou de la page web ciblée ; </li>
+</ul>
+<p> le but étant de composer une <strong><em class="sigle">URL</em> suffisamment courte</strong> pour être <strong class="pros">facile à saisir</strong> (voire mémoriser). </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> L'<strong class="title"><em class="sigle">URL</em></strong> de la vidéo de vulgarisation sur le <strong><em class="sigle">DNS</em></strong> donnée en exemple supra <a class="supra" href="Rc2-1_dns_url.html#exempleURLrequete" target="_BLANK"></a> : <br>
+<span class="inline" style="background: ivory; font-size: 90%"> <code><span class="specialR">https</span>://<span class="specialT">www.youtube.com</span><span class="specialLG">/watch</span>?<span class="specialMg">v</span>=<span class="specialM">xhP_guPY1CM</span></code>
+</span> <br>
+fait l'objet de la <strong class="title">réduction </strong> suivante : <br>
+<span class="inline" style="background: ivory; font-size: 90%"> <code><span class="specialR">https</span>://<span class="specialT">youtu.be</span><span class="specialLG">/xhP_guPY1CM</span></code>
+</span> </p>
+
+<div class="expert">
+<p> Ici, l'effet de la réduction n'est <strong class="cons">pas très spectaculaire</strong> parce que l'<strong><em class="sigle">URL</em></strong> initiale est déjà très courte. Seul le <strong>nom de domaine de substitution</strong> <span style="background: ivory; font-size: 90%"><code><span class="specialT">youtu</span></code></span> apporte une réelle réduction. Ce dernier étant enregistré dans le <em>ccTLD</em> <span style="background: ivory; font-size: 90%"><code><span class="specialT">.be</span></code></span> de la Belgique, cela permet <strong class="pros">astucieusement</strong> de recomposer le nom de la marque <em class="mark">YouTube</em>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Fonctionnement du DNS </h2>
+
+
+
+<h3 id="RR"> Les enregistrements de ressource </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/resourceRecord.png" width="100px" style="padding-top: 0.2em">
+<p> Dans la <strong>base de donnée</strong> d'un serveur de nom, un <strong class="defin">enregistrement</strong> relatif à un <strong class="defin">nom de domaine</strong> est appelé <strong class="title">resource record</strong> (abrégé <strong class="title"><em class="sigle">RR</em></strong>). Conformément à la <strong><em class="sigle">RFC 1035</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1035#section-4.1.3" target="_BLANK"></a>, il est constitué d'une séquence de <strong>6 champs</strong> de données :  </p>
+<div class="inline">
+<span style="background: white; border-radius: 0.2em"> <strong class="specialT">domain name</strong>     <strong class="specialMg"><em class="sigle">TTL</em></strong>     <strong class="specialM">class</strong>     <strong class="specialG">type</strong>     <strong class="specialLGr">RDlength</strong>     <strong class="specialV">Rdata</strong> </span>
+</div><!-- inline -->
+</div><!-- important -->
+
+<div class="complement">
+<p> De façon détaillée, et en rappel des explications précédentes : </p>
+<ul>
+	<li> Le champ <strong class="specialT">domain name</strong> est le <strong>nom de domaine pleinement qualifié</strong> – <strong><em class="sigle">FQDN</em></strong>, cf. supra <a class="supra" href="Rc2-1_dns_url.html#FQDN"></a> – qui est le sujet de l'enregistrement. </li>
+
+  <div class="expert">
+	<div class="nobullet"> C'est une <strong class="defin">chaîne de caractères</strong> conforme aux <strong class="cons">limites syntaxiques</strong> exposées supra <a class="supra" href="Rc2-1_dns_url.html#syntaxeNomsDomaine"></a>. </div>
+  </div><!-- expert --> 
+
+
+	<li> Le champ <strong class="specialMg"><em class="sigle">TTL</em></strong> – ou <strong class="specialMg">time‑to‑live</strong>, cf. supra <a class="supra" href="Rc2-1_dns_url.html#cache"></a> – exprime en secondes la <strong>durée de conservation</strong> de l'enregistrement dans la <strong>mémoire cache</strong> des résolveurs.  </li>
+
+  <div class="expert">
+	<div class="nobullet"> Comme on l'a vu supra <a class="supra" href="Rc2-1_dns_url.html#syntaxe"></a>, c'est une <strong class="defin">nombre entier non signé</strong> encodé sur <strong>32 bits</strong>, avec des valeurs pouvant donc aller jusqu'à 136 ans. </div>
+  </div><!-- expert --> 
+  
+	<li> Le champ <strong class="specialM">class</strong> indique le <strong>domaine général d'emploi</strong> de l'enregistrement ; sauf exceptions historiques, la <strong>classe</strong> <code class="cmd">IN</code> — pour <strong>Internet</strong> – est la <strong class="pros">seule employée</strong>. </li>
+
+  <div class="expert">
+	<div class="nobullet"> Plus précisément, il s'agit d'un <strong class="defin">nombre entier non signé</strong> encodé sur <strong>16 bits</strong> (2 octets). En particulier, la valeur <code>0x0001</code> code la classe <code class="cmd">IN</code> et les valeurs <code>0xFF00</code> à <code>0xFFFE</code> sont réservées pour un <em>usage privé</em> (cf. la <em class="sigle">RFC 6895</em> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc6895" target="_BLANK"></a>, section <em class="sigle">3.2</em>). </div>
+  </div><!-- expert --> 
+
+
+	<li> Le champ <strong class="specialG">type</strong> indique la <strong>« nature »</strong> de la <strong class="specialV">donnée enregistrée</strong> associée au <strong class="specialT">nom de domaine</strong>. Il existe un <strong class="warning">très grand nombre de types</strong> (cf. cette liste <a class="external" href="https://fr.wikipedia.org/wiki/Liste_des_enregistrements_DNS" target="_BLANK">W</a>). Ceux les plus fréquemment employés sont : </li>
+	<ul>
+		<li> <code class="cmd">A</code> pour une <strong>adresse IPv4</strong> et <code class="cmd">AAAA</code> pour une <strong>adresse IPv6</strong> (4 lettres « <code>A</code> » car elle fait 4 fois la taille d'une adresse <em>IPv4</em>) ;  </li>
+
+		<li> <code class="cmd">NS</code> pour le nom de domaine du <strong>serveur de nom</strong> (<em class="english">name server</em>) ; </li>
+
+		<li> <code class="cmd">CNAME</code> pour le nom de domaine d'un <strong>alias</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Enregistrement_de_nom_canonique" target="_BLANK">W</a> (<em class="english">canonical name</em>) ;   </li>
+
+		<li> <code class="cmd">SOA</code> pour les informations administratives de la <strong>zone d'autorité</strong> <a class="external" href="https://fr.wikipedia.org/wiki/SOA_Resource_Record" target="_BLANK">W</a> (<em class="english">start of authority</em>) ;   </li>
+
+		<li> <code class="cmd">MX</code> pour un <strong>serveur de mail</strong> associés au nom de domaine <a class="external" href="https://fr.wikipedia.org/wiki/Enregistrement_Mail_eXchanger" target="_BLANK">W</a> (<em class="english">mail exchange</em>) – cf. chap. R2‑VII <a class="next" href="Rc2-7_messagerie.html#MX" target="_BLANK"></a>).   </li>
+	</ul>
+
+  <div class="expert">
+	<div class="nobullet"> Là encore, il s'agit d'un <strong class="defin">nombre entier non signé</strong> encodé sur <strong>16 bits</strong>. Les valeurs <code>0x0001</code>, <code>0x001C</code> (<code>28</code>), <code>0x0002</code>, <code>0x0005</code>, <code>0x0006</code> et <code>0x000F</code> codent respectivement les types <code class="cmd">A</code>, <code class="cmd">AAAA</code>, <code class="cmd">NS</code>, <code class="cmd">CNAME</code>, <code class="cmd">SOA</code> et <code class="cmd">MX</code>. Les valeurs <code>0xFF00</code> à <code>0xFFFE</code> sont réservées pour un <em>usage privé</em>. </div>
+  </div><!-- expert --> 
+
+  <li> Le champ <strong class="specialLGr">RDlength</strong> (<em class="english">record data length</em>) exprime la <strong>longueur en octets</strong> du champ variable <strong class="specialV">Rdata</strong>. Purement technique, cette information n'est pas affichée par les commandes d'investigation sur les noms de domaine. </li>
+  
+  <div class="expert">
+  <div class="nobullet"> C'est aussi un <strong class="defin">nombre entier non signé</strong> encodé sur <strong>16 bits</strong>. </div>
+  </div><!-- expert -->
+
+	<li> Le champ <strong class="specialV">Rdata</strong> (<em class="english">record data</em>) contient la <strong>donnée</strong> au associée au <strong class="specialT">nom de domaine</strong>, qui est l'objet de l'enregistrement. C'est donc lui qui contient l'<strong class="pros">information essentielle</strong> de l'enregistrement. </li>
+
+	<div class="nobullet">	Par exemple, si l'enregistrement est de <strong class="specialG">type</strong> <code class="cmd">A</code>, le champ <strong class="specialV">Rdata</strong> contient l'<strong>adresse IPv4</strong> associée au nom de domaine qui est le sujet de l'enregistrement (champ <strong class="specialT">domain name</strong>). </div>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Pour une <strong class="title">présentation complète</strong> de ces différents champs et de leurs valeurs possibles, il est conseillé de consulter directement la <strong>page des paramètres <em class="sigle">DNS</em></strong> sur le site l'<strong><em class="sigle">IANA</em></strong> <a class="external" href="https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml" target="_BLANK"></a> où l'on trouve les <strong class="pros">informations les plus à jour</strong>. </p>
+</div><!-- expert -->
+
+
+
+<h3 id="requeteDNS"> Les requêtes DNS </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/DNSquery.png" width="400px" style="padding-top: 0.2em">
+<p> Toute <strong class="specialLB">résolution de nom de domaine</strong> qui ne trouve pas de réponse en mémoire cache (du navigateur, du système ou du résolveur) nécessite l'envoi d'une <strong class="title">requête <em class="sigle">DNS</em></strong> – en anglais, <strong><em class="sigle">DNS</em> <em class="english">query</em></strong>. </p>	
+
+<p> Conformément à la <strong><em class="sigle">RFC 1035</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1035#section-4.1.2" target="_BLANK"></a>, une requête est essentiellement formulée par <em class="bold">3</em> <strong>champs</strong> : </p>
+<div class="inline">
+<span style="background: white; border-radius: 0.2em"> <strong class="specialT">domain name</strong>     <strong class="specialM">Qclass</strong>     <strong class="specialG">Qtype</strong> </span>
+</div><!-- inline -->
+</div><!-- important -->
+
+<div class="complement">
+<p> De façon détaillée : </p>
+<ul>
+	<li> Le champ <strong class="specialT">domain name</strong> est <strong>nom de domaine pleinement qualifié</strong> – <strong><em class="sigle">FQDN</em></strong>, cf. supra <a class="supra" href="Rc2-1_dns_url.html#FQDN"></a> – qui est justement l'<strong class="defin">objet de la requête</strong>. </li>
+
+	<li> Le champ <strong class="specialM">Qclass</strong> indique le <strong>domaine général d'emploi</strong> de la donnée recherchée ; comme le champ <strong>Class</strong> des enregistrements (cf. supra <a class="supra" href="Rc2-1_dns_url.html#RR"></a>), sauf exceptions, seule la classe <code class="cmd">IN</code> – pour <strong>Internet</strong> – est aujourd'hui employée. </li>
+
+	<li> Le champ <strong class="specialG">Qtype</strong> (<em class="english">query type</em>) indique la <strong>« nature »</strong> de la <strong class="specialV">donnée demandée</strong>. Il doit correspondre à un type d'enregistrement reconnu d'enregistrement de ressource (cf. supra <a class="supra" href="Rc2-1_dns_url.html#RR"></a>). </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="messageDNS"> Les messages DNS </h3>
+
+
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/DNSmessages.png" width="150px">
+<p> Les <strong class="title">échanges de données du <em class="sigle">DNS</em></strong> – typiquement, entre un <strong>résolveur <em class="sigle">DNS</em></strong> et un <strong>serveur de noms</strong> – adoptent un <strong class="defin">format de message unique</strong>, aussi bien pour les <strong>requêtes</strong> que pour les <strong >réponses</strong>. En principe, la ou les questions formulées sont toujours rappelées dans un message de réponse. </p>
+
+<p> Ce format est défini dans la <strong><em class="sigle">RFC 1035</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc1035#section-4.1" target="_BLANK"></a> et synthétisé par le schéma ci‑dessous. </p>
+</div><!-- display -->
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/DNSmessageFormat.png" width="600px" >
+<p> Ainsi, un <strong class="title">message <em class="sigle">DNS</em></strong> : </p>
+<ul>
+	<li> comporte toujours un <strong class="specialLB">en‑tête</strong> – <strong>header</strong> – de taille fixe <strong>12 octets</strong> ;  </li>
+
+	<li> peut contenir <strong class="specialLB">plusieurs questions</strong> et/ou <strong class="specialLB">plusieurs réponses</strong>, dont les <strong>nombres</strong> respectifs sont <strong>indiqués dans l'en‑tête</strong>, et qui adoptent les <strong>formats</strong> décrits précédemment (3 champs pour une question, 6 champs pour une réponse – cf. supra). </li>
+</ul>
+<p> En règle générale, un <strong class="title">message <em class="sigle">DNS</em></strong> est encapsulé dans un <strong class="defin"><strong>datagramme</strong> <em class="sigle">UDP</em></strong>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<div class="expert">
+<p> Comme dans toute mise en œuvre de protocole, les <strong class="title">messages <em class="sigle">DNS</em></strong> comportent divers <strong class="defin">éléments de codage techniques</strong>, en particulier : </p>
+<ul>
+	<li> un <strong class="specialLB">numéro d'identification</strong> (nombre entier non signé encodé sur 2 octets) qui est <strong>généré aléatoirement</strong> par l'application requérante pour chaque <strong>nouvelle requête</strong> et qui est <strong>répliqué dans les réponses</strong> ; il permet vérifier sans ambiguïté la bonne correspondance de ces dernières à la requête ;   </li>
+  
+  <div style="display: inline-block;">
+  	<img class="top-right" src="../img/DNSflags.png" width="500px" >
+	<li> un champ dit de <strong class="specialLB">drapeaux</strong> qui code sur 16 bits (2 octets) toutes sortes de <strong>détails</strong>, notamment :  </li>
+	<ul>
+		<li> le <strong>bit</strong> <code>QR</code> (<em class="english">query‑response</em>) qui indique si le message est une <em>requête</em> (valeur <code>0</code>) ou une <em>réponse</em> (valeur <code>1</code>) ; </li>
+
+		<li> le <strong>champ</strong> <code>OpCode</code> (<em class="english">operation code</em>) qui code sur 4 bits le type de requête ou de réponse (valeur <code>0</code> s'il s'agit d'un message standard…) ; </li>
+
+		<li> le <strong>drapeau</strong> <code>AA</code> (<em class="english">authoritative answer</em>) qui indique (valeur <code>1</code>), dans le cas d'une réponse, si cette dernière est émise par un <em>serveur de noms faisant autorité</em> sur sa zone ; </li>
+
+		<li> le <strong>drapeau</strong> <code>TC</code> (<em class="english">truncation</em>) qui indique (valeur <code>1</code>), dans le cas d'une réponse, si cette dernière est tronquée  car trop longue pour tenir dans un seul datagramme <em class="sigle">UDP</em> ; </li>
+
+		<li> le <strong>drapeau</strong> <code>RD</code> (<em class="english">recursion desired</em>) qui indique (valeur <code>1</code>) s'il s'agit d'une <em>requête en mode récursif</em> (la valeur de ce drapeau est reproduite à l'identique dans les réponses) ; </li>
+
+		<li> le <strong>drapeau</strong> <code>RA</code> (<em class="english">recursion available</em>) qui indique (valeur <code>1</code>) s'il s'agit d'une <em>réponse en mode récursif</em> ; </li>
+
+		<li> le <strong>bit</strong> <code>Z</code>, réservé pour un usage futur, en principe toujours mis à <em>zéro</em> ;  </li>
+
+		<li> le <strong>drapeau</strong> <code>AD</code> (<em class="english">authenticated data</em>) qui indique (valeur <code>1</code>), dans le cas d'une réponse, si toutes les données (RR) contenues dans le message sont authentifiées ; </li>
+
+		<li> le <strong>drapeau</strong> <code>CD</code> (<em class="english">checking disabled</em>) qui indique (valeur <code>1</code>), dans le cas d'une requête, que les réponses non vérifiées sont acceptables ; </li>
+
+		<div class="nobullet"> <em class="remark">remarque</em> : les deux drapeaux <code>AD</code> et <code>CD</code> ne sont exploités que par des <strong>serveurs <em class="sigle">DNS</em> sécurisés</strong> ; </div>
+
+    <li> le <strong>champ</strong> <code>Rcode</code> (<em class="english">response/error code</em>) qui code le type d'erreur éventuellement détecté lors de la génération d'une réponse, la valeur <code>0</code> signifiant l'<em>absence d'erreur</em>. </li>
+	</ul>
+  </div><!-- display -->
+</ul>
+
+<p> La connaissance de ces différents aspects est <strong class="pros">utile</strong> pour comprendre les résultats obtenus par des commandes en lignes d'<strong>investigation du <em class="sigle">DNS</em></strong> comme <code class="cmd">dig</code> (cf. infra <a class="external" href="Rc2-1_dns_url.html#dig"></a>). Pour <strong class="title">plus de détails</strong>, on pourra notamment consulter les <strong><em class="sigle">RFC 4035</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc4035.html" target="_BLANK"></a> et <strong><em class="sigle">6895</em></strong> <a class="external" href="https://www.rfc-editor.org/rfc/rfc6895.html" target="_BLANK"></a>. </p>
+</div><!-- expert -->	
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">messages DNS</strong> ont principalement recours au <strong>protocole <em class="sigle">UDP</em></strong> (cf. chap. R1‑IV <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R1-Generalites/Rc1-IV_protocoles.html#UDP" target="_BLANK"></a>) mais aussi au <strong class="defin">protocole <em class="sigle">TCP</em></strong> (même chap. <a class="previous" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R1-Generalites/Rc1-IV_protocoles.html#TCP" target="_BLANK"></a>), en particulier lorsque les ressources demandées sont au format <strong>IPv6</strong>. </p>
+
+<p> En effet, les datagrammes <strong><em class="sigle">UDP</em></strong> ont une <strong class="cons">taille souvent trop limitée</strong> pour contenir toutes les adresses en réponse (rappelons qu'une adresse <em class="mark">IPv6</em> est 4 fois plus longue qu'une adresse <em class="mark">IPv4</em>). </p>
+</div><!-- remarque --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Outils logiciels du DNS </h2>
+
+
+
+<h3 id="viderCacheDNSbrowser"> Inspection et réinitialisation du cache DNS du navigateur </h3>
+
+
+<div class="important">
+<p> En règle générale, le contenu de la <strong class="title">mémoire cache <em class="sigle">DNS</em> d'un navigateur</strong> (cf. supra <a class="supra" href="Rc2-1_dns_url.html#cacheDNSbrowser" target="_BLANK"></a>) est visualisable dans une <strong class="defin">page d'information</strong> accessible par le <strong>schéma</strong> <code class="filename"><span class="specialR">about</span>:</code> (cf. supra <a class="supra" href="Rc2-1_dns_url.html#schemaAbout"></a>). </p>
+
+<p> Dans cette page, on trouve un <strong>bouton</strong> qui permet de <strong class="specialLB">réinitialiser cette mémoire</strong> – on dit « <strong>vider le cache</strong> ». </p>
+</div><!-- important -->
+
+<div class="exemples">
+<p class="exemple"> Avec le navigateur <strong class="title">Firefox</strong>, l'<strong><em class="sigle">URL</em></strong> <code class="filename"><span class="specialR">about</span>:<span class="specialLG">networking</span><span class="specialN">#dns</span></code> liste détaillée tous les noms de domaines en <strong>mémoire cache <em class="sigle">DNS</em></strong>, comme par exemple ci‑dessous : </p>
+  <img class="top-left" src="../img/FirefoxCacheDNS.png">
+<p> De plus, la page dispose de <strong class="title">deux boutons</strong> : </p>
+<ul>
+	<li> l'un pour <strong class="specialLB">actualiser la page</strong> ; on peut notamment constater en cliquant dessus que les durées d'expiration diminuent… </li>
+
+	<li> l'autre pour <strong class="specialLB">vider le cache</strong> ; il faut cliquer sur le bouton <code>Actualiser</code> pour vérifier que la mémoire est momentanément vide. </li>
+</ul>
+
+
+<div class="expert" style="display: inline-block;">
+ <img class="top-right" src="../img/FirefoxRechercheDNS.png" width="400px" >
+<p> Par ailleurs, on trouve dans le <strong class="title">panneau latéral</strong> de la page une rubrique <code class="cmd">Recherche DNS</code> qui cible l'<strong><em class="sigle">URL</em></strong> <code class="filename"><span class="specialR">about</span>:<span class="specialLG">networking</span><span class="specialN">#dnslookuptool</span></code>. On aboutit sur une page interactive qui permet d'effectuer des requêtes élémentaires en <strong>résolution de nom</strong>. </p>
+
+<p> Dans l'exemple de la capture d'écran ci‑contre, une <strong class="title">recherche <em class="sigle">DNS</em></strong> sur le nom de domaine <code class="filename">lycee-ferry-versailles.fr</code> qui héberge ce module de formation donne l'<strong>adresse <em class="sigle">IP</em></strong> du serveur qui l'héberge (<code>54.36.63.2</code>) et indique qu'il s'agit bien d'un <strong>resource record</strong> (<code>RR</code>). </p>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+
+<h3 id="fichierHosts"> Le fichier <code>hosts</code> du système d'exploitation </h3>
+
+
+
+<div class="important">
+<p> Héritage du passé, sur une machine à <strong>système d'exploitation</strong> (ordinateur, smartphone, etc.), le <strong class="title">fichier</strong> <code class="filename">hosts</code> <a class="external" href="https://fr.wikipedia.org/wiki/Hosts" target="_BLANK">W</a> est un <strong>fichier système</strong> de type <strong>texte</strong> (mais sans extension <code>.txt</code>) qui met en <strong class="specialO">correspondance statique</strong> des <strong class="defin">adresses <em class="sigle">IP</em></strong>, des <strong class="defin">noms de domaines</strong> et éventuellement des <strong class="defin">alias</strong> de noms associés. </p>
+
+<p> Par défaut, lors de toute <strong class="specialLB">requête en résolution de nom</strong>, il est <strong class="defin">consulté en premier</strong>, <em class="remark">sauf</em> si le système d'exploitation est paramétré pour recourir à un <strong class="warning">serveur proxy</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p class="square" style="margin-top: 0em"> La <strong class="title">localisation du fichier</strong> <code class="filename">hosts</code> dépend bien évidemment du <strong>système de fichiers</strong> de la machine. Typiquement, il est accessible dans le répertoire :   </p>
+<ul>
+	<li> <code class="filename">/etc</code> sous <strong class="specialLB">Linux</strong> ; </li>
+
+	<li> <code class="filename">C:\System32\drivers\etc\</code> sous <strong class="specialLB">Windows</strong>. </li>
+</ul>
+
+<p> Dans tous les cas, pour le <strong class="title">modifier</strong>, il faut les <strong class="warning">droits d'administration</strong>. Cette précaution est essentielle pour <strong class="pros">protéger la machine</strong> contre toutes sortes de <strong class="cons">détournements malveillants</strong>.  </p>
+
+<p class="square"> Le <strong>fichier</strong> <code class="filename">hosts</code> peut remplir principalement <strong class="title">2 fonctions</strong> :  </p>
+<ul>
+	<li> définir <em class="remark">pour la machine</em> des <strong class="specialLB">noms de domaines privés</strong>, notamment le nom de domaine générique <code class="filename">localhost</code> ;  </li>
+
+	<li> implémenter un <strong class="specialLB">filtrage</strong> de <strong class="cons">noms de domaine indésirables</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+
+<h4> Définition d'un nom de domaine privé </h4>
+
+
+<div class="important">
+<p> Toute <strong class="title">définition d'un nom de domaine privé</strong> et d'éventuels <strong class="specialLB">alias</strong> consiste en l'<strong class="defin">écriture d'une ligne</strong> dans le fichier <code class="filename">hosts</code> de la forme : <br>
+<span class="inline">
+	<span style="background: white; border-radius: 0.2em"> <strong>adresse <em class="sigle">IP</em></strong>     <strong class="title">nom de domaine</strong>     <span class="specialGr">[ </span><strong class="specialLB">alias‑1</strong>     <strong class="specialLB">alias‑2</strong>     <span class="specialGr">… ]</span> </span>
+</span> <br>
+et ce aussi bien pour la <strong>norme</strong> – <strong>v4</strong> ou <strong>v6</strong> – de l'<strong>adresse <em class="sigle">IP</em></strong>. </p> 
+</div><!-- important -->
+
+<div class="complement">
+<p> En particulier, on trouve systématiquement <strong class="pros">par défaut</strong> dans le fichier <code class="filename">hosts</code> la définition du <strong class="specialLB">nom de domaine générique</strong> <code class="filename">localhost</code>, associée à l'<strong>adresse IPv4 de rebouclage</strong> (cf. chap. R1‑III <a class="external" href="../R1-Generalites/Rc1-3_adressage.html#loopback" target="_BLANK"></a>) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+127.0.0.1 localhost
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- complement -->
+
+<div class="expert">
+<p> Sur ce même principe, on peut donc définir, exclusivement pour la machine locale dont on modifie le fichier <code class="filename">hosts</code>, des <strong class="title">noms de domaine privés</strong>, pour cibler <strong class="pros">n'importe quelle ressource</strong> (imprimante réseau, serveur…) ou <strong class="pros">domaine</strong>, <strong>public</strong> ou <strong>privé</strong>. </p>
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> Si, dans le <strong>fichier</strong> <code class="filename">hosts</code> d'un ordinateur raccordé à un routeur local dont l'<strong>adresse <em class="sigle">IP</em> privée</strong> est <code>192.168.0.1</code>, on ajoute la ligne suivante : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+192.168.0.1 router
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> on définit le <strong class="title">nom de domaine privé</strong> <code class="filename">router</code>. Dans une fenêtre de terminal, on peut alors saisir la commande <code class="displayDark"><span class="displayDarkGreen">ping</span> <span class="displayDarkWhite">router</span></code> et obtenir une réponse exactement comme si on avait saisi son <strong>adresse <em class="sigle">IP</em></strong> après la commande <code class="cmd">ping</code>. On peut également visualiser l'éventuelle <strong>page d'accueil</strong> de ce routeur en saisissant l'<strong><em class="sigle">URL</em></strong> <code class="filename">http://router</code> dans la barre d'adresse d'un navigateur. </div>
+
+
+	<li> Si, dans le <strong>fichier</strong> <code class="filename">hosts</code> d'un ordinateur raccordé à l'Internet, on ajoute la ligne suivante : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+54.36.63.2 site-jf sjf
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> on définit un <strong class="title">nom de domaine privé</strong> <code class="filename">site-jf</code> pour le site pédagogique du Lycée Jules Ferry de Versailles et un <strong class="specialLB">alias</strong> <code class="filename">sjf</code>. On peut alors accéder à la <strong>page d'accueil publique</strong> de la  <strong>section <em class="sigle">SNIR</em></strong> en saisissant l'<strong><em class="sigle">URL</em></strong> <code class="filename">http://site-jf/snir/</code> ou encore <code class="filename">http://sjf/snir/</code> dans la barre d'adresse d'un navigateur. </div>
+
+  <div class="nobullet"> <em class="remark">Remarque</em> : même s'il pointe sur une ressource publique, ce <strong>nom de domaine</strong>  peut être qualifié de <strong class="title">privé</strong> tout simplement parce qu'il n'est pas défini sur un serveur de nom public du <strong><em class="sigle">DNS</em></strong>, mais <strong class="defin">seulement sur une machine hôte</strong>. Et il n'est utilisable sur <strong class="warning">aucune autre machine</strong> du réseau local, à moins bien entendu qu'il ne soit également défini dans leurs <strong>fichiers</strong> <code class="filename">hosts</code> respectifs, ou dans un <strong><em class="sigle">DNS</em> privé</strong> mis en place sur ce réseau. </div>
+</ol>
+</div><!-- exemples -->
+</div><!-- expert -->
+
+
+<h4> Filtrage statique de noms de domaines indésirables </h4>
+
+
+<div class="important">
+<p> En détournant le principe de définition d'un nom de domaine privé, on peut mettre en place sur la machine un <strong class="title">filtrage statique de noms de domaines</strong> : il suffit de leur <strong class="defin">associer une adresse <em class="sigle">IP</em> de substitution</strong> différente de celle à laquelle ils sont normalement associés dans le <strong><em class="sigle">DNS</em></strong>. </p>
+
+<p> Cette <strong class="cons">technique rudimentaire</strong> permet de <strong class="pros">rendre difficile voire impossible</strong> l'accès à des ressources, que ces dernières soient publiques ou privées. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Typiquement, on peut utiliser comme <strong class="title">adresse <em class="sigle">IP</em> de substitution</strong> : </p>
+<ul>
+	<li> l'<strong class="specialLB">adresse réservée nulle</strong> – en <em>IPv4</em>, <code class="filename">0.0.0.0</code> ou tout simplement <code class="filename">0</code> (cf. chap. R1‑III <a class="external" href="../R1-Generalites/Rc1-3_adressage.html#adressesPrivees" target="_BLANK"></a>) ;   </li>
+
+	<li> n'importe quelle <strong class="specialLB">adresse de rebouclage</strong> – notamment <code class="filename">127.0.0.1</code> (cf. chap. R1‑III idem) ;  </li>
+
+	<li> l'adresse associée à une <strong class="specialO">page web d'explication</strong> ou d'<strong class="specialO">avertissement</strong>, à condition d'avoir mis en place un <strong>serveur web</strong> sur la machine disposant de cette <strong>adresse <em class="sigle">IP</em></strong> (pas forcément l'hôte local). </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+	<li> Une page web d'un <strong>site filtré</strong> par le fichier <code class="filename">host</code> peut sembler rester <strong class="title">temporairement accessible</strong> parce qu'elle est mémorisée dans la <strong class="defin">mémoire cache du navigateur</strong> (à ne pas confondre avec le cache <em class="sigle">DNS</em> mentionné supra). Mais la navigation finit toujours par échouer pour un <strong>accès à une autre page</strong> non mémorisée du même site ou par <strong>rafraîchissement de la page</strong> après expiration de la durée de vie de l'enregistrement. </li>
+
+	<li> Pour que le <strong class="title">filtrage</strong> d'une ressource soit <strong class="pros">pleinement effectif</strong>, il faut veiller à filtrer <strong class="defin">tous les noms de domaines</strong> donnant accès à cette ressource, en tenant compte des éventuels <strong class="warning">alias</strong> (cf. supra <a class="supra" href="Rc2-1_dns_url.html#alias"></a>) et des <strong class="warning">redirections d'<em class="sigle">URL</em></strong> (cf. supra <a class="supra" href="Rc2-1_dns_url.html#redirectionURL"></a>). </li>
+
+	<li> De plus, il faut également s'assurer que les informations sur cette ressource contenues dans le <strong class="warning">cache du navigateur</strong> aient <strong>expiré</strong> (en rappelant qu'on peut forcer sa suppression immédiate, cf. infra <a class="supra" href="Rc2-1_dns_url.html#viderCacheDNSbrowser"></a>). </li>
+
+	<li> Par ailleurs, même en filtrant tous les noms de domaines lui donnant accès, une <strong class="title">ressource</strong> peut <strong class="cons">rester accessible</strong> via son <strong>adresse <em class="sigle">IP</em></strong>. Cette possibilité est relativement <strong class="cons">facile à exploiter</strong> si la ressource est accessible par <strong class="defin">page web statique</strong> – sachant qu'avec le protocole <code>https</code>, une tentative d'accès à une ressource directement par son adresse <em class="sigle">IP</em> risque d'échouer pour cause de <strong class="warning">certificat <em class="sigle">SSL</em> non valide</strong>. </li>
+
+	<li> Enfin, s'il s'agit de <strong class="title">filtrer des noms de domaines de sites malveillants ou de publicité en ligne</strong>, copier un grand nombre de lignes de substitution dans le fichier <code class="filename">hosts</code> n'est <strong class="cons">pas très commode ni durablement efficace</strong> car ces noms de domaines indésirables se renouvellent constamment. </li>
+</ol>	
+</div><!-- remarques -->
+
+
+
+<div class="expert">
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> Si, dans le <strong>fichier</strong> <code class="filename">hosts</code> d'un ordinateur raccordé à l'Internet, on ajoute la ligne suivante : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0 kogama.com www.kogama.com
+
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/filtrageKogama.png" width="120px" >
+  <div class="nobullet"> on <strong class="title">bloque l'accès</strong> au site de jeux en ligne <em class="mark">Kogama</em> <a class="external" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/kogama.com" target="_BLANK"></a>. Ce filtrage est <strong class="pros">efficace</strong> car ce site opère avec une <strong>page web d'accueil</strong> <strong class="defin">dynamique</strong>, elle passe par des <strong class="specialO">serveur‑proxys</strong> qui ne peuvent pas être sollicités directement par leur <strong>adresse <em class="sigle">IP</em></strong>.   </div>
+  </div><!-- display -->
+
+	<li> Si, dans le <strong>fichier</strong> <code class="filename">hosts</code> d'un poste de travail raccordé à l'Internet, on ajoute la ligne suivante : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+0 lycee-ferry-versailles.fr www.lycee-ferry-versailles.fr
+
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/filtrageLycee.png" width="150px" >
+  <div class="nobullet"> on <strong class="title">bloque l'accès</strong> au site pédagogique du Lycée Jules Ferry de Versailles. Néanmoins, ce filtrage n'est <strong class="cons">pas totalement efficace</strong> car le site est mis en œuvre par des <strong>pages web d'accueil</strong> <strong class="specialLB">statiques</strong>. Il reste l'<strong class="warning">accès possible</strong> directement par l'<strong>adresse <em class="sigle">IP</em> du serveur</strong> qui héberge ce site, c'est‑à‑dire en saisissant dans la barre de recherche d'un navigateur une <strong><em class="sigle">URL</em></strong> comme : <br>
+  <span class="inline">
+  	<code class="filename">http://54.36.63.2/snir/</code>
+  </span></div>
+  </div><!-- display -->
+</ol>
+</div><!-- exemples -->
+</div><!-- expert -->
+
+
+
+<h3> Investigation sur les noms de domaines </h3>
+
+
+
+<div class="important">
+<p> Depuis de nombreuses années, les <strong>systèmes d'exploitation</strong> des ordinateurs disposent d'<strong class="title">outils en ligne de commande</strong> pour effectuer des <strong class="defin">requêtes au <em class="sigle">DNS</em></strong> et des <strong class="defin">demandes administratives</strong> (au sens général du terme) sur les <strong>noms de domaines</strong>. </p>
+
+<p> Les <strong class="title">outils les plus connus</strong> – tous <strong class="pros">gratuits</strong> et <strong class="pros">open‑source</strong> –  sont les <strong>commandes</strong> <code class="cmd">host</code>, <code class="cmd">dig</code>, <code class="cmd">nslookup</code> et <code class="cmd">whois</code>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Comme tous les outils en ligne de commande, ceux du <strong class="title"><em class="sigle">DNS</em></strong> : </p>
+<ul>
+	<li> possèdent de <strong class="specialLB">nombreuses options</strong>, qu'il est possible de découvrir en affichant les <strong>pages d'aide</strong> ou de <strong>manuel en ligne</strong> (sous <em class="mark">Linux</em>, il suffit de saisir la commande <code class="displayDark"><span class="displayDarkGreen">man</span> <span class="nocode"><strong style="color: yellow;">nom de la commande</strong></span></code>) ; </li>
+
+	<li> peuvent aussi être utilisés dans des <strong class="specialLB">fichiers de script</strong> pour <strong>automatiser les recherches</strong> et optimiser l'exploitation de leurs résultats. </li>
+</ul>
+
+<p> La présentation ci‑après de ces outils reste <strong class="cons">très superficielle</strong>. Des liens sont proposés pour en approfondir la pratique. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Ces commandes ne permettent <strong class="cons">pas</strong> de lister les <strong class="title">sous‑domaines</strong> d'un nom de domaine, ni ses <strong class="specialLB">alias</strong> ou ses <strong class="specialLB">redirections</strong>. </p>
+
+<p> En fait, cette limitation est souhaitable en termes de <strong class="pros">sécurité</strong>. En effet, la recherche d'une telle liste est un préalable pour mettre en œuvre une <strong class="warning">attaque sur un site</strong>. Pour plus de détails, on pourra consulter ce lien <a class="external" href="https://news.gandi.net/fr/2022/01/comment-trouver-tous-les-sous-domaines-dun-nom-de-domaine/" target="_BLANK"></a>.  </p>
+</div><!-- exemple -->
+
+
+
+
+<h4> La commande <code class="cmd">host</code> </h4>
+
+
+<div class="complement">
+<p> La <strong class="title">commande</strong> <code class="cmd">host</code> <a class="external" href="https://en.wikipedia.org/wiki/Host_(Unix)" target="_BLANK">W</a> est un outil logiciel pour systèmes d'exploitation <strong class="specialLB">Unix</strong> et <strong class="specialLB">Linux</strong>, développé par l'<strong><em class="sigle">ISC</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Internet_Systems_Consortium" target="_BLANK">W</a> (<em class="english">Internet systems consortium</em>). Elle est en général <strong class="pros">pré‑installée</strong>, quelle que soit la distribution du système. </p>
+
+<p> Par défaut, elle fournit des <strong class="title">résultats de « premier niveau »</strong> sous forme <strong class="pros">synthétique</strong>, c'est‑à‑dire <strong>sans détails techniques</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> Une <strong class="title">utilisation élémentaire typique</strong> de la commande <code class="cmd">host</code> est la suivante :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">host</span> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span>
+lycee-ferry-versailles.fr has address 54.36.63.2
+lycee-ferry-versailles.fr mail is handled by 1 mx1.mail.ovh.net.
+lycee-ferry-versailles.fr mail is handled by 5 mx2.mail.ovh.net.
+lycee-ferry-versailles.fr mail is handled by 100 mx3.mail.ovh.net.
+$ 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Ainsi, on obtient l'<strong class="pros">information essentielle</strong> de l'<strong>adresse <em class="sigle">IP</em></strong> associée au nom de domaine saisi, et aussi les noms de domaines de <strong>serveurs de courriels</strong> associés (cf. chap. R2‑VI <a class="next" href="http://www.lycee-ferry-versailles.fr/snir/ModuleR/R2-Applications/Rc2-6_messagerie.html" target="_BLANK"></a>). </div>
+
+  <div class="expert">
+  <div class="nobullet"> <em class="remark">Remarque</em> : si le nom de domaine saisi est un <strong class="specialLB">alias</strong>, le résultat de la commande précise cet aspect, comme ci‑dessous : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">host</span> <span class="displayDarkWhite">www.lycee-ferry-versailles.fr</span> 
+www.lycee-ferry-versailles.fr is an alias for lycee-ferry-versailles.fr.
+lycee-ferry-versailles.fr has address 54.36.63.2
+…
+$ 
+</pre>
+<!---------- ne pas indenter ---------->
+  </div><!-- expert -->
+
+	<li> Une <strong class="title">utilisation plus experte</strong> de la commande <code class="cmd">host</code> est, par exemple, la suivante :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">host</span> <span class="displayDarkRed">-a</span> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span> 
+Trying "lycee-ferry-versailles.fr"
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12029
+;; flags: qr rd ra; QUERY: 1, ANSWER: 9, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;lycee-ferry-versailles.fr.	IN	ANY
+
+;; ANSWER SECTION:
+lycee-ferry-versailles.fr. 3600	IN	SOA	dns110.ovh.net. tech.ovh.net. 2019072300 86400 3600 3600000 300
+lycee-ferry-versailles.fr. 3600	IN	NS	ns110.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	NS	dns110.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	MX	1 mx1.mail.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	MX	100 mx3.mail.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	MX	5 mx2.mail.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	A	54.36.63.2
+lycee-ferry-versailles.fr. 3600	IN	TXT	"google-site-verification=HUNDoeFN79g2pHtvhuMgpg1B5NCUNRMnhY5nZR72KVc"
+lycee-ferry-versailles.fr. 3600	IN	TXT	"v=spf1 include:mx.ovh.com ~all"
+
+Received 337 bytes from 212.27.40.241#53 in 23 ms
+$ 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Avec l'<strong class="title">option</strong> <code class="cmd">-a</code>, on obtient <strong class="pros">davantage de résultats</strong> et surtout une <strong class="defin">présentation technique</strong>, très similaire à celle produite par la commande <code class="cmd">dig</code>, que l'on va détailler ci‑après. </div>
+  
+  <div class="expert">
+  <div class="nobullet"> De plus, la commande affiche en dernière ligne l'<strong>adresse <em class="sigle">IP</em></strong> du <strong class="defin">résolveur <em class="sigle">DNS</em></strong> qui a opéré la requête, en précisant le <strong>numéro de port</strong> (<code>53</code>, numéro standard, cf. chap. R1‑IV <a class="previous" href="../R1-Generalites/Rc1-4_protocoles.html#servicesReseau" target="_BLANK"></a>). </div>
+  </div><!-- expert -->
+</ol>
+</div><!-- exemples -->
+
+
+<h4> La commande <code class="cmd">dig</code> </h4>
+
+
+<div class="complement">
+<p> La <strong class="title">commande</strong> <code class="cmd">dig</code> <a class="external" href="https://en.wikipedia.org/wiki/Dig_(command)" target="_BLANK">W</a> – pour <strong><em class="sigle">DNS</em> information groper</strong> –  est une composante de la suite logicielle <strong class="pros">multiplateforme</strong> <strong>BIND</strong> (cf. infra <a class="infra" href="Rc2-1_dns_url.html#BIND"></a>). Elle est en général <strong class="pros">pré‑installée</strong> dans les distributions <strong class="specialLB">Linux</strong>. </p>
+
+<p> <strong class="pros">Plus puissante</strong> que la commande <code>host</code>, elle fournit ses <strong class="title">résultats</strong> avec une <strong class="defin">présentation technique</strong> conforme à la composition d'un <strong>message <em class="sigle">DNS</em></strong> exposée supra <a class="supra" href="Rc2-1_dns_url.html#messageDNS"></a>. Elle est donc bien adaptée pour une <strong class="defin">exploitation automatisée</strong> où de multiples requêtes sont mise en œuvre par un script et leurs résultats analysés et exportés dans un ou plusieurs fichiers. </p>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> Le <strong class="title">sigle de la commande</strong> <code class="cmd">dig</code> est aussi choisi en référence au verbe anglais <strong>to dig</strong> qui signifie « creuser ». </p>
+</div><!-- remarque -->
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> Une <strong class="title">utilisation simple</strong> de la commande <code class="cmd">dig</code> est par exemple la suivante :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">dig</span> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span>
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; lycee-ferry-versailles.fr
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 8386
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1472
+;; QUESTION SECTION:
+;lycee-ferry-versailles.fr.	IN	A
+
+;; ANSWER SECTION:
+lycee-ferry-versailles.fr. 3600	IN	A	54.36.63.2
+
+;; Query time: 39 msec
+;; SERVER: 212.27.40.241#53(212.27.40.241)
+;; WHEN: mar. oct. 19 13:34:45 CEST 2021
+;; MSG SIZE  rcvd: 70
+
+$ 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="expert">
+  <div class="nobullet"> Ainsi, on obtient une <strong class="pros">réponse détaillée</strong> avec : </div>
+  <ul>
+  	<li> les éléments d'<strong>en‑tête</strong> (<code>HEADER</code>) du message <strong><em class="sigle">DNS</em></strong>, à savoir le nº d'identification (<code>id</code>), les drapeaux (<code>flags</code>), le nombre de requêtes (<code>QUERY</code>), de réponses (<code>ANSWER</code>), etc. </li>
+    
+  	<li> des informations optionnelles relative à l'<strong><em class="sigle">EDNS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/EDNS" target="_BLANK">W</a> (<em class="english">extension mechanisms for <em class="sigle">DNS</em></em>) avec notamment la taille maximale possible du datagramme <strong><em class="sigle">UDP</em></strong> ; </li>
+
+    <li> le rappel des <strong>3 champs de la requête</strong> (<code>QUESTION SECTION</code>)  – cf. supra <a class="supra" href="Rc2-1_dns_url.html#requeteDNS"></a> ; </li>
+
+    <li> les <strong>5 champs de la réponse</strong> (<code>ANSWER SECTION</code>), avec bien entendu l'<strong class="specialV">adresse <em class="sigle">IP</em></strong> (champ <strong>Rdata</strong>), mais aussi son <strong class="specialG">type</strong> <code>A</code> (IPv4) et sa <strong class="specialMg"><em class="sigle">TTL</em></strong> <code>3600</code> (1 h) ; </li>
+    
+    <li> des <strong>informations additionnelles</strong> comme la date, l'heure et la durée de traitement de la requête, mais aussi l'<strong>adresse <em class="sigle">IP</em> du serveur</strong> ayant répondu ; il s'agit d'un <strong class="defin">résolveur</strong> mettant en œuvre un <strong>algorithme récursif</strong>, ce que confirme l'en‑tête avec l'absence du drapeau <code>aa</code> (<em class="english">autoritative answer</em>) et la présence des drapeaux <code>rd</code> et <code>ra</code> (<em class="english">recursion desired</em> et <em class="english">recursion available</em>). </li>
+  </ul>
+  </div><!-- expert -->
+
+	<li> Une <strong class="title">utilisation une peu plus experte</strong> de la commande <code class="cmd">dig</code> est la suivante :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">dig</span> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span> <span class="displayDarkRed">ANY</span>
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; lycee-ferry-versailles.fr ANY
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 34941
+;; flags: qr rd ra; QUERY: 1, ANSWER: 9, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1472
+;; QUESTION SECTION:
+;lycee-ferry-versailles.fr.	IN	ANY
+
+;; ANSWER SECTION:
+lycee-ferry-versailles.fr. 3600	IN	SOA	dns110.ovh.net. tech.ovh.net. 2019072300 86400 3600 3600000 300
+lycee-ferry-versailles.fr. 3600	IN	NS	dns110.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	NS	ns110.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	MX	5 mx2.mail.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	MX	1 mx1.mail.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	MX	100 mx3.mail.ovh.net.
+lycee-ferry-versailles.fr. 3600	IN	A	54.36.63.2
+lycee-ferry-versailles.fr. 3600	IN	TXT	"v=spf1 include:mx.ovh.com ~all"
+lycee-ferry-versailles.fr. 3600	IN	TXT	"google-site-verification=HUNDoeFN79g2pHtvhuMgpg1B5NCUNRMnhY5nZR72KVc"
+
+;; Query time: 27 msec
+;; SERVER: 212.27.40.241#53(212.27.40.241)
+;; WHEN: mar. oct. 19 23:31:21 CEST 2021
+;; MSG SIZE  rcvd: 348
+
+$ 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Avec l'<strong class="title">option</strong> <code class="cmd">ANY</code>, on obtient en principe <strong>tous les enregistrements</strong> associés au nom de domaine <code class="filename">lycee-ferry-versailles.fr</code>, quels que soient leurs types. On obtient ainsi <strong class="defin">9 réponses</strong> avec notamment, en plus de l'adresse IP attendue : </div>
+
+  <ul>
+  	<li> les informations sur la <strong>zone d'autorité</strong> (<code>SOA</code>)  pour <em class="english">start of authority</em>) ; </li>
+
+  	<li> 2 noms de <strong>serveurs de noms</strong> du domaine (types <code>NS</code> pour <em class="english">name server</em>) ;  </li>
+
+  	<li> 3 noms de domaine des <strong>serveurs de courriels</strong> associés (types <code>MX</code> pour <em class="english">mail exchanger</em>).</li>
+  </ul>
+  
+  <li> Une <strong class="title">utilisation encore plus experte</strong> de la commande <code class="cmd">dig</code> est la suivante :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">dig</span> <span class="displayDarkBlue">@dns110.ovh.net</span> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span> 
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; @dns110.ovh.net lycee-ferry-versailles.fr
+; (2 servers found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13831
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;lycee-ferry-versailles.fr.	IN	A
+
+;; ANSWER SECTION:
+lycee-ferry-versailles.fr. 3600	IN	A	54.36.63.2
+
+;; Query time: 23 msec
+;; SERVER: 2001:41d0:1:4a9a::1#53(2001:41d0:1:4a9a::1)
+;; WHEN: mer. oct. 20 00:08:44 CEST 2021
+;; MSG SIZE  rcvd: 70
+
+$ 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Ici, avec le <strong class="title">symbole</strong> <code class="displayDarkBlue">@</code> on a effectué une <strong class="defin">requête directement adressée</strong> au <strong>serveur de noms faisant autorité</strong> sur la zone (<strong><em class="sigle">SOA</em></strong>), dont on a pu identifier le nom de domaine <code class="displayDarkBlue">dns110.ovh.net</code> lors de la requête précédente. Et on peut constater que le <strong class="specialO">drapeau</strong> <code class="cmd">aa</code> (<em class="english">autoritative answer</em>) est bien présent, ce qui certifie que <strong class="pros">la réponse fait autorité</strong>. </div>
+  <div class="expert">
+  <div class="nobullet"> Le fait d'obtenir la <strong class="pros">même réponse</strong> de type <code>A</code> que précédemment signifie que la ressource n'a <strong>pas changé récemment d'adresse <em class="sigle">IP</em></strong>, ce qui est presque toujours le cas. C'est pour cela qu'on peut le plus souvent se passer d'une telle démarche et faire confiance à la mémoire cache du résolveur. </div>
+  </div><!-- expert -->
+</ol>
+</div><!-- exemples -->
+
+
+<h4> La commande <code class="cmd">nslookup</code> </h4>
+
+
+<div class="complement">
+<p> La <strong class="title">commande</strong> <code class="cmd">nslookup</code> <a class="external" href="https://en.wikipedia.org/wiki/Nslookup" target="_BLANK">W</a> est l'<strong class="defin">outil logiciel le plus ancien</strong> de requêtes au <strong><em class="sigle">DNS</em></strong>. Développé conjointement par l'<strong><em class="sigle">ISC</em></strong> (<em class="english">Internet systems consortium</em>) ainsi que les entreprises <strong><em class="sigle">IBM</em></strong> (<em class="english">Industrial business machines</em>) et <strong>Microsoft</strong>, il est <strong class="pros">multi‑plateforme</strong> et <strong class="cons">pré‑installé</strong> sur la plupart des systèmes d'exploitation. </p>
+
+<p> Même si elle est parfois jugée comme étant <strong class="cons">redondante</strong> avec les autres outils sur les systèmes <em class="mark">Linux</em>, la commande <code class="cmd">nslookup</code> possède des <strong class="title">caractéristiques particulières</strong> qui rendent son <strong class="defin">utilisation « manuelle »</strong> <strong class="pros">très commode</strong> : </p>
+<ul>
+	<li> elle possède un <strong class="defin">mode interactif</strong>, qui permet d'enchaîner rapidement des requêtes ; </li>
+
+	<li> elle ne fait <strong class="warning">jamais</strong> appel à la <strong>mémoire cache</strong>  du système d'exploitation, autrement dit elle interroge systématiquement l'un des <strong>résolveurs <em class="sigle">DNS</em></strong> définis dans la <strong>configuration de l'interface réseau</strong> ;  </li>
+  
+  <li> elle adopte toujours une <strong class="pros">présentation conviviale</strong> des <strong>résultats</strong> pour l'utilisateur (<em class="english">user‑friendly display</em>).  </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<ol class="numbered">
+	<li> Une <strong class="title">utilisation simple</strong> de la commande <code class="cmd">nslookup</code> est par exemple la suivante :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">nslookup</span> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span>
+Server:		212.27.40.241
+Address:	212.27.40.241#53
+
+Non-authoritative answer:
+Name:	lycee-ferry-versailles.fr
+Address: 54.36.63.2
+
+$ 
+</pre>
+
+  <div class="nobullet"> On obtient des <strong class="defin">résultats similaires</strong> à ceux obtenus précédemment, plus détaillés qu'avec la commande <code>host</code> mais moins qu'avec la commande <code>dig</code>. </div>
+<!---------- ne pas indenter ---------->
+
+  <li> On entre dans le <strong class="title">mode interactif</strong> en saisissant seulement le nom de la commande <code class="displayDarkGreen">nslookup</code> sans argument à la suite. Le <strong>prompt</strong> change et devient <code class="displayDark">></code>, en attente de saisies supplémentaires pour effectuer des <strong class="defin">requêtes successives</strong>. On peut alors simplement <strong>saisir un nom de domaine</strong>, fixer des <strong>paramètres</strong> ou les deux à la fois. Et on sort du mode interactif en saisissant <code class="displayDark">exit</code>. Divers exemples sont proposés ci‑dessous. </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">nslookup</span>
+> <span class="displayDarkWhite">www.lycee-ferry-versailles.fr</span>
+Server:		212.27.40.241
+Address:	212.27.40.241#53
+
+Non-authoritative answer:
+www.lycee-ferry-versailles.fr	canonical name = lycee-ferry-versailles.fr.
+Name:	lycee-ferry-versailles.fr
+Address: 54.36.63.2
+> <span class="displayDarkBlue">set querytype=ANY</span>
+> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span>
+Server:		212.27.40.241
+Address:	212.27.40.241#53
+
+Non-authoritative answer:
+lycee-ferry-versailles.fr
+	origin = dns110.ovh.net
+	mail addr = tech.ovh.net
+	serial = 2019072300
+	refresh = 86400
+	retry = 3600
+	expire = 3600000
+	minimum = 300
+lycee-ferry-versailles.fr	nameserver = dns110.ovh.net.
+lycee-ferry-versailles.fr	nameserver = ns110.ovh.net.
+lycee-ferry-versailles.fr	mail exchanger = 5 mx2.mail.ovh.net.
+lycee-ferry-versailles.fr	mail exchanger = 1 mx1.mail.ovh.net.
+lycee-ferry-versailles.fr	mail exchanger = 100 mx3.mail.ovh.net.
+Name:	lycee-ferry-versailles.fr
+Address: 54.36.63.2
+lycee-ferry-versailles.fr	text = "google-site-verification=HUNDoeFN79g2pHtvhuMgpg1B5NCUNRMnhY5nZR72KVc"
+lycee-ferry-versailles.fr	text = "v=spf1 include:mx.ovh.com ~all"
+
+Authoritative answers can be found from:
+> <span class="displayDarkBlue">server dns110.ovh.net</span>
+Default server: dns110.ovh.net
+Address: 2001:41d0:1:4a9a::1#53
+Default server: dns110.ovh.net
+Address: 213.251.188.154#53
+> <span class="displayDarkBlue">set querytype=A</span>
+> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span>
+Server:		dns110.ovh.net
+Address:	2001:41d0:1:4a9a::1#53
+
+Name:	lycee-ferry-versailles.fr
+Address: 54.36.63.2
+> <span class="displayDarkGreen">exit</span>
+
+$ 
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> On voit donc que l'on obtient les <strong class="defin">mêmes informations</strong> qu'avec la commande <code>dig</code>. Mais si l'on doit faire de <strong>nombreuses requêtes « à la main »</strong>, la commande <code>nslookup</code> nécessite <strong class="pros">moins de saisies</strong>. </div>
+</ol>
+</div><!-- exemples -->
+
+
+<!-- à ajouter : exemple de réponse DNS Authoritatives : 
+	https://serverfault.com/questions/1088257/why-does-dig-not-show-the-authority-section-and-how-to-make-it-show-the-authorit
+-->
+
+
+<h4> La commande <code class="cmd">whois</code> </h4>
+
+
+<div class="complement">
+<p> La <strong class="title">commande</strong> <code class="cmd">whois</code> <a class="external" href="https://fr.wikipedia.org/wiki/Whois" target="_BLANK">W</a> offre un service d'<strong class="defin">informations administratives</strong> relatives aux <strong>noms de domaines</strong> à leurs <strong>adresses <em class="sigle">IP</em></strong> associées. Ces données sont publiées par les <strong class="specialO"><em class="sigle">RIR</em></strong> (cf. chap. R1‑III <a class="previous" href="../R1-Generalites/Rc1-3_adressage.html#roleRIR" target="_BLANK"></a>) ou les <strong class="specialO"><em class="sigle">TLD</em> manager</strong> (cf. supra <a class="supra" href="Rc2-1_dns_url.html#enregistrement"></a>) sur des serveurs dédiés. Elles sont rendues accessibles via un <strong class="defin">protocole</strong> nommé également <strong>whois</strong> et spécifié par la <strong><em class="sigle">RFC 3912</em></strong> <a class="external" href="https://datatracker.ietf.org/doc/html/rfc3912" target="_BLANK"></a>. </p>
+
+<p> En règle générale, la commande <code class="cmd">whois</code> n'est <strong class="cons">pas pré‑installée</strong> sur les systèmes d'exploitation des postes de travail. Pour pouvoir l'utiliser, il faut donc procéder à son <strong class="title">installation</strong>, ce qui nécessite bien entendu de disposer des <strong>droits d'administration</strong>. </p>
+
+<ul>
+	<li> Sur une machine à système <strong class="specialLB">Linux</strong> (distribution <em class="mark">Ubuntu</em> ou similaire), il suffit de saisir la commande : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ sudo apt install -y whois
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<li> Sur un PC <strong class="specialLB">Windows</strong>, il faut : </li>
+	<ul>
+		<li> <strong>télécharger le fichier exécutable</strong> via une archive disponible sur cette page <a class="external" href="https://docs.microsoft.com/en-us/sysinternals/downloads/whois" target="_BLANK"></a> ; </li>
+
+		<li> en <strong>extraire le fichier</strong> <code class="filename">whois.exe</code> et le placer dans le <strong>dossier</strong> <code class="filename">C:\Windows\System32</code>. </li>
+	</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Une <strong class="title">utilisation simple</strong> de la <strong>commande</strong> <code class="cmd">whois</code> consiste à simplement la faire suivre d'un <strong>nom de domaine</strong>, comme dans l'exemple ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+$ <span class="displayDarkGreen">whois</span> <span class="displayDarkWhite">lycee-ferry-versailles.fr</span>
+%%
+%% This is the AFNIC Whois server.
+%%
+%% complete date format : YYYY-MM-DDThh:mm:ssZ
+%% short date format    : DD/MM
+%% version              : FRNIC-2.5
+%%
+%% Rights restricted by copyright.
+%% See https://www.afnic.fr/en/products-and-services/services/whois/whois-special-notice/
+%%
+%% Use '-h' option to obtain more information about this service.
+%%
+%% [2a01:0e0a:0441:fcb0:xxxx:xxxx:xxxx:xxxx REQUEST] >> -V Md5.5.6 lycee-ferry-versailles.fr
+%%
+%% RL Net [##########] - RL IP [#########.]
+%%
+
+domain:      lycee-ferry-versailles.fr
+status:      ACTIVE
+hold:        NO
+holder-c:    ANO00-FRNIC
+admin-c:     LJF386-FRNIC
+tech-c:      OVH5-FRNIC
+zone-c:      NFC1-FRNIC
+nsl-id:      NSL100842-FRNIC
+registrar:   OVH
+Expiry Date: 2024-02-19T23:08:15Z
+created:     2009-10-19T13:55:35Z
+last-update: 2021-02-09T10:43:33Z
+source:      FRNIC
+
+ns-list:     NSL100842-FRNIC
+nserver:     ns110.ovh.net
+nserver:     dns110.ovh.net
+source:      FRNIC
+
+registrar:   OVH
+type:        Isp Option 1
+address:     2 Rue Kellermann
+address:     59100 ROUBAIX
+country:     FR
+phone:       +33 8 99 70 17 61
+fax-no:      +33 3 20 20 09 58
+e-mail:      support@ovh.net
+website:     http://www.ovh.com
+anonymous:   NO
+registered:  1999-10-21T12:00:00Z
+source:      FRNIC
+
+nic-hdl:     ANO00-FRNIC
+type:        PERSON
+contact:     Ano Nymous
+remarks:     -------------- WARNING --------------
+remarks:     While the registrar knows him/her,
+remarks:     this person chose to restrict access
+remarks:     to his/her personal data. So PLEASE,
+remarks:     don't send emails to Ano Nymous. This
+remarks:     address is bogus and there is no hope
+remarks:     of a reply.
+remarks:     -------------- WARNING --------------
+registrar:   OVH
+changed:     2019-02-19T23:08:14Z anonymous@anonymous
+anonymous:   YES
+obsoleted:   NO
+eligstatus:  ok
+eligdate:    2019-02-19T23:08:14Z
+reachstatus: not identified
+source:      FRNIC
+
+nic-hdl:     LJF386-FRNIC
+type:        ORGANIZATION
+contact:     Lycee Jules Ferry
+address:     Lycee Jules Ferry
+address:     29 rue du Marechal Joffre
+address:     78000 Versailles
+country:     FR
+phone:       +33.139201160
+e-mail:      mtenzpkby0gg9fhym4i0@v.o-w-o.info
+registrar:   OVH
+changed:     2021-02-09T10:43:29Z nic@nic.fr
+anonymous:   NO
+obsoleted:   NO
+eligstatus:  not identified
+reachstatus: not identified
+source:      FRNIC
+
+nic-hdl:     OVH5-FRNIC
+type:        ROLE
+contact:     OVH NET
+address:     OVH
+address:     140, quai du Sartel
+address:     59100 Roubaix
+country:     FR
+phone:       +33 8 99 70 17 61
+e-mail:      tech@ovh.net
+trouble:     Information: http://www.ovh.fr
+trouble:     Questions:  mailto:tech@ovh.net
+trouble:     Spam: mailto:abuse@ovh.net
+admin-c:     OK217-FRNIC
+tech-c:      OK217-FRNIC
+notify:      tech@ovh.net
+registrar:   OVH
+changed:     2006-10-11T08:41:58Z tech@ovh.net
+anonymous:   NO
+obsoleted:   NO
+eligstatus:  not identified
+reachstatus: not identified
+source:      FRNIC
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Dans cette réponse très détaillée, on trouve quelques <strong class="title">informations administratives</strong> – <strong>nom</strong>, <strong>adresse postale</strong>, <strong>adresse électronique</strong>, <strong>nº de téléphone</strong> – sur : </p>
+<ul>
+	<li> l'organisme en charge du <strong class="specialLB">serveur</strong> ayant fourni la réponse – ici, l'<strong><em class="sigle">AFNIC</em></strong> (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#AFNIC" target="_BLANK"></a>) qui est le <em class="sigle">TLD</em> manager du <em class="mark">ccTLD</em> <code class="filename">fr</code> ;  </li>
+
+	<li> le <strong class="specialLB">détenteur du nom de domaine</strong> (<code>nic-hdl</code> ou <em class="english">network information centre handle</em>) – ici, le <strong>lycée Jules Ferry de Versailles</strong> ;  </li>
+
+	<li> le <strong class="specialLB">registraire</strong> (cf. supra <a class="supa" href="Rc2-1_dns_url.html#registraire"></a>) auquel le détenteur du nom de domaine a fait appel  – ici, la <strong>société <em class="sigle">OVH</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/OVHcloud" target="_BLANK"></a>, qui est aussi le principal hébergeur web (cf. chap. R1‑I <a class="previous" href="../R1-Generalites/Rc1-1_notionsFondamentales.html#hebergeur" target="_BLANK"></a>) en France.  </li>
+</ul>
+</div><!-- exemple -->
+
+<div class="remarques"> 
+<p class="remarque"> Même si les <strong class="title">informations</strong> fournies via la commande <code class="cmd">whois</code> sont a priori <strong>publiques</strong>, il peut sembler étonnant qu'elles soient <strong class="defin">si facilement disponibles</strong>.  </p>
+
+<p> <strong class="title">À l'origine</strong>, le service <strong>whois</strong> a été conçu pour permettre aux techniciens du réseau de pouvoir <strong class="pros">joindre rapidement</strong> tout gestionnaire d'un nom de domaine en cas de dysfonctionnement. </p>
+
+<p> Toutefois certains <strong class="title">acteurs commerciaux</strong> ou <strong class="title">associatifs</strong> peuvent <strong class="warning">ne pas souhaiter la divulgation</strong> de leurs coordonnées. Dans ce cas, les champs sont renseignés avec une mention générique de la forme <code>REDACTED FOR PRIVACY</code>. </p>
+
+<p> Par ailleurs, les informations via la commande <code class="cmd">whois</code> ne font l'objet d'<strong class="cons">aucune garantie d'authenticité</strong> : elles peuvent être <strong class="warning">erronés</strong>, et ce par obsolescence, inadvertance, voire mauvaise volonté. </p>
+</div><!-- remarque -->
+
+
+
+
+
+<!-- à ajouter : reverse DNS                      
+<a class="external" href="https://en.wikipedia.org/wiki/Reverse_DNS_lookup" target="_BLANK">W</a>
+-->
+
+
+
+
+<div class="expert">
+<h3> Manipulation du cache DNS du système d'exploitation </h3>
+
+
+
+<p> On a vu supra <a class="supra" href="Rc2-1_dns_url.html#cacheDNSsystem"></a> que le <strong class="title">système d'exploitation</strong> d'une machine contribue au <strong><em class="sigle">DNS</em></strong> en jouant le rôle d'un <strong class="defin">résolveur récursif</strong> doté d'une importante <strong class="defin">mémoire cache</strong>. </p>
+
+<div class="complement">
+<p> Il est possible d'<strong class="title">accéder</strong> en <strong class="title">lecture</strong> et en <strong class="title">écriture</strong> au <strong>cache <em class="sigle">DNS</em> du système</strong> par des <strong class="defin">commandes spécifique</strong> saisies dans un terminal. </p>
+
+<p> Pour plus de détails sur l'intérêt de ces manipulations, on peut consulter par exemple cet article <a class="external" href="https://www.ionos.fr/digitalguide/serveur/configuration/flush-dns/" target="_BLANK"></a>. </p>
+</div><!-- complement -->
+
+<p class="square"> Sur un PC <strong class="specialLB">Windows</strong>, il faut employer la <strong>commande</strong> <code class="cmd">ipconfig</code> et les <strong>options</strong> suivantes :  </p>
+<ul>
+	<li> <code class="cmd">/displaydns</code> pour <strong>afficher le contenu</strong> du cache ; </li>
+
+  <li> <code class="cmd">/flushdns</code> pour <strong>effacer le contenu</strong> du cache ; </li>
+
+	<li> <code class="cmd">/registerdns</code> pour <strong>réenregistrer</strong> tous les noms de domaines en mémoire (donc, réinitialiser leur durée de vie). </li>
+</ul>
+ 
+<p class="square"> Sur une machine <strong class="specialLB">Linux</strong>, les commandes dépendent du composant logiciel qui met en œuvre le cache <em class="sigle">DNS</em>. Avec les distributions <strong>Ubuntu</strong> et ses dérivées – <strong>Mint</strong>, etc. – récentes, ce composant est <code class="cmd">systemd-resolve</code>. </p>
+
+
+
+
+
+<h3> Logiciels pour résolveurs </h3>
+
+
+
+<h4 id="BIND"> La suite logicielle <em class="mark">BIND</em> </h4>
+
+
+</div><!-- expert -->
+
+
+
+
+
+<!-- 
+
+<h3> Outils logiciels de test de requêtes </h3>
+
+
+<a class="external" href="https://dnsquery.org/" target="_BLANK"></a>
+-->
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

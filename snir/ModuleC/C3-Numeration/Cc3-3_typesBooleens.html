@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="III"
+  data-pageState="OK" 
+  data-pageheadtitle="Type booléen"
+  data-pagefulltitle="Le type booléen  –  les mots binaires"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+<!-- relecture complète en nov. 2022, ajout de figures -->
+<!-- éventuellement, faire des fig. pour illustrer les fonctions bitRead, etc. -->
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/GeorgeBoole.jpg" width="150px" style="margin-top: 1.2em">
+<p class="square"> L'<strong class="title">algèbre de Boole</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Algèbre_de_Boole_(logique)" target="_BLANK">W</a> est une <strong>formalisation algébrique</strong> de la <strong class="defin">logique combinatoire</strong> par laquelle les valeurs de vérité <strong>faux</strong> et <strong>vrai</strong> sont respectivement représentées par les nombres <em class="bold">0</em> et <em class="bold">1</em>. On parle alors de <strong class="specialLB">grandeurs booléennes</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Booléen" target="_BLANK">W</a>. On doit cette formalisation à George Boole, mathématicien anglais du <em class="sigle">XIX</em><sup>e</sup> siècle <a class="external" href="https://fr.wikipedia.org/wiki/George_Boole" target="_BLANK">W</a>. </p>
+</div><!-- display -->
+
+<p> En langage <strong class="title">C</strong> <strong>originel</strong>, il n'y avait <strong class="warning">pas de type booléen</strong> pour déclarer des <strong>données logiques</strong>. À la place, on pouvait employer <strong class="pros">n'importe quel type numérique</strong> (de préférence, entier) avec le <strong class="title">critère</strong> qu'une donnée de ce type est considérée : </p>
+
+<ul>
+  <li> <strong style="color:red">fausse</strong> si sa valeur est <strong style="color:red">nulle</strong> ; </li>
+
+  <li> <strong style="color:green">vraie</strong> si sa valeur est <strong style="color:green">non nulle</strong>. </li>
+</ul>
+
+<p> C'est conformément à ce principe d'interprétation qu'ont été définis les <strong class="specialLB">opérateurs booléens</strong> dits <strong class="defin">logiques</strong> <code class="prettyprint lang-c">!</code> (<em class="english">not</em>), <code class="prettyprint lang-c">&&</code> (<em class="english">and</em>), <code class="prettyprint lang-c">||</code> (<em class="english">or</em>). </p>
+
+<p> Toutefois, l'absence d'un type booléen posait des <strong class="cons">problèmes de lisibilité</strong>. Un tel type a donc été <strong class="pros">intégré</strong> dans le <strong>noyau</strong> du langage <strong class="title">C</strong> par la norme <strong>C99</strong> et dans celui du langage <strong class="title">C++</strong> dès sa première version normalisée. </p>
+
+
+<p class="square"> Par ailleurs, pour des questions de compacité, on est amené à en considérer une <strong>donnée entière</strong> non signée comme un <strong class="title">mot binaire</strong> dont certains <strong class="specialLB">bits</strong>  peuvent implémenter chacun une valeur booléenne. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/binaryFlags.png" width="200px" style="margin-top: 0.2em">
+<p> On parle alors de <strong class="specialLB">drapeau</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Drapeau_(informatique)" target="_BLANK">W</a> – en anglais, <strong>flag</strong> – au sens où les valeurs <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code> signifient respectivement que le drapeau est <strong>baissé</strong> ou <strong>levé</strong>. </p>
+</div><!-- display -->
+
+<img class="top-right" src="../img/DNSflags.png" width="550px" style="margin-top: 0.2em">
+<p> C'est notamment le cas dans le domaine des <strong class="title">réseaux</strong>. Par exemple, le <strong class="defin">service <em class="sigle">DNS</em></strong> met en œuvre des <strong>messages</strong> dont l'en‑tête comporte systématiquement un <strong class="specialG">mot binaire de 16 bits</strong> comportant toute une série de drapeaux (cf. chap. R2‑I <a class="previous" href="../../ModuleR/R2-Applications/Rc2-1_dns_url.html#messageDNS" target="_BLANK">R</a>). </p>
+
+<p> Pour la <strong class="title">manipulation des mots binaires</strong>, les langages <strong>C</strong> et <strong>C++</strong> mettent à disposition du codeur : </p>
+
+<ul>
+  <li> des <strong class="specialLB">opérateurs booléens</strong> dits <strong class="defin">bit à bit</strong> <code class="prettyprint lang-c">~</code> (<em class="english">not</em>), <code class="prettyprint lang-c">&</code> (<em class="english">and</em>), <code class="prettyprint lang-c">|</code> (<em class="english">or</em>), <code class="prettyprint lang-c">^</code> (<em class="english">xor</em>). </li>
+
+  <li> des <strong class="specialLB">opérateurs</strong> de <strong class="defin">décalage de bits</strong> <code class="prettyprint lang-c"><<</code> (<em class="english">shift left</em>) et <code class="prettyprint lang-c">>></code> (<em class="english">shift right</em>). </li>
+</ul>
+
+<p> Les <strong class="title">opérateurs booléens bits à bits</strong> sont <strong class="pros">particulièrement utiles</strong> pour la programmation des <strong class="specialLB">cartes à microcontrôleur</strong>, en particulier lors de la  manipulation des données issues ou à destination d'un port d'entrées‑sorties numérique. </p>
+
+<div style="display: inline-block;">  
+  <img class="top-right" src="../img/IPaddressCalc.png" width="550px" style="margin-top: 1em">
+<p> Dans le domaine des <strong class="title">réseaux</strong>, ces opérateurs sont employés pour l'exploitation des mots binaires inclus dans les <strong>messages protocolaires</strong> ou la gestion des <strong class="defin">adresses <em class="sigle">IP</em></strong> (calculs avec masque de sous‑réseau, etc. – cf. chap. R1‑III <a class="previous" href="../../ModuleR/R1-Generalites/Rc1-3_adressage.html#calculAvecMasque" target="_BLANK">R</a>). </p>
+</div><!-- display -->
+
+
+<p class="square"> L'<strong class="title">objectif</strong> de ce chapitre est de détailler tous ces aspects. On étudie dans l'ordre : </p>
+<ul>
+  <li> le <strong class="specialLB">type booléen</strong> codé <code class="prettyprint lang-c">bool</code> ainsi que ses <strong>constantes logiques</strong> <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code> ;   </li>
+
+  <li> les <strong class="specialLB">opérateurs booléens</strong> dits <strong class="defin">logiques</strong> <strong class="specialN">non</strong>, <strong class="specialN">et</strong>, <strong class="specialN">ou</strong> et leurs principales propriétés en langages <strong>C/C++</strong> ; </li>
+
+  <li> les <strong class="specialLB">mots binaires</strong>, en évoquant les <strong>types synonymes</strong> d'entiers <code class="prettyprint lang-c">byte</code> et <code class="prettyprint lang-c">word</code> définis dans le framework <strong class="Arduino">Arduino</strong> ;  </li>
+
+  <li> les <strong class="specialLB">opérateurs de manipulation de bits</strong> – opérateurs booléens bits à bits, opérateurs de décalage – ainsi que les <strong>fonctions de lecture et d'écriture</strong> de bits dans un mot binaire définies dans le framework <strong class="Arduino">Arduino</strong>. </li>
+</ul>
+
+<p> Attention, une bonne compréhension de ce chapitre nécessite quelques <strong class="specialO">prérequis</strong> en logique combinatoire, en particulier la connaissance des <strong class="defin">tables de vérité</strong> des <strong>opérateurs logiques</strong>. En cas de lacunes, on pourra se reporter à ce cours <a class="external" href="../doc/SI_44C&#32;-&#32;combinatoire.pdf" target="_BLANK"></a> et ce sujet de travaux dirigés <a class="external" href="../doc/SI_44TD&#32;-&#32;combinatoire.pdf" target="_BLANK"></a> de Sciences de l'ingénieur. </p>
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Le type booléen </h2>
+
+
+
+<h3> Descripteur de type et valeurs booléennes </h3>
+
+
+
+<div class="important">
+<p> En langage <strong>C</strong> et <strong>C++</strong>, on emploie le <strong class="title">descripteur de type</strong> <code class="prettyprint lang-c">bool</code> pour déclarer des données booléennes et pour convertir des valeurs dans ce type, sachant que : </p>
+<ul>
+  <li> en <strong class="title">C</strong> (avant la norme <em class="mark">C23</em>), la <strong>directive</strong> <code class="prettyprint lang-c">#include &lt;stdbool.h&gt;</code> est <strong class="warning">requise</strong> ; </li>
+
+  <li> en <strong class="title">C++</strong> (et donc dans les <strong>programmes</strong> <strong class="Arduino">Arduino</strong>), l'identificateur <code class="prettyprint lang-c">bool</code> est un <strong class="warning">mot‑clef</strong> du langage ; il est intégré au noyau du langage, donc aucune directive d'inclusion n'est requise pour l'employer. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Une donnée déclarée de type <code class="prettyprint lang-c">bool</code> ne peut prendre que les <strong class="title">valeurs booléennes</strong>  <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code>. </p>
+
+<p> Toute affectation d'une <strong class="specialLB">valeur autre</strong> que <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code> à une donnée déclarée de type <code class="prettyprint lang-c">bool</code> est <strong class="specialO">implicitement convertie</strong> en : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">0</code> si la valeur est <strong class="specialN">nulle</strong> ; </li>
+
+  <li> <code class="prettyprint lang-c">1</code> si la valeur est <strong class="specialN">non nulle</strong>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> La <strong class="title">déclaration incohérente</strong> <code class="prettyprint lang-c">bool a = 2;</code> : </p>
+<ul>
+  <li> est <strong class="cons">acceptée sans avertissement</strong> lors de la compilation ; </li>
+
+  <li> et <strong>affecte la valeur</strong> <code class="prettyprint lang-c">1</code> (et non pas <code>2</code>) à la variable <code class="prettyprint lang-c">a</code>. </li>
+</ul>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Le <strong class="title">type booléen</strong> ayant été <strong class="cons">tardivement introduit</strong> dans le noyau du langage <strong class="title">C</strong> (seulement à partir de la norme <em class="mark">C99</em>), il n'était <strong class="cons">pas possible</strong> de lui attribuer le <strong>mot‑clef</strong> <code class="prettyprint lang-c">bool</code>, parce que de très nombreux programmes avaient déjà été codés en employant cet identificateur usuel en programmation (via une déclaration <code class="prettyprint lang-c">typedef</code>). Sinon, des conflits auraient pu intervenir lors de la recompilation de ces programmes. </li>
+
+  <div class="nobullet">  C'est donc le <strong>mot‑clef</strong> <code class="prettyprint lang-c">_Bool</code> qui a été choisi, le tiret bas initial et la majuscule peu usuelle permettant de <strong class="pros">réduire le risque de conflits</strong> potentiels dans l'écosystème des programmes codés en <em class="mark">C</em>. Mais en contre‑partie, cette typographie inusuelle n'est <strong class="cons">pas optimale pour la lisibilité</strong> pour le descripteur d'un type aussi fondamental. À côté de <code class="prettyprint lang-c">char</code>, <code class="prettyprint lang-c">int</code>, <code class="prettyprint lang-c">float</code>…, le mot‑clef <code class="prettyprint lang-c">_Bool</code> « fait tâche ». </div>
+
+  <div class="nobullet" id="defineBool"> Le fichier d'en‑tête <code class="filename">stdbool.h</code> <a class="external" href="https://code.woboq.org/gcc/gcc/ginclude/stdbool.h.html" target="_BLANK">C</a> a donc été ajouté à la bibliothèque standard du langage <strong>C</strong> pour définir l'<strong>identificateur</strong> <code class="prettyprint lang-c">bool</code> par <strong class="defin">substitution</strong> au <strong>mot‑clef</strong> <code class="prettyprint lang-c">_Bool</code> via la directive : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:33">
+#define bool        _Bool
+</pre>
+<!---------- ne pas indenter ---------->  
+  
+  <div class="nobullet"> Ainsi, on garde de le <strong class="pros">choix</strong> : </div>
+  <ul>
+    <li> Si un programme n'a <strong>pas redéfini déjà</strong> le type booléen avec l'identificateur <code class="prettyprint lang-c">bool</code>, on peut inclure le fichier d'en‑tête <code class="filename">stdbool.h</code> et utiliser le descripteur <code class="prettyprint lang-c">bool</code> ainsi introduit. </li>
+  
+    <li> Si un programme a <strong>déjà redéfini</strong> le type booléen avec l'identificateur <code class="prettyprint lang-c">bool</code>, on n'inclut <strong class="warning">pas</strong> le fichier d'en‑tête <code class="filename">stdbool.h</code> et on continue le codage avec la définition existante.</li>
+  </ul>
+  
+  <li> En <strong class="title">langage C++</strong>, le <strong>mot‑clef</strong> <code class="prettyprint lang-c">bool</code> a été intégré au noyau depuis sa première norme <em class="sigle">ISO</em>/<em class="sigle">ANSI</em>. En revanche, le <strong>mot‑clef</strong> <code class="prettyprint lang-c">_Bool</code> n'est <strong class="cons">pas reconnu</strong> par les compilateurs. Les programmes codés en <strong>C</strong> qui emploient ce mot‑clef ne sont donc <strong class="warning">pas compilables</strong> en <strong>C++</strong>. </li>
+
+  <div class="nobullet"> Pour pouvoir néanmoins compiler de tels programmes en <strong>C++</strong> sans devoir se lancer dans une procédure potentiellement fastidieuse de « rechercher/remplacer », le fichier d'en‑tête <code class="filename">stdbool.h</code> définit en <strong>C++</strong> l'<strong>identificateur</strong> <code class="prettyprint lang-c">_Bool</code> par <strong class="defin">substitution</strong> au <strong>mot‑clef</strong> <code class="prettyprint lang-c">bool</code> via une directive : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:40">
+#define _Bool        bool
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> Le fichier d'en‑tête principal <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> du framework <strong class="Arduino">Arduino</strong> définit le type <code class="prettyprint lang-c">boolean</code> comme synonyme du type standard <code class="prettyprint lang-c">bool</code> du langage <strong>C++</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:126">
+typedef bool boolean;
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Toutefois, ce synonyme n'apporte <strong class="cons">pas de gain</strong> en <strong>lisibilité</strong> qui puisse justifier son emploi. Il s'agit sans doute d'un élément de code « historique » qu'il n'est pas possible de supprimer pour des questions de compatibilité des anciens programmes. Le site de référence <strong class="Arduino">Arduino</strong> lui‑même recommande de <strong class="pros">privilégier</strong> le <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code> <a class="external" href="https://www.arduino.cc/reference/en/language/variables/data-types/boolean/" target="_BLANK">A</a>. </div>
+
+</ol>
+</div><!-- remarques -->
+
+<div class="expert">
+<h4> Règle de bonne pratique </h4>
+
+<div class="complement">
+<p> Compte tenu des remarques supra, dans le codage de tout nouveau programme en langages <strong>C</strong> et <strong>C++</strong>, il faut <strong class="warning">ne pas employer</strong>  l'<strong>identificateur</strong> <code class="prettyprint lang-c">_Bool</code>. Ce dernier doit être considéré comme <strong class="cons">obsolète</strong>. </p>
+</div><!-- complement -->
+
+</div><!-- expert -->
+
+
+
+<h3> Constantes logiques <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code> </h3>
+
+
+
+<div class="important">
+<p> Pour améliorer la <strong class="pros">lisibilité</strong> d'un code source, on peut employer les <strong class="title">identificateurs</strong> <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code> respectivement à la place des <strong>valeurs booléennes</strong> <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code>.  </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Ces identificateurs sont : </p>
+<ul>
+  <li> en <strong class="title">C</strong>, des <strong class="defin">pseudo-constantes</strong> définies dans le fichier d'en‑tête <code class="filename">stdbool.h</code> de la bibliothèque standard <a class="external" href="https://sites.uclouvain.be/SystInfo/usr/include/stdbool.h.html" target="_BLANK">C</a> ; </li>
+
+  <li> en <strong class="title">C++</strong>, des <strong class="defin">mots‑clefs</strong> <a class="external" href="https://en.cppreference.com/w/cpp/keyword" target="_BLANK">C++</a>.</li>
+</ul>
+</div><!-- complementExpert -->
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">initCondition</code> est une variable déclarée de <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code>, il est <strong class="pros">plus lisible</strong> de coder : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (initCondition == true) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> que : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (initCondition == 1) {
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Dans l'exemple supra, on aurait pu simplement coder : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (initCondition) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> mais ce choix aurait été <strong class="cons">moins lisible</strong> car l'identificateur <code class="prettyprint lang-c">initCondition</code> n'explicite pas suffisamment l'<strong>aspect logique</strong> de la condition exprimée. </p>
+
+<p> En termes de <strong class="title">bonnes pratiques</strong>, il est recommandé de n'employer un <strong>identificateur seul</strong> dans l'expression d'une condition logique que si cet identificateur est formulé comme un <strong class="defin">prédicat logique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Prédicat_(logique_mathématique)" target="_BLANK">W</a>, par exemple : <br>
+<span class="inline">
+   <code class="prettyprint lang-c">isInitConditionTrue</code>
+</span> <br>
+dans le cas ci‑dessus. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Compatibilité des valeurs booléennes avec les types numériques </h3>
+
+
+
+<div class="important">
+<p> Parce qu'elles sont à <strong class="defin">valeurs numériques</strong> (les entiers <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code>) : </p>
+<ul>
+  <li> les <strong>constantes logiques</strong> <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code>, </li>
+
+  <li> et plus généralement toutes les <strong>données</strong> de <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code>, </li>
+</ul>
+<p> sont, comme toute constante littérale entière, considérées par le compilateur dans les expressions comme étant de <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code>. Elles sont donc <strong class="title">compatibles</strong> avec <strong class="defin">tous les opérateurs</strong> de <strong>calcul numérique</strong>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Plus généralement, lors de l'évaluation d'une expression calculatoire, toute <strong>valeur booléenne</strong> est donc <strong class="specialV">convertie</strong> dans un <strong class="defin">type numérique</strong> conformément aux règles générale de conversions implicites (cf. chap. C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#conversionsImplicites" target="_BLANK"></a>).  </p>
+</div><!-- complementExpert -->
+
+<div class="exemples">
+<p class="exemple"> Si <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> sont deux variables déclarées de <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code>, toutes les <strong class="title">expressions hétérogènes</strong> ci‑dessous sont <strong class="pros">syntaxiquement valides</strong> : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">1 - a</code> exprime la <strong>négation</strong> de <code class="prettyprint lang-c">a</code> (comme <code class="prettyprint lang-c">!a</code>) ; </li>
+
+  <li> <code class="prettyprint lang-c">a * b</code> exprime la <strong>conjonction</strong> de <code class="prettyprint lang-c">a</code> et <code class="prettyprint lang-c">b</code> (comme <code class="prettyprint lang-c">a && b</code>) ; </li>
+
+  <li> <code class="prettyprint lang-c">a * 10</code> vaut <code class="prettyprint lang-c">0</code> si <code class="prettyprint lang-c">a</code> vaut <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">10</code> si <code class="prettyprint lang-c">a</code> vaut <code class="prettyprint lang-c">true</code>. </li>
+</ul>
+</div><!-- exemple -->
+
+
+
+<h3> Spécifications de conversion d'entrées‑sorties en langage <em class="mark">C</em> </h3>
+
+
+
+<p> Dans la bibliothèque standard du langage <strong>C</strong>, le  module <code class="filename">stdio</code> ne définit <strong class="warning">pas</strong> de <strong class="title">spécification de conversion</strong> exclusivement dédiée aux données de <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code> (ni aucun autre module). En particulier, on ne peut pas afficher ni saisir l'<strong>expression littérale</strong> des identificateurs des <strong>constantes logiques</strong> <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code>. </p>
+
+
+<h4> Sorties standards </h4>
+
+
+<div class="complement">
+<p> Puisque les <strong>données</strong> de <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code> sont <strong>évaluées</strong> par le compilateur dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code>, elles sont exploitables dans les <strong>fonctions</strong> de <strong class="defin">sortie standard</strong>, comme <code class="prettyprint lang-c">printf</code>,  avec les <strong class="title">spécifications de conversion</strong> <code class="cmd" style="color: crimson;">%d</code> et <code class="cmd" style="color: crimson;">%u</code> dédiées aux <strong>entiers standards</strong> (cf. chap. C2‑VI <a class="previous" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#specificationsConversion" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Le <strong class="title">programme académique</strong> ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool initCondition = true;
+
+int main(void) {
+  printf("The initial condition equals <span class="nocode"><code>%d</code></span>.\n", initCondition);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> produit sur le terminal d'exécution la sortie : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+The initial condition equals 1.
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où, comme attendu, c'est la <strong class="defin">valeur numérique</strong> de la <strong>variable booléene</strong> <code class="prettyprint lang-c">initCondition</code> qui est affichée.</p>
+</div><!-- exemple -->
+
+<div class="remarques"><p class="remarques"></p>
+
+<ol class="littered">
+  <li> Bien entendu, le langage <strong class="title">C</strong> a assez de « ressources » pour permettre d'afficher l'<strong class="title">expression littérale</strong> des identificateurs des constantes logiques <code class="prettyprint lang-c">false</code> et <code class="prettyprint lang-c">true</code>. Ce faisant, l'<strong>opérateur conditionnel</strong> se révèle très commode (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#operateurConditionnel" target="_BLANK"></a>). </li>
+
+  <div class="nobullet"> Ainsi, dans l'exemple supra, à la place de la ligne n° 7, on pourrait coder : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  printf("The initial condition is <span class="nocode"><code>%s</code></span>.\n", initCondition ? "true" : "false");
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> le principe étant d'afficher dans la chaîne de format, via la spécification de conversion <code class="cmd" style="color: crimson;">%s</code> (pour <em class="english">string</em>), une <strong class="specialO">chaîne de caractère</strong> valant <code class="prettyprint lang-c">"true"</code> ou <code class="prettyprint lang-c">"false"</code> selon que la variable booléenne <code class="prettyprint lang-c">initCondition</code> vaut respectivement <code class="prettyprint lang-c">1</code> ou <code class="prettyprint lang-c">0</code>. </div>
+
+  <div class="nobullet"> L'avantage de cette méthode est qu'elle peut être appliquée dans <strong class="pros">n'importe quelle langue</strong>, par exemple en français : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:7">
+  printf("La condition initiale est <span class="nocode"><code>%s</code></span>.\n", initCondition ? "vraie" : "fausse");
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <li> En <strong class="title">C++</strong>, on peut évidemment employer la même syntaxe ou l'adapter avec des <strong>éléments de langage</strong> du module <code class="filename">iostream</code> pour parvenir à un résultat similaire <a class="external" href="https://en.cppreference.com/w/cpp/language/bool_literal" target="_BLANK">C++</a>. </li>
+  </ol><!-- littered -->
+</div><!-- remarques -->
+
+
+<h4> Entrées standards </h4>
+
+
+<div class="complement"> La question des <strong class="title">entrées standards</strong> est <strong class="warning">plus complexe</strong> que celle des sorties. EN effet, on ne peut <strong class="warning">pas</strong> employer directement les <strong class="defin">spécifications de conversion des entiers</strong> <code class="cmd" style="color: crimson;">%d</code> et <code class="cmd" style="color: crimson;">%u</code> pour saisir une valeur booléenne car l'affectation mise en œuvre par une fonction comme <code class="prettyprint lang-c">scanf</code> n'opère <strong class="warning">pas</strong> de <strong>conversion implicite</strong>. </p>
+
+<p> Une solution consiste donc à passer par une <strong class="title">variable intermédiaire</strong> de <strong>type entier</strong>. </p>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Avec le <strong class="title">programme académique</strong> ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool initCondition = false;
+
+int main(void) {
+  printf("Type the initial condition: ");
+  scanf("<span class="nocode"><code>%d</code></span>", &initCondition);
+  printf("The initial condition equals <span class="nocode"><code>%d</code></span>.\n", initCondition);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> provoque à la compilation sur <strong class="OnlineGDB">OnlineGDB</strong> un <strong class="warning">avertissement</strong> comme : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+  format '%d' expects argument of type 'int *',
+  but argument 2 has type '_Bool *'
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+
+<p> Pour résoudre ce problème, on utilise donc une <strong class="defin">variable intermédiaire</strong> peut être le code ci‑dessous :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool initCondition  = false;
+int  typedCondition = 0;
+
+int main(void) {
+  printf("Type the initial condition: ");
+  scanf("<span class="nocode"><code>%d</code></span>", &typedCondition);
+  initCondition = typedCondtion;
+  printf("The initial condition equals <span class="nocode"><code>%d</code></span>.\n", initCondition);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- exemple -->
+
+<div class="remarques">
+<p class="remarque"> Dans l'exemple supra, <strong class="cons">ne pas tenir compte de l'avertissement</strong> du compilateur est <strong class="warning">risqué</strong>. En effet, si lors de l'exécution de la <strong class="title">première version du programme</strong>, l'utilisateur saisit une <strong>valeur entière autre que</strong> <code class="cmd">0</code> ou <code class="cmd">1</code>  – par exemple, <code class="grey">2</code> – alors c'est cette valeur qui sera mémorisée à l'adresse de la variable  <code class="prettyprint lang-c">initCondition</code>, ce qui n'est <strong class="warning">pas conforme</strong> à son <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code>. Et bien évidemment, cela risque d'engendrer des dysfonctionnements ultérieurs. </p>
+
+<p> En revanche, on ne recontre <strong class="pros">pas de problème</strong> avec la <strong class="title">deuxième version du programme</strong>. En effet, lors de l'affectation : </p>
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  initCondition = typedCondtion;
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> le programme exécutable opère une <strong class="defin">conversion implicite</strong> de la valeur saisie dans le type <code class="prettyprint lang-c">bool</code> de <code class="prettyprint lang-c">initCondition</code>, et ainsi toute valeur différente de <code class="cmd">0</code> est mémorisée par la valeur <code class="cmd">1</code>. </p>
+</div><!-- remarque -->
+
+
+
+<h3> Encodage des données booléennes </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+<p> Le <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code> est de <strong class="title">taille</strong> <strong class="specialN">1 octet</strong> et l'<strong class="title">encodage</strong> d'une donnée de ce type procède en <strong>binaire naturel</strong>. Puisque sa valeur ne peut être que <code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code> : </p>
+  <img class="top-right" src="../img/typeBool.png" width="400px" style="margin-top: 0.2em">
+<ul>
+  <li> elle est encodée seulement dans <strong>le bit</strong> <strong class="defin">de rang 0</strong> ;</li>
+
+  <li> les <strong>7</strong> <strong class="specialT">autres bits</strong> (rangs 1 à 7) restent toujours <strong>tous nuls</strong>. </li>
+</ul>
+
+</div><!-- important --> 
+
+<div class="complement">
+<p> Sur les <strong>architectures</strong> disposant d'une <strong class="cons">mémoire très limitée</strong> (microcontrôleur <em>ATtiny</em>, cartes <em>Arduino Uno</em>, <em>Nano</em>…), lorsqu'un programme manipule de nombreuses variables booléennes, il peut être judicieux de ne pas les déclarer toutes individuellement avec le <strong class="specialG">type</strong> <code class="prettyprint lang-c">bool</code>, mais d'en <strong class="title">regrouper</strong> certaines dans des <strong class="defin">mots binaires</strong> (cf. infra <a class="infra" href="Cc3-3_typesBooleens.html#typesByteWord"></a>). </p>
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Les opérateurs booléens dits <em>logiques</em> </h2>
+
+
+
+<h3> Opérateurs principaux </h3>
+
+
+
+<div class="important">
+<p> Les langages <strong>C/C++</strong> définissent seulement les <strong class="specialN">trois principaux</strong> <strong class="title">opérateurs logiques</strong> : la <strong class="specialLB">négation</strong> (<strong>non</strong>), la <strong class="specialLB">conjonction</strong> (<strong>et</strong>) et la <strong class="specialLB">disjonction</strong> (<strong>ou</strong> inclusif). </p>
+
+<p> Ces opérateurs sont de loin <strong class="defin">les plus usuels</strong> en programmation. Ils ont les <strong>caractéristiques</strong> suivantes (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a>) : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Nom </th>
+    <th> Symbole </th>
+    <th> Priorité </th>
+    <th> Associativité </th>
+  </tr>
+  <tr>
+    <td style="text-align: center"> <strong class="specialLB">not</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">!</code> </td>  
+    <td style="text-align: center"> 2 </td>
+    <td style="text-align: center"> ← </td>
+  </tr> 
+  <tr>
+    <td style="text-align: center"> <strong class="specialLB">and</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">&&</code> </td>  
+    <td style="text-align: center"> 11 </td>
+    <td style="text-align: center"> → </td>
+  </tr> 
+  <tr>
+    <td style="text-align: center"> <strong class="specialLB">or</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">||</code> </td>  
+    <td style="text-align: center"> 12 </td>
+    <td style="text-align: center"> → </td>
+  </tr> 
+</table>
+</div><!-- overflow -->
+
+<p> Ces opérateurs acceptent des <strong>opérandes</strong> de <strong class="specialG">tous types</strong> (éventuellement hétérogènes) et retourne une <strong class="specialLB">valeur booléenne</strong> (<code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code>) encodée dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong>« faible »</strong> <strong class="title">rang de priorité</strong> (respectivement 11 et 12) des opérateurs <code class="prettyprint lang-c">&&</code> et <code class="prettyprint lang-c">||</code> permet de composer plusieurs expressions de comparaison  <strong class="pros">sans les encapsuler dans des parenthèses</strong>. Toutefois, cette pratique est parfois déconseillée par les guides de bonnes pratiques. </p>
+</div><!-- complement -->
+
+<div class="exemples"> 
+<p class="exemple"> Pour tester si la valeur d'une <strong class="title">variable numérique</strong> <code class="prettyprint lang-c">x</code> est <strong>comprise</strong> entre <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">10</code> () bornes incluses), on peut coder <strong class="pros">sans parenthèses</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (0 <= x && x <= 10) { // in math, 0 ≤ x ≤ 10
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> De façon plus « conventionnelle », on aurait pu aussi coder <strong class="defin">avec des parenthèses</strong> : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if ((x >= 0) && (x <= 10)) {
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Optimisation du traitement des expressions booléennes composées </h4>
+
+
+<div class="complement">
+<p> Les <strong>compilateurs récents</strong> procèdent à des <strong class="title">optimisations</strong> dans le traitement d'évaluation des <strong class="title">expressions composées</strong> avec les opérateurs <code class="prettyprint lang-c">&&</code> et <code class="prettyprint lang-c">||</code> : </p>
+<ul>
+  <li> Une expression de la forme <code class="prettyprint lang-c"> <span class="nocode"><strong>a</strong></span> && <span class="nocode"><strong>b</strong></span></code> est <strong>nécessairement</strong> <strong style="color: red">fausse</strong> si l'expression <strong style="background: white">a</strong> est évaluée <strong style="color: red">fausse</strong> ; </li>
+
+  <li> Une expression de la forme <code class="prettyprint lang-c"> <span class="nocode"><strong>a</strong></span> || <span class="nocode"><strong>b</strong></span></code> est <strong>nécessairement</strong> <strong style="color: green">vraie</strong> si l'expression <strong style="background: white">a</strong> est évaluée <strong style="color: green">vraie</strong>. </li>
+</ul>
+<p> Dans ces deux cas, l'expression <strong style="background: white">b</strong> n'a <strong class="warning">pas besoin</strong> être <strong class="warning">évaluée</strong>, ce qui représente un <strong class="pros">gain de temps</strong>. </p>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Le codeur doit <strong class="defin">avoir conscience</strong> que le <strong class="title">principe d'optimisation</strong> exposé supra peut avoir des <strong class="cons">conséquences « inattendues »</strong> lors de l'exécution d'un programme. </p>
+
+<p> En particulier, si l'expression <strong style="background: white">b</strong> à droite de l'opérateur <code class="prettyprint lang-c">&&</code> ou <code class="prettyprint lang-c">||</code> inclut une opération à <strong class="title">effet de bord</strong>, cette dernière ne sera <strong class="warning">pas forcément exécutée</strong> à chaque évaluation de l'expression globale. </p>
+
+<p> Observons par exemple le programme académique ci‑dessous, dont le but est sans intérêt particulier : dans une boucle, afficher la valeur la <strong>variable de décomptage</strong> <code class="prettyprint lang-c">count</code> de la boucle seulement si l'utilisateur le souhaite, choix mémorisé dans une <strong>variable booléenne</strong> <code class="prettyprint lang-c">choice</code>. Le code n'est <strong class="cons">pas optimal</strong> (il est simplement conçu pour illustrer l'aspect évoqué ci‑dessus) : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool choice = false;
+int  choice_int = 0;
+int  count = 3;
+
+int main(void) {
+  while (count >= 0) {
+    printf("Print (no 0 / yes 1)? ");
+    scanf("%d", &choice_int);
+    choice = choice_int;
+    if (choice && count--) printf("%d\n", count); 
+  }
+  return 0; 
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> À la ligne n° 13, l'expression testée <code class="prettyprint lang-c">choice && count--</code> comporte l'<strong class="title">opération à effet de bord</strong> <code class="prettyprint lang-c">count--</code> qui ne sera exécutée que si, après saisie de l'utilisateur, la valeur prise par la variable <code class="prettyprint lang-c">choice</code> est <code class="cmd">1</code>. Autrement dit, un scénario d'exécution avec un <strong>nombre d'itérations</strong> de la boucle <strong class="cons">supérieur à</strong> <code class="cmd">3</code> (la valeur initiale de la variable de décomptage) est possible, par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+Print (no 0 / yes 1)? 0
+Print (no 0 / yes 1)? 0
+Print (no 0 / yes 1)? 0
+Print (no 0 / yes 1)? 0
+Print (no 0 / yes 1)? 1
+2
+Print (no 0 / yes 1)? 1
+1
+Print (no 0 / yes 1)? 1
+0
+Print (no 0 / yes 1)? 1
+
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- remarques -->
+</div><!-- expert -->
+
+
+<h3 id="xor_xnor"> Autres opérateurs </h3>
+
+
+<div class="complement">
+<p> La <strong class="defin">logique combinatoire</strong> comprend d'<strong class="title">autres opérateurs</strong> que les trois principaux (<em>not</em>, <em>and</em>, <em>or</em>) détaillés supra, notamment les opérateurs <strong class="specialLB">nand</strong>, <strong class="specialLB">nor</strong>, <strong class="specialLB">xor</strong> et <strong class="specialLB">xnor</strong>. </p>
+
+<p> Mais en langages <strong>C/C++</strong>, ces opérateurs n'ont <strong class="warning">pas de symbole</strong> spécifique. Pour les employer, on doit donc combiner les opérateurs principaux. En particulier, si <span class="nocode"><strong>a</strong></span> et <span class="nocode"><strong>b</strong></span> sont deux expressions booléennes :
+</p>
+
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">!(<span class="nocode"><strong>a</strong></span> && <span class="nocode"><strong>b</strong></span>)</code> code l'opération <span class="nocode"><strong>a</strong></span> <strong class="specialLB">nand</strong> <span class="nocode"><strong>b</strong></span> <a class="external" href="https://fr.wikipedia.org/wiki/Fonction_NON-ET" target="_BLANK">W</a> ; </li>
+
+  <li> l'expression <code class="prettyprint lang-c">!(<span class="nocode"><strong>a</strong></span> || <span class="nocode"><strong>a</strong></span>)</code> code l'opération <span class="nocode"><strong>b</strong></span> <strong class="specialLB">nor</strong> <span class="nocode"><strong>b</strong></span> <a class="external" href="https://fr.wikipedia.org/wiki/Fonction_NON-OU" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- complement --> 
+
+<div class="complement">
+<p> Quant aux opérateurs <strong class="specialLB">xor</strong> (« ou exclusif » ) et <strong class="specialLB">xnor</strong> (« non ou exclusif », qui est aussi l'<em>équivalence logique</em>), leur expression logique est plus complexe que celle des opérateurs ci‑dessus mais il y a pour chacun une alternative de codage : </p>
+
+<ul>
+  <li> l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> != <span class="nocode"><strong>b</strong></span></code> code l'opération <span class="nocode"><strong>a</strong></span> <strong class="specialLB">xor</strong> <span class="nocode"><strong>b</strong></span> <a class="external" href="https://fr.wikipedia.org/wiki/Fonction_OU_exclusif" target="_BLANK">W</a> ; </li>
+
+  <li> l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>a</strong></span> == <span class="nocode"><strong>b</strong></span></code> code l'opération <span class="nocode"><strong>a</strong></span> <strong class="specialLB">xnor</strong> <span class="nocode"><strong>b</strong></span> <a class="external" href="https://fr.wikipedia.org/wiki/Coïncidence_(informatique)" target="_BLANK">W</a>. </li>
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Si l'on souhaite <strong class="pros">améliorer la lisibilité</strong> du codage de ces opérateurs, on peut facilement attribuer à ces opérateurs un <strong class="title">identificateur</strong> – typiquement, <code class="cmd">xor</code> et <code class="cmd">xnor</code> – en recourant à des <strong>macro‑définitions</strong> via des <strong>directives</strong> <code class="prettyprint lang-c">#define</code> (cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#macrocommandes" target="_BLANK"></a>). </p>
+
+<p> Il suffit de coder au début d'un fichier source : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">#define xor !=</code> </li>
+
+  <li> <code class="prettyprint lang-c">#define xnor ==</code> </li>
+</ul>
+<p> et dans la suite du code, on peut alors coder des <strong>expressions logiques</strong> comme par exemple <code class="prettyprint lang-c">a xor b</code>. </p>
+</div><!-- remarque -->
+
+
+
+<div class="expert">
+<h3> Conversion d'une valeur numérique en une valeur booléenne </h3>
+
+
+
+<div class="complement">
+<p> Dans un programme en langage <strong>C</strong>, il est parfois nécessaire de <strong class="title">convertir</strong> une <strong>valeur numérique</strong> en une <strong class="title">valeur booléenne</strong>. C'est notamment le cas pour certaines fonctions de test qui retournent une <strong class="defin">valeur non nulle</strong> mais <strong class="warning">pas forcément égale à</strong> <code class="cmd">1</code> (comme les fonctions déclarées dans le fichier d'en‑tête <code class="filename">ctype.h</code> de la bibliothèque standard – cf. chap. C3‑VIII <a class="next" href="Cc3-8_typesCaracteres.html#fonctionsTest" target="_BLANK"></a>). </p>
+
+<p> Deux solutions sont recommandées : </p>
+<ul>
+  <li> soit effectuer une <strong class="specialLB">conversion explicite </strong>via l'<strong>opérateur de cast</strong> <code class="prettyprint lang-c">(bool)</code> (cf. chap. C3‑VI <a class="next" href="Cc3-6_conversionsTypes.html#cast" target="_BLANK"></a>) ;  </li>
+
+  <li> soit opérer une <strong class="specialLB">double négation</strong> <code class="prettyprint lang-c">!!</code> puisque l'opérateur logique <strong>not</strong> <code class="prettyprint lang-c">!</code> prend forcément une valeur <code class="cmd">0</code> ou <code class="cmd">1</code> et puisqu'une double négation est logiquement invariante. </li>
+
+  <div class="nobullet"> Cette deuxième solution présente l'<strong class="pros">avantage</strong> de rester dans l'esprit original du langage <strong>C</strong> au sens où elle <strong>ne nécessite pas</strong> l'inclusion du fichier <code class="filename">stdbool.h</code>. </div>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/ASCIIpunctuation.png" width="250px" style="margin-top: 0.5em">
+<p class="exemple"> Le programme académique ci‑dessous compte le <strong class="title">nombre de symboles de ponctuation</strong> – au sens général du terme, c'est‑à‑dire tous les <strong class="defin">caractères symboliques</strong> – cf. chap C3‑VIII <a class="next" href="Cc3-8_typesCaracteres.html#fonctionsTest" target="_BLANK"></a> – dans le <strong>jeu de caractères <em class="sigle">ASCII</em> restreint</strong> (cf. la capture d'écran ci‑contre). </p>
+
+<p> Le compte est opéré par incrémentation d'une variable de comptage <code class="prettyprint lang-c">count</code> avec la <strong class="specialLB">double négation</strong> des valeurs retournées par appel de la <strong>fonction</strong> <code class="prettyprint lang-c">ispunct</code> en lui passant pour argument tous les codes du jeu <em class="sigle">ASCII</em> restreint (cf. la ligne n° 6). </p>
+</div><!-- display -->
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt; 
+#include &lt;ctype.h&gt; 
+
+int main(void) {
+  int count = 0;
+  for (int c = 0x0; c <= 0x7F; c++) count += !!ispunct(c);
+  printf("%d\n", count);
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Exécuté sur <strong class="OnlineGDB">OnlineGDB</strong>, ce programme affiche la <strong class="pros">valeur attendue</strong> <code class="cmd">32</code>. </p>
+
+<p> <em class="remark">Remarque</em> : si on ne code <strong class="warning">pas de double négation</strong> à la ligne n° 6, on obtient la <strong class="cons">valeur erronée</strong> <code class="grey">128</code> (grossière erreur, en effet, puisque le jeu <em class="sigle">ASCII</em> restreint ne compte que 96 caractères imprimables). Et pourquoi ? Tout simplement parce que par exemple, l'appel <code class="prettyprint lang-c">ispunct('$')</code> retourne la valeur <code class="cmd">4</code> et non pas <code class="cmd">1</code>.  </p>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="typesByteWord"> Mots binaires </h2>
+
+
+
+<h3> Généralités </h3>
+
+
+
+<div class="important">
+<p> On appelle <strong class="title">mot binaire</strong> toute <strong>constante</strong> ou <strong>variable entière</strong> dont les <strong class="defin">bits</strong> mémorisent des <strong>données booléennes</strong> <strong class="defin">particulières</strong>, et non pas une donnée globale. </p>
+
+<p> Il est vivement recommandé de choisir un <strong class="specialG">type entier</strong> <strong class="specialV">non signé</strong> à <strong class="specialO">taille spécifiée</strong> (comme <code class="prettyprint lang-c">uint8_t</code>, <code class="prettyprint lang-c">uint16_t</code>, etc.) pour déclarer un mot binaire. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Le recours à un <strong class="title">mot binaire</strong> plutôt qu'une collection de données booléennes est <strong class="pros">judicieux</strong> lorsque :  </p>
+<ul>
+  <li> l'architecture matérielle dispose d'une <strong>mémoire limitée</strong> au regard des besoins du programme ; </li>
+
+  <li> les <strong>données booléennes</strong> sont <strong>liées</strong> dans le contexte du programme (par exemple, pour une série de leds, de capteurs, …).</li>
+</ul>
+</div><!-- complement -->
+
+<div class="expert">
+<p> Pour une bonne <strong class="title">lisibilité</strong> du programme, il est <strong class="pros">recommandé</strong>, pour tout mot binaire employé dans un programme : </p>
+<ul>
+  <li> de définir un <strong>type synonyme</strong> dont l'identificateur explicite le statut de mot binaire (et non pas de donnée entière usuelle) ; </li>
+
+  <li> de nommer de façon contextuelle via des <strong>constantes</strong> ou des <strong>pseudo‑constantes</strong> les <strong class="defin">numéros de rang</strong> des différents bits utilisés dans le mot binaire. </li>
+</ul>
+
+<p> Un exemple est donné infra <a class="infra" href="Cc3-3_typesBooleens.html#exempleByte"></a>. </p>
+
+
+<h4> Valeurs remarquables </h4>
+
+
+<div class="complement">
+<p> La <strong>valeur</strong> en <strong class="title">base 16</strong> d'un mot binaire permet d'<strong class="defin">exprimer concisément</strong> sa valeur binaire, quartet par quartet (cf. chap C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#interetBase16" target="_BLANK"></a>). </p>
+
+
+<p> Dans un <strong>quartet</strong> (groupe de 4 bits consécutifs), on a les <strong class="specialG">valeurs remarquables</strong> suivantes : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> mot binaire  </th>
+    <th> <code>0b0000</code> </th>  <th> <code>0b0001</code> </th> 
+    <th> <code>0b0010</code> </th>  <th> <code>0b0100</code> </th> 
+    <th> <code>0b1000</code> </th>  <th> <code>0b1111</code> </th> 
+  </tr>
+  <tr>
+    <th style="color: green"> en base 16  </th>
+    <td style="text-align: center"> <code style="color:green">0x0</code> </td>
+    <td style="text-align: center"> <code style="color:green">0x1</code> </td>
+    <td style="text-align: center"> <code style="color:green">0x2</code> </td>
+    <td style="text-align: center"> <code style="color:green">0x4</code> </td>
+    <td style="text-align: center"> <code style="color:green">0x8</code> </td>
+    <td style="text-align: center"> <code style="color:green">0xF</code> </td>          
+  </tr>
+</table>
+</div><!-- overflow -->
+
+</div><!-- complement -->
+
+<p> A priori moins lisible pour un codeur, la <strong>valeur</strong> en <strong class="title">base 10</strong> d'un mot binaire peut néanmoins présenter un <strong class="defin">intérêt calculatoire</strong>. On a les formules générale suivantes : </p>
+<ul>
+  <li> la valeur <em class="bold">2<sup><var>n</var></sup></em> met à <code style="background: white">1</code> le <strong>bit</strong> de rang <strong class="title">n</strong> <strong>seul</strong> ;  </li>
+
+  <li> la valeur <em class="bold">2<sup><var>n</var></sup> − 1</em> met à <code style="background: white">1</code> <strong>tous les bits</strong> de rang strictement <strong>inférieur à</strong> <strong class="title">n</strong>.  </li>
+</ul>
+
+
+<div class="exemples">
+<p class="exemple"> Dans un format sur 8 bits (2 digits hexadécimaux) : </p>
+
+<ul>
+  <li> le <strong>mot</strong> <code style="background: white">0b00100000</code> (où seul le bit de rang 5 vaut <code class="cmd">1</code>) vaut <em class="bold">2<sup>5</sup></em> = 32 ou encore <code style="color:green">0x20</code> ; </li>
+
+  <li> le <strong>mot</strong> <code style="background: white">0b00111111</code> (où les bits de rang 0 à 5 valent tous <code>1</code>) vaut <em class="bold">2<sup>6</sup> − 1</em> = 63 ou encore <code style="color:green">0x3F</code>. </li>
+</ul>
+</div><!-- exemple -->
+</div><!-- expert -->
+
+
+
+<h3> Types synonymes du framework <em class="mark">Arduino</em> </h3>
+
+
+
+<div class="important">
+<p> Parce que le <strong>recours aux mots binaires</strong> est <strong class="defin">fréquent</strong> dans le cadre de la programmation des cartes à microcontrôleur, le fichier d'en‑tête principal <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> du framework <strong class="Arduino">Arduino</strong> définit par synonymie <strong class="specialG">deux types</strong> de <strong class="title">mots binaires</strong>, nommés respectivement <code class="prettyprint lang-c">byte</code> et <code class="prettyprint lang-c">word</code>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<ul>
+  <li> Le <strong class="specialG">type</strong> <code class="prettyprint lang-c">byte</code> <a class="external" href="https://www.arduino.cc/reference/en/language/variables/data-types/byte/" target="_BLANK">A</a> est synonyme de <code class="prettyprint lang-c">uint8_t</code> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:127">
+typedef uint8_t byte;
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Sachant que le type <code class="prettyprint lang-c">uint8_t</code> est lui‑même défini comme synonyme de <code class="prettyprint lang-c">unsigned char</code> dans le fichier d'en‑tête <code class="filename">stdint.h</code> <a class="external" href="https://sites.uclouvain.be/SystInfo/usr/include/stdint.h.html" target="_BLANK">C</a>, le type <code class="prettyprint lang-c">byte</code> est donc de <strong>largeur fixe</strong> <strong class="defin">8 bits</strong>. </div>
+
+  <li> Le <strong class="specialG">type</strong> <code class="prettyprint lang-c">word</code> <a class="external" href="https://www.arduino.cc/reference/fr/language/variables/data-types/word/" target="_BLANK">A</a> est synonyme de <code class="prettyprint lang-c">unsigned int</code> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:122">
+typedef unsigned int word;
+</pre>
+<!---------- ne pas indenter ---------->
+
+  <div class="nobullet"> Et comme le type standard <code class="prettyprint lang-c">int</code> <strong class="warning">dépend de l'implémentation</strong>, ainsi en va-t-il du type <code class="prettyprint lang-c">word</code>, dont la <strong>largeur</strong> vaut :  </div>
+  <ul>
+    <li> <strong class="defin">16 bits</strong> sur les cartes à <strong>cœur <em class="sigle">AVR</em> 8 bits</strong> (<em class="mark">Arduino Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…) ; </li>
+
+    <li> <strong class="defin">32 bits</strong> sur les cartes à <strong>cœur <em class="sigle">ARM</em> 32 bits</strong> (<em class="mark">Arduino Due</em>, <em class="mark">Zero</em>, <em class="mark">ESP8266</em>…). </li>
+  </ul>
+</ul>
+</div><!-- complement -->
+
+
+
+<div class="exemples" id="exempleByte">
+<p class="exemple"> Pour un <strong>système d'enregistrement</strong> de données horodatées sur carte micro‑SD, on déclare ci‑dessous (ligne nº 11) un <strong class="title">mot binaire de défauts</strong> nommé <code class="prettyprint lang-c">systemDefaultByte</code>. Il regroupe <strong>5 bits de défauts</strong> dont les numéros sont déclarées préalablement comme des constantes :  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+const int timeDefaultBit     = 0;
+const int ethernetDefaultBit = 1;
+const int cardDefaultBit     = 2;
+const int fileDefaultBit     = 3;
+const int sensorDefaultbit   = 4;
+
+byte systemDefaultByte = 0b00000; // no initial default
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> Ce mot est <strong class="specialLB">initialisé</strong> à la valeur  <code class="prettyprint lang-c">0b00000</code> en notation binaire (et non pas simplement la valeur <code>0</code>) pour une bonne <strong class="pros">lisibilité</strong>, en explicitant les <strong>5 bits de rang bas</strong> (les 3 bits de rang haut n'étant pas significatifs et implicitement toujours nuls).</p>
+
+<p> Cette <strong class="specialLB">initialisation</strong> part du principe qu'à la mise en service, le système est a priori <strong class="defin">exempt de défaut</strong> (ses 5 bits de défaut sont mis à zéro). On verra infra comment changer individuellement la valeur d'un bit. </p>
+</div><!-- exemple -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Opérateurs et fonctions de manipulation de bits </h2>
+
+
+
+<div class="complement">
+<p> Comme toutes les données numériques, les <strong class="title">mots binaires</strong> sont <strong class="defin">manipulables</strong> avec les <strong>opérateurs algébriques</strong> et de <strong>comparaison</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a>). </p>
+
+<p> De plus, les langages <strong>C/C++</strong> mettent à la disposition du codeur des <strong>opérateurs spécifiques</strong> de <strong class="title">manipulation de bits</strong>, exposés ci‑après. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="bitwizeOperators"> Opérateurs booléens bits à bits </h3>
+
+
+
+<div class="important">
+<p> Les langages <strong>C/C++</strong> définissent <strong class="specialN">quatre</strong> <strong class="title">opérateurs booléens bits à bits</strong> – en anglais, <strong>bitwise operators</strong> <a class="external" href="https://en.wikipedia.org/wiki/Bitwise_operation" target="_BLANK">W</a> : <strong class="specialLB">non</strong>, <strong class="specialLB">et</strong>, <strong class="specialLB">ou</strong> <strong class="specialN">exclusif</strong>, <strong class="specialLB">ou</strong> <strong class="specialN">inclusif</strong>. </p>
+
+<p> Ils effectuent une <strong class="title">opération booléenne</strong> entre les <strong class="defin">bits respectifs</strong> du ou des opérandes, en procédant <strong class="specialN">rang par rang</strong>.  Ils ont les caractéristiques suivantes (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a>) : </p>
+
+<div style="overflow-x: auto; margin: 0.5em; margin-right: 0em;">
+<table style="margin: 0em">
+  <tr>
+    <th> Nom </th>
+    <th> Symbole </th>
+    <th> Priorité </th>
+    <th> Associativité </th>
+  </tr>
+  <tr>
+    <td style="text-align: center"> <strong class="title">not</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">~</code> </td>  
+    <td style="text-align: center"> 2 </td>
+    <td style="text-align: center"> ← </td>
+  </tr> 
+  <tr>
+    <td style="text-align: center"> <strong class="title">and</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">&</code> </td>  
+    <td style="text-align: center"> 8 </td>
+    <td style="text-align: center"> → </td>
+  </tr> 
+  <tr>
+    <td style="text-align: center"> <strong class="title">xor</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">^</code> </td>  
+    <td style="text-align: center"> 9 </td>
+    <td style="text-align: center"> → </td>
+  </tr> 
+  <tr>
+    <td style="text-align: center"> <strong class="title">or</strong> </td>
+    <td style="text-align: center"> <code class="prettyprint lang-c">|</code> </td>  
+    <td style="text-align: center"> 10 </td>
+    <td style="text-align: center"> → </td>
+  </tr> 
+</table>
+</div><!-- overflow -->
+
+<p> <em class="remark">Attention</em> : ces quatre opérateurs n'acceptent que des <strong class="warning">opérandes entiers</strong> de <strong class="specialO">même taille</strong>. Et ils retournent une <strong class="title">valeur entière</strong> encodée dans un <strong class="specialG">type</strong> de <strong class="specialO">même taille</strong> que celle du type des <strong>opérandes</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> En particulier, comme il a été mentionné en introduction, ces opérateurs sont très employés pour extraire par <strong class="title">masquage</strong> des <strong>adresses de sous‑réseaux</strong> et de <strong>machines</strong> à partir d'<strong>adresses <em class="sigle">IP</em></strong> (cf. chap. R1‑III <a class="previous" href="../../ModuleR/R1-Generalites/Rc1-3_adressage.html#calculAvecMasque" target="_BLANK">R</a> et <a class="external" href="https://fr.wikipedia.org/wiki/Adresse_IP" target="_BLANK"></a>). </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Les <strong class="title">exemples académiques</strong> ci‑dessous illustrent des opérations sur des <strong class="defin">mots de 8 bits</strong>. Elles sont posées en colonnes <strong class="pros">comme des opérations arithmétiques</strong> avec l'<strong>alignement vertical</strong> des <strong>bits de même rang</strong>, pour bien comprendre le calcul booléen de chaque bit du résultat. </p>
+
+<div style="overflow-x: auto; margin-left: 0.5em; margin-top:0.2em; margin-bottom: 0.5em;">
+<table style="width: auto">
+  <tr>
+    <th> <strong class="title">not</strong> </th> 
+
+    <th> <strong class="title">and</strong> </th>  
+
+    <th> <strong class="title">or</strong> </th>  
+
+    <th> <strong class="title">xor</strong> </th>  
+  </tr>
+
+  <tr>
+    <td style="vertical-align: bottom"> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+<span class="codeOper">~</span> 0b10010110
+<span class="codeComment">=</span> <span class="green">0b01101001</span> 
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+    <td> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+  0b10010110
+<span class="codeOper">&</span> 0b00001111 
+<span class="codeComment">=</span> <span class="green">0b00000110</span>
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+    <td> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+  0b10010110
+<span class="codeOper">|</span> 0b00001111 
+<span class="codeComment">=</span> <span class="green">0b10011111</span>
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+    <td> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+  0b10010110
+<span class="codeOper">^</span> 0b00001111 
+<span class="codeComment">=</span> <span class="green">0b10011001</span> 
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+  </tr>
+  <tr style="font-size: 90%;">
+    <td style="text-align: justify; vertical-align: top"> À chaque rang, le bit du résultat est l'<strong>inverse</strong> de celui de l'opérande. </td>
+  
+    <td style="text-align: justify; vertical-align: top"> À chaque rang, on a <code class="prettyprint lang-c">1</code> <strong>si et seulement</strong> si les opérandes sont <strong>tous les deux</strong> à <code>1</code>. </td>
+  
+    <td style="text-align: justify; vertical-align: top"> À chaque rang, on a <code class="prettyprint lang-c">0</code> <strong>si et seulement</strong> si les opérandes sont <strong>tous les deux</strong> à <code>0</code>. </td>
+  
+    <td style="text-align: justify; vertical-align: top"> À chaque rang, on a <code class="prettyprint lang-c">1</code> <strong>si et seulement</strong> si les bits des opérandes sont <strong>différents</strong>. </td>
+  </tr>
+</table>  
+</div><!-- overflow -->
+
+<div class="expert">
+<p> À travers ces différents exemples, on peut voir comment les <strong class="title">opérateurs</strong> <code class="prettyprint lang-c">&</code> et <code class="prettyprint lang-c">|</code> permettent de <strong class="defin">masquer une partie du mot binaire</strong> formé par le premier opérande, en employant pour deuxième opérande un mot binaire <code class="cmd">0b00001111</code> formé de <strong class="specialLB">deux parties</strong> (ici, des quartets), l'une avec <strong>seulement des</strong> <code class="cmd">0</code>, l'autre avec <strong>seulement des</strong> <code class="cmd">1</code> :  </p>
+<ul>
+  <li> avec <code class="prettyprint lang-c">&</code>, le <strong>quartet de haut rang</strong> est <strong class="defin">mis à</strong> <code class="prettyprint lang-c">0</code> – donc « <strong class="title">masqué</strong> » – tandis que le <strong>quartet de bas rang</strong> reste <strong class="defin">identique</strong> ; </li>
+
+  <li> avec <code class="prettyprint lang-c">|</code>, le <strong>quartet de bas rang</strong> est <strong class="defin">mis à</strong> <code class="prettyprint lang-c">1</code> – donc « <strong class="title">surexposé</strong> » – tandis que le <strong>quartet de haut rang</strong> reste <strong class="defin">identique</strong>. </li>
+</ul>
+</div><!-- expert -->
+</div><!-- exemples -->
+
+<div class="remarques">
+<p class="remarque"> Contrairement aux opérateurs arithmétiques, les opérateurs booléens bits à bits ont des <strong class="title">rangs de priorité</strong> tous <strong class="cons">plus faibles</strong> que ceux des <strong>opérateurs de comparaison</strong>. En conséquence, ils doivent <strong class="warning">toujours</strong> être employés avec une encapsulation dans des <strong class="defin">parenthèses</strong> pour mettre en œuvre des <strong>expressions de tests</strong>.  </p>
+
+
+<div style="margin-top: 1em"> 
+<em class="remark">Exemple</em>. Quelle que soit la valeur de la variable <code class="prettyprint lang-c">a</code> déclarée de type <code class="prettyprint lang-c">uint8_t</code>, l'<strong class="cons">expression mal parenthésée</strong> de test : <br> 
+  <span class="inline">
+    <code class="prettyprint lang-c">a & 0x0F == 0x0</code>
+  </span> <br>
+sera <strong>toujours</strong> évaluée <strong class="warning">nulle</strong>, car la sous‑expression ici prioritaire <code class="prettyprint lang-c">0x0F == 0x0</code> est évidemment fausse, donc évaluée nulle ; l'expression de test se résume donc à <code class="prettyprint lang-c">a & 0</code> qui vaut forcément <code class="prettyprint lang-c">0</code>. </p>
+
+<p> Il faut donc <strong class="pros">encapsuler dans des parenthèses</strong> l'opération formée avec <code class="prettyprint lang-c">&</code> comme ci‑dessous : <br> 
+<span class="inline">
+  <code class="prettyprint lang-c">(a & 0x0F) == 0x0</code>
+</span> <br>
+pour coder correctement l'expression de test. </p>
+</div><!-- margin -->
+</div><!-- remarque -->
+
+
+<div class="expert">
+<h4 id="bitwizeCompoundOperators"> Opérateurs bits à bits avec affectation combinée </h4>
+
+
+<div class="complement">
+<p> Les opérateurs booléens bits à bits <strong>binaires</strong> (à deux opérandes) <code class="prettyprint lang-c">&</code> <code class="prettyprint lang-c">|</code> <code class="prettyprint lang-c">^</code> peuvent former autant d'<strong class="title">opérateurs à affectation composée</strong> (cf. chap C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#compoundAssignmentOperators" target="_BLANK"></a>).  </p>
+
+<p> Si <code class="prettyprint lang-c">a</code> est l'identificateur d'une variable entière, et si <code class="prettyprint lang-c"><span class="nocode"><strong>b</strong></span></code> est une expression à valeur entière de <strong class="specialO">même taille</strong> que <code class="prettyprint lang-c">a</code>, alors : </p>
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">a &= <span class="nocode"><strong>b</strong></span></code> abrège
+    <code class="prettyprint lang-c">a = a & <span class="nocode"><strong>b</strong></span></code>, </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a |= <span class="nocode"><strong>b</strong></span></code> abrège
+    <code class="prettyprint lang-c">a = a | <span class="nocode"><strong>b</strong></span></code>,  </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a ^= b</code> abrège
+    <code class="prettyprint lang-c">a = a ^ <span class="nocode"><strong>b</strong></span></code>.  </li>
+</ul>
+<p> Ces opérateurs ont, comme tous ceux à affectation composée et l'opérateur d'affectation lui‑même, le <strong>rang de priorité</strong> <strong class="defin">14</strong> (sur 15).   </p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+
+<h3 id="bitShiftOperators"> Opérateurs de décalage de bits </h3>
+
+
+
+<div class="important">
+<p> Les langages <strong>C/C++</strong> définissent <strong class="specialN">deux</strong> <strong class="title">opérateurs de décalages des bits</strong> respectivement codés par les symboles <code class="prettyprint lang-c">>></code> (en anglais, <strong class="specialLB">shift right</strong>) et <code class="prettyprint lang-c"><<</code> (en anglais, <strong class="specialLB">shift left</strong>). </p>
+
+<p> Si <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">a</strong></span></code> est une expression de <strong class="specialG">type entier</strong> (premier opérande), et <code class="prettyprint lang-c"><span class="nocode"><strong class="specialN">n</strong></span></code> une expression de <strong class="specialG">type entier</strong> <strong class="specialO">non signé</strong> (deuxième opérande), alors : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c"> <span class="nocode"><strong class="specialM">a</strong></span> >> <span class="nocode"><strong class="specialN">n</strong></span></code> prend la valeur de <strong class="specialM">a</strong> avec ses bits <strong>décalés</strong> de <strong class="specialN">n</strong> <strong>rangs</strong> <strong class="specialLB">vers la droite</strong>. </li>
+
+  <li> <code class="prettyprint lang-c"> <span class="nocode"><strong class="specialM">a</strong></span> << <span class="nocode"><strong class="specialN">n</strong></span></code> prend la valeur de <strong class="specialM">a</strong> avec ses bits <strong>décalés</strong> de <strong class="specialN">n</strong> <strong>rangs</strong> <strong class="specialLB">vers la gauche</strong>. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement"> 
+<p> <em class="remark">En règle générale</em>, lors d'un <strong class="title">décalage de bits</strong> : </p>
+<ul>
+  <li> les <strong class="specialLB">bits entrants</strong> sont des <code class="prettyprint lang-c">0</code> ; </li>
+
+  <li> les <strong class="specialLB">bits sortants</strong> sont « <strong>perdus</strong> » (comme la valeur antérieure d'une affectation). </li>
+</ul>
+
+<div class="expert">
+<p> <em class="remark">Mais attention</em> : si l'expression <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">a</strong></span></code> est de <strong class="specialO">type signé</strong>, alors les bits <strong class="specialLB">entrants à gauche</strong> ne sont <strong class="warning">pas nécessairement</strong> des <code class="prettyprint lang-c">0</code>, ils sont égaux à la <strong>valeur</strong> du <strong class="specialR">bit de signe</strong> de <code class="prettyprint lang-c"><span class="nocode"><strong class="specialM">a</strong></span></code> (sinon, le signe du résultat serait différent de celui de l'opérande). </p>
+</div><!-- expert -->
+
+<p> En définitive, on constate que : </p>
+<ul>
+  <li> <code class="prettyprint lang-c"> <span class="nocode"><strong class="specialM">a</strong></span> >> <span class="nocode"><strong class="specialN">n</strong></span></code> équivaut à une <strong class="defin">division euclidienne</strong> de <strong class="specialM">a</strong> par <em class="bold">2<sup><var>n</var></sup></em> ; </li>
+
+  <li> <code class="prettyprint lang-c"> <span class="nocode"><strong class="specialM">a</strong></span> << <span class="nocode"><strong class="specialN">n</strong></span></code> équivaut à une <strong class="defin">multiplication</strong> de <strong class="specialM">a</strong> par <em class="bold">2<sup><var>n</var></sup></em>. </li>
+</ul>
+
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Les deux <strong class="title">exemples académiques</strong> illustrés dans le tableau ci‑dessous font l'hypothèse que le premier opérande est une <strong>variable</strong> <code class="prettyprint lang-c">a</code> déclarée comme suit : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">uint8_t a = 0b00010010; // = 20</code> 
+</span> </p>
+
+
+<div style="overflow-x: auto; margin-left: 0.5em; margin-top:0.2em; margin-bottom: 0.5em">
+<table style="width: auto">
+  <tr>
+    <th> <code class="prettyprint lang-c">>></code> </th> 
+
+    <th> <code class="prettyprint lang-c"><<</code> </th>  
+  </tr>
+  <tr>
+    <td> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+<span class="codeComment">(a)</span>  0b00010100 <span class="codeOper">>></span> 3
+   <span class="codeComment">=</span> <span class="green">0b00000010</span> <span class="codeComment">     // = 2 </span>
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+    <td> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+<span class="codeComment">(a)</span>  0b00010100 <span class="codeOper"><<</span> 1
+   <span class="codeComment">=</span> <span class="green">0b00101000</span> <span class="codeComment">      // = 40 </span>
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+  </tr>
+  <tr style="font-size: 90%;">
+    <td style="text-align: justify; vertical-align: top; "> On a bien 20 ÷ 2<sup>3</sup> = 20 ÷ 8 = 2. En décalant les bits de <strong class="specialLB">3 rangs vers la droite</strong> : <br>
+      <ul>
+        <li> le bit de rang 4 (valant 2<sup>4</sup> = 16) passe au rang 1 (valant 2<sup>1</sup> = 2) et forme le <strong>quotient</strong> de la division ; </li>
+
+        <li> le bit de rang 2 (valant 2<sup>2</sup> = 4) est perdu ; il correspond au <strong>reste</strong> de la division. </li>
+      </ul>
+    En effet, 20 = 8 × 2 + 4. 
+    </td>
+  
+    <td style="text-align: justify; vertical-align: top;"> On a bien 20 × 2<sup>1</sup> = 20 × 2 = 40. En décalant les bits de <strong class="specialLB">1 rang vers la gauche</strong> : <br>
+      <ul>
+        <li> le bit de rang 4 (valant 2<sup>4</sup> = 16) passe au rang 5 (valant 2<sup>5</sup> = 32) ; </li>
+
+        <li> le bit de rang 2 (valant 2<sup>2</sup> = 4) passe au rang 3 (valant 2<sup>3</sup> = 8). </li>
+      </ul>
+      En effet, 40 = 32 + 8.
+    </td>
+  </tr>
+</table>  
+</div><!-- overflow -->
+
+<div class="expert">
+<p style="margin-top: 1em"> Les <strong class="title">deux autres exemples</strong> ci‑dessous illustrent la valeur des <strong class="specialLB">bits entrants à gauche</strong> identiques à la valeur du <strong class="specialR">bit de signe</strong> dans le cas d'un opérande <code class="prettyprint lang-c">a</code> de <strong class="specialO">type signé</strong> <code class="prettyprint lang-c">int8_t</code> (cf. chap. C3‑II <a class="previous" href="Cc3-2_typesEntiers.html#complementA2" target="_BLANK"></a>) : </p>
+
+<div style="overflow-x: auto; margin-left: 0.5em; margin-top:0.2em; margin-bottom: 0.5em">
+<table style="width: auto">
+  <tr>
+    <th> <code class="prettyprint lang-c">a = 0b10000000; // = -128</code> </th> 
+
+    <th> <code class="prettyprint lang-c">a = 0b01000000; // = 64</code> </th>  
+  </tr>
+  <tr>
+    <td> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+<span class="codeComment">(a)</span> 0b<span class="red">1</span>0000000 <span class="codeOper">>></span> 6
+  <span class="codeComment">=</span> <span class="green">0b<span class="red">1</span>1111110</span> <span class="codeComment">     // = -2 </span>
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+    <td> 
+<!---------- ne pas indenter ---------->
+<pre class="code">
+<span class="codeComment">(a)</span> 0b<span class="red">0</span>1000000 <span class="codeOper">>></span> 6
+  <span class="codeComment">=</span> <span class="green">0b<span class="red">0</span>0000001</span> <span class="codeComment">      // = 1 </span>
+</pre>  
+<!---------- ne pas indenter ---------->
+    </td>
+  </tr>
+  <tr style="font-size: 90%;">
+    <td style="text-align: justify; vertical-align: top; "> On a bien −128 ÷ 2<sup>6</sup> = −128 ÷ 64 = −2. Le <strong class="specialR">bit de signe</strong> valant <code class="cmd" style="color: red">1</code>, les <strong class="specialLB">bits entrants à gauche</strong> sont des <code class="prettyprint lang-c">1</code>.
+    </td>
+  
+    <td style="text-align: justify; vertical-align: top;"> On a bien 64 ÷ 2<sup>6</sup> = 64 ÷ 64 = 1. Le <strong class="specialR">bit de signe</strong> valant <code class="cmd" style="color: red">0</code>, les <strong class="specialLB">bits entrants à gauche</strong> sont des <code  class="prettyprint lang-c">0</code>. </td>
+  </tr>
+</table>  
+</div><!-- overflow -->
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+<div class="expert">
+<h4 id="bitwizeCompoundOperators"> Opérateurs de décalage de bits avec affectation combinée </h4>
+
+<div class="complement">
+<p> Les <strong>opérateurs de décalage de bits</strong> existent aussi sous forme d'<strong class="title">opérateurs à affectation composée</strong> (cf. chap C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#compoundAssignmentOperators" target="_BLANK"></a>).  </p>
+
+<p> Si on déclare une <strong>variable</strong> <code class="prettyprint lang-c">a</code> de <strong class="specialG">type entier</strong> et si <code class="prettyprint lang-c"><span class="nocode"><strong class="specialN">n</strong></span></code> est l'identificateur d'une <strong>expression</strong> de <strong class="specialG">type entier</strong> </strong> <strong class="specialO">non signé</strong>, alors : </p>
+<ul>
+  <li> l'expression <code class="prettyprint lang-c">a >>= <span class="nocode"><strong class="specialN">n</strong></span></code> abrège <code class="prettyprint lang-c">a = a >> <span class="nocode"><strong class="specialN">n</strong></span></code>, </li>
+
+  <li> l'expression <code class="prettyprint lang-c">a <<= <span class="nocode"><strong class="specialN">n</strong></span></code> abrège <code class="prettyprint lang-c">a = a << <span class="nocode"><strong class="specialN">n</strong></span></code>. </li>
+</ul>
+<p> Ces opérateurs ont, comme tous ceux à affectation composée et l'opérateur d'affectation lui‑même, le <strong>rang de priorité</strong> <strong class="defin">14</strong> (sur 15).   </p>
+</div><!-- complement -->
+</div><!-- expert -->
+
+
+
+<h3 id="bitFunctions"> Pseudo‑fonctions <em class="mark">Arduino</em> de manipulation de bits d'une valeur entière </h3>
+
+
+
+<div class="important">
+<p> Pour <strong class="pros">faciliter la manipulation des bits</strong> des <strong>mots binaires</strong>, et plus généralement, de toute donnée de <strong class="specialG">type entier</strong> de taille <strong class="warning">4 octets maximum</strong>, le fichier d'en‑tête <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> du framework <strong class="Arduino">Arduino</strong> définit <strong>huit</strong> <strong class="title">pseudo‑fonctions</strong> (macro‑définitions – cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#macrocommandes" target="_BLANK"></a>), nommées <code class="prettyprint lang-c">bitSet</code>, <code class="prettyprint lang-c">bitClear</code>, <code class="prettyprint lang-c">bitRead</code>, <code class="prettyprint lang-c">bitToggle</code> et <code class="prettyprint lang-c">bitWrite</code>. </p>
+
+<p> Ces pseudo‑fonctions admettent des <strong>arguments</strong> et s'emploient <strong class="defin">comme des fonctions</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Parmi ces pseudo‑fonctions, celle de lecture et d'écriture ont des <strong class="title">syntaxes d'invocation</strong> <strong class="pros">très semblables</strong> les unes des autres, dans lesquelles : </p>
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/bitFunctions.png" width="350px"> 
+<ul>
+  <li> le <strong class="specialN">premier argument</strong>, désigné <strong class="specialO">value</strong>, est une <strong>expression</strong> de <strong class="specialG">type entier</strong> de largeur <strong>32 bits maximum</strong> ; c'est sa valeur que la pseudo‑fonction manipule ;  </li>
+
+  <li> le <strong class="specialN">deuxième argument</strong>, désigné <strong class="specialT">bit</strong>, est une <strong>expression</strong> de <strong class="specialG">type entier</strong> <strong class="warning">non signé</strong> ; sa valeur définit le <strong class="specialT">rang du bit</strong> de <strong class="specialO">value</strong> sur lequel la pseudo‑fonction opère. </li>
+</ul>
+</div><!-- display -->
+</div><!-- complement -->
+
+
+<h4 id="bitRead"> Pseudo‑fonction de lecture de bit </h4>
+
+
+<div class="complement">
+<p> Le fichier <code class="filename">Arduino.h</code> définit <strong>une pseudo‑fonction</strong> de <strong class="title">lecture de bit</strong> nommée <code class="prettyprint lang-c">bitRead</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/bitread/" target="_BLANK">A</a>. Une expression d'invocation de cette pseudo‑fonction, de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">bitRead(<span class="nocode"><strong class="specialO">value</strong></span>, <span class="nocode"><strong class="specialT">bit</strong></span>)</code> 
+</span> <br>
+retourne la <strong>valeur</strong> <code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code> lue sur le bit de rang <strong class="specialT">bit</strong> dans l'encodage de l'entier <strong class="specialO">value</strong>. </p>
+
+<div class="expert">
+<p> Conformément aux <strong class="title">règles de typage implicite</strong> des langages <strong>C/C++</strong> (cf. chap. C3‑I <a class="previous" href="Cc3-1_typesGeneralites.html#reglesTypageOperation" target="_BLANK"></a>, le <strong class="specialG">type</strong> de l'expression <code class="prettyprint lang-c">bitRead(<span class="nocode"><strong class="specialO">value</strong></span>, <span class="nocode"><strong class="specialT">bit</strong></span>)</code> est <code class="prettyprint lang-c">int</code> ou <code class="prettyprint lang-c">unsigned int</code>, ou du <strong>même type</strong> que celui de <strong class="specialO">value</strong> si ce dernier est plus grand que <code class="prettyprint lang-c">int</code>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans un programme pour carte <strong class="Arduino">Arduino</strong>, après la déclaration : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">byte a = 0b00001000;</code>
+</span> <br>
+l'expression d'invocation <code class="prettyprint lang-c">bitRead(a, <span class="nocode"><strong class="specialT">bit</strong></span>)</code> retourne la valeur : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">1</code> si l'expression <code class="prettyprint lang-c"><span class="nocode"><strong class="specialT">bit</strong></span></code> vaut <code>3</code> ; </li>
+
+  <li> <code class="prettyprint lang-c">0</code> sinon. </li>
+</ul>
+</div><!-- exemple -->
+
+
+<h4 id="bitWrite"> Pseudo‑fonctions d'écriture de bit </h4>
+
+
+<div class="complement">
+<p> Le fichier <code class="filename">Arduino.h</code> définit <strong>quatre pseudo‑fonctions</strong> d'<strong class="title">écriture de bit</strong> nommées respectivement <code class="prettyprint lang-c">bitSet</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/bitset/" target="_BLANK">A</a>, <code class="prettyprint lang-c">bitClear</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/bitclear/" target="_BLANK">A</a>, <code class="prettyprint lang-c">bitTogle</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/bittoggle/" target="_BLANK">A</a> et <code class="prettyprint lang-c">bitWrite</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/bitwrite/" target="_BLANK">A</a>. </p>
+
+<p> <em class="remark">Attention</em>, pour toutes ces pseudo‑fonctions : </p>
+
+<ul>
+  <li> l'expression <strong class="specialO">value</strong> doit impérativement être l'<strong class="defin">identificateur d'une variable</strong> de type entier ; </li>
+
+  <li> la pseudo‑fonction opère une <strong class="defin">affectation sur cette variable</strong> et retourne sa <strong>valeur</strong> <strong class="warning">après</strong> <strong>écriture du bit</strong> dont le rang est spécifié par l'expression <strong class="specialT">bit</strong>. </li>
+</ul>
+
+<p> Plus précisément, on retiendra que : </p>
+
+<ul>
+  <li> <code class="prettyprint lang-c">bitSet(<span class="nocode"><strong class="specialO">value</strong></span>, <span class="nocode"><strong class="specialT">bit</strong></span>)</code> <strong>met à</strong> <code class="prettyprint lang-c">1</code> le bit de rang <strong class="specialT">bit</strong> de la variable <strong class="specialO">value</strong>, <br>
+  et retourne cette valeur modifiée, du <strong class="specialG">même type</strong> que celui de <strong class="specialO">value</strong> ;  </li>
+
+  <li> <code class="prettyprint lang-c">bitClear(<span class="nocode"><strong class="specialO">value</strong></span>, <span class="nocode"><strong class="specialT">bit</strong></span>)</code> <strong>met à</strong> <code class="prettyprint lang-c">0</code> le bit de rang <strong class="specialT">bit</strong> de la variable <strong class="specialO">value</strong>, <br>
+  et retourne cette valeur modifiée, du <strong class="specialG">même type</strong> que celui de <strong class="specialO">value</strong> ;  </li>
+
+  <li> <code class="prettyprint lang-c">bitToggle(<span class="nocode"><strong class="specialO">value</strong></span>, <span class="nocode"><strong class="specialT">bit</strong></span>)</code> <strong>inverse la valeur</strong> du bit (<code class="prettyprint lang-c">0</code>⇄<code class="prettyprint lang-c">1</code>), <br>
+  et retourne cette valeur modifiée, du <strong class="specialG">même type</strong> que celui de <strong class="specialO">value</strong> ;  </li>
+
+  <li> <code class="prettyprint lang-c">bitWrite(<span class="nocode"><strong class="specialO">value</strong></span>, <span class="nocode"><strong class="specialT">bit</strong></span>, <span class="nocode"><strong class="specialV">bitValue</strong></span>)</code> <strong>affecte</strong> au bit la <strong>valeur</strong> spécifiée par l'<strong>expression</strong> <strong class="specialV">bitValue</strong>, <br>
+  et retourne cette valeur modifiée, du <strong class="specialG">même type</strong> que celui de <strong class="specialO">value</strong>.  </li>
+</ul>
+</div><!-- complement -->
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> Dans un programme pour carte <strong class="Arduino">Arduino</strong>, après la déclaration : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">byte a = 0b00001010; // = 10</code> <br>
+</span>
+l'expression d'invocation : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">bitSet(a, 0)</code> <strong>met à</strong> <code class="cmd" style="color: red">1</code> le bit de rang <code class="cmd">0</code> de la variable <code class="prettyprint lang-c">a</code>, <br>
+    autrement dit, elle affecte à <code class="prettyprint lang-c">a</code> (et retourne) la valeur <code class="cmd" style="color: green">0b0000101<span style="color: red">1</span></code> (<code>11</code>) ; </li>
+
+  <li> <code class="prettyprint lang-c">bitClear(a, 3)</code> <strong>met à</strong> <code class="cmd" style="color: red">0</code> le bit de rang <code class="cmd">3</code> de la variable <code class="prettyprint lang-c">a</code>, <br>
+    autrement dit, elle affecte à <code class="prettyprint lang-c">a</code> (et retourne) la valeur <code class="cmd" style="color: green">0b0000<span style="color: red">0</span>010</code> (<code>2</code>) ; </li>
+
+  <li> <code class="prettyprint lang-c">bitToggle(a, 5)</code> <strong>inverse</strong> de <code class="prettyprint lang-c">0</code> à <code class="cmd" style="color: red">1</code> la valeur du bit de rang <code class="cmd">5</code> de la variable <code class="prettyprint lang-c">a</code>, <br>
+    autrement dit, elle affecte à <code class="prettyprint lang-c">a</code> (et retourne) la valeur <code class="cmd" style="color: green">0b00<span style="color: red">1</span>01010</code>  (<code>42</code>) ; </li>
+
+  <li> <code class="prettyprint lang-c">bitWrite(a, 7, bitRead(a, 0))</code> <strong>écrit</strong> le bit de rang <code class="cmd">7</code> de la variable <code class="prettyprint lang-c">a</code> à la valeur de celle lue sur son bit de rang <code class="cmd">0</code> (ici la valeur <code class="cmd"><span style="color: red">1</span></code>), <br>
+    autrement dit, elle affecte à <code class="prettyprint lang-c">a</code> (et retourne) la valeur <code class="cmd" style="color: green">0b<span style="color: red">1</span>0001010</code> (<code>138</code>). </li>
+</ul>
+
+<div class="expert">
+<p class="square"> Plus généralement, la <strong class="title">pseudo‑fonction</strong> <code class="prettyprint lang-c">bitWrite</code> trouve son <strong class="pros">utilité</strong> lorsqu'on souhaite <strong>spécifier la valeur à écrire</strong> sur le bit par une <strong class="specialV">expression variable</strong>. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/multiSwitch.png" width="250px"> 
+<p> Considérons par exemple le système figuré ci‑contre avec un <strong class="title">bloc de micro‑interrupteurs</strong> câblés en <strong>logique négative</strong> (pour simplifier le câblage) sur autant d'entrées consécutives du port numérique d'une <strong class="Arduino">carte Arduino Uno</strong>. </p>
+
+<p> On peut regrouper l'état de tous ces interrupteurs dans un <strong class="specialO">mot binaire</strong> <code class="prettyprint lang-c">multiSwitchState</code> en procédant à l'<strong>écriture de ses bits un par un</strong> avec la fonction <code class="prettyprint lang-c">bitWrite</code> (cf. la ligne nº 22) dans la boucle <code class="prettyprint lang-c">for</code> codée ci‑dessous : </p>
+
+</div><!-- display -->
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:20">
+  for (int switchPin = firstSwitchPin; switchPin <= lastSwitchPin; switchPin++) {
+    int bitRank = switchPin - firstSwitchPin;     // offset first bitRank to zero 
+    bitWrite(multiSwitchState, bitRank, !digitalRead(switchPin));
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> et illustré par la figure suivante : </p>
+<img class="top-left" src="../img/multiSwitchState.png" style="max-width: 800px">
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Pseudo‑fonction de génération d'un mot binaire à un seul bit non nul </h4>
+
+
+<div class="complement">
+<p> Le fichier <code class="filename">Arduino.h</code> définit également <strong>une pseudo‑fonction</strong> de <strong class="title">génération de mot binaire</strong> à <strong class="specialLB">un seul bit non nul</strong> nommée <code class="prettyprint lang-c">bit</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/bit/" target="_BLANK">A</a>. </p>  
+
+<p> Plus précisément, une expression d'invocation de la forme : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">bit(<span class="nocode"><strong class="specialT">bit</strong></span>)</code>
+</span> <br>
+retourne un <strong class="specialO">mot binaire</strong> de type <code class="prettyprint lang-c">unsigned long</code> – donc encodé sur <strong>4 octets</strong> – dont <strong>seul</strong> le bit de rang <strong class="specialT">bit</strong> vaut <code class="prettyprint lang-c">1</code> – tous les <strong>autres bits</strong> valant <code class="prettyprint lang-c">0</code>. </p>
+
+<p>Le <strong class="specialO">mot binaire</strong> retourné vaut donc <em class="bold">2</em><sup><strong class="specialT">bit</strong></span></sup>. </p> 
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans un programme pour carte <strong class="Arduino">Arduino</strong>, l'expression d'invocation <code class="prettyprint lang-c">bit(3)</code> retourne la <strong>valeur</strong> <code class="prettyprint lang-c">8</code> (2<sup>3</sup>), encodée sur 4 octets, c'est‑à‑dire en notation hexadécimale : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">0x00000008</code>
+</span>  <br>
+ou encore en binaire : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">0b00000000000000000000000000001000</code>
+</span> </p>
+</div><!-- exemple -->
+
+
+<h4> Pseudo‑fonctions de masquage </h4>
+
+
+<div class="complement">
+<p> Enfin, le fichier <code class="filename">Arduino.h</code> définit <strong>deux pseudo‑fonctions</strong> de <strong class="title">masquage</strong>. Nommées <code class="prettyprint lang-c">lowByte</code> et <code class="prettyprint lang-c">highByte</code>, elles permettent respectivement d'extraire l'<strong class="defin">octet de rang « bas »</strong> et <strong class="defin">de rang « haut »</strong> d'un <strong class="specialO">mot binaire</strong> pris pour argument et désigné <strong class="specialO">word</strong> ci‑après. </p>
+
+<p> Ainsi, une expression d'invocation de la forme : </p> 
+<ul>
+  <li> <code class="prettyprint lang-c">lowByte(<span class="nocode"><strong class="specialO">word</strong></span>)</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/lowbyte/" target="_BLANK">A</a> retourne dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">uint8_t</code> la <strong>valeur</strong> de l'<strong class="defin">octet le plus à droite</strong> (<em class="english">rightmost</em>) de la valeur prise par l'expression <strong class="specialO">word</strong> ; </li>
+
+  <li> <code class="prettyprint lang-c">highByte(<span class="nocode"><strong class="specialO">word</strong></span>)</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/bits-and-bytes/highbyte/" target="_BLANK">A</a> retourne dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">uint8_t</code> la <strong>valeur</strong> du <strong class="defin">second octet</strong> en partant de la droite de la valeur prise par l'expression <strong class="specialO">word</strong>. </li>
+
+  <div class="nobullet">Sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> à <strong>cœur <em class="sigle">AVR</em></strong> (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…), et pour un mot binaire de <strong class="specialG">type</strong> <code class="prettyprint lang-c">word</code> (de taille 2 octets seulement), il s'agit de l'octet le plus à gauche (<em class="english">leftmost</em>), d'où l'identificateur « <code>highByte</code> ». </div>
+</ul>
+</div><!-- complement -->
+
+<div class="exemples">
+<p class="exemple"> Dans un programme pour carte <strong class="Arduino">Arduino</strong>, après la déclaration : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">word a = 0xCAFE; // (51966)</code>
+</span> <br>
+l'expression d'invocation : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">lowByte(a)</code> retourne la <strong>valeur</strong> <code class="prettyprint lang-c">FE</code> (254) ; </li>
+
+  <li> <code class="prettyprint lang-c">highByte(a)</code> retourne la <strong>valeur</strong> <code class="prettyprint lang-c">CA</code> (202). </li>
+</ul>
+</div><!-- exemple -->
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="2"
+  data-pagenumber="IX"
+  data-pageState="OK"
+  data-pageheadtitle="Bonnes pratiques"
+  data-pagefulltitle="Les bonnes pratiques de la programmation"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+
+<div class="exergue">
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/CleanCode.jpg" width="250px">
+<p class="square" style="margin-top: 0em"> On a vu dès le chapitre C1‑I <a class="previous" href="../C1-Generalites/Cc1-1_langagesGeneralites.html#lisibilite" target="_BLANK"></a> que la <strong class="title">lisibilité</strong> des programmes est un <strong class="warning">enjeu décisif</strong> du génie logiciel – cf. le livre <em class="english">Clean Code: a handbook of agile software craftsmanship</em> qui est entièrement consacré à cette question, et dont il existe une version française (<em>Coder proprement</em>). Le respect de l'exigence de lisibilité du code tient avant tout à l'observance de <strong class="pros">bonnes pratiques générales</strong>, certaines ayant déjà été proposées dans divers chapitres de cette partie <span class="partie">C2</span> du cours, par exemple au chap. C2‑III pour la déclaration des constantes <a class="previous" href="Cc2-3_declarationDonnees.html#bonnePratiqueConstantes" target="_BLANK"></a>. </p>
+</div><!-- display -->
+
+<p> Mais ce qu'on appelle « <strong class="title">bonne pratique</strong> » peut varier d'une période, d'un langage ou d'un contexte professionnel à l'autre (entreprise, laboratoire de recherche, équipe…). Très souvent, un chef de projet informatique impose à son équipe de développement une <strong class="specialV">convention de codage</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Règles_de_codage" target="_BLANK">W</a>, c'est‑à‑dire un ensemble de <strong>règles</strong> et de <strong>recommandations</strong> à respecter, pour notamment : </p>
+<ul>
+	<li> prévenir des <strong class="warning">erreurs classiques</strong> grâce à des obligations et des interdictions formelles (par exemple, pas de <code>goto</code>…) ; </li>
+
+	<li> garantir l'<strong class="pros">homogénéité du code</strong>, dont la production est nécessairement répartie entre plusieurs codeurs, et ainsi faciliter sa relecture ainsi que la coordination du projet. </li>
+</ul>
+
+
+<p class="square"> Néanmoins, pour un codeur débutant à qui l'on demande de composer des programmes courts et très simples comme ceux des premiers exercices et travaux pratiques de ce module de formation, il est <strong class="cons">difficile de comprendre</strong> l'<strong class="title">importance des conventions de codage</strong>. Souvent perçues comme inutilement contraignantes, ces dernières semblent pénaliser l'effort intellectuel nécessaire pour concevoir les solutions aux problèmes posés. </p>
+
+<p> Il faut pourtant y accorder la plus grande attention pour  <strong class="pros">adopter dès le début</strong> <strong class="defin">de bonnes habitudes</strong>. Elles prendront tout leur sens au fur et à mesure de l'<strong>apprentissage individuel</strong> (ne serait‑ce que pour pouvoir relire son propre code plus facilement) puis dans le cadre d'un <strong>travail d'équipe</strong>. </p>
+
+
+<p class="square"> Sans prétention d'exhaustivité, les recommandations de ce chapitre se concentrent sur les <strong class="title">premiers détails</strong> auquel tout codeur est confronté au début de son apprentissage : </p>
+
+<ul>
+	<li> choisir des <strong class="specialLB">identificateurs</strong> de données ou de fonctions, </li>
+
+	<li> rédiger des <strong class="specialLB">commentaires</strong>, </li>
+
+	<li> <strong class="specialLB">indenter</strong> et <strong class="specialLB">espacer</strong> les éléments de code… </li>
+</ul>
+
+<div class="expert">
+<p style="margin-top: 0.5em"> D'<strong class="title">autres aspects</strong> importants pour la lisibilité – la décomposition en fonctions, le choix des algorithmes et des structures de données – seront abordés <strong>au fur et à mesure des chapitres</strong>, avec un repérage explicite, comme cela a déjà été fait dans les chapitres précédents. </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/GuideAnssi.png" width="200px">
+<p> Pour une <strong class="title">présentation plus détaillée</strong>, on pourra consulter le <strong>guide</strong> <a class="external" href="https://www.ssi.gouv.fr/uploads/2020/05/anssi-guide-regles_de_programmation_pour_le_developpement_securise_de_logiciels_en_langage_c-v1.1.pdf" target="_BLANK"></a> rédigé et gratuitement distribué par l'<em class="bold"><em class="sigle">ANSSI</em></em> (<em>Agence nationale de la sécurité des systèmes d'information</em> <a class="external" href="https://fr.wikipedia.org/wiki/Agence_nationale_de_la_sécurité_des_systèmes_d'information" target="_BLANK">W</a>), en gardant toutefois à l'esprit qu'en matière de bonnes pratiques, personne ne détient de vérité absolue – même une agence nationale. </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="identificateurs"> Les identificateurs </h2>
+
+
+<div class="important">
+<p> Pour tous les <strong class="title">identificateurs</strong> <strong>choisis par le codeur</strong> (noms de variables, types, classes, fonctions…), <strong class="defin">trois règles simples</strong> sont à observer : </p>
+
+<ul>
+	<li> n'employer que l'<strong>anglais</strong> ; </li>
+
+	<li> choisir des <strong>noms explicites</strong> ; </li>
+
+  <li> adopter une <strong>convention typographie</strong> usuelle. </li>
+</ul>
+</div><!-- important -->
+
+<p> Ces règles sont respectivement détaillées dans les trois sections ci‑après. </p>
+
+
+
+<h3> Tout en anglais </h3>
+
+
+
+<div class="important">
+<p> Dans un code source, le <strong class="title">recours exclusif à l'</strong><strong class="specialLB">anglais</strong> (<em class="sigle">GB</em> ou <em class="sigle">US</em>) pour nommer les identificateurs présente <strong class="pros">plusieurs avantages décisifs</strong> sur toute autre langue. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Ces avantages sont : </p>
+<ul>
+	<li> l'<strong class="pros">homogénéité linguistique</strong>, car tous les <strong>mots‑clefs</strong>, les <strong>noms de types</strong> et les identificateurs de <strong>fonctions standards</strong> sont déjà issus de l'<strong class="defin">anglais</strong> ; si le codeur forme aussi ses identificateurs en anglais, le code peut former des instructions très semblables à des phrases dans cette langue. </li>
+
+	<div class="exemples">
+	<p class="exemple"> Le code : <br>
+	<span class="inline">
+	 	<code class="prettyprint lang-c">while (randomNumber == previousDisplayedNumber) {</code>…
+	</span>	<br>
+	se <strong class="pros">lit presque mot‑à‑mot</strong> : <br>
+  <span class="inline">
+     « <em class="english">While the random number equals the previous displayed number…</em> »
+  </span></p>
+  </div><!-- exemple -->
+
+	<li> la <strong class="pros">concision des termes</strong> car les mots dans d'autres langues – notamment en français – sont en moyenne plus longs que leurs équivalents anglais ; </li>
+
+	<div class="exemples">
+	<p class="exemple"> L'<strong>identificateur français</strong> <code class="prettyprint lang-c">nombreAleatoire</code> fait <strong class="cons">3 lettres de plus</strong> que son équivalent anglais <code class="prettyprint lang-c">randomNumber</code>. Cette différence de longueur de <em class="bold">25 %</em> n'est <strong class="warning">pas négligeable</strong>. Elle devient sensible dès qu'on emploit l'identificateur dans une expression un tant soit peu élaborée, au point de nécessiter parfois des <strong class="cons">sauts de lignes indésirables</strong>. </p>
+  </div><!-- exemple -->
+
+	<li> l'<strong class="pros">absence de caractères spécifiques</strong> (lettres accentuées, etc.) qui sont non conformes aux <strong class="defin">restrictions de codage des identificateurs</strong> ; avec une langue assez accentuée comme le français, on risque des confusions ; </li>
+
+	<div class="exemples">
+	<p class="exemple"> Dans l'<strong>identificateur français</strong> <code class="prettyprint lang-c">precedentNombreAffiche</code> : </p>
+
+	<ul>
+		<li> <code class="prettyprint lang-c">precedent</code> peut être <strong class="cons">interprété de deux façons</strong>, soit comme « <em class="bold">précédent</em> » (adjectif), soit comme « <em class="bold">précèdent</em> » (forme conjuguée) ; </li>
+
+		<li> idem pour <code class="prettyprint lang-c">affiche</code> qu'on peut interpréter comme « <em class="bold">affiché</em> » (participe passé) ou « <em class="bold">affiche</em> » (nom). </li>
+	</ul>
+  </div><!-- exemple -->
+
+	<li> l'<strong class="title">universalité</strong> <strong>linguistique</strong> dans le cadre d'<strong class="defin">équipes internationales</strong> de développement, où tout le monde parle anglais – ce qui est rarement le cas pour d'autres langues. </li>
+</ul>
+</div><!-- complement -->
+
+
+
+<h3 id="nomsExplicites"> Des identificateurs explicites </h3>
+
+
+
+<div class="important">
+<p> En règle générale, tout  <strong class="title">identificateur</strong> doit <strong>préciser</strong> en lui‑même le <strong class="defin">rôle de l'objet qu'il désigne</strong>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> La <strong class="title">précision</strong> avec laquelle un identificateur décrit son objet doit être : </p>
+<ul>
+	<li> <strong class="pros">suffisante</strong> pour rendre intelligibles le sens des instructions <strong>dès leur première lecture</strong> ; les abréviations et les sigles (<strong>sauf</strong> ceux de la langue technique courante comme, par exemple <code>rpm</code>, <code>mph</code>, <code>pwm</code>, etc.) sont à éviter ; </li>
+
+  <div class="exemples">
+	<p class="exemple">Pour désigner le <strong class="title">numéro de broche</strong> en entrée d'une carte à microcontrôleur à laquelle un <strong>bouton‑poussoir</strong> est relié : </p>
+	<ul>
+		<li> les identificateurs <code class="prettyprint lang-c">b</code>, <code class="prettyprint lang-c">pb</code> ou <code class="prettyprint lang-c">push_b</code> sont <strong class="warning">à bannir</strong> car ce sont abréviations <strong>non universelles</strong>, donc pas claires ; </li>
+
+		<li> les identificateurs <code class="prettyprint lang-c">button</code> ou <code class="prettyprint lang-c">pushButton</code> ne sont <strong class="cons">pas assez explicites</strong>, car ils omettent de préciser que l'objet désigné est une <strong>broche</strong> – aspect matériel très important ; </li>
+
+		<div class="nobullet"> on sera embarrassé par la suite pour déclarer une variable devant décrire l'<strong>état</strong> du bouton : si on choisissait <code class="prettyprint lang-c">pushButtonState</code>, alors on se poserait la question : que représente <code class="prettyprint lang-c">pushButton</code> ? </div>
+
+		<li> <code class="prettyprint lang-c">buttonPin</code> ou <code class="prettyprint lang-c">pushButtonPin</code> <strong class="pros">conviennent</strong>, le premier ayant l'avantage de la concision, son manque de précision n'ayant pas d'impact si le type du bouton (poussoir, tournant, tactile, etc.) n'est pas déterminant pour la compréhension du code. </li>
+	</ul>
+	</div><!-- exemple -->
+
+
+	<li> mais <strong class="warning">pas excessive</strong>, car plus les identificateurs sont <strong class="cons">longs</strong>, plus les instructions sont <strong class="cons">pénibles à lire</strong> et même à <strong>formater</strong> (on est amené parfois à devoir insérer des saut de lignes indésirables).  </li>
+
+	<div class="exemples"><p class="exemples"></p>
+
+  <ol class="numbered">
+  	<li> Dans l'exemple précédent, <code class="prettyprint lang-c">buttonPinNumber</code> est <strong>plus précis</strong> mais <strong class="cons">alourdit</strong> considérablement et, à bien y réfléchir, <strong class="cons">inutilement</strong> l'identificateur. </li>
+
+    <li> Une instruction comme : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+analogWriteFrequency(nmosTransistorGatePin, pwmFrequency);
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<div class="nobullet">est déjà bien longue, <strong class="warning">mais dépasserait les 100 caractères</strong> si on avait utilisé : </div>
+	<ul>
+	 	<li> <code class="prettyprint lang-c">pulseWidthModulation</code> à la place de <code class="prettyprint lang-c">pwm</code>,  </li>
+
+	 	<li> <code class="prettyprint lang-c">negativeChannelMetalOxydeSemiconductor</code> à la place de <code class="prettyprint lang-c">nmos</code>. </li>
+	</ul>
+  </ol>
+  </div><!-- exemples -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques">
+<p class="remarque"> Dans la pratique, on observe dans du <strong class="title">code professionnel</strong> des <strong>exceptions à la règle</strong> supra. En particulier, pour les <strong>variables d'itération</strong> de boucles <code class="prettyprint lang-c">for</code>, dont l'usage est tellement familier, un identificateur consituté d'une seule lettre générale comme <code class="prettyprint lang-c">i</code> peut suffire. Par exemple, on peut coder : <br>
+<span class="inline">
+	 <code class="prettyprint lang-c">for (int i = 1; i <= 10; i++) {</code>…
+</span> <br>
+en pensant raisonnablement que cette ligne de code ne présente aucune difficulté de compréhension. </p>
+
+<p> Néanmoins, si le bloc de la boucle <code class="prettyprint lang-c">for</code> est complexe, il est alors préférable d'employer un <strong class="pros">identificateur plus explicite</strong> pour la variable d'itération. Par exemple, on peut choisir <code class="prettyprint lang-c">pin</code> ou <code class="prettyprint lang-c">pinNumber</code> si l'itération porte sur des numéros de broche d'une carte électronique. </p>
+</div><!-- remarque -->
+
+
+
+<h3 id="typographie"> Une typographie optimisée </h3>
+
+
+
+<h4> Usage du tiret‑bas </h4>
+
+
+<div class="complement">
+<p> En langages <strong>C</strong> et <strong>C++</strong>, le <strong class="title">tiret‑bas</strong> <code class="prettyprint lang-c">_</code> est le <strong>seul caractère symbolique</strong> autorisé dans les identificateurs. Il est tentant de l'employer pour <strong class="defin">simuler un espace</strong> et ainsi former des identificateurs composés de <strong>plusieurs mots</strong>. </p>
+
+<p> Cette pratique porte le nom de <strong class="specialM">snake case</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Snake_case" target="_BLANK">W</a>. </p>
+
+<div class="exemples">
+<p class="exemple"> Pour bien identifier la <strong>broche d'un bouton‑poussoir</strong>, on pourrait choisir <code class="prettyprint lang-c">push_button_pin</code>  </p>
+</div><!-- exemple -->
+
+<p> Toutefois, cette pratique présente l'inconvénient d'<strong class="cons">allonger les identificateurs</strong>. </p>
+</div><!-- complement -->
+
+<div class="important">
+<p> Pour <strong class="cons">ne pas recourir au tiret‑bas</strong>, une solution typographique très répandue pour former un <strong class="defin">identificateur</strong> consiste à <strong>commencer chaque mot</strong> qui le compose  par une <strong class="title">lettre majuscule</strong>. Cette solution est appelée « <strong class="specialM">camel case</strong> » <a class="external" href="https://fr.wikipedia.org/wiki/Camel_case" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Mais le style <strong class="specialM">camel case</strong> présente <strong class="warning">quelques subtilités</strong>. On ne met <strong>pas de majuscule</strong> : </p>
+
+<ul>
+	<li> à la <strong class="specialLB">toute première lettre</strong> de l'identificateur si ce dernier désigne une <strong>donnée</strong> ou une <strong>fonction</strong> ; par convention, on emploie une <strong class="defin">majuscule initiale</strong> pour les identificateurs de <strong class="specialG">types</strong> (cf. chap. C3‑I <a class="next" href="../C3-Numeration/Cc3-1_typesGeneralites.html" target="_BLANK"></a>) ;  </li>
+
+	<div class="exemples">
+	<p class="exemple"> Il est d'usage de donner <em>presque</em> le même identificateur pour désigner une <strong>variable</strong> d'un type défini par le codeur et ce <strong class="specialR">type</strong> lui‑même, comme dans la déclaration : <br>
+	<span class="inline">
+		 <code class="prettyprint lang-c">DigitalSignal digitalSignal; </code>
+	</span> <br>
+  où <code class="prettyprint lang-c">digitalSignal</code> (sans majuscule initiale) est une variable du type <code class="prettyprint lang-c">DigitalSignal</code> (avec majuscule initiale), déclaré préalablement par <code class="prettyprint lang-c">typedef</code>. </p>
+	</div>
+
+	<li> pour un mot <strong class="specialLB">juste après un groupe de majuscules</strong> (notamment un <strong>sigle</strong>). </li>
+
+	<div class="exemples">
+	<p class="exemple"> Dans l'identificateur de constante <code style="background:white">firstLEDpin</code>, le mot <code class="prettyprint lang-c">pin</code> n'a pas de majuscule puisque la lettre qui le précède est elle‑même une majuscule ; en effet, l'identificateur <code style="background:white">firstLEDPin</code> serait un peu <strong class="cons">moins lisible</strong>. </p>
+	</div><!-- exemple -->
+</ul>
+</div><!-- complement -->
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">	
+	<li> Le style <strong class="specialM">camel case</strong> est bien celle employée pour les identificateurs du <strong>framework</strong> <strong class="Arduino">Arduino</strong>, avec <code class="prettyprint lang-c">pinMode</code>, <code class="prettyprint lang-c">digitalWrite</code>, <code class="prettyprint lang-c">delayMicrosecond</code>, etc. </li>
+
+	<li> La règle qui consiste à <strong class="warning">ne jamais employer une majuscule initiale</strong> pour un <strong class="title">identificateur de donnée</strong> prime sur toute autre règle, en particulier sur la règle typographique générale qui impose d'employer des majuscules pour les sigles. En effet, la présence d'une majuscule initiale est automatiquement détectée par de nombreux éditeurs de code, qui assimilent alors  l'identificateur à celui d'un <strong class="specialG">type</strong> ou d'une <strong class="specialG">classe</strong> et lui confère alors le style spécifique de cette catégorie syntaxique (selon les réglages choisis). </li>
+
+	<div class="nubullet"> <em class="remark">Exemple</em> : Observons la mise en forme automatique opérée dans cette page web par le script <code>run_prettify</code> de <em class="mark">Google</em> sur les deux identificateurs déclarés ci‑dessous pour nommer le numéro d'une broche de carte à microcontrôleur à laquelle est reliée une <strong><em class="sigle">LED</em></strong> (sigle anglais pour <em class="english">light emitting diod</em>) : </div>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+const int ledPin = 2; // OK
+const int LEDpin = 2; // NOT OK! Data identifier detected as a type name
+</pre>
+<!---------- ne pas indenter ---------->
+
+<ul>
+	<li> La ligne n° 10 ne pose <strong class="pros">pas de problème</strong> puisque <code class="prettyprint lang-c">ledPin</code> est bien détecté comme une <strong>identificateur de donnée</strong>. </li>
+
+	<li> En revanche, à la ligne n° 11, à cause de la <strong class="cons">majuscule initiale</strong>, <code class="prettyprint lang-c">LEDpin</code> est détecté comme un <strong>identificateur de type</strong>, et affiché en <code style="font-style: italic; color: green">italique vert</code>, comme le descripteur <code class="prettyprint lang-c">int</code>, ce qui n'est <strong class="warning">pas satisfaisant</strong>. </li>
+</ul>
+
+</ol>
+</div><!-- remarques -->
+
+
+<h4 id="majuscules"> Identificateurs en majuscules </h4>
+
+
+<div class="important">
+<p> Par convention, on met <strong class="title">entièrement en majuscules</strong>  les identificateurs des <strong class="defin">constantes déclarées</strong> et surtout des <strong class="defin">pseudo‑constantes</strong> (introduites par des macro‑définitions – cf. chap. C4‑III <a class="next" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#pseudoConstante" target="_BLANK"></a>). </p>
+
+<p> Lorsqu'un identificateur entièrement en majuscules est composé de <strong>plusieurs mots</strong>, le <strong class="title">tiret‑bas</strong> <code class="prettyprint lang-c">_</code> est alors bienvenu pour les séparer (<strong class="specialM">snake case</strong>). </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>  Cette convention permet de <strong class="defin">distinguer</strong> au premier coup d'œilles <strong>constantes</strong> des <strong>variables</strong> dans les données d'un code source. </p>
+
+<p> Toutefois, pour les on peut y <strong class="cons">déroger</strong> pour les <strong>identificateurs longs</strong>, car s'ils sont mis entièrement en majuscules, ils ont tendance à obérer la visibilité du reste du code. </p>
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+
+<ol class="numbered">
+	<li> Pour gérer les <strong class="title">modes de marche et d'arrêt</strong> d'un système, il est préférable de définir des <strong>constantes explicites</strong>, plutôt que d'employer directement les valeurs booléennes <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">1</code>. On pourra ainsi coder : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+const bool STOP = 0;
+const bool RUN = 1;
+bool mode = STOP;
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <div class="nobullet"> pour obtenir un programme simple à comprendre (le lecteur n'ayant pas besoin de retenir que <code>0</code> signifie « arrêt » et <code>1</code> signifie « marche »). Ces identificateurs étant très courts, le fait de les coder en majuscules n'alourdit pas le code tout en les rendant <strong class="pros">faciles à repérer</strong>. </div>
+
+
+	<li> Pour coder des numéros de <strong class="title">première et dernière broches d'une série de led</strong>, on peut choisir des identificateurs tout en majuscules comme : <br>
+	<span class="inline">
+		 <code class="prettyprint lang-c">FIRST_LED_PIN</code> et <code class="prettyprint lang-c">LAST_LED_PIN</code>
+	</span> <br>
+  mais on peut aussi préférer une typographie <strong class="pros">un peu plus légère</strong> comme : <br>
+	<span class="inline">
+		 <code class="prettyprint lang-c">firstLEDpin</code> et <code class="prettyprint lang-c">lastLEDpin</code>.
+	</span></li>
+</ol>
+</div><!-- exemples -->
+
+
+
+<div class="remarques">
+<p class="remarque"> Les <strong class="title">conventions d'emploi</strong> des majuscules et de la typographie <strong class="specialM">snake case</strong> pour les identificateurs de constantes sont bien celles employées dans le <strong>framework</strong> <strong class="Arduino">Arduino</strong> : souvenons‑nous de <code class="prettyprint lang-c">LOW</code>, <code class="prettyprint lang-c">HIGH</code>, <code class="prettyprint lang-c">INPUT</code>, <code class="prettyprint lang-c">INPUT_PULLUP</code>, <code class="prettyprint lang-c">LED_BUILTIN</code>, etc. (cf. chap. C2‑VII <a class="previous" href="Cc2-7_entreesSortiesBooleennes.html" target="_BLANK"></a>).</p>
+</div><!-- remarques -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="commentaires"> Les commentaires </h2>
+
+
+<div class="expert">
+<p> Parce qu'il ne sont <strong class="defin">pas du code</strong> et qu'ils sont potentiellement <strong>très divers</strong>, les <strong class="title">commentaires</strong> ne peuvent <strong class="warning">pas</strong> faire l'objet de règles aussi précises que celles énoncées pour les identificateurs. Mais on peut aborder cet aspect de la programmation à travers un <strong class="specialLB">questionnement analytique</strong> classique : <strong>Pourquoi ? Où ? Comment ?</strong> </p>
+</div><!-- expert -->
+
+
+<h3> Pourquoi ? </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">principale fonction</strong> d'un <strong class="specialLB">commentaire</strong> est de fournir aux <strong>lecteurs du code source</strong> une <strong class="defin">explication complémentaire</strong> au sens directement intelligible de la lecture d'un élément de code. </p>
+
+<p> Mais <strong class="pros">si les identificateurs sont bien choisis</strong>, alors les éléments de code doivent en principe se comprendre à leur simple lecture. On dit que l'on produit un <strong class="title">code auto‑documenté</strong> ; les <strong>commentaires</strong> sont alors <strong class="cons">superflus</strong>.  </p>
+</div><!-- important -->
+
+<div class="complement">
+<p>	Cette mise en perspective est essentielle pour déterminer la <strong class="title">quantité</strong> et le <strong class="title">niveau de détail</strong> requis des commentaires afin qu'ils jouent pleinement leur rôle, mais <strong class="cons">sans excès</strong>. En effet, rédiger des commentaires : </p>
+<ul>
+	<li> demande du <strong>temps</strong> (y compris durant la maintenance du code) qui ne doit <strong class="cons">pas augmenter démesurément</strong> celui qui est consacré au codage proprement dit ; </li>
+
+	<li> occupe dans les fichiers un <strong>espace</strong> qui ne doit <strong class="cons">pas nuire</strong> à la <strong class="defin">lisibilité</strong> du code. </li>
+</ul>
+
+<p> Donc, sauf dans un contexte pédagogique, il n'est <strong class="warning">pas question</strong> d'<strong class="cons">expliquer le rôle de chaque instruction</strong>. On suppose que tout lecteur potentiel, y compris un chef de projet, a suffisamment de compétences pour comprendre l'essentiel du code. On veillera donc à <strong class="pros">commenter le moins possible</strong>, c'est‑à‑dire <strong class="pros">presque jamais</strong><strong> !</strong> </p>
+</div><!-- complement -->
+
+
+<p> En pratique, on ajoutera des <strong class="title">commentaires</strong> pour préciser ponctuellement : </p>
+
+<ul>
+	<li> les <strong class="specialLB">unités des valeurs numériques</strong> lorsqu'elles ne sont pas évidentes ; </li>
+
+	<div class="exemples">
+  <p class="exemple"> Dans les programmes pour carte à microcontrôleur, on emploie généralement <strong>deux unités de temps</strong>, la <strong class="specialT">milliseconde</strong> ou la <strong class="specialMg">microseconde</strong>. Lorsqu'on déclare une donnée temporelle, il faut <strong class="pros">indiquer l'unité</strong> qui est implicitement choisie, comme par exemple dans le commentaire de fin de ligne ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:5">
+  const int cycleDuration = 20000; // microseconds
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  <p> En effet, l'interprétation de la valeur de cette variable ne peut se faire qu'à la lecture des expressions qui l'utilisent (comme par exemple un appel de la fonction <code class="prettyprint lang-c">delayMicroseconds</code>), et qui peut être codées bien plus loin dans le fichier. </p>
+	</div><!-- exemple -->
+
+
+	<li> les <strong class="specialLB">calculs complexes</strong> pour lesquels une brève explication ou une confirmation facilite la lecture du code ; </li>
+
+	<div class="exemples">
+  <p class="exemple"> Dans les programmes pour carte à microcontrôleur, lorsqu'on emploie un <strong class="title">capteur</strong>, on effectue des <strong class="defin">calculs spécifiques</strong> à ce dernier (on applique sa fonction de transfert). Il faut brièvement <strong class="pros">expliquer le principe du calculs</strong>, comme par exemple dans le commentaire préalable ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  // current sensor : 0.1 V/A arround 2.5 V
+  batteryDischargeAmp = (2.5 - (analogRead(ampSensorPin) * 2.5 / 1024.0)) / 0.1;
+</pre>
+<!---------- ne pas indenter ---------->
+  
+  </div><!-- exemple -->
+
+
+	<li> les <strong class="specialLB">précautions à prendre</strong>, notamment en vue d'éventuelles futures modifications du programme ;  </li>
+
+	<div class="exemples">
+  <p class="exemple"> Dans les programmes pour carte à microcontrôleur, on est parfois amené à ajouter ultérieurement des composants, et donc à éventuellement devoir <strong>modifier le câblage</strong>. Si le bon fonctionnement du programme repose sur des <strong>particularités d'attribution des numéros de broches</strong>, il est important de le préciser, comme en ligne nº 10 ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+// light pins must be consecutive
+const int greenLightPin  = 2;
+const int yellowLightPin = 3;
+const int redLightPin    = 4;
+
+void setup() {
+  for (int pin = greenLightPin; pin <= redLightPin; pin++) {
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, LOW);
+  }
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<p> En effet, si l'on devait utiliser la broche nº 3 pour une autre emploi et déplacer l'entrée <code class="prettyprint lang-c">yellowLightPin</code> sur une autre broche, la boucle <code class="prettyprint lang-c">for</code> telle qu'elle est codée en ligne nº 7 ci‑dessus ne produirait plus une exécution satisfaisante. </p>
+	</div><!-- exemple -->
+
+	<li> et aussi le sens de tout <strong class="specialLB">élément de code contre‑intuitif</strong>. </li>
+
+	<div class="exemples">
+  <p class="exemple"> On a vu au chapitre C2‑VIII <a class="previous" href="Cc2-8_gestionTemps.html#delayTinkercad" target="_BLANK"></a> qu'il était opportun de rajouter une <strong>pause artificielle</strong> (appel de la fonction <code class="prettyprint lang-c">delay</code>) pour fluidifier la simulation d'un programme <strong class="Arduino">Arduino</strong> dans l'environnement <strong class="Tinkercad">Tinkercad</strong>. </p>
+
+  <p> Dans un programme qui se veut <strong class="warning">réactif</strong>, donc où le recours à une fonction comme <code class="prettyprint lang-c">delay</code> est a priori « proscrit », le rôle spécifique de cette pause artificielle doit être précisé, comme par exemple ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:50">
+  delay(10); // only for a quicker Tinkercad simulation
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<p> Ainsi, tout lecteur du code comprend immédiatement que cette pause <strong class="pros">peut être supprimée</strong> ou mise en commentaire dans un contexte d'<strong>exécution sur une vraie carte</strong>. </p>
+	</div><!-- exemple -->
+</ul>
+
+<div class="remarques">
+<p class="remarque"> Il faut avoir conscience que, dans un programme, si l'on doit ajouter <strong class="cons">beaucoup de commentaires</strong> (pour toutes les raisons que l'on vient indiquer), cela doit aussi amener à éventuellement <strong class="warning">s'interroger sur les choix algorithmiques</strong>… </p>
+</div><!-- complement -->
+
+
+<h3> Où ? </h3>
+
+
+
+<div class="important">
+<p> En principe, un <strong>commentaire</strong> peut être <strong class="title">inséré</strong> dans le code <strong>partout</strong> où un espace peut l'être. Mais pour une <strong class="defin">bonne lisibilité</strong>, on doit surtout <strong class="warning">ne jamais couper les instructions</strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il faut donc <strong class="title">placer les commentaires</strong> <strong class="pros">autour des instruction</strong>. Diverses possibilités existent, leur choix dépend de la nature des commentaires et de circonstances particulières comme la longueur des instructions. </p>
+</div><!-- complement -->
+
+<ul>
+	<li> Les <strong class="specialLB">premières lignes du fichier</strong> sont toujours réservées à l'<strong class="defin">en‑tête descriptif du programme</strong>, qui doit impérativement préciser toutes les <strong>données nécessaires à la compréhension globale</strong> du code : objet, matériel mis en œuvre, algorithme, version, etc. </li>
+
+	<div class="exemples">
+  <p class="exemple"> Dans un programme pour <strong>carte</strong> <strong class="Arduino">Arduino</strong> de commande d'une led par un bouton, on pourrait saisir l'en‑tête suivant : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+/* * * * * * * * * * LED-BUTTON COMMAND PROGRAM * * * * * * * * * *
+ *  BOARD: any Arduino board
+ *  LED: builtin LED
+ *  BUTTON: push button on D8 pin with pull-down 2k resistor (positive logic)
+ *  COMMAND: on/off LED on rising edge of push button signal
+ */
+</pre>
+<!---------- ne pas indenter ---------->
+	</div><!-- exemple -->
+
+	<li> Une <strong class="specialLB">ligne au dessus ou dessous</strong> d'une <strong class="defin">fonction</strong>, d'un <strong class="defin">bloc</strong> ou même d'un <strong class="defin">groupe d'instructions</strong> peut être employée pour en décrire l'objectif ou se repérer au premier d'œil dans le code. </li>
+
+	<div class="exemples">
+  <p class="exemple"> Dans un programme pour <strong>carte</strong> <strong class="Arduino">Arduino</strong> de compte à rebours où la fonction <code class="prettyprint lang-c">loop</code> s'étend sur une soixantaine de lignes, ce qui peut dépasser la capacité d'affichage vertical d'un moniteur, et donc compromettre la vision d'ensemble nécessaire à sa compréhension. </p>
+
+  <p> Une ligne de commentaires au dessus de chaque bloc est alors bien utile pour en préciser le rôle, comme par exemple ci‑dessous.  </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:91">
+  // state changes
+  if (mode == WORK) {
+    if (risingEdge(startStopButtonSignal)) {
+      state = State (!bool(state));
+    }
+    if (remainingSeconds == 0) {
+      state = STOP;
+    }
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+	</div><!-- exemple -->
+
+	<li> Une <strong class="specialLB">fin de ligne</strong> est aussi un bon emplacement pour un <strong>commentaire ponctuel</strong> relatif à une <strong class="defin">instruction</strong> ; si la ligne de code est longue, on peut placer le commentaire au dessus ou au dessous, en dernier recours. </li>
+
+  <div class="exemples">
+  <p class="exemple"> Dans le même programme de compte à rebours, on apporte en fin de ligne nº 50 une précision sur l'usage du type de données. </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:49">
+enum Mode  : uint8_t {WORK, SET};
+enum State : uint8_t {STOP, RUN}; // in mode WORK only
+</pre>
+<!---------- ne pas indenter ---------->
+
+	<p> Le lecteur peut alors comprendre sans peine que les valeurs <code class="prettyprint lang-c">STOP</code> et <code class="prettyprint lang-c">RUN</code> ne sont valables que lorsque le système est dans le mode <code class="prettyprint lang-c">WORK</code>. </p>
+	</div><!-- exemple -->
+
+</ul>
+
+
+
+<h3> Quand ? </h3>
+
+
+
+<div class="complement">
+<p> Dans la pratique, <strong class="title">commenter le code</strong> est vu au mieux comme une <strong>corvée nécessaire</strong>, au pire une <strong class="cons">activité nuisible à la concentration</strong> qui est requise pour le codage proprement dit. </p>
+
+<div class="expert">
+<p> Lors de la <strong class="title">mise au point d'un programme</strong>, alors qu'on ne cesse de changer ses instructions, on se demande bien <strong>à quoi bon commenter</strong>, s'il faut ensuite perdre du temps à tout effacer. <strong class="warning">Procrastiner</strong> (remettre au lendemain ce qu'on devrait faire le jour même) est un défaut banal, surtout si l'on a le commentaire bavard… </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+<div class="important">
+<p> Mais si l'on adopte les <strong class="defin">bonnes pratiques</strong> permettant de <strong class="pros">commenter très peu</strong>, alors il n'y a pas d'obstacle à <strong class="title">commenter immédiatement</strong> <strong>ce qui doit l'être</strong>. </p>
+
+<p> Le risque de <strong class="cons">ne pas le faire tout de suite</strong>, c'est d'<strong class="warning">oublier</strong> ensuite l'<strong>intuition</strong> qui a fait sentir une difficulté méritant d'être signalée, et d'être soi‑même confronté à nouveau à cette difficulté quelques heures ou quelques jours plus tard. </p>
+</div><!-- important -->
+
+
+
+<h3> Comment ? </h3>
+
+
+
+<div class="important">
+<p> <strong>Comme les identifiants</strong>, il est préférable d'exprimer les <strong class="title">commentaires</strong> <strong class="specialLB">tout en anglais</strong>, et ce même si l'éditeur de code est paramétré pour afficher les caractères accentués. </p>
+</div>
+
+<div class="complement">
+<p> Certes, cela demande <strong>quelques compétences</strong>, mais l'<strong class="title">acquisition du vocabulaire spécifique</strong> nécessaire à la rédaction des commentaires est un <strong class="pros">investissement intellectuel</strong> qui finit par payer. </p>
+
+<div class="expert">
+<p> C'est par de tels <strong>efforts réguliers</strong> que peu à peu, on arrive aussi à mieux comprendre la documentation technique des bibliothèques de fonctions ou les débats publiés sur des forums incontournables en programmation comme <em class="mark">Stack Overflow</em> <a class="external" href="https://fr.wikipedia.org/wiki/Stack_Overflow" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+</div><!-- complement -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="formatCode"> Le format du code </h2>
+
+
+<div class="important">
+<p> On a vu au chapitre C2‑II <a class="previous" href="Cc2-2_syntaxeFondamentale.html#formatLibre" target="_BLANK"></a> qu'en langages <strong>C/C++</strong>, le <strong>code source</strong> est dit à <strong class="title">format libre</strong> : sauf dans les éléments de code atomiques, on peut <strong class="defin">ajouter</strong> partout autant de <strong>séparateurs blancs</strong> que l'on souhaite. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Il en résulte qu'il n'y a <strong>pas de contraintes strictes de position </strong> où placer les instructions dans les blocs, ni des atomes et symboles dans les expressions. </p>  </p>
+
+<p> Pourtant, l'exigence de <strong class="title">lisibilité</strong> veut que l'on respecte quand même des <strong class="defin">conventions de formatage</strong>, certaines étant universellement adoptées à quelques variantes près, d'autres pouvant être très souples. </p>
+
+<p> Comme pour les commentaires, il est vivement recommandé de <strong class="title">formater le code</strong> <strong class="pros">dès la saisie</strong>, et en tout premier lieu l'<strong class="specialLB">indentation</strong>, qui en révèle la structure. Sinon, le codeur risque de perdre lui‑même beaucoup de temps lors du codage pour se repérer dans la hiérarchie des blocs. </p>
+</div><!-- complement -->
+
+
+
+<h3 id="indentation"> Alignement et indentation </h3>
+
+
+
+<div class="important">
+<p> Un <strong>éditeur de code</strong> affiche toujours les caractères d'un fichier source <strong class="title">alignés à gauche</strong> (conformément au sens d'écriture des langues occidentales). </p>
+
+<p> De plus, il emploie toujours par défaut une <strong class="title">police de caractères</strong> à <strong class="defin">chasse fixe</strong> – la chasse étant (approximativement) la <strong>largeur des caractères</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chasse_(typographie)" target="_BLANK">W</a>. </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/comparaisonPolices.png" width="350px">
+<p> Contrairement à une police dite « proportionnelle » comme <code style="font-family: cambria";>Cambria</code> (cf. ci‑contre), une <strong class="title">police à chasse fixe</strong> comme <code style="font-family: consolas, yahei consolas hybrid;";>Consolas</code>, <code style="font-family: courier new";>Courrier new</code>, <code style="font-family: source code pro">Source Code Pro</code>, etc. permet une <strong class="pros">indentation régulière</strong> des lignes de code, c'est‑à‑dire un <strong class="defin">décalage horizontal</strong> vers la droite du début de l'instruction d'un ou plusieurs caractères <strong>espace</strong> ou mieux, de <strong>tabulation</strong>. </p>
+</div><!-- display -->
+</div><!-- complement -->
+
+<p> Partant du principe général qu'on saisit <strong class="pros">une ligne de code par instruction simple</strong> (ou par directive), l'<strong class="title">indentation</strong> évolue au fur et à mesure des instructions selon les <strong>structures de contrôles</strong> employées : </p>
+<ul>
+	<li> l'indentation est <strong class="speciaLB">augmentée</strong> à chaque  <strong class="defin">« entrée » dans un bloc</strong> et <strong class="specialLB">diminuée</strong> d'autant à chaque <strong class="defin">« sortie » de bloc</strong> ; toutes les lignes du bloc ayant la même indentation, elles sont donc <strong class="pros">alignées verticalement</strong>, à gauche) ; </li>
+
+	<li> quant aux <strong class="defin">accolades de blocs</strong>, elles peuvent être  positionnées de <strong>deux manières</strong> : </li>
+  <ul>
+  	<li> soit l'une et l'autre en <strong>début de ligne</strong>, afin qu'elles soient <strong class="specialLB">alignées verticalement</strong>,  </li>
+
+  	<li> soit l'accolade ouvrante <code class="prettyprint lang-c">{</code> en <strong>fin de ligne</strong> et l'accolade fermante <code class="prettyprint lang-c">}</code> en <strong>fin de ligne</strong>, <strong class="specialLB">alignée avec le mot-clef</strong> de la structure de contrôle. </li>
+  </ul>
+</ul>
+<p> Ces <strong class="title">bonnes pratiques</strong> permettent de <strong class="pros">repérer au premier coup d'œil</strong>, par l'alignement des lignes de code, les <strong>blocs des structures de contrôle</strong>. </p>
+
+
+
+<div class="exemples"><p class="exemples"></p>
+<p> Pour formater le <strong class="title">code générique</strong> d'une boucle <code class="prettyprint lang-c">while</code> imbriquée dans un test <code class="prettyprint lang-c">if<span class="nocode">…</span> else</code>, les <strong>deux variantes</strong> ci‑dessous sont usuelles, celle de droite étant un peu plus compacte, mais moins aérée que celle de gauche. </p>
+
+<div style="display: inline-flex; margin-left: 0.5em">
+	<div style="width: 80%; margin-right: 1em">
+<!---------- ne pas indenter ---------->
+
+<pre class="prettyprint lang-c linenums:10">
+if (<span class="nocode"><em>condition</em></span>)
+{
+  <span class="nocode"><em>instruction</em></span>;
+  ⫶
+  while (<span class="nocode"><em>condition</em></span>)
+  {
+    <span class="nocode"><em>instruction</em></span>;
+    ⫶
+    <span class="nocode"><em>instruction</em></span>;
+  }
+  <span class="nocode"><em>instruction</em></span>;
+}
+else
+{
+  <span class="nocode"><em>instruction</em></span>;
+  ⫶
+  <span class="nocode"><em>instruction</em></span>;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+	</div><!-- pre -->
+
+	<div style="width: 80%; margin-right: 0.5em">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+if (<span class="nocode"><em>condition</em></span>) {
+  <span class="nocode"><em>instruction</em></span>;
+  ⫶
+  while (<span class="nocode"><em>condition</em></span>) {
+    <span class="nocode"><em>instruction</em></span>;
+    ⫶
+    <span class="nocode"><em>instruction</em></span>;
+  }
+  <span class="nocode"><em>instruction</em></span>;
+}
+else {
+  <span class="nocode"><em>instruction</em></span>;
+  ⫶
+  <span class="nocode"><em>instruction</em></span>;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+	</div><!-- pre -->
+</div><!-- display -->
+</div><!-- exemples -->
+
+
+<div class="expert">
+<h4> Emploi de la touche tabulations </h4>
+
+
+<div class="important">
+<p> Pour maîtriser la <strong>régularité de l'indentation</strong>, on peut recourir à la touche de <strong class="title">tabulation horizontale</strong>  <span class="touche"><em class="sigle">TAB</em></span> qui, en principe, insère dans le texte à chaque appui un <strong>caractère</strong> <strong class="defin"><em class="sigle">HT</em></strong> (<em class="english">horizontal tabulation</em>, code <em class="sigle">ASCII</em> <code>0x09</code>). </p>
+</div><!-- important -->
+
+
+<div class="complement">
+<p> Avec la plupart des éditeurs de code, en sélectionnant un <strong>groupe de lignes de code</strong>, on peut le <strong class="title">décaler</strong> d'une tabulation : </p>
+
+<ul>
+	<li> <strong class="speciallB">vers la droite</strong> en appuyant sur la touche <span class="touche"><em class="sigle">TAB</em></span> ; </li>
+
+	<li> <strong class="speciallB">vers la gauche</strong> en appuyant simultanément sur les touches <span class="touche"><em class="sigle">⇧</em></span><span class="touche"><em class="sigle">TAB</em></span> ; </li>
+</ul>
+
+<div class="expert">
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/SublimeText_autoIndent.png" width="400px">
+<p> De plus, la plupart des éditeurs de code possèdent une fonction d'<strong class="pros">auto-indentation</strong> d'une partie de code sélectionnée. </p>
+</ul>
+
+<p> Dans <strong class="Sublime">Sublime Text</strong>, on trouve ces fonctionnalités (et bien d'autres) via le menu <code>Edit/Line</code> (cf. la figure ci‑contre). </p>
+</div><!-- expert -->
+</div><!-- display -->
+</div><!-- complement -->
+
+
+
+<h4> Valeur de l'unité d'indentation </h4>
+
+
+
+<div class="complement">
+<p> Sur la plupart des éditeurs de code, il est possible de <strong class="title">régler la taille</strong> de la <strong>tabulation</strong> en <strong class="defin">nombre de caractères espaces</strong> équivalents : </p>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/SublimeText_tabSize.png" width="200px">
+
+<ul>
+	<li> une <strong class="specialLB">grande valeur</strong> – typiquement <strong>4 espaces</strong>, voire plus – met bien en évidence l'imbrication des blocs mais elle consomme davantage la largeur de ligne disponible qui est limitée par celle de la fenêtre d'affichage, et en définitive, par celle du moniteur ; </li>
+
+	<li> aussi, pour éviter les débordements de la fenêtre ou les retours à la ligne intempestifs, il est préférable de choisir une <strong class="specialLB">petite valeur</strong> en fixant la tabulation à <strong>2 espaces</strong> seulement ; c'est <strong class="warning">valeur minimale</strong> recommandée car en dessous, l'indentation étant à peine visible, elle ne remplit plus sa fonction. </li>
+</ul>
+
+<p> De plus, il est également possible de <strong class="title">convertir</strong> automatiquement dans le fichier source tous <strong>les espaces en tabulations</strong>, et vice‑versa.</p>
+
+<div class="expert">
+<p> Sur <strong class="Sublime">Sublime Text</strong>, on accède à ces réglages et fonctionnalités via le menu <code>View/Indentation</code>, ou encore en cliquant sur la zone <code class="displayDark">Tab Size</code> dans la <strong>barre d'état</strong> tout en bas de la fenêtre pour faire apparaître un menu déroulant et choisir la valeur d'une tabulation (cf. la figure ci‑contre). </p>
+</div><!-- expert -->
+</div><!-- display -->
+</div><!-- complement -->
+
+<div class="exemples"><p class="exemples"></p>
+<p> Reprenons l'exemple ci‑dessous et comparons le <strong class="title">code générique</strong> indenté par tabulations de deux espaces (code de gauche) et quatre espaces (code de droite) : </p>
+
+<div style="display: inline-flex; margin-left: 0.5em">
+	<div style="width: 80%; margin-right: 1em">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+if (<span class="nocode"><em>condition</em></span>) {
+  <span class="nocode"><em>instruction</em></span>;
+  ⫶
+  while (<span class="nocode"><em>condition</em></span>) {
+    <span class="nocode"><em>instruction</em></span>;
+    ⫶
+    <span class="nocode"><em>instruction</em></span>;
+  }
+  <span class="nocode"><em>instruction</em></span>;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+	</div><!-- pre -->
+
+	<div style="width: 80%; margin-right: 0.5em">
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+if (<span class="nocode"><em>condition</em></span>) {
+    <span class="nocode"><em>instruction</em></span>;
+    ⫶
+    while (<span class="nocode"><em>condition</em></span>) {
+        <span class="nocode"><em>instruction</em></span>;
+        ⫶
+        <span class="nocode"><em>instruction</em></span>;
+    }
+    <span class="nocode"><em>instruction</em></span>;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+	</div><!-- pre -->
+</div><!-- display -->
+</div><!-- exemples -->
+
+</div><!-- expert -->
+
+
+
+<h3 id="aeration"> Aération horizontale et verticale </h3>
+
+
+
+<p> À l'exception des codes composés en réponse à des petits exercices académiques, les <strong>programmes sources</strong> deviennent vite <strong class="warning">très complexes</strong>. Leur lecture peut devenir très <strong class="cons">pénible</strong> s'ils sont présentés de façon <strong class="cons">trop compacte</strong>. </p>
+
+<div class="important">
+L'<strong class="title">aération du code</strong> consiste à <strong>ajouter des <strong class="defin">caractères d'espacement</strong></strong> <strong>surnuméraires</strong> (non indispensable d'un point de vue purement syntaxique) entre les éléments de code pour faciliter leur lecture. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> L'aération du code est nécessaire autant <strong>horizontalement</strong> que <strong>verticalement</strong>. </p>
+</div><!-- complement -->
+
+
+<h4> Aération horizontale </h4>
+
+
+<div class="important">
+<p> Il est <strong class="pros">recommandé</strong> d'insérer des <strong class="title">caractères espaces</strong> : </p>
+<ul>
+	<li> <strong class="defin">entre</strong> les <strong>opérateurs</strong> et les <strong>opérandes</strong>,</li>
+
+	<li> <strong class="defin">entre</strong> les <strong>mots‑clefs</strong>, les <strong>délimiteurs</strong> et les <strong>expressions</strong>.</li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> Mais comme il n'y <strong class="title">aucune règle obligatoire</strong>, contrairement à la typographie, les usages sont divers et difficiles à décrire.  Tout est une question de <strong class="defin">dosage</strong> ; il y a aussi une part d'<strong>habitudes</strong> et de <strong>subjectivité</strong>. </p>
+
+<p> On se contentera donc ici de donner un exemple sans et avec aération, voire trop, pour comparer. </p>
+
+</div><!-- complement -->
+
+
+
+
+<div class="exemples">
+<p class="exemple"> L'exemple est issu du <strong class="title">programme réactif de clignotement</strong> de la led intégrée à une <strong>carte</strong> <strong class="Arduino">Arduino</strong>, présenté au chapitre C2‑VIII <a class="previous" href="Cc2-8_gestionTemps.html#blinkReactif" target="_BLANK"></a>. </p>
+
+<ul>
+	<li> L'instruction <strong class="specialLB">sans aucune aération</strong> comme ci‑dessous : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if(millis()-previousMillis>=blinkHalfPeriod){
+    previousMillis+=blinkHalfPeriod;
+    digitalWrite(LED_BUILTIN,!digitalRead(LED_BUILTIN));
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+  est <strong class="cons">pénible à lire</strong>, même avec la coloration syntaxique, car l'œil a du mal à repérer les opérateurs perdus au milieu des identificateurs (avec la fatigue, on pourrait facilement manquer le symbole <code class="prettyprint lang-c">+</code> accolé à <code class="prettyprint lang-c">=</code> pour former l'opérateur d'incrémentation <code class="prettyprint lang-c">+=</code> qui est ici essentiel). </li>
+
+	<li> La même instruction <strong class="specialLB">modérément aérée</strong> comme ci‑dessous : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (millis() - previousMillis >= blinkHalfPeriod) {
+    previousMillis += blinkHalfPeriod;
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+	est bien <strong class="pros">plus facile à lire</strong> (la composition des expressions se détache mieux), d'autant plus que les espaces ajoutés reprennent en partie les règles typographiques usuelles (un espace après <code class="prettyprint lang-c">,</code> mais pas avant, etc.). </li>
+
+  <li> Enfin, la même instruction <strong class="specialLB">trop aérée</strong> comme ci‑dessous : <br>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if ( millis () - previousMillis >= blinkHalfPeriod ) {
+    previousMillis += blinkHalfPeriod ;
+    digitalWrite ( LED_BUILTIN , ! digitalRead ( LED_BUILTIN ) ) ;
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+	est <strong class="cons">moins lisible</strong> que dans le format précédent. Elle « consomme » trop d'espace et détache des éléments qui sont usuellement liés, en particulier les parenthèses d'arguments des appels de fonctions.  </li>
+</ul>
+
+</div><!-- exemples -->
+
+
+<h4> Aération verticale </h4>
+
+
+<div class="important">
+<p> Il est <strong class="pros">recommandé</strong> d'insérer un voire plusieurs <strong class="title">sauts de ligne</strong> pour mieux <strong class="defin">détacher verticalement</strong> : </p>
+<ul>
+	<li> les <strong>blocs</strong> de définition des différentes <strong>fonctions</strong>, </li>
+
+	<li> les <strong>déclarations</strong> des instructions proprement dites, </li>
+
+	<li> et plus généralement tous les <strong>groupes d'instructions</strong> (même si elles ne forment pas nécessairement un bloc) qui implémentent à elles‑seules un sous‑algorithme du programme. </li>
+</ul>
+</div><!-- important -->
+
+<div class="complement">
+<p> De plus, l'ajout d'une <strong class="title">dizaine de sauts</strong> de lignes entre les <strong class="defin">grandes parties</strong> d'un programme permet de repérer facilement ces dernières dans l'<strong>image miniature</strong> du fichier que génère certains nombreux éditeurs de code. </p>
+
+<p> Soulignons que dans tous les cas, <strong class="warning">la taille d'un fichier source importe peu</strong> en termes de mémoire et d'affichage. En effet, même dans le cas d'un gros logiciel, la <strong>programmation modulaire</strong> permet de modérer la taille des fichiers. En principe, la doubler avec les espacements ne pose pas de problème. </p>
+
+<p> Ce qui compte, c'est de pouvoir <strong class="pros">visualiser facilement</strong> sur un <strong>écran</strong> ou une <strong>feuille imprimée</strong> les <strong class="defin">unités principales du programme</strong> (fonctions, blocs, etc.) –  qu'on s'efforce d'ailleurs de rendre les plus simples et courtes possible pour mieux les comprendre. </p>
+
+<p> Là encore, tout est une question de mesure et d'habitudes. </p>
+</div><!-- complement -->
+
+
+<div class="exemples">
+<p class="exemple"> Considérons le programme académique ci‑dessous qui calcule le <strong class="title">nombre de jours dans un mois de l'année</strong>, en tenant compte du fait que cette dernière est bissextile ou non (certaines parties du code ont déjà été données en exemples au chap. C2‑V <a class="previous" href="Cc2-5_structuresControle.html#anneeBissextile" target="_BLANK"></a> <a class="previous" href="Cc2-5_structuresControle.html#casClausesMultiples" target="_BLANK"></a>). </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+/* Program that calculate the number of days in the month of a given date
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+ 
+int main(void) {
+  printf("Type a date with format mm/yyyy (mm = 0 to quit)\n");
+  int month = 0, year = 0;
+
+
+  while (true) {    
+    int  daysInMonth = 0;
+    bool leapYear = false;
+    
+    // scan and check the date typed by the user
+    printf("> ");
+    scanf(" %d/%d", &month, &year);
+    if (month == 0) break;
+    if (month < 0 || month > 12) {
+      printf("Month is out of range!\n");
+      continue;
+    }
+
+    // check if the year is a leap year
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+      leapYear = true;
+    }
+    else {
+      leapYear = false;
+    }
+    
+    // calculate and display the number of days in the month
+    switch (month) {
+      case 2 :                // february
+        if (leapYear) {
+          daysInMonth = 29;
+        }
+        else {
+          daysInMonth = 28;
+        }
+        break;
+      case 4 : case 6 : case 9 : case 11 :
+        daysInMonth = 30;
+        break;
+      default :  
+        daysInMonth = 31;
+    }
+    printf("Number of days in the month: %d\n\n", daysInMonth);
+  } // while(true)
+
+  
+  printf("Goodbye.\n");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> En plus des lignes de commentaires, on a ajouté des <strong class="title">sauts de ligne</strong> – cf. les lignes nº 9, 10, 14, 23, 31, 50 et 51 – pour mieux séparer les différentes parties du code, ce qui améliore sa <strong class="pros">lisibilité</strong>. </p>
+
+</div> <!-- exemple -->
+
+
+<div class="remarques">
+<p class="remarque"> Pour séparer différentes parties du code, il serait tentant d'utiliser des <strong class="title">lignes de commentaires</strong> du genre : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  //================================
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> Pourtant, cette pratique présente des <strong class="cons">inconvénients</strong> : </p>
+	<ul>
+	 	<li> il est difficile de leur donner une <strong>longueur identique</strong> d'une ligne à l'autre, sauf à y consacrer une attention fastidieuse (au détriment du codage) ; </li>
+
+	 	<li> elles prennent plus de <strong>temps à saisir et effacer</strong> que de simples sauts de ligne. </li>
+	</ul>
+</div><!-- remarque -->
+
+
+
+
+<h3 id="colorSynth"> Coloration syntaxique </h3>
+
+
+
+<div class="important">
+<p> La <strong class="title">coloration syntaxique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Coloration_syntaxique" target="_BLANK">W</a> (<em class="english">syntaxt highlighting</em>) consiste à afficher le code source en employant des <strong class="defin">couleurs</strong> et des <strong class="defin">styles</strong> (gras, italique…) par <strong class="specialLB">catégories syntaxiques</strong> : <strong>mots‑clefs</strong>, <strong>descripteurs de types</strong>, <strong>opérateurs</strong>, etc. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Aujourd'hui, tous les <strong class="title">éditeurs de code</strong> proposent cette fonctionnalité, car elle <strong class="pros">améliore considérablement la lisibilité</strong> du code. Il serait dommage de ne pas se l'approprier ! Car même si ce n'est pas toujours aisé pour un débutant, la mise en forme du code est <strong>paramétrable</strong>. </p>
+
+<p> On pourrait penser que les <strong class="title">choix</strong> en matière de coloration syntaxique sont une affaire de goûts personnels, mais on peut néanmoins énoncer quelques <strong class="defin">principes de bon sens</strong>, au regard de la hiérarchie des catégories syntaxiques du langage et des caractéristiques de l'œil humain (mais en gardant à l'esprit que ces règles sont subjectives, comme les précédentes).  </p>
+
+<ul>
+	<li> Pour <strong class="pros">diminuer la fatigue</strong>, on privilégie un <code class="displayDark">arrière‑plan sombre</code> (on parle de <strong>dark mode</strong>), noir ou du moins <strong>très foncé</strong>, car plus l'arrière plan est proche du gris moyen, plus il écrase le contraste avec le texte et rend la lecture pénible à la longue. </li>
+
+	<li> Pour tous les <strong>éléments structurels</strong> qui articulent le code, le style <code style="font-weight: 700;">gras</code> aide à renforcer la perception ; de plus, il est opportun de choisir des <strong class="warning">couleurs primaires</strong>, vives, qui attirent l'attention et qui contrastent bien entre elles ; par exemple :
+		<ul>
+			<li> les <strong>mots‑clefs</strong> en <code style="font-weight: 700; color: red;">rouge</code>, </li>
+
+			<li> les <strong>séparateurs</strong> et <strong>délimiteurs</strong> en <code style="font-weight: 700; color: blue;">bleu</code>. </li>
+		</ul>
+	</li>
+
+	<li> Pour les <strong>opérateurs</strong> qui sont, comme les délimiteurs et séparateurs, des symboles isolés, on peut choisir le même format <code style="font-weight: 700; color: blue;">bleu</code>, éventuellement avec une nuance de couleur. </li>
+
+	<li> Pour les <strong>descripteurs de types</strong> et leurs <strong>valeurs numériques</strong> associées, on peut choisir du <code style="font-weight: 600; color: green;">vert</code> (c'est la troisième couleur primaire). </li>
+
+	<li> Enfin, pour les <strong>commentaires</strong>, on privilégie le style <code style="font-style: italic;">italique</code>, plus semblable à l'écriture manuscrite (donc d'apparence moins formelle que le code proprement dit), et dans une nuance de <code class="displayDark" style="font-style: italic; color: #A0A0A0;"> // gris</code>  qui apparaît moins vive que le code, mais qui contraste suffisamment avec l'arrière-plan pour rester lisible. </li>
+</ul>
+
+<p> En définitive, cette combinaison de couleurs et de styles permet de gagner en lisibilité, tant sur <strong>moniteur</strong> que sur <strong>feuille imprimée</strong>, même en noir et blanc (les éditeurs de code permettent d'éliminer la couleur d'arrière plan lors d'une impression). </p>
+</div><!-- complementExpert -->
+
+<div class="exemples" style="display: block"><p class="exemples"></p>
+<p> Les deux captures d'écran ci‑dessous montrent le <strong>même code source</strong> mis en forme par deux environnements : </p>
+<ul>
+	<li> Avec l'<strong><em class="sigle">IDE</em></strong> <strong class="Codeblocks">Code::Blocks</strong>, il est facile de <strong class="title">paramétrer</strong> la <strong>coloration syntaxique</strong> conformément aux règles énoncées supra ; </li>
+
+	<img class="top-left" src="../img/colorationSyntaxiqueCodeblocks.png" style="max-width: 700px">
+
+	<div class="nobullet"> Via le menu <code>Settings/Editor</code>, on sélectionnne l'icône <code>Syntax highliting</code> dans le panneau latéral. Pour les catégories syntaxiques usuelles (<code>Default</code>, <code>Comments</code>, <code>Keyword</code>, etc.), on modifie les choix en sélectionnant les couleurs de premier plan (<code>Foreground</code>) et d'arrière‑plan (<code>Background</code>) via des fenêtres pop‑up usuelles. On peut aussi cocher des cases de styles (<code>Bold</code>, <code>Italic</code>…). </div>
+
+	<li> Avec l'éditeur de code <strong class="Sublime">Sublime Text</strong>, la <strong>coloration syntaxique</strong> <strong class="title">par défaut</strong> est déjà <strong class="pros">très convenable</strong> :  </li>
+
+	<img class="top-left" src="../img/colorationSyntaxiqueSublimeText.png" style="max-width: 700px">
+</ul>
+
+<div class="expert">
+<p class="square"> Si l'on souhaite <strong class="title">paramétrer</strong> cette coloration syntaxique d'une façon similaire à celle proposée supra, on peut utiliser le fichier <code class="filename">DarkStudy.sublime-color-scheme</code> au format <code>json</code>, téléchargeable ici <a class="external" href="../doc/DarkStudy.sublime-color-scheme" target="_BLANK"></a>. Il faut le placer dans le <strong>répertoire des préférences</strong> de l'utilisateur, typiquement sous <strong class="specialLB">Linux</strong> : </p>
+<div class="inline">
+	 <code class="filename">/home/<span class="nocode"><em>user‑name</em></span>/.config/sublime-text-3/Packages/User</code>
+</div>
+	
+<p> ou sous <strong class="specialLB">Windows</strong> : </p>
+<div class="inline">
+	 <code class="filename">C:\Users\<span class="nocode"><em>user‑name</em></span>\AppData\Roaming\Sublime Text 3\Packages\User</code>
+</div>
+
+<p> Ensuite, il suffit de le <strong>sélectionner</strong> via le menu <code>Preferences/Select Color Scheme</code>. On obtient alors le résultat suivant : </p>
+  <img class="top-left" src="../img/colorationSyntaxiqueSublimeText2.png" style="max-width: 700px">
+<p> Enfin, pour modifier ce fichier ou en créer un autre, il est préférable d'avoir installé l'extension <code>Package Development</code> (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#priseEnMainSublime" target="_BLANK"></a>). </p>
+
+</div><!-- expert -->
+</div><!-- exemples -->
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

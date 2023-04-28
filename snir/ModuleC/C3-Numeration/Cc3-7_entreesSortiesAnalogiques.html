@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Chapitre"
+  data-modulepartnumber="3"
+  data-pagenumber="VII"
+  data-pageState="OK"
+  data-pageheadtitle="E-S analogiques"
+  data-pagefulltitle="Arduino : Les entrées‑sorties analogiques"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+ 
+
+<!-- relecture complète janvier 2023 -->
+<!-- compléter la section 1.1 avec un développement sur le schéma électronique du CAN issu de la doc Atmel comme pour le chap. C2‑VII 
+     
+     développer la dernière section MLI avec un exemple de pilotage de moteur Tinkercad si possible
+-->
+
+
+
+<div class="exergue">
+
+
+<div style="display: inline-auto; margin-bottom: 0.5em">
+  <img class="top-right" src="../img/carteArduinoUnoCAN.jpg" width="450px">
+<p class="square"> Le <strong>microcontrôleur Atmel ATMega328P</strong> à cœur <strong><em class="sigle">AVR</em></strong> employé sur de nombreuses <strong class="Arduino">cartes Arduino</strong>  (<em class="mark">Uno</em>, <em class="mark">Nano</em>, <em class="mark">Mega</em>…) intègre un <strong class="title">convertisseur analogique numérique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Convertisseur_analogique-numérique" target="_BLANK">W</a> ou <strong class="title"><em class="sigle">CAN</em></strong> (en anglais, <strong><em class="sigle">ADC</em></strong> pour <em class="english">analog‑to‑digital converter</em>). Multiplexé sur un port à <strong>8 broches</strong>, il permet d'y « lire » par numérisation des signaux d'<strong class="specialO">entrées analogiques</strong> de <strong>tension unipolaire</strong> comprise entre <em class="bold">0</em> et <em class="bold">5 V</em> en courant continu – cet intervalle constituant ce qu'on appelle la <strong>pleine échelle</strong> du <strong><em class="sigle">CAN</em></strong>. En quelque sorte, il s'agit donc d'un <strong class="defin">voltmètre rudimentaire</strong>. </p>
+</div><!-- display -->
+
+<p> Sur une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>, le <strong class="specialO">port analogique</strong> compte <strong>6 broches</strong>, numérotées de <em class="bold">A0</em> à <em class="bold">A5</em>. Cela est suffisant pour la plupart des systèmes que peut gérer une telle carte. On peut y raccorder toutes sortes de <strong class="title">composants</strong> dont la tension variable porte une <strong class="defin">information quantifiable</strong>, typiquement : </p>
+<ul>
+  <div style="display:inline-block;">
+    <img class="top-right" src="../img/potentiometre.png" width="120px">
+  <li> des boutons tournants de type <strong class="specialLB">potentiomètre</strong> (cf. la photo ci‑contre) pour permettre à l'utilisateur de <strong>régler un paramètre</strong> sur un système ; </li>
+  </div><!-- display -->
+  
+  <div style="display:inline-block;">
+    <img class="top-right" src="../img/photoresistance.png" width="80px" style="padding-top: 0.5em">
+  <li> des <strong class="specialLB">capteurs divers</strong>  pour mesurer des <strong>grandeurs physiques</strong> de l'environnement d'un système ; par exemple, la température avec une thermistance, la luminosité avec une photorésistance (cf. la photo ci‑contre), etc. </li>
+  </div><!-- display -->
+</ul>
+
+<div class="expert">
+<p> Et pour calibrer les variations de la tension d'entrée dans la pleine échelle du <strong><em class="sigle">CAN</em></strong>, on a en général recours à un <strong>pont de mesure</strong>, dont le plus simple est le pont diviseur de tension. </p>
+</div><!-- expert -->
+
+<p class="square"> En revanche, sur un <strong>microcontrôleur Atmel ATMega328P</strong> – et plus généralement sur les microcontrôleur à cœur <strong><em class="sigle">AVR</em></strong> – on ne trouve <strong class="warning">pas</strong> de <strong class="title">convertisseur numérique analogique</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Convertisseur_numérique-analogique" target="_BLANK">W</a> ou <strong class="title"><em class="sigle">CNA</em></strong> (en anglais, <em class="sigle">DAC</em> pour <em class="english">digital-to-analog converter</em>). Dans la gamme des <strong>cartes</strong> <strong class="Arduino">Arduino</strong>, ce dispositif n'est disponibles que sur celles équipées d'un microcontrôleur à cœur <strong><em class="sigle">ARM</em></strong> (<em class="mark">Arduino Due</em>…). </p>
+
+<p> Pour mettre en œuvre des <strong class="defin">sorties analogiques</strong> sur une carte comme la <strong class="Arduino">Arduino Uno</strong>, il existe néanmoins une alternative via la <strong class="title">modulation de largeur d'impulsion</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modulation_de_largeur_d'impulsion" target="_BLANK">W</a> ou <strong class="title"><em class="sigle">MLI</em></strong> (en anglais, <strong><em class="sigle">PWM</em></strong> pour <em class="english">pulse width modulation</em>). Appliquée à une <strong class="specialY">sortie numérique</strong> disposant de cette fonctionnalité (broches n° <strong>3</strong>, <strong>5</strong>, <strong>6</strong>, <strong>9</strong>, <strong>10</strong> et <strong>11</strong>), cette technologie logicielle permet d'« écrire » des <strong>variations</strong> de la <strong class="defin">valeur moyenne</strong> du <strong>signal numérique</strong> de tension tout‑ou‑rien <em class="bold">0</em> ‑ <em class="bold">5 V</em>. </p>
+
+<p> Ainsi, on peut aisément <strong class="defin">faire varier</strong> la caractéristiques de certains <strong class="title">composants</strong> : </p>
+<ul>
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/ledRouge.png" height="100px">
+  <li> la <strong class="specialLB">luminosité d'une led</strong> (car, du fait de la <strong>persistence rétinienne</strong>, le cerveau humain n'est pas capable de percevoir le clignotement de cette dernière à la fréquence de la <strong><em class="sigle">MLI</em></strong>) ; </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+    <img class="top-right" src="../img/mcc.png" height="100px">
+  <li> la <strong class="specialLB">fréquence de rotation</strong> d'un <strong class="specialLB">moteur à courant continu</strong> (car l'<strong>inertie du rotor</strong> suffit à lisser le couple saccadé généré par le signal électrique en <strong><em class="sigle">MLI</em></strong>). </li>
+  </div><!-- display -->
+</ul>
+
+
+<p class="square"> En application des chapitres précédents sur les types numériques, ce chapitre aborde la thématique des <strong class="title">entrées‑sorties analogiques</strong> sur une <strong>carte</strong> <strong class="Arduino">Arduino</strong> dans cet ordre : </p>
+
+<ul>
+  <li> la <strong class="specialLB">lecture d'entrées analogiques</strong> via la fonction <code class="prettyprint lang-c">analogRead</code>, avec la possibilité d'<strong>ajuster la tension de pleine échelle</strong> du convertisseur ;   </li>
+
+  <li> l'<strong class="specialLB">écriture de sorties digitales modulées</strong> via la fonction <code class="prettyprint lang-c">analogWrite</code>. </li>
+</ul>
+ 
+<div class="expert">
+<p> En revanche, hormis quelques rappels, ce chapitre n'a pas vocation à détailler toutes les bases du <strong>conditionnement</strong> et de la <strong>conversion des signaux</strong>, qui est un domaine <strong class="warning">très complexe</strong> de la physique appliquée. En cas de lacunes, on pourra dans un premier temps se reporter à ce cours de Sciences de l'ingénieur <a class="external" href="../doc/SI_42C&#32;-&#32;cond_conv.pdf" target="_BLANK"></a> et ce sujet de travaux pratiques <a class="external" href="../doc/SI_42TP&#32;-&#32;CAN&#32;-&#32;Arduino.pdf" target="_BLANK"></a>. </p>
+
+ 
+<p> Et pour une connaissance approfondie des mécanismes de bas niveaux mis en œuvre par les fonctions <code class="prettyprint lang-c">analogRead</code> et <code class="prettyprint lang-c">analogWrite</code>, il est recommandé de consulter leur code source, qui est placé dans le fichier <code class="filename">wiring_analog.c</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/wiring_analog.c" target="_BLANK">G</a> de la <strong>bibliothèque</strong> <strong class="Arduino">Arduino</strong>. </p>  
+</div><!-- expert -->
+
+</div><!-- exergue -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Lecture d'entrées analogiques </h2>
+
+
+<h3> Principe et caractéristiques générales du CAN  </h3>
+
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/CANprincipe.png" width="400px">
+<p> Le <strong class="title">convertisseur analogique numérique</strong> intégré au microcontrôleur <strong>Atmel ATMega328P</strong> emploie la technologie dite à <strong class="defin">approximations successives</strong> <a class="external" href="https://en.wikipedia.org/wiki/Successive-approximation_ADC" target="_BLANK">W</a> (en anglais, <em class="english">successive approximation register</em>, abrégée <strong><em class="sigle">SAR</em></strong>) qui offre un <strong class="pros">excellent compromis</strong> en termes de <strong>rapidité</strong> et <strong>précision</strong> de conversion. </p>
+
+<p> Il permet de <strong class="defin">numériser</strong> par un <strong>nombre en sortie</strong> <strong class="specialDB">N<sub>s</sub></strong> de type <strong class="defin">entier</strong> la <strong>tension d'entrée</strong> <strong class="specialR">v<sub>e</sub></strong> entre l'une des <strong>broches</strong> du <strong class="specialO">port analogique</strong> <span class="framedSmall" ><em class="bold">A</em><strong>x</strong></span> et la <strong>broche</strong> <span class="framedSmall"><em class="bold">GND</em></span>. </p>
+</div><!-- important -->
+
+
+
+<div class="complement">
+<p> Les <strong class="title">caractéristiques</strong> de ce <strong><em class="sigle">CAN</em></strong> intégré au microcontrôleur <strong>Atmel ATMega328P</strong> sont les suivantes. </p>
+
+<ul>
+  <li> Il opère une <strong>conversion</strong> <strong class="defin">unipolaire</strong>, avec une <strong class="defin">pleine échelle</strong> de tension <em class="bold">0 ‑ 5 V</em>. </li>
+
+  <li> Il encode la <strong>numérisation</strong> sur <strong>n</strong> = <strong class="defin">10 bits</strong>  procurant une <strong>excursion</strong> de <strong class="specialDB">N<sub>s</sub></strong> comprise entre <em class="bold">0</em>  et  <span class="framed" style="background: white"><em class="bold"><var>N</var><sub>max</sub></em> = <em class="bold"></sub>2<sup><var>n</var></sup> − 1</em> = <em class="bold">1023</em></span>. </li>
+
+  <div class="expert">
+  <div class="nobullet"><em class="remark">Remarque</em> : en anglais, on emploie le terme de « <em class="english">resolution</em> » <a class="external" href="https://en.wikipedia.org/wiki/Analog-to-digital_converter#Resolution" target="_BLANK">W</a> pour désigner le <strong>nombre de bits</strong> du <strong><em class="sigle">CAN</em></strong>. </div>
+  
+  <li> Sa <strong class="defin">tension de pleine échelle</strong> <em class="bold"><var>V</var><sub>max</sub></em> est <strong class="pros">ajustable</strong> : </li>
+
+  <ul>
+    <li> soit à <em class="bold">1,1 V</em> par une référence de tension <strong>interne</strong> à la carte ; </li>
+
+    <li> soit entre <em class="bold">0</em> et <em class="bold">5 V</em> par une référence de tension <strong>externe</strong>, établie entre les broches <span class="framedSmall"><em class="bold">AREF</em></span> et <span class="framedSmall"><em class="bold">GND</em></span>. </li>
+  </ul>
+  </div><!-- expert -->
+</ul>
+</div><!-- complement -->
+
+
+<!-- 
+<div class="expert">  
+<h4> Architecture matérielle du CAN intégré à la carte <em class="mark">Arduino Uno</em> </h4>
+
+
+</div> ajouter le commentaire "fin de balise div expert"
+-->
+
+
+<h3> La notion de quantum </h3>
+
+
+
+<div class="important" style="display: inline-block;">
+  <img class="top-right" src="../img/quantumCAN.png" width="300px">
+<p> De façon générale, le <strong class="title">quantum</strong> <strong class="specialG">q</strong> d'une conversion analogique-numérique représente l'<strong class="specialG">accroissement</strong> en <strong>volt</strong> de la <strong>tension d'entrée</strong> <strong class="specialR">v<sub>e</sub></strong>  pour obtenir un accroissement d'exactement <strong class="specialLB">une unité</strong> – donc, <em class="bold">+<span style="color: deepskyblue; text-shadow: 0.05em 0.05em black;">1</span></em> – du <strong>nombre en sortie</strong> <strong class="specialDB">N<sub>s</sub></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Le <strong><em class="sigle">CAN</em></strong> intégré au microcontrôleur <strong>Atmel ATMega328P</strong> étant <strong class="defin">unipolaire</strong>, son <strong class="specialG">quantum</strong> de la conversion vaut : </p>
+<div class="inline">
+ <span class="framed" style="background: white"><strong class="specialG">q</strong> = <em class="bold"><var>V</var><sub>max</sub></em> / (<em class="bold"><var>N</var><sub>max</sub> + 1</em>)</span> </p>
+</div>
+<p> Si la tension de pleine échelle <em class="bold"><var>V</var><sub>max</sub></em> vaut bien <em class="bold">5 V</em> (pas d'ajustement), et sachant que <em class="bold"><var>N</var><sub>max</sub></em> = <em class="bold">1023</em> alors le quantum de conversion vaut <span class="framedSmall"><em class="bold"><strong class="specialG">q</strong> = 5/1024 ≈ 5 mV</em></span>. </p>
+</div><!-- complement -->
+
+
+<div class="expert">
+<h4> Cas du microcontrôleur <em class="mark">Atmel SAM3X8E ARM Cortex-<em class="sigle">M3</em></em> </h4>
+
+
+<p> Dans le microcontrôleur <strong>Atmel SAM3X8E</strong> à cœur <em class="bold"><em class="sigle">ARM</em></em> qui équipe les <strong>cartes</strong> <strong class="Arduino">Arduino Due</strong>, le <strong class="title"><em class="sigle">CAN</em></strong> présente des caractéristiques générales similaires, mais avec : </p>
+<ul>
+  <li> une tension de <strong>pleine échelle</strong> <strong class="cons">plus faible</strong> <em class="bold"><var>V</var><sub>max</sub> = <em class="bold">3,3 V</em> ;</em> </li>
+
+  <li> une <strong class="pros">meilleure résolution</strong> de <strong class="defin">12 bits</strong>, qui donne au nombre en sortie <strong class="specialDB">N<sub>s</sub></strong> une <strong class="defin">excursion</strong> comprise entre <em class="bold">0</em> et 2<sup>12</sup> − 1 = <em class="bold">4095</em> ;  </li>
+
+  <li> une <strong>référence de tension</strong> interne de <em class="bold">0,6 V</em> qui peut être multipliée par les <strong>facteurs de gain</strong> <em class="bold">×2</em> (soit <em class="bold">1,2 V</em>) et <em class="bold">×4</em> (soit <em class="bold">2,4 V</em>). </li>
+</ul>
+<p> Avec ces caractérisques, le <strong class="specialG">quantum</strong> de conversion vaut <span class="framedSmall"><em class="bold"><strong class="specialG">q</strong> = 3,3/4096 ≈ 0,8 mV</em></span>. </p>
+</div><!-- expert -->
+
+
+<h3 id="fonctionTransfert"> Fonction de transfert du CAN </h3>
+
+
+<div class="important">
+<p> La <strong class="title">fonction de transfert</strong> d'un <strong><em class="sigle">CAN</em></strong> est la <strong class="defin">fonction mathématique</strong> qui à chaque valeur de la <strong>tension d'entrée</strong> <strong class="specialR">v<sub>e</sub></strong> fait correspondre une valeur du <strong>nombre en sortie</strong> <strong class="specialDB">N<sub>s</sub></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Très classiquement, le <strong><em class="sigle">CAN</em></strong> intégré au microcontrôleur <strong>Atmel ATMega328P</strong> opère en <strong class="defin">conversion linéaire centrée</strong>. Sa <strong class="title">fonction de transfert</strong> est représentée sur la figure ci‑dessous : </p>
+
+<img class="top-left" src="../img/CANcourbe.png">
+
+<p> Sa courbe représentative – dite <strong class="defin">en escalier</strong> – admet des <strong class="defin">marches centrées</strong> sur la droite d'équation <strong class="specialDB">N<sub>s</sub></strong> = <strong class="specialR">v<sub>e</sub></strong> / <strong class="specialG">q</strong>. Ces marches ont une <strong>longueur constante</strong> de la valeur du <strong>quantum</strong> <strong class="specialG">q</strong>, à l'<strong class="warning">exception</strong> de : </p>
+<ul>
+  <li> la <strong>première</strong> marche, dont la longueur vaut <em class="bold"><strong class="specialG">q</strong>/2</em> ; </li>
+
+  <li> la <strong>dernière</strong> marche, dont la longueur vaut <em class="bold">3<strong class="specialG">q</strong>/2</em>.</li>
+</ul>
+</div><!-- complement -->
+
+
+<h4 id="fonctionTansfertCANalgebrique"> Définition algébrique de la fonction de transfert du CAN</h4>
+
+
+<div class="important">
+<p> Algébriquement, la <strong class="title">fonction de transfert</strong> d'un <strong><em class="sigle">CAN</em></strong> à <strong class="defin">conversion unipolaire centrée</strong> est définie par les formules ci‑dessous : </p> 
+<ul>
+  <li> si <strong class="specialR">v<sub>e</sub></strong> ∊ [0, <var>V</var><sub>max</sub> − ½&#8239;<var>q</var>[, alors <span class="framed"><strong class="specialDB">N<sub>s</sub></strong> = <em class="bold">ℛ</em>(<strong class="specialR">v<sub>e</sub></strong> / <strong class="specialG">q</strong>)</span> où <em class="bold">ℛ</em> est la fonction <strong>arrondi entier</strong> ; </li>
+
+  <li> si <strong class="specialR">v<sub>e</sub></strong> ∊ [<var>V</var><sub>max</sub> − ½&#8239;<var>q</var>, <var>V</var><sub>max</sub>], alors <span class="framed"><strong class="specialDB">N<sub>s</sub></strong> = <em class="bold"><var>N</var><sub>max</sub></em></span> (expression constante). </li>
+</ul>
+<p> Autrement dit, cette fonction peut s'écrire : <span class="framed" style="background: white;"><strong class="specialDB">N<sub>s</sub></strong> = <strong>min</strong>{<em class="bold">ℛ</em>(<strong class="specialR">v<sub>e</sub></strong> / <strong class="specialG">q</strong>), <em class="bold"><var>N</var><sub>max</sub></em>}</span>. </p>
+</div><!-- important -->
+
+<div class="complementExpert">
+<p> Dans un programme informatique en langage <strong>C</strong>, si l'on souhaite <strong class="title">simuler</strong> la <strong class="title">fonction de tranfert</strong> ci‑dessus (cf. ex. C3‑5 <a class="TP" href="Cexo3_numeration.html#exo5" target="_BLANK"></a>), on peut : </p>
+<ul>
+  <li> pour la fonction d'arrondi <em class="bold">ℛ</em>, employer la fonction <code class="prettyprint lang-c">round</code> déclarée dans le fichier d'en‑tête <code class="filename">math.h</code> de la bibliothèque standard du langage <strong>C</strong> – directement utilisable dans un programme <strong class="Arduino">Arduino</strong> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a>) ;  </li>
+
+  <li> pour la fonction <strong>min</strong>, employer : </li>
+  <ul>
+    <li> soit la fonction <code class="prettyprint lang-c">min</code> définie dans le module <code class="filename">algorithm</code> de la bibliothèque standard du langage <strong>C++</strong> (norme <em class="mark">C++11</em> ou <em class="mark">C++14</em> <a class="external" href="https://en.cppreference.com/w/cpp/algorithm/min" target="_BLANK">C++</a>) ; </li>
+
+    <li> soit la pseudo‑fonction <code class="prettyprint lang-c">min</code> <a class="external" href="https://www.arduino.cc/reference/fr/language/functions/math/min/" target="_BLANK">A</a> définie dans le fichier d'en‑tête principal <code class="filename">Arduino.h</code> <a class="external" href="https://github.com/arduino/ArduinoCore-avr/blob/master/cores/arduino/Arduino.h" target="_BLANK">G</a> de la bibliothèque <strong class="Arduino">Arduino</strong> : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:92">
+#define min(a,b) ((a)<(b)?(a):(b))
+</pre>
+<!---------- ne pas indenter ---------->  
+    <li> ou encore tout simplement copier‑coller la directive ci‑dessus en début de programme. </li>
+  </ul>
+</ul>
+</div><!-- complementExpert -->  
+
+
+
+
+
+<div class="expert">
+<h4 id="conseilsCAN"> Conseils pratiques </h4>
+
+
+<p> Dans l'environnement <strong class="Tinkercad">Tinkercad</strong>, le <strong class="title"><em class="sigle">CAN</em></strong> de la <strong>carte Arduino Uno</strong>  est <strong class="title">simulé</strong> <strong class="defin">sans défaut</strong> : sa fonction de transfert est conforme à la présentation théorique ci‑dessus. </p>
+
+<p> Mais dans la pratique avec une <strong class="pros">vraie</strong> <strong class="Arduino">carte Arduino</strong>, il est recommandé de prendre <strong class="title">deux précautions</strong>. </p>
+
+<ol class="numbered" style="display: inline-block;">
+  <li> Il faut préalablement effectuer une <strong class="specialLB">mesure précise</strong> de la valeur de <em class="bold"><var>V</var><sub>max</sub></em> – en particulier quand cette dernière n'est pas ajustée. Pour cela, il suffit d'employer un <strong>voltmètre</strong> entre les broches <span class="framedSmall"><em class="bold">5V</em></span> et <span class="framedSmall"><em class="bold">GND</em></span>. </li>
+
+  <div class="nobullet"> En effet, selon la valeur réelle de la <strong class="specialDR">tension d'alimentation de la carte</strong>, la valeur de <em class="bold"><var>V</var><sub>max</sub></em> peut être légèrement <strong class="cons">différente</strong> de la valeur théorique <em class="bold">5 V</em>. </div>
+
+  <ul>
+    <li> si l'alimentation est fournie via la prise <strong><em class="sigle">USB</em></strong>, il n'est pas rare d'obtenir pour <em class="bold"><var>U</var><sub>max</sub></em> une tension de <strong class="cons">seulement</strong> <em class="bold" style="color: darkslategray;">4,9</em> voire <em class="bold" style="color: darkslategray;">4,8 V</em> ; </li>
+
+    <li> si l'alimentation est fournie via le connecteur barillet <em class="bold">7 ‑ 12 V</em>, on obtient <strong class="pros">bien</strong> <em class="bold"><var>U</var><sub>max</sub></em></strong> = <em class="bold" style="color: red;">5,0 V</em> avec une source de tension externe réglée <em class="remark">entre 7 et 9 V</em> ; </li>
+
+    <div class="nobullet"> et si la source de tension externe est <em class="remark">trop grande</em> – typiquement, la valeur standard <em class="bold">12 V</em> – alors on obtient <em class="bold"><var>U</var><sub>max</sub></em></strong> ≃ <em class="bold" style="color: darkslategray;">5,1 V</em>.  </div>
+  </ul>
+
+  <div class="nobullet"> Il faut <strong class="pros">utiliser cette valeur mesurée</strong> et non <strong>pas la valeur théorique</strong> pour calculer la valeur du <strong class="specialG">q</strong> de la conversion – et donc pourinterpréter la valeur de <strong class="specialDB">N<sub>s</sub></strong> dans la formule algébrique donnée <a class="supra" href="Cc3-7_entreesSortiesAnalogiques.html#fonctionTansfertCANalgebrique" ></a>.  </div>
+
+  
+    <img class="top-right" src="../img/CANdefautZero.png" width="350px" style="margin-top: 0.5em">
+  <li> Il faut <strong class="warning">ne pas se fier</strong> aux valeurs de <strong class="specialDB">N<sub>s</sub></strong>  lorsque la tension d'entrée <strong class="specialR">v<sub>e</sub></strong> est <strong>au voisinage de</strong> <em class="bold">0 V</em>, et tout particulièrement lorsqu'on a <strong class="specialR">v<sub>e</sub></strong> <em class="bold">< 0,1 V</em>. </li>
+
+  <div class="nobullet"> En effet, le convertisseur présente un <strong class="cons">défaut de monotonie</strong> en <strong>bas d'échelle</strong> : on peut le voir en comparant la courbe rouge ci‑contre, issues de mesures réelles, avec la courbe théorique verte. </div>
+</ol>
+
+</div><!-- expert -->
+
+
+
+<h3 id="analogRead"> Fonction de lecture d'une entrée analogique </h3>
+
+
+
+<div class="important">
+<p> Sur une <strong class="Arduino">carte Arduino</strong> ou compatible, contrairement à une broche du port numérique, une <strong>broche</strong> <span class="framedSmall"><em class="bold">A</em><strong>x</strong></span> du <strong class="specialO">port analogique</strong> n'a <strong class="pros">pas besoin d'être configurée</strong> (avec la fonction <code>pinMode</code>) avant d'être employée, car elle ne peut fonctionner <strong>que</strong> comme une entrée. </p>
+
+<p> Pour y <strong class="title">lire</strong> une <strong>tension d'entrée</strong> <strong class="specialR">v<sub>e</sub></strong> par rapport à la borne <span class="framedSmall"><em class="bold">GND</em></span>, on emploie la <strong class="title">fonction</strong> <code class="prettyprint lang-c">analogRead</code> dont un appel se code : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">analogRead(<span class="nocode"><strong class="specialT">pin</strong></span>)</code>
+</span> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogread/" target="_BLANK">A</a>  <br>
+et où l'argument <strong class="specialT">pin</strong> est une expression qui code le <strong>numéro de la broche</strong> du <strong class="specialO">port analogique</strong> <strong class="pros">avec ou sans</strong> le <strong>préfixe</strong> <code class="prettyprint lang-c">A</code>. </p>
+
+<p>  La <strong class="specialDB">valeur retournée</strong> par cette fonction est le <strong>nombre en sortie </strong> <strong class="specialDB">N<sub>s</sub></strong> encodé dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code> qui numérise la tension d'entrée <strong class="specialR">v<sub>e</sub></strong>. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> On rappelle que, pour un convertisseur unipolaire, l'<strong>excursion</strong> définie par l'intervalle <em class="bold">0 ‑ <var>N</var><sub>max</sub></em> du nombre en sortie <strong class="specialDB">N<sub>s</sub></strong> dépend du <strong class="defin">nombre de bits</strong> d'encodage du <strong><em class="sigle">CAN</em></strong> intégré au microcontrôleur de la carte. Cette caractéristique est essentielle pour interpréter la valeur de <strong class="specialDB">N<sub>s</sub></strong> – en particulier pour déduire de la valeur de <strong class="specialDB">N<sub>s</sub></strong> (nombre sans dimension) la valeur en <strong>volts</strong> de la tension d'entrée <strong class="specialR">v<sub>e</sub></strong> lue par un appel de la fonction <code class="prettyprint lang-c">analogRead</code>.  </p>
+</div><!-- complement -->
+
+
+<div class="remarques">
+<p class="remarque"> Le <strong class="title">codage de l'argument</strong> <strong class="specialT">pin</strong> par un numéro de broche de la forme <code class="prettyprint lang-c">A<span class="nocode"><strong>x</strong></span></code> est <strong class="pros">possible</strong> parce qu'il s'agit d'identificateurs de <strong>pseudo‑constantes</strong>, qui sont définies dans le fichier <code class="filename">pin_arduino.h</code> (cf. chap. C2‑VII <a class="previous" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#pinout" target="_BLANK"></a>). On peut donc coder par exemple : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int potentiometerPin = A0;  
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+<p> puis utiliser cet identificateur à la place de <code class="cmd">A0</code> partout dans le code, notamment comme argument de la fonction <code class="prettyprint lang-c">analogRead</code>. </p>
+</div><!-- remarque -->
+
+
+<h4> Expérimentation </h4>  
+
+
+<div class="exemples" >
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/analogRead.png" width="600px">
+<p class="exemple"> Considérons le <strong class="title">montage académique</strong> en figure ci‑contre où le curseur d'un <strong class="specialLB">potentiomètre</strong> est reliée à la broche <span class="framedSmall"><em class="bold">A0</em></span> du <strong class="specialO">port d'entrée analogique</strong> d'une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>. </p>
+
+<ul>
+  <li> Dans le cadre d'une simulation sur <strong class="Thinkercad">Tinkercad</strong>, on peut considérer que la tension de référence à laquelle le potentiomètre est alimenté vaut bien <em class="bold"><var>V</var><sub>max</sub> </em> = <em class="bold">5 V</em>. </li>
+
+  <li> On rappelle par ailleurs qu'avec le <strong class="defin"><em class="sigle">CAN</em> 10 bits</strong> du microcontrôleur <strong>Atmel 328P</strong>, on a <em class="bold"><var>N</var><sub>max</sub> </em> = <em class="bold">1023</em>. </li>
+</ul>
+</div><!-- display -->
+<!-- ajouter ci-dessous une figure extraite de la fonction de transfert du CAN -->
+
+
+<p> À partir de la valeur de <strong class="specialDB">N<sub>s</sub></strong> rendue par l'appel de la fonction <code class="prettyprint lang-c">analogRead(A0)</code>, il est <strong class="cons">impossible de déterminer la valeur exacte</strong> de la tension d'entrée <strong class="specialR">v<sub>e</sub></strong> sur la borne <span class="framedSmall"><em class="bold">A0</em></span> qui a généré ce nombre. </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/CANdeterminationVe.png" width="300px">
+<p> En effet, <strong class="specialR">v<sub>e</sub></strong> peut en principe se situer <strong class="specialG">partout sur la marche</strong> dont la « hauteur » est donnée par <strong class="specialDB">N<sub>s</sub></strong>. On prend donc « arbitrairement » le <strong class="defin">point milieu</strong> de la marche, situé à son intersection avec la droite d'équation <strong class="specialDB">N<sub>s</sub></strong> = <strong class="specialR">v<sub>e</sub></strong> / <strong class="specialG">q</strong>. On obtient alors <strong class="pros">tout simplement</strong> : <br>
+<span class="inline">
+  <span class="framed" style="background: white; padding-bottom: 0.3em"><strong class="specialR">v<sub>e</sub></strong> = <strong class="specialDB">N<sub>s</sub></strong> . <strong class="specialG">q</strong></span>
+</span> </p>
+</div><!-- display -->
+
+<p> Sur ce principe, le programme ci‑dessous code l'<strong class="title">affichage toutes les secondes</strong> sur le moniteur série la <strong>valeur supposée</strong> de la tension d'entrée <strong class="specialR">v<sub>e</sub></strong> (variable <code class="prettyprint lang-c">inputVoltage</code>) avec 3 décimales :   </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+float quantum = 5.0 / 1024; // volts
+
+void setup(){
+  Serial.begin(115200);
+}
+
+void loop(){
+  float inputVoltage = analogRead(A0) * quantum;
+  Serial.println(inputVoltage, 3);
+  delay(1000);
+}  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<div class="expert" style="margin-top: 1em">
+<p class="square"> Par ailleurs, il est intéressant d'observer ce qui se passe si l'on expérimente  dans les <strong class="title">positions extrêmes</strong> de la course du <strong class="specialLB">potentiomètre</strong>, en comparant les valeurs affichées par le voltmètre simulé par <strong class="Tinkercad">Tinkercad</strong>, et la <strong>valeur supposée</strong> de la tension d'entrée <strong class="specialR">v<sub>e</sub></strong> affichée sur le moniteur série (variable <code class="prettyprint lang-c">inputVoltage</code>). </p>
+
+<ul>
+  <li> Dans la <strong class="specialLB">position minimale</strong> (bouton complètement tourné à gauche), on obtient <code class="cmd">0.000</code> sur le moniteur série et <em class="bold">0.00 V</em> sur le voltmètre, comme attendu ; </li>
+
+  <li> Dans la <strong class="specialLB">position minimale</strong> (bouton complètement tourné à droite), on obtient <code class="cmd">4.995</code> alors qu'on lit <em class="bold">5.00 V</em> sur le voltmètre. Mais c'est logique car : </li>
+
+  
+  <ul>
+    <div style="display: inline-block;">
+      <img class="top-right" src="../img/CANderniereMarche.png" width="350px">
+    <li> au point d'intersection de la dernière marche de la courbe en escalier avec la droite d'équation <strong class="specialDB">N<sub>s</sub></strong> = <strong class="specialR">v<sub>e</sub></strong> / <strong class="specialG">q</strong> (cf. supra <a class="supra" href="Cc3-7_entreesSortiesAnalogiques.html#fonctionTransfert"></a>), on a <em class="bold"><strong class="specialR">v<sub>e</sub></strong> = 1023.<strong class="specialG">q</strong> ≃ 4,995 V</em> ; </li>
+     </div><!-- display -->
+
+    <div style="display: inline-block;">
+      <img class="top-right" src="../img/VoltmetreDerniereMarche.png" width="250px"> 
+    <li> le voltmètre de <strong class="Tinkercad">Tinkercad</strong>, quant à lui, affiche <em class="bold">5.00 V</em> puisqu'il n'a qu'une résolution de 0.01 V. </li>
+    </div><!-- display -->
+  </ul>
+ 
+</ul>
+</div><!-- expert -->
+</div><!-- exemple -->
+
+
+<div class="remarques"><p class="remarques"></p>
+<ol class="littered">
+  <li> Pour déterminer dans un programme la <strong class="title">valeur de la tension d'entrée</strong> <strong class="specialR">v<sub>e</sub></strong> à partir de celle du nombre de sortie <strong class="specialDB">N<sub>s</sub></strong>, on peut aussi employer la <strong class="defin">fonction de mise à l'échelle</strong> <code class="cmd">map</code> présentée au chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a>, avec la syntaxe : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">map(analogRead(<span class="nocode"><strong class="specialT">pin</strong></span>),
+      0, 1024, 0, <span class="nocode"><em class="bold"><var>V</var><sub>max</sub></em></span>) / 1000.0</code>
+  </span> <br>
+  et en codant la valeur de <em class="bold"><var>V</var><sub>max</sub></em> en <em class="remark">millivolts</em> (car la fonction <code class="prettyprint lang-c">map</code> n'opère que sur des entiers) et en divisant le résultat par <code class="prettyprint lang-c">1000.0</code> bien entendu (pour harmoniser le résultat avec une division algébrique, et non pas euclidienne). </li>
+
+  <li> Dans la pratique, il est <strong class="pros">rarement nécessaire</strong> de <strong>déterminer la tension d'entrée</strong> <strong class="specialR">v<sub>e</sub></strong> à laquelle correspond le nombre en sortie <strong class="specialDB">N<sub>s</sub></strong> rendu par un appel de la fonction <code class="prettyprint lang-c">analogRead</code>. Dans toutes sortes d'application (potentiomètre, capteur, etc.), il est plus efficace de procéder <strong class="defin">directement par proportionnalité</strong> sur la valeur de <strong class="specialDB">N<sub>s</sub></strong> au regard de son excursion maximale <em class="bold"><var>V</var><sub>max</sub></em>. Là encore, la fonction <code class="cmd">map</code> peut être bien utile ! </li>
+</ol>
+</div><!-- remarques -->
+ 
+
+<div class="expert">
+<h3> Ajustement de la tension de pleine échelle du CAN </h3>
+
+
+<div class="important">
+<p> Sur une <strong class="Arduino">carte Arduino</strong>, pour optimiser la résolution d'une conversion (c'est‑à‑dire, avoir un <strong class="specialG">quantum</strong> de conversion <strong class="pros">le plus petit possible</strong>), la <strong class="title">tension de pleine échelle</strong> <em class="bold"><var>V</var><sub>max</sub></em> est <strong class="pros">ajustable</strong> grâce à la fonction <code class="prettyprint lang-c">analogReference</code> <a class="external" href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogreference/" target="_BLANK">A</a>. </p>
+
+<p> En revanche, la <strong class="title">valeur de pied d'échelle</strong> <em class="bold">0 V</em> de la tension d'entrée est <strong class="cons">immuable</strong> sur le <strong><em class="sigle">CAN</em></strong> intégré à la carte. </p>
+</div><!-- important -->
+
+<div class="complement">
+<p> Les <strong class="title">possibilités d'ajustement</strong> de <em class="bold"><var>V</var><sub>max</sub></em> sont <strong class="defin">très diverses</strong> selon les modèles de cartes. Sur une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>, on peut : </p>
+<ul>
+  <li> soit employer la <strong class="specialLB">tension de référence interne</strong> de <em class="bold">1,1 V</em>  en codant directement l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">analogReference(INTERNAL);</code>
+  </span>   <br> 
+  ce qui offre un quantum de conversion <strong class="specialG">q</strong> ≈ <em class="bold">1 mV</em> <strong class="pros">cinq fois plus précis</strong> que par défaut, mais une <strong class="cons">échelle de tension cinq fois plus réduite</strong> ; </li>
+ 
+  <li> soit appliquer une <strong class="specialLB">tension de référence externe</strong> comprise entre <em class="bold">0</em> et <em class="bold">5 V</em> sur la broche <span class="framedSmall"><em class="bold">AREF</em></span> de la carte, avec un <strong class="specialLG">circuit potentiométrique</strong> suffisamment impédant (typiquement autour de 5 kΩ), et en codant l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">analogReference(EXTERNAL);</code>
+  </span>   <br> 
+  cela permet d'ajuster au mieux la pleine échelle – et ainsi <strong class="pros">optimiser le quantum</strong> – en fonction du besoin spécifique de tel ou tel montage. </li>
+</ul>
+</div><!-- complement -->
+
+<p> Et pour régler à nouveau la valeur de <em class="bold"><var>V</var><sub>max</sub></em> à sa valeur par défaut (<em class="bold">5 V</em> sur une carte <strong class="Arduino">Uno</strong>), il suffit de remettre <strong class="defin">hors tension</strong> la broche <span class="framedSmall"><em class="bold">AREF</em></span> et de coder l'instruction : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">analogReference(DEFAULT);</code>
+  </span> 
+</p>   
+
+<div class="exemples"style="display: inline-block;">
+  <img class="top-right" src="../img/CANaref.png" width="150px">
+<p class="exemple"> En recourant pour le <strong class="specialLG">circuit potentiométrique</strong> au <strong>pont diviseur de tension</strong> représenté en figure ci‑contre (<var>R</var><sub>1</sub> = 3,3 kΩ et <var>R</var><sub>2</sub> = 4,7 kΩ), alimenté par la tension globale de 5 V issue du régulateur la carte, la <strong class="title">tension de référence externe</strong> appliquée sur la broche <span class="framedSmall"><em class="bold">AREF</em></span> vaut : <br>
+<span class="inline">
+  <em class="bold"><var>V</var><sub>ref</sub></em> = 5 × 4,7 /(3,3 + 4,7) ≈ <em class="bold">2,94 V</em>
+</span> </p>
+<p> En appelant la fonction <code class="prettyprint lang-c">analogReference(EXTERNAL)</code>, on obtient alors un quantum <strong class="specialG">q</strong> ≈ 2,94 / 1024 ≈ <em class="bold">2,87 mV</em>. </p>
+</div><!-- exemple -->
+
+
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="modulationSorties"> Écriture de sorties digitales modulées </h2>
+
+
+<div class="complement">
+<p> En rappel de l'introduction de ce chapitre, en l'<strong class="cons">absence</strong> de <strong>convertisseur numérique analogique</strong> (<strong><em class="sigle">CNA</em></strong>) – ce qui est le cas sur les microcontrôleurs à <strong><em class="sigle">AVR</em></strong> embarqués sur les <strong>cartes Arduino</strong> <strong class="Arduino">Uno</strong>, <strong class="Arduino">Mega</strong>, <strong class="Arduino">Nano</strong>… – il est quand même <strong class="pros">possible</strong> de <strong class="defin">faire varier la tension moyenne</strong> de certaines sorties du port numérique, par la technique dite de <strong class="title">modulation par largeur d'impulsion</strong>. </p>
+</div><!-- complement -->
+
+
+
+<h3> Principe et caractéristiques de la MLI </h3>
+
+
+
+<div class="important">
+<div style="display: inline-block;"> 
+  <img class="top-right" src="../img/MLIpins.png" width="180px">
+<p> La <strong class="title">modulation par largeur d'impulsion</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Modulation_de_largeur_d'impulsion" target="_BLANK">W</a> ou <strong class="title"><em class="sigle">MLI</em></strong> – en anglais <strong>pulse width modulation</strong>, abrégée <strong><em class="sigle">PWM</em></strong> – peut opérer sur <strong class="specialY">certaines broches du port numérique</strong> d'une <strong class="Arduino">carte Arduino</strong> (broches qui doivent, bien évidemment, être configurées en <strong>sortie</strong> dans le programme). </p>
+</div><!-- display -->
+<div style="display: inline-block;"> 
+  <img class="top-right" src="../img/MLIsignal1.png" width="400px">
+<p> La <strong class="title"><em class="sigle">MLI</em></strong> consiste à générer sur une telle broche un <strong class="specialLB">signal logique</strong> <strong class="defin">périodique</strong> et <strong class="defin">rectangulaire</strong> de tension <strong>u</strong> tel que : </p>
+<ul>
+  <li> sa <strong class="defin">période</strong> <strong>T</strong> est suffisamment <strong>petite</strong> pour être <strong class="cons">négligeable</strong> au regard de l'échelle de temps de fonctionnement du système, </li>
+
+  <li> son <strong class="defin">rapport cyclique</strong> <em class="bold">α</em> est <strong class="pros">modulable</strong> en temps‑réel ; c'est le <strong>paramètre de la modulation</strong>. </li>
+</ul>
+<p> Le <strong class="specialLB">signal logique de sortie</strong> ainsi généré est cadencé par un <strong class="specialV">timer interne</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Timer_(microcontrôleur)" target="_BLANK">W</a> à la carte, piloté par le microcontrôleur en parallèle de l'exécution du programme. </p>
+</div><!-- display -->
+</div><!-- important -->
+
+<div class="complement "style="display: inline-block;">
+  <img class="top-right" src="../img/MLIsignal2.png" width="600px">
+<p> Rappelons qu'un <strong class="specialLB">signal logique</strong> de tension <strong>u</strong> ne peut prendre que <strong>deux valeurs</strong> basse et haute – respectivement <var>U</var><sub>min</sub> = <em class="bold">0 V</em> et <var>U</var><sub>max</sub> = <em class="bold">5 V</em> pour une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>. </p>
+
+<p> Si le signal est <strong class="defin">périodique</strong> et <strong class="defin">rectangulaire</strong>, il est caractérisé par sa <strong>période</strong> <strong class="defin">T</strong> et son <strong>rapport cyclique</strong> <strong class="defin">α</strong><em class="bold"> = </em><strong>TH/T</strong> où <strong>TH</strong> est la durée du temps haut dans la période du signal ; <em class="bold">α</em> est donc un nombre compris entre <em class="bold">0</em> et <em class="bold">1</em>. </p>
+
+<p> Si <var>U</var><sub>min</sub>= 0 V, alors il en résulte sur la broche une <strong>tension moyenne</strong> : <br>
+<span class="inline" style="line-height: 150%">
+  <span class="framed" style="background: white; padding-bottom: 0.3em"><strong class="defin">U<sub style="font-style: normal;">moy</sub></strong> = <em class="bold">α.<var>U</var><sub>max</sub></em></span>   
+</span><br>
+donc <strong class="defin">proportionnelle</strong> à <em class="bold">α</em> et comprise entre <em class="bold">0</em> et <em class="bold"><var>U</var><sub>max</sub></em> – avec, en particulier, <var>U</var><sub>moy</sub> = 0 si α = 0 et <var>U</var><sub>moy</sub> = <var>U</var><sub>max</sub> si α = 1. </p>
+</div><!-- complement -->
+
+
+<p> Si la fréquence <em class="bold"><var>f </var>= 1/<var>T</var></em> du signal est <strong>suffisamment élevée</strong> (dès 30 Hz environ, mais en général, on module via des fréquences beaucoup plus élevées, au moins 300 Hz), cette technique offre de <strong class="title">nombreuses applications</strong> : </p>
+<ul>
+  <li> Elle permet notamment de <strong>faire varier la luminosité</strong> d'une <strong class="defin">led</strong> (cf. l'exemple infra <a class="infra" href="Cc3-7_entreesSortiesAnalogiques.html#exVarLed"></a>) – la persistance rétinienne empêchant l'œil humain de percevoir les clignotements rapides de la led. </li>
+
+  <li> De même, on peut : </li>
+  <ul>
+    <li> <strong>moduler l'amplitude du son</strong> d'un <strong class="defin">buzzer</strong>, </li>
+  
+    <li> <strong>piloter la vitesse de rotation</strong> d'un <strong class="defin">moteur à courant continu</strong> (via un hacheur), etc. </li>
+  </ul>
+</ul>
+
+
+
+<div class="expert">
+<h4> Cas de la carte <em class="mark">Arduino Uno</em> </h4> 
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/UnoPortNumerique2.png" width="300px">
+<p> Sur une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong>, les <strong class="title">broches du port numérique</strong> nº <strong class="title">3</strong>, <strong class="title">5</strong>, <strong class="title">6</strong>, <strong class="title">9</strong>, <strong class="title">10</strong> et <strong class="title">11</strong> (toutes repérées sur la carte par le symbole « <em class="bold">~</em> ») sont pilotables en <strong><em class="sigle">MLI</em></strong>, avec les <strong class="defin">caractéristiques suivantes</strong> : </p>
+</div><!-- display -->
+<ul>
+  <li> un encodage sur <strong class="defin">8 bits</strong> de la valeur du <strong>rapport cyclique</strong>, c'est‑à‑dire par un nombre entier compris entre <em class="bold">0</em> et 2<sup>8</sup> − 1 = <em class="bold">255</em> ; </li>
+
+  <li> une <strong class="defin">fréquence de modulation</strong> de :
+  <ul>
+    <li> <em class="bold">490 Hz</em> pour les broches n° <strong>3</strong>, <strong>9</strong>, <strong>10</strong> et <strong>11</strong> ;</li>
+
+    <li> <em class="bold">980 Hz</em> pour les broches nº <strong>5</strong> et <strong>6</strong> ;</li>
+  </ul>
+  </li>
+</ul>
+<p> sachant par ailleurs que la <strong class="defin">précision du rapport cyclique</strong> est <strong class="cons">moindre</strong> sur les broches nº <strong>5</strong> et <strong>6</strong> que sur les autres broches si l'on appelle dans le programme les fonctions <code class="prettyprint lang-c">millis</code> et <code class="prettyprint lang-c">delay</code>, car ces dernières utilisent le <strong>même timer</strong>. </p>
+
+
+<h4> Conseils pratiques </h4>
+
+
+<p> Comme pour le <em class="sigle">CAN</em> (cf. supra <a class="supra" href="Cc3-7_entreesSortiesAnalogiques.html#conseilsCAN"></a>), l'<strong class="title">amplitude réelle</strong> du signal de tension en <strong class="title"><em class="sigle">MLI</em></strong> n'est <strong class="cons">pas exactement</strong> égale à sa <strong>valeur théorique</strong> <em class="bold"><var>U</var><sub>max</sub> = 5,0 V</em>. Selon la valeur réelle de la <strong class="specialDR">tension d'alimentation</strong> de la carte, on peut observer un écart jusqu'à <em class="bold">±0,2 V</em>. </p>
+
+</div><!-- expert -->
+
+
+
+<h3 id="analogWrite"> Fonction d'écriture analogique d'une sortie numérique </h3>
+
+
+
+<div class="important">
+<p> Avec une <strong class="Arduino">carte Arduino</strong>, pour <strong class="title">écrire</strong> (c'est‑à‑dire régler) une <strong>tension de sortie moyenne</strong> <strong class="defin">U<sub>moy</sub></strong> par rapport à la borne <strong><em class="sigle">GND</em></strong> sur une <strong class="specialY">broche du port numérique</strong> étiquetée <strong class="specialY"><em class="sigle">PWM</em></strong>, on emploie la <strong class="title">fonction</strong> <code class="prettyprint lang-c">analogWrite</code> dont un appel se code : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">analogWrite(<span class="nocode"><strong class="specialT">pin</strong></span>, <span class="nocode"><strong class="specialO">value</strong></span>);</code>
+</span>  <a class="external" href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogwrite/" target="_BLANK">A</a> <br>
+où : </p>
+
+<ul>
+  <li> l'argument <strong class="specialT">pin</strong> est une expression qui code le <strong>numéro de la broche</strong> du port numérique de la carte ; </li>
+
+  <li> l'argument <strong class="specialO">value</strong> est une expression à valeur entière (encodée dans le <strong class="specialG">type</strong> <code class="prettyprint lang-c">int</code>), comprise entre <code class="prettyprint lang-c">0</code> et <code class="prettyprint lang-c">255</code> (pour une carte <strong class="Arduino">Uno</strong>), qui code par proportionnalité la valeur du <strong class="defin">rapport cyclique</strong> <em class="bold">α</em> entre <em class="bold">0</em> et <em class="bold">1</em>. </li>
+</ul>
+
+La <strong class="title">fonction</strong> <code class="cmd">analogWrite</code> est de <strong class="specialG">type</strong> <code class="prettyprint lang-c">void</code>, elle ne retourne donc aucune valeur.
+</div><!-- important -->
+
+<div class="complement" style="line-height: 150%">
+<p> En d'autres termes, <strong>après exécution</strong> d'une instruction de la forme : </p>
+<span class="inline">
+  <code class="prettyprint lang-c">analogWrite(<span class="nocode"><strong class="specialT">pin</strong></span>, <span class="nocode"><strong class="specialO">value</strong></span>);</code>
+</span>  <br>
+la valeur du <strong class="defin">rapport cyclique</strong> du <strong class="title">signal de <em class="sigle">MLI</em></strong> sur la broche <strong class="specialT">pin</strong> vérifie la relation : <br>
+<span class="inline">
+  <span class="framed" style="background: white; padding-bottom: 0.3em"><em class="bold">α</em> = <strong class="specialO">value</strong> / <em class="bold">255</em></span>
+</span><br> 
+et, si <em class="bold"><var>U</var><sub>max</sub> = 5 V</em> alors la <strong class="defin">tension de sortie moyenne</strong> exprimée en volts sur la broche <strong class="specialT">pin</strong> vaut : <br>
+<span class="inline">
+  <span class="framed" style="background: white; padding-bottom: 0.3em"><em class="bold"><var>U</var><sub>moy</sub></em>  =  5 × <strong class="specialO">value</strong> / 255  =  <strong class="specialO">value</strong> / <em class="bold">51</em></span> 
+</span> </p>
+</div><!-- complement -->
+
+<p> Après un appel de la fonction <code class="prettyprint lang-c">analogWrite</code>, le <strong class="title">signal de <em class="sigle">MLI</em></strong> est <strong class="defin">maintenu</strong> sur la broche jusqu'au <strong>prochain appel</strong> d'une des fonctions <code class="prettyprint lang-c">analogWrite</code>, <code class="prettyprint lang-c">digitalWrite</code> ou <code class="prettyprint lang-c">digitalRead</code> appliquées à cette broche. </p>
+
+
+<h4 id="exVarLed"> Application pour une led à luminosité variable </h4>
+
+
+<div class="exemples">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/analogWriteLED.png" width="350px">
+<p class="exemple"> Considérons le <strong class="title">montage académique</strong> ci‑contre avec une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong> et : </p>
+<ul>
+   <li> une <strong class="specialDR">led</strong> dont l'anode est reliée (via une résistance de limitation de courant) à la <strong>broche <em class="sigle">PWM</em> nº 3</strong> du port numérique ; </li>
+ 
+   <li> un <strong class="specialLB">potentiomètre</strong> relié à la broche analogique <span class="framedSmall"><em class="bold">A0</em></span>. </li>
+ </ul>
+
+<div class="expert">
+<p> Comme une led est un <strong>composant non linéaire</strong> avec un phénomène de <strong class="defin">seuil</strong> très marqué, pour faire varier sa luminosité, il n'est <strong class="warning">pas possible</strong> de lui appliquer une <strong>tension continue</strong> dont on ferait varier le niveau. </p>
+
+<p> C'est typiquement dans un tel cas que la <strong class="title">modulation par largeur d'impulsion</strong> apporte une <strong class="pros">solution adéquate</strong> : elle soumet la led à des pics de tension toujours supérieurs à sa tension de seuil, mais d'une durée éventuellement très courte. Pour l'œil humain, la discontinuité du signal est imperceptible mais la <strong class="specialDR">led</strong> apparaît significativement <strong class="pros">moins brillante</strong> que si elle était alimentée en tension continue, par effet de <strong>persistance rétinienne</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Persistance_rétinienne" target="_BLANK">W</a>. </p>
+</div><!-- expert -->
+</div><!-- display -->
+
+<p> Pour que la <strong class="title">luminosité</strong> de la <strong class="specialDR">led</strong> soit <strong class="defin">proportionnelle à la position du curseur</strong> du potentiomètre dans sa course, il suffit de coder le programme ci‑dessous : </p>
+
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const int8_t potentiometerPin = A0;  
+const int8_t ledPin = 3;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  int16_t potentiometerValue = analogRead(potentiometerPin);
+  uint8_t brightness = map(potentiometerValue, 0, 1023, 0, 255);
+  analogWrite(ledPin, brightness);
+  delay(10); // for a fluid Tinkercad simulation
+}  
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> où, encore une fois, la <strong>fonction</strong> <code class="prettyprint lang-c">map</code> (cf. chap. C2‑IV <a class="previous" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a>) est bienvenue pour effectuer le calcul de proportionnalité. </p>
+</div><!-- exemple -->
+
+
+<div class="expert">
+<h4> Codage de l'argument <em>value</em> </h4>
+
+<div class="complement">
+<p> Lors d'un appel : <br>
+<span class="inline">
+  <code class="prettyprint lang-c">analogWrite(<span class="nocode"><strong class="specialT">pin</strong></span>, <span class="nocode"><strong class="specialO">value</strong></span>)</code>
+</span> <br>
+le codage l'argument <strong class="specialO">value</strong> dépend de la façon dont on exprime le <strong class="defin">rapport cyclique</strong> <em class="bold">α</em> du signal de tension <strong>u</strong> engendré sur la broche spécifiée par l'argument <strong class="specialT">pin</strong>. </p>
+
+<ul>
+  <li> Si <em class="bold">α</em> est exprimé comme un <strong>nombre décimal</strong> compris entre <em class="bold">0</em> et <em class="bold">1</em>, donc codé comme un type décimal comme <code class="prettyprint lang-c">float</code>, alors on peut coder <strong class="specialO">value</strong> par une expression de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">round(255 * <span class="nocode"><em class="bold">α</em></span>)</code>
+  </span> </li>
+
+  <li> Si <em class="bold">α</em> est exprimé comme un <strong>nombre entier</strong> compris entre <em class="bold">0</em> et <em class="bold">100</em> – autrement dit un pourcentage –  alors on peut coder <strong class="specialO">value</strong> par une expression de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">map(<span class="nocode"><em class="bold">α</em></span>, 
+    0, 100, 0, 255)</code>
+  </span> </li>
+</ul>
+</div><!-- complement -->
+
+
+<p class="square"> On peut aussi être amené à coder l'argument <strong class="specialO">value</strong> à partir de la <strong class="defin">valeur moyenne de la tension</strong> <em class="bold"><var>U</var><sub>moy</sub></em> <strong class="defin">souhaitée</strong> sur la broche <strong class="specialT">pin</strong>. </p>
+
+<ul>
+  <li> Si <em class="bold"><var>U</var><sub>moy</sub></em> est exprimée en <strong>volts</strong> comme un <strong>nombre décimal</strong> compris entre <em class="bold">0</em> et <em class="bold">5</em> (autrement dit codé dans un type décimal comme <code class="prettyprint lang-c">float</code>), alors on peut coder <strong class="specialO">value</strong> par une expression de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">round(255 * <span class="nocode"><em class="bold"><var>U</var><sub>moy</sub></em></span> / 5)</code>
+  </span> </li>
+
+  <li> Si <em class="bold"><var>U</var><sub>moy</sub></em> est exprimée en <strong>millivolts</strong> comme un <strong>nombre entier</strong> compris entre <em class="bold">0</em> et <em class="bold">5000</em>, par exemple codé dans le type <code class="prettyprint lang-c">int16_t</code>, alors on peut coder <strong class="specialO">value</strong> par une expression de la forme : <br>
+  <span class="inline">
+    <code class="prettyprint lang-c">map(<span class="nocode"><em class="bold"><var>U</var><sub>moy</sub></em></span>, 
+    0, 5000, 0, 255)</code>
+  </span> </li>
+</ul>
+
+<p class="square"> Enfin, si l'argument <strong class="specialO">value</strong> est destiné à exprimer le <strong class="defin">niveau d'intensité lumineuse</strong> d'une <strong class="specialDR">led</strong> à partir d'un <strong>code de couleur</strong> codé sur <strong>8 bits</strong>, il suffit simplement de donner à <strong class="specialO">value</strong> la valeur de ce code en base 10, ou même en base 16 avec le préfixe <code class="prettyprint lang-c">0x</code>. </p>
+
+<div class="exemples">
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/analogWriteLED-RGB.png" width="350px">
+<p class="exemple"> Considérons le <strong class="title">montage académique</strong> ci‑contre avec une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong> et une <strong class="specialLGr">led <em class="sigle">RBG</em></strong> dont les <strong>anodes</strong> <strong style="color: red">rouge</strong>, <strong style="color: limegreen">verte</strong> et <strong style="color: blue">bleue</strong> sont respectivement reliées (chacune via une résistance de limitation de courant) aux <strong>broches <em class="sigle">PWM</em> nº 8</strong>, <strong>9</strong> et <strong>10</strong> du port numérique de la carte</strong>. </p>
+
+
+<p> Pour obtenir avec la led, comme sur la capture d'écran, la <strong>couleur <em class="sigle">HTML</em></strong> <code class="cmd"; style="color:  white; background: mediumorchid;">MediumOrchid</code> dont le code est <code class="cmd">#BA55D3</code>, on peut coder le programme ci‑dessous : </p>
+</div><!-- display -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+const uint8_t ledRedPin   = 9;
+const uint8_t ledGreenPin = 10;
+const uint8_t ledBluePin  = 11;
+
+void setup() {
+  pinMode(ledRedPin,   OUTPUT);
+  pinMode(ledGreenPin, OUTPUT);
+  pinMode(ledBluePin,  OUTPUT);
+
+  analogWrite(ledRedPin,   0xBA);
+  analogWrite(ledGreenPin, 0x55);
+  analogWrite(ledBluePin,  0xD3);
+}
+
+void loop() {
+  delay(10); // for a quicker Tinkercad simulation
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- exemple --> 
+
+</div><!-- expert -->
+
+
+<div class="expert">
+<h3> Modification de la fréquence de MLI </h3>
+
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/mcc.png" width="150px">
+<p> Pour <strong class="defin">piloter un moteur à courant continu</strong> en variation de vitesse, la <strong class="title">fréquence de <em class="sigle">MLI</em></strong> mise en œuvre par défaut sur une <strong>carte</strong> <strong class="Arduino">Arduino Uno</strong> n'est <strong class="cons">pas suffisante</strong>. En effet, à moins de 5 kHz, il est difficile d'atteindre le régime dit de <em>conduction continue</em> qui garantit une bonne stabilité du courant dans le rotor. </p>
+</div><!-- display -->
+
+<p> Pour surmonter cette difficulté, il est possible de <strong>modifier la fréquence</strong> d'un <strong class="defin">timer</strong> de la carte. Néanmoins, une telle modification peut avoir un impact sur les fonctions <code class="prettyprint lang-c">millis</code> et <code class="prettyprint lang-c">delay</code>. On peut continuer à employer ces fonctions, mais il faut <strong class="warning">tenir compte de l'impact</strong> de la modification de la fréquence du <strong class="specialV">timer</strong> qui les gère. De plus, il n'est <strong class="cons">pas possible</strong> d'<strong>ajuster finement cette fréquence</strong>, mais seulement par puissances de 2 ; typiquement, on passe immédiatement de 8000 à 16000 Hz.  </p>
+
+<div style="display: inline-block;">
+  <img class="top-right" src="../img/teensy3-2.png" width="250px" style="margin-top: 1.5em">
+<p class="square"> Une <strong class="title">solution plus robuste</strong> consiste à employer une <strong>carte à microcontrôleur</strong> <strong class="pros">plus performante</strong>, comme une <strong class="specialLB">Teensy 3.x</strong> <a class="external" href="https://www.pjrc.com/teensy/" target="_BLANK"></a>. Avec une telle carte, il est possible de <strong class="defin">modifier la fréquence de <em class="sigle">MLI</em></strong> directement par une appel de la <strong>fonction spécifique</strong> <code class="cmd">analogWriteFrequency</code> fournie dans la bibliothèque associée à cette carte. </p>
+</div><!-- display -->
+</div><!-- expert -->
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>
