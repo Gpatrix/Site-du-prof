@@ -1,6 +1,9 @@
 # Site-du-prof
-le site du prof en entier, les lien sont bugger désoler 
+le site du prof en entier
 
 j'ai jamais vus un site aussi mal fait
 
-je ne le modifierai pas, tu te démerde
+
+v1.4
+
+-les lien ont ete fix

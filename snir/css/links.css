@@ -26,29 +26,29 @@ a.infra:before{
 	content : "[";
 }
 a.external:after{
-	content : "â†—]";
+	content : "↗]";
 }
 a.previous:after{
-		content : "â†°]";
+		content : "↰]";
 }
 a.next:after{
-		content : "â†³]";
+		content : "↳]";
 }
 a.TP:after{
-		content : "â†’]";
+		content : "→]";
 }
 a.cours:after{
-		content : "â†]";
+		content : "←]";
 }
 a.supra:after{
-		content : "â†‘]";
+		content : "↑]";
 }
 a.infra:after{
-		content : "â†“]";
+		content : "↓]";
 }
 
 a.file:after{
-	content: "[ðŸ“„]";
+	content: "[📄]";
 }
 
 a#mailto {
