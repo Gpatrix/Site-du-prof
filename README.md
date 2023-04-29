@@ -6,4 +6,4 @@ j'ai jamais vus un site aussi mal fait
 
 v1.4
 
--les lien ont ete fix
+-les lien ont été fix
