@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html 
+  data-module="C"
+  data-pagetype="Exercices"
+  data-modulepartnumber="2"
+  data-pagenumber="0"
+  data-pageState="OK"
+  data-pageheadtitle="Éléments langage"
+  data-pagefulltitle="Éléments de langage"
+  data-authorname="François GIRAULT"
+  data-authormail="francois.girault@ac-versailles.fr"
+  lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+  <meta charset="utf-8">
+  <script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+  <script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header> 
+
+<div id="scrollingFrame">
+
+<footer class="band">
+  <script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+  <script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de cette feuille d'exercices sont : </p>
+
+<ul>
+  <li> de <strong class="defin">découvrir la syntaxe</strong> du langage <strong>C</strong> à travers des exercices de lecture, de mise en forme et de recherche d'erreurs ; </li>
+
+  <li> de coder des <strong class="defin">premiers programmes</strong> élémentaires « classiques » (afficher la valeur d'une fonction, une table de multiplication, etc.). </li>
+</ul>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ces exercices, il serait idéal d'avoir étudié le cours <strong>jusqu'au chapitre</strong> <strong class="warning">C2‑VI</strong> <strong>inclus</strong>. Néanmoins, cela obligerait à retarder considérablement les séances de travaux pratiques en classe. De plus, certains exercices ne font appel qu'à un nombre ciblé de connaissances et des renvois aux principaux éléments de cours requis sont indiqués au fur et à mesure des questions, de sorte qu'il est possible d'aborder les questions dans un état d'esprit de <strong class="pros">découverte</strong>, sans objectif de maîtrise. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important" style="margin-left: 0em;">
+<p> Les <strong class="title">exercices</strong> sont presque tous <strong class="defin">indépendants</strong> les uns des autres, mais ordonnés par niveaux croissants de difficultés et de connaissances requises. Certaines questions peuvent être traitées sur <strong>cahier</strong>, mais la plupart nécessitent l'emploi d'un <strong>ordinateur</strong>. </p>
+
+<p> Pour coder les programmes, il est recommandé d'utiliser un éditeur de code comme <strong class="Sublime">Sublime Text</strong> (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#SublimeText" target="_BLANK"></a>).  </p>
+
+<ul>
+  <li> Enregistrer chaque <strong>fichier source principal</strong> en le nommant conformément à la numérotation des exercices, c'est‑à‑dire par exemple pour l'exercice <em class="bold">1</em>, question <em class="bold">b)</em> :  <br>
+  <span class="inline">
+    <code class="filename">C2exo1_b.c</code>
+  </span> </li>
+
+	<li> L'ensemble des fichiers sources doivent être regroupés dans un <strong class="specialT">répertoire d'exercices</strong> nommé par exemple <code class="filename">C2_EXOS</code>. </li>
+
+  <li> La <strong>compilation</strong> des programmes peuvent être effectués avec la commande <code>gcc</code> directement dans un terminal exécuté depuis le répertoire d'exercices (cf. chap. C1‑II <a class="previous" href="../C1-Generalites/Cc1-2_langagesCetCpp.html#gccEmploi" target="_BLANK"></a>), soit en copiant/collant chaque code source dans un environnement de programmation en ligne comme <strong class="OnlineGDB">OnlineGDB</strong> <a class="external" href="https://www.onlinegdb.com/" target="_BLANK"></a>. </li>
+</ul>
+</div><!-- important -->
+
+
+
+<ol class="exercice">
+
+<li id="exo1"> <em class="bold">Analyse syntaxique d'un programme simple</em> </li>
+
+<div class="nobullet" style="margin-left: 0.5em">Lire attentivement le <strong class="title">code source</strong> ci‑dessous. <br>  
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+/* Academic dull program to discover C language elements
+ */
+#include &lt;stdio.h&gt;                 
+
+int main(void) {                               
+  int typedNumber = 0;                       
+  printf("Tapez un chiffre compris entre 1 et 3,\n"); 
+  printf("ou tout autre chiffre pour quitter.\n");
+
+  do {       
+    printf("> ");
+    scanf("%d", &typedNumber);  
+    if (typedNumber == 1) { 
+      printf("  C'est peu !\n");
+    }            
+    else if (typedNumber == 2) {
+      printf("  C'est moyen...\n");
+    }
+    else if (typedNumber == 3) {
+      printf("  C'est beaucoup !\n");
+    }
+  }
+  while (typedNumber >= 1 && typedNumber <= 3);
+
+  printf("Au revoir.\n");  
+  return 0;  
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- nobullet -->
+
+	<ol class="questions">
+    <li> Syntaxiquement, comment s'appelle l'<strong>élément de code</strong> des lignes nº 1 et 2 ? À quoi sert‑il ? (cf. chap. C2‑II <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#commentaires" target="_BLANK"></a>) </li>
+
+    <li> Syntaxiquement, comment s'appelle l'<strong>élément de code</strong> de la ligne nº 3 ? À quoi sert‑il ? (cf. chap. C2‑II <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#instructionsPreambule" target="_BLANK"></a>) </li>
+
+    <li> Syntaxiquement, comment s'appelle l'<strong>élément de code</strong> de la ligne nº 6 ? À quoi sert‑il ? (cf. chap. C2‑III <a class="cours" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html" target="_BLANK"></a>) </li>
+
+    <li> De quoi est composée l'<strong>instruction</strong> de la ligne nº 11 ? Quel est son but ? (cf. chap. C2‑VI <a class="cours" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#printf" target="_BLANK"></a>) </li>
+
+		<li> De <strong>combien d'instructions</strong> le bloc de définition de la fonction <code class="prettyprint lang-c">main</code> est‑il constitué ? Indiquer le nº de la première ligne de chacune de ces instructions (cf. chap. C2‑II <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#categoriesInstructions" target="_BLANK"></a>). </li>
+
+		<li> De <strong>combien d'instructions</strong> le bloc de l'instruction <code class="prettyprint lang-c">do<span class="nocode">…</span> while</code> est‑il constitué ? Indiquer le nº de la première ligne de chacune de ces instructions (cf. chap. C2‑II  <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#categoriesInstructions" target="_BLANK"></a>). </li> 
+
+		<li> Syntaxiquement, comment s'appelle l'<strong>élément de code</strong> à la ligne nº 23,  placé entre le mot‑clef <code class="prettyprint lang-c">while</code> et le symbole <code class="prettyprint lang-c">;</code> ? De combien d'atomes est‑il constitué ? En établir la liste (cf. chap. C2‑II  <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#expressions" target="_BLANK"></a>). </li>
+
+		<li> Syntaxiquement, comment s'appelle l'<strong>élément de code</strong> <code class="prettyprint lang-c">&&</code> ? Que code‑t‑il ? (cf. chap. C2‑IV <a class="cours" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#operateurs" target="_BLANK"></a>)	</li>
+	</ol><!-- questions -->
+
+
+<li id="exo2"> <em class="bold"> Mise en forme et analyse sémantique d'un code source </em> </li>
+
+<div class="nobullet" style="margin-left: 0.5em"> Le programme ci‑dessous affiche un tableau de dix lignes de <strong class="title">conversion de températures</strong> de °C en °F <a class="external" href="https://fr.wikipedia.org/wiki/Degré_Fahrenheit" target="_BLANK">W</a>, entre deux valeurs limites saisies par l'utilisateur. <br>  
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+/* Academic program to convert temperatures */
+#include &lt;stdio.h&gt;
+int main(void) {
+const float CtoF_rate = 9.0/5.0;
+const float CtoF_offset = 32.0;
+int maxTemp_C = 0;
+int minTemp_C = 0;
+printf(" -- Tableau de conversion °C -> °F -- \n");
+printf("Tapez les deux valeurs limites du tableau en °C : ");
+scanf("%d %d", &minTemp_C, &maxTemp_C);
+if (maxTemp_C < minTemp_C) {
+int bufferVar = minTemp_C;
+minTemp_C = maxTemp_C;
+maxTemp_C = bufferVar;}
+if (maxTemp_C < minTemp_C + 10) {
+maxTemp_C = minTemp_C + 10;}
+int deltaTemp_C = (maxTemp_C - minTemp_C) / 10;
+for (int temp_C = minTemp_C; temp_C <= maxTemp_C; temp_C += deltaTemp_C) {
+float temp_F = temp_C * CtoF_rate + CtoF_offset;
+printf("%4.1d °C = %4.0f °F\n", temp_C, temp_F);
+} return 0; }
+</pre>
+<!---------- ne pas indenter ---------->
+
+</div><!-- nobullet --> 	
+
+	<ol class="questions">
+	  <li> <strong>Indenter les instructions</strong> conformément à la structure du programme et avec la même convention d'indentation que celle du programme de l'exercice <em class="bold">1</em> (cf. chap. C2‑IX <a class="cours" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#indentation" target="_BLANK"></a>). </li>
+
+	  <li> Ajouter judicieusement des <strong>lignes d'aération</strong> pour séparer les différentes parties du programme et les rendre ainsi plus facile à repérer (cf. chap. C2‑IX <a class="cours" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#aeration" target="_BLANK"></a>). </li>
+
+	  <li> À quoi servent les deux constantes déclarées au tout début du bloc de définition de la fonction <code class="prettyprint lang-c">main</code> ? </li>
+
+	  <li> Pourquoi l'<strong>ordre de saisie</strong> des deux valeurs limites du tableau n'a‑t‑il pas d'incidence sur l'affichage ? Que se passe‑t‑il si l'utilisateur tape deux valeurs limites égales ? </li>
+
+	  <li> * Observer les <strong>constantes littérales</strong> employées dans le code source. En déduire une <strong>modification</strong> pour rendre le programme plus facile à faire évoluer (cf. chap. C2‑III <a class="cours" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#bonnePratiqueConstantes" target="_BLANK"></a>). </li>
+
+    <li> Ajouter une ligne de <strong>commentaire</strong> avant chaque groupe d'instructions constituant une partie distincte du programme. </li>
+  </ol><!-- questions -->
+
+
+
+
+
+
+
+
+<li id="exo3"> <em class="bold"> Recherche d'erreurs de syntaxe </em> </li>
+
+<div class="enonce">
+<p>	Dans les extraits de code source ci‑dessous, rechercher les <strong class="title">erreurs de syntaxe</strong> (et uniquement de syntaxe)  dans chaque extrait, sachant que le nombre d'erreurs est indiqué pour aider. Proposer une <strong class="pros">correction</strong> à <strong>chaque erreur</strong>. </p>
+
+<p> <em class="remark">Remarque</em>. Sauf lorsque le cadre commence en ligne nº 1, le <strong>code</strong> n'est <strong class="warning">pas complet</strong>. Le fait qu'un identificateur apparaisse sans avoir été déclaré n'est a priori <strong class="pros">pas une erreur</strong> (la déclaration est supposée codée précédemment). </p>
+
+<p> Pour <strong class="title">tester</strong> un tel extrait de code et sa correction avec un <strong class="defin">compilateur</strong>, il est donc indispensable : </p>
+<ul>
+  <li> de le copier dans le bloc de définition d'une <strong>fonction</strong> <code class="prettyprint lang-c">main</code> (cf. chap. C2‑I <a class="cours" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#fonctionMain" target="_BLANK"></a>) ; </li>
+
+  <li> de faire précéder cette fonction de toutes les <strong>directives d'inclusion</strong> requises (cf. chap. C2‑I <a class="cours" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#directives" target="_BLANK"></a>) et d'une <strong>déclaration ad‑hoc</strong> pour chaque identificateur figurant dans le code (cf. chap. C2‑III <a class="cours" href="../C2-ElementsLangage/Cc2-3_declarationDonnees.html#declarationVar" target="_BLANK"></a>). </li>
+</ul>
+</div><!-- enonce --> 	
+
+<ol class="questions">
+	<li>  Une erreur de syntaxe (cf. chap. C2‑I <a class="cours" href="../C2-ElementsLangage/Cc2-1_squeletteCode.html#fonctionMain" target="_BLANK"></a>) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+int main {
+  printf("Hello, Wordl\nn");
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+	<li>  Deux fois la même erreur lexicographique (cf. chap. C2‑II <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#choixIdentificateur" target="_BLANK"></a>) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  float price_in_£ = raw_price * (1.0 + VAT_rate);
+  printf("The item costs %5.2f.\n", price_in_£);
+</pre>
+<!---------- ne pas indenter ---------->
+	
+
+	<li>  Deux erreurs (cf. chap. C2‑II <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#choixIdentificateur" target="_BLANK"></a> et <a class="cours" href="../C2-ElementsLangage/Cc2-2_syntaxeFondamentale.html#delimiteurs" target="_BLANK"></a>) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  globalTempVariation = lastMeasure - <span class="nocode"><code style="font-size: 100%; font-weight: 500;">1stMeasure</code></span>;
+  printf("The temperature has varied of %d °C.\n, globalTempVariation");
+</pre>
+<!---------- ne pas indenter ---------->
+	
+
+		<li>  Deux erreurs de syntaxe (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#remarquesPrel" target="_BLANK"></a> et <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#ifComplet" target="_BLANK"></a>) : </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (measuredPressure > lowPressure) && (measuredPressure < highPressure) {
+    compressorRelayState = LOW;
+  }
+  else 
+    compressorRelayState = HIGH;
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+  <li>  Trois erreurs de syntaxe (cf. chap. C2‑VI <a class="cours" href="../C2-ElementsLangage/Cc2-6_entreesSortiesStandards.html#printf" target="_BLANK"></a> et chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#doWhile" target="_BLANK"></a>) : </li>
+  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  int counter = 0;
+  char typedChar;
+  do {
+    printf("Compteur de boucle = \n", ++counter);
+    printf("Souhaitez-vous continuer, tapez "o", sinon toute autre touche : "); 
+    scanf(" %c", &typedChar);  
+  }
+  while (typedChar == 'o')
+</pre>
+<!---------- ne pas indenter ---------->
+  </li>
+
+  </ol><!-- questions -->
+
+
+
+
+
+
+<li id="exo4"> <em class="bold"> Recherche d'erreurs de codage </em> </li>
+
+<div class="enonce">
+<p> Dans les extraits de code source ci‑dessous, rechercher les <strong class="title">erreurs de codage</strong>, sachant : </p>
+<ul>
+  <li>  qu'il peut y avoir <strong class="warning">plusieurs erreurs</strong> dans chaque extrait de code ;  </li>
+
+  <li> qu'il peut s'agir d'<strong class="warning">erreurs d'exécution</strong> et non pas seulement de syntaxe (pour le programme de la question <em class="bold">d)</em>, il faut le tester, en ayant compris son but).   </li>
+</ul>
+<p> Pour chaque erreur, proposer une <strong class="pros">correction</strong>. </p>
+
+<p> <em class="remark">Remarque</em>. Comme pour l'exercice précédent, sauf lorsque le cadre commence en ligne nº 1, le code n'est pas complet. Le fait qu'un identificateur apparaisse sans avoir été déclaré n'est a priori <strong>pas une erreur</strong> (la déclaration est supposée codée précédemment). </p>
+</div> 	<!-- enonce -->
+
+<ol class="questions">
+	<li>  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (currentDate = birthdayDate) {
+    print("Joyeux anniversaire !\n");
+  }
+  else {
+    print("Joyeux non-anniversaire !\n");
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+	</li>
+
+  <li>  
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  if (x >= 0) 
+    printf("x positif");
+    if (y >= 0) 
+      printf(" et y aussi.\n");
+</pre>
+<!---------- ne pas indenter ---------->
+	</li>
+
+  <li>  
+	<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:10">
+  for (int p = 10; p <= 0; p--) {
+    printf("L'inverse de %d est %g\n.", p, 1.0/p);
+  }
+</pre>
+<!---------- ne pas indenter ---------->
+	</li>
+
+
+	<li>  
+	<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+#include &lt;stdio.h&gt;
+
+void Main(){}
+  int newAttempt = 3;
+  int secretCode = 1234;
+
+  do {
+    int typedCode = 0;
+    if (newAttempt <= 2) {
+      printf("Il vous reste %d tentatives.\n");
+    }
+    printf("Tapez votre code secret : ");
+    scanf("%d", &typedCode)
+    newAtempt--;
+  }
+  while (typedCode == secretCode || newAttemps > 0);
+  
+  if (typedCode == secretcode) {
+    printf("Bienvenue !\n");
+  }
+  else {
+    printf("Code incorrect, contactez votre administrateur !\n");
+    return -1;
+  }
+  return 0;
+}
+</pre>
+<!---------- ne pas indenter ---------->
+	</li>
+
+  <div class="nobullet"> <em class="remark">Remarque</em> : ce programme comporte de <strong class="warning">nombreuses erreurs</strong> de <strong class="defin">syntaxe</strong> ainsi que <strong class="cons">quelques erreurs</strong> de <strong class="defin">logique</strong>. Pour les détecter, il est recommandé : </div>
+  <ul>
+    <li> de commencer par <strong>corriger immédiatement</strong> les <strong>erreurs évidentes</strong> de syntaxe ;  </li>
+  
+    <li> puis de recourir à un <strong>compilateur</strong> pour trouver toutes les <strong>erreurs restantes</strong> et les corriger ; </li>
+
+    <li> et enfin, d'<strong>exécuter</strong> le programme avec divers scénarios et constater les <strong>dysfonctionnements</strong> à corriger… </li>
+  </ul>
+  
+
+  </ol><!-- questions -->
+
+
+
+
+
+
+
+
+
+<li id="exo5"> <em class="bold">Codage de fonctions mathématiques</em> </li>
+
+<div class="enonce" >
+<p> En s'inspirant du programme analysé à l'exercice <em class="bold">1</em>, coder un programme qui, <strong class="defin">en boucle</strong> : </p>
+
+<ul>
+	<li> demande à l'utilisateur de <strong>saisir</strong> un entier positif <strong>n</strong>, </li>
+
+	<li> affiche la valeur du nombre <em class="bold"><strong>f</strong>(<strong>n</strong>)</em> où <strong>f</strong> est une <strong class="title">fonction</strong> spécifiée aux questions <em class="bold">a)</em> et <em class="bold">b) </em> ci‑après, </li>
+</ul>
+
+<p> sachant que :  </p>
+
+<ul>
+	<li> si une <strong>valeur négative</strong> est saisie, un bref message s'affiche pour signaler l'impossibilité du calcul ; </li>
+
+	<li> l'exécution du programme s'achève lorsque l'utilisateur saisit la <strong>valeur</strong> <code class="prettyprint lang-c">0</code>. </li>
+</ul>
+</div><!-- enonce -->
+
+	<ol class="questions">
+	  <li> Traiter l'exercice avec la fonction <var>f</var>(<var>n</var>) = √<var>n</var> (racine carrée, en anglais <em class="english">square root</em>). On exploitera le fichier d'en‑tête de la bibliothèque standard <code class="filename">math.h</code> – cf. chap. C2‑IV <a class="cours" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#fonctionsMath" target="_BLANK"></a>. </li>
+
+	  <li> Traiter l'exercice avec la fonction <var>f</var>(<var>n</var>) = <var>n</var>! (factorielle) <a class="external" href="https://fr.wikipedia.org/wiki/Factorielle" target="_BLANK">W</a>. On codera le calcul de la valeur de cette fonction avec une <strong>boucle</strong> <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>) en stockant le résultat dans une <strong>variable</strong> <code class="prettyprint lang-c">f</code> déclarée de type <code class="prettyprint lang-c">int</code> juste avant la boucle. </li>
+
+	  <li> Pour le programme de la question <em class="bold">b)</em>, que se passe‑t‑il lorsque <var>n</var> > 12 ? Pour cela, tester la valeur obtenue pour <var>n</var> = 13, 14, etc. puis consulter le cours, chap. C3‑II <a class="cours" href="../C3-Numeration/Cc3-2_typesEntiers.html#entiersStandards" target="_BLANK"></a>. </li>
+  </ol><!-- questions -->
+
+
+
+
+<li id="exo6"> <em class="bold">Codage de bifurcations multiples</em>  </li>
+
+  <ol class="questions">
+    <li> Recoder le programme de l'exercice <em class="bold">1</em> en employant une <strong class="title">bifurcation multiple</strong> <code class="prettyprint lang-c">switch</code> (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#switchCases" target="_BLANK"></a>) à la place de la succession de bifurcations simples <code class="prettyprint lang-c">if</code>… <code class="prettyprint lang-c">else if</code>… (lignes nº 13 à 21) – ne rien changer aux autres lignes du code source. </li>
+
+    <div class="nobullet"> <strong>Vérifier</strong> que le programme s'exécute correctement, exactement comme avant. </div>
+
+    <li> Dans le programme de l'exercice précédent, question <em class="bold">a)</em>, est‑il possible de traiter les trois cas – valeur négative, positive ou nulle – à l'aide d'une bifurcation <code class="prettyprint lang-c">switch</code> pour la saisie de l'utilisateur ? Sinon, pourquoi ? </li>
+  </ol><!-- questions -->
+
+
+
+
+
+<li id="exo7"> <em class="bold">Codage d'un jeu de devinette</em>  </li>
+
+<div class="enonce" > 
+<p> Dans le code source ci‑dessous, les lignes nº 10 & 11 génèrent un <strong class="defin">nombre entier aléatoire</strong> <strong>x</strong> compris entre <em class="bold">1</em> et <em class="bold">100</em>. En s'inspirant des exercices précédents (notamment l'exercice <em class="bold">1</em>), compléter ce code pour composer un programme qui demande à l'utilisateur de <strong class="title">deviner ce nombre</strong>, en affichant à chaque tentative si le nombre qu'il a saisi est plus petit ou plus grand que <strong>x</strong>. La valeur <em class="bold">0</em> sera utilisée pour permettre au joueur d'abandonner le jeu. </p>
+</div><!-- enonce -->
+
+<!---------- ne pas indenter ---------->
+<pre class="prettyprint lang-c linenums:1">
+/* Simple guess game program
+ */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+const int maxNumber = 100;
+ 
+int main(void) {
+  srand(time(NULL)); 
+  int x = 1 + rand() % maxNumber; // number to be guessed
+  int typedNumber = 0;
+  printf("%d\n", x);              // uncomment for debuggging - comment for playing
+  printf("Try to guess the hidden number between 1 and %d:\n", maxNumber);
+  
+  do {
+    printf("> ");
+    scanf("%d", &typedNumber);  
+  // ... to be completed
+}
+</pre>
+<!---------- ne pas indenter ---------->
+
+
+
+<li id="exo8"> <em class="bold">Affichage d'une table de multiplication</em>  </li>
+
+<div class="enonce" > 
+<p> Coder à l'aide d'une boucle <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>) un programme qui affiche la <strong class="title">table de multiplication</strong> d'un nombre entier positif <strong>n</strong> jusqu'à un facteur multiplicatif <strong>m</strong> donnés. Par exemple, si <strong>n</strong> = <em class="bold">7</em> et <strong>m</strong> = <em class="bold">10</em>, le programme doit afficher : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+ 0 x 7 = 0
+ 1 x 7 = 7
+ 2 x 7 = 14
+ 3 x 7 = 21
+ 4 x 7 = 28
+ 5 x 7 = 35
+ 6 x 7 = 42
+ 7 x 7 = 49
+ 8 x 7 = 56
+ 9 x 7 = 63
+10 x 7 = 70
+</pre>
+<!---------- ne pas indenter ---------->
+</div><!-- enonce -->
+
+<div class="consignes">
+<p class="consigne"> On déclarera les <strong class="title">constantes</strong> entières nommées : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">number</code> pour le nombre <strong>n</strong> qui fait l'objet de la table de multiplication ;  </li>
+
+  <li> <code class="prettyprint lang-c">maxFactor</code> pour la valeur maximale du facteur multiplicatif <strong>m</strong> de la table. </li>
+</ul>
+</div><!-- consigne -->
+
+<div class="nobullet"> 
+<p> Tester le <strong class="pros">bon fonctionnement</strong> du programme pour diverses valeurs de <strong>n</strong> et <strong>m</strong>. </p>
+</div><!-- nobullet -->
+
+
+
+<li id="exo9"> <em class="bold">Affichage d'une liste de multiples</em> </li>
+
+<div class="enonce" > 
+<p> Coder un programme qui affiche la <strong class="title">liste de tous les multiples</strong> d'un nombre entier positif <strong>n</strong> qui sont inférieurs à une valeur maximale <strong>m</strong>, avec un <strong>saut de ligne</strong> à chaque dizaine. Par exemple, si <strong>n</strong> = <em class="bold">4</em> et <strong>m</strong> = <em class="bold">100</em>, le programme doit afficher : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+ 4  8 
+12 16 20 
+24 28 
+32 36 40 
+44 48 
+52 56 60 
+64 68 
+72 76 80 
+84 88 
+92 96 100 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> On pourra procéder à l'aide d'une <strong>boucle</strong> <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>) par <strong>incrémentation unitaire</strong> d'un nombre <code class="prettyprint lang-c">k</code>, en testant sa divisibilité par <code class="prettyprint lang-c">n</code>. On s'aidera pour cela de l'<strong>opérateur</strong> <strong class="defin">modulo</strong> : l'expression <code class="prettyprint lang-c"><span class="nocode"><strong>k</strong></span> % <span class="nocode"><strong>n</strong></span> == 0</code> est vraie si et seulement si <strong>k</strong> est divisible par <strong>n</strong> (cf. chap. C2‑IV <a class="cours" href="../C2-ElementsLangage/Cc2-4_manipulationDonnees.html#operators" target="_BLANK"></a> et chap. C3‑II <a class="cours" href="../C3-Numeration/Cc3-2_typesEntiers.html#division" target="_BLANK"></a>). </p>
+</div><!-- enonce -->
+
+<div class="consignes">
+<p class="consigne"> On déclarera les <strong class="title">constantes</strong> entières nommées : </p>
+<ul>
+  <li> <code class="prettyprint lang-c">factor</code> pour le nombre <strong>n</strong> dont on veut afficher les multiples ;  </li>
+
+  <li> <code class="prettyprint lang-c">maxNumber</code> pour le nombre maximal <strong>m</strong> en dessous duquel on cherche les multiples de <strong>n</strong>. </li>
+</ul>
+</div><!-- consigne -->
+
+<div class="nobullet"> 
+<p> Tester le <strong class="pros">bon fonctionnement</strong> du programmes pour diverses valeurs de <strong>n</strong> et <strong>m</strong>. Pour les valeurs de <strong>n</strong> supérieures à <em class="bold">10</em>, prendre <strong>m</strong> = <em class="bold">1000</em> et effectuer un saut de ligne à chaque centaine. </p>
+</div><!-- nobullet -->
+
+
+
+
+<li id="exo10"> <em class="bold">* Affichage d'une liste de nombres premiers</em> </li>
+
+<div class="enonce" > 
+<p> En s'inspirant de l'exercice précédent, coder un programme qui affiche la <strong class="title">liste de tous les nombres premiers</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Nombre_premier" target="_BLANK">W</a> inférieurs à une valeur maximale <strong>m</strong> = <em class="bold">1000</em> avec un <strong>saut de ligne</strong> à chaque centaine, comme ci‑dessous : </p>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+  2   3   5   7  11  13  17  19  23  29  31  37  41  43  47  53  59  61  67  71  73  79  83  89  97 
+101 103 107 109 113 127 131 137 139 149 151 157 163 167 173 179 181 191 193 197 199 
+211 223 227 229 233 239 241 251 257 263 269 271 277 281 283 293 
+307 311 313 317 331 337 347 349 353 359 367 373 379 383 389 397 
+401 409 419 421 431 433 439 443 449 457 461 463 467 479 487 491 499 
+503 509 521 523 541 547 557 563 569 571 577 587 593 599 
+601 607 613 617 619 631 641 643 647 653 659 661 673 677 683 691 
+701 709 719 727 733 739 743 751 757 761 769 773 787 797 
+809 811 821 823 827 829 839 853 857 859 863 877 881 883 887 
+907 911 919 929 937 941 947 953 967 971 977 983 991 997 
+</pre>
+<!---------- ne pas indenter ---------->
+
+<p> <em class="remark">Remarque</em>. L'<strong class="title">algorithme</strong> le plus « simple » pour déterminer si un nombre est premier – à savoir tester tous les nombres en recherchant leurs diviseurs parmi tous les nombres inférieurs – peut quand même faire l'objet d'<strong class="defin">optimisations</strong>. En effet :   </p>
+<ul>
+  <li> hormis <em class="bold">2</em>, aucun nombre pair n'est premier, donc on peut <strong>ne tester que les</strong> <strong class="pros">nombres impairs</strong> à partir de <code class="prettyprint lang-c">3</code> ; </li>
+
+  <li> de même, pour chaque nombre testé, on peut ne chercher ses éventuels diviseurs que parmi les nombres impairs, et <strong>s'arrêter lorsqu'on a atteint sa</strong> <strong class="pros">racine carrée</strong>. </li>
+</ul>
+</div><!-- enonce -->
+
+
+
+<li id="exo11"> <em class="bold">* Décomposition d'un entier en facteurs premiers</em>  </li>
+
+<div class="enonce" >	
+<p> En s'inspirant des programmes précédents, coder un programme qui demande à l'utilisateur de saisir un nombre entier positif et qui affiche sa <strong class="title">décomposition en facteurs premiers</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Décomposition_en_produit_de_facteurs_premiers" target="_BLANK">W</a>. Par exemple, si l'utilisateur saisit le nombre <code>120</code>, le programme doit afficher : <br>
+<span class="inline">
+	<code class="displayDark">120 = 2 x 2 x 2 x 3 x 5</code>
+</span> </p>
+
+<p> De plus, si l'utilisateur saisit un <strong class="specialLB">nombre premier</strong>, alors le programme produire un affichage de la forme : <br>
+<span class="inline">
+  <code class="displayDark"><span class="nocode"><strong class="specialLY">nombre</strong></span> = <span class="nocode"><strong class="specialLY">nombre</strong></span>   it's a prime number! </code>
+</span> <br>
+<em class="remark">Rappel</em> : Le nombre <em class="bold">1</em> n'est <strong class="warning">pas premier</strong> ;  le nombre <em class="bold">2</em> est <strong class="specialLB">premier</strong>. </p>
+
+<p class="square"> <strong class="defin">Tester</strong> ce programme avec <strong>tous les nombres</strong> de <em class="bold">1</em> à <em class="bold">13</em>, puis avec le nombre <em class="bold">2&#8239;000&#8239;000&#8239;000</em> puis avec les nombres premiers : </p>
+<ul>
+  <li> 2&#8239;000&#8239;003, </li>
+
+  <li> 20&#8239;000&#8239;003, </li>
+
+  <li> 200&#8239;000&#8239;033, </li>
+
+  <li> 2&#8239;000&#8239;000&#8239;011.</li>
+</ul>
+</div><!-- enonce -->
+
+</ol><!-- exercices -->
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

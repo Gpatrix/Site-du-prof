@@ -28,7 +28,7 @@ ol.exercice > li {
 
 ol.exercice > li:before {
   counter-increment: exolist;
-  content: counter(exolist) ".Â ";
+  content: counter(exolist) ". ";
   position: absolute;
   left: -1.8em;
   font-weight: 600;
@@ -48,7 +48,7 @@ ol.questions > li {
 
 ol.questions > li:before {
   counter-increment: questlist;
-  content: counter(questlist, lower-alpha) ")Â ";
+  content: counter(questlist, lower-alpha) ") ";
   position: absolute;
   left: -1.4em;
   font-weight: 600;
@@ -79,7 +79,7 @@ ol.remarques > li {
 
 ol.remarques > li:before {
   counter-increment: remlist;
-  content: counter(remlist, upper-alpha) ")Â ";
+  content: counter(remlist, upper-alpha) ") ";
   position: absolute;
   left: -1.6em;
   font-weight: 600;
@@ -101,7 +101,7 @@ ol.littered > li {
 
 ol.littered > li:before {
   counter-increment: litterlist;
-  content: counter(litterlist, upper-alpha) ")Â ";
+  content: counter(litterlist, upper-alpha) ") ";
   position: absolute;
   left: -1.6em;
   font-weight: 600;
@@ -121,7 +121,7 @@ ol.exemples > li {
 
 ol.exemples > li:before {
   counter-increment: exlist;
-  content: counter(exlist, decimal) ")Â ";
+  content: counter(exlist, decimal) ") ";
   position: absolute;
   left: -1.6em;
   font-weight: 600;
@@ -141,7 +141,7 @@ ol.numbered > li {
 
 ol.numbered > li:before {
   counter-increment: nblist;
-  content: counter(nblist, decimal) ")Â ";
+  content: counter(nblist, decimal) ") ";
   position: absolute;
   left: -1.6em;
   font-weight: 600;
@@ -162,7 +162,7 @@ ol.lower > li {
 
 ol.lower > li:before {
   counter-increment: lowerlist;
-  content: counter(lowerlist, lower-alpha) ")Â ";
+  content: counter(lowerlist, lower-alpha) ") ";
   position: absolute;
   left: -1.6em;
 }

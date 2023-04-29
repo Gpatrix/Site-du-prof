@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="TP"
+	data-modulepartnumber="4"
+	data-pagenumber="2"
+	data-pageState="travaux"
+	data-pageheadtitle="Compte à rebours"
+	data-pagefulltitle="Compte à rebours"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont de consolider les méthodes de programmation initiées précédemment (TP C4‑1 <a class="previous" href="../C4-Fonctions/Ctp4-1_deElectronique.html" target="_BLANK">)</a>) : </p>
+
+<ul>
+	<li> créer pas à pas un programme décomposé en <strong class="defin">fonctions</strong> ; </li>
+
+	<li> employer des <strong class="defin">variables locales statiques</strong> ; </li>
+
+	<li> définir des <strong>pseudo-constantes</strong> à la place des constantes. </li>
+</ul>
+
+<p> Les exercices sont aussi l'occasion de <strong class="pros">découvrir</strong> : </p>
+
+<ul>
+	<li> l'emploi <strong>macro-commandes</strong> à la place des fonctions « courtes » (c'est-à-dire, qui sont codables avec peu d'instructions) ; </li>
+
+	<li> la décomposition d'un programme sur <strong>plusieurs fichiers</strong> ; </li>
+
+	<div class="nobullet">cette possibilité n'existe pas dans l'environnement de simulation <strong class="Tinkercad">Tinkercad</strong>, mais même sans disposer du matériel de la partie opérative, il est possible de tester la bonne compilation du code avec le logiciel <strong class="Arduino">Arduino <em class="sigle">IDE</em></strong>. </div>
+</ul>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ce sujet de TP, il est recommandé d'avoir étudié <strong class="warning">chapitres C4‑I à C4‑VI</strong> du cours. Des renvois aux principaux éléments de connaissance requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<h3 class="nocount"> Spécifications matérielles générales </h3>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/Ctp4-2_compteArebours.png" width="600px">
+
+<p>	Tous les exercices sont à traiter dans l'environnement de <strong>simulation en ligne</strong> <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK"></a>, en implémentant préalablement le <strong class="title">montage électronique</strong> en figure ci-contre, qui comprend : </p>
+
+<ul>
+	<li> une <strong>carte</strong>  <strong class="Arduino">Arduino Uno</strong> ; </li>
+
+	<li> une <strong>platine d'essai</strong> (<em class="english">breadboard</em>) de grande taille, dont les rails « <em class="bold">+</em> » et « <em class="bold">−</em> » sont respectivement reliés aux broches <em class="bold" style="color:red">5V</em></em> et <em class="bold">GND</em> de la carte ; </li>
+
+	<li> deux <strong>afficheurs 7 segments</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Afficheur_7_segments" target="_BLANK">W</a> permettant d'afficher un <strong>nombre entier à deux chiffres</strong> (unités et dizaines), c'est‑à‑dire compris entre <em class="bold">0</em> et <em class="bold">99</em> ; chaque afficheur est à <strong>cathode commune</strong> (caractéristique à choisir son menu contextuel de chaque afficheur sur <strong class="Tinkercad">Tinkercad</strong>) ; de plus, il faut : </li>
+
+	<ul>
+		<li> relier cette <strong>cathode</strong> (pôle commun inférieur) au rail « <em class="bold">−</em> » de la platine via une <strong>résistance de limitation</strong> de courant de <em class="bold">82 Ω</em> ; </li>
+
+		<div class="nobullet"> la broche du séparateur décimal <code>DP</code> (<em class="english">decimal point</em>) est également à relier directement au rail « <em class="bold">−</em> » car cette fonctionnalité ne sera pas utilisée ; </div>
+
+		<li> associer à chaque afficheur un <strong>circuit intégré décodeur</strong> <em><em class="sigle">BCD</em> vers 7 segments</em>  à technologie <em class="sigle">CMOS</em>, référence <em class="mark">CD4511</em> <a class="external" href="https://www.ti.com/lit/ds/symlink/cd4511b.pdf" target="_BLANK"></a> ; les <strong>4 entrées <em class="sigle">BCD</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/Décimal_codé_binaire" target="_BLANK">W</a> de ce circuit sont respectivement reliées (fils gris) : </li>
+		<ul>
+			<li> aux broches <strong>nº 3 à 6</strong> du port numérique de la carte <em class="mark">Arduino</em> pour l'afficheur du <strong>chiffre des unités</strong> ; </li>
+
+			<li> aux broches <strong>nº 8 à 11</strong> du port numérique de la carte <em class="mark">Arduino</em> pour l'afficheur du <strong>chiffre des dizaines</strong> ; </li>
+		</ul>
+
+		<div class="nobullet"> ces 8 broches étant toutes à configurer commes <strong>sortie</strong> de la carte <strong class="Arduino">Arduino</strong> ; </div>
+  	</ul>
+
+	<li> par ailleurs, pour chaque <strong>circuit décodeur</strong> <em class="mark">CD4511</em> : </li>
+		<ul>
+			<li> l'entrée d'<strong>effacement</strong> (<em class="english">blank</em>) fonctionne en <strong>logique négative</strong>, c'est-à-dire qu'au niveau logique bas, l'effacement opère (aucun segment ne s'allume) ; </li>
+
+			<div class="nobullet"> cette entrée est à relier respectivement à la broche <strong>nº 7</strong> (afficheur du chiffre des unités) ou <strong>nº 12</strong> (afficheur du chiffre des dizaines) de la carte <em class="mark">Arduino</em> ; </div>
+
+			<div class="nobullet">	configurées en <strong>sorties</strong>, ces deux broches permettront d'effectuer le <strong>clignotement</strong> des afficheurs ; </div>
+
+			<li> chacune des 7 sorties repérées <code>A</code> à <code>G</code> du circuit <em class="mark">CD4511</em> doit être respectivement reliée à la broche du segment de même repère de l'afficheur (fils jaunes) ; </li>
+
+			<li> l'entrée « lampe-témoin » <em class="sigle">LT</em> (<em class="english">lamp test</em>) doit être directement reliée au  rail « <em class="bold">+</em> » de la platine (fonctionnalité non utilisée ici) ; </li>
+
+			<li> l'entrée « verrou actif » <em class="sigle">LE</em> (<em class="english">latch enable</em>) est directement reliée au  rail « <em class="bold">−</em> » de la platine (fonctionnalité non utilisée ici) ; </li>
+
+			<li> enfin, l'alimentation en tension (via les broches diamétralement opposées du circuit) sera assurée par liaisons directes aux rails « <em class="bold">+</em> » et « <em class="bold">−</em> » de la platine ; </li>
+		</ul> 
+
+	<li> deux <strong class="specialGr">bouton-poussoir</strong>, respectivement désignés <code class="cmd">START-STOP</code> et <code class="cmd">SET-RESET</code>, tels que pour chacun :</li>
+	<ul>
+		<li> son pôle gauche est relié au rail « <em class="bold">+</em> » de la platine ; </li>
+
+		<li> son pôle droit est relié à la broche <strong>nº 2</strong> (bouton <code>START-STOP</code>) ou à la broche <strong>nº 13</strong> (bouton <code>SET-RESET</code>) du port numérique de la carte <em class="mark">Arduino</em> et au rail « − » de la platine via une <strong>résistance de pull‑down</strong> de <em class="bold">2 kΩ</em> ; </li>
+
+		<div class="nobullet"> autrement dit, ces broches doivent être configurées en <strong>entrées</strong> et fonctionneront en <strong>logique positive</strong> ; </div>
+
+		<li> ses pôles doublés sont à reliés par un <strong>condensateur</strong> <em>anti-rebond</em> de 10 nF (recommandé en pratique, mais facultatif en simulation, voire néfaste – à mettre hors circuit si les appuis sont mal détectés sur <strong class="Tinkercad">Tinkercad</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#remConfigES" target="_BLANK"></a>). </li>
+	</ul>
+</ul>
+
+</div><!-- display -->
+
+
+
+
+<h3 class="nocount"> Spécifications logicielles générales </h3>
+
+
+<p> Le but final du sujet de TP est d'implémenter le programme de commande d'un afficheur de <strong class="defin">compte à rebours</strong> <strong>de secondes</strong> (en anglais, <em class="english">countdown</em> <a class="external" href="https://en.wikipedia.org/wiki/Countdown" target="_BLANK">W</a>), avec une <strong>interface homme-machine minimale</strong> (deux boutons), un peu comme sur une montre, avec <strong>deux modes</strong> (<code>WORK/SET</code>) : </p>
+
+<ul>
+	<li> à la mise en service, l'afficheur est <strong class="defin">mode travail</strong> (<code>WORK</code>) et alors, le compte à rebours peut être dans <strong>deux états</strong> (<code>STOP/RUN</code>) : </li>
+	<ul>
+		<li> à la mise en service, l'afficheur est à l'<strong class="warning">arrêt</strong> (<code>STOP</code>), le nombre affiché est <strong>fixe</strong> et vaut la <strong>valeur initiale</strong> <code>20</code> mémorisée par défaut ;  </li>
+
+		<li> si le compte à rebours est à l'arrêt, un <strong>appui bref</strong> sur le bouton <code>START-STOP</code> déclenche l'état de <strong class="warning">marche</strong> (<code>RUN</code>) du compte à rebours, avec une <strong>décrémentation unitaire</strong> à chaque seconde du nombre affiché jusqu'à atteindre la valeur <code>OO</code> ; </li>
+
+		<li> si le compte à rebours est en marche, un <strong>appui bref</strong> sur le bouton <code>START-STOP</code> arrête le compte à rebours, la valeur en cours restant affichée ; </li>
+
+		<li> si le compte à rebours est à l'arrêt, un <strong>appui bref</strong> sur le bouton <code>RESET-SET</code> réinitialise le nombre affiché à la <strong>valeur initiale mémorisée</strong>. </li>
+	</ul>
+
+	<li> Si le compte à rebours est à l'arrêt, un <strong>appui long</strong> (au moins 1 seconde) sur le bouton <code>RESET-SET</code> fait passer l'afficheur en <strong class="defin">mode réglage</strong> (<code>SET</code>), dans lequel le bouton <code>START-STOP</code> permet d'ajuster la valeur initiale mémorisée : </li>
+
+	<ul>
+		<li> le nombre affiché est alors la <strong>valeur initiale mémorisée</strong> ; sauf en cas d'appui long sur le bouton <code>START-STOP</code>, l'affichage <strong>clignote</strong> avec une demi-période d'<strong>une seconde</strong> et un rapport cyclique de <strong>50 %</strong> ; </li>
+
+		<li> chaque appui bref sur le bouton <code>START-STOP</code> provoque l'<strong>incrémentation unitaire</strong> du nombre affiché, avec un <strong>rebouclage à zéro</strong> en cas de dépassement de la valeur <code>99</code> ; l'affichage est toujours clignotant ; </li>
+
+		<li> dès qu'un <strong>appui long</strong> (au moins 1 seconde) est détecté sur le bouton <code>START-STOP</code>, et tant que cet appui est maintenu, le nombre affiché ne clignote plus mais subit une <strong>incrémentation unitaire</strong> à chaque <strong>dixième de seconde</strong> écoulé, avec un <strong>rebouclage à zéro</strong> en cas de dépassement de la valeur <code>99</code> ; </li>
+
+		<li> si le bouton <code>START-STOP</code> est relâché, un nouvel <strong>appui long</strong> (au moins 1 seconde) sur le bouton <code>RESET-SET</code> refait passer l'afficheur en <strong>mode travail</strong> avec comme <strong>valeur initiale mémorisée</strong> la dernière valeur du nombre affiché. </li>
+	</ul>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<em>
+
+<p> À chaque exercice numéroté ci-dessous, coder le programme conformément aux spécifications générales (cf. supra) et particulières (énoncé de l'exercice). Veiller au respect des bonnes pratiques : </p>
+
+<ul>
+	<li> commencer par <strong>définir des constantes</strong> pour désigner les numéros de broches d'entrées-sorties de la carte et les paramètres mentionnés dans les spécifications (durées, etc.), en choisissant des <strong>identificateurs explicites en anglais</strong> pour produire un code auto-documenté <a class="previous" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#nomsExplicites" target="_BLANK"></a> ; </li>
+
+	<li> dans la fonction <code class="prettyprint lang-c">setup</code>, <strong>configurer toutes les entrées/sorties</strong> utilisées sur le port numérique de la carte <em class="mark">Arduino</em> <a class="previous" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#configurationBroche" target="_BLANK"></a>, et ne pas oublier d'<strong>initialiser les sorties</strong> (a priori, à 0 V) <a class="previous" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#digitalWrite" target="_BLANK"></a>
+		. </li>
+</ul>
+
+<p> Avant de commencer le traitement des exercices, il est vivement conseillé de <strong>vérifier le bon câblage</strong> de la partie matérielle par des instructions directes d'entrées-sorties logiques (cf. exercice 1). </p>
+
+<p> Avec un éditeur de code externe (<em class="mark">Atom</em>, <em class="mark">Sublime Text</em>…), enregistrer le programme de chaque exercice dans un fichier distinct, d'extension <code>.ino</code>  puis le copier/coller dans la fenêtre d'édition de <em class="mark">Tinkercad</em> pour vérifier qu'il s'exécute correctement. </p>
+
+<p> Sur cahier, répondre aux éventuelles questions supplémentaires. </p>
+
+</em>
+
+
+<ol class="exercice">
+
+	<li> <em class="bold">Fonctions et macro-commandes d'initialisation</em> </li>
+
+	<div><ol class="questions">
+
+		<li> Pour vérifier le bon fonctionnement des sorties de la carte <em class="mark">Arduino</em>, coder préalablement <strong>trois fonctions</strong> : <br>
+
+		<ul>
+			<li> <code>initPins</code>, sans valeur de retour et sans argument, qui <strong>initialise toutes les broches</strong> de la carte conformément aux spécifications matérielles ; </li>
+
+			<li> <code>steadyDisplay</code>, sans valeur de retour et sans argument, qui rend l'<strong>affichage fixe</strong> (c'est-à-dire non clignotant) sur les afficheurs 7 segments ; </li>
+
+			<li> <code>displayDigit</code>, sans valeur de retour et prenant pour arguments deux entiers positifs, respectivement : <br>
+			<ul>
+				<li> <code>digit</code>, le chiffre à afficher (codé en <em class="sigle">BCD</em> sur le quartet de poids faible),  </li>
+
+				<li> <code>BCDinputFirstPin</code>, le premier numéro de broche d'entrée du circuit décodeur via lequel le chiffre sera affiché, </li>
+			</ul>
+			et qui <strong>affiche le chiffre</strong> sur l'afficheur raccordé au circuit décodeur ciblé. </li>
+		</ul>
+
+   	Dans la fonction <code>setup</code>, appeler ces trois fonctions pour afficher successivement <strong>tous les chiffres de 9 à 0</strong> sur l'afficheur des unités puis sur celui des dizaines, avec un délai d'une demi-seconde entre deux valeurs et une seconde de délai entre chaque afficheur. </li>
+
+		<li> Pour vérifier le bon fonctionnement des entrées de la carte <em class="mark">Arduino</em>, coder préalablement <strong>deux macro-commandes</strong> équivalentes aux fonctions présentées au chap. C4-VI dans la bibliothèque <code>digitalSignals</code> <a class="previous" href="../C4-Fonctions/Cc4-6_programmationModulaire.html#DigitalSignals" target="_BLANK"></a> : <br>
+
+		<ul>
+			<li> <code>updateSignal</code>, pour mettre à jour l'octet de mémorisation des niveaux logiques du signal sur une entrée numérique de la carte ; </li>
+
+			<li> <code>risingEdge</code>, pour détecter un front montant codé sur l'octet de mémorisation des niveaux logiques du signal sur une entrée numérique de la carte ; </li>
+		</ul>
+
+		En reprenant le programme de la question a), dans la fonction <code>loop</code>, appeler ces deux macro-commandes pour qu'un appui sur le bouton <code>START-STOP</code> inverse l'état allumé/éteint de l'afficheur des unités, et le bouton <code>RESET-SET</code> idem pour l'afficheur des dizaines. </li>
+	</li>
+	</ol></div>
+
+
+
+	<li> <em class="bold">Fonctions et macro-commandes d'affichage</em> </li>
+
+	<div><ol class="questions">
+		<li> Pour implémenter l'affichage d'un nombre à deux chiffres, coder préalablement <strong>deux macro-commandes</strong> : <br>
+
+		<ul>
+			<li> <code>unitDigit(number)</code> qui rend le <strong>chiffre des unités</strong> de son argument <code>number</code> ; </li>
+
+			<li> <code>tensDigit(number)</code> qui rend le <strong>chiffre des dizaines</strong> de son argument <code>number</code>. </li>
+		</ul>
+		</li>
+
+		<li> En utilisant ces deux macro-commandes, coder une fonction <code>displayNumber</code>, sans valeur de retour et prenant pour argument un nombre entier positif ; elle doit afficher le chiffre des unités et des dizaines de ce nombre respectivement sur les deux afficheurs correspondants. </li>
+
+		<li> Dans la fonction <code>loop</code>, coder une boucle qui appelle la fonction <code>displayNumber</code> pour afficher successivement <strong>tous les nombres</strong> de <code>20</code> à <code>00</code> avec un délai de une seconde entre chacun (à l'aide de la fonction <code>delay</code>). </li>
+	</ol></div>
+	
+
+
+	<li> <em class="bold">Fonction d'horloge impulsionnelle principale</em> </li>
+
+	<div><ol class="questions">
+		<li> Coder une fonction <code>clockSecondTick</code>, sans argument et rendant la valeur booléenne <code>1</code> à chaque nouveau millier de la valeur rendue par la fonction <code>millis</code>, c'est-à-dire <strong>à chaque nouvelle seconde</strong>, et la valeur booléenne <code>0</code> le reste du temps. </li>
+
+		<li> Pour tester cette fonction, implémenter alors une <strong>version réactive</strong> du programme de la question 2.c) en utilisant la fonction <code>clockSecondTick</code> à la place de <code>delay</code>. </li>
+	</ol></div>
+
+
+
+	<li> <em class="bold">Programme de compte à rebours élémentaire</em> </li>
+
+	<div><ol class="questions">
+	  <li> Reprendre le programme de la question 3.c) de telle sorte que le compte à rebours s'arrête à la valeur <code>00</code> et ne reprend à la valeur <code>20</code> (<em class="english">reset</em>) qu'après un appui bref sur le bouton <code>RESET-SET</code>. </li>
+
+    <li> Reprendre le programme de la question 4.a) et implémenter le fonctionnement du bouton <code>START-STOP</code> (déclarer une variable énumérée <code>state</code> avec deux valeurs possibles <code>STOP</code> et <code>RUN</code>). Un <em class="english">reset</em> ne doit pouvoir alors intervenir qu'à l'état <code>STOP</code>.  </li>
+	</ol></div>
+
+
+
+	<li> <em class="bold">Fonction d'incrémentation rapide</em> </li>
+
+	<div><ol class="questions"> 
+		<li> Coder préalablement : </li>
+
+    <ul>
+      <li> une fonction <code>clockTenthTick</code>, sans argument et qui rend la valeur booléenne <code>1</code> selon le même principe que la fonction <code>clockSecondTick</code> codée à la question 3.a), mais à chaque nouvelle centaine de la fonction <code>millis</code> (c'est-à-dire à chaque dixième de seconde) ; </li>
+
+      <li> une fonction <code>blinkDisplay</code>, sans argument ni valeur rendue, qui inverse l'état allumé/éteint des deux afficheurs à chaque fois qu'elle est appelée ; </li>
+
+      <li> une macro-commande <code>isHigh</code> pour détecter un niveau logique HAUT sur l'octet de mémorisation des niveaux logiques du signal sur une entrée numérique de la carte (même principe qu'à la question 1.b) ;  </li>
+
+      <li> une macro-commande <code>modulo100increment(number)</code> qui, à chaque appel, incrémente de un son argument <code>number</code>, sauf si ce dernier vaut 99, auquel cas, il est réinitialisé à 0.  </li>
+    </ul>
+
+    <li> Tester ces fonctions dans un programme qui incrémente la valeur affichée tous les dixièmes de secondes tant qu'on appuie sur le bouton <code>RESET-SET</code> et qui la fait clignoter lorsque ce bouton est relâché. </li>
+  </ol></div>	
+
+
+  <li> <em class="bold">Fonctions de détection d'appuis long</em> </li>
+  
+  <div><ol class="questions"> 	
+    <li> Coder une fonction <code>longPushOccured</code> à valeur booléenne et prenant pour argument l'octet de mémorisation des niveaux logiques du signal d'un bouton poussoir, qui <strong>détecte l'occurrence d'un appui long</strong> sur le bouton et qui rend alors la valeur <code>1</code>, sinon la valeur <code>0</code>. <br>
+    <em class="remark">NB</em> :  cette fonction ne doit rendre la valeur <code>1</code> qu'<strong>une seule fois par appui long</strong>.  </li>
+
+    <li> Tester la fonction <code>longPushOccured</code> dans le programme de la question 4.a) en déclenchant le <em class="english">reset</em> par un appui long au lieu d'un appui bref sur le bouton <code>RESET-SET</code>. </li>
+
+    <li> Coder une fonction <code>longPushMaintained</code> à valeur booléenne et prenant pour argument l'octet de mémorisation des niveaux logiques du signal d'un bouton poussoir, qui <strong>détecte un appui long maintenu</strong> sur le bouton et qui rend la valeur <code>1</code> tant que l'appui est maintenu, sinon la valeur <code>0</code>. </li>
+
+    <li> Tester cette fonction dans le programme de la question 4.b) en opérant la décrémentation du nombre affiché tant qu'un appui long est maintenu sur le bouton <code>START-STOP</code>. </li>
+  </ol></div> 
+
+
+
+  <li> <em class="bold">Programme de compte à rebours complet</em> <br>
+
+	<div style="margin-top: 0.5em;"> En utilisant toutes les fonctions précédentes, coder dans la fonction <code>loop</code> l'algorithme complet avec <strong>le mode « réglage »</strong> (déclarer une variable énumérée <code>mode</code> avec deux valeurs possibles <code>WORK</code> et <code>SET</code>). Procéder en implémentant d'abord tous les changements de modes et d'état, puis toutes les actions à accomplir dans chaque mode ou état particulier. </div>
+  </li>
+
+
+  <li> <em class="bold">Version modulaire du programme de compte à rebours</em> <br>
+
+	<div style="margin-top: 0.5em;"> En gardant les mêmes éléments de code, répartir le programme de la question 7 sur <strong>plusieurs fichiers</strong>. Vérifier que cette version modulaire est compilable avec le logiciel <em class="mark">Arduino</em> <em class="sigle">IDE</em>. Quels modules pourraient être constitués en bibliothèque ? </div>
+  </li>
+
+</ol>
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

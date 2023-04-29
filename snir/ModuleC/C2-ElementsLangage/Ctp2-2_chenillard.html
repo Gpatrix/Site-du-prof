@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="TP"
+	data-modulepartnumber="2"
+	data-pagenumber="2"
+	data-pageState="OK"
+	data-pageheadtitle="Chenillard"
+	data-pagefulltitle="Chenillard de led"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont de consolider la pratique de toutes les éléments de langage abordés dans le sujet précédent, à savoir : </p>
+
+<ul>
+	<li> les <strong class="defin">constantes et variables booléennes</strong> ; </li>
+
+	<li> les <strong class="defin">structures de contrôle</strong> élémentaires (<code class="prettyprint lang-c">if</code>, <code class="prettyprint lang-c">for</code>) ; </li>
+
+	<li> la détection d'un <strong class="defin">front montant</strong> du signal de tension sur le bouton‑poussoir et non pas seulement de son état (appuyé ou relâché). </li>
+</ul>
+
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ce sujet de TP, il est recommandé d'avoir étudié le cours jusqu'au <strong>chapitre</strong> <strong class="warning">C2‑VIII</strong> <strong>inclus</strong> (à l'exception du chap. C2‑VI). Néanmoins, la plupart des exercices ne font appel qu'à un nombre ciblé de connaissances et des renvois aux principaux éléments de cours requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+
+<h3 class="nocount" id="specifMat"> Spécifications matérielles générales </h3>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/Ctp2-2_chenillard.png" width="400px">
+<p>	Tous les exercices sont à traiter dans l'environnement de <strong>simulation en ligne</strong> <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK" ></a>, en implémentant préalablement le <strong class="title">montage électronique</strong> en figure ci‑contre, qui comprend : </p>
+
+<ul>
+	<li> une <strong>carte</strong>  <strong class="Arduino">Arduino Uno</strong> ; </li>
+
+	<li> une <strong>platine d'essai</strong> (<em class="english">breadboard</em>) de taille moyenne, dont le rail « <em class="bold">−</em> » est relié à la broche <em class="bold">GND</em> de la carte ;</li>
+
+	<li> une série de <strong class="specialY">8 led jaunes</strong> telles que : </li>
+	<ul>
+		<li> les anodes sont respectivement reliées aux <strong>broches nº 2 à 9</strong> du port numérique de la carte ; ces broches doivent donc être configurées dans les programmes comme des <strong>sorties</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#OUTPUT" target="_BLANK"></a>) ; </li> 
+
+		<li> les cathodes sont reliées au rail « <em class="bold">−</em> » de la platine, chacune via une <strong>résistance de limitation</strong> de courant de <em class="bold">220 Ω</em> ; </li>
+	</ul>
+	
+	<li id="boutonPoussoir"> un <strong class="specialGr">bouton‑poussoir</strong> tel que : </li>
+	<ul>
+		<li> son pôle gauche est relié au rail « <em class="bold">−</em> » de la platine ; </li>
+
+		<li> son pôle droit est relié à la <strong>broche nº 12</strong> du port numérique de la carte et n'est pas associé à une résistance externe ; elle est donc à configurer dans les programmes comme une <strong class="defin">entrée en logique négative</strong> qui active une résistance de <strong class="warning">pull‑up</strong> <strong class="specialV">interne</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#INPUT_PULLUP" target="_BLANK"></a>) ;  </li>
+
+		<li> ses pôles doublés sont reliés par un <strong>condensateur</strong> <em>anti‑rebond</em> de 10 nF (recommandé en pratique, mais facultatif en simulation, voire néfaste – à mettre hors circuit si les appuis sont mal détectés sur <strong class="Tinkercad">Tinkercad</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#remConfigES" target="_BLANK"></a>). </li>
+	</ul>
+</ul>
+</div><!-- display -->	
+
+
+
+<h3 class="nocount" id="specifGene"> Spécifications logicielles générales </h3>
+
+
+
+<p> Les <strong>exercices</strong> consistent à coder des programmes pour faire clignoter les led en <strong class="title">chenillard</strong> (en anglais, <em class="english">led chaser</em> <a class="external" href="https://www.youtube.com/watch?v=MemHThiHecI" target="_BLANK"></a>) selon différents <strong>modes</strong> : </p>
+<ul>
+	<li> <strong class="title">répétitif</strong> <strong>unidirectionnel</strong> ou <strong>bidirectionnel</strong>, </li>
+
+	<li> <strong class="title">déclenché</strong> à <strong>chaque trajet</strong> par appui sur le bouton‑poussoir, </li>
+
+	<li> <strong class="title">marche‑arrêt</strong> commandé par appuis sur le bouton‑poussoir, </li>
+
+	<li> <strong class="title">pas‑à‑pas</strong> (c'est‑à‑dire led par led) à chaque appui sur le bouton‑poussoir… </li>
+</ul>
+
+<p> Sauf pour le mode pas‑à‑pas, tous les chenillard seront programmés avec <strong class="specialY">durée de poursuite</strong> – c'est‑à‑dire la <strong>durée d'allumage</strong> de la led courante – de <strong>0,1 seconde</strong>. </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important"; style="margin-left: 0em;">
+<p> Il est recommandé de traiter les exercices <strong class="pros">dans l'ordre</strong>. </p>
+
+<p> Dans un <strong class="title">nouveau circuit</strong> sous <strong class="Tinkercad">Tinkercad</strong> : </p>
+<ul>
+	<li> <strong class="specialLB">effectuer le câblage</strong> de la partie matérielle ;</li>
+
+	<li> <strong class="specialLB">vérifier le câblage</strong> par branchements directs temporaires, typiquement en reliant l'anode de chaque led au potentiel de référence <em class="bold" style="color:red">5V</em> de la carte.  </li>
+</ul>
+
+<p> Sur le poste de travail, créer un <strong class="title">répertoire de TP</strong> nommé avec la référence du sujet, typiquement <code class="filename">C2_TP2</code>. </p>
+
+<p> Puis,	avec un <strong class="title">éditeur de code</strong> (<em class="mark">Sublime Text</em>, <em class="mark">Atom</em>…) : </p>
+
+<ul>
+	<li> <strong class="specialLB">Coder</strong> les programmes demandés en respectant les <strong class="pros">règles de bonnes pratiques</strong> (cf. chap. C2‑IX <a class="cours" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#nomsExplicites" target="_BLANK"></a>).  </li>
+
+	<li> <strong class="specialLB">Enregistrer</strong> le programme de <strong>chaque exercice</strong> dans un <strong class="pros">fichier distinct</strong> nommé <code class="filename">Ctp22_ex<strong class="defin" style="padding-left: 0.1em; padding-right: 0.1em">n</strong>v<strong class="defin" style="padding-left: 0.1em; padding-right: 0.1em">x</strong>.ino</code>, où <strong class="defin">n</strong> est le nº de l'exercice et  <strong class="defin">x</strong> est le nº de la version demandée. </li>
+</ul>
+
+<p> Pour <strong class="title">tester le bon fonctionnement</strong> de chaque programme, procéder par <strong>copier‑coller </strong>dans la fenêtre d'édition de <strong class="Tinkercad">Tinkercad</strong>. En cas de <strong class="defin">modifications ponctuelles</strong> de mise au point, ne pas oublier d'effectuer un <strong>copier‑coller inverse</strong> dans l'éditeur de code et d'enregistrer les modifications. </p>
+
+<p>	Répondre aux <strong class="title">questions supplémentaires</strong> sur feuille ou cahier. </p>
+</div><!-- important -->
+
+
+<h4> Consignes de codage </h4>
+
+
+<div class="consignes" style="margin-left: 0em;"><p class="consignes"></p>
+<p> <strong class="title">Déclarer les constantes globales</strong> ci‑dessous : </p>
+
+<ul>
+	<li> <code class="prettyprint lang-c">firstLEDpin</code> et <code class="prettyprint lang-c">lastLEDpin</code> pour désigner les <strong>numéros de broches</strong> du port numérique auxquelles sont respectivement reliées la <strong>première</strong> (la plus à droite) et la <strong>dernière</strong> <strong class="specialY">led</strong> (la plus à gauche) du chenillard ; </li>
+
+	<li> <code class="prettyprint lang-c">buttonPin</code> pour désigner le <strong>numéro de broche</strong> du port numérique à laquelle est relié le <strong class="specialGr">bouton‑poussoir</strong> ;</li>
+
+	<li> <code class="prettyprint lang-c">chaseDuration</code> pour désigner la <strong>durée de poursuite</strong> de la <strong class="specialY">led</strong> courante durant le chenillard (cf. spécifications logicielles générales supra <a class="supra" href="#specifGene"></a>), à déclarer de type <strong class="specialG">entier non signé</strong>. </li>
+</ul>
+
+<p style="margin-top: 1em"> <strong class="title">Dans la fonction</strong> <code class="prettyprint lang-c">setup</code> : </p>
+<ul>
+	<li> à l'aide d'une boucle <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>) avec un variable d'itération <code class="cmd">ledPin</code> allant de <code class="prettyprint lang-c">firstLEDpin</code> à <code class="prettyprint lang-c">lastLEDpin</code>, configurer comme <strong>sorties</strong> et initialiser à l'état logique <strong>bas</strong> toutes les broches du port numérique auxquelles sont reliées des <strong class="specialY">led</strong>. </li>
+
+	<li> configurer comme <strong>entrée</strong> la broche du port numérique à laquelle est relié le <strong class="specialGr">bouton‑poussoir</strong> (on rappelle que ce dernier est câblé pour fonctionner en <strong class="defin">logique négative</strong> en faisant appel à une résistance de <strong>pull‑up</strong> interne à la <strong>carte</strong> <strong class="Arduino">Arduino</strong> – cf. supra <a class="supra" href="#boutonPoussoir"></a>). </li>
+</ul>
+</div><!-- consignes -->
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="exercice">
+	<li id="exo1"> Coder un programme qui : </li>
+	<ul>
+		<li> initialement (fonction <code class="prettyprint lang-c">setup</code>), fait <strong class="mainTitle">clignoter simultanément</strong> toutes les led <strong class="title">3 fois</strong> (période <strong>T</strong> = <em class="bold">1 s</em>, rapport cyclique <em class="bold">α</em> = <em class="bold">50 %</em>) ; </li>
+
+		<div class="nobullet"> pour cela, on utilisera l'algorithme classique du programme « <strong>blink</strong> » (cf. chap. C2‑VIII <a class="cours" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html#blinkDelay" target="_BLANK"></a>) avec des boucles <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>) ; 
+
+		<li> puis en boucle (fonction <code class="prettyprint lang-c">loop</code>), anime les led en <strong class="title">chenillard répétitif unidirectionnel</strong> <strong>vers la gauche</strong>, c'est‑à‑dire qu'après avoir atteint la led la plus à gauche, le chenillard reprend automatiquement à la led la plus à droite. </li>
+	</ul>
+	
+	<div class="nobullet" style="margin-left: 0.5em"> Pour le chenillard uniquement (pas le clignotement), coder <strong>deux versions différentes</strong> <strong class="title">v1</strong>, <strong class="title">v2</strong> : </div>
+	<ul>
+		<li> <strong class="title">v1</strong> : avec, dans la fonction <code class="prettyprint lang-c">loop</code>, une boucle <code class="prettyprint lang-c">for</code> (cf. chap. C2‑V <a class="cours" href="../C2-ElementsLangage/Cc2-5_structuresControle.html#boucleFor" target="_BLANK"></a>) : </li>
+
+		<ul>
+			<li> qui opère sur une variable <code class="cmd">ledPin</code> allant de <code class="prettyprint lang-c">firstLEDpin</code> à <code class="prettyprint lang-c">lastLEDpin</code> ; </li>
+   
+			<li> qui met en œuvre la <strong>séquence élémentaire</strong> à la base du chenillard, laquelle consiste simplement à : </li>
+			<em><ol> 
+				<li> allumer la led courante (cf. chap. C2‑VIII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#digitalWrite" target="_BLANK"></a>), </li>
+
+				<li> attendre l'écoulement de la durée de poursuite <code class="prettyprint lang-c">chaseDuration</code> (cf. chap. C2‑VIII <a class="cours" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html#delay" target="_BLANK"></a>), </li>
+
+				<li> éteindre de led courante, et passer à la led suivante… </li>
+		  </ol></em>
+		</ul> 
+
+		<li> <strong class="title">v2</strong> : <strong class="warning">sans</strong> boucle <code class="prettyprint lang-c">for</code> (ni <code class="prettyprint lang-c">while</code>) dans la fonction <code class="prettyprint lang-c">loop</code>, mais en exploitant la répétitivité de cette dernière et en employant une variable d'itération <code class="cmd">ledPin</code> à déclarer préalablement (hors de la fonction <code class="prettyprint lang-c">loop</code>) puis à manipuler et tester comme le fait une boucle <code class="prettyprint lang-c">for</code>. </li>
+	</ul> 
+	<div class="nobullet" style="margin-left: 0.5em">Comparer ces deux versions (lisibilité, efficacité…). </div>
+
+
+
+
+	<div class="consignes" style="margin-top: 2em; margin-left: -0.3em;">
+	<p class="consigne"> Pour <strong class="title">tous les exercices suivants</strong>, <strong class="warning">aucun clignotement initial</strong> des led n'est demandé. Les <strong>instructions</strong> correspondantes codées à l'exercice <em class="bold">1</em> peuvent donc être <strong class="pros">supprimées de la fonction</strong> <code class="prettyprint lang-c">setup</code> pour ne pas encombrer inutilement les programmes ni alourdir leur exécution. </p>
+	</div><!-- consigne -->
+
+
+
+
+	<li id="exo2"> Coder un programme qui anime les led en <strong class="title">chenillard répétitif bidirectionnel</strong> (vers la gauche puis vers la droite), avec <strong>deux versions différentes</strong> <strong class="title">v1</strong>, <strong class="title">v2</strong> : </li>
+
+	<div class="nobullet" style="margin-left: 1.5em">
+	<ul>
+		<li>  <strong class="title">v1</strong> : avec deux boucles « symétriques » <code class="prettyprint lang-c">for</code> dans la fonction <code class="prettyprint lang-c">loop</code> ; </li> 
+
+		<li>  <strong class="title">v2</strong> : <strong class="warning">sans</strong> boucle <code class="prettyprint lang-c">for</code> dans la fonction <code class="prettyprint lang-c">loop</code>, mais en exploitant la répétitivité de cette dernière comme pour l'exercice précédent ; <br> 
+		pour rationaliser le code, on pourra déclarer <strong>variable de direction</strong> <code class="prettyprint lang-c">chaseDirection</code> et deux <strong>constantes entière</strong> nommées <code class="prettyprint lang-c">LEFT</code> et <code class="prettyprint lang-c">RIGHT</code>, valant respectivement <code class="prettyprint lang-c">+1</code> et <code class="prettyprint lang-c">-1</code>, formant les deux seules valeurs que l'on affectera à <code class="prettyprint lang-c">chaseDirection</code>. </li>
+	</ul> 
+	Comparer ces deux versions (lisibilité, efficacité…). 
+  </div><!-- nobullet -->
+
+
+
+
+
+
+	<li id="exo3"> Coder un programme qui, sans clignotement initial, anime les led en <strong class="title">chenillard bidirectionnel déclenché</strong>, chaque <strong>trajet</strong> de gauche à droite ou de droite à gauche débutant lorsque le <strong class="specialGr">bouton‑poussoir</strong> est appuyé. Pour cela : </li>
+
+  <div class="nobullet" style="margin-left: 1.5em">
+	<ul>
+		<li> il faut donc <strong>détecter les appuis</strong> sur le <strong class="specialGr">bouton‑poussoir</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#detectionFronts" target="_BLANK"></a>), sachant que ce dernier opère en <strong class="defin">logique négative</strong> (cf. les spécifications matérielles supra <a class="supra" href="#specifMat" target="_BLANK"></a>) ; </li>
+
+		<li> pour mémoriser le fait que le chenillard doit rester « en mouvement » durant tout un trajet, on peut déclarer une <strong>variable booléenne</strong> nommée <code class="prettyprint lang-c">isChasing</code> ;  </li>
+
+		<li> le programme n'a <strong class="warning">pas besoin</strong> d'être <strong>réactif</strong>, autrement dit, on peut encore utiliser la fonction <code class="prettyprint lang-c">delay</code> ; en effet, tout trajet commencé doit être achevé, donc tant que ce trajet dure, il n'est pas nécessaire de surveiller l'état du bouton ; </li>
+
+		
+	</ul> 
+	</div><!-- nobullet -->
+
+
+
+
+
+
+	<li id="exo4"> <em class="bold">*</em> Coder un programme qui anime les led en <strong class="title">chenillard répétitif bidirectionnel</strong> comme à l'exercice <em class="bold">2</em> (v2), mais avec un <strong class="specialGr">bouton‑poussoir</strong> <strong class="title">marche‑arrêt</strong>. À l'arrêt, la led en cours doit rester allumée et donc, à l'instant initial, la led la plus à droite doit être allumée. </li>
+
+  <div class="nobullet" style="margin-left: 1.5em">
+  <ul>
+		<li> Cette fois, le programme doit être <strong class="defin">réactif</strong> car il faut pouvoir <strong>détecter à tout instant</strong> un éventuel appui sur le <strong class="specialGr">bouton‑poussoir</strong>. Il ne faut donc pas recourir à la fonction <code class="prettyprint lang-c">delay</code> mais à la place, employer la fonction <code class="prettyprint lang-c">millis</code> (cf. chap. C2‑VIII <a class="cours" href="../C2-ElementsLangage/Cc2-8_gestionTemps.html#millis" target="_BLANK"></a>). </li>
+
+		<div class="nobullet"> <em class="remark">Remarque</em>. Il peut être utile de <strong>repenser l'ordre d'exécution</strong> des instructions fondamentales qui implémentent le chenillard. Au lieu de la séquence : <br>
+		<em><ol>
+			<li> allumage de la led courante, </li>
+
+			<li> attente (de la durée de poursuite), </li>
+
+			<li> extinction de led courante et passage à la led suivante… </li>
+		</ol></em>
+		rien n'interdit de se baser plutôt sur la séquence : <br>
+		<em><ol>
+			<li> extinction de led précédente et passage à la led courante </li>
+
+			<li> allumage de la led courante, </li>
+
+			<li> attente (de la durée de poursuite)… </li>
+		</ol></em> 
+	  </div><!-- nobullet -->
+
+	  <li> Et pour l'<strong>algorithme global</strong> de la boucle <code class="prettyprint lang-c">loop</code>, on peut s'inspirer de celui de l'exercice nº 8 du TP C2‑1 <a class="previous" href="../C2-ElementsLangage/Ctp2-1_ledBouton.html#exo8" target="_BLANK"></a>, en remarquant qu'ici, un appui sur le <strong class="specialGr">bouton‑poussoir</strong> agit sur  le <strong class="defin">mode de fonctionnement</strong> du chenillard, qui passe de <strong>arrêt</strong> à <strong>marche</strong> ou inversement.  </li>
+	</ul>  
+  </div><!-- nobullet -->
+
+
+
+
+
+
+	<li id="exo5"> Coder un programme qui anime les led en <strong class="title">chenillard répétitif</strong> <strong>bidirectionnel</strong>, comme à l'exercice <em class="bold">2</em> (v2),  mais en <strong>mode</strong> <strong class="title">pas‑à‑pas</strong>, en déclenchant chaque passage à led suivante par un appui sur le <strong class="specialGr">bouton‑poussoir</strong>. Entre chaque pas, la led en cours doit rester allumée et donc, à l'instant initial, la led la plus à droite est allumée.</li>
+
+ 
+
+
+
+
+
+	<li id="exo6"> Coder un programme qui anime les led en <strong class="title">chenillard répétitif</strong> <strong>bidirectionnel</strong>, mais qui opère immédiatement un <strong class="title">changement de direction</strong> par un appui sur le <strong class="specialGr">bouton‑poussoir</strong> (même si le trajet en cours n'est pas achevé). À l'instant initial, le chenillard doit donc être en marche. </li>
+
+</ol><!-- exercices -->
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

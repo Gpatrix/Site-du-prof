@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="C"
+	data-pagetype="TP"
+	data-modulepartnumber="4"
+	data-pagenumber="1"
+	data-pageState="OK"
+	data-pageheadtitle="Dé électronique"
+	data-pagefulltitle="Dé électronique"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont : </p>
+
+<ul>
+	<li> de créer pas à pas un programme décomposé en <strong class="defin">fonctions</strong> ; </li>
+
+	<li> de découvrir l'usage des <strong class="defin">variables locales statiques</strong>. </li>
+</ul>
+
+<p> Les exercices sont aussi l'occasion de <strong class="pros">consolider</strong> la pratique des éléments de langage mis en œuvre aux TP précédents, en particulier la manipulation des variables de <strong>type</strong> <code class="prettyprint lang-c">byte</code>, la génération de <strong>nombres pseudo‑aléatoires</strong> et la <strong>composition d'appels de fonctions</strong>.  </p>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour traiter ce sujet de TP, il est recommandé d'avoir étudié les <strong class="warning">chapitres C4‑I à C4‑III</strong> du cours. Des renvois aux principaux éléments de connaissance requis sont indiqués au fur et à mesure des questions. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+
+<h3 class="nocount"> Spécifications matérielles générales </h3>
+
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/Ctp4-1_electronicDice.png" width="500px">
+
+<p>	Tous les exercices sont à traiter dans l'environnement de <strong>simulation en ligne</strong> <strong class="Tinkercad">Tinkercad</strong> <a class="external" href="https://www.tinkercad.com" target="_BLANK"></a>, en implémentant préalablement le <strong class="title">montage électronique</strong> en figure ci‑contre, qui comprend : </p>
+
+<ul>
+	<li> une <strong>pile « bouton »</strong> <em class="sigle">CR2032</em> de tension nominale 3 V ;</li>
+
+	<li> une <strong>platine d'essai</strong> (<em class="english">breadboard</em>) de très petite taille (« mini-plaquette ») ; </li>	
+
+	<li> un <strong class="specialN">microcontrôleur Atmel ATTiny 85</strong> (cf. chap C1‑III <a class="previous" href="../C1-Generalites/Cc1-3_ArduinoTinkercad.html#ATtiny" target="_BLANK"></a>) ; il est directement alimenté par la tension de la pile ; sa broche <strong><em class="sigle">PB5</em></strong> est laissée <strong class="specialO">non connectée</strong> pour générer un <strong>nombre aléatoire</strong> par lecture analogique de la tension générée par le champ électromagnétique ambiant ; </li>
+
+	<li> <strong>sept</strong> <strong class="specialB">led bleues</strong> (numérotées de <em class="bold">1</em> à <em class="bold">7</em>) disposées selon le motif générique commun aux six faces d'un dé à jouer ; ces led sont raccordées aux broches <strong><em class="sigle">PB0</em></strong> à <strong><em class="sigle">PB3</em></strong> du microcontrôleur conformément aux spécifications ci-dessous : </li>
+
+	<ul>
+		<li> les led d'angle <em class="bold">nº 1</em> et <em class="bold">6</em>, <strong class="specialLB">en parallèle</strong>, à la broche <strong><em class="sigle">PB0</em></strong> ; </li>
+
+		<li> les led latérales <em class="bold">nº 2</em> et <em class="bold">5</em>, <strong class="specialLB">en parallèle</strong>, à la broche <strong><em class="sigle">PB1</em></strong> ; </li>
+
+		<li> les led d'angle <em class="bold">nº 3</em> et <em class="bold">4</em>, <strong class="specialLB">en parallèle</strong>, à la broche <strong><em class="sigle">PB2</em></strong> ; </li>
+
+		<li> la led centrale <em class="bold">nº 7</em>, <strong class="specialLB">seule</strong>, à la broche <strong><em class="sigle">PB3</em></strong>. <br>
+
+		<em class="remark">Attention</em> : pour être en position centrale sur le simulateur, la led <em class="bold">nº 7</em> n'est pas insérée dans des trous de la platine mais disposée <strong class="warning">flottante</strong> sur la partie centrale (dans la pratique, avec une vraie platine, on procéderait autrement) ; </li> 
+	</ul>
+
+	<p> Les cathodes des led sont toutes reliées à la borne « <em class="bold">−</em> » de la pile via une <strong>résistance de limitation</strong> de <em class="bold">50 Ω</em> seulement  (car la tension délivrée par la pile est très basse). </p>  
+
+	<li> un <strong class="specialG">détecteur d'inclinaison</strong> <strong><em class="sigle">SW200D</em></strong>  (<em class="english">dual ball tilt switch</em>) <a class="external" href="https://itbrainpower.net/downloadables/SW-200d.pdf" target="_BLANK"></a> alimenté par la tension de la pile et câblé en <strong>logique positive</strong> (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#configurationBroche" target="_BLANK"></a>, c'est‑à‑dire raccordé à la broche <strong><em class="sigle">PB4</em></strong> du microcontrôleur avec une <strong>résistance de pull‑down</strong> (vers la borne « <em class="bold">−</em> » de la pile) de <em class="bold">2 kΩ</em>. </li>
+</ul>
+
+</div><!-- display -->
+
+
+
+
+<h3 class="nocount"> Spécifications logicielles générales </h3>
+
+<div style="display: inline-auto;">
+
+<img class="top-right" src="../img/Ctp4-1_sparkfunDice.png" width="200px">
+
+<p class="square"> Le gadget en photo ci‑contre est un <strong class="title">dé électronique</strong> (modèle en kit). Son fonctionnement consiste à animer les led pour <strong>simuler un dé à six faces</strong> qui roule pour finalement présenter sa face du dessus, « fruit » du hasard. Pour plus de détails, on peut consulter la vidéo <a class="external" href="https://www.youtube.com/watch?v=8joLK039fjk" target="_BLANK">Y</a> présentant une solution <em class="sigle">DIY</em> de ce gadget. </p>
+
+<p class="square"> Les <strong class="title">spécifications logicielles</strong> pour le programme d'animation final du dé sont les suivantes : </p>
+
+<ol class="littered">
+	<li> Chaque <strong class="specialLB">roulement</strong> de dé est déclenché sur <strong>front montant</strong> sur le signal du <strong class="specialG">détecteur d'inclinaison</strong>. </li>
+
+	<li> Un roulement du dé est simulé par une <strong class="specialLB">séquence d'affichage de 10 faces</strong> du dé, toutes tirées au hasard et chacune restant affichée durant une <strong class="defin">durée croissante</strong> par <strong>incréments de 100 ms</strong>, qui est aussi la durée d'affichage de la <strong>première face</strong> de la séquence. </li>
+
+	<div class="nobullet"> Autrement dit, la première face reste affichée 100 ms, la deuxième 200 ms, la troisième 300 ms, etc. </div>
+
+	<li> Dans une séquence, <strong class="specialLB">deux faces consécutives</strong> doivent nécessairement être <strong class="defin">adjacentes</strong> sur un dé c'est‑à‑dire, ni identiques, ni opposées – cf. le patron d'un dé sur la figure. </li>
+
+	<div class="nobullet" style="line-height: 110%"> Par exemple, après affichage de la face <span style="font-size: 120%;">⚃</span> on ne peut pas afficher encore <span style="font-size: 120%">⚃</span> (car identique) ni <span style="font-size: 120%">⚂</span> (car opposée). </div>
+
+	<li> La <strong class="specialLB">dernière face</strong> de la séquence doit <strong class="defin">rester affichée</strong> tant que le dé n'est pas « relancé », et <strong class="warning">au moins</strong> <strong>deux secondes</strong> avant le début d'une nouvelle séquence. </li>
+
+	<li> Une <strong class="specialLB">séquence</strong> ne peut <strong class="warning">pas</strong> <strong>être interrompue</strong> par un nouveau déclenchement du détecteur d'inclinaison. Elle doit obligatoirement être exécutée jusqu'à son terme.</li>
+</ol>
+
+</div><!-- display -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+
+<div class="important"; style="margin-left: 0em;">
+<p> Il est recommandé de traiter les exercices <strong class="pros">dans l'ordre</strong>. </p>
+
+<p> Dans un <strong class="title">nouveau circuit</strong> sous <strong class="Tinkercad">Tinkercad</strong> : </p>
+<ul>
+	<li> <strong class="specialLB">effectuer le câblage</strong> de la partie matérielle ;</li>
+
+	<li> <strong class="specialLB">vérifier le câblage</strong> par des branchements directs temporaires, typiquement en reliant les « sorties led » du micro‑contrôleur au potentiel de référence <em class="bold" style="color:red">5V</em> de la carte.  </li>
+</ul>
+
+<p> Sur le poste de travail, créer un <strong class="title">répertoire de TP</strong> nommé avec la référence du sujet, typiquement <code class="filename">C4_TP1</code>. </p>
+
+<p> Puis,	avec un <strong class="title">éditeur de code</strong> (<em class="mark">Sublime Text</em> ou autre) : </p>
+
+<ul>
+	<li> <strong class="specialLB">Coder</strong> les programmes demandés en respectant les <strong class="pros">règles de bonnes pratiques</strong> (cf. chap. C2‑IX <a class="cours" href="../C2-ElementsLangage/Cc2-9_bonnesPratiques.html#nomsExplicites" target="_BLANK"></a>).  </li>
+
+	<li> <strong class="specialLB">Enregistrer</strong> le programme de <strong>chaque exercice</strong> dans un <strong class="pros">fichier distinct</strong> nommé <code class="filename">Ctp41_ex<strong class="defin" style="padding-left: 0.1em; padding-right: 0.1em">n</strong>.ino</code>, où <strong class="defin">n</strong> est le nº de l'exercice. </li>
+</ul>
+
+<p> Pour <strong class="title">tester le bon fonctionnement</strong> de chaque programme, procéder par <strong>copier‑coller </strong>dans la fenêtre d'édition de <strong class="Tinkercad">Tinkercad</strong>. En cas de <strong class="defin">modifications ponctuelles</strong> de mise au point, ne pas oublier d'effectuer un <strong>copier‑coller inverse</strong> dans l'éditeur de code et d'enregistrer les modifications. </p>
+
+<p>	Répondre aux <strong class="title">questions supplémentaires</strong> sur feuille ou cahier. </p>
+</div><!-- important -->
+
+
+<h4> Consignes de codage </h4>
+
+
+<div class="consignes" style="margin-left: 0em;"><p class="consignes"></p>
+<p> Au début de chaque programme, selon les besoins, <strong class="title">définir les pseudo‑constantes</strong> (cf. chap. C4‑III <a class="cours" href="../C4-Fonctions/Cc4-3_directivesPreprocesseur.html#pseudoConstante" target="_BLANK"></a>) pour nommer :  </p>
+<ul>
+	<li> les <strong>numéros de broche</strong> en fonction de leur utilisation ;  </li>
+
+	<li> les valeurs des <strong>délais</strong> dans une séquence – cf. les spécifications générales <em class="bold">B)</em> et <em class="bold">E)</em> supra.  </li>
+</ul>
+</div><!-- consignes -->
+
+
+
+
+
+
+
+
+<ol class="exercice">
+
+	<li id="exo1"> <em class="bold">Fonction de configuration et initialisation des broches</em> </li> 
+
+	<div class="nobullet" style="margin-left: 1.8em"> Coder une fonction <code class="prettyprint lang-c">initPins</code> qui, sans arguments ni valeur rendue (c'est‑à‑dire de type <code class="prettyprint lang-c">void</code> – cf. chap. C4‑I <a class="cours" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#particularite" target="_BLANK"></a>), <strong class="title">configure toutes les broches connectées</strong> du microcontrôleur et <strong class="defin">initialise les sorties</strong> au repos. </div>
+
+	<div class="nobullet" style="margin-left: 1.8em"> Coder un appel de la fonction <code class="prettyprint lang-c">initPins</code> dans la fonction <code class="prettyprint lang-c">setup</code> (cf. chap. C4‑I <a class="cours" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#appelFonction" target="_BLANK"></a>). </div>
+
+	<li id="exo2"> <em class="bold">Fonction de transcodage du nombre à afficher</em> </li>	
+
+	<ol class="questions"> 	
+		<li> Coder une fonction <code class="prettyprint lang-c">transcodeNumber</code> qui <strong class="title">transcode</strong> la <strong class="defin">valeur numérique</strong> d'une face de dé en un <strong class="specialLB">quartet de sorties logiques</strong> conformément au montage du système. Cette fonction doit : <br>
+
+		<ul>
+			<li> prendre pour <strong class="defin">argument</strong> un nombre entier <code class="prettyprint lang-C">number</code> compris entre <code class="prettyprint lang-c">1</code> et <code class="prettyprint lang-c">6</code> ; </li>
+
+			<li> retourne comme valeur un <strong class="specialLB">octet de sortie</strong> (de type <code class="prettyprint lang-c">byte</code>) dont le quartet de poids faible (les bits de rang 0 à 3) indiquent le niveau logique à écrire respectivement sur les 4 broches <strong><em class="sigle">PB0</em></strong> à <strong><em class="sigle">PB3</em></strong> du microcontrôleur pour afficher la face du dé correspondant au nombre pris comme argument. </li>
+
+		  <div class="nobullet"> Quant au quartet de poids fort de l'octet de sortie, il n'est pas utilisé et vaut toujours implicitement <code class="prettyprint lang-c">0b0000</code>. </div>
+		</ul>
+
+		<span style="line-height: 120%"> Par exemple, si <code class="prettyprint lang-c">number</code> vaut <code class="prettyprint lang-c">4</code>, la fonction retourne l'octet <code class="prettyprint lang-c">0b0101</code> pour mettre au niveau logique <code class="prettyprint lang-c">HIGH</code> les sorties <strong><em class="sigle">PB0</em></strong> (led nº 1 et 6) et <strong><em class="sigle">PB2</em></strong> (led nº 3 et 4) formant la face <span style="font-size: 120%;">⚃</span> du dé.</span> </li> 
+
+		<li> Dans l'<em class="sigle">IDE</em> <strong class="Codeblocks">Code::blocks</strong>, copier le code de la fonction <code class="prettyprint lang-c">transcodeNumber</code> et coder en fonction principal un <strong>jeu d'essais</strong> (cf. chap. C4‑I <a class="cours" href="../C4-Fonctions/Cc4-1_fonctionsGeneralites.html#jeuEssais" target="_BLANK"></a>)  en utilisant l'instruction : <br>
+		<span class="inline">
+			<code class="prettyprint lang-c">printf("%d %x\n", number, transcodeNumber(number));</code>
+		</span> <br>
+		pour afficher la valeur retournée par la fonction pour toutes les valeurs de <code class="prettyprint lang-c">number</code> de <code class="prettyprint lang-c">1</code> à <code class="prettyprint lang-c">6</code>. Vérifier que les valeurs affichées sont bien celles attendues. </li>
+
+		<li> * Compte tenue de la spécification matérielle imposée, pourquoi, pour tester la fonction <code class="prettyprint lang-c">transcodeNumber</code>, ne peut-on pas directement utiliser le <strong>moniteur série</strong> simulé sous <strong class="Tinkercad">Tinkercad</strong> ? </li>
+		</li>
+	</ol><!-- questions -->
+
+
+
+	<li id="exo3"> <em class="bold">Fonction d'affichage de la face du dé</em> </li>
+
+	<ol class="questions"> 
+		<li> Coder une fonction <code class="prettyprint lang-c">displayDiceFace</code> qui affiche sur les led la face correspondante à un octet de sortie. Sans valeur retournée (c'est‑à‑dire de type <code class="prettyprint lang-c">void</code>), cette fonction : </li>
+
+		<ul>
+			<li> prend pour argument un octet de sortie nommé <code class="prettyprint lang-c">pinByte</code> dont les valeurs <code class="prettyprint lang-c">0</code> ou <code class="prettyprint lang-c">1</code> des bits du quartet de poids faible codent respectivement les niveaux logiques <code class="prettyprint lang-c">LOW</code> ou <code class="prettyprint lang-c">HIGH</code> à écrire sur les 4 sorties <strong><em class="sigle">PB0</em></strong> à <strong><em class="sigle">PB3</em></strong> du microcontrôleur ; </li>
+
+			<li> et qui écrit physiquement ces niveaux logiques de sorties (cf. chap. C2‑VII <a class="cours" href="../C2-ElementsLangage/Cc2-7_entreesSortiesBooleennes.html#digitalWrite" target="_BLANK"></a>). </li>
+		</ul>
+		
+		<li> Dans la fonction <code class="prettyprint lang-c">setup</code>, coder temporairement un <strong class="title">jeu d'essai</strong> de cette fonction, en affichant sur les led la succession des 16 combinaisons de valeurs du quartet de poids faible (<code class="prettyprint lang-c">0b0000</code> à <code class="prettyprint lang-c">0b1111</code>) de l'octet d'entrée <code class="prettyprint lang-c">pinByte</code> de la fonction <code class="prettyprint lang-c">displayDiceFace</code>, même si certaines combinaisons ne correspondent pas à une face de dé. </li>
+		<div class="nobullet"> Chaque combinaison doit rester affichée durant <strong>une seconde</strong>. </div>
+
+		<div class="nobullet"> Vérifier que les led s'allument et s'éteignent de la façon attendue. </div>
+	</ol>
+
+
+
+	<li id="exo4"> <em class="bold">Programme d'affichage d'une séquence ordonnée de faces</em> </li> 
+
+	<div class="nobullet" style="line-height: 120%; margin-left: 2em"> Coder dans la fonction <code class="prettyprint lang-c">loop</code> une boucle qui appelle la composition des fonctions <code class="prettyprint lang-c">transcodeNumber</code> et <code class="prettyprint lang-c">displayDiceFace</code> pour afficher en boucle sur les led la <strong class="title">séquence ordonnée de toutes les faces de dé</strong> de <span style="font-size: 120%;">⚀</span> à <span style="font-size: 120%;">⚅</span>, avec une durée d'affichage d'<strong>une seconde</strong> pour chacune. </div> 
+
+
+
+	<li id="exo5"> <em class="bold">Fonction de génération d'une face de dé aléatoire</em> </li>
+
+	<ol class="questions"> 
+		<li> Coder une fonction <code class="prettyprint lang-c">initRandomSerie</code> qui, sans arguments ni valeur rendue, <strong class="title">initialise la série de nombres pseudo‑aléatoires</strong> (cf. chap. C3‑II <a class="previous" href="../C3-Numeration/Cc3-2_typesEntiers.html#randomArduino" target="_BLANK"></a>) pour générer la séquence de faces d'un roulement de dé. </li>
+
+    <div class="nobullet"> Coder l'appel de cette fonction dans la fonction <code class="prettyprint lang-c">setup</code>. </div>
+
+		<li> Coder une fonction <code class="prettyprint lang-c">generateNewFaceNumber</code>, sans argument, qui retourne comme valeur un <strong class="title">nouveau nombre aléatoire</strong> entier qui est tiré entre <code class="prettyprint lang-c">1</code> et <code class="prettyprint lang-c">6</code> et qui <strong class="defin">respecte la condition d'adjacence</strong> avec le nombre aléatoire précédemment affiché comme face de dé (cf. la spécification logicielle C supra). </li>
+
+		<div class="nobullet"> Pour mémoriser la valeur numérique de la dernière face de dé affichée, utiliser une <strong>variable locale statique</strong> nommée <code class="prettyprint lang-c">previousDisplayedNumber</code> (cf. chap. C4‑II <a class="previous" href="../C4-Fonctions/Cc4-2_porteeDonnees.html#classeStatique" target="_BLANK"></a>). </div>
+
+		<li> Dans la fonction <code class="prettyprint lang-c">loop</code>, coder un <strong class="title">programme d'essai</strong> qui appelle une composition des fonctions <code class="prettyprint lang-c">generateNewFaceNumber</code>, <code class="prettyprint lang-c">transcodeNumber</code> et <code class="prettyprint lang-c">displayDiceFace</code> pour afficher en boucle des faces de dé aléatoires (successivement adjacentes), chacune restant visible <strong>une seconde</strong>.  </li>
+	</ol><!-- questions -->
+
+
+
+	<li id="exo6"> <em class="bold">Fonction de gestion du détecteur d'inclinaison</em> </li>
+
+	<ol class="questions"> 
+		<li> Coder une fonction <code class="prettyprint lang-c">isSequenceTriggered</code>, sans argument, qui retourne la valeur booléenne <code class="prettyprint lang-c">1</code> en cas de <strong>front montant</strong> sur le signal du <strong class="specialG">détecteur d'inclinaison</strong>, sinon la valeur <code class="prettyprint lang-c">0</code>. </li>
+
+		<div class="nobullet"> Pour cela, utiliser deux <strong>variables locales statiques</strong> nommées <code class="prettyprint lang-c">previousSwitchLevel</code> et <code class="prettyprint lang-c">currentSwitchLevel</code>, initialisées toutes les deux à la valeur <code class="prettyprint lang-c">LOW</code> puisque le détecteur est câblé en <strong>logique positive</strong>. Ces deux variables mémoriseront respectivement les valeurs antérieure et courantes lues sur la broche du <strong class="specialG">détecteur d'inclinaison</strong> et permettront ainsi d'exprimer l'occurrence d'un front montant. </div>
+
+		<li style="line-height: 120%"> Coder un <strong class="title">programme d'essai</strong> de la fonction <code class="prettyprint lang-c">isSequenceTriggered</code>  qui affiche durant <strong>une seconde</strong> la face <span style="font-size: 120%;">⚀</span> du dé à chaque front montant sur le signal du <strong class="specialG">détecteur d'inclinaison</strong>, sachant que : </br>
+		<ul>
+			<li> durant l'affichage, d'éventuels fronts montants ultérieurs à celui qui a déclenché l'affichage doivent être ignorés ; </li>
+
+			<li> une fois que la durée est écoulée, la face doit s'éteindre (jusqu'au prochain front montant).  </li>
+		</ul></li>
+	</ol><!-- question -->
+
+
+
+	<li id="exo7"> <em class="bold">Programme d'affichage d'une séquence aléatoire</em> </li>
+
+	<ol class="questions">
+		<li> Coder un programme qui, à chaque <strong>front montant</strong> sur le signal du <strong class="specialG">détecteur d'inclinaison</strong> affiche sur les led, une <strong class="title">séquence aléatoires</strong> de <strong>10 faces</strong> de dé successivement adjacentes, chacune restant affichée <strong>½ seconde</strong>, sauf la dernière qui doit rester affichée jusqu'au prochain front montant. </li> 
+
+		<li> Modifier le programme précédent pour que la <strong>durée d'affichage</strong> des faces soit de plus en plus longue au cours de la séquence, conformément aux spécifications logicielles <em class="bold">B)</em> et <em class="bold">D)</em> supra. </li>
+	</ol><!-- questions -->
+</ol>
+
+
+
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>

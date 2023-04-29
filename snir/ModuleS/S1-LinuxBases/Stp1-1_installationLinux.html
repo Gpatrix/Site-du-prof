@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html 
+	data-module="S"
+	data-pagetype="TP"
+	data-modulepartnumber="1"
+	data-pagenumber="1"
+	data-pageState="OK"
+	data-pageheadtitle="Installation Mint"
+	data-pagefulltitle="Installation de Linux Mint"
+	data-authorname="François GIRAULT"
+	data-authormail="francois.girault@ac-versailles.fr"
+	lang="fr">
+
+<script src="../../js/operateData.js"></script>
+
+<!-- The following script MUST be coded here and not anywhere else! -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<head> 
+	<meta charset="utf-8">
+	<script src="../../js/makeHead.js"></script>
+</head>
+
+<body>
+
+<nav id="navPannel" style="display: block">
+	<script src="../../js/makeNavPannel.js"></script>
+</nav>
+
+<div id="mainFrame">
+  
+<header class="band">
+  <script src="../../js/makeHeader.js"></script>
+</header>	
+
+<div id="scrollingFrame">
+
+<footer class="band">
+	<script src="../../js/makeFooter.js"></script>
+</footer>
+
+<section>
+
+<div id="mainTitle">
+	<script src="../../js/makeTitle.js"></script>
+</div>
+
+
+<div class="expert">
+<h3 class="nocount"> Objectifs pédagogiques </h3>
+
+
+<p> Les <strong class="title">principaux objectifs</strong> de ce sujet de travaux pratiques sont : </p>  
+
+<ul>
+  <li> d'<strong>apprendre à installer</strong> sur un poste de travail à système <strong>Windows</strong> un deuxième système d'exploitation de type <strong class="specialLB">Linux</strong> pour obtenir une machine dite à « <strong>double boot</strong> » ;  </li>
+
+  <li> de découvrir ce faisant <strong class="defin">divers aspects des machines</strong> – disques durs et partitions, image système, clef <em class="sigle">USB</em> de démarrage… ; </li>
+
+  <li> de <strong>configurer</strong> le <strong class="defin">bureau</strong> en vue d'une <strong>utilisation professionnelle</strong> pour le développement informatique (programmation, réseau, etc.). </li>
+</ul>
+
+<div class="prerequis" style="margin-top: 1em">
+<p class="prerequis"> Pour effectuer toutes les manipulations demandées, seuls des <strong class="pros">connaissances générales d'informatique</strong> sont requises. Aucune étude préalable des chapitres du module n'est nécessaire. </p>
+</div><!-- prerequis -->
+</div><!-- expert -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Mise en situation </h2>
+
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/CinnamonLogo.png" height="115px" style="margin-top:1em">
+	<img class="top-right" src="../img/LinuxMintLogo.png" height="120px" style="margin-top:1em">
+	
+<p class="square"> Le système à installer est la distribution <strong class="Mint">Linux Mint</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Linux_Mint" target="_BLANK">W</a> avec le bureau <strong class="Cinnamon">Cinnamon</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Cinnamon_(logiciel)" target="_BLANK">W</a>. Ce choix est principalement motivé par les <strong class="pros">similarités</strong> que ce bureau présente avec l'interface utilisateur des systèmes <strong>Windows</strong> : </p>
+</div><!-- display -->
+
+<ul>
+	<li> la <strong class="specialLB">barre de tâche</strong> en bas de l'écran par défaut, avec zone d'accès rapide à droite et menu démarrer à gauche ;  </li>
+
+	<li> l'<strong class="specialLB">explorateur de fichiers</strong> avec panneau latéral gauche de navigation ;   </li>
+
+	<li> de <strong class="specialLB">nombreux utilitaires</strong> classiques – moniteur système, table des caractères, calculatrice, capture d'écran – intégrés par défaut. </li>
+</ul>
+
+<img class="top-left" src="../img/MintCinnamonDesktop.png">
+<!-- à capturer sur le poste prof avec une fenêtre ouverte -->
+
+<p> En outre, la prise en main de <strong class="Mint">Linux Mint</strong> / <strong class="Cinnamon">Cinnamon</strong> est <strong class="pros">très simple</strong>. De nombreux aspects sont contrôlables par <strong>interface graphique</strong> : installation des logiciels (logithèque), configuration réseau, etc. C'est donc une distribution particulièrement bien adaptée pour des débutants familiers de <strong>Windows</strong>. </p>
+
+
+	
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../../img/logoJF-LDT.png" height="100px" style="margin-top:1em">
+<p class="square"> La <strong class="title">procédure d'installation</strong> proposée est conçue dans le contexte d'une salle de travaux pratiques d'informatique réservée à la <strong><em class="sigle">STS SNIR</em></strong> au <strong class="specialLY">lycée Jules Ferry</strong> de Versailles. </p>
+</div><!-- display -->
+
+<ul>
+	<div style="display: inline-block;">
+		<img class="top-right" src="../img/symboleOrdi.png" height="100px" style="margin-top:0.5em">
+	<li> Elle opère sur des <strong class="defin">postes de travail</strong> de type « PC tour » équipés de <strong>deux disques durs</strong>. Une telle configuration facilite tant l'installation que la gestion de la machine.  </li>
+  </div><!-- display -->
+
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/serveurProxy.png" width="400px" style="margin-top:0.0em">
+	<li> Les postes sont reliés à l'<strong class="defin">Internet</strong> via le réseau du lycée et son <strong>serveur proxy académique</strong> qui filtre les accès demandés. Ce dernier pose parfois des <strong class="warning">problèmes de refus d'accès</strong> à certains sites de dépôt de composants logiciels.   </li>
+	</div><!-- display -->
+</ul>
+
+<div class="complementExpert" style="display: inline-block;">
+	<img class="top-right" src="../img/homeIcon.png" height="115px" style="margin-top:0.5em">
+<p> Cette procédure peut être appliquée dans un <strong>autre contexte</strong> – notamment pour une installation sur un <strong class="title">ordinateur personnel</strong> – moyennant des <strong class="defin">adaptations nécessaires</strong> signalées par l'icône ci‑contre. Dans un tel cas, il est vivement recommandé de procéder à une <strong class="warning">sauvegarde préalable des fichiers</strong> sur un disque dur externe ou toute autre solution de secours en cas d'échec. </p>
+
+<p> En complément, on pourra s'appuyer sur la vidéo réalisée par Adrien D. sur sa chaîne <strong>YouTube</strong> <em class="mark">Adrien Linuxtricks</em> <a class="external" href="https://www.youtube.com/watch?v=S3GftdWM3Z4" target="_BLANK">Y</a>.</p>
+</div><!-- complementExpert -->
+
+<div class="important">
+<p> Le <strong class="title">travail demandé</strong> est à effectuer en <strong>binôme</strong> sur <strong class="defin">un seul poste de travail</strong>. </p>
+
+<p> Un <strong class="specialLB">deuxième poste de travail</strong> est mis à disposition uniquement pour <strong class="defin">lire le sujet</strong> et consulter de la <strong>documentation</strong> en ligne durant toute la procédure, y compris quant le premier poste est en cours d'installation. Mais il ne faut <strong class="warning">pas intervenir sur le système</strong> de ce <strong>deuxième poste</strong>. </p>
+</div><!-- important -->	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="nocount"> Travail demandé </h2>
+
+<div class="important" style="margin-left: 0em;" id="warning">
+<p> La <strong class="title">procédure d'installation</strong> est décrite point par point <strong class="pros">en détails</strong> ci‑après. Sauf imprévu, il n'est pas nécessaire – et même <strong class="warning">vivement déconseillé</strong> – de chercher une solution <strong>alternative</strong> sur l'Internet. </p>
+
+<div style="display: inline-block;">
+<img class="top-right" src="../img/dangerSign.png" height="100px" style="margin-top:0.5em">
+<p> Mais l'exécution de cette procédure requiert une <strong class="title">grande vigilance</strong>. Un mauvais choix ou une confusion peut supprimer ou rendre le système <strong>Windows</strong> du poste de travail <strong class="cons">inutilisable</strong> –  avec à la clef la nécessité de racheter une licence pour le réinstaller. Lorsqu'une opération ne donne <strong class="cons">pas le résultat attendu</strong>, ou même simplement en cas de doute, il est vivement recommandé d'<strong class="defin">appeler l'enseignant</strong> et de <strong class="warning">ne pas improviser une alternative</strong>.  </p>
+</div><!-- display -->
+</div><!-- important -->
+
+
+
+
+<ol class="exercice">
+
+<li id="exo1" style="margin-top: 2em;"> <em class="bold"> Préparation du disque dur et de la clef de démarrage</em> </li>
+
+<div style="display: inline-block;">
+<ol class="questions">
+	<li> <strong class="title">Démarrer</strong> le poste de travail. Si ce dernier est déjà installé en <strong>double boot</strong>, il affiche très rapidement en <strong class="specialN">mode terminal</strong> le menu du <strong class="specialLB"><em class="sigle">GRUB</em></strong> – pour <em class="english">GNU GRand Unified Bootloader</em> <a class="external" href="https://fr.wikipedia.org/wiki/GNU_GRUB" target="_BLANK">W</a>. </li>
+
+	<div class="nobullet"> Sélectionner <code class="displayDark">Windows boot manager</code> (3<sup>e</sup> choix) avec les touches de flèches du clavier. <strong class="warning">Attention</strong>, ce n'est <strong>pas le choix par défaut</strong> ; a priori, le système <em class="mark">Linux</em> se lance automatiquement au bout de quelques secondes et dans ce cas, il faut redémarrer le poste de travail, ce qui occasionne une <strong class="cons">perte de temps</strong>. </div>
+  
+  <div class="nobullet"> Une fois que le système <strong class="specialLB">Windows</strong> est lancé, se connecter en tant qu’<strong class="defin">administrateur local</strong> avec les <strong>identifiants</strong> donnés par votre enseignant. Ne <strong class="warning">pas</strong> se connecter au réseau pédagogique avec ses propres identifiants. </div>
+
+  <li id="proxy"> En tout premier lieu, pour que le système puisse accéder à l'Internet, il faut vérifier que l'<strong>adresse <em class="sigle">IP</em></strong> du <strong class="title">serveur proxy</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Proxy" target="_BLANK">W</a> est bien configurée dans le système. Pour cela : </li>
+  
+  <div style="display: inline-block;">
+  <ul>
+  	<div style="display: inline-block;">
+  		<img class="top-right" src="../img/WindowsSearchBar.png" height="40px" style="margin-top:0.5em">
+  	<li> Saisir le mot‑clef « <code>proxy</code> » dans la <strong>barre de recherche</strong> à côté du menu <code>Démarrer</code>. Sélectionner le 1<sup>er</sup> choix <code class="cmd"> Paramètres du proxy</code>.  </li>
+    </div><!-- display -->
+
+  	<li> Dans la section <code>Configuration manuelle du proxy</code>, si ce n'est pas déjà fait, <strong class="defin">activer le proxy</strong> et, pour les <strong>deux protocoles</strong> <code class="cmd">http</code> et <code class="cmd">https</code> renseigner l'<strong>adresse <em class="sigle">IP</em></strong> <code class="cmd">10.0.0.1</code> et le <strong>nº de port</strong>  <code class="cmd">80</code>. </li>
+  </ul>
+  </div><!-- display -->
+  
+
+
+  <div class="nobullet" style="display: inline-block;">
+    <img class="top-right" src="../img/logoFirefox.png" height="80px" style="margin-top:0.0em">
+   Avec le <strong>navigateur</strong> <strong class="specialDO">Firefox</strong>, il est également nécessaire de vérifier que les paramètres réseaux n'imposent <strong class="warning">pas</strong> une <strong>adresse <em class="sigle">IP</em></strong> spécifique pour le serveur proxy. Pour cela :  </div>
+
+  
+  <ul>
+  	<div style="display: inline-block;">
+  		<img class="top-right" src="../img/WinFirefoxBurgerButton.png" height="60px" style="margin-top:0.5em">
+  	<li> Dans le <strong>menu</strong> accessible via le « <em class="english">burger‑button</em> » en haut à gauche de la fenêtre du navigateur, choisir la commande <code class="cmd">Paramètres</code> puis tout en bas de la page, cliquer sur le bouton <code class="cmd">Paramètres…</code>. </li>
+    </div><!-- display -->
+
+  	<li> Choisir la 3<sup>e</sup> option : <code class="cmd">Utiliser les paramètres proxy du système</code>.</li>
+  </ul>
+  
+
+  <div class="nobullet"> Ces manipulations doivent être <strong class="pros">bien comprises</strong>, elles seront à répéter encore deux fois aux cours de la séance d'installation. </div>
+
+	<li> Faire un clic‑droit sur le <strong>menu</strong> <code>Démarrer</code> (tout en bas à gauche du bureau) et sélectionner la fonctionnalité <code class="cmd">Gestion des disques</code>.  </li>
+  
+  <img class="top-right" src="../img/dangerSign.png" height="80px" style="margin-top:0.5em">
+	<div class="nobullet"> Dans la fenêtre (cf. la capture d'écran ci‑dessous), repérer visuellement le disque occupé par le système <strong class="specialLB">Windows</strong> : il comporte une <strong>partition <em class="sigle">NTFS</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/NTFS_(Microsoft)" target="_BLANK">W</a> étiquetée <code class="filename">HDD (C:)</code>. Ce disque ne doit <strong class="warning">pas être modifié</strong>. En cas de doute, <strong class="pros">appeler l'enseignant</strong>, car toute confusion aurait des conséquences fâcheuses ! (cf. le paragraphe encadré bleu supra <a class="supra" href="#warning"></a>.) </div>
+
+	<div class="nobullet"> Sélectionner l'<strong class="defin">autre disque</strong>, faire un clic‑droit sur <strong>chacune de ses partitions</strong> et sélectionner la fonctionnalité <code class="cmd">Supprimer le volume</code>. On obtient alors en principe un <strong class="title">volume non alloué</strong> d'<strong>au moins 70 Go</strong> comme sur la capture d'écran ci‑dessous (typiquement 150, 240 ou 490 Go selon la capacité du disque). </div>
+
+	<img class="top-left" src="../img/WindowsFreeDisk.png">
+
+  <div class="expert" style="display: inline-block;">
+	  <img class="top-right" src="../img/homeIcon.png" height="60px" style="margin-top:0.5em">
+	<div class="nobullet"> Sur un <strong class="title">ordinateur personnel</strong>, si l'on ne dispose pas d’un disque séparé pour installer <em class="mark">Linux</em>, il faut <strong class="defin">dégager une partition</strong> de <strong>70 Go minimum</strong> sur le même disque que celui où est installé Windows. Pour cela, il faut éventuellement <strong>réduire le volume</strong> des <strong>autres partitions</strong> – cf. la vidéo <a class="external" href="https://www.youtube.com/watch?v=S3GftdWM3Z4" target="_BLANK">Y</a> pour plus de détails. </div>
+  </div><!-- expert -->
+  
+
+  	<img class="top-right" src="../img/CinnamonLogo.png" height="75px" style="margin-top:1em">
+		<img class="top-right" src="../img/LinuxMintLogo.png" height="80px" style="margin-top:1em">
+  <li> Récupérer l'<strong class="title">image</strong> <code class="filename">.iso</code>  du système <strong class="Mint">Linux Mint</strong> / <strong class="Cinnamon">Cinnamon</strong> fournie par l'enseignant sur <strong>clef <em class="sigle">USB</em></strong> (pour minimiser le volume de téléchargement en séance de <em class="sigle">TP</em>) et la copier sur le disque dur du poste de travail dans le répertoire <code class="filename">Téléchargements</code>. </li>
+
+  <div class="expert" style="display: inline-block;">
+	  <img class="top-right" src="../img/homeIcon.png" height="60px" style="margin-top:0.5em">
+	<div class="nobullet"> Sur un <strong class="title">ordinateur personnel</strong>, il suffit de <strong class="title">télécharger l'image</strong> sur la page web <a class="external" href="https://www.linuxmint.com/download.php" target="_BLANK"></a> qui propose en premier choix la <strong class="pros">dernière version stable</strong>. Des images avec un <strong class="specialLB">bureau différent</strong> – <strong>MATE</strong> <a class="external" href="https://fr.wikipedia.org/wiki/MATE" target="_BLANK">W</a> et <strong>Xfce</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Xfce" target="_BLANK">W</a> – sont également disponibles pour des machines dont la configuration matérielle est faible. </div>
+  </div><!-- expert -->
+    
+    <img class="top-right" src="../img/carteMicroSDlecteur.png" width="200px" style="margin-top:0.8em">
+  <li> Avec le <strong>lecteur <em class="sigle">USB</em></strong> et la <strong>carte MicroSD</strong> fournis, créer une <strong class="title">clef de démarrage système</strong> (<strong>bootable</strong>) en exécutant la procédure suivante : </li>
+
+  <ul>
+  	<li> Insérer la carte dans le <strong>lecteur</strong> puis la brancher sur un <strong class="defin">port USB 3.0</strong> du poste de travail. Vérifier que son volume apparaît bien dans l'explorateur de fichiers. (Inutile de vider son contenu, elle sera automatiquement formatée durant la procédure.) </li>
+
+  	<div class="expert" style="display: inline-block;">
+	  	<img class="top-right" src="../img/homeIcon.png" height="60px" style="margin-top:0.5em">
+		<div class="nobullet"> Sur un <strong class="title">ordinateur personnel</strong>, il faut disposer d'une <strong>clef <em class="sigle">USB</em></strong> ou tout autre dispositif équivalent ayant un volume mémoire d'<strong class="defin">au moins 4 Go</strong>. </div>
+  	</div><!-- expert -->
+
+    <div style="display: inline-block;">
+    	<img class="top-right" src="../img/dangerSign.png" height="60px" style="margin-top:0.5em">
+  	<div class="nobullet"> <strong class="warning">Retirer toute autre clef <em class="sigle">USB</em></strong> du poste de travail qui serait éventuellement branchée pour éviter une  confusion dans l'identification des volumes et risquer de perdre le contenu de cette clef.  </div>
+    </div><!-- display -->
+
+    <div style="display: inline-block;" id="#rufus">
+    	<img class="top-right" src="../img/RufusSetup.png" width="400px" style="margin-top:0.8em">
+  	<li> S'il n'y en a pas sur le poste de travail, télécharger et installer un <strong class="specialLB">logiciel de gravage</strong> de clef de démarrage comme <strong>Rufus</strong>, disponible au lien suivant <a class="external" href="https://rufus.ie/fr/" target="_BLANK"></a>. </li>
+
+    <div class="nobullet"> Avec ce logiciel : </div>
+    <ul>
+    	<li> sélectionner le <strong class="defin">périphérique <em class="sigle">USB</em></strong> sur lequel la clef de démarrage sera gravée, donc le <strong>lecteur</strong> et sa <strong>carte MicroSD</strong> fournis. </li>
+
+    	<li> sélectionner comme <strong class="defin">type de démarrage</strong> l'<strong>image système Linux</strong> précédemment obtenue ;  </li>
+
+    	<li> laisser tous les <strong class="defin">autres paramètres par défaut</strong>, comme indiqué sur la capture d'écran ci‑contre et <strong>démarrer la procédure</strong>, en acceptant toutes les éventuelles recommandations supplémentaires. </li>
+    </ul>
+
+    <div class="nobullet"> Cette procédure prend <strong>plusieurs minutes</strong>. Une fois terminée, <strong class="warning">ne pas retirer le lecteur</strong> du poste de travail. Il doit être <strong class="defin">laissé sur le poste</strong> jusqu'à la fin de la procédure d'installation. </div>
+  	</div><!-- display -->
+  </ul>
+</ol><!-- questions exo1 -->
+</div><!-- display -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li id="exo2" style="margin-top: 2em;"> <em class="bold"> Démarrage sur clef <em class="sigle">USB</em></em> </li>
+
+<div style="display: inline-block;">
+<ol class="questions">
+	<li> <strong>Redémarrer</strong> la machine avec le lecteur et sa carte <em class="mark">MicroSD</em> branchée, tout en effectuant des <strong class="defin">appuis répétitifs sur la touche</strong> <code class="cmd">F9</code> du clavier. Cette opération lance le <strong class="title">micrologiciel de démarrage</strong> appelé <strong class="title"><em class="sigle">UEFI</em></strong> <a class="external" href="https://fr.wikipedia.org/wiki/UEFI" target="_BLANK">W</a> – <strong>unified extensible firmware interface</strong>. </li>
+
+	<div class="nobullet"> Dans le <strong>menu</strong> <code class="cmd">UEFI Boot Sources</code>, sélectionner le périphérique <code class="cmd">Generic_MicroSD/M2</code> et valider. Le poste de travail affiche démarre en <strong>mode terminal</strong> et affiche très rapidement le menu du <strong class="cmd"><em class="sigle">GRUB</em></strong> (cf. supra <a class="supra" href="#exo1"></a>). Laisser le premier choix <code class="displayDark">Start Linux Mint</code>. </div>
+
+	<div class="nobullet"> Le poste de travail charge en mémoire le <strong>système</strong> <strong class="Mint">Linux Mint</strong> gravé sur la carte <em class="mark">MicroSD</em>. Après quelques <strong class="cons">messages d'erreurs</strong>  éventuels – <strong class="pros">à ignorer</strong> – on doit obtenir l'affichage du <strong>bureau</strong> <strong class="Cinnamon">Cinnamon</strong> comme sur la capture d'écran ci‑dessous.   </div>
+
+		<img class="top-left" src="../img/CinnamonDesktop.png">
+
+	<div class="expert" style="display: inline-block;">
+	  <img class="top-right" src="../img/homeIcon.png" height="60px" style="margin-top:0.5em">
+	<div class="nobullet"> Sur un <strong class="title">ordinateur personnel</strong>, ce peut être éventuellement une <strong class="specialLB">autre touche</strong> du clavier (<code>ESC</code>, <code>F2</code>…) sur laquelle appuyer pour <strong class="defin">lancer l'<em class="sigle">UEFI</em></strong>. Tout dépend de la marque et du modèle de la machine. Il faut donc faire préalablement une recherche sur l'Internet pour obtenir l'information – typiquement avec les mots‑clef « <code>boot menu</code> » ainsi que le nom de la marque et le type de modèle. </div>
+
+	<div class="nobullet"> Bien évidemment, la sélection de la <strong class="specialLB">commande de démarrage</strong> sur <strong>clef <em class="sigle">USB</em></strong> peut également être différente. </div>
+  </div><!-- expert -->
+  
+    <img class="top-right" src="../img/MintNetworkIcon.png" height="50px" style="margin-top:0.8em">
+	<li id="reseau"> Tout à droite sur le <strong>tableau de bord</strong> du bureau (communément appelé « barre de tâche » sous <em class="mark">Windows</em>), cliquer sur l'<strong>icône réseau</strong> et <strong class="title">paramétrer le serveur proxy</strong> (cf. supra <a class="supra" href="#proxy"></a>) comme indiqué sur la capture d'écran ci‑dessous : </li>
+   
+    <img class="top-left" src="../img/proxySetup.png" style="max-width: 800px">
+  
+  
+  <div class="nobullet"> Ouvrir le navigateur <strong class="defin">Firefox</strong> pré‑installé sur <em class="mark">Linux Mint</em> (accessible par le raccourci présent sur le tableau de bord). Cliquer sur l'icône de son menu – le « <em class="english">burger‑button</em> » – , puis :  </div>
+
+  <ul>
+  	<li> sélectionner <code class="cmd">Settings</code> pour afficher dans un nouvel onglet la page principale de paramétrage ;  </li>
+
+  	<li> tout en bas de cette page, à la rubrique <code class="cmd">Network Settings</code>, cliquer sur le bouton <code class="cmd">Settings</code> ;  </li>
+
+    <li> Vérifier que l'option <code class="cmd">Use system proxy settings</code> est bien sélectionnée, sinon la choisir et valider en cliquant sur la touche <code class="cmd">OK</code>. </li>
+  </ul>
+
+  <div class="nobullet"> En actualisant le premier onglet ouvert, vérifier alors que la <strong>page d'accueil</strong> de <strong class="Mint">Linux Mint</strong> (paramétrée comme page ouverte par défaut dans le navigateur) <strong class="pros">s'affiche correctement</strong>. </div>
+
+	<div class="expert" style="display: inline-block;">
+	  <img class="top-right" src="../img/homeIcon.png" height="60px" style="margin-top:0.5em">
+	<div class="nobullet"> Sur un <strong class="title">ordinateur personnel</strong>, ce paramétrage n'est a priori <strong class="pros">pas nécessaire</strong> dans la mesure où il n'y a <strong>pas de serveur proxy</strong> installé sur un réseau domestique. En principe, le navigateur doit donc être immédiatement opérationnel. </div>
+  </div><!-- expert -->
+
+</ol><!-- questions exo2 -->
+</div><!-- display -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li id="exo3" style="margin-top: 2em;"> <em class="bold">Installation du système</em> </li>
+
+<div class="important" style="display: inline-block;">
+	<img class="top-right" src="../img/dangerSign.png" height="80px" style="margin-top:0.5em">
+<div class="nobullet"> On aborde maintenant la <strong class="warning">partie la plus technique de la procédure</strong>, qui demande une <strong class="pros">grande vigilance</strong>. Toute saisie, toute option choisie doit être systématiquement vérifiée conforme aux indications du sujet. </div>	
+</div><!-- important -->
+
+<div style="display: inline-block;">
+<ol class="questions">
+		<img class="top-right" src="../img/InstallLinuxIcon.png" width="120px" style="margin-top:0.2em">
+	<li> Cliquer sur l’icône <code class="cmd">Install Linux Mint</code> située en haut à gauche sur le bureau, puis suivre la procédure de choix des <strong class="title">paramètres régionaux</strong> :  </li>
+
+	<ul>
+		<li> pour la <strong class="specialLB">langue</strong>, choisir le <code class="cmd">français</code> ;  </li>
+
+		<li> pour le <strong class="specialLB">clavier</strong>, choisir <code class="cmd">French – French (alt.)</code> bien adaptée à un usage moderne du <strong>clavier Azerty 102 touches</strong> usuel (ne pas garder l'option « legacy » sélectionnée par défaut) ;  </li>
+  </ul>
+
+	<div class="nobullet"> Cocher l’option <code class="cmd">Installer les codecs multimédia</code> <a class="external" href="https://fr.wikipedia.org/wiki/Codec" target="_BLANK">W</a> pour permettre la lecture de toutes sortes de formats de <strong class="title">fichiers audiovisuels</strong>. </div>
+
+  <div class="nobullet"> Dans la fenêtre <code class="cmd">Type d’installation</code>, choisir l’<strong class="defin">option</strong> <code class="cmd">Autre chose</code> et <strong class="warning">surtout pas</strong> l'option « <code>Installer à côté de Windows Boot Manager</code> » qui est cochée par défaut. </div>
+
+  <div class="nobullet"> On obtient alors une <strong class="title">visualisation des disques durs</strong> du poste de travail et de leur <strong class="defin">partition en volumes</strong> comme sur la capture d’écran ci‑dessous (pour une machine avec un disque dur entièrement libre de 160 Go). </div>
+  
+  	<img class="top-left" src="../img/MintInstall_disks.png" style="max-width: 800px">
+
+  <li> Repérer le <strong class="specialLB">disque dur vacant</strong> – typiquement identifié par le chemin <code class="filename">/dev/sda</code>, avec une <strong class="defin">taille</strong> de <strong>160</strong>, <strong>250</strong> ou <strong>500 Go</strong> qui a été libéré à la question <em class="bold">1.b)</em> – et <strong class="warning">surtout pas</strong> celui affecté au système <em class="mark">Windows</em>. </li>
+
+  <div class="nobullet"> Pour <strong class="title">définir les trois partitions</strong> du futur système <strong class="Mint">Linux Mint</strong>, cliquer à chaque fois sur la ligne <code class="cmd">espace libre</code> du disque vacant puis sur le bouton <code class="cmd">+</code>. </div>
+  
+  <ul>
+  	<li> La <strong class="specialLB">première partition</strong> est réservée au <strong class="defin">système</strong> lui‑même et aux <strong class="defin">logiciels</strong> qui seront installés au fur et à mesure de l'utilisation du poste de travail. Elle doit être paramétrée comme indiqué ci‑dessous et conformément à la capture d'écran : </li>
+  	<div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintPartition1.png" width="400px" style="margin-top:0.5em">
+  	<ul>
+  		<li> allouer une taille de <em class="bold">50&#8239;000 Mo</em> (soit 50 Go) ; </li>
+
+  		<li> garder les <strong>options par défaut</strong> – à savoir une <em>partition primaire</em> située au <em>début de l'espace</em>, avec un système de fichiers <code>ext4</code> <a class="external" href="https://fr.wikipedia.org/wiki/Ext4" target="_BLANK">W</a> ; </li>
+
+  		<li> attribuer comme <strong>point de montage</strong> de la partition la <em>racine</em> <code class="filename">/</code> du système de fichiers. </li>
+  	</ul>
+    </div><!-- display -->
+
+  	<li> La <strong class="specialLB">deuxième partition</strong> est réservée pour constituer un <strong class="defin">espace d'échange</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Espace_d'échange" target="_BLANK">W</a> – en anglais, <strong>swap</strong> – servant pallier une éventuelle insuffisance de la mémoire vive (<em class="sigle">RAM</em>) du poste de travail en cours d'utilisation intensive (lorsque beaucoup d'applications fonctionnent simultanément). Elle doit être paramétrée comme indiqué ci‑dessous et conformément à la capture d'écran : </li>
+  	<div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintPartition2.png" width="400px" style="margin-top:0.5em">
+  	<ul>
+  		<li> allouer une taille de <em class="bold">16&#8239;000 Mo</em> (soit 16 Go) qui est égal à celui de la <strong><em class="sigle">RAM</em></strong> du poste de travail ; </li>
+
+  		<li> définir comme <code class="cmd">espace d'échange (« swap »)</code> (un tel volume n'a pas de point de montage puis qu'il n'est pas lié au système de fichiers). </li>
+  	</ul>
+    </div><!-- display -->
+
+    
+  	<li> La <strong class="specialLB">troisième partition</strong> est réservée aux <strong class="defin">données des utilisateurs</strong> (fichiers) du poste de travail. Elle doit être paramétrée comme indiqué ci‑dessous et conformément à la capture d'écran (pour un disque de 160 Go) : </li>
+  	<div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintPartition3.png" width="400px" style="margin-top:0.5em">
+  	<ul>
+  		<li> allouer comme taille <strong>tout l'espace restant</strong> sur le disque (ce volume pourrait éventuellement être réduit par la suite dans la perspective d'installer encore un autre système) ; </li>
+
+  		<li> garder les <strong>options par défaut</strong> – à savoir une <em>partition primaire</em> située au <em>début de l'espace</em>, avec un système de fichiers <code>ext4</code> ; </li>
+
+  		<li> attribuer comme <strong>point de montage</strong> de la partition le <em>répertoire</em> <code class="filename">/home</code> du système de fichiers. </li>
+  	</ul>
+    </div><!-- display -->
+  </ul>
+
+  <li> Après la définition de ces partitions, on doit obtenir un <strong class="title">résultat</strong> conforme à la capture d’écran ci‑dessous : </li>
+  	<img class="top-left" src="../img/MintAllPartitions.png" style="max-width: 800px">
+  <ul>
+  	<li> Vérifier que le périphérique sur lequel sera installé le <strong class="specialLB">programme de démarrage</strong> – le <strong><em class="sigle">GRUB</em></strong> – est bien le <strong class="defin">même disque</strong> que celui sur lequel <strong>Linux</strong> sera installé (typiquement identifié par le chemin <code class="filename">/dev/sda</code>, cf. le bas de la capture d’écran ci‑dessus). </li>
+
+  	<li> <strong class="warning">Appeler l'enseignant</strong> pour une <strong class="pros">vérification</strong> avant de cliquer sur le bouton <code class="cmd">Installer maintenant</code>. </li>
+  </ul>
+
+  <li> En fait, le paramétrage de l'installation n'est pas tout à fait terminé. Il reste à préciser quelques choix concernant le <strong class="title">compte de l'utilisateur</strong> par défaut du système (sachant qu'il serait possible par la suite de créer d'autres compte d'utilisateurs). </li>
+  <ul>
+  	<!-- noter l'intitulé de la zone -->
+  	<li> Pour la <strong class="specialLB">zone horaire</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Fuseau_horaire" target="_BLANK">W</a>, garder le <strong class="defin">choix par défaut</strong> <code class="cmd">Paris</code> puisque le poste de travail est situé en <strong>France métropolitaine</strong> qui est englobée dans une seule zone horaire – celle d'<strong>Europe centrale</strong>. </li>
+    
+    <div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintUser.png" width="500px" style="margin-top:0.5em">
+  	<li> Pour les <strong class="specialLB">identifiants de l'utilisateur</strong> (cf. la capture d'écran ci‑contre), saisir impérativement : </li>
+  	<ul>
+  		<li> comme <strong class="defin">nom d'utilisateur</strong>, le mnémonique <code class="cmd">elv</code> (pour « élève ») ; </li>
+
+  		<li> comme <strong class="defin">nom d'ordinateur</strong>, le code <code class="cmd">241-<span class="nocode"><strong class="specialN">n</strong></span></code> où  le nombre <strong class="specialN">n</strong> est le <strong>numéro</strong> du poste de travail <strong>donné par l'enseignant</strong> ; </li>
+
+  		<li> comme <strong class="defin">mot de passe</strong>, exclusivement celui <strong>donné par l'enseignant</strong>. </li>
+  	</ul>
+    </div><!-- display -->
+
+    <li> <strong class="warning">Appeler l'enseignant</strong> pour une <strong class="pros">dernière vérification</strong> avant de cliquer sur le bouton <code class="cmd">Continuer</code> pour lancer la procédure d'installation. </li>
+  </ul>
+
+  <li> Cette <strong class="title">procédure d'installation</strong> n'est <strong class="pros">pas très longue</strong>  – <strong>quelques minutes</strong> – car les postes de travail disposent d'une configuration matérielle satisfaisante et la clef d'installation opère sur un port <strong><em class="sigle">USB 3.0</em></strong>. Une fois terminée, il suffit de <strong class="specialLB">redémarrer le poste</strong>. </li>
+  
+  <div style="display: inline-block;">
+		<img class="top-right" src="../img/dangerSign.png" height="80px" style="margin-top:0.5em">
+  <div class="nobullet"><em class="remark">Attention</em>, il faut <strong class="warning">attendre que le système demande</strong> de <strong>retirer le périphérique d'installation</strong>, c'est‑à‑dire la clef de démarrage. En effet, le système d'exploitation et les fichiers utilisés durant toute la procédure sont précisément stockés cette clef, donc la retirer prématurément compromettrait la bonne exécution de la commande de redémarrage. </div>
+  </div><!-- display -->
+</ol><!-- questions exo3 -->
+</div><!-- display -->	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li id="exo4" style="margin-top: 2em;"> <em class="bold">Prise en main du système</em> </li>
+
+<div style="display: inline-block;">
+
+<div class="nobullet"> Si l'installation s'est correctement déroulée, le poste de travail redémarre en affichant très rapidement en <strong>mode terminal</strong> le <strong class="title">menu du <em class="sigle">GRUB</em></strong> (cf. supra <a class="supra" href="#exo1"></a>). Son <strong class="defin">premier choix</strong> est le système <strong class="Mint">Linux Mint</strong> qui s'<strong>auto‑active par défaut</strong> au bout de quelques secondes.  </div>
+
+<div class="nobullet"> Ensuite, le <strong class="title">démarrage du système</strong> <strong class="Mint">Linux Mint</strong> prend <strong>quelques dizaines de secondes</strong> – moins d'une minute s'il est installé sur un disque dur de type <em class="sigle">SSD</em> <a class="external" href="https://fr.wikipedia.org/wiki/SSD" target="_BLANK">W</a>. Fermer la fenêtre de bienvenue automatiquement ouverte lors de ce premier démarrage. </div>
+
+<div class="important"> 
+<p> Le travail demandé ci‑dessous consiste à <strong class="defin">rendre le système opérationnel et ergonomique</strong> pour pouvoir commencer les travaux pratiques d'informatique dans les meilleures conditions. On recherche également une <strong class="pros">uniformité d'apparence du bureau</strong> entre les postes pour faciliter le travail d'encadrement des enseignants. Chaque étudiant est donc invité à <strong>renoncer à ses préférences personnelles</strong> – d'autant plus que chaque poste a vocation à être partagé entre plusieurs étudiants. </p>
+</div><!-- important -->
+
+<ol class="questions">
+		<img class="top-right" src="../img/serveurProxy.png" width="400px" style="margin-top:0.0em">
+	<li> Avant tout, il faut encore une fois <strong class="title">paramétrer l'interface réseau</strong> ; sinon, aucune mise à jour ni téléchargement d'application n'est possible puisque l'accès à l'Internet est empêché. </li>
+
+	<div class="nobullet"> Procéder comme indiqué à la question nº <em class="bold">2.b)</em> (cf. supra <a class="supra" href="#reseau")></a>).  </div>
+
+	<div class="nobullet"> <strong class="warning">Ne pas oublier</strong> de paramétrer le navigateur <strong class="specialDO">Firefox</strong> qui est installé par défaut avec le système. </div>
+  
+    <img class="top-right" src="../img/MintUpdateIcon.png" height="50px" style="margin-top:0.5em">
+  <li> En cliquant sur l'icône du <strong class="defin">gestionnaire de mises à jour</strong> – en anglais, <strong>update manager</strong> – à droite dans le <strong>tableau de bord</strong> (barre de tâche), effectuer <strong class="title">toutes les mises à jours</strong> proposées en suivant la procédure ci‑dessous. </li>
+
+<div style="display: inline-block;">
+	<img class="top-right" src="../img/MintUpdateManager.png" width="500px" style="margin-top:0.5em">
+  <ul>
+  	<li> Tout d'abord, il faut choisir un <strong class="specialLB">miroir de dépôt local</strong>, c'est‑à‑dire d'un pool de serveurs contenant une copie des fichiers de mise à jour originaux, mais situés dans une <strong class="defin">zone géographique proche</strong> du poste de travail. En évitant ainsi de surcharger les routes de l'Internet ainsi que les serveurs principaux de <em class="mark">Linux Mint</em>, cela <strong class="pros">diminue les temps de téléchargement</strong> des mises à jour pour l'utilisateur du poste. </li>
+
+  	<div class="nobullet"> Les différents miroirs répertoriés s'affichent de façon dynamique dans l'ordre des débits décroissants. Mais dans une <strong>salle informatique d'enseignement</strong>, il est recommandé de <strong class="warning">ne pas utiliser le même miroir</strong> pour tous les postes de travail. Pour le choix, suivre les <strong class="defin">recommandations de l'enseignant</strong>. </div>
+
+  	<li> Le gestionnaire peut demander également sa <strong>propre mises à jour</strong>. Dans ce cas, il faut y procéder <strong class="pros">en priorité</strong>. </li>
+
+  	<li> Ensuite, <strong class="specialLB">cliquer sur le bouton</strong> <code class="cmd">Installer les mises à jour</code>. Cette opération prend en général plusieurs minutes. En cliquant sur le bouton <code class="cmd">Afficher les détails</code>, on peut suivre en temps‑réel la <strong>sortie texte</strong> de la procédure comme dans un terminal. </li>
+    
+    <div class="expert">
+  	<li> <strong class="cons">En cas d'échec</strong> d'une mise à jour, on peut tenter une <strong class="defin">alternative</strong> en saisissant dans un <strong>terminal de commandes en lignes</strong> :  </li>
+
+<!---------- ne pas indenter ---------->
+<pre class="displayDark">
+sudo apt update -y
+sudo apt upgrade
+</pre>
+<!---------- ne pas indenter ---------->   
+    </div><!-- expert -->
+  </ul>
+    
+    
+  <li> Pour un meilleur <strong class="pros">confort visuel</strong>, on opte pour un <strong class="specialN">thème sombre</strong> d'<strong class="title">apparence du bureau</strong>. Pour cela : </li>
+  <ul>
+  	<div style="display: inline-block;">
+  	  <img class="top-right" src="../img/MintParametresIcon.png" height="80px" style="margin-top:0.5em">
+  	<li> Dans le <strong>menu principal</strong> (bouton cerclé « Lm » tout à gauche du tableau de bord), sélectionner le <strong>bouton</strong> <code class="cmd">Paramètres systèmes - centre de contrôle</code> (cf. icône ci‑contre). </li>
+    </div><!-- display -->
+
+    <div style="display: inline-block;">
+  	  <img class="top-right" src="../img/MintThemesIcon.png" height="60px" style="margin-top:0.5em">
+  	<li> Dans la fenêtre ainsi ouverte, à la première section <code>Apparence</code>, cliquer sur le <strong>bouton</strong> <code class="cmd">Thèmes</code>. </li>
+  	</div><!-- display -->
+
+  	<li> À la rubrique <code class="displayDark">Applications</code>, remplacer le <strong class="defin">thème</strong> <code>Mint-Y</code> par <code class="cmd">Mint-Y-Dark</code>. L'intérieur de la fenêtre doit alors devenir sombre. </li>
+
+  	<div class="nobullet"> Dans l'objectif d'uniformité des postes de travail, <strong class="warning">ne pas changer</strong> les <strong>autres éléments</strong> du bureau ; garder les choix <code>Mint‑Y</code> <strong class="defin">par défaut</strong>.  </div>
+  </ul>
+
+    <img class="top-right" src="../img/MintFilesShortcut.png" height="50px" style="margin-top:0.5em">
+  <li> On va maintenant optimiser la présentation de l'<strong class="title">explorateur de fichier</strong> <code class="cmd">Nautilus</code>. Pour cela, commencer par cliquer sur le <strong>raccourci</strong> <code>Fichiers</code> dans le tableau de bord pour ouvrir une fenêtre d'exploration ; dans le <strong>menu</strong> <code class="cmd">Édition</code>, sélectionner la commande <code class="cmd">Préférences</code>. </li>
+  <ul>
+  	<li> Sélectionner la <strong>rubrique</strong> <code class="displayDark">Vues</code>, choisir l'<strong class="defin">option</strong> <code class="cmd">Vue en listes</code> pour l'ouverture des nouveaux dossiers et <strong class="defin">cocher</strong> la case <code class="cmd">hériter le type de vue du parent</code>. </li>
+    
+  	<li> Sélectionner la <strong>rubrique</strong> <code class="displayDark">Colonnes de listes</code> et <strong class="defin">cocher</strong> les cases <code class="cmd">Propriétaire</code> et <code class="cmd">Permissions</code>. </li>
+
+  	<li> Sélectionner la <strong>rubrique</strong> <code class="displayDark">Barre d'outils</code> et <strong class="defin">ajouter</strong> les boutons <code class="cmd">Nouveau dossier</code> et <code class="cmd">Ouvrir dans un terminal</code>. </li>
+
+  	<li> Sélectionner la <strong>rubrique</strong> <code class="displayDark">Menus contextuels</code> et <strong class="defin">cocher</strong> la case <code class="cmd">Créer un lien</code>. </li>
+  </ul>
+  
+  <div class="nobullet"> Fermer la fenêtre de préférences et <strong class="defin">tester</strong> ces diverses fonctionnalités. </div>
+
+  <li id="accessoires"> Pour plus d'<strong class="pros">efficacité</strong> dans l'utilisation du poste de travail, on va installer des <strong class="title">raccourcis d'accès</strong> à certains <strong class="title">accessoires</strong> du système. </li>
+  <ul>
+  	<div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintMonitor.png" width="60px" style="margin-top:0.5em">
+  	<li> Le <strong class="specialLB">moniteur système</strong> permet d'afficher la <strong>liste des processus</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Processus_(informatique)" target="_BLANK">W</a> en cours d'exécution sur le poste de travail, de suivre en temps‑réel la <strong>consommation des ressources</strong> (processeur, mémoire, etc.).  </li>
+    </div><!-- display -->
+
+  	<div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintCharTable.png" width="60px" style="margin-top:0.5em">
+  	<li> La <strong class="specialLB">table de caractères</strong> permet de trouver n'importe quel caractère d'une police donnée, de le sélectionner et l'insérer dans un fichier par copier‑coller.  </li>
+    </div><!-- display -->
+
+    <div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintSnapshot.png" width="60px" style="margin-top:0.5em">
+  	<li> La <strong class="specialLB">capture d'écran</strong> permet de générer une image matricielle de tout ou partie de ce qui est affiché sur le moniteur, avec le format <code class="filename">.png</code> par défaut.   </li>
+    </div><!-- display -->
+
+    <div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintCalculator.png" width="60px" style="margin-top:0.5em">
+  	<li> La <strong class="specialLB">calculatrice</strong> permet d'effectuer des calculs mathématiques. Elle est proposée avec <strong>plusieurs modes</strong> de fonctionnement : basique, avancé, programmation, etc.  </li>
+    </div><!-- display -->
+
+    <div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintCelluloid.png" width="60px" style="margin-top:0.5em">
+  	<li> <strong class="specialLB">Celluloid</strong> est un <strong>lecteur de fichiers audio et video</strong>. Rudimentaire, il présente l'avantage d'être <strong class="pros">très simple d'emploi</strong>.  </li>
+    </div><!-- display -->
+
+    <div style="display: inline-block;">
+  		<img class="top-right" src="../img/MintUSBcreator.png" width="60px" style="margin-top:0.5em">
+  	<li> Le <strong class="specialLB">créateur de clé <em class="sigle">USB</em></strong> permet de « graver » des clefs de démarrage de système, selon le même principe que l'utilitaire <em class="mark">Rufus</em> utilisé supra <a class="supra" href="#rufus"></a>.  </li>
+    </div><!-- display -->
+  </ul>
+  
+
+  <div class="nobullet"> Pour créer un raccourci dans le tableau de bord de chaque accessoire ci‑dessus, il faut : </div>
+    
+  <ul>
+  	<li> le trouver dans le <strong>menu principal</strong> grâce à la <strong>barre de recherche</strong> ; </li>
+  
+  	<li> faire un clic‑droit sur son icône et sélectionner la commande <code class="cmd">Ajouter au panneau</code>. </li>
+  </ul>
+
+  <div class="nobullet" style="display: inline-block;">
+  	<img class="top-right" src="../img/MintLibreOffice.png" width="60px" style="margin-top:0.2em">
+  De la même manière, on peut créer un raccourci pour la suite bureautique <strong class="specialLB">LibreOffice</strong> <a class="external" href="https://fr.wikipedia.org/wiki/LibreOffice" target="_BLANK">W</a> qui est pré‑installée avec <em class="mark">Linux Mint</em>. </div>
+  </ul>
+
+
+    
+ 	<li> Pour finir, à titre d'exemple, on va installer les deux <strong class="title">logiciels d'usage courant</strong> listés ci‑dessous. </li>
+ 	<ul>
+ 		<div style="display: inline-block;">
+  		<img class="top-right" src="../img/ChromiumIcon.png" width="80px" style="margin-top:0.5em">
+ 		<li> <strong class="specialLB">Chromium</strong> <a class="external" href="https://fr.wikipedia.org/wiki/Chromium" target="_BLANK">W</a> est un navigateur libre sur lequel <strong>Google Chrome</strong> se base, et qu présente l'avantage d'être <strong class="pros">exempt de télémétrie</strong> <a class="external" href="https://en.wikipedia.org/wiki/Telemetry#Software" target="_BLANK">W</a>. En complément de <em class="mark">Firefox</em>, lorsque l'on est confronté à un <strong class="cons">problème d'accès ou d'affichage</strong> d'une page web, <strong>Chromium</strong> peut constituer une <strong class="pros">bonne alternative</strong>. </li>
+ 	  </div><!-- display -->
+
+    <div style="display: inline-block;">
+  		<img class="top-right" src="../img/GimpIcon.png" width="80px" style="margin-top:0.2em">
+ 		<li> <strong class="specialLB">Gimp</strong> – pour <em class="mark">GNU Image Manipulation Program</em> <a class="external" href="https://fr.wikipedia.org/wiki/GIMP" target="_BLANK">W</a> – est un logiciel <strong class="pros">libre</strong> et <strong class="pros">gratuit</strong> d'<strong>édition d'images</strong>. Très puissant, il offre une bonne alternative à <em class="mark">Photoshop</em>. </li>
+ 		</div><!-- display -->
+ 	</ul>
+ 	
+  <div style="display: inline-block;"> 
+    <img class="top-right" src="../img/MintLogitechIcon.png" width="80px" style="margin-top:0.5em">
+  <div class="nobullet"> Il existe plusieurs moyens d'installer des logiciels sous <em class="mark">Linux</em>. Ici, le plus simple est d'utiliser la <strong class="defin">logithèque</strong> qui est directement accessible dans le <strong>menu principal</strong> (cf. l'icône ci‑contre). </div>
+  </div><!-- display -->  
+
+  <div class="nobullet"> Une fois que la fenêtre de la logithèque est ouverte, il faut <strong class="defin">trouver l'application voulue</strong>. On peut procéder :  </div>
+  <ul>
+  	<li> soit <strong>par catégories</strong> (bureautique, programmation, etc.) en cliquant sur le bouton approprié dans cette rubrique ; </li>
+  
+  	<li> soit en saisissant directement le nom de l'application dans la <strong>barre de recherche</strong>. </li>
+  </ul>
+
+  <div class="nobullet"> Dans tous les cas, il faut veiller à <strong class="pros">ne pas confondre</strong> l'application cherchée avec une autre ou avec un module complémentaire de cette application, qui posséderait la même icône. La <strong>lecture du descriptif</strong> est <strong class="warning">impérative</strong>. </div>
+
+  <div class="nobullet"> Après avoir sélectionné le bon logiciel, il suffit de cliquer sur le <strong class="specialG">bouton vert</strong> <code class="cmd">Installer</code>. </div>
+
+  <div class="nobullet"> Lorsque cette procédure terminée, on peut lancer immédiatement le logiciel pour vérifier son bon fonctionnement. On peut aussi le retrouver dans le <strong>menu principal</strong> en saisissant son nom dans la <strong>barre de recherche</strong> et, comme pour les accessoires (cf. supra <a class="supra" href="accessoires"></a>), lui <strong class="defin">créer un raccourci dans le tableau de bord</strong>. À la fin, on doit donc obtenir un <strong class="title">tableau de bord</strong> conforme à la capture d'écran ci‑contre. </div>
+  <img class="top-left" src="../img/MintTableauBord2.png">
+
+
+</ol><!-- questions exo4 -->
+</div><!-- display -->	
+
+
+
+</ol><!-- exercices -->
+
+
+</section>
+
+</div><!-- #scrollingFrame -->
+
+</div><!-- #mainFrame -->
+
+</body>
+
+</html>
