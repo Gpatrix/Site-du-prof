@@ -111,45 +111,45 @@ p.square{
 p.ex::before { 
 	font-family: carlito, calibri, verdana, trebuchet, arial;
 	text-shadow: 2px 2px #D0DFAC;
-	content: "Exemple.Â Â ";
+	content: "Exemple.  ";
 }
 
 
 p.exemple::before{
-	content: "Exemple.Â Â ";
+	content: "Exemple.  ";
 }
 
 p.exemples::before{
-	content: "Exemples.Â Â ";
+	content: "Exemples.  ";
 	line-height: 150%;
 }
 
 p.remarque::before{
-	content: "Remarque.Â Â ";
+	content: "Remarque.  ";
 }
 
 p.remarques::before{
-	content: "Remarques.Â Â ";
+	content: "Remarques.  ";
 	line-height: 150%;
 }
 
 p.prerequis::before{
-	content: "PrÃ©requis.Â Â ";
+	content: "Prérequis.  ";
 }
 
 p.consigne::before{
-	content: "Consigne.Â Â ";
+	content: "Consigne.  ";
 }
 
 p.consignes::before{
-	content: "Consignes.Â Â ";
+	content: "Consignes.  ";
 	line-height: 150%;
 }
 
 p.square::before{
 	position: absolute;
   left: -1.4em;
-	content: "âˆŽ";
+	content: "∎";
 }
 
 div.nobullet{
